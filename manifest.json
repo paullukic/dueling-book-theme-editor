@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "DuelingBook Theme Editor",
+  "version": "1.0.0",
+  "description": "Edit the HTML of duelingbook.com with a React UI.",
+  "permissions": ["scripting", "activeTab", "tabs", "storage"],
+  "host_permissions": ["https://duelingbook.com/*", "http://duelingbook.com/*", "https://www.duelingbook.com/*", "http://www.duelingbook.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "DuelingBook Theme Editor"
+  }
+}

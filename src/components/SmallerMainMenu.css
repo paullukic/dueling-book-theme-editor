@@ -1,0 +1,10 @@
+/* Styles for smaller main menu */
+.smaller-main-menu {
+  height: 30px !important;
+  font-size: large !important;
+  padding-bottom: 4px !important;
+}
+
+.smaller-main-menu span {
+  top: -12px !important;
+}
