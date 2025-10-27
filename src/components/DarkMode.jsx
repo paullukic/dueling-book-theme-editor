@@ -46,7 +46,7 @@ font[color="#0000FF"] {
   background: rgba(35, 39, 42, 0.75) !important;
   color: ${lightText} !important;
 }
-div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, .atk_lbl, .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt {
+div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, .atk_lbl, .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt, .title_txt .aliased {
   color: ${lightText} !important;
 }
 .search_bg span {
@@ -62,11 +62,30 @@ div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .at
   border: 1px solid ${darkBorder} !important;
   border-radius: 4px !important;
 }
-.textinput, input.username_txt, input.name_txt, input.desc_txt, .lvll_txt, .lvlh_txt, .atkl_txt, .atkh_txt, .defl_txt, .defh_txt, .spdl_txt, .spdh_txt, #watchers, #watchers.users, #preview_txt, .cout_txt.textarea, .search_txt, .users.list {
+.textinput, input.username_txt, input.name_txt, input.desc_txt, .lvll_txt, .lvlh_txt, .atkl_txt, .atkh_txt, .defl_txt, .defh_txt, .spdl_txt, .spdh_txt, #watchers, #watchers.users, #preview_txt, .cout_txt.textarea, .search_txt, .users.list, #joinlist {
   background-color: ${darkBackground} !important;
   color: ${lightText} !important;
   border: none !important;
   border-radius: 4px !important;
+}
+.deck_slot {
+  border: none !important;
+  border-radius: 2px !important;
+}
+.deck_bg, .side_bg, .extra_bg {
+  background: transparent !important;
+}
+.deck_bg .total_txt {
+  color: ${darkBackground} !important;
+}
+.deck_slot .content {
+  background-color: ${darkBackgroundHover} !important;
+  border: none !important;
+}
+.side_slot, .extra_slot {
+  border: none !important;
+  border-radius: 2px !important;
+  background-color: ${darkBackgroundHover} !important;
 }
 .card_border {
   border-radius: 8px !important;

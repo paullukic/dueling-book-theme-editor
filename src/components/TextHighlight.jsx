@@ -85,6 +85,7 @@ function unhighlightText(className) {
 function highlightSentences(sentenceKeywords, className) {
   const root = document.querySelector("#preview_txt");
   if (!root) return;
+
   // Get all text nodes
   const textNodes = [];
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
@@ -92,29 +93,42 @@ function highlightSentences(sentenceKeywords, className) {
   while ((node = walker.nextNode())) {
     textNodes.push(node);
   }
+
   // Get full text
   const fullText = textNodes.map(n => n.textContent).join('');
-  // Find sentences
-  const sentenceRegex = /([^.;:]*[.;:])/g;
-  let match;
+
+  // Instead of naive regex, we manually parse to skip dots inside quotes
   const sentences = [];
-  while ((match = sentenceRegex.exec(fullText)) !== null) {
-    const sentence = match[1];
-    const highlight = sentenceKeywords.some(keyword => sentence.toLowerCase().includes(keyword.toLowerCase()));
-    if (highlight) {
-      const trimmed = sentence.trim();
-      const startTrim = sentence.indexOf(trimmed);
-      const endTrim = startTrim + trimmed.length;
-      const startPos = match.index + startTrim;
-      const endPos = match.index + endTrim;
-      sentences.push({ startPos, endPos, className });
+  let sentenceStart = 0;
+  let inQuotes = false;
+
+  for (let i = 0; i < fullText.length; i++) {
+    const ch = fullText[i];
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+    }
+    if ((ch === '.' || ch === ';' || ch === ':') && !inQuotes) {
+      const sentence = fullText.slice(sentenceStart, i + 1);
+      const highlight = sentenceKeywords.some(keyword =>
+        sentence.toLowerCase().includes(keyword.toLowerCase())
+      );
+      if (highlight) {
+        const trimmed = sentence.trim();
+        const startTrim = sentence.indexOf(trimmed);
+        const endTrim = startTrim + trimmed.length;
+        const startPos = sentenceStart + startTrim;
+        const endPos = sentenceStart + endTrim;
+        sentences.push({ startPos, endPos, className });
+      }
+      sentenceStart = i + 1; // next sentence starts after punctuation
     }
   }
-  // Sort by startPos descending to process from end
+
+  // Sort by startPos descending
   sentences.sort((a, b) => b.startPos - a.startPos);
-  // Now, for each sentence, create range and surround
+
+  // Highlight in DOM
   for (const sent of sentences) {
-    // Find start container and offset
     let cumulative = 0;
     let startContainer = null;
     let startOffset = 0;
@@ -127,7 +141,7 @@ function highlightSentences(sentenceKeywords, className) {
       }
       cumulative += len;
     }
-    // Find end
+
     let endContainer = null;
     let endOffset = 0;
     cumulative = 0;
@@ -140,6 +154,7 @@ function highlightSentences(sentenceKeywords, className) {
       }
       cumulative += len;
     }
+
     if (startContainer && endContainer) {
       const range = document.createRange();
       range.setStart(startContainer, startOffset);
@@ -149,7 +164,6 @@ function highlightSentences(sentenceKeywords, className) {
       try {
         range.surroundContents(span);
       } catch (e) {
-        // If fails, perhaps the range is not valid
         console.error(e);
       }
     }
@@ -168,24 +182,35 @@ function highlightFromTo(startChar, endChar, className) {
   }
   // Get full text
   const fullText = textNodes.map(n => n.textContent).join('');
-  // Find positions
+
+  // Find positions between startChar and endChar, skipping dots inside quotes
   const sentences = [];
   let pos = 0;
   while ((pos = fullText.indexOf(startChar, pos)) !== -1) {
-    const startPos = pos + 1; // after startChar
-    const endPos = fullText.indexOf(endChar, startPos);
+    const startPos = pos + 1;
+    let endPos = -1;
+    let i = startPos;
+    let inQuotes = false;
+    while (i < fullText.length) {
+      const ch = fullText[i];
+      if (ch === '"') inQuotes = !inQuotes;
+      if (ch === endChar && !inQuotes) {
+        endPos = i;
+        break;
+      }
+      i++;
+    }
     if (endPos !== -1) {
       sentences.push({ startPos, endPos, className });
       pos = endPos + 1;
-    } else {
-      break;
-    }
+    } else break;
   }
+
   // Sort by startPos descending
   sentences.sort((a, b) => b.startPos - a.startPos);
+
   // Highlight
   for (const sent of sentences) {
-    // Find start container and offset
     let cumulative = 0;
     let startContainer = null;
     let startOffset = 0;
@@ -198,7 +223,7 @@ function highlightFromTo(startChar, endChar, className) {
       }
       cumulative += len;
     }
-    // Find end
+
     let endContainer = null;
     let endOffset = 0;
     cumulative = 0;
@@ -211,6 +236,7 @@ function highlightFromTo(startChar, endChar, className) {
       }
       cumulative += len;
     }
+
     if (startContainer && endContainer) {
       const range = document.createRange();
       range.setStart(startContainer, startOffset);
@@ -230,7 +256,8 @@ function highlightFromTo(startChar, endChar, className) {
 // first sentences, then single words
 function highlightTexts() {
   // highlightSentences(['Fusion', 'Synchro', 'Xyz', 'Link', 'Pendulum', 'special summon'], 'highlight-purple');
-  // highlightFromTo(';', '.', 'highlight-green');
+  highlightFromTo(';', '.', 'highlight-green');
+  highlightFromTo(':', '.', 'highlight-green');  
   highlightSentences([';'], 'highlight-red');
   highlightSentences(['draw 1 card', 'add it to your hand', 'You can add', 'Each time your opponent Special Summons', 'This card is always treated'], 'highlight-green');
   highlightSentences([':'], 'highlight-orange');
@@ -255,7 +282,7 @@ const applyTextHighlight = (enabled) => {
         observer.disconnect();
         unhighlightText("highlight-red");
         unhighlightText("highlight-green");
-        unhighlightText("highlight-sentence");
+        unhighlightText("highlight-strong-red");
         highlightTexts();
         observer.observe(preview, { childList: true, subtree: true });
       });

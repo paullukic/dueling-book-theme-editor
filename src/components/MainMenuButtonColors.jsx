@@ -25,9 +25,14 @@ const MainMenuButtonColors = () => {
         const bgRgb = hexToRgb(bg);
         const borderRgb = hexToRgb(border);
         const edgeRgb = hexToRgb(edge);
-        el.style.backgroundColor = `rgba(${bgRgb.r},${bgRgb.g},${bgRgb.b},${bgAlpha})`;
-        el.style.borderColor = `rgba(${borderRgb.r},${borderRgb.g},${borderRgb.b},${borderAlpha})`;
-        el.style.backgroundImage = `linear-gradient(to right, rgba(${edgeRgb.r},${edgeRgb.g},${edgeRgb.b},${edgeAlpha}), rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.3) 80%, rgba(${edgeRgb.r},${edgeRgb.g},${edgeRgb.b},${edgeAlpha}))`;
+        // Ensure minimum alpha to keep elements functional and slightly visible
+        const minAlpha = 0.01;
+        const effectiveBgAlpha = Math.max(bgAlpha, minAlpha);
+        const effectiveBorderAlpha = Math.max(borderAlpha, minAlpha);
+        const effectiveEdgeAlpha = Math.max(edgeAlpha, minAlpha);
+        el.style.backgroundColor = `rgba(${bgRgb.r},${bgRgb.g},${bgRgb.b},${effectiveBgAlpha})`;
+        el.style.borderColor = `rgba(${borderRgb.r},${borderRgb.g},${borderRgb.b},${effectiveBorderAlpha})`;
+        el.style.backgroundImage = `linear-gradient(to right, rgba(${edgeRgb.r},${edgeRgb.g},${edgeRgb.b},${effectiveEdgeAlpha}), rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.3) 80%, rgba(${edgeRgb.r},${edgeRgb.g},${edgeRgb.b},${effectiveEdgeAlpha}))`;
       } else {
         el.style.backgroundColor = '';
         el.style.borderColor = '';
@@ -41,11 +46,11 @@ const MainMenuButtonColors = () => {
     chrome.storage.sync.get(['mainMenuApplyColors', 'mainMenuBgColor', 'mainMenuBgAlpha', 'mainMenuBorderColor', 'mainMenuBorderAlpha', 'mainMenuEdgeColor', 'mainMenuEdgeAlpha'], (result) => {
       const apply = result.mainMenuApplyColors || false;
       const bg = result.mainMenuBgColor || '#ffffff';
-      const bgAlpha = result.mainMenuBgAlpha || 1;
+      const bgAlpha = Math.max(result.mainMenuBgAlpha || 1, 0.01);
       const border = result.mainMenuBorderColor || '#000000';
-      const borderAlpha = result.mainMenuBorderAlpha || 1;
+      const borderAlpha = Math.max(result.mainMenuBorderAlpha || 1, 0.01);
       const edge = result.mainMenuEdgeColor || '#2acbda';
-      const edgeAlphaVal = result.mainMenuEdgeAlpha || 0.65;
+      const edgeAlphaVal = Math.max(result.mainMenuEdgeAlpha || 0.65, 0.01);
       setApplyColors(apply);
       setBackgroundColor(bg);
       setBackgroundAlpha(bgAlpha);
@@ -72,7 +77,7 @@ const MainMenuButtonColors = () => {
   };
 
   const handleBgAlphaChange = (e) => {
-    const newAlpha = parseFloat(e.target.value);
+    const newAlpha = Math.max(parseFloat(e.target.value), 0.01);
     setBackgroundAlpha(newAlpha);
     chrome.storage.sync.set({ mainMenuBgAlpha: newAlpha });
     applyColorsFunc(applyColors, backgroundColor, newAlpha, borderColor, borderAlpha, edgeColor, edgeAlpha);
@@ -86,7 +91,7 @@ const MainMenuButtonColors = () => {
   };
 
   const handleBorderAlphaChange = (e) => {
-    const newAlpha = parseFloat(e.target.value);
+    const newAlpha = Math.max(parseFloat(e.target.value), 0.01);
     setBorderAlpha(newAlpha);
     chrome.storage.sync.set({ mainMenuBorderAlpha: newAlpha });
     applyColorsFunc(applyColors, backgroundColor, backgroundAlpha, borderColor, newAlpha, edgeColor, edgeAlpha);
@@ -100,7 +105,7 @@ const MainMenuButtonColors = () => {
   };
 
   const handleEdgeAlphaChange = (e) => {
-    const newAlpha = parseFloat(e.target.value);
+    const newAlpha = Math.max(parseFloat(e.target.value), 0.01);
     setEdgeAlpha(newAlpha);
     chrome.storage.sync.set({ mainMenuEdgeAlpha: newAlpha });
     applyColorsFunc(applyColors, backgroundColor, backgroundAlpha, borderColor, borderAlpha, edgeColor, newAlpha);
