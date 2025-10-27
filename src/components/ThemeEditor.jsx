@@ -6,6 +6,7 @@ import MainMenuButtonColors from './MainMenuButtonColors';
 import BackgroundImage from './BackgroundImage';
 import FontQuicksand from './FontQuicksand';
 import DarkMode from './DarkMode';
+import TextHighlight from './TextHighlight';
 
 const ThemeEditor = () => {
 
@@ -18,6 +19,7 @@ const ThemeEditor = () => {
         <SkipIntro />
         <FontQuicksand />
         <DarkMode />
+        <TextHighlight />
         <br />
         <h4>Main Menu</h4>
         <SmallerMainMenu />
