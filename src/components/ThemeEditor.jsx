@@ -40,7 +40,7 @@ const ThemeEditor = () => {
       <div className="settings-section">
         <h4>Settings</h4>
         <SkipIntro />
-        <FontQuicksand />
+        {/* <FontQuicksand /> */}
         <DarkMode />
         <TextHighlight />
         <br />
