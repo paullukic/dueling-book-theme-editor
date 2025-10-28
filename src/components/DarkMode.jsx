@@ -46,7 +46,7 @@ font[color="#0000FF"] {
   background: rgba(35, 39, 42, 0.75) !important;
   color: ${lightText} !important;
 }
-div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, .atk_lbl, .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt, .title_txt .aliased {
+div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, #search .def_lbl, #search .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt, .title_txt .aliased {
   color: ${lightText} !important;
 }
 .search_bg span {

@@ -22,6 +22,53 @@ const BackgroundImage = () => {
     });
   }, []);
 
+  // Resize/compress large images to avoid storage quota errors when
+  // storing data URLs in chrome.storage.local. Returns a DataURL.
+  const processFileToDataUrl = (file, maxDim = 1600, jpegQuality = 0.8) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            let { width, height } = img;
+            let targetWidth = width;
+            let targetHeight = height;
+
+            if (width > maxDim || height > maxDim) {
+              if (width >= height) {
+                targetWidth = maxDim;
+                targetHeight = Math.round((maxDim / width) * height);
+              } else {
+                targetHeight = maxDim;
+                targetWidth = Math.round((maxDim / height) * width);
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+            // Prefer jpeg for better compression unless original was PNG with transparency
+            const isPng = file.type === 'image/png';
+            const mime = isPng ? 'image/png' : 'image/jpeg';
+            const quality = isPng ? 0.92 : jpegQuality;
+            const dataUrl = canvas.toDataURL(mime, quality);
+            resolve(dataUrl);
+          } catch (err) {
+            reject(err);
+          }
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const applyBackground = (isEnabled, data) => {
     const greenlines = document.getElementById('greenlines');
     const contentDiv = document.getElementById('content');
@@ -66,14 +113,24 @@ const BackgroundImage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = event.target.result;
-        setImageData(data);
-        chrome.storage.local.set({ backgroundImageData: data });
-        if (enabled) applyBackground(enabled, data);
-      };
-      reader.readAsDataURL(file);
+      // Compress / resize before storing to avoid quota errors with large files
+      processFileToDataUrl(file)
+        .then((data) => {
+          setImageData(data);
+          // Try to store; check runtime.lastError in callback to detect quota issues
+          chrome.storage.local.set({ backgroundImageData: data }, () => {
+            if (chrome.runtime.lastError) {
+              console.error('chrome.storage set error:', chrome.runtime.lastError);
+              // If quota exceeded, store nothing and inform the user in console.
+              // Optionally you can store a very small thumbnail instead or suggest enabling
+              // "unlimitedStorage" or using IndexedDB for larger images.
+            }
+          });
+          if (enabled) applyBackground(enabled, data);
+        })
+        .catch((err) => {
+          console.error('Failed to process image:', err);
+        });
     }
   };
 
@@ -96,14 +153,18 @@ const BackgroundImage = () => {
               e.stopPropagation();
               const file = e.dataTransfer.files[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                  const data = event.target.result;
-                  setImageData(data);
-                  chrome.storage.local.set({ backgroundImageData: data });
-                  if (enabled) applyBackground(enabled, data);
-                };
-                reader.readAsDataURL(file);
+                // Compress / resize dropped file before storing
+                processFileToDataUrl(file)
+                  .then((data) => {
+                    setImageData(data);
+                    chrome.storage.local.set({ backgroundImageData: data }, () => {
+                      if (chrome.runtime.lastError) {
+                        console.error('chrome.storage set error:', chrome.runtime.lastError);
+                      }
+                    });
+                    if (enabled) applyBackground(enabled, data);
+                  })
+                  .catch((err) => console.error('Failed to process dropped image:', err));
               }
             }}
           >
