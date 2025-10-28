@@ -7,6 +7,7 @@ import BackgroundImage from "./BackgroundImage";
 import FontQuicksand from "./FontQuicksand";
 import DarkMode from "./DarkMode";
 import TextHighlight from "./TextHighlight";
+import ShortcutKeys from "./ShortcutKeys";
 
 const ThemeEditor = () => {
   return (
@@ -43,6 +44,7 @@ const ThemeEditor = () => {
         {/* <FontQuicksand /> */}
         <DarkMode />
         <TextHighlight />
+        <ShortcutKeys />
         <br />
         <h4>Main Menu</h4>
         <SmallerMainMenu />

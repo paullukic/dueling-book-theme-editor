@@ -13,7 +13,7 @@ const softBlue = '#7f7fff';
 
 const darkModeCSS = `
 .cell1 {
-  background-image: none !important;\
+  background-image: none !important;
   border: none !important;
   background-color: ${darkBackground} !important;
   color: ${lightText} !important;
@@ -62,7 +62,7 @@ div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .at
   border: 1px solid ${darkBorder} !important;
   border-radius: 4px !important;
 }
-.textinput, input.username_txt, input.name_txt, input.desc_txt, .lvll_txt, .lvlh_txt, .atkl_txt, .atkh_txt, .defl_txt, .defh_txt, .spdl_txt, .spdh_txt, #watchers, #watchers.users, #preview_txt, .cout_txt.textarea, .search_txt, .users.list, #joinlist {
+.textinput, .cin_txt, .log_txt.textarea, input.username_txt, input.name_txt, input.desc_txt, .lvll_txt, .lvlh_txt, .atkl_txt, .atkh_txt, .defl_txt, .defh_txt, .spdl_txt, .spdh_txt, #watchers, #watchers.users, #preview_txt, .cout_txt.textarea, .search_txt, .users.list, #joinlist {
   background-color: ${darkBackground} !important;
   color: ${lightText} !important;
   border: none !important;

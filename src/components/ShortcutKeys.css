@@ -1,0 +1,78 @@
+.shortcut-section {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  font-family: Arial, sans-serif;
+}
+
+.shortcut-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  color: #444;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+
+.shortcut-toggle:hover {
+  color: #0078d7;
+}
+
+.shortcut-icon {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.shortcut-body {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: background 0.2s;
+}
+
+.shortcut-row:hover {
+  background: #f1f7ff;
+}
+
+.shortcut-label {
+  font-size: 13px;
+  color: #333;
+}
+
+.shortcut-input {
+  width: 35px;
+  height: 22px;
+  text-align: center;
+  font-size: 13px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.shortcut-input:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 2px #0078d7;
+}
+
+.shortcut-hint {
+  font-size: 12px;
+  color: #777;
+  margin-top: 6px;
+  line-height: 1.4;
+}
