@@ -39,3 +39,27 @@ A plain JavaScript browser extension for Chrome and Firefox that allows you to e
 Simply navigate to duelingbook.com - the theme editor panel will automatically appear in the top-right corner.
 
 Feel free to expand the content script to add more HTML editing features!
+
+## Release / Packaging
+
+## Release / Packaging
+
+From the repo root, bump the version and build:
+
+```bash
+npm run build
+```
+
+To package your extension for release, zip only the necessary files:
+
+**With bash (if you have zip installed):**
+```bash
+zip -r dueling-book-theme-editor-1.0.1.zip manifest.json background.js contentScript.js icon16.png icon32.png icon48.png icon128.png README.md screenshots
+```
+
+**With PowerShell (if zip is not available):**
+```powershell
+Compress-Archive -Path manifest.json,background.js,contentScript.js,icon16.png,icon32.png,icon48.png,icon128.png,README.md,screenshots -DestinationPath dueling-book-theme-editor-1.0.1.zip -Force
+```
+
+Upload the resulting `.zip` file to the developer dashboard.
