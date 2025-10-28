@@ -98,7 +98,7 @@ const BackgroundImage = () => {
         bgImg.style.display = '';
       }
     } else {
-      if (greenlines) greenlines.style.display = '';
+      // if (greenlines) greenlines.style.display = '';
       if (bgImg) bgImg.style.display = 'none';
     }
   };
