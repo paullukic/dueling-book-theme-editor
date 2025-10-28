@@ -1,6 +1,6 @@
 {
   "name": "dueling-book-theme-editor-extension",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A React browser extension for duelingbook.com to edit HTML themes.",
   "scripts": {
     "start": "webpack --mode development --watch",
