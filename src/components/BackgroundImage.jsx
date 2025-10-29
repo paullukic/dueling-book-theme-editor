@@ -4,6 +4,7 @@ const BackgroundImage = () => {
   const [enabled, setEnabled] = useState(false);
   const [imageData, setImageData] = useState('');
   const [originalSrc, setOriginalSrc] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     // Store original src on mount
@@ -28,6 +29,10 @@ const BackgroundImage = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (e) => {
+        if (file.type === 'image/gif') {
+          resolve(e.target.result);
+          return;
+        }
         const img = new Image();
         img.onload = () => {
           try {
@@ -121,9 +126,9 @@ const BackgroundImage = () => {
           chrome.storage.local.set({ backgroundImageData: data }, () => {
             if (chrome.runtime.lastError) {
               console.error('chrome.storage set error:', chrome.runtime.lastError);
-              // If quota exceeded, store nothing and inform the user in console.
-              // Optionally you can store a very small thumbnail instead or suggest enabling
-              // "unlimitedStorage" or using IndexedDB for larger images.
+              setErrorMessage('Image is too large to save. Please choose a smaller image or compress it.');
+            } else {
+              setErrorMessage('');
             }
           });
           if (enabled) applyBackground(enabled, data);
@@ -160,6 +165,9 @@ const BackgroundImage = () => {
                     chrome.storage.local.set({ backgroundImageData: data }, () => {
                       if (chrome.runtime.lastError) {
                         console.error('chrome.storage set error:', chrome.runtime.lastError);
+                        setErrorMessage('Image is too large to save. Please choose a smaller image or compress it.');
+                      } else {
+                        setErrorMessage('');
                       }
                     });
                     if (enabled) applyBackground(enabled, data);
@@ -170,6 +178,7 @@ const BackgroundImage = () => {
           >
             <input type="file" accept="image/*" onChange={handleFileChange} style={{ width: '100%' }} />
           </div>
+          {errorMessage && <div style={{color: 'red', marginTop: '5px'}}>{errorMessage}</div>}
           {imageData && (
             <div className="image-preview" style={{ width: '100%', marginTop: '10px', textAlign: 'center' }}>
               <img src={imageData} alt="Background preview" style={{ maxWidth: '100%', maxHeight: '120px', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />

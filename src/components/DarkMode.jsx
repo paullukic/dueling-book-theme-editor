@@ -22,7 +22,7 @@ const darkModeCSS = `
   background-image: none !important;
   border: none !important;
   background-color: ${darkBackgroundHover} !important;
-  color: ${lightText} !important;
+  filter: saturate(2.3) !important;
 }
 .isAdmin {
   color: ${adminColor} !important;
@@ -110,6 +110,10 @@ select option {
 ::-webkit-scrollbar-thumb:hover {
   background: ${scrollbarThumbHover} !important;
 }
+#decklist_cb option[style*="color: #007700"] { color: #149114ff !important; }
+#decklist_cb option[style*="color: #888888"] { color: #a0a0a0ff !important; }
+#decklist_cb option[style*="color: #CC0077"] { color: #df47a0ff !important; }
+#decklist_cb option[style*="color: #880088"] { color: #9f019fff !important; }
 `;
 
 const applyDarkMode = (enabled) => {
