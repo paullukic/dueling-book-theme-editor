@@ -59,7 +59,7 @@ zip -r dueling-book-theme-editor-1.0.3.zip manifest.json background.js contentSc
 
 **With PowerShell (if zip is not available):**
 ```powershell
-Compress-Archive -Path manifest.json,background.js,contentScript.js,icon16.png,icon32.png,icon48.png,icon128.png,README.md,screenshots -DestinationPath dueling-book-theme-editor-1.0.3.zip -Force
+powershell.exe Compress-Archive -Path manifest.json,background.js,contentScript.js,icon16.png,icon32.png,icon48.png,icon128.png,README.md,screenshots -DestinationPath dueling-book-theme-editor-1.0.3.zip -Force
 ```
 
 Upload the resulting `.zip` file to the developer dashboard.
