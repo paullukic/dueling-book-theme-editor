@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./ShortcutKeys.css";
 
 const BUTTONS = [
-  { id: "good_btn", label: "Ok" },
+  { id: "good_btn", label: "Signal Ok" },
   { id: "shuffle_btn", label: "Shuffle Hand" },
   { id: "think_btn", label: "Thinking" },
-  { id: "draw_action", label: "Draw 1" },
-  { id: "mill_action", label: "Mill 1" },
+  { id: "draw_action", label: "Draw 1 Card" },
+  { id: "mill_action", label: "Mill 1 Card" },
+  { id: "discard_action", label: "Discard Random Card" },
+  { id: "half_action", label: "Half your Life Points" },
+  { id: "nibiru_action", label: "Nibiru Stats" },
+  { id: "custom_chat_action", label: "Custom chat text" },
 ];
 
 const ShortcutKeys = () => {
@@ -16,11 +20,46 @@ const ShortcutKeys = () => {
     t: "think_btn",
     d: "draw_action",
     m: "mill_action",
+    r: "discard_action",
+    h: "half_action",
+    n: "nibiru_action",
+    g: "custom_chat_action",
   });
   const [collapsed, setCollapsed] = useState(true);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [customMessage, setCustomMessage] = useState('GLHF');
+
+  const typeInChat = (message) => {
+    const input = document.querySelector("#duel .cin_txt");
+    if (input) {
+      input.focus();
+      input.value = message;
+      const inputEvent = new Event("input", { bubbles: true });
+      input.dispatchEvent(inputEvent);
+      const keydownEvent = new KeyboardEvent("keydown", {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+      });
+      const keyupEvent = new KeyboardEvent("keyup", {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+      });
+      input.dispatchEvent(keydownEvent);
+      input.dispatchEvent(keyupEvent);
+      input.value = "";
+      input.dispatchEvent(inputEvent);
+      input.blur();
+    }
+  };
 
   useEffect(() => {
-    chrome.storage.sync.get(["shortcutKeys"], (result) => {
+    chrome.storage.sync.get(["shortcutKeys", "customChatMessage"], (result) => {
       if (result.shortcutKeys) {
         setShortcuts(result.shortcutKeys);
       } else {
@@ -30,9 +69,19 @@ const ShortcutKeys = () => {
           t: "think_btn",
           d: "draw_action",
           m: "mill_action",
+          r: "discard_action",
+          h: "half_action",
+          n: "nibiru_action",
+          g: "custom_chat_action",
         };
         setShortcuts(defaultKeys);
         chrome.storage.sync.set({ shortcutKeys: defaultKeys });
+      }
+      if (result.customChatMessage !== undefined) {
+        setCustomMessage(result.customChatMessage);
+      } else {
+        setCustomMessage('GLHF');
+        chrome.storage.sync.set({ customChatMessage: 'GLHF' });
       }
     });
 
@@ -46,59 +95,33 @@ const ShortcutKeys = () => {
       const btnId = shortcuts[key];
       if (btnId) {
         if (btnId === "draw_action") {
-          const input = document.querySelector("#duel .cin_txt");
-          if (input) {
-            input.focus();
-            input.value = "/draw 1";
-            const inputEvent = new Event("input", { bubbles: true });
-            input.dispatchEvent(inputEvent);
-            const keydownEvent = new KeyboardEvent("keydown", {
-              key: "Enter",
-              code: "Enter",
-              keyCode: 13,
-              which: 13,
-              bubbles: true,
-            });
-            const keyupEvent = new KeyboardEvent("keyup", {
-              key: "Enter",
-              code: "Enter",
-              keyCode: 13,
-              which: 13,
-              bubbles: true,
-            });
-            input.dispatchEvent(keydownEvent);
-            input.dispatchEvent(keyupEvent);
-            input.value = "";
-            input.dispatchEvent(inputEvent);
-            input.blur();
-          }
+          typeInChat("/draw 1");
         } else if (btnId === "mill_action") {
-          const input = document.querySelector("#duel .cin_txt");
-          if (input) {
-            input.focus();
-            input.value = "/mill 1";
-            const inputEvent = new Event("input", { bubbles: true });
-            input.dispatchEvent(inputEvent);
-            const keydownEvent = new KeyboardEvent("keydown", {
-              key: "Enter",
-              code: "Enter",
-              keyCode: 13,
-              which: 13,
-              bubbles: true,
+          typeInChat("/mill 1");
+        } else if (btnId === "discard_action") {
+          typeInChat("/discardrandom");
+        } else if (btnId === "half_action") {
+          typeInChat("/half");
+        } else if (btnId === "nibiru_action") {
+          const field = document.getElementById('field');
+          if (field) {
+            const atkSpans = field.querySelectorAll('span.card_atk_txt');
+            let totalAtk = 0;
+            atkSpans.forEach(span => {
+              const atk = parseInt(span.textContent) || 0;
+              totalAtk += atk;
             });
-            const keyupEvent = new KeyboardEvent("keyup", {
-              key: "Enter",
-              code: "Enter",
-              keyCode: 13,
-              which: 13,
-              bubbles: true,
+            const defSpans = field.querySelectorAll('span.card_def_txt');
+            let totalDef = 0;
+            defSpans.forEach(span => {
+              const def = parseInt(span.textContent) || 0;
+              totalDef += def;
             });
-            input.dispatchEvent(keydownEvent);
-            input.dispatchEvent(keyupEvent);
-            input.value = "";
-            input.dispatchEvent(inputEvent);
-            input.blur();
+            const message = `Nibiru Token ATK:${totalAtk} DEF:${totalDef}`;
+            typeInChat(message);
           }
+        } else if (btnId === "custom_chat_action") {
+          typeInChat(customMessage);
         } else {
           // Handle other button IDs
           const btn = document.getElementById(btnId);
@@ -112,6 +135,12 @@ const ShortcutKeys = () => {
 
   const handleShortcutChange = (btnId, e) => {
     const key = e.target.value.toLowerCase();
+    if (shortcuts[key] && shortcuts[key] !== btnId) {
+      const conflictingButton = BUTTONS.find(b => b.id === shortcuts[key]);
+      setWarningMessage(`Key '${key.toUpperCase()}' is already assigned to "${conflictingButton.label}". Please choose a different key.`);
+      return;
+    }
+    setWarningMessage('');
     const newShortcuts = { ...shortcuts };
 
     Object.keys(newShortcuts).forEach((k) => {
@@ -132,23 +161,79 @@ const ShortcutKeys = () => {
 
       {!collapsed && (
         <div className="shortcut-body">
-          {BUTTONS.map((btn) => (
-            <div className="shortcut-row" key={btn.id}>
-              <label className="shortcut-label">{btn.label}:</label>
-              <input
-                className="shortcut-input"
-                type="text"
-                maxLength={1}
-                value={
-                  Object.entries(shortcuts).find(
-                    ([, id]) => id === btn.id
-                  )?.[0] || ""
-                }
-                onChange={(e) => handleShortcutChange(btn.id, e)}
-                placeholder="Key"
-              />
-            </div>
-          ))}
+          {warningMessage && <div style={{color: 'red', marginBottom: '10px', wordWrap: 'break-word'}}>{warningMessage}</div>}
+          {BUTTONS.map((btn) => {
+            if (btn.id === "custom_chat_action") {
+              return (
+                <div className="shortcut-row" key={btn.id} style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center'}}>
+                    <label className="shortcut-label">{btn.label}:</label>
+                    <input
+                      className="shortcut-input"
+                      type="text"
+                      maxLength={1}
+                      value={
+                        Object.entries(shortcuts).find(
+                          ([, id]) => id === btn.id
+                        )?.[0] || ""
+                      }
+                      onChange={(e) => handleShortcutChange(btn.id, e)}
+                      placeholder="Key"
+                    />
+                  </div>
+                  <textarea
+                    style={{width: '100%', marginTop: '5px', minHeight: '40px', resize: 'vertical'}}
+                    value={customMessage}
+                    onChange={(e) => {
+                      setCustomMessage(e.target.value);
+                      chrome.storage.sync.set({ customChatMessage: e.target.value });
+                    }}
+                    placeholder="Enter custom chat message"
+                  />
+                </div>
+              );
+            } else if (btn.id === "nibiru_action") {
+              return (
+                <div key={btn.id}>
+                  <div className="shortcut-row">
+                    <label className="shortcut-label">{btn.label}:</label>
+                    <input
+                      className="shortcut-input"
+                      type="text"
+                      maxLength={1}
+                      value={
+                        Object.entries(shortcuts).find(
+                          ([, id]) => id === btn.id
+                        )?.[0] || ""
+                      }
+                      onChange={(e) => handleShortcutChange(btn.id, e)}
+                      placeholder="Key"
+                    />
+                  </div>
+                  <div style={{fontSize: '11px', color: '#b15c1cff', marginTop: '2px', marginLeft: '10px', lineHeight: '1.3'}}>
+                    Please use this shortcut before you summoned Nibiru and monsters are removed from field, else this will not sum correctly.
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div className="shortcut-row" key={btn.id}>
+                <label className="shortcut-label">{btn.label}:</label>
+                <input
+                  className="shortcut-input"
+                  type="text"
+                  maxLength={1}
+                  value={
+                    Object.entries(shortcuts).find(
+                      ([, id]) => id === btn.id
+                    )?.[0] || ""
+                  }
+                  onChange={(e) => handleShortcutChange(btn.id, e)}
+                  placeholder="Key"
+                />
+              </div>
+            );
+          })}
 
           <div className="shortcut-hint">
             Assign a letter key to each button.
