@@ -103,19 +103,20 @@ const ShortcutKeys = () => {
         } else if (btnId === "half_action") {
           typeInChat("/half");
         } else if (btnId === "nibiru_action") {
-          const field = document.getElementById('field');
+          const field = document.getElementById('duel_content');
           if (field) {
-            const atkSpans = field.querySelectorAll('span.card_atk_txt');
+            const allSpans = field.querySelectorAll('span');
             let totalAtk = 0;
-            atkSpans.forEach(span => {
-              const atk = parseInt(span.textContent) || 0;
-              totalAtk += atk;
-            });
-            const defSpans = field.querySelectorAll('span.card_def_txt');
             let totalDef = 0;
-            defSpans.forEach(span => {
-              const def = parseInt(span.textContent) || 0;
-              totalDef += def;
+            allSpans.forEach(span => {
+              const text = span.textContent.trim();
+              const match = text.match(/^(\d+)\/(\d+)$/);
+              if (match) {
+                const atk = parseInt(match[1]) || 0;
+                const def = parseInt(match[2]) || 0;
+                totalAtk += atk;
+                totalDef += def;
+              }
             });
             const message = `Nibiru Token ATK:${totalAtk} DEF:${totalDef}`;
             typeInChat(message);
