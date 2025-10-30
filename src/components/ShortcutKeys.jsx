@@ -11,6 +11,12 @@ const BUTTONS = [
   { id: "half_action", label: "Half your Life Points" },
   { id: "nibiru_action", label: "Nibiru Stats" },
   { id: "custom_chat_action", label: "Custom chat text" },
+  { id: "draw_phase", label: "Draw Phase?" },
+  { id: "standby_phase", label: "Standby Phase?" },
+  { id: "main1_phase", label: "Main Phase 1?" },
+  { id: "battle_phase", label: "Battle Phase?" },
+  { id: "main2_phase", label: "Main Phase 2?" },
+  { id: "end_phase", label: "End Phase?" },
 ];
 
 const ShortcutKeys = () => {
@@ -24,10 +30,17 @@ const ShortcutKeys = () => {
     h: "half_action",
     n: "nibiru_action",
     g: "custom_chat_action",
+    "1": "draw_phase",
+    "2": "standby_phase",
+    "3": "main1_phase",
+    "4": "battle_phase",
+    "5": "main2_phase",
+    "6": "end_phase",
   });
   const [collapsed, setCollapsed] = useState(true);
   const [warningMessage, setWarningMessage] = useState('');
   const [customMessage, setCustomMessage] = useState('GLHF');
+  const [phaseCollapsed, setPhaseCollapsed] = useState(true);
 
   const typeInChat = (message) => {
     const input = document.querySelector("#duel .cin_txt");
@@ -60,20 +73,32 @@ const ShortcutKeys = () => {
 
   useEffect(() => {
     chrome.storage.sync.get(["shortcutKeys", "customChatMessage"], (result) => {
+      const defaultKeys = {
+        a: "good_btn",
+        s: "shuffle_btn",
+        t: "think_btn",
+        d: "draw_action",
+        m: "mill_action",
+        r: "discard_action",
+        h: "half_action",
+        n: "nibiru_action",
+        g: "custom_chat_action",
+        "1": "draw_phase",
+        "2": "standby_phase",
+        "3": "main1_phase",
+        "4": "battle_phase",
+        "5": "main2_phase",
+        "6": "end_phase",
+      };
       if (result.shortcutKeys) {
-        setShortcuts(result.shortcutKeys);
+        // Merge defaults with saved shortcuts to add new ones
+        const updatedShortcuts = { ...defaultKeys, ...result.shortcutKeys };
+        setShortcuts(updatedShortcuts);
+        // Save back if there were additions
+        if (Object.keys(updatedShortcuts).length > Object.keys(result.shortcutKeys).length) {
+          chrome.storage.sync.set({ shortcutKeys: updatedShortcuts });
+        }
       } else {
-        const defaultKeys = {
-          a: "good_btn",
-          s: "shuffle_btn",
-          t: "think_btn",
-          d: "draw_action",
-          m: "mill_action",
-          r: "discard_action",
-          h: "half_action",
-          n: "nibiru_action",
-          g: "custom_chat_action",
-        };
         setShortcuts(defaultKeys);
         chrome.storage.sync.set({ shortcutKeys: defaultKeys });
       }
@@ -123,6 +148,30 @@ const ShortcutKeys = () => {
           }
         } else if (btnId === "custom_chat_action") {
           typeInChat(customMessage);
+        } else if (btnId === "draw_phase") {
+          typeInChat("Draw Phase?");
+          const dpDiv = document.getElementById('dp');
+          if (dpDiv) dpDiv.click();
+        } else if (btnId === "standby_phase") {
+          typeInChat("Standby Phase?");
+          const spDiv = document.getElementById('sp');
+          if (spDiv) spDiv.click();
+        } else if (btnId === "main1_phase") {
+          typeInChat("Main Phase 1?");
+          const m1Div = document.getElementById('m1');
+          if (m1Div) m1Div.click();
+        } else if (btnId === "battle_phase") {
+          typeInChat("Battle Phase?");
+          const bpDiv = document.getElementById('bp');
+          if (bpDiv) bpDiv.click();
+        } else if (btnId === "main2_phase") {
+          typeInChat("Main Phase 2?");
+          const m2Div = document.getElementById('m2');
+          if (m2Div) m2Div.click();
+        } else if (btnId === "end_phase") {
+          typeInChat("End Phase?");
+          const epDiv = document.getElementById('ep');
+          if (epDiv) epDiv.click();
         } else {
           // Handle other button IDs
           const btn = document.getElementById(btnId);
@@ -130,8 +179,8 @@ const ShortcutKeys = () => {
         }
       }
     };
-    window.addEventListener("keydown", handleKeydown);
-    return () => window.removeEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeydown);
+    return () => window.removeEventListener("keyup", handleKeydown);
   }, [shortcuts]);
 
   const handleShortcutChange = (btnId, e) => {
@@ -154,7 +203,7 @@ const ShortcutKeys = () => {
   };
 
   return (
-    <div className="shortcut-section">
+    <div className="shortcut-section" style={{marginTop: '10px'}}>
       <div className="shortcut-toggle" onClick={() => setCollapsed((c) => !c)}>
         <span>Keyboard Shortcuts</span>
         <span className="shortcut-icon">{collapsed ? "▼" : "▲"}</span>
@@ -163,7 +212,7 @@ const ShortcutKeys = () => {
       {!collapsed && (
         <div className="shortcut-body">
           {warningMessage && <div style={{color: 'red', marginBottom: '10px', wordWrap: 'break-word'}}>{warningMessage}</div>}
-          {BUTTONS.map((btn) => {
+          {BUTTONS.filter(btn => !['draw_phase', 'standby_phase', 'main1_phase', 'battle_phase', 'main2_phase', 'end_phase'].includes(btn.id)).map((btn) => {
             if (btn.id === "custom_chat_action") {
               return (
                 <div className="shortcut-row" key={btn.id} style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -240,6 +289,37 @@ const ShortcutKeys = () => {
             Assign a letter key to each button.
             <br />
             When pressed, that button will be triggered.
+          </div>
+        </div>
+      )}
+
+      <div className="shortcut-toggle" onClick={() => setPhaseCollapsed((c) => !c)}>
+        <span>Phase Shortcuts</span>
+        <span className="shortcut-icon">{phaseCollapsed ? "▼" : "▲"}</span>
+      </div>
+
+      {!phaseCollapsed && (
+        <div className="shortcut-body">
+          {BUTTONS.filter(btn => ['draw_phase', 'standby_phase', 'main1_phase', 'battle_phase', 'main2_phase', 'end_phase'].includes(btn.id)).map((btn) => (
+            <div className="shortcut-row" key={btn.id}>
+              <label className="shortcut-label">{btn.label}:</label>
+              <input
+                className="shortcut-input"
+                type="text"
+                maxLength={1}
+                value={
+                  Object.entries(shortcuts).find(
+                    ([, id]) => id === btn.id
+                  )?.[0] || ""
+                }
+                onChange={(e) => handleShortcutChange(btn.id, e)}
+                placeholder="Key"
+              />
+            </div>
+          ))}
+
+          <div className="shortcut-hint">
+            Phase shortcuts ask about the phase and advance to it.
           </div>
         </div>
       )}
