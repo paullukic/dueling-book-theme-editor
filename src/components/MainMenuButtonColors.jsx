@@ -121,32 +121,34 @@ const MainMenuButtonColors = () => {
         />
         Custom Button Colors
       </label>
-      <div className="color-controls">
-        <div className="color-group">
-          <label className="color-label">Background Color:</label>
-          <input type="color" value={backgroundColor} onChange={handleBgChange} disabled={!applyColors} className="color-input" />
+      {applyColors && (
+        <div className="color-controls">
+          <div className="color-group">
+            <label className="color-label">Background Color:</label>
+            <input type="color" value={backgroundColor} onChange={handleBgChange} className="color-input" />
+          </div>
+          <div className="alpha-group">
+            <label className="alpha-label">Background Alpha: {backgroundAlpha.toFixed(2)}</label>
+            <input type="range" min="0" max="1" step="0.01" value={backgroundAlpha} onChange={handleBgAlphaChange} className="alpha-slider" />
+          </div>
+          <div className="color-group">
+            <label className="color-label">Border Color:</label>
+            <input type="color" value={borderColor} onChange={handleBorderChange} className="color-input" />
+          </div>
+          <div className="alpha-group">
+            <label className="alpha-label">Border Alpha: {borderAlpha.toFixed(2)}</label>
+            <input type="range" min="0" max="1" step="0.01" value={borderAlpha} onChange={handleBorderAlphaChange} className="alpha-slider" />
+          </div>
+          <div className="color-group">
+            <label className="color-label">Edge Color:</label>
+            <input type="color" value={edgeColor} onChange={handleEdgeColorChange} className="color-input" />
+          </div>
+          <div className="alpha-group">
+            <label className="alpha-label">Edge Alpha: {edgeAlpha.toFixed(2)}</label>
+            <input type="range" min="0" max="1" step="0.01" value={edgeAlpha} onChange={handleEdgeAlphaChange} className="alpha-slider" />
+          </div>
         </div>
-        <div className="alpha-group">
-          <label className="alpha-label">Background Alpha: {backgroundAlpha.toFixed(2)}</label>
-          <input type="range" min="0" max="1" step="0.01" value={backgroundAlpha} onChange={handleBgAlphaChange} disabled={!applyColors} className="alpha-slider" />
-        </div>
-        <div className="color-group">
-          <label className="color-label">Border Color:</label>
-          <input type="color" value={borderColor} onChange={handleBorderChange} disabled={!applyColors} className="color-input" />
-        </div>
-        <div className="alpha-group">
-          <label className="alpha-label">Border Alpha: {borderAlpha.toFixed(2)}</label>
-          <input type="range" min="0" max="1" step="0.01" value={borderAlpha} onChange={handleBorderAlphaChange} disabled={!applyColors} className="alpha-slider" />
-        </div>
-        <div className="color-group">
-          <label className="color-label">Edge Color:</label>
-          <input type="color" value={edgeColor} onChange={handleEdgeColorChange} disabled={!applyColors} className="color-input" />
-        </div>
-        <div className="alpha-group">
-          <label className="alpha-label">Edge Alpha: {edgeAlpha.toFixed(2)}</label>
-          <input type="range" min="0" max="1" step="0.01" value={edgeAlpha} onChange={handleEdgeAlphaChange} disabled={!applyColors} className="alpha-slider" />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
