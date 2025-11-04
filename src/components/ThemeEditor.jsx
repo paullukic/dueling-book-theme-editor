@@ -8,6 +8,8 @@ import FontQuicksand from "./FontQuicksand";
 import DarkMode from "./DarkMode";
 import TextHighlight from "./TextHighlight";
 import ShortcutKeys from "./ShortcutKeys";
+import Notes from "./Notes";
+import ActionTracker from "./ActionTracker";
 
 const ThemeEditor = () => {
   return (
@@ -45,6 +47,8 @@ const ThemeEditor = () => {
         <DarkMode />
         <TextHighlight />
         <ShortcutKeys />
+        <Notes />
+        <ActionTracker />
         <br />
         <h4>Main Menu</h4>
         <SmallerMainMenu />

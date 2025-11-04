@@ -113,7 +113,7 @@ const ShortcutKeys = () => {
     const handleKeydown = (e) => {
       if (
         document.activeElement.tagName === "INPUT" ||
-        document.activeElement.tagName === "TEXTAREA"
+        document.activeElement.tagName === "TEXTAREA" || e.shiftKey
       )
         return;
       const key = e.key.toLowerCase();
