@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HelpTip from "./HelpTip";
 
 const MainMenuButtonColors = () => {
   const [applyColors, setApplyColors] = useState(false);
@@ -120,6 +121,8 @@ const MainMenuButtonColors = () => {
           onChange={handleApplyChange}
         />
         Custom Button Colors
+      
+        <HelpTip text="Recolours the main menu buttons. Set the fill, border and edge-glow colours, each with its own transparency." />
       </label>
       {applyColors && (
         <div className="color-controls">

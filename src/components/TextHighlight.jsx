@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HelpTip from "./HelpTip";
 
 const highlightCSS = `
 .highlight-red {
@@ -328,6 +329,8 @@ const TextHighlight = () => {
       <label className="setting-toggle">
         <input type="checkbox" checked={enabled} onChange={handleChange} />
         Highlight Card Keywords
+      
+        <HelpTip text="Colour-codes the card preview text: costs after a semicolon in red, draw and search effects in green, effect timing after a colon in orange, and hard once-per-turn wording in bright red." />
       </label>
     </div>
   );

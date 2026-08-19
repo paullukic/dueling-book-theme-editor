@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import HelpTip from "./HelpTip";
 
 const STORAGE_KEYS = {
   enabled: "actionLogEnabled",
@@ -826,7 +827,9 @@ const ActionTracker = () => {
     <div className="setting-item">
       <label className="setting-toggle">
         <input type="checkbox" checked={enabled} onChange={handleToggleChange} />
-        Track actions (Add/Set/Place/Reveal/Return)
+        Track actions
+      
+        <HelpTip text="Logs every Add / Set / Place / Reveal / Return into a draggable, timestamped list, and keeps a running count of the cards in your opponent's hand." />
       </label>
     </div>
   );

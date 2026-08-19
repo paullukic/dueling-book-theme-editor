@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HelpTip from "./HelpTip";
 
 const darkBackground = '#23272a';
 const darkBackgroundHover = '#2c2f33';
@@ -154,7 +155,9 @@ const DarkMode = () => {
     <div className="setting-item">
       <label className="setting-toggle">
         <input type="checkbox" checked={enabled} onChange={handleChange} />
-        Dark Mode (cell1 + admin)
+        Dark Mode
+      
+        <HelpTip text="Recolours DuelingBook itself - user lists, chat, search panels, deck slots and text inputs - to a dark grey palette. Admin names stay green and followed players stay blue." />
       </label>
     </div>
   );

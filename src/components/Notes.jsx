@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HelpTip from "./HelpTip";
 
 const Notes = () => {
   const [enabled, setEnabled] = useState(false);
@@ -19,11 +20,13 @@ const Notes = () => {
         position: fixed;
         left: ${position.left};
         top: ${position.top};
-        background: #303030ed;
-        padding: 0px 4px 0px 4px;
+        background: #191919f0;
+        border: 1px solid rgb(74, 74, 74);
+        color: #eee;
+        padding: 8px;
         z-index: 9998;
         font-family: Arial, sans-serif;
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 8px 24px;
         border-radius: 8px;
         width: 200px;
         max-width: 300px;
@@ -65,11 +68,11 @@ const Notes = () => {
       });
 
       const footerDiv = document.createElement("div");
-      footerDiv.style.cssText = `font-size: 12px; color: rgb(102, 102, 102); color: wheat; margin-bottom: 5px; user-select: none;`;
+      footerDiv.style.cssText = `font-size: 12px; color: #9aa0a6; margin-bottom: 5px; user-select: none;`;
 
       const clearButton = document.createElement("button");
       clearButton.textContent = "Clear Notes";
-      clearButton.style.cssText = `margin-top: 5px; margin-right: 14px; border: 1px solid rgb(204, 204, 204); border-radius: 4px; background: #f0f0f0db; cursor: pointer;`;
+      clearButton.style.cssText = `margin-top: 5px; margin-right: 14px; padding: 2px 8px; border: 1px solid rgb(74, 74, 74); border-radius: 6px; background: #2b2b2b; color: #eee; cursor: pointer;`;
       clearButton.addEventListener("click", () => {
         textarea.value = "";
         setNotesText("");
@@ -184,6 +187,8 @@ const Notes = () => {
           onChange={handleToggleChange}
         />
         Persistent Notes
+      
+        <HelpTip text="Adds a draggable notepad to the page. Whatever you type is saved and is still there next time you open DuelingBook." />
       </label>
     </div>
   );

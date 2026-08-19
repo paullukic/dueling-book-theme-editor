@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HelpTip from "./HelpTip";
 import './SmallerMainMenu.css';
 
 const SmallerMainMenu = () => {
@@ -52,6 +53,8 @@ const SmallerMainMenu = () => {
           onChange={handleSmallerMainMenuChange}
         />
         Smaller main menu
+      
+        <HelpTip text="Shrinks the main menu buttons so more of the menu fits on screen." />
       </label>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HelpTip from "./HelpTip";
 
 const BackgroundImage = () => {
   const [enabled, setEnabled] = useState(false);
@@ -148,6 +149,8 @@ const BackgroundImage = () => {
           onChange={handleEnabledChange}
         />
         Custom Background Image
+      
+        <HelpTip text="Replaces the DuelingBook background with an image of your own. Drop a file on the box or pick one - it is resized and stored locally." />
       </label>
       {enabled && (
         <>
@@ -178,7 +181,7 @@ const BackgroundImage = () => {
           >
             <input type="file" accept="image/*" onChange={handleFileChange} style={{ width: '100%' }} />
           </div>
-          {errorMessage && <div style={{color: 'red', marginTop: '5px'}}>{errorMessage}</div>}
+          {errorMessage && <div className="dbte-error">{errorMessage}</div>}
           {imageData && (
             <div className="image-preview" style={{ width: '100%', marginTop: '10px', textAlign: 'center' }}>
               <img src={imageData} alt="Background preview" style={{ maxWidth: '100%', maxHeight: '120px', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />

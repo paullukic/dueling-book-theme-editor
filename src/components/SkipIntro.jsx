@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HelpTip from "./HelpTip";
 
 const SkipIntro = () => {
   const [skipIntro, setSkipIntro] = useState(false);
@@ -69,6 +70,8 @@ const SkipIntro = () => {
           onChange={handleSkipIntroChange}
         />
         Always Skip Intro
+      
+        <HelpTip text="Clicks past DuelingBook's intro screen the moment the page loads, then opens the duel lobby for you." />
       </label>
     </div>
   );
