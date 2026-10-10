@@ -88,28 +88,34 @@ const mount = async () => {
   });
 
   document.body.appendChild(host);
+
+  // Listen for the next copy's shutdown request before anything slow happens,
+  // so a copy that is still loading can be stopped too.
+  let alive = true;
+  let root = null;
+  let liveness = null;
+  const teardown = () => {
+    if (!alive) return;
+    alive = false;
+    clearInterval(liveness);
+    document.removeEventListener(TEARDOWN_EVENT, teardown);
+    if (root) root.unmount();
+    host.remove();
+  };
+  document.addEventListener(TEARDOWN_EVENT, teardown);
+  liveness = setInterval(() => {
+    if (!contextAlive()) teardown();
+  }, 3000);
+
   await loadSettings();
-  const root = createRoot(container);
+  if (!alive) return;
+  root = createRoot(container);
   root.render(
     <Boundary>
       <App shadowRoot={shadowRoot} />
     </Boundary>,
   );
   send('getState');
-
-  let alive = true;
-  const teardown = () => {
-    if (!alive) return;
-    alive = false;
-    clearInterval(liveness);
-    document.removeEventListener(TEARDOWN_EVENT, teardown);
-    root.unmount();
-    host.remove();
-  };
-  document.addEventListener(TEARDOWN_EVENT, teardown);
-  const liveness = setInterval(() => {
-    if (!contextAlive()) teardown();
-  }, 3000);
 };
 
 if (document.body) mount();

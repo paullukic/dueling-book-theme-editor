@@ -7,8 +7,14 @@
 // Constructor. It never reads hands, decks or face-down cards of other players.
 
 (() => {
-  if (window.__dbteBridge) return;
-  window.__dbteBridge = true;
+  // After an extension update the previous bridge is still running in this
+  // page. Stop it and take over; same-version re-injection is a no-op.
+  const VERSION = 2;
+  const previous = window.__dbteBridge;
+  if (previous && previous.version >= VERSION) return;
+  if (previous && typeof previous.stop === 'function') previous.stop();
+  const timers = [];
+  const observers = [];
 
   const FROM_BRIDGE = 'dbte-bridge';
   const FROM_EXTENSION = 'dbte-ext';
@@ -71,6 +77,8 @@
 
   // Wrap the site's turn/phase functions so state is reported the moment the
   // server pushes it, even in a background tab where timers are throttled.
+  // Wrappers call whichever bridge is current, so a newer bridge needs no
+  // re-wrapping.
   const HOOKS = ['startTurn', 'endTurn', 'updatePhase', 'initDuelistDuelStart', 'showStartTurn'];
   const wrapHooks = () => {
     for (const name of HOOKS) {
@@ -79,7 +87,8 @@
       const wrapped = function (...args) {
         const result = fn.apply(this, args);
         try {
-          emitIfChanged();
+          const bridge = window.__dbteBridge;
+          if (bridge && bridge.emit) bridge.emit();
         } catch (e) {
           // never break the site
         }
@@ -116,7 +125,7 @@
     return { main, extraCount: extra.length, deckName };
   };
 
-  window.addEventListener('message', (e) => {
+  const onMessage = (e) => {
     if (e.source !== window || !e.data || e.data.source !== FROM_EXTENSION) return;
     const { type, value } = e.data;
     if (type === 'setTimeScale') {
@@ -129,15 +138,28 @@
       last = '';
       emitIfChanged();
     }
-  });
+  };
+  window.addEventListener('message', onMessage);
 
   // Duel screen shows/hides via style changes; observe them directly so a
   // found match is reported immediately in a hidden tab.
   const watchDuelScreen = () => {
     const duel = document.getElementById('duel');
     if (!duel) return false;
-    new MutationObserver(emitIfChanged).observe(duel, { attributes: true, attributeFilter: ['style', 'class'] });
+    const obs = new MutationObserver(emitIfChanged);
+    obs.observe(duel, { attributes: true, attributeFilter: ['style', 'class'] });
+    observers.push(obs);
     return true;
+  };
+
+  window.__dbteBridge = {
+    version: VERSION,
+    emit: emitIfChanged,
+    stop: () => {
+      timers.forEach(clearInterval);
+      observers.forEach((o) => o.disconnect());
+      window.removeEventListener('message', onMessage);
+    },
   };
 
   wrapHooks();
@@ -145,11 +167,14 @@
     const retry = setInterval(() => {
       if (watchDuelScreen()) clearInterval(retry);
     }, 2000);
+    timers.push(retry);
   }
-  setInterval(() => {
-    wrapHooks();
-    emitIfChanged();
-  }, 1000);
+  timers.push(
+    setInterval(() => {
+      wrapHooks();
+      emitIfChanged();
+    }, 1000),
+  );
   post('ready', null);
   emitIfChanged();
 })();

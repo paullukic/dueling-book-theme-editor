@@ -23,7 +23,8 @@ let state = withDefaults(null);
 let loadedOk = false;
 let writeTimer = null;
 let lastWritten = '';
-let saveError = null;
+let saveError = null; // 'load' | 'save' | null
+let retryTimer = null;
 const dirty = new Set();
 const listeners = new Set();
 
@@ -50,10 +51,13 @@ const flush = () => {
       const err = chrome.runtime.lastError;
       if (err) {
         console.error('[DB Theme Editor] could not save settings:', err.message);
-        saveError = err.message;
+        saveError = 'save';
         lastWritten = '';
         written.forEach((k) => dirty.add(k));
         emit();
+        // Quota and rate limits clear up on their own; try again later.
+        if (writeTimer) clearTimeout(writeTimer);
+        writeTimer = setTimeout(flush, 15000);
       } else if (saveError) {
         saveError = null;
         emit();
@@ -71,6 +75,12 @@ const scheduleWrite = () => {
 
 export const getSettings = () => state;
 export const getSaveError = () => saveError;
+
+// "Try again" from the panel: reload if the first read failed, else save now.
+export const retryStorage = () => {
+  if (!loadedOk) loadSettings();
+  else flush();
+};
 
 export const updateSettings = (patch) => {
   const next = typeof patch === 'function' ? patch(state) : patch;
@@ -118,7 +128,18 @@ const readSync = () =>
     });
   });
 
-export const loadSettings = async () => {
+let loading = null;
+export const loadSettings = () => {
+  if (!loading) {
+    loading = readAndApply().finally(() => {
+      loading = null;
+    });
+  }
+  return loading;
+};
+
+const readAndApply = async () => {
+  if (loadedOk) return state;
   let res = null;
   for (let attempt = 0; attempt < 3 && !res; attempt++) {
     try {
@@ -129,10 +150,17 @@ export const loadSettings = async () => {
     }
   }
   if (!res) {
-    // Show defaults but keep saving disabled so the stored settings survive.
+    // Show defaults but keep saving disabled so the stored settings survive,
+    // tell the user, and keep trying in the background.
+    saveError = 'load';
     emit();
+    if (retryTimer) clearTimeout(retryTimer);
+    retryTimer = setTimeout(loadSettings, 20000);
     return state;
   }
+  if (retryTimer) clearTimeout(retryTimer);
+  retryTimer = null;
+  if (saveError === 'load') saveError = null;
 
   const stored = res[SETTINGS_KEY];
   let base = stored ? stored : migrateLegacy(res);

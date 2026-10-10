@@ -628,6 +628,10 @@ textarea.field {
   color: var(--ink-muted);
 }
 
+.card-callout.danger {
+  border-color: var(--danger);
+}
+
 .card-callout.gold {
   border-color: var(--gold-deep);
   background: linear-gradient(160deg, rgba(232, 198, 106, 0.14), rgba(232, 198, 106, 0.03) 60%), var(--plate-raised);

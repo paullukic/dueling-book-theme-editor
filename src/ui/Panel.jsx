@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { updateSettings, useSettings } from '../lib/settings';
-import { DEFAULT_PSCT_COLORS } from '../lib/defaults';
+import { retryStorage, updateSettings, useSaveError, useSettings } from '../lib/settings';
+import { CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
 import { useLocal } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
@@ -18,8 +18,6 @@ const TABS = [
   { id: 'deck', label: 'Deck', Icon: CardsIcon },
   { id: 'more', label: 'Support', Icon: HeartIcon },
 ];
-
-const CARD_TEXT_SIZES = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22];
 
 const set = (key) => (value) => updateSettings({ [key]: value });
 
@@ -314,6 +312,24 @@ const ChatTab = () => {
   );
 };
 
+const StorageProblem = () => {
+  const problem = useSaveError();
+  if (!problem) return null;
+  return (
+    <div className="card-callout danger" role="alert">
+      <h3>{problem === 'load' ? 'Could not read your settings' : 'Your last changes are not saved yet'}</h3>
+      <p>
+        {problem === 'load'
+          ? 'Changes you make now will not be saved until your browser lets the extension read its storage again. Retrying automatically.'
+          : 'Your browser refused to save (usually too many changes too quickly). Retrying automatically.'}
+      </p>
+      <button type="button" className="btn" onClick={retryStorage}>
+        Try again now
+      </button>
+    </div>
+  );
+};
+
 const Panel = ({ onClose, logoUrl }) => {
   const { panelTab } = useSettings();
   const tab = TABS.some((t) => t.id === panelTab) ? panelTab : 'look';
@@ -381,6 +397,7 @@ const Panel = ({ onClose, logoUrl }) => {
         role="tabpanel"
         aria-labelledby={`dbte-tab-${tab}`}
       >
+        <StorageProblem />
         <WhatsNew meta={meta} setMeta={setMeta} />
         {tab !== 'more' && <SupportNudge meta={meta} setMeta={setMeta} />}
         {tab === 'look' && <LookTab />}

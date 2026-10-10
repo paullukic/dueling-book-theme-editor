@@ -22,6 +22,8 @@ export const DEFAULT_SHORTCUT_KEYS = {
   6: 'end_phase',
 };
 
+export const CARD_TEXT_SIZES = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22];
+
 export const DEFAULT_PSCT_COLORS = {
   condition: '#f0c29f',
   cost: '#f09f9f',
@@ -178,6 +180,9 @@ const cleanValue = (k, v, d) => {
   if (!sameType(v, d)) return d;
   if (typeof d === 'number') {
     if (!Number.isFinite(v)) return d;
+    if (k === 'cardTextSize') {
+      return CARD_TEXT_SIZES.reduce((best, s) => (Math.abs(s - v) < Math.abs(best - v) ? s : best), 0);
+    }
     const r = RANGES[k];
     return r ? Math.min(r[1], Math.max(r[0], v)) : v;
   }
