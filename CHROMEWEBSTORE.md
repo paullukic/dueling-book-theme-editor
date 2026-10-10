@@ -59,11 +59,11 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Asset | Dimensions | Status | Filename |
 |-------|-----------|--------|----------|
 | Store Icon | 128×128 PNG | ✅ Ready | `icon128.png` |
-| Screenshot 1 | 1280×800 | 🟡 Needs update (new panel) | |
-| Screenshot 2 | 1280×800 | 🟡 Needs update | |
-| Screenshot 3 | 1280×800 | 🟡 Needs update | |
-| Screenshot 4 | 1280×800 | ⬜ Not created | |
-| Screenshot 5 | 1280×800 | ⬜ Not created | |
+| Screenshot 1 | 1280×800 | ✅ Ready (panel, Look tab) | `screenshots/v1.1/1-look.png` |
+| Screenshot 2 | 1280×800 | ✅ Ready (alerts + notes) | `screenshots/v1.1/2-duel.png` |
+| Screenshot 3 | 1280×800 | ✅ Ready (chat mute) | `screenshots/v1.1/3-chat.png` |
+| Screenshot 4 | 1280×800 | 🟡 Take logged in: Deck tab with a test hand | |
+| Screenshot 5 | 1280×800 | 🟡 Take logged in: dark mode lobby + coloured card text in a duel | |
 | Small Promo Tile | 440×280 | 🟡 Exists (`screenshots/promo-small.jpg`), refresh with new panel | |
 | Marquee Promo Tile | 1400×560 | 🟡 Exists (`screenshots/promo-big.jpg`) | |
 

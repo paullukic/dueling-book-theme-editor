@@ -33,3 +33,10 @@ Format (`Symptom`, `Cause`, `Fix / rule`, `paths`, `confirmed` are required;
 - **commands:** `npm run build`
 - **confirmed:** 2026-10-10
 
+
+## chrome-storage-quota-message
+- **Symptom:** a too-big setting is retried forever as if rate-limited; other settings stop saving.
+- **Cause:** Chrome's `lastError.message` is `Resource::kQuotaBytesPerItem quota exceeded` (camel case), not the documented `QUOTA_BYTES_PER_ITEM`.
+- **Fix / rule:** classify storage errors with `src/lib/storageErrors.js` only (matches both spellings); add new strings to `test/logic.test.mjs`.
+- **paths:** `src/lib/settings.js`, `src/lib/localStore.js`, `src/lib/storageErrors.js`
+- **confirmed:** 2026-10-11
