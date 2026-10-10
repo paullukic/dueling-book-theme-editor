@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import HelpTip from "./HelpTip";
+// DuelingBook dark palette. Injected into the page head while Dark mode is on.
 
 const darkBackground = '#23272a';
 const darkBackgroundHover = '#2c2f33';
@@ -12,7 +11,7 @@ const followingColor = '#00aced';
 const softRed = '#ff7f7f';
 const softBlue = '#7f7fff';
 
-const darkModeCSS = `
+export const darkModeCSS = `
 .cell1 {
   background-image: none !important;
   border: none !important;
@@ -47,7 +46,7 @@ font[color="#0000FF"] {
   background: rgba(35, 39, 42, 0.75) !important;
   color: ${lightText} !important;
 }
-div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, #search .def_lbl, #search .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt, .title_txt .aliased {
+div.title_txt .aliased, .name_lbl, .desc_lbl, .card_lbl, #search1 .type_lbl, .attrib_lbl, .lvl_compare_lbl, .lvl_rank_lbl, #search .def_lbl, .limit_lbl, .order_lbl, .pendulum_lbl, .scale2_lbl, .scale1_lbl, .tcg_lbl, .ocg_lbl, .custom_lbl, .watchers_txt, .title_txt .aliased {
   color: ${lightText} !important;
 }
 .search_bg span {
@@ -116,51 +115,3 @@ select option {
 #decklist_cb option[style*="color: #CC0077"] { color: #df47a0ff !important; }
 #decklist_cb option[style*="color: #880088"] { color: #9f019fff !important; }
 `;
-
-const applyDarkMode = (enabled) => {
-  let styleElement = document.getElementById("dark-mode-styles");
-  if (enabled) {
-    if (!styleElement) {
-      styleElement = document.createElement("style");
-      styleElement.id = "dark-mode-styles";
-      styleElement.textContent = darkModeCSS;
-      document.head.appendChild(styleElement);
-    }
-  } else {
-    if (styleElement) {
-      styleElement.remove();
-    }
-  }
-};
-
-const DarkMode = () => {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    chrome.storage.sync.get(["darkModeEnabled"], (result) => {
-      const isEnabled = result.darkModeEnabled || false;
-      setEnabled(isEnabled);
-      applyDarkMode(isEnabled);
-    });
-  }, []);
-
-  const handleChange = (e) => {
-    const newValue = e.target.checked;
-    setEnabled(newValue);
-    chrome.storage.sync.set({ darkModeEnabled: newValue });
-    applyDarkMode(newValue);
-  };
-
-  return (
-    <div className="setting-item">
-      <label className="setting-toggle">
-        <input type="checkbox" checked={enabled} onChange={handleChange} />
-        Dark Mode
-      
-        <HelpTip text="Recolours DuelingBook itself - user lists, chat, search panels, deck slots and text inputs - to a dark grey palette. Admin names stay green and followed players stay blue." />
-      </label>
-    </div>
-  );
-};
-
-export default DarkMode;

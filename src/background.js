@@ -1,76 +1,50 @@
-// Background script for DuelingBook Theme Editor
-// Automatically inject content script when user navigates to duelingbook.com
+// Service worker. Content scripts are declared in the manifest, so this only
+// routes the toolbar icon and keyboard command to the page, and records
+// install/update so the panel can show "What's new".
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  // Only inject when the page has finished loading and is on duelingbook.com
-  if (changeInfo.status === 'complete' && tab.url && tab.url.includes('duelingbook.com')) {
-    try {
-      // Check if content script is already injected to avoid duplicates
-      const existing = await chrome.scripting.executeScript({
-        target: { tabId: tabId },
-        func: () => !!document.getElementById('duelingbook-theme-editor')
-      });
+const DUELINGBOOK_URL = 'https://www.duelingbook.com/';
+const META_KEY = 'dbte:meta';
 
-      if (!existing[0].result) {
-        // Inject the content script
-        await chrome.scripting.executeScript({
-          target: { tabId: tabId },
-          files: ['contentScript.js']
-        });
-        console.log('DuelingBook Theme Editor injected automatically');
-      }
-    } catch (error) {
-      console.error('Failed to inject content script:', error);
-    }
-  }
-});
-
-// Also handle when user switches to an already loaded duelingbook.com tab
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
+const togglePanel = async (tab) => {
+  if (!tab || tab.id == null) return;
   try {
-    const tab = await chrome.tabs.get(activeInfo.tabId);
-    if (tab.url && tab.url.includes('duelingbook.com')) {
-      // Check if content script is already injected
-      const existing = await chrome.scripting.executeScript({
-        target: { tabId: activeInfo.tabId },
-        func: () => !!document.getElementById('duelingbook-theme-editor')
-      });
-
-      if (!existing[0].result) {
-        // Inject the content script
-        await chrome.scripting.executeScript({
-          target: { tabId: activeInfo.tabId },
-          files: ['contentScript.js']
-        });
-        console.log('DuelingBook Theme Editor injected on tab activation');
-      }
-    }
-  } catch (error) {
-    console.error('Failed to inject content script on tab activation:', error);
+    await chrome.tabs.sendMessage(tab.id, { action: 'toggleThemeEditor' });
+  } catch (e) {
+    // No content script answered: not a DuelingBook tab, or the tab was open
+    // before the extension was installed/updated. Take the user to the site.
+    await chrome.tabs.create({ url: DUELINGBOOK_URL });
   }
+};
+
+chrome.action.onClicked.addListener((tab) => {
+  togglePanel(tab);
 });
 
-// Handle extension icon click to toggle theme editor
-chrome.action.onClicked.addListener(async (tab) => {
-  if (tab.url && tab.url.includes('duelingbook.com')) {
-    try {
-      // Ensure content script is injected
-      const existing = await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: () => !!document.getElementById('duelingbook-theme-editor')
-      });
+chrome.commands.onCommand.addListener(async (command, tab) => {
+  if (command !== 'toggle-panel') return;
+  if (tab) {
+    togglePanel(tab);
+    return;
+  }
+  const [active] = await chrome.tabs.query({ active: true, currentWindow: true });
+  togglePanel(active);
+});
 
-      if (!existing[0].result) {
-        await chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          files: ['contentScript.js']
-        });
+chrome.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
+  try {
+    const { [META_KEY]: meta = {} } = await chrome.storage.local.get(META_KEY);
+    const next = { ...meta };
+    if (reason === 'install') {
+      next.installedAt = Date.now();
+      next.welcome = true;
+    } else if (reason === 'update') {
+      if (!next.installedAt) next.installedAt = Date.now();
+      if (previousVersion && previousVersion !== chrome.runtime.getManifest().version) {
+        next.updatedFrom = previousVersion;
       }
-
-      // Send toggle message
-      chrome.tabs.sendMessage(tab.id, { action: 'toggleThemeEditor' });
-    } catch (error) {
-      console.error('Failed to toggle theme editor:', error);
     }
+    await chrome.storage.local.set({ [META_KEY]: next });
+  } catch (e) {
+    console.error('[DB Theme Editor] could not record install info:', e);
   }
 });
