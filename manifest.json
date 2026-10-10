@@ -5,7 +5,7 @@
   "version": "1.1.0",
   "description": "Dark mode, hotkeys, turn alerts, test hands, chat mute and more for duelingbook.com. Lightweight, no data collected.",
   "minimum_chrome_version": "111",
-  "permissions": ["storage"],
+  "permissions": ["storage", "scripting"],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",

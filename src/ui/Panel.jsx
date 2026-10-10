@@ -19,6 +19,8 @@ const TABS = [
   { id: 'more', label: 'Support', Icon: HeartIcon },
 ];
 
+const CARD_TEXT_SIZES = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22];
+
 const set = (key) => (value) => updateSettings({ [key]: value });
 
 const LookTab = () => {
@@ -51,11 +53,9 @@ const LookTab = () => {
         <SliderRow
           label="Card text size"
           value={s.cardTextSize}
-          min={0}
-          max={22}
-          step={1}
+          values={CARD_TEXT_SIZES}
           format={(v) => (v === 0 ? 'Default' : `${v}px`)}
-          onChange={(v) => updateSettings({ cardTextSize: v > 0 && v < 10 ? 10 : v })}
+          onChange={set('cardTextSize')}
         />
       </Group>
       <Group title="Main menu">
@@ -147,7 +147,7 @@ const DuelTab = () => {
               onChange={enableDesktop}
             />
             <ToggleRow
-              label="Only when I'm away"
+              label="Only when I’m away"
               description="Stay quiet while the DuelingBook tab is focused."
               checked={s.alertOnlyWhenHidden}
               onChange={set('alertOnlyWhenHidden')}
@@ -181,7 +181,7 @@ const DuelTab = () => {
         />
         <ToggleRow
           label="Action log"
-          description="Lists cards added, set, revealed or returned, plus your opponent's hand whenever it is revealed."
+          description="Lists cards added, set, revealed or returned, plus your opponent’s hand whenever it is revealed."
           checked={s.trackerEnabled}
           onChange={set('trackerEnabled')}
         >
@@ -239,7 +239,11 @@ const ChatTab = () => {
     if (s.chatMuted.some((m) => m.toLowerCase() === clean.toLowerCase())) return;
     updateSettings({ chatMuted: [...s.chatMuted, clean].slice(-100) });
   };
-  const unmute = (n) => updateSettings({ chatMuted: s.chatMuted.filter((m) => m !== n) });
+  const unmute = (n, e) => {
+    const input = e.currentTarget.getRootNode().getElementById('dbte-mute');
+    updateSettings({ chatMuted: s.chatMuted.filter((m) => m !== n) });
+    if (input) input.focus();
+  };
   return (
     <>
       <Group title="Muted players">
@@ -261,13 +265,16 @@ const ChatTab = () => {
             value={name}
             placeholder="Username"
             autoComplete="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            maxLength={40}
             onChange={(e) => setName(e.target.value)}
           />
           <button type="submit" className="btn">
             Mute
           </button>
         </form>
-        {duel.opponent && !s.chatMuted.includes(duel.opponent) && (
+        {duel.opponent && !s.chatMuted.some((m) => m.toLowerCase() === duel.opponent.toLowerCase()) && (
           <div className="btn-row">
             <button type="button" className="btn btn-quiet" onClick={() => mute(duel.opponent)}>
               Mute current opponent ({duel.opponent})
@@ -279,7 +286,7 @@ const ChatTab = () => {
             {s.chatMuted.map((n) => (
               <span className="chip" key={n}>
                 {n}
-                <button type="button" onClick={() => unmute(n)} aria-label={`Unmute ${n}`}>
+                <button type="button" onClick={(e) => unmute(n, e)} aria-label={`Unmute ${n}`}>
                   ×
                 </button>
               </span>
@@ -327,6 +334,8 @@ const Panel = ({ onClose, logoUrl }) => {
     let next = null;
     if (e.key === 'ArrowRight') next = TABS[(i + 1) % TABS.length];
     else if (e.key === 'ArrowLeft') next = TABS[(i - 1 + TABS.length) % TABS.length];
+    else if (e.key === 'Home') next = TABS[0];
+    else if (e.key === 'End') next = TABS[TABS.length - 1];
     if (!next) return;
     e.preventDefault();
     updateSettings({ panelTab: next.id });

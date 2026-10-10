@@ -30,16 +30,42 @@ export const ToggleRow = ({ label, description, checked, onChange, children }) =
           className="switch"
           aria-checked={checked ? 'true' : 'false'}
           aria-describedby={description ? `${id}-d` : undefined}
+          aria-expanded={children ? (checked ? 'true' : 'false') : undefined}
+          aria-controls={children && checked ? `${id}-sub` : undefined}
           onClick={() => onChange(!checked)}
         />
       </div>
-      {checked && children && <div className="sub">{children}</div>}
+      {checked && children && (
+        <div className="sub" id={`${id}-sub`}>
+          {children}
+        </div>
+      )}
     </>
   );
 };
 
-export const SliderRow = ({ label, value, min, max, step, format = String, onChange }) => {
+// `values` turns the slider into a list of fixed stops (e.g. Default, 10, 11…).
+export const SliderRow = ({ label, value, min, max, step, values, format = String, onChange }) => {
   const id = useId();
+  if (values) {
+    const index = Math.max(0, values.indexOf(value));
+    return (
+      <div className="slider-row">
+        <label htmlFor={id}>{label}</label>
+        <output htmlFor={id}>{format(values[index])}</output>
+        <input
+          id={id}
+          type="range"
+          min={0}
+          max={values.length - 1}
+          step={1}
+          value={index}
+          aria-valuetext={format(values[index])}
+          onChange={(e) => onChange(values[Number(e.target.value)])}
+        />
+      </div>
+    );
+  }
   return (
     <div className="slider-row">
       <label htmlFor={id}>{label}</label>
@@ -51,6 +77,7 @@ export const SliderRow = ({ label, value, min, max, step, format = String, onCha
         max={max}
         step={step}
         value={value}
+        aria-valuetext={format(value)}
         onChange={(e) => onChange(Number(e.target.value))}
       />
     </div>

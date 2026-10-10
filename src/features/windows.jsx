@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSettings, updateSettings, useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
+import { useTabState } from '../lib/session';
 import { onDuelState } from '../lib/bridge';
 import FloatingWindow from '../ui/FloatingWindow';
 import { TrashIcon } from '../ui/icons';
@@ -24,7 +25,7 @@ export const NotesWindow = () => {
         id="dbte-notes"
         className="field"
         value={text}
-        placeholder="Opponent's deck, combo lines, things to remember. Saved automatically."
+        placeholder="Opponent’s deck, combo lines, things to remember…"
         onChange={(e) => setText(e.target.value)}
       />
     </FloatingWindow>
@@ -121,10 +122,15 @@ const useTrackerCapture = (enabled, setItems, setHand) => {
 
 export const TrackerWindow = () => {
   const { trackerEnabled } = useSettings();
-  const [items, setItems] = useLocal('tracker', []);
-  const [hand, setHand] = useLocal('revealedHand', { counts: {}, at: 0 });
+  const [items, setItems] = useTabState('tracker', []);
+  const [hand, setHand] = useTabState('revealedHand', { counts: {}, at: 0 });
+  const [undo, setUndo] = useState(null);
   const listRef = useRef(null);
   useTrackerCapture(trackerEnabled, setItems, setHand);
+
+  useEffect(() => {
+    if (items.length > 0 && undo) setUndo(null);
+  }, [items.length, undo]);
 
   useEffect(() => {
     const el = listRef.current;
@@ -146,14 +152,37 @@ export const TrackerWindow = () => {
         onClose={() => updateSettings({ trackerEnabled: false })}
         actions={
           items.length > 0 && (
-            <button type="button" className="icon-btn" onClick={() => setItems([])} aria-label="Clear the action log">
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => {
+                setUndo(items);
+                setItems([]);
+              }}
+              aria-label="Clear the action log"
+            >
               <TrashIcon />
             </button>
           )
         }
       >
+        {undo && items.length === 0 && (
+          <div className="btn-row">
+            <span className="note">Log cleared.</span>
+            <button
+              type="button"
+              className="btn btn-quiet"
+              onClick={() => {
+                setItems(undo);
+                setUndo(null);
+              }}
+            >
+              Undo
+            </button>
+          </div>
+        )}
         {items.length === 0 ? (
-          <p className="empty">Cards added, set, revealed or returned during the duel show up here.</p>
+          !undo && <p className="empty">Cards added, set, revealed or returned during the duel show up here.</p>
         ) : (
           <ul className="log" ref={listRef} style={{ maxHeight: 260, overflowY: 'auto' }}>
             {items.map((text, i) => {
@@ -183,11 +212,12 @@ export const TrackerWindow = () => {
       {handTotal > 0 && (
         <FloatingWindow
           id="hand"
-          title="Opponent's revealed hand"
+          title="Opponent’s revealed hand"
           badge={handTotal}
           defaultPos={{ x: 300, y: 430 }}
           width={250}
           onClose={() => setHand({ counts: {}, at: 0 })}
+          closeLabel="Clear the revealed hand"
         >
           <ul className="log">
             {handNames.map((name) => (

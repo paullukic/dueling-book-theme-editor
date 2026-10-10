@@ -20,7 +20,7 @@ const ShortcutEditor = ({ which }) => {
   const [conflict, setConflict] = useState(null);
 
   const bind = (id, raw) => {
-    const key = raw.slice(-1).toLowerCase();
+    const key = raw.toLowerCase();
     if (key && !/^[a-z0-9]$/.test(key)) {
       setConflict({ id, text: 'Use a letter or a number.' });
       return;
@@ -28,7 +28,7 @@ const ShortcutEditor = ({ which }) => {
     if (key && shortcutKeys[key] && shortcutKeys[key] !== id) {
       setConflict({
         id,
-        text: `${key.toUpperCase()} already does "${LABELS[shortcutKeys[key]] || shortcutKeys[key]}". Clear it there first.`,
+        text: `${key.toUpperCase()} already does “${LABELS[shortcutKeys[key]] || shortcutKeys[key]}”. Clear it there first.`,
       });
       return;
     }
@@ -88,20 +88,23 @@ const Row = ({ row, value, onBind, conflict, children }) => {
       <input
         id={id}
         className="field key-input"
-        value={value}
+        value={value.toUpperCase()}
         placeholder="–"
-        aria-label={`Key for ${row.label}`}
+        readOnly
+        autoComplete="off"
+        spellCheck={false}
+        aria-label={`Key for ${row.label}. Press a letter or number, Backspace to clear.`}
         aria-invalid={conflict ? 'true' : undefined}
-        onChange={(e) => onBind(e.target.value)}
+        aria-describedby={conflict ? `${id}-err` : undefined}
         onKeyDown={(e) => {
-          if (e.key === 'Backspace' || e.key === 'Delete') {
-            e.preventDefault();
-            onBind('');
-          }
+          if (e.key === 'Tab' || e.key === 'Escape' || e.ctrlKey || e.altKey || e.metaKey) return;
+          e.preventDefault();
+          if (e.key === 'Backspace' || e.key === 'Delete') onBind('');
+          else if (e.key.length === 1) onBind(e.key);
         }}
       />
       {conflict && (
-        <span className="conflict" role="alert">
+        <span className="conflict" role="alert" id={`${id}-err`}>
           {conflict}
         </span>
       )}

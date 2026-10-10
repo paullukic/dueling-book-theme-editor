@@ -60,7 +60,9 @@ const BackgroundPicker = () => {
         e.preventDefault();
         setOver(true);
       }}
-      onDragLeave={() => setOver(false)}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setOver(false);
+      }}
       onDrop={(e) => {
         e.preventDefault();
         setOver(false);
@@ -86,7 +88,15 @@ const BackgroundPicker = () => {
           />
         </label>
         {image && (
-          <button type="button" className="btn btn-quiet" onClick={() => setImage('')}>
+          <button
+            type="button"
+            className="btn btn-quiet"
+            onClick={(e) => {
+              const file = e.currentTarget.parentElement.querySelector('input[type=file]');
+              setImage('');
+              if (file) file.focus();
+            }}
+          >
             Remove
           </button>
         )}

@@ -164,21 +164,70 @@ export const migrateLegacy = (old) => {
   return s;
 };
 
-// Objects the user edits as a whole: a removed binding must stay removed.
-const REPLACED_WHOLE = ['shortcutKeys', 'windows'];
+const RANGES = {
+  cardTextSize: [0, 30],
+  backgroundOpacity: [0.05, 1],
+  animationSpeed: [1, 4],
+};
 
-// Shallow-merge stored settings over defaults, one level deep for objects.
+const isPlainObject = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
+const sameType = (a, b) =>
+  a !== null && b !== null && typeof a === typeof b && Array.isArray(a) === Array.isArray(b);
+
+const cleanValue = (k, v, d) => {
+  if (!sameType(v, d)) return d;
+  if (typeof d === 'number') {
+    if (!Number.isFinite(v)) return d;
+    const r = RANGES[k];
+    return r ? Math.min(r[1], Math.max(r[0], v)) : v;
+  }
+  if (typeof d === 'string') return v.slice(0, 40);
+  if (Array.isArray(d)) {
+    if (k === 'customChatMessages') {
+      const msgs = v.slice(0, CUSTOM_SLOTS).map((m) => (typeof m === 'string' ? m.slice(0, 200) : ''));
+      while (msgs.length < CUSTOM_SLOTS) msgs.push('');
+      return msgs;
+    }
+    if (k === 'chatMuted') return v.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.slice(0, 40)).slice(0, 100);
+    return v;
+  }
+  if (isPlainObject(d)) {
+    if (k === 'shortcutKeys') {
+      const out = {};
+      Object.keys(v).forEach((key) => {
+        if (/^[a-z0-9]$/.test(key) && typeof v[key] === 'string') out[key] = v[key].slice(0, 40);
+      });
+      return out;
+    }
+    if (k === 'windows') {
+      const out = {};
+      Object.keys(v).forEach((id) => {
+        const p = v[id];
+        if (isPlainObject(p) && Number.isFinite(p.x) && Number.isFinite(p.y)) out[id] = { x: p.x, y: p.y };
+      });
+      return out;
+    }
+    const out = { ...d };
+    Object.keys(d).forEach((sub) => {
+      const val = v[sub];
+      if (val === undefined || !sameType(val, d[sub])) return;
+      if (typeof d[sub] === 'string' && d[sub].startsWith('#') && !/^#[0-9a-f]{6}$/i.test(val)) return;
+      if (typeof d[sub] === 'number' && !Number.isFinite(val)) return;
+      out[sub] = typeof d[sub] === 'number' ? Math.min(1, Math.max(0, val)) : val;
+    });
+    return out;
+  }
+  return v;
+};
+
+// Merge stored settings over defaults. Anything of the wrong type (a damaged
+// or hand-edited import, an old format) falls back to its default.
 export const withDefaults = (stored) => {
   const out = { ...DEFAULTS };
-  if (!stored || typeof stored !== 'object') return out;
+  if (!isPlainObject(stored)) return out;
   Object.keys(DEFAULTS).forEach((k) => {
     if (stored[k] === undefined) return;
-    const d = DEFAULTS[k];
-    if (d && typeof d === 'object' && !Array.isArray(d) && !REPLACED_WHOLE.includes(k)) {
-      out[k] = { ...d, ...stored[k] };
-    } else {
-      out[k] = stored[k];
-    }
+    out[k] = cleanValue(k, stored[k], DEFAULTS[k]);
   });
   return out;
 };

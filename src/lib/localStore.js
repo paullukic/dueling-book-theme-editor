@@ -51,31 +51,36 @@ window.addEventListener('pagehide', () => {
   [...pending.keys()].forEach(write);
 });
 
-// [value, setValue, loaded]. Updates made before the stored value has loaded
-// are queued and replayed on top of it, so they never overwrite saved data.
+// Read-modify-write against what is stored (or about to be stored), one at a
+// time per tab, so several components editing the same key never undo each
+// other's changes.
+let chain = Promise.resolve();
+export const mutateLocal = (key, fn) => {
+  chain = chain.then(async () => {
+    const current = pending.has(key) ? pending.get(key) : await getLocal(key);
+    setLocal(key, fn(current), { immediate: true });
+  });
+  return chain;
+};
+
+// [value, setValue, loaded]. Function updates are applied to the stored value
+// (see mutateLocal); plain values replace it.
 export const useLocal = (key, initial) => {
   const [value, setValue] = useState(initial);
   const [loaded, setLoaded] = useState(false);
   const valueRef = useRef(value);
-  const loadedRef = useRef(false);
-  const queued = useRef([]);
+  const touched = useRef(false);
   valueRef.current = value;
 
   useEffect(() => {
     let alive = true;
     getLocal(key).then((stored) => {
       if (!alive) return;
-      let v = stored !== undefined ? stored : initial;
-      if (queued.current.length) {
-        queued.current.forEach((fn) => {
-          v = fn(v);
-        });
-        queued.current = [];
-        setLocal(key, v);
+      if (!touched.current) {
+        const v = stored !== undefined ? stored : initial;
+        valueRef.current = v;
+        setValue(v);
       }
-      loadedRef.current = true;
-      valueRef.current = v;
-      setValue(v);
       setLoaded(true);
     });
     const onChanged = (changes, area) => {
@@ -95,15 +100,17 @@ export const useLocal = (key, initial) => {
   }, [key]);
 
   const update = (next) => {
-    const fn = typeof next === 'function' ? next : () => next;
-    if (!loadedRef.current) {
-      queued.current.push(fn);
+    touched.current = true;
+    if (typeof next === 'function') {
+      const optimistic = next(valueRef.current === undefined ? initial : valueRef.current);
+      valueRef.current = optimistic;
+      setValue(optimistic);
+      mutateLocal(key, (cur) => next(cur === undefined ? initial : cur));
       return;
     }
-    const v = fn(valueRef.current);
-    valueRef.current = v;
-    setValue(v);
-    setLocal(key, v);
+    valueRef.current = next;
+    setValue(next);
+    setLocal(key, next);
   };
 
   return [value, update, loaded];

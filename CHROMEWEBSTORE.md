@@ -43,7 +43,7 @@ HOW TO USE
 3. Switch on what you like. Everything starts switched off and every change can be undone.
 
 PRIVACY
-Your settings stay in your browser and sync through your Chrome account if you use Chrome sync. Nothing is collected, tracked or sent anywhere. The only permission requested is storage.
+Your settings stay in your browser and sync through your Chrome account if you use Chrome sync. Nothing is collected, tracked or sent anywhere. The extension asks only for storage and for permission to re-attach itself to open DuelingBook tabs after an update.
 
 Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you can support it from the Support tab inside the panel.
 ```
@@ -79,9 +79,10 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Permission | Type | Justification |
 |------------|------|---------------|
 | storage | permissions | Saves the user's choices (theme, colours, shortcuts, muted players), their notes and their background image so they are still there the next time they open DuelingBook. |
+| scripting | permissions | After an update (or right after install), re-attaches the extension to DuelingBook tabs that were already open, so users do not have to reload the page to get their theme and panel back. It only injects the extension's own bundled files, only into duelingbook.com tabs. |
 | duelingbook.com content scripts (4 URL patterns, with and without www, http and https) | content_scripts matches | The extension only runs on duelingbook.com, where it applies the user's theme and shows its settings panel and tools. |
 
-No host permissions, no `tabs`, no `scripting`, no remote code.
+No extra host permissions, no `tabs`, no remote code.
 
 ## Privacy & Data Use
 
@@ -113,7 +114,7 @@ All data (settings, notes, background image, action log) is stored with the brow
 
 | Version | Date | Summary |
 |---------|------|---------|
-| 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; only the storage permission now (tabs, scripting and activeTab removed). Existing settings carry over. |
+| 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; fewer permissions (tabs and activeTab removed). Existing settings carry over. |
 | 1.0.7 | 2026-08-20 | Dark theme, feature tooltips, five custom chat shortcuts. |
 
 ## Pre-publish checklist (1.1.0)

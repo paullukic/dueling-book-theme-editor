@@ -26,15 +26,17 @@ const logoUrl = (() => {
 const App = ({ shadowRoot }) => {
   const { showLauncher } = useSettings();
   const [open, setOpen] = useState(false);
-  const [meta, , metaLoaded] = useLocal('meta', {});
+  const [meta, setMeta, metaLoaded] = useLocal('meta', {});
   const launcherRef = useRef(null);
   const welcomed = useRef(false);
+  const returnFocus = useRef(false);
 
   const toggle = useCallback(() => setOpen((o) => !o), []);
   const close = useCallback(() => {
+    // Only hand focus back if it was inside the panel.
+    returnFocus.current = !!shadowRoot.activeElement;
     setOpen(false);
-    if (launcherRef.current) launcherRef.current.focus({ preventScroll: true });
-  }, []);
+  }, [shadowRoot]);
 
   useEffect(() => {
     const onMessage = (msg) => {
@@ -44,12 +46,15 @@ const App = ({ shadowRoot }) => {
     return () => chrome.runtime.onMessage.removeListener(onMessage);
   }, [toggle]);
 
-  // First install: show the panel once so people find it.
+  // First install: show the panel once so people find it, then never again.
   useEffect(() => {
     if (!metaLoaded || welcomed.current) return;
     welcomed.current = true;
-    if (meta && meta.welcome) setOpen(true);
-  }, [metaLoaded, meta]);
+    if (meta && meta.welcome) {
+      setOpen(true);
+      setMeta((m) => ({ ...m, welcome: false }));
+    }
+  }, [metaLoaded, meta, setMeta]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -63,10 +68,19 @@ const App = ({ shadowRoot }) => {
     return () => window.removeEventListener('keydown', onKey, true);
   }, [open, close, shadowRoot]);
 
+  // Opening moves focus into the panel unless the user is typing elsewhere on
+  // the page; closing returns it to the corner button.
   useEffect(() => {
-    if (!open) return;
-    const first = shadowRoot.querySelector('.tab[aria-selected="true"]');
-    if (first && document.activeElement !== shadowRoot.host) first.focus({ preventScroll: true });
+    if (open) {
+      const active = document.activeElement;
+      const typingOnPage = active && active !== shadowRoot.host && active !== document.body && isTypingEvent({ target: active });
+      if (typingOnPage) return;
+      const tab = shadowRoot.querySelector('.tab[aria-selected="true"]');
+      if (tab) tab.focus({ preventScroll: true });
+    } else if (returnFocus.current) {
+      returnFocus.current = false;
+      if (launcherRef.current) launcherRef.current.focus({ preventScroll: true });
+    }
   }, [open, shadowRoot]);
 
   const hasNews = metaLoaded && meta && meta.seenVersion !== chrome.runtime.getManifest().version;

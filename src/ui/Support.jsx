@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSettings, replaceSettings, resetSettings, updateSettings, useSettings } from '../lib/settings';
 import { Group, ToggleRow } from './controls';
 import { HeartIcon, PlayIcon, ShareIcon, StarIcon } from './icons';
@@ -24,13 +24,20 @@ const NEWS = [
   'A cleaner panel with tabs, Esc to close, and a corner button to open it',
 ];
 
+const askAllowed = (meta) =>
+  !!meta && !meta.supportNever && !!meta.installedAt && Date.now() - meta.installedAt >= NUDGE_AFTER_DAYS * DAY;
+
 export const WhatsNew = ({ meta, setMeta }) => {
   if (!meta || meta.seenVersion === version()) return null;
   const fresh = !meta.updatedFrom;
-  const dismiss = () => setMeta((m) => ({ ...m, seenVersion: version(), welcome: false }));
+  const dismiss = (e) => {
+    const tab = e.currentTarget.getRootNode().querySelector('.tab[aria-selected="true"]');
+    setMeta((m) => ({ ...m, seenVersion: version(), welcome: false }));
+    if (tab) tab.focus();
+  };
   return (
-    <div className="card-callout gold" role="status">
-      <h3>{fresh ? 'Welcome to Theme Editor' : `What's new in ${version()}`}</h3>
+    <div className="card-callout gold">
+      <h3>{fresh ? 'Welcome to Theme Editor' : `What’s new in ${version()}`}</h3>
       {fresh ? (
         <p>
           Everything starts switched off. Try Dark mode below, or set up alerts in the Duel tab.
@@ -52,7 +59,7 @@ export const WhatsNew = ({ meta, setMeta }) => {
         <button type="button" className="btn" onClick={dismiss}>
           Got it
         </button>
-        {!fresh && (
+        {!fresh && askAllowed(meta) && (
           <a className="btn btn-quiet" href={DONATE_URL} target="_blank" rel="noopener noreferrer">
             Support this update
           </a>
@@ -90,7 +97,7 @@ export const SupportNudge = ({ meta, setMeta }) => {
           Maybe later
         </button>
         <button type="button" className="btn btn-quiet" onClick={never}>
-          Don&apos;t ask again
+          Don’t ask again
         </button>
       </div>
     </div>
@@ -112,6 +119,19 @@ const SettingsTransfer = () => {
   const fileRef = useRef(null);
   const [status, setStatus] = useState(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const keepRef = useRef(null);
+  const resetRef = useRef(null);
+  const wasConfirming = useRef(false);
+
+  useEffect(() => {
+    if (confirmReset) {
+      wasConfirming.current = true;
+      if (keepRef.current) keepRef.current.focus();
+    } else if (wasConfirming.current) {
+      wasConfirming.current = false;
+      if (resetRef.current) resetRef.current.focus();
+    }
+  }, [confirmReset]);
 
   const importFile = async (file) => {
     if (!file) return;
@@ -180,12 +200,17 @@ const SettingsTransfer = () => {
             >
               Yes, reset everything
             </button>
-            <button type="button" className="btn btn-quiet" onClick={() => setConfirmReset(false)}>
+            <button ref={keepRef} type="button" className="btn btn-quiet" onClick={() => setConfirmReset(false)}>
               Keep my settings
             </button>
           </>
         ) : (
-          <button type="button" className="btn btn-quiet btn-danger" onClick={() => setConfirmReset(true)}>
+          <button
+            ref={resetRef}
+            type="button"
+            className="btn btn-quiet btn-danger"
+            onClick={() => setConfirmReset(true)}
+          >
             Reset all settings
           </button>
         )}
@@ -230,6 +255,9 @@ export const SupportTab = () => {
             <ShareIcon />
             {copied ? 'Link copied. Paste it in your Discord' : 'Copy a link for your friends'}
           </button>
+          <span className="sr-only" role="status">
+            {copied ? 'Link copied to the clipboard.' : ''}
+          </span>
           <a className="btn" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">
             <PlayIcon />
             Watch PsyYGO on YouTube

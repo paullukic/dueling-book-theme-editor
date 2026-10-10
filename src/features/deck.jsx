@@ -41,10 +41,20 @@ const DeckTools = () => {
   const [order, setOrder] = useState([]);
   const [drawn, setDrawn] = useState(0);
   const [picked, setPicked] = useState(() => new Set());
+  const [loading, setLoading] = useState(false);
 
   const load = async () => {
+    if (loading) return;
+    setLoading(true);
     setStatus('Reading your deck…');
-    const d = await requestDeck();
+    let d = null;
+    try {
+      d = await requestDeck();
+    } catch (e) {
+      d = null;
+    } finally {
+      setLoading(false);
+    }
     if (!d || !d.main || d.main.length === 0) {
       setDeck(null);
       setStatus('No deck found. Open the Deck Constructor, load a deck, then try again.');
@@ -95,7 +105,7 @@ const DeckTools = () => {
           Draw sample opening hands from the deck loaded in the Deck Constructor. Nothing is sent to DuelingBook.
         </p>
         <div className="btn-row">
-          <button type="button" className="btn btn-gold" onClick={load}>
+          <button type="button" className="btn btn-gold" onClick={load} disabled={loading}>
             {deck ? 'Reload deck' : 'Load my deck'}
           </button>
         </div>
@@ -133,10 +143,13 @@ const DeckTools = () => {
                 Going second (6)
               </button>
             </div>
-            <ul className="hand" aria-live="polite">
+            <p className="sr-only" role="status">
+              {hand.length ? `Drew ${hand.length} cards.` : ''}
+            </p>
+            <ul className="hand">
               {hand.map((c, i) => (
                 <li key={`${i}-${c.name}`} className={cardClass(c)}>
-                  {artUrl(c) && <img src={artUrl(c)} alt="" loading="lazy" />}
+                  {artUrl(c) && <img src={artUrl(c)} alt="" width={30} height={30} loading="lazy" />}
                   <span>{c.name}</span>
                 </li>
               ))}
