@@ -1,65 +1,47 @@
-# dueling-book-theme-editor
+# DuelingBook Theme Editor
 
-# DuelingBook Theme Editor Extension
+A Chrome extension that makes [duelingbook.com](https://www.duelingbook.com) look and play the way you want: dark mode, colour-coded card text, keyboard shortcuts, turn alerts, test hands, chat mute and more. It never changes game rules and collects no data.
 
-A plain JavaScript browser extension for Chrome and Firefox that allows you to edit the HTML of duelingbook.com.
+## Features
 
-## Setup
+| Tab | What you get |
+|-----|--------------|
+| Look | Dark mode · colour-coded card text with your own colours · card text size · compact main menu · main menu button colours · your own background image |
+| Duel | Duel-found and your-turn alerts (sound, tab flash, desktop notification) · animation speed · skip intro · one-key shortcuts and five custom chat messages · notes window · action log with opponent's revealed hand |
+| Chat | Mute players · highlight and alert on mentions of your name |
+| Deck | Test hands (going first or second) from the deck open in the Deck Constructor · opening odds for the cards you tick |
+| Support | Donate, review, share · export, import and reset settings |
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Build the extension:
-   ```bash
-   npm run build
-   ```
-3. Load the extension in your browser:
-   - **Chrome/Edge:**
-     - Go to chrome://extensions
-     - Enable Developer Mode
-     - Click "Load unpacked" and select the project folder
-   - **Firefox:**
-     - Go to about:debugging#/runtime/this-firefox
-     - Click "Load Temporary Add-on" and select the `manifest.json` file
+Open the panel with the corner button, the toolbar icon, or <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>. <kbd>Esc</kbd> closes it.
 
 ## Development
 
-- To watch for changes and rebuild automatically:
-  ```bash
-  npm start
-  ```
-
-## Features
-- Automatically injects a React UI panel when visiting duelingbook.com
-- Change background colors with buttons
-- Edit the entire page HTML with a textarea and save functionality
-
-## Usage
-Simply navigate to duelingbook.com - the theme editor panel will automatically appear in the top-right corner.
-
-Feel free to expand the content script to add more HTML editing features!
-
-## Release / Packaging
-
-## Release / Packaging
-
-From the repo root, bump the version and build:
-
 ```bash
-npm run build
+npm install
+npm start        # webpack watch; every build is copied to the repo root
+npm run build    # production build
+npm run package  # build + zip for the Chrome Web Store
 ```
 
-To package your extension for release, zip only the necessary files:
+Load it in Chrome: `chrome://extensions` → Developer mode → **Load unpacked** → this folder. After a rebuild, press the reload icon on the extension card and reload duelingbook.com.
 
-**With bash (if you have zip installed):**
-```bash
-zip -r dueling-book-theme-editor-1.0.7.zip manifest.json background.js contentScript.js icon16.png icon32.png icon48.png icon128.png README.md screenshots
-```
+### Layout
 
-**With PowerShell (if zip is not available):**
-```powershell
-powershell.exe Compress-Archive -Path manifest.json,background.js,contentScript.js,icon16.png,icon32.png,icon48.png,icon128.png,README.md,screenshots -DestinationPath dueling-book-theme-editor-1.0.7.zip -Force
-```
+| Path | Purpose |
+|------|---------|
+| `src/contentScript.jsx` | Mounts the app in a shadow root on duelingbook.com |
+| `src/bridge.js` | Runs in the page's own JavaScript world; reports public duel state (players, whose turn, turn number, phase) and the user's own deck in the Deck Constructor |
+| `src/background.js` | Toolbar icon and keyboard command; records install/update for "What's new" |
+| `src/lib/` | Settings store (with v1.0 migration), local storage hook, bridge client, alerts, DOM helpers |
+| `src/features/` | Page effects (each one undoes itself when switched off), floating windows, deck tools |
+| `src/ui/` | Panel, controls, styles (shadow-DOM only) |
 
-Upload the resulting `.zip` file to the developer dashboard.
+Root `contentScript.js`, `bridge.js` and `background.js` are build output. Edit `src/`.
+
+## Privacy
+
+Settings, notes and images stay in your browser. See [PRIVACY.md](PRIVACY.md).
+
+## Support
+
+The extension is free. If it makes your duels nicer: [buy me a coffee](https://www.buymeacoffee.com/sudbina).
