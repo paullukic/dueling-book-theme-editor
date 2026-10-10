@@ -231,11 +231,19 @@ const ChatTab = () => {
   const s = useSettings();
   const duel = useDuelState();
   const [name, setName] = useState('');
+  const [full, setFull] = useState(false);
   const mute = (n) => {
     const clean = n.trim().replace(/:$/, '');
     if (!clean) return;
     if (s.chatMuted.some((m) => m.toLowerCase() === clean.toLowerCase())) return;
-    updateSettings({ chatMuted: [...s.chatMuted, clean].slice(-100) });
+    const next = [...s.chatMuted, clean];
+    // Browser sync stores at most 8 KB per setting.
+    if (next.length > 100 || new TextEncoder().encode(JSON.stringify(next)).length > 7500) {
+      setFull(true);
+      return;
+    }
+    setFull(false);
+    updateSettings({ chatMuted: next });
   };
   const unmute = (n, e) => {
     const input = e.currentTarget.getRootNode().getElementById('dbte-mute');
@@ -272,6 +280,11 @@ const ChatTab = () => {
             Mute
           </button>
         </form>
+        {full && (
+          <p className="note note-error" role="alert">
+            Your mute list is full. Unmute someone first.
+          </p>
+        )}
         {duel.opponent && !s.chatMuted.some((m) => m.toLowerCase() === duel.opponent.toLowerCase()) && (
           <div className="btn-row">
             <button type="button" className="btn btn-quiet" onClick={() => mute(duel.opponent)}>

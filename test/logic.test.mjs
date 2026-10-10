@@ -104,5 +104,9 @@ test('storage errors: size limits are permanent, rate limits retry', () => {
   assert.equal(classifyStorageError('MAX_ITEMS quota exceeded'), 'quota');
   assert.equal(classifyStorageError('MAX_WRITE_OPERATIONS_PER_MINUTE quota exceeded'), 'rate');
   assert.equal(classifyStorageError('MAX_WRITE_OPERATIONS_PER_HOUR quota exceeded'), 'rate');
+  assert.equal(classifyStorageError('Resource::kQuotaBytesPerItem quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('Resource::kQuotaBytes quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('Resource::kMaxItems quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('Resource::kMaxWriteOperationsPerMinute quota exceeded'), 'rate');
   assert.equal(classifyStorageError('Something else'), 'other');
 });

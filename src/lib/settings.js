@@ -24,7 +24,8 @@ let writeTimer = null;
 let retryTimer = null;
 let problem = null; // 'load' | 'save' | 'quota' | null
 const dirty = new Set();
-const inflight = new Set();
+const inflight = new Map(); // key -> number of writes in progress
+const blocked = new Set(); // keys too big to store; skipped until edited again
 const listeners = new Set();
 
 const emit = () => listeners.forEach((l) => l());
@@ -54,33 +55,59 @@ const writeArea = (area, keys) =>
     }
   });
 
+// Writes a batch; if the batch is too big, writes key by key so one oversized
+// setting cannot stop the others from saving. Returns { quota: [...], retry: [...] }.
+const writeKeys = async (area, keys) => {
+  const out = { quota: [], retry: [] };
+  if (!keys.length) return out;
+  const err = await writeArea(area, keys);
+  if (!err) return out;
+  if (err !== 'quota' || keys.length === 1) {
+    (err === 'quota' ? out.quota : out.retry).push(...keys);
+    return out;
+  }
+  for (const k of keys) {
+    const one = await writeArea(area, [k]);
+    if (one === 'quota') out.quota.push(k);
+    else if (one) out.retry.push(k);
+  }
+  return out;
+};
+
 const flush = async () => {
   if (writeTimer) {
     clearTimeout(writeTimer);
     writeTimer = null;
   }
-  if (!loadedOk || stopped || !dirty.size) return;
-  const keys = [...dirty];
-  dirty.clear();
-  keys.forEach((k) => inflight.add(k));
-  const groups = ['sync', 'local'].map((area) => [area, keys.filter((k) => areaFor(k) === area)]);
-  const results = await Promise.all(
-    groups.map(async ([area, ks]) => [ks, ks.length ? await writeArea(area, ks) : null]),
-  );
-  keys.forEach((k) => inflight.delete(k));
-  let failure = null;
-  results.forEach(([ks, err]) => {
-    if (!err) return;
-    ks.forEach((k) => dirty.add(k));
-    if (err === 'quota' || !failure) failure = err;
+  if (!loadedOk || stopped) return;
+  const keys = [...dirty].filter((k) => !blocked.has(k));
+  if (!keys.length) return;
+  keys.forEach((k) => {
+    dirty.delete(k);
+    inflight.set(k, (inflight.get(k) || 0) + 1);
   });
-  if (!failure) {
-    if (problem === 'save' || problem === 'quota') setProblem(null);
-    return;
-  }
-  setProblem(failure === 'quota' ? 'quota' : 'save');
+  const results = await Promise.all(
+    ['sync', 'local'].map((area) => writeKeys(area, keys.filter((k) => areaFor(k) === area))),
+  );
+  keys.forEach((k) => {
+    const n = (inflight.get(k) || 1) - 1;
+    if (n > 0) inflight.set(k, n);
+    else inflight.delete(k);
+  });
+  let retry = false;
+  results.forEach(({ quota, retry: again }) => {
+    quota.forEach((k) => {
+      blocked.add(k);
+      dirty.add(k);
+    });
+    again.forEach((k) => dirty.add(k));
+    if (again.length) retry = true;
+  });
+  if (blocked.size) setProblem('quota');
+  else if (retry) setProblem('save');
+  else if (problem === 'save' || problem === 'quota') setProblem(null);
   // A size limit never clears by waiting; a rate limit or hiccup does.
-  if (failure !== 'quota' && !writeTimer && !stopped) writeTimer = setTimeout(flush, RETRY_DELAY_MS);
+  if (retry && !writeTimer && !stopped) writeTimer = setTimeout(flush, RETRY_DELAY_MS);
 };
 
 const scheduleWrite = () => {
@@ -95,16 +122,28 @@ export const updateSettings = (patch) => {
   const next = typeof patch === 'function' ? patch(state) : patch;
   const merged = withDefaults({ ...state, ...next });
   Object.keys(next).forEach((k) => {
-    if (k in DEFAULTS && JSON.stringify(merged[k]) !== JSON.stringify(state[k])) dirty.add(k);
+    if (k in DEFAULTS && JSON.stringify(merged[k]) !== JSON.stringify(state[k])) {
+      dirty.add(k);
+      blocked.delete(k); // edited: worth trying again
+    }
   });
   state = merged;
   emit();
   scheduleWrite();
 };
 
+// Import or reset. Per-device keys (window positions, last tab) stay as they
+// are on this device.
 export const replaceSettings = (raw) => {
-  state = withDefaults(raw);
-  Object.keys(DEFAULTS).forEach((k) => dirty.add(k));
+  const keepLocal = {};
+  LOCAL_SETTING_KEYS.forEach((k) => {
+    keepLocal[k] = state[k];
+  });
+  state = withDefaults({ ...raw, ...keepLocal });
+  blocked.clear();
+  Object.keys(DEFAULTS)
+    .filter((k) => !LOCAL_SETTING_KEYS.includes(k))
+    .forEach((k) => dirty.add(k));
   emit();
   flush();
 };
@@ -182,6 +221,7 @@ const readAndApply = async () => {
     // Show defaults but keep saving disabled so the stored settings survive,
     // tell the user, and keep trying in the background.
     setProblem('load');
+    if (retryTimer) clearTimeout(retryTimer);
     if (!stopped) retryTimer = setTimeout(loadSettings, 20000);
     return state;
   }
@@ -228,8 +268,12 @@ export const loadSettings = () => {
 
 // "Try again" from the panel: reload if the first read failed, else save now.
 export const retryStorage = () => {
-  if (!loadedOk) loadSettings();
-  else flush();
+  if (!loadedOk) {
+    loadSettings();
+    return;
+  }
+  blocked.clear();
+  flush();
 };
 
 // Another tab or device saved a setting: adopt it unless this copy has its
