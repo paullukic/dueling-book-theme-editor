@@ -33,3 +33,7 @@ Thumbs.db
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
+
+# Coograph
+.code-graph/
+.coograph/
