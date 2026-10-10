@@ -79,34 +79,14 @@ export const DEFAULTS = {
   windows: {},
 };
 
-export const SETTINGS_KEY = 'dbte:settings';
+// Each setting is stored as its own item: "dbte:s:<name>".
+export const SETTING_PREFIX = 'dbte:s:';
+// Per-device UI state: kept in storage.local, never synced.
+export const LOCAL_SETTING_KEYS = ['windows', 'panelTab'];
 export const META_KEY = 'dbte:meta';
 
-// v1.0.x stored each setting under its own key. Read them once so existing
-// users keep everything; the old keys are left untouched.
-export const LEGACY_SYNC_KEYS = [
-  'skipIntro',
-  'darkModeEnabled',
-  'textHighlightEnabled',
-  'shortcutKeys',
-  'customChatMessage',
-  'customChatMessages',
-  'notesEnabled',
-  'notesText',
-  'notesPosition',
-  'actionLogEnabled',
-  'actionLogItems',
-  'actionLogPosition',
-  'actionHandPosition',
-  'smallerMainMenu',
-  'mainMenuApplyColors',
-  'mainMenuBgColor',
-  'mainMenuBgAlpha',
-  'mainMenuBorderColor',
-  'mainMenuBorderAlpha',
-  'mainMenuEdgeColor',
-  'mainMenuEdgeAlpha',
-];
+// v1.0 stored each setting under its own sync key; migrateLegacy reads them
+// once so existing users keep everything. The old keys are left untouched.
 
 const toPoint = (pos) => {
   if (!pos) return undefined;

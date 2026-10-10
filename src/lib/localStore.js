@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { classifyStorageError } from './storageErrors';
 
 // Per-key value in chrome.storage.local (5 MB budget, no write quota) for
 // bulky data: notes text, the action log, the background image.
@@ -9,32 +10,72 @@ const WRITE_DELAY_MS = 400;
 
 const timers = new Map();
 const pending = new Map();
+const problemListeners = new Set();
+let problem = null; // 'quota' | 'other' | null
 
-const write = (key) => {
-  timers.delete(key);
-  if (!pending.has(key)) return;
-  const value = pending.get(key);
-  pending.delete(key);
-  try {
-    chrome.storage.local.set({ [PREFIX + key]: value }, () => {
-      if (chrome.runtime.lastError) {
-        console.error(`[DB Theme Editor] could not save ${key}:`, chrome.runtime.lastError.message);
-      }
-    });
-  } catch (e) {
-    // orphaned after an extension reload
-  }
+const setProblem = (p) => {
+  if (problem === p) return;
+  problem = p;
+  problemListeners.forEach((l) => l());
 };
+
+// Resolves true once the value is stored. A failed write stays pending so the
+// next change or page exit retries it, and the panel shows the problem.
+const write = (key) =>
+  new Promise((resolve) => {
+    timers.delete(key);
+    if (!pending.has(key)) {
+      resolve(true);
+      return;
+    }
+    const value = pending.get(key);
+    try {
+      chrome.storage.local.set({ [PREFIX + key]: value }, () => {
+        const err = chrome.runtime.lastError;
+        if (err) {
+          console.error(`[DB Theme Editor] could not save ${key}:`, err.message);
+          const kind = classifyStorageError(err.message);
+          setProblem(kind === 'quota' ? 'quota' : 'other');
+          if (kind !== 'quota' && !timers.has(key)) timers.set(key, setTimeout(() => write(key), 15000));
+          resolve(false);
+          return;
+        }
+        if (pending.get(key) === value) pending.delete(key);
+        if (![...pending.keys()].length) setProblem(null);
+        resolve(true);
+      });
+    } catch (e) {
+      resolve(false); // orphaned after an extension reload
+    }
+  });
 
 export const setLocal = (key, value, { immediate = false } = {}) => {
   pending.set(key, value);
   if (timers.has(key)) clearTimeout(timers.get(key));
-  if (immediate) {
-    write(key);
-    return;
-  }
+  if (immediate) return write(key);
   timers.set(key, setTimeout(() => write(key), WRITE_DELAY_MS));
+  return undefined;
 };
+
+export const setLocalConfirmed = (key, value) => setLocal(key, value, { immediate: true });
+
+export const removeLocalRaw = (keys) =>
+  new Promise((resolve) => {
+    try {
+      chrome.storage.local.remove(keys, () => resolve(!chrome.runtime.lastError));
+    } catch (e) {
+      resolve(false);
+    }
+  });
+
+export const useLocalProblem = () =>
+  useSyncExternalStore(
+    (l) => {
+      problemListeners.add(l);
+      return () => problemListeners.delete(l);
+    },
+    () => problem,
+  );
 
 export const getLocal = (key) =>
   new Promise((resolve) => {
@@ -84,8 +125,10 @@ export const useLocal = (key, initial) => {
       setLoaded(true);
     });
     const onChanged = (changes, area) => {
-      if (area !== 'local' || !changes[PREFIX + key] || pending.has(key)) return;
+      if (area !== 'local' || !changes[PREFIX + key]) return;
       const v = changes[PREFIX + key].newValue;
+      // A newer local edit is still waiting to be written: keep it.
+      if (pending.has(key) && JSON.stringify(pending.get(key)) !== JSON.stringify(v)) return;
       if (JSON.stringify(v) !== JSON.stringify(valueRef.current)) {
         valueRef.current = v === undefined ? initial : v;
         setValue(valueRef.current);

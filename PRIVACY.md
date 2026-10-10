@@ -18,6 +18,7 @@ Nothing. The extension makes no network requests of its own. Card pictures shown
 ## Permissions
 
 - **storage**: to remember your settings and notes.
+- **unlimitedStorage**: so a large background image fits on your device. Nothing is uploaded.
 - **scripting**: to re-attach the extension to DuelingBook tabs that were already open when it was installed or updated.
 - The extension runs only on duelingbook.com.
 

@@ -5,7 +5,17 @@
   "version": "1.1.0",
   "description": "Dark mode, hotkeys, turn alerts, test hands, chat mute and more for duelingbook.com. Lightweight, no data collected.",
   "minimum_chrome_version": "111",
-  "permissions": ["storage", "scripting"],
+  "permissions": [
+    "storage",
+    "scripting",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "https://duelingbook.com/*",
+    "http://duelingbook.com/*",
+    "https://www.duelingbook.com/*",
+    "http://www.duelingbook.com/*"
+  ],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -17,21 +27,43 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://duelingbook.com/*", "http://duelingbook.com/*", "https://www.duelingbook.com/*", "http://www.duelingbook.com/*"],
-      "js": ["bridge.js"],
+      "matches": [
+        "https://duelingbook.com/*",
+        "http://duelingbook.com/*",
+        "https://www.duelingbook.com/*",
+        "http://www.duelingbook.com/*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
       "run_at": "document_idle",
       "world": "MAIN"
     },
     {
-      "matches": ["https://duelingbook.com/*", "http://duelingbook.com/*", "https://www.duelingbook.com/*", "http://www.duelingbook.com/*"],
-      "js": ["contentScript.js"],
+      "matches": [
+        "https://duelingbook.com/*",
+        "http://duelingbook.com/*",
+        "https://www.duelingbook.com/*",
+        "http://www.duelingbook.com/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icon48.png", "icon128.png"],
-      "matches": ["https://duelingbook.com/*", "http://duelingbook.com/*", "https://www.duelingbook.com/*", "http://www.duelingbook.com/*"]
+      "resources": [
+        "icon48.png",
+        "icon128.png"
+      ],
+      "matches": [
+        "https://duelingbook.com/*",
+        "http://duelingbook.com/*",
+        "https://www.duelingbook.com/*",
+        "http://www.duelingbook.com/*"
+      ]
     }
   ],
   "action": {
@@ -45,7 +77,9 @@
   },
   "commands": {
     "toggle-panel": {
-      "suggested_key": { "default": "Alt+Shift+D" },
+      "suggested_key": {
+        "default": "Alt+Shift+D"
+      },
       "description": "Open or close the Theme Editor panel"
     }
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 
 // Talks to src/bridge.js, which runs in the page's own JavaScript world.
 // Only messages from this window tagged by the bridge are accepted.
@@ -22,6 +22,7 @@ const EMPTY = {
 };
 
 let duelState = EMPTY;
+let received = false;
 const stateListeners = new Set();
 const deckWaiters = new Set();
 
@@ -29,8 +30,12 @@ window.addEventListener('message', (e) => {
   if (e.source !== window || !e.data || e.data.source !== FROM_BRIDGE) return;
   const { type, payload } = e.data;
   if (type === 'state' && payload && typeof payload === 'object') {
-    const prev = duelState;
-    duelState = { ...EMPTY, ...payload };
+    // The first report is where things already are (e.g. mid-duel after a
+    // reload), not a change: listeners see it with prev === next.
+    const next = { ...EMPTY, ...payload };
+    const prev = received ? duelState : next;
+    received = true;
+    duelState = next;
     stateListeners.forEach((l) => l(duelState, prev));
   } else if (type === 'deck') {
     deckWaiters.forEach((w) => w(payload));
@@ -72,12 +77,3 @@ export const requestDeck = (timeoutMs = 1500) =>
   });
 
 export const setAnimationSpeed = (n) => send('setTimeScale', n);
-
-// Re-render on an interval while mounted (for "time ago" style labels).
-export const useTick = (ms) => {
-  const [, set] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => set((n) => n + 1), ms);
-    return () => clearInterval(t);
-  }, [ms]);
-};

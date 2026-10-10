@@ -79,10 +79,12 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Permission | Type | Justification |
 |------------|------|---------------|
 | storage | permissions | Saves the user's choices (theme, colours, shortcuts, muted players), their notes and their background image so they are still there the next time they open DuelingBook. |
+| unlimitedStorage | permissions | Lets a user's own background image and notes be saved on their device without hitting the default 5 MB limit. Nothing is uploaded. |
+| host_permissions: duelingbook.com (4 URL patterns) | host_permissions | Needed so the extension can re-attach to DuelingBook tabs that were already open (see scripting). Same sites the content scripts already run on; no other sites. |
 | scripting | permissions | After an update (or right after install), re-attaches the extension to DuelingBook tabs that were already open, so users do not have to reload the page to get their theme and panel back. It only injects the extension's own bundled files, only into duelingbook.com tabs. |
 | duelingbook.com content scripts (4 URL patterns, with and without www, http and https) | content_scripts matches | The extension only runs on duelingbook.com, where it applies the user's theme and shows its settings panel and tools. |
 
-No extra host permissions, no `tabs`, no remote code.
+Host access is limited to duelingbook.com. No `tabs`, no remote code.
 
 ## Privacy & Data Use
 

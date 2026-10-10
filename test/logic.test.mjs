@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { classify } from '../src/features/psct.js';
 import { atLeastOne } from '../src/lib/odds.js';
-import { DEFAULTS, migrateLegacy, withDefaults } from '../src/lib/defaults.js';
+import { migrateLegacy, withDefaults } from '../src/lib/defaults.js';
+import { classifyStorageError } from '../src/lib/storageErrors.js';
 
 const runs = (text) => {
   const roles = classify(text);
@@ -52,16 +53,17 @@ test('settings: damaged values fall back to defaults', () => {
     psctColors: { cost: 'red', effect: '#00ff00' },
     shortcutKeys: { zz: 'good_btn', x: 'good_btn', y: 5 },
     customChatMessages: ['hi', 3],
-    menuColors: { bgAlpha: 7 },
+    menuColors: { edgeAlpha: 7, bgAlpha: -2 },
   });
   assert.deepEqual(s.windows, {});
   assert.deepEqual(s.chatMuted, []);
   assert.equal(s.darkMode, false);
-  assert.equal(s.psctColors.cost, DEFAULTS.psctColors.cost);
+  assert.equal(s.psctColors.cost, '#f09f9f');
   assert.equal(s.psctColors.effect, '#00ff00');
   assert.deepEqual(s.shortcutKeys, { x: 'good_btn' });
   assert.deepEqual(s.customChatMessages, ['hi', '', '', '', '']);
-  assert.equal(s.menuColors.bgAlpha, 1);
+  assert.equal(s.menuColors.edgeAlpha, 1);
+  assert.equal(s.menuColors.bgAlpha, 0);
 });
 
 test('settings: card text size snaps to a slider stop', () => {
@@ -94,4 +96,13 @@ test('migration: v1.0 keys carry over', () => {
   assert.deepEqual(s.windows.notes, { x: 15, y: 200 });
   assert.equal(s.menuColorsEnabled, true);
   assert.equal(s.menuColors.bgAlpha, 0.5);
+});
+
+test('storage errors: size limits are permanent, rate limits retry', () => {
+  assert.equal(classifyStorageError('QUOTA_BYTES_PER_ITEM quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('QUOTA_BYTES quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('MAX_ITEMS quota exceeded'), 'quota');
+  assert.equal(classifyStorageError('MAX_WRITE_OPERATIONS_PER_MINUTE quota exceeded'), 'rate');
+  assert.equal(classifyStorageError('MAX_WRITE_OPERATIONS_PER_HOUR quota exceeded'), 'rate');
+  assert.equal(classifyStorageError('Something else'), 'other');
 });

@@ -1,72 +1,86 @@
 import { useSyncExternalStore } from 'react';
-import {
-  DEFAULTS,
-  LEGACY_SYNC_KEYS,
-  SETTINGS_KEY,
-  migrateLegacy,
-  withDefaults,
-} from './defaults';
-import { getLocal, setLocal } from './localStore';
+import { DEFAULTS, LOCAL_SETTING_KEYS, SETTING_PREFIX, migrateLegacy, withDefaults } from './defaults';
+import { getLocal, removeLocalRaw, setLocalConfirmed } from './localStore';
+import { classifyStorageError } from './storageErrors';
 
-// One settings object for the whole content script. Components read it with
-// useSettings(); writes are applied in memory at once and flushed to
-// storage.sync at most once a second (sync allows 120 writes a minute).
+// Settings live one key per item ("dbte:s:darkMode", ...) so that edits to
+// different settings from different tabs or devices never overwrite each
+// other: browser sync merges per item. Per-device UI state (window
+// positions, last tab) lives in storage.local instead of sync.
 //
-// Keys edited here and not yet saved are tracked as "dirty": a change arriving
-// from another tab only overwrites keys this tab is not in the middle of
-// saving, so neither side loses an edit.
+// Edits apply in memory at once and are flushed at most once a second (sync
+// allows 120 writes a minute). A key stays "dirty" until its write is
+// confirmed; incoming changes never overwrite a dirty or in-flight key.
 
 const WRITE_DELAY_MS = 1000;
+const RETRY_DELAY_MS = 15000;
 const MIGRATED_KEY = 'migrated'; // per device, in storage.local
+const OLD_SINGLE_KEY = 'dbte:settings'; // pre-release 1.1 builds kept one object
 
 let state = withDefaults(null);
 let loadedOk = false;
-let writeTimer = null;
-let lastWritten = '';
-let saveError = null; // 'load' | 'save' | 'quota' | null
 let stopped = false;
+let writeTimer = null;
 let retryTimer = null;
+let problem = null; // 'load' | 'save' | 'quota' | null
 const dirty = new Set();
+const inflight = new Set();
 const listeners = new Set();
 
 const emit = () => listeners.forEach((l) => l());
+const itemKey = (k) => SETTING_PREFIX + k;
+const areaFor = (k) => (LOCAL_SETTING_KEYS.includes(k) ? 'local' : 'sync');
 
-const flush = () => {
+const setProblem = (p) => {
+  if (problem === p) return;
+  problem = p;
+  emit();
+};
+
+const writeArea = (area, keys) =>
+  new Promise((resolve) => {
+    const items = {};
+    keys.forEach((k) => {
+      items[itemKey(k)] = state[k];
+    });
+    try {
+      chrome.storage[area].set(items, () => {
+        const err = chrome.runtime.lastError;
+        if (err) console.error(`[DB Theme Editor] could not save settings (${area}):`, err.message);
+        resolve(err ? classifyStorageError(err.message) : null);
+      });
+    } catch (e) {
+      resolve('other'); // orphaned after an extension reload
+    }
+  });
+
+const flush = async () => {
   if (writeTimer) {
     clearTimeout(writeTimer);
     writeTimer = null;
   }
-  // Never write before the stored settings were read: that would replace
-  // them with defaults.
-  if (!loadedOk || stopped) return;
-  const json = JSON.stringify(state);
-  if (json === lastWritten) {
-    dirty.clear();
+  if (!loadedOk || stopped || !dirty.size) return;
+  const keys = [...dirty];
+  dirty.clear();
+  keys.forEach((k) => inflight.add(k));
+  const groups = ['sync', 'local'].map((area) => [area, keys.filter((k) => areaFor(k) === area)]);
+  const results = await Promise.all(
+    groups.map(async ([area, ks]) => [ks, ks.length ? await writeArea(area, ks) : null]),
+  );
+  keys.forEach((k) => inflight.delete(k));
+  let failure = null;
+  results.forEach(([ks, err]) => {
+    if (!err) return;
+    ks.forEach((k) => dirty.add(k));
+    if (err === 'quota' || !failure) failure = err;
+  });
+  if (!failure) {
+    if (problem === 'save' || problem === 'quota') setProblem(null);
     return;
   }
-  const written = new Set(dirty);
-  dirty.clear();
-  lastWritten = json;
-  try {
-    chrome.storage.sync.set({ [SETTINGS_KEY]: state }, () => {
-      const err = chrome.runtime.lastError;
-      if (err) {
-        console.error('[DB Theme Editor] could not save settings:', err.message);
-        // A size limit never clears by waiting; a rate limit does.
-        const tooBig = /QUOTA_BYTES/i.test(err.message || '') && !/WRITE_OPERATIONS/i.test(err.message || '');
-        saveError = tooBig ? 'quota' : 'save';
-        lastWritten = '';
-        written.forEach((k) => dirty.add(k));
-        emit();
-        if (!tooBig && !writeTimer) writeTimer = setTimeout(flush, 15000);
-      } else if (saveError) {
-        saveError = null;
-        emit();
-      }
-    });
-  } catch (e) {
-    // Extension was reloaded; this orphaned copy can no longer save.
-  }
+  setProblem(failure === 'quota' ? 'quota' : 'save');
+  // A size limit never clears by waiting; a rate limit or hiccup does.
+  if (failure !== 'quota' && !writeTimer && !stopped) writeTimer = setTimeout(flush, RETRY_DELAY_MS);
 };
 
 const scheduleWrite = () => {
@@ -75,28 +89,15 @@ const scheduleWrite = () => {
 };
 
 export const getSettings = () => state;
-export const getSaveError = () => saveError;
-
-// Called when this copy of the content script shuts down: no more timers or
-// writes from it.
-export const stopSettings = () => {
-  stopped = true;
-  if (writeTimer) clearTimeout(writeTimer);
-  if (retryTimer) clearTimeout(retryTimer);
-  writeTimer = null;
-  retryTimer = null;
-};
-
-// "Try again" from the panel: reload if the first read failed, else save now.
-export const retryStorage = () => {
-  if (!loadedOk) loadSettings();
-  else flush();
-};
+export const getStorageProblem = () => problem;
 
 export const updateSettings = (patch) => {
   const next = typeof patch === 'function' ? patch(state) : patch;
-  Object.keys(next).forEach((k) => dirty.add(k));
-  state = withDefaults({ ...state, ...next });
+  const merged = withDefaults({ ...state, ...next });
+  Object.keys(next).forEach((k) => {
+    if (k in DEFAULTS && JSON.stringify(merged[k]) !== JSON.stringify(state[k])) dirty.add(k);
+  });
+  state = merged;
   emit();
   scheduleWrite();
 };
@@ -110,8 +111,19 @@ export const replaceSettings = (raw) => {
 
 export const resetSettings = () => replaceSettings(DEFAULTS);
 
-// v1.0 kept the background image and its switch in storage.local, which is per
-// device, and notes in sync. Carry them over once per device.
+// Called when this copy of the content script shuts down: no more timers or
+// writes from it.
+export const stopSettings = () => {
+  stopped = true;
+  if (writeTimer) clearTimeout(writeTimer);
+  if (retryTimer) clearTimeout(retryTimer);
+  writeTimer = null;
+  retryTimer = null;
+};
+
+// v1.0 kept the background image and its switch in storage.local, which is
+// per device, and notes in sync. Carry them over once per device; the
+// "migrated" flag is only set once every copy was confirmed written.
 const migrateLocalOnce = async (legacySync) => {
   if (await getLocal(MIGRATED_KEY)) return null;
   const patch = {};
@@ -120,24 +132,89 @@ const migrateLocalOnce = async (legacySync) => {
       resolve(chrome.runtime.lastError ? {} : r || {}),
     );
   });
+  let ok = true;
   if (loc.backgroundImageData && (await getLocal('background')) === undefined) {
-    setLocal('background', loc.backgroundImageData, { immediate: true });
-    if (loc.backgroundImageEnabled !== undefined) patch.backgroundEnabled = !!loc.backgroundImageEnabled;
+    if (await setLocalConfirmed('background', loc.backgroundImageData)) {
+      if (loc.backgroundImageEnabled !== undefined) patch.backgroundEnabled = !!loc.backgroundImageEnabled;
+      await removeLocalRaw(['backgroundImageData']);
+    } else {
+      ok = false;
+    }
   }
   if (typeof legacySync.notesText === 'string' && legacySync.notesText && (await getLocal('notes')) === undefined) {
-    setLocal('notes', legacySync.notesText, { immediate: true });
+    ok = (await setLocalConfirmed('notes', legacySync.notesText)) && ok;
   }
-  setLocal(MIGRATED_KEY, true, { immediate: true });
+  if (ok) await setLocalConfirmed(MIGRATED_KEY, true);
   return patch;
 };
 
-const readSync = () =>
+const getArea = (area, keys) =>
   new Promise((resolve, reject) => {
-    chrome.storage.sync.get([SETTINGS_KEY, ...LEGACY_SYNC_KEYS], (res) => {
+    chrome.storage[area].get(keys, (res) => {
       if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
       else resolve(res || {});
     });
   });
+
+const pickSettings = (items) => {
+  const out = {};
+  Object.keys(items).forEach((key) => {
+    if (key.startsWith(SETTING_PREFIX)) out[key.slice(SETTING_PREFIX.length)] = items[key];
+  });
+  return out;
+};
+
+const readAndApply = async () => {
+  if (loadedOk || stopped) return state;
+  let syncItems = null;
+  let localItems = {};
+  for (let attempt = 0; attempt < 3 && !syncItems; attempt++) {
+    try {
+      syncItems = await getArea('sync', null);
+      localItems = await getArea('local', LOCAL_SETTING_KEYS.map(itemKey));
+    } catch (e) {
+      syncItems = null;
+      console.error('[DB Theme Editor] could not load settings:', e.message);
+      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+    }
+  }
+  if (!syncItems) {
+    // Show defaults but keep saving disabled so the stored settings survive,
+    // tell the user, and keep trying in the background.
+    setProblem('load');
+    if (!stopped) retryTimer = setTimeout(loadSettings, 20000);
+    return state;
+  }
+  if (retryTimer) clearTimeout(retryTimer);
+  retryTimer = null;
+
+  let stored = { ...pickSettings(syncItems), ...pickSettings(localItems) };
+  let needsWrite = [];
+  if (!Object.keys(pickSettings(syncItems)).length) {
+    // First run of this format: carry over 1.0 settings (or a pre-release
+    // single-object build) and write them out item by item.
+    stored = { ...(syncItems[OLD_SINGLE_KEY] || migrateLegacy(syncItems)), ...pickSettings(localItems) };
+    needsWrite = Object.keys(stored).filter((k) => k in DEFAULTS);
+  }
+  const localPatch = await migrateLocalOnce(syncItems);
+  if (localPatch) {
+    stored = { ...stored, ...localPatch };
+    needsWrite = needsWrite.concat(Object.keys(localPatch));
+  }
+
+  // Edits made while loading win over what was stored.
+  const pendingEdits = {};
+  dirty.forEach((k) => {
+    pendingEdits[k] = state[k];
+  });
+  state = withDefaults({ ...stored, ...pendingEdits });
+  needsWrite.forEach((k) => dirty.add(k));
+  loadedOk = true;
+  if (problem === 'load') problem = null;
+  emit();
+  flush();
+  return state;
+};
 
 let loading = null;
 export const loadSettings = () => {
@@ -149,72 +226,38 @@ export const loadSettings = () => {
   return loading;
 };
 
-const readAndApply = async () => {
-  if (loadedOk || stopped) return state;
-  let res = null;
-  for (let attempt = 0; attempt < 3 && !res; attempt++) {
-    try {
-      res = await readSync();
-    } catch (e) {
-      console.error('[DB Theme Editor] could not load settings:', e.message);
-      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
-    }
-  }
-  if (!res) {
-    // Show defaults but keep saving disabled so the stored settings survive,
-    // tell the user, and keep trying in the background.
-    saveError = 'load';
-    emit();
-    if (retryTimer) clearTimeout(retryTimer);
-    if (!stopped) retryTimer = setTimeout(loadSettings, 20000);
-    return state;
-  }
-  if (retryTimer) clearTimeout(retryTimer);
-  retryTimer = null;
-  if (saveError === 'load') saveError = null;
-
-  const stored = res[SETTINGS_KEY];
-  let base = stored ? stored : migrateLegacy(res);
-  const localPatch = await migrateLocalOnce(res);
-  if (localPatch && Object.keys(localPatch).length) base = { ...base, ...localPatch };
-
-  // Edits made while loading win over what was stored.
-  const pendingEdits = {};
-  dirty.forEach((k) => {
-    pendingEdits[k] = state[k];
-  });
-  state = withDefaults({ ...base, ...pendingEdits });
-  lastWritten = stored && !localPatch && !dirty.size ? JSON.stringify(withDefaults(stored)) : '';
-  loadedOk = true;
-  emit();
-  flush();
-  return state;
+// "Try again" from the panel: reload if the first read failed, else save now.
+export const retryStorage = () => {
+  if (!loadedOk) loadSettings();
+  else flush();
 };
 
-// Another tab (or device) saved settings: adopt every key this tab is not
-// itself in the middle of saving.
+// Another tab or device saved a setting: adopt it unless this copy has its
+// own unsaved or in-flight edit of the same setting.
 try {
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== 'sync' || !changes[SETTINGS_KEY] || !loadedOk) return;
-    const incoming = changes[SETTINGS_KEY].newValue;
-    if (!incoming) return;
-    const merged = withDefaults(incoming);
-    if (JSON.stringify(merged) === lastWritten) return; // our own write echoing back
-    const next = { ...merged };
-    dirty.forEach((k) => {
-      next[k] = state[k];
+    if ((area !== 'sync' && area !== 'local') || !loadedOk || stopped) return;
+    const patch = {};
+    Object.keys(changes).forEach((key) => {
+      if (!key.startsWith(SETTING_PREFIX)) return;
+      const k = key.slice(SETTING_PREFIX.length);
+      if (!(k in DEFAULTS) || areaFor(k) !== area || dirty.has(k) || inflight.has(k)) return;
+      const v = changes[key].newValue;
+      patch[k] = v === undefined ? DEFAULTS[k] : v;
     });
-    const json = JSON.stringify(next);
-    if (json === JSON.stringify(state)) return;
+    if (!Object.keys(patch).length) return;
+    const next = withDefaults({ ...state, ...patch });
+    if (JSON.stringify(next) === JSON.stringify(state)) return;
     state = next;
-    if (!dirty.size) lastWritten = json;
     emit();
   });
 } catch (e) {
   // not in an extension context
 }
 
-window.addEventListener('pagehide', flush);
+window.addEventListener('pagehide', () => {
+  flush();
+});
 
 const subscribe = (l) => {
   listeners.add(l);
@@ -222,4 +265,4 @@ const subscribe = (l) => {
 };
 
 export const useSettings = () => useSyncExternalStore(subscribe, getSettings);
-export const useSaveError = () => useSyncExternalStore(subscribe, getSaveError);
+export const useStorageProblem = () => useSyncExternalStore(subscribe, getStorageProblem);

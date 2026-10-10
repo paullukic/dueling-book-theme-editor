@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { retryStorage, updateSettings, useSaveError, useSettings } from '../lib/settings';
+import { retryStorage, updateSettings, useSettings, useStorageProblem } from '../lib/settings';
 import { CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
-import { useLocal } from '../lib/localStore';
+import { useLocal, useLocalProblem } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
 import { ColorRow, Group, SliderRow, ToggleRow } from './controls';
@@ -323,20 +323,32 @@ const PROBLEMS = {
   },
   quota: {
     title: 'Your settings are too big to save',
-    text: 'Browser sync allows about 8 KB. Unmute some players or shorten your chat messages, then try again.',
+    text: 'Browser sync allows about 8 KB per setting. Unmute some players or shorten your chat messages, then try again.',
+  },
+  localQuota: {
+    title: 'Not enough room to save',
+    text: 'Your background image or notes did not fit. Try a smaller image or shorter notes.',
+  },
+  local: {
+    title: 'Notes or background not saved yet',
+    text: 'Your browser could not save them just now. Retrying automatically.',
   },
 };
 
 const StorageProblem = () => {
-  const problem = useSaveError();
+  const settingsProblem = useStorageProblem();
+  const localProblem = useLocalProblem();
+  const problem = settingsProblem || (localProblem === 'quota' ? 'localQuota' : localProblem ? 'local' : null);
   if (!problem) return null;
   return (
     <div className="card-callout danger" role="alert">
       <h3>{PROBLEMS[problem].title}</h3>
       <p>{PROBLEMS[problem].text}</p>
-      <button type="button" className="btn" onClick={retryStorage}>
-        Try again now
-      </button>
+      {settingsProblem && (
+        <button type="button" className="btn" onClick={retryStorage}>
+          Try again now
+        </button>
+      )}
     </div>
   );
 };

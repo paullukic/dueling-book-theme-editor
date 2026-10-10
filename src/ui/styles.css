@@ -840,6 +840,13 @@ textarea.field {
   font-size: 13px;
 }
 
+.toast-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 32px);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

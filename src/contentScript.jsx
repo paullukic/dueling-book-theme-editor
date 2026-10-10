@@ -62,13 +62,31 @@ class Boundary extends Component {
   }
 }
 
+const ReloadNotice = ({ onDismiss }) => (
+  <div className="dbte">
+    <div className="toast toast-action" role="alert">
+      <span>Theme Editor was updated. Reload DuelingBook to switch to the new version.</span>
+      <button type="button" className="btn btn-gold" onClick={() => window.location.reload()}>
+        Reload now
+      </button>
+      <button type="button" className="btn btn-quiet" onClick={onDismiss}>
+        Later
+      </button>
+    </div>
+  </div>
+);
+
 const mount = async () => {
   // A copy from before an extension update or reload can no longer reach the
   // browser. Ask it to shut down (it unmounts, which undoes all its page
   // changes), then remove anything left behind.
   document.dispatchEvent(new CustomEvent(TEARDOWN_EVENT));
   document.getElementById(HOST_ID)?.remove();
-  document.getElementById(LEGACY_CONTAINER_ID)?.remove();
+
+  // Version 1.0 cannot be shut down from here: its keyboard shortcuts would
+  // keep firing next to ours and send every action twice. Until the page is
+  // reloaded, show only a reload prompt.
+  const legacyRunning = !!document.getElementById(LEGACY_CONTAINER_ID);
 
   const host = document.createElement('div');
   host.id = HOST_ID;
@@ -107,6 +125,12 @@ const mount = async () => {
   liveness = setInterval(() => {
     if (!contextAlive()) teardown();
   }, 3000);
+
+  if (legacyRunning) {
+    root = createRoot(container);
+    root.render(<ReloadNotice onDismiss={teardown} />);
+    return;
+  }
 
   await loadSettings();
   if (!alive) return;
