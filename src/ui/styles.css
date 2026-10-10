@@ -527,6 +527,15 @@ textarea.field {
   font-size: 12.5px;
 }
 
+.hand img {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--plate-sunk);
+}
+
 .card-monster { --card: #d9a35b; }
 .card-effect { --card: #d68a3c; }
 .card-ritual { --card: #6c8fd6; }

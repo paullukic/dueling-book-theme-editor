@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { getSettings, useSettings } from '../lib/settings';
-import { hasModifier, isTypingEvent, isVisible, sendDuelChat, whenElement } from '../lib/dom';
+import { hasModifier, isTypingEvent, isVisible, sendDuelChat } from '../lib/dom';
 import { onDuelState, setAnimationSpeed } from '../lib/bridge';
 import { alertUser } from '../lib/notify';
 
@@ -90,29 +90,33 @@ export const ShortcutsEffect = () => {
 
 // Runs once per page load, and only if the setting was on when the page opened,
 // so switching it on mid-session never clicks anything unexpectedly.
+// The intro's Skip button appears a few seconds after load and the DUEL button
+// only after skipping, so poll for each to become visible.
 export const SkipIntroEffect = () => {
   const ran = useRef(false);
   useEffect(() => {
     if (ran.current || !getSettings().skipIntro) return undefined;
     ran.current = true;
-    const cancels = [];
-    const giveUp = setTimeout(() => cancels.forEach((c) => c()), 20000);
-    cancels.push(
-      whenElement('#skip_intro_btn', (skip) => {
-        if (isVisible(skip)) skip.click();
-        cancels.push(
-          whenElement('#duel_btn', (duel) => {
-            setTimeout(() => {
-              if (isVisible(duel)) duel.click();
-            }, 150);
-          }),
-        );
-      }),
-    );
-    return () => {
-      clearTimeout(giveUp);
-      cancels.forEach((c) => c());
-    };
+    const started = Date.now();
+    let skipped = false;
+    const timer = setInterval(() => {
+      if (Date.now() - started > 30000 || isVisible(document.getElementById('menu_content'))) {
+        clearInterval(timer);
+        return;
+      }
+      const skip = document.getElementById('skip_intro_btn');
+      if (!skipped && isVisible(skip)) {
+        skip.click();
+        skipped = true;
+        return;
+      }
+      const duel = document.getElementById('duel_btn');
+      if (isVisible(duel)) {
+        duel.click();
+        clearInterval(timer);
+      }
+    }, 250);
+    return () => clearInterval(timer);
   }, []);
   return null;
 };

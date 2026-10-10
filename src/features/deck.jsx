@@ -12,6 +12,8 @@ export const atLeastOne = (N, K, n) => {
   return 1 - miss;
 };
 
+const artUrl = (c) => (c.id && /^\d+$/.test(c.id) ? `https://images.duelingbook.com/card-pics/${c.id}.jpg` : '');
+
 const pct = (p) => `${(p * 100).toFixed(p >= 0.995 || p < 0.1 ? 1 : 0)}%`;
 
 const shuffle = (arr) => {
@@ -134,7 +136,8 @@ const DeckTools = () => {
             <ul className="hand" aria-live="polite">
               {hand.map((c, i) => (
                 <li key={`${i}-${c.name}`} className={cardClass(c)}>
-                  {c.name}
+                  {artUrl(c) && <img src={artUrl(c)} alt="" loading="lazy" />}
+                  <span>{c.name}</span>
                 </li>
               ))}
             </ul>

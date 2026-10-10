@@ -36,12 +36,12 @@ const LookTab = () => {
         />
         <ToggleRow
           label="Colour card text"
-          description="Colours each part of an effect: when it activates, its cost, what it does, and its limits."
+          description="Colours each part of an effect: when it activates, its cost or target, what it does, and its limits."
           checked={s.psctEnabled}
           onChange={set('psctEnabled')}
         >
           <ColorRow label="Condition (before :)" value={s.psctColors.condition} onChange={setPsctColor('condition')} />
-          <ColorRow label="Cost (before ;)" value={s.psctColors.cost} onChange={setPsctColor('cost')} />
+          <ColorRow label="Cost or target (before ;)" value={s.psctColors.cost} onChange={setPsctColor('cost')} />
           <ColorRow label="Effect" value={s.psctColors.effect} onChange={setPsctColor('effect')} />
           <ColorRow label="Limits (once per turn…)" value={s.psctColors.restriction} onChange={setPsctColor('restriction')} />
           <button type="button" className="btn btn-quiet" onClick={() => updateSettings({ psctColors: DEFAULT_PSCT_COLORS })}>
