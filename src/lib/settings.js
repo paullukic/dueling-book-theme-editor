@@ -23,7 +23,8 @@ let state = withDefaults(null);
 let loadedOk = false;
 let writeTimer = null;
 let lastWritten = '';
-let saveError = null; // 'load' | 'save' | null
+let saveError = null; // 'load' | 'save' | 'quota' | null
+let stopped = false;
 let retryTimer = null;
 const dirty = new Set();
 const listeners = new Set();
@@ -37,7 +38,7 @@ const flush = () => {
   }
   // Never write before the stored settings were read: that would replace
   // them with defaults.
-  if (!loadedOk) return;
+  if (!loadedOk || stopped) return;
   const json = JSON.stringify(state);
   if (json === lastWritten) {
     dirty.clear();
@@ -51,13 +52,13 @@ const flush = () => {
       const err = chrome.runtime.lastError;
       if (err) {
         console.error('[DB Theme Editor] could not save settings:', err.message);
-        saveError = 'save';
+        // A size limit never clears by waiting; a rate limit does.
+        const tooBig = /QUOTA_BYTES/i.test(err.message || '') && !/WRITE_OPERATIONS/i.test(err.message || '');
+        saveError = tooBig ? 'quota' : 'save';
         lastWritten = '';
         written.forEach((k) => dirty.add(k));
         emit();
-        // Quota and rate limits clear up on their own; try again later.
-        if (writeTimer) clearTimeout(writeTimer);
-        writeTimer = setTimeout(flush, 15000);
+        if (!tooBig && !writeTimer) writeTimer = setTimeout(flush, 15000);
       } else if (saveError) {
         saveError = null;
         emit();
@@ -75,6 +76,16 @@ const scheduleWrite = () => {
 
 export const getSettings = () => state;
 export const getSaveError = () => saveError;
+
+// Called when this copy of the content script shuts down: no more timers or
+// writes from it.
+export const stopSettings = () => {
+  stopped = true;
+  if (writeTimer) clearTimeout(writeTimer);
+  if (retryTimer) clearTimeout(retryTimer);
+  writeTimer = null;
+  retryTimer = null;
+};
 
 // "Try again" from the panel: reload if the first read failed, else save now.
 export const retryStorage = () => {
@@ -139,7 +150,7 @@ export const loadSettings = () => {
 };
 
 const readAndApply = async () => {
-  if (loadedOk) return state;
+  if (loadedOk || stopped) return state;
   let res = null;
   for (let attempt = 0; attempt < 3 && !res; attempt++) {
     try {
@@ -155,7 +166,7 @@ const readAndApply = async () => {
     saveError = 'load';
     emit();
     if (retryTimer) clearTimeout(retryTimer);
-    retryTimer = setTimeout(loadSettings, 20000);
+    if (!stopped) retryTimer = setTimeout(loadSettings, 20000);
     return state;
   }
   if (retryTimer) clearTimeout(retryTimer);

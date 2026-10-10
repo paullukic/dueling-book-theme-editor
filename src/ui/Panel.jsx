@@ -312,17 +312,28 @@ const ChatTab = () => {
   );
 };
 
+const PROBLEMS = {
+  load: {
+    title: 'Could not read your settings',
+    text: 'Changes you make now will not be saved until your browser lets the extension read its storage again. Retrying automatically.',
+  },
+  save: {
+    title: 'Your last changes are not saved yet',
+    text: 'Your browser asked to slow down. Retrying automatically.',
+  },
+  quota: {
+    title: 'Your settings are too big to save',
+    text: 'Browser sync allows about 8 KB. Unmute some players or shorten your chat messages, then try again.',
+  },
+};
+
 const StorageProblem = () => {
   const problem = useSaveError();
   if (!problem) return null;
   return (
     <div className="card-callout danger" role="alert">
-      <h3>{problem === 'load' ? 'Could not read your settings' : 'Your last changes are not saved yet'}</h3>
-      <p>
-        {problem === 'load'
-          ? 'Changes you make now will not be saved until your browser lets the extension read its storage again. Retrying automatically.'
-          : 'Your browser refused to save (usually too many changes too quickly). Retrying automatically.'}
-      </p>
+      <h3>{PROBLEMS[problem].title}</h3>
+      <p>{PROBLEMS[problem].text}</p>
       <button type="button" className="btn" onClick={retryStorage}>
         Try again now
       </button>

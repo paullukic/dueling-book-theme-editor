@@ -20,6 +20,7 @@ Open the panel with the corner button, the toolbar icon, or <kbd>Alt</kbd>+<kbd>
 npm install
 npm start        # webpack watch; every build is copied to the repo root
 npm run build    # production build
+npm test         # unit tests for the pure logic (no dependencies)
 npm run package  # build + zip for the Chrome Web Store
 ```
 

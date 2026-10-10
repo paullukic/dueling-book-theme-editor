@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './ui/App';
-import { loadSettings, resetSettings } from './lib/settings';
+import { loadSettings, resetSettings, stopSettings } from './lib/settings';
 import { send } from './lib/bridge';
 import css from './ui/styles.css';
 
@@ -99,6 +99,7 @@ const mount = async () => {
     alive = false;
     clearInterval(liveness);
     document.removeEventListener(TEARDOWN_EVENT, teardown);
+    stopSettings();
     if (root) root.unmount();
     host.remove();
   };
