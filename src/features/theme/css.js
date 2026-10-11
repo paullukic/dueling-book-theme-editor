@@ -93,6 +93,11 @@ html #content .combobox.combobox_selected, html #content .combobox:hover {
 }
 html #content .combobox.disabled { color: var(--dbt-muted) !important; }
 html #content .combobox .combobox_line { background-color: var(--dbt-border) !important; }
+/* Tinted plates DuelingBook puts behind controls (red under the deck picker,
+   green under Host a Duel...). Our controls are opaque, so the plates only
+   showed as stray coloured edges around rounded corners. */
+html #content .combobox_background, html #content .checkbox_background,
+html #content .radiobutton_background { background-color: transparent !important; box-shadow: none !important; }
 html #content .combobox .combobox_arrow img { filter: invert(1) brightness(0.8); }
 html #content select, html #content option, html #content optgroup {
   color-scheme: dark;
@@ -113,6 +118,7 @@ html #content textarea, html #content .textarea, html #content .textinput {
   border-color: var(--dbt-border) !important;
   caret-color: var(--dbt-accent);
   color-scheme: dark;
+  border-radius: calc(var(--dbt-radius) / 2) !important;
 }
 html #content input:focus, html #content textarea:focus { outline: 1px solid var(--dbt-accent) !important; outline-offset: 0; }
 html #content input::placeholder, html #content textarea::placeholder { color: var(--dbt-muted) !important; opacity: 1; }
