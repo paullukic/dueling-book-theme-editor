@@ -351,14 +351,40 @@ const AREA_OF = [
 ];
 
 // Data URIs are percent-encoded, so every brace here is CSS structure.
+// Splits CSS into top-level blocks ("selector { ... }" or "@media ... { ... }"),
+// tracking brace depth so nested at-rules stay whole.
+const topBlocks = (css) => {
+  const out = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    if (css[i] === '{') depth++;
+    else if (css[i] === '}' && --depth === 0) {
+      out.push(css.slice(start, i + 1));
+      start = i + 1;
+    }
+  }
+  if (css.slice(start).trim()) out.push(css.slice(start));
+  return out;
+};
+
+const ruleWanted = (sel, areas) => AREA_OF.every(([id, test]) => areas[id] !== false || !test(sel));
+
+// Drops the rules that belong to switched-off areas; inside @media/@supports
+// blocks it filters the inner rules and drops the block if nothing is left.
 export const keepAreas = (css, areas) =>
-  css
-    .split('}')
-    .filter((rule) => {
-      const sel = rule.split('{')[0];
-      return AREA_OF.every(([id, test]) => areas[id] !== false || !test(sel));
+  topBlocks(css)
+    .map((block) => {
+      const open = block.indexOf('{');
+      const head = block.slice(0, open);
+      if (/^\s*@(media|supports)/.test(head)) {
+        const inner = keepAreas(block.slice(open + 1, block.lastIndexOf('}')), areas);
+        return inner.trim() ? `${head}{${inner}}` : '';
+      }
+      if (/^\s*@keyframes/.test(head)) return block;
+      return ruleWanted(head, areas) ? block : '';
     })
-    .join('}');
+    .join('');
 
 // CSS for the preset's skin in the given colours, or '' when it has none.
 export const skinCss = (presetId, tokens, areas = {}, { motif = true } = {}) => {

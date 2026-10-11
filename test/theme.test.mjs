@@ -7,7 +7,7 @@ import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
-import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
+import { keepAreas, skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { CHROME_IDS, chromeCss } from '../src/features/theme/chrome.js';
 import { PARTICLES, SCENE_IDS, SHADERS, sceneMarkup } from '../src/features/theme/scenes.js';
 import { QUALITY, fragmentSource, uniformName } from '../src/features/theme/shader.js';
@@ -442,4 +442,14 @@ test('chrome: theme UI chrome never changes layout or card faces, and follows th
     assert.doesNotMatch(off, /#main_menu|#content #msg|#duel |#chats|#duel_room|#deck_constructor/, `${id} ignores area switches`);
   });
   assert.equal(chromeCss('obsidian', PRESETS[0].tokens), '');
+});
+
+test('areas: switched-off rules inside @media blocks drop cleanly, the rest survives', () => {
+  const css = 'html body #chats .a { color: red; }\n@media (prefers-reduced-motion: reduce) { html body #chats .b { animation: none; } html body .c { opacity: 1; } }\n@keyframes k { to { opacity: 0; } }\nhtml body #duel_room .d { color: blue; }';
+  const out = keepAreas(css, { chat: false });
+  assert.doesNotMatch(out, /#chats/);
+  assert.match(out, /@media \(prefers-reduced-motion: reduce\) \{ html body \.c \{ opacity: 1; \}\s*\}/);
+  assert.match(out, /@keyframes k \{ to \{ opacity: 0; \} \}/);
+  assert.match(out, /#duel_room \.d \{ color: blue; \}/);
+  assert.equal((out.match(/\{/g) || []).length, (out.match(/\}/g) || []).length);
 });
