@@ -2,6 +2,8 @@
 // (small, syncs across the user's browsers). Bulky data lives in storage.local
 // (see lib/localStore.js).
 
+import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme/presets.js';
+
 export const CUSTOM_SLOTS = 5;
 
 export const DEFAULT_SHORTCUT_KEYS = {
@@ -49,6 +51,16 @@ export const DEFAULTS = {
   },
   backgroundEnabled: false,
   backgroundOpacity: 0.5,
+
+  // Theme (full reskin). Off by default: DuelingBook looks as before.
+  themeEnabled: false,
+  themePreset: DEFAULT_PRESET.id,
+  themeTokens: DEFAULT_PRESET.tokens,
+  themeRadius: DEFAULT_PRESET.radius,
+  themeBackdrop: 0.25,
+  themeFont: 'original',
+  themeAreas: DEFAULT_AREAS,
+  customCssEnabled: false,
 
   // Duel
   skipIntro: false,
@@ -150,6 +162,13 @@ const RANGES = {
   cardTextSize: [0, 30],
   backgroundOpacity: [0.05, 1],
   animationSpeed: [1, 4],
+  themeRadius: [0, 16],
+  themeBackdrop: [0, 1],
+};
+
+const ONE_OF = {
+  themeFont: FONTS.map((f) => f.id),
+  themePreset: [...PRESETS.map((p) => p.id), 'custom'],
 };
 
 const isPlainObject = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -166,7 +185,10 @@ const cleanValue = (k, v, d) => {
     const r = RANGES[k];
     return r ? Math.min(r[1], Math.max(r[0], v)) : v;
   }
-  if (typeof d === 'string') return v.slice(0, 40);
+  if (typeof d === 'string') {
+    if (ONE_OF[k]) return ONE_OF[k].includes(v) ? v : d;
+    return v.slice(0, 40);
+  }
   if (Array.isArray(d)) {
     if (k === 'customChatMessages') {
       const msgs = v.slice(0, CUSTOM_SLOTS).map((m) => (typeof m === 'string' ? m.slice(0, 200) : ''));

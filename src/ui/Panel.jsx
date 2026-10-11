@@ -4,7 +4,8 @@ import { CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
 import { useLocal, useLocalProblem } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
-import { ColorRow, Group, SliderRow, ToggleRow } from './controls';
+import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
+import ThemeSection from './ThemeTab';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
 import BackgroundPicker from './BackgroundPicker';
@@ -12,7 +13,7 @@ import { SupportNudge, SupportTab, WhatsNew } from './Support';
 import { CardsIcon, ChatIcon, CloseIcon, HeartIcon, PaletteIcon, SwordsIcon } from './icons';
 
 const TABS = [
-  { id: 'look', label: 'Look', Icon: PaletteIcon },
+  { id: 'look', label: 'Theme', Icon: PaletteIcon },
   { id: 'duel', label: 'Duel', Icon: SwordsIcon },
   { id: 'chat', label: 'Chat', Icon: ChatIcon },
   { id: 'deck', label: 'Deck', Icon: CardsIcon },
@@ -27,13 +28,8 @@ const LookTab = () => {
   const setMenu = (k) => (v) => updateSettings({ menuColors: { ...s.menuColors, [k]: v } });
   return (
     <>
-      <Group>
-        <ToggleRow
-          label="Dark mode"
-          description="Dark grey lobby, chat, search and deck panels. Admins stay green, followed players blue."
-          checked={s.darkMode}
-          onChange={set('darkMode')}
-        />
+      <ThemeSection />
+      <Group title="Cards">
         <ToggleRow
           label="Colour card text"
           description="Colours each part of an effect: when it activates, its cost or target, what it does, and its limits."
@@ -56,6 +52,18 @@ const LookTab = () => {
           onChange={set('cardTextSize')}
         />
       </Group>
+      <Group title="Simple dark mode">
+        <ToggleRow
+          label="Dark mode"
+          description={
+            s.themeEnabled
+              ? 'The full theme already covers this. It applies again if you turn the theme off.'
+              : 'Darkens only the lobby, chat, search and deck panels. Admins stay green, followed players blue.'
+          }
+          checked={s.darkMode}
+          onChange={set('darkMode')}
+        />
+      </Group>
       <Group title="Main menu">
         <ToggleRow
           label="Compact buttons"
@@ -65,7 +73,11 @@ const LookTab = () => {
         />
         <ToggleRow
           label="Button colours"
-          description="Pick the fill, border and glow of the main menu buttons."
+          description={
+            s.themeEnabled && s.themeAreas.menu
+              ? 'The full theme styles these buttons now. To use your own colours, turn off Main menu under What to restyle.'
+              : 'Pick the fill, border and glow of the main menu buttons.'
+          }
           checked={s.menuColorsEnabled}
           onChange={set('menuColorsEnabled')}
         >
@@ -219,13 +231,6 @@ const DuelTab = () => {
     </>
   );
 };
-
-const Disclosure = ({ title, children }) => (
-  <details className="sub disclosure">
-    <summary>{title}</summary>
-    {children}
-  </details>
-);
 
 const ChatTab = () => {
   const s = useSettings();

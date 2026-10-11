@@ -13,6 +13,7 @@ import {
 } from '../features/look';
 import { AlertsEffect, AnimationSpeedEffect, ShortcutsEffect, SkipIntroEffect } from '../features/duel';
 import { ChatEffect } from '../features/chat';
+import ThemeEffect from '../features/theme/ThemeEffect';
 import { NotesWindow, TrackerWindow } from '../features/windows';
 
 const logoUrl = (() => {
@@ -87,6 +88,7 @@ const App = ({ shadowRoot }) => {
 
   return (
     <div className="dbte">
+      <ThemeEffect />
       <DarkModeEffect />
       <PsctEffect />
       <CardTextSizeEffect />

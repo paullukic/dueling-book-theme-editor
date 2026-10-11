@@ -1,5 +1,12 @@
 import { useId } from 'react';
 
+export const Disclosure = ({ title, children }) => (
+  <details className="sub disclosure">
+    <summary>{title}</summary>
+    {children}
+  </details>
+);
+
 export const Group = ({ title, children }) => (
   <section className="group">
     {title && <h2>{title}</h2>}

@@ -8,7 +8,7 @@ import { psctCss, unwrap, wrap } from './psct';
 // Each effect applies its change while enabled and fully undoes it in cleanup,
 // so turning a feature off restores DuelingBook's own look.
 
-const useStyle = (id, css) => {
+export const useStyle = (id, css) => {
   useEffect(() => {
     if (!css) return undefined;
     setPageStyle(id, css);
@@ -16,9 +16,10 @@ const useStyle = (id, css) => {
   }, [id, css]);
 };
 
+// The full theme covers everything the simple dark mode did.
 export const DarkModeEffect = () => {
-  const { darkMode } = useSettings();
-  useStyle('dbte-dark', darkMode ? darkModeCSS : null);
+  const { darkMode, themeEnabled } = useSettings();
+  useStyle('dbte-dark', darkMode && !themeEnabled ? darkModeCSS : null);
   return null;
 };
 
@@ -106,13 +107,14 @@ export const SmallerMenuEffect = () => {
   return null;
 };
 
+// The full theme styles the menu buttons too; it wins while its Main menu area is on.
 export const MenuColorsEffect = () => {
-  const { menuColorsEnabled, menuColors: c } = useSettings();
+  const { menuColorsEnabled, menuColors: c, themeEnabled, themeAreas } = useSettings();
   const edge = rgba(c.edge, c.edgeAlpha);
   useStyle(
     'dbte-menu-colors',
-    menuColorsEnabled
-      ? `.menu_btn .content {
+    menuColorsEnabled && !(themeEnabled && themeAreas.menu)
+      ? `html body #main_menu .menu_btn .content {
   background-color: ${rgba(c.bg, c.bgAlpha)} !important;
   border-color: ${rgba(c.border, c.borderAlpha)} !important;
   background-image: linear-gradient(to right, ${edge}, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.3) 80%, ${edge}) !important;
