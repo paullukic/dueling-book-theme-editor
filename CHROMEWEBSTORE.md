@@ -30,7 +30,8 @@ THEME
 DUEL
 • Turn and duel-found alerts: a chime, a flashing tab and an optional desktop notification, so you can wait in another tab
 • Faster animations (up to 4x)
-• Skip the intro screen
+• Skip the intro screen and connect straight away
+• Reconnect automatically when DuelingBook drops the connection or is full (never fights another login)
 • One-key shortcuts for draw, mill, shuffle, phase questions and up to five custom chat messages
 • A floating notepad and an action log that lists what your opponent added, set or revealed
 
@@ -41,6 +42,7 @@ DECK
 CHAT
 • Mute players: their lines are hidden and they are not told
 • Highlight and get alerted when someone mentions your name
+• Chat commands: /calc for Life Point maths, /note to jot things down, /help, and your own shortcuts like /gl
 
 HOW TO USE
 1. Open duelingbook.com.
@@ -122,7 +124,7 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 
 | Version | Date | Summary |
 |---------|------|---------|
-| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with six presets, your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes. Off until you switch it on; existing settings unchanged. |
+| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with 16 presets (incl. ten duel themes), your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes; card text colouring rebuilt (Pendulum, Rush Duel, materials); reconnect automatically; chat commands. All off until switched on; existing settings unchanged. |
 | 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; fewer permissions (tabs and activeTab removed). Existing settings carry over. |
 | 1.0.7 | 2026-08-20 | Dark theme, feature tooltips, five custom chat shortcuts. |
 

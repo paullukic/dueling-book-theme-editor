@@ -6,6 +6,7 @@ import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
 import ThemeSection from './ThemeSection';
+import AliasEditor from './AliasEditor';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
 import BackgroundPicker from './BackgroundPicker';
@@ -331,6 +332,16 @@ const ChatTab = () => {
           checked={s.chatMentionAlert}
           onChange={set('chatMentionAlert')}
         />
+      </Group>
+      <Group title="Chat commands">
+        <ToggleRow
+          label="Chat commands"
+          description="Type /help in duel chat. /calc and /note stay on your screen and are never sent; DuelingBook’s own commands like /draw 2 work as always."
+          checked={s.chatCommandsEnabled}
+          onChange={set('chatCommandsEnabled')}
+        >
+          <AliasEditor />
+        </ToggleRow>
       </Group>
     </>
   );

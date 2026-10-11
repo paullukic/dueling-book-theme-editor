@@ -3,6 +3,7 @@
 // (see lib/localStore.js).
 
 import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme/presets.js';
+import { cleanAliases } from './chatCommands.js';
 
 export const CUSTOM_SLOTS = 5;
 
@@ -83,6 +84,11 @@ export const DEFAULTS = {
   chatMuted: [],
   chatHighlightMentions: false,
   chatMentionAlert: false,
+  chatCommandsEnabled: false,
+  chatAliases: [
+    { name: 'gl', text: 'Good luck, have fun!' },
+    { name: 'gg', text: 'Good game!' },
+  ],
 
   // Panel
   showLauncher: true,
@@ -196,6 +202,7 @@ const cleanValue = (k, v, d) => {
       while (msgs.length < CUSTOM_SLOTS) msgs.push('');
       return msgs;
     }
+    if (k === 'chatAliases') return cleanAliases(v);
     if (k === 'chatMuted') return v.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.slice(0, 40)).slice(0, 100);
     return v;
   }

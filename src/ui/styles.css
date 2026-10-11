@@ -1089,3 +1089,76 @@ textarea.field {
   font-weight: 600;
   color: var(--ink-muted);
 }
+
+/* ---------- Chat commands ---------- */
+
+.alias-list {
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alias-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 12.5px;
+}
+
+.alias-list code,
+.command-list code {
+  font: 600 12px ui-monospace, Consolas, monospace;
+  color: var(--gold);
+}
+
+.alias-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.icon-text-btn {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.icon-text-btn:hover {
+  background: var(--plate-raised);
+  color: var(--ink);
+}
+
+.alias-form {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.command-list {
+  margin: 0;
+  font-size: 12px;
+}
+
+.command-list div {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.command-list dd {
+  margin: 0;
+  color: var(--ink-muted);
+}

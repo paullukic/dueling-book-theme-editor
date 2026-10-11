@@ -19,6 +19,7 @@ const version = () => chrome.runtime.getManifest().version;
 const NEWS = [
   'Full theme: a sleek look for every DuelingBook screen, with 16 presets (Spell, Trap, Xyz, Link…) and your own colours',
   'Share your theme as a code, or add your own CSS',
+  'Reconnect automatically when DuelingBook drops you, and chat commands like /calc and /gl',
   'Turn and duel-found alerts, so you can wait in another tab',
   'Test hands and opening odds for the deck you are building',
   'Mute players in chat and get pinged when someone says your name',
