@@ -22,6 +22,32 @@ export const fieldEdgeMix = (tokens) => (isLightTheme(tokens) ? 0.55 : 0.4);
 export const varsCss = ({ tokens, radius, backdrop }) => {
   const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
   const [r, g, b] = toRgb(tokens.bg);
+  // Light themes get their own depth: shadows tinted with the ink colour, a
+  // strong white highlight, a full-strength border line, opaque glass and a
+  // resting accent cue on tiles. Dark themes keep black shadows.
+  const light = isLightTheme(tokens);
+  const ink = toRgb(tokens.text).join(', ');
+  const depth = light
+    ? `  --dbt-shade: rgba(${ink}, 0.1);
+  --dbt-shade-strong: rgba(${ink}, 0.2);
+  --dbt-lit: rgba(255, 255, 255, 0.75);
+  --dbt-lift: var(--dbt-text);
+  --dbt-halo: rgba(255, 255, 255, 0.7);
+  --dbt-glass: color-mix(in srgb, var(--dbt-surface) 97%, transparent);
+  --dbt-line: var(--dbt-border);
+  --dbt-rest-cue: inset 3px 0 0 var(--dbt-accent);
+  --dbt-link-hover: color-mix(in srgb, var(--dbt-accent) 55%, var(--dbt-text));
+  --dbt-shadow: 0 1px 2px rgba(${ink}, 0.1), 0 14px 32px -14px rgba(${ink}, 0.28);`
+    : `  --dbt-shade: rgba(0, 0, 0, 0.28);
+  --dbt-shade-strong: rgba(0, 0, 0, 0.7);
+  --dbt-lit: rgba(255, 255, 255, 0.08);
+  --dbt-lift: #ffffff;
+  --dbt-halo: rgba(0, 0, 0, 0.8);
+  --dbt-glass: color-mix(in srgb, var(--dbt-surface) 93%, transparent);
+  --dbt-line: color-mix(in srgb, var(--dbt-border) 75%, transparent);
+  --dbt-rest-cue: 0 0 0 0 transparent;
+  --dbt-link-hover: var(--dbt-accent);
+  --dbt-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.75);`;
   return `:root {
 ${lines.join('\n')}
   --dbt-bg-rgb: ${r}, ${g}, ${b};
@@ -31,14 +57,12 @@ ${lines.join('\n')}
   --dbt-backdrop: ${backdrop};
   --dbt-scheme: ${isLightTheme(tokens) ? 'light' : 'dark'};
   --dbt-field-edge: color-mix(in srgb, var(--dbt-text) ${fieldEdgeMix(tokens) * 100}%, var(--dbt-raised));
-  --dbt-glass: color-mix(in srgb, var(--dbt-surface) 93%, transparent);
+${depth}
   --dbt-glass-soft: color-mix(in srgb, var(--dbt-surface) 78%, transparent);
   --dbt-hover: color-mix(in srgb, var(--dbt-accent) 16%, var(--dbt-raised));
   --dbt-press: color-mix(in srgb, var(--dbt-accent) 32%, var(--dbt-raised));
   --dbt-accent-soft: color-mix(in srgb, var(--dbt-accent) 24%, transparent);
-  --dbt-line: color-mix(in srgb, var(--dbt-border) 75%, transparent);
   --dbt-scrim: rgba(var(--dbt-bg-rgb), 0.72);
-  --dbt-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.75);
 }`;
 };
 
@@ -141,7 +165,7 @@ html #content .button, html #content input[type=submit], html #content input[typ
   color: var(--dbt-text) !important;
   border-radius: var(--dbt-radius) !important;
   text-shadow: none !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.22), 0 3px 8px -4px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0 1px 0 var(--dbt-lit), inset 0 -2px 0 var(--dbt-shade), 0 3px 8px -4px var(--dbt-shade-strong);
   transition: background-color 0.12s, border-color 0.12s, box-shadow 0.08s;
 }
 html #content .button.button_selected, html #content .button:hover,
@@ -152,7 +176,7 @@ html #content input[type=submit]:hover, html #content input[type=button]:hover {
 html #content .button.button_down, html #content .button:active, html #content input[type=submit]:active {
   background: var(--dbt-press) !important;
   border-color: var(--dbt-accent) !important;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 2px 4px var(--dbt-shade-strong);
 }
 html #content .button.disabled, html #content .button2.disabled { color: var(--dbt-muted) !important; }
 
@@ -252,9 +276,9 @@ html #content font[color="#000000" i], html #content font[color="black" i],
 html #content .textarea [style*="color: black"], html #content .textarea [style*="color: rgb(0, 0, 0)"],
 html #content .cout_txt [style*="color: black"], html #content .cout_txt [style*="color: rgb(0, 0, 0)"] { color: var(--dbt-text) !important; }
 html #content font[color="#FF0000" i], html #content font[color="red" i],
-html #content [style*="color: rgb(187, 0, 0)"] { color: color-mix(in srgb, var(--dbt-self) 75%, white) !important; }
-html #content font[color="#0000FF" i], html #content font[color="#0012ff" i], html #content font[color="blue" i] { color: color-mix(in srgb, var(--dbt-opp) 70%, white) !important; }
-html #content font[color="#880088" i], html #content font[color="#9900FF" i] { color: color-mix(in srgb, var(--dbt-accent2) 75%, white) !important; }
+html #content [style*="color: rgb(187, 0, 0)"] { color: color-mix(in srgb, var(--dbt-self) 75%, var(--dbt-lift)) !important; }
+html #content font[color="#0000FF" i], html #content font[color="#0012ff" i], html #content font[color="blue" i] { color: color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-lift)) !important; }
+html #content font[color="#880088" i], html #content font[color="#9900FF" i] { color: color-mix(in srgb, var(--dbt-accent2) 75%, var(--dbt-lift)) !important; }
 html #content font[color="#009900" i], html #content font[color="#008000" i] { color: var(--dbt-success) !important; }
 html #content font[color="#CC9900" i] { color: var(--dbt-warning) !important; }
 
@@ -267,7 +291,7 @@ html #tooltips > * {
   box-shadow: var(--dbt-shadow);
 }
 html #content a, html #content a:visited, html #content .cyan a, html #content .card_hover { color: var(--dbt-link) !important; }
-html #content a:hover, html #content a:active { color: var(--dbt-accent) !important; }
+html #content a:hover, html #content a:active { color: var(--dbt-link-hover) !important; }
 html #content a.nolink { color: inherit !important; }
 html #content .kristenitc { color: var(--dbt-accent2) !important; }
 html #content .prev_btn, html #content .next_btn {
@@ -290,7 +314,7 @@ html #main_menu .menu_btn .content {
   border-color: transparent !important;
   border-radius: var(--dbt-radius) !important;
   /* Depth: a lit top edge, a shaded bottom edge and a cast shadow. */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 0 -3px 0 rgba(0, 0, 0, 0.28), inset 0 0 0 1px var(--dbt-line), 0 12px 26px -14px rgba(0, 0, 0, 0.95) !important;
+  box-shadow: var(--dbt-rest-cue), inset 0 1px 0 var(--dbt-lit), inset 0 -3px 0 var(--dbt-shade), inset 0 0 0 1px var(--dbt-line), 0 12px 26px -14px var(--dbt-shade-strong) !important;
   transition: background-color 0.15s, border-color 0.15s, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s;
 }
 html #main_menu .menu_btn .content span { color: var(--dbt-text) !important; text-shadow: none !important; }
@@ -306,7 +330,7 @@ html #main_menu .menu_btn:hover .content {
 html #main_menu .menu_btn:hover .content::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 4px; }
 /* Pressed: shadow only. Moving the tile under a held pointer could send the
    mouseup elsewhere and lose the click. */
-html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: none; box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--dbt-line) !important; transition-duration: 0.05s; }
+html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: none; box-shadow: inset 0 3px 6px var(--dbt-shade-strong), inset 0 0 0 1px var(--dbt-line) !important; transition-duration: 0.05s; }
 html #main_menu .menu_btn.administrator_btn:hover .content { border-left-color: var(--dbt-warning) !important; }
 /* Compact menu: one joined list. Square rows with a divider, no lift and no
    brightness filter on hover: the hover colour and accent bar do the work. */
@@ -406,7 +430,7 @@ html #duel .lifepoints .life_border { border-color: var(--dbt-border) !important
 html #duel .lifepoints .black_bar { background-color: var(--dbt-bg) !important; }
 html #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 55%, black), var(--dbt-self)) !important; }
 html #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 55%, black), var(--dbt-opp)) !important; }
-html #duel .lifepoints .life_txt { color: var(--dbt-text) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important; }
+html #duel .lifepoints .life_txt { color: var(--dbt-text) !important; text-shadow: 0 1px 2px var(--dbt-halo) !important; }
 
 /* Phase buttons: dim ring, side colour when active */
 html #duel .phase .background { background: var(--dbt-border) !important; }
@@ -429,8 +453,8 @@ html #duel #turn span, html #duel #start_turn span, html #duel #end_turn span { 
 /* Avatars, status, countdowns */
 html #duel #avatar1, html #duel #avatar3 { background: linear-gradient(160deg, var(--dbt-self), color-mix(in srgb, var(--dbt-self) 40%, black)) !important; }
 html #duel #avatar2, html #duel #avatar4 { background: linear-gradient(160deg, var(--dbt-opp), color-mix(in srgb, var(--dbt-opp) 40%, black)) !important; }
-html #duel #status1 .status_txt, html #duel #countdown1 { text-shadow: 0 0 10px var(--dbt-self), 0 0 2px #000 !important; }
-html #duel #status2 .status_txt, html #duel #countdown2 { text-shadow: 0 0 10px var(--dbt-opp), 0 0 2px #000 !important; }
+html #duel #status1 .status_txt, html #duel #countdown1 { text-shadow: 0 0 10px var(--dbt-self), 0 0 2px var(--dbt-halo) !important; }
+html #duel #status2 .status_txt, html #duel #countdown2 { text-shadow: 0 0 10px var(--dbt-opp), 0 0 2px var(--dbt-halo) !important; }
 
 /* Card text, watchers, prompts, menus */
 html #duel #preview_txt, html #deck_constructor #preview_txt { background-color: var(--dbt-glass) !important; color: var(--dbt-text) !important; }
@@ -481,7 +505,7 @@ html #content #input, html #content #input2, html #content #combo {
   background-color: var(--dbt-surface) !important;
   border-radius: calc(var(--dbt-radius) * 2 + 4px) !important;
   /* Layered shadows read as a panel floating above the page. */
-  box-shadow: 0 0 0 1px var(--dbt-border), inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 24px -6px rgba(0, 0, 0, 0.5), var(--dbt-shadow) !important;
+  box-shadow: 0 0 0 1px var(--dbt-border), inset 0 1px 0 var(--dbt-lit), 0 2px 4px var(--dbt-shade), 0 12px 24px -6px var(--dbt-shade-strong), var(--dbt-shadow) !important;
 }
 html #content #msg .title_txt, html #content #link .title_txt, html #content #confirm .title_txt,
 html #content #confirm2 .title_txt, html #content #input .title_txt, html #content #input2 .title_txt,
