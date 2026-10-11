@@ -36,6 +36,23 @@ import gladiator from './chrome/gladiator.js';
 import toon from './chrome/toon.js';
 import kewlTune from './chrome/kewl-tune.js';
 import cyberDragon from './chrome/cyber-dragon.js';
+import constellar from './chrome/constellar.js';
+import fireKing from './chrome/fire-king.js';
+import mermail from './chrome/mermail.js';
+import starlight from './chrome/starlight.js';
+import starlightLight from './chrome/starlight-light.js';
+import dracotail from './chrome/dracotail.js';
+import powerPatron from './chrome/power-patron.js';
+import ryzeal from './chrome/ryzeal.js';
+import attackOnTitan from './chrome/attack-on-titan.js';
+import demonSlayer from './chrome/demon-slayer.js';
+import jujutsuKaisen from './chrome/jujutsu-kaisen.js';
+import onePiece from './chrome/one-piece.js';
+import naruto from './chrome/naruto.js';
+import dragonBall from './chrome/dragon-ball.js';
+import deathNote from './chrome/death-note.js';
+import fullmetalAlchemist from './chrome/fullmetal-alchemist.js';
+import soloLeveling from './chrome/solo-leveling.js';
 
 const CHROME = {
   spell,
@@ -68,6 +85,23 @@ const CHROME = {
   toon,
   'kewl-tune': kewlTune,
   'cyber-dragon': cyberDragon,
+  constellar,
+  'fire-king': fireKing,
+  mermail,
+  starlight,
+  'starlight-light': starlightLight,
+  dracotail,
+  'power-patron': powerPatron,
+  ryzeal,
+  'attack-on-titan': attackOnTitan,
+  'demon-slayer': demonSlayer,
+  'jujutsu-kaisen': jujutsuKaisen,
+  'one-piece': onePiece,
+  naruto,
+  'dragon-ball': dragonBall,
+  'death-note': deathNote,
+  'fullmetal-alchemist': fullmetalAlchemist,
+  'solo-leveling': soloLeveling,
 };
 
 export const CHROME_IDS = Object.keys(CHROME).filter((id) => CHROME[id]);

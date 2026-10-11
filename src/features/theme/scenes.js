@@ -47,6 +47,23 @@ import * as duelDisk from './scenes/duel-disk.js';
 import * as ritual from './scenes/ritual.js';
 import * as shadowRealm from './scenes/shadow-realm.js';
 import * as graphite from './scenes/graphite.js';
+import * as starlight from './scenes/starlight.js';
+import * as starlightLight from './scenes/starlight-light.js';
+import * as constellar from './scenes/constellar.js';
+import * as mermail from './scenes/mermail.js';
+import * as fireKing from './scenes/fire-king.js';
+import * as dracotail from './scenes/dracotail.js';
+import * as powerPatron from './scenes/power-patron.js';
+import * as ryzeal from './scenes/ryzeal.js';
+import * as attackOnTitan from './scenes/attack-on-titan.js';
+import * as demonSlayer from './scenes/demon-slayer.js';
+import * as jujutsuKaisen from './scenes/jujutsu-kaisen.js';
+import * as onePiece from './scenes/one-piece.js';
+import * as naruto from './scenes/naruto.js';
+import * as dragonBall from './scenes/dragon-ball.js';
+import * as deathNote from './scenes/death-note.js';
+import * as fullmetalAlchemist from './scenes/fullmetal-alchemist.js';
+import * as soloLeveling from './scenes/solo-leveling.js';
 
 export const FX_ID = 'dbte-skin-fx';
 
@@ -91,6 +108,23 @@ const MODULES = {
   ritual,
   'shadow-realm': shadowRealm,
   graphite,
+  starlight,
+  'starlight-light': starlightLight,
+  constellar,
+  mermail,
+  'fire-king': fireKing,
+  dracotail,
+  'power-patron': powerPatron,
+  ryzeal,
+  'attack-on-titan': attackOnTitan,
+  'demon-slayer': demonSlayer,
+  'jujutsu-kaisen': jujutsuKaisen,
+  'one-piece': onePiece,
+  naruto,
+  'dragon-ball': dragonBall,
+  'death-note': deathNote,
+  'fullmetal-alchemist': fullmetalAlchemist,
+  'solo-leveling': soloLeveling,
 };
 
 export const SCENE_IDS = Object.keys(MODULES).filter((id) => MODULES[id].default);

@@ -44,7 +44,21 @@ export const ICON_STYLES = {
   toon: 'comic',
   'kewl-tune': 'vinyl',
   'cyber-dragon': 'bezel',
+  constellar: 'starplate',
+  'fire-king': 'banded',
+  mermail: 'scaleplate',
   'dark-magic': 'circle',
+  starlight: 'prism',
+  'starlight-light': 'prism',
+  dracotail: 'astrolabe',
+  'power-patron': 'sigil',
+  ryzeal: 'coil',
+  'attack-on-titan': 'blade',
+  'demon-slayer': 'haori',
+  'jujutsu-kaisen': 'talisman',
+  'one-piece': 'helm',
+  naruto: 'scroll',
+  'dragon-ball': 'orb',
 };
 
 const n2 = (v) => Math.round(v * 100) / 100;
@@ -138,6 +152,25 @@ const frame = (style, w, h, t, radius) => {
       // A round bronze shield with a raised rim and boss.
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent}" stroke-width="${sw * 1.4}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.78)}" fill="none" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="${sw * 0.6}"/>`;
     }
+    case 'starplate': {
+      // Constellar: a silver plate with gold-chamfered corners and a crosshair star on top.
+      const c = Math.min(fw, fh) * 0.2;
+      const k = Math.min(fw, fh) * 0.13;
+      return `<path d="M${n2(x + c)} ${y}H${n2(x + fw - c)}L${x + fw} ${n2(y + c)}V${n2(y + fh - c)}L${n2(x + fw - c)} ${y + fh}H${n2(x + c)}L${x} ${n2(y + fh - c)}V${n2(y + c)}Z" fill="${mix(t.raised, t.accent, 0.1)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="miter"/><path d="M${x} ${n2(y + c)}L${n2(x + c)} ${y}M${n2(x + fw - c)} ${y}L${x + fw} ${n2(y + c)}M${x + fw} ${n2(y + fh - c)}L${n2(x + fw - c)} ${y + fh}M${n2(x + c)} ${y + fh}L${x} ${n2(y + fh - c)}" stroke="${t.accent2}" stroke-width="${n2(sw * 1.6)}"/><path d="M${cx} ${n2(y - k * 0.6)}L${n2(cx + k * 0.25)} ${n2(y - k * 0.1)}L${n2(cx + k)} ${y}L${n2(cx + k * 0.25)} ${n2(y + k * 0.1)}L${cx} ${n2(y + k * 0.6)}L${n2(cx - k * 0.25)} ${n2(y + k * 0.1)}L${n2(cx - k)} ${y}L${n2(cx - k * 0.25)} ${n2(y - k * 0.1)}Z" fill="${t.accent2}"/>`;
+    }
+    case 'banded': {
+      // Fire King: crimson lacquer between black-and-gold armour bands, a turquoise gem.
+      const b = fh * 0.16;
+      const g = Math.min(fw, fh) * 0.08;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.raised, t.self, 0.3)}" stroke="${t.accent}" stroke-width="${sw}"/><g fill="${mix(t.bg, '#000000', 0.4)}"><rect x="${x}" y="${y}" width="${fw}" height="${n2(b)}"/><rect x="${x}" y="${n2(y + fh - b)}" width="${fw}" height="${n2(b)}"/></g><path d="M${x} ${n2(y + b)}H${x + fw}M${x} ${n2(y + fh - b)}H${x + fw}" stroke="${t.accent}" stroke-width="${n2(sw * 0.8)}"/><path d="M${cx} ${n2(y + b * 0.5 - g)}l${n2(g)} ${n2(g)}l${n2(-g)} ${n2(g)}l${n2(-g)} ${n2(-g)}Z" fill="${t.accent2}"/>`;
+    }
+    case 'scaleplate': {
+      // Mermail: a rounded silver-blue plate, wave scroll along its foot, a red gem above.
+      const w4 = fw / 4;
+      let wave = `M${x} ${n2(y + fh * 0.84)}`;
+      for (let i = 0; i < 4; i++) wave += `q${n2(w4 * 0.5)} ${n2(-fh * 0.14)} ${n2(w4)} 0`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${n2(Math.min(fw, fh) * 0.22)}" fill="${mix(t.raised, t.accent, 0.12)}" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-width="${sw}"/><path d="${wave}" fill="none" stroke="${t.accent}" stroke-opacity="0.7" stroke-width="${n2(sw * 0.8)}"/><circle cx="${cx}" cy="${n2(y + sw * 0.4)}" r="${n2(Math.min(fw, fh) * 0.08)}" fill="${t.danger}" stroke="${t.accent2}" stroke-width="${n2(sw * 0.6)}"/>`;
+    }
     case 'vinyl': {
       // A record label: groove rings and a centre hole.
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.82)}" fill="none" stroke="${t.muted}" stroke-opacity="0.35" stroke-width="${sw * 0.4}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.68)}" fill="none" stroke="${t.muted}" stroke-opacity="0.25" stroke-width="${sw * 0.4}"/>`;
@@ -154,8 +187,83 @@ const frame = (style, w, h, t, radius) => {
       });
       return `<polygon points="${pts.join(' ')}" fill="${t.raised}" stroke="${t.accent2}" stroke-width="${sw}"/>`;
     }
+    case 'prism': {
+      // A Starlight Rare foil plate: a rainbow foil rim, hairline foil lines and a star glint.
+      const stops = [t.danger, t.warning, t.success, t.accent, t.link, t.accent2].map((c, i) => `<stop offset="${n2(i / 5)}" stop-color="${c}"/>`).join('');
+      let lines = '';
+      for (let ly = y + sw * 2; ly < y + fh - sw; ly += Math.max(1.5, fh / 14)) lines += `M${n2(x + sw)} ${n2(ly)}H${n2(x + fw - sw)}`;
+      const g = Math.min(fw, fh) * 0.16;
+      const gx = x + fw - g * 0.9;
+      const gy = y + g * 0.9;
+      return `<defs><linearGradient id="p" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 4)}" fill="${t.raised}" stroke="url(#p)" stroke-width="${n2(sw * 1.3)}"/><path d="${lines}" stroke="url(#p)" stroke-opacity="0.22" stroke-width="${n2(sw * 0.35)}"/><path d="M${n2(gx)} ${n2(gy - g)}Q${n2(gx)} ${n2(gy)} ${n2(gx + g)} ${n2(gy)}Q${n2(gx)} ${n2(gy)} ${n2(gx)} ${n2(gy + g)}Q${n2(gx)} ${n2(gy)} ${n2(gx - g)} ${n2(gy)}Q${n2(gx)} ${n2(gy)} ${n2(gx)} ${n2(gy - g)}Z" fill="${t.text}" fill-opacity="0.85"/>`;
+    }
+    case 'blade': {
+      // Attack on Titan: an ODM blade plate, steel with the diagonal snap-off scores and a clipped tip.
+      const c = Math.min(fw, fh) * 0.24;
+      let scores = '';
+      for (let i = 1; i < 4; i++) scores += `M${n2(x + (fw * i) / 4 - c * 0.35)} ${n2(y + fh - sw)}L${n2(x + (fw * i) / 4 + c * 0.35)} ${n2(y + sw)}`;
+      return `<defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.22)}"/><stop offset="0.5" stop-color="${t.raised}"/><stop offset="1" stop-color="${mix(t.raised, t.bg, 0.5)}"/></linearGradient></defs><path d="M${x} ${y}H${n2(x + fw - c)}L${x + fw} ${n2(y + c)}V${y + fh}H${x}Z" fill="url(#b)" stroke="${mix(t.text, t.border, 0.45)}" stroke-width="${sw}" stroke-linejoin="miter"/><path d="${scores}" stroke="${t.bg}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.7)}"/><path d="M${n2(x + sw)} ${n2(y + fh - sw * 1.4)}H${n2(x + fw - sw)}" stroke="${t.accent}" stroke-width="${n2(sw * 1.1)}"/>`;
+    }
+    case 'haori': {
+      // Demon Slayer: black lacquer with a crimson rim, a checkered haori band along the foot.
+      const q = Math.max(1.5, fh * 0.12);
+      let checks = '';
+      for (let i = 0, cx0 = x + sw; cx0 < x + fw - sw - 0.1; i++, cx0 += q) {
+        const cw = Math.min(q, x + fw - sw - cx0);
+        checks += `<rect x="${n2(cx0)}" y="${n2(y + fh - sw - q * (i % 2 ? 1 : 2))}" width="${n2(cw)}" height="${n2(q)}"/>`;
+      }
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="${mix(t.raised, t.bg, 0.3)}" stroke="${t.accent}" stroke-width="${sw}"/><rect x="${n2(x + sw)}" y="${n2(y + fh - sw - q * 2)}" width="${n2(fw - sw * 2)}" height="${n2(q * 2)}" fill="${mix(t.bg, '#000000', 0.3)}"/><g fill="${t.success}">${checks}</g>`;
+    }
+    case 'talisman': {
+      // Jujutsu Kaisen: a sealing talisman, a pale paper strip with a red seal band and an ink stroke.
+      const b = fh * 0.2;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="1" fill="${mix(t.raised, t.text, 0.12)}" stroke="${mix(t.text, t.muted, 0.4)}" stroke-width="${n2(sw * 0.8)}"/><rect x="${x}" y="${y}" width="${fw}" height="${n2(b)}" fill="${t.accent2}"/><rect x="${n2(x + sw * 1.5)}" y="${n2(y + b + sw * 1.2)}" width="${n2(fw - sw * 3)}" height="${n2(fh - b - sw * 2.7)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.5)}"/><path d="M${n2(x + fw * 0.12)} ${n2(y + fh - sw * 1.6)}Q${n2(cx)} ${n2(y + fh - sw * 3.2)} ${n2(x + fw * 0.88)} ${n2(y + fh - sw * 1.4)}" fill="none" stroke="${t.accent}" stroke-width="${n2(sw * 0.9)}" stroke-linecap="round"/>`;
+    }
     case 'circle':
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${rr - sw * 2.2}" fill="none" stroke="${t.accent}" stroke-opacity="0.4" stroke-width="${sw * 0.5}" stroke-dasharray="${sw * 1.5} ${sw * 1.2}"/>`;
+    case 'astrolabe': {
+      // A gold zodiac ring with tick marks around a jade inner ring.
+      let ticks = '';
+      for (let i = 0; i < 12; i++) {
+        const a = (Math.PI / 6) * i;
+        ticks += `M${n2(cx + Math.cos(a) * rr * 0.8)} ${n2(cy + Math.sin(a) * rr * 0.8)}L${n2(cx + Math.cos(a) * rr * 0.95)} ${n2(cy + Math.sin(a) * rr * 0.95)}`;
+      }
+      return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><path d="${ticks}" stroke="${t.accent}" stroke-opacity="0.7" stroke-width="${n2(sw * 0.5)}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.74)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.6" stroke-width="${n2(sw * 0.5)}"/>`;
+    }
+    case 'sigil':
+      // A black almond eye-plate with a pale sigil rim and a forked crest.
+      return `<path d="M${x} ${cy}Q${cx} ${n2(y - fh * 0.1)} ${x + fw} ${cy}Q${cx} ${n2(y + fh * 1.1)} ${x} ${cy}Z" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${cx} ${y}V${n2(y + fh * 0.16)}M${n2(cx - fw * 0.12)} ${y}V${n2(y + fh * 0.1)}M${n2(cx + fw * 0.12)} ${y}V${n2(y + fh * 0.1)}" stroke="${t.accent}" stroke-width="${n2(sw * 0.7)}"/>`;
+    case 'coil': {
+      // A chamfered gunmetal plate with an amber ignition ring in one corner.
+      const c = Math.min(fw, fh) * 0.2;
+      return `<path d="M${n2(x + c)} ${y}H${x + fw}V${n2(y + fh - c)}L${n2(x + fw - c)} ${y + fh}H${x}V${n2(y + c)}Z" fill="${t.raised}" stroke="${mix(t.border, t.text, 0.3)}" stroke-width="${sw}" stroke-linejoin="round"/><circle cx="${n2(x + fw - c * 0.9)}" cy="${n2(y + c * 0.9)}" r="${n2(c * 0.45)}" fill="none" stroke="${t.accent}" stroke-width="${n2(sw * 0.9)}"/><path d="M${n2(x + c * 0.6)} ${n2(y + fh - sw * 1.6)}H${n2(x + fw * 0.55)}" stroke="${t.accent2}" stroke-width="${n2(sw * 0.7)}"/>`;
+    }
+    case 'helm': {
+      // One Piece: a ship's wheel, timber rim and eight turned handles.
+      let spokes = '';
+      for (let i = 0; i < 8; i++) {
+        const a = (Math.PI / 4) * i + Math.PI / 8;
+        spokes += `M${n2(cx + Math.cos(a) * rr * 0.8)} ${n2(cy + Math.sin(a) * rr * 0.8)}L${n2(cx + Math.cos(a) * rr)} ${n2(cy + Math.sin(a) * rr)}`;
+      }
+      return `<path d="${spokes}" stroke="${t.accent}" stroke-width="${n2(sw * 1.6)}" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.8)}" fill="${mix(t.raised, t.accent, 0.12)}" stroke="${t.accent}" stroke-width="${n2(sw * 1.2)}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.66)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.5)}"/>`;
+    }
+    case 'scroll': {
+      // Naruto: an unrolled ninja scroll between two wooden rollers, an orange seal band.
+      const rw = Math.max(2, fw * 0.1);
+      return `<rect x="${n2(x + rw * 0.5)}" y="${n2(y + fh * 0.06)}" width="${n2(fw - rw)}" height="${n2(fh * 0.88)}" fill="${t.raised}" stroke="${mix(t.border, t.text, 0.25)}" stroke-width="${n2(sw * 0.6)}"/><rect x="${n2(x + rw * 0.5)}" y="${n2(y + fh * 0.06)}" width="${n2(fw - rw)}" height="${n2(fh * 0.1)}" fill="${t.accent}"/><g fill="${mix(t.accent, t.bg, 0.6)}" stroke="${t.accent}" stroke-width="${n2(sw * 0.5)}"><rect x="${x}" y="${y}" width="${n2(rw)}" height="${fh}" rx="${n2(rw / 2)}"/><rect x="${n2(x + fw - rw)}" y="${y}" width="${n2(rw)}" height="${fh}" rx="${n2(rw / 2)}"/></g>`;
+    }
+    case 'orb': {
+      // Dragon Ball: an amber glass orb rim with a red star.
+      const [sx, sy] = [cx + rr * 0.62, cy - rr * 0.62];
+      const k = rr * 0.24;
+      let star = '';
+      for (let i = 0; i < 10; i++) {
+        const a = -Math.PI / 2 + (i * Math.PI) / 5;
+        const rad = i % 2 ? k * 0.42 : k;
+        star += `${i ? 'L' : 'M'}${n2(sx + Math.cos(a) * rad)} ${n2(sy + Math.sin(a) * rad)}`;
+      }
+      return `<defs><radialGradient id="o" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="${mix(t.accent2, '#ffffff', 0.4)}"/><stop offset="0.6" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.5)}"/></radialGradient></defs><circle cx="${cx}" cy="${cy}" r="${rr}" fill="url(#o)"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.78)}" fill="${mix(t.raised, t.accent, 0.2)}"/><path d="${star}Z" fill="${t.danger}" stroke="${mix(t.danger, t.bg, 0.5)}" stroke-width="${n2(sw * 0.3)}"/>`;
+    }
     default:
       return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${r}" fill="${t.raised}" stroke="${t.border}" stroke-width="${sw}"/>`;
   }
@@ -184,7 +292,7 @@ const GLYPHS = {
 // A framed glyph in a w x h viewBox (the size DuelingBook gives the <img>).
 const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent, badge = false } = {}) => {
   // Round and hexagonal frames have less room inside than a tile.
-  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad', 'shield', 'vinyl'].includes(style) ? 0.6 : 0.78)) / 40;
+  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad', 'shield', 'vinyl', 'helm', 'orb'].includes(style) ? 0.6 : 0.78)) / 40;
   const gx = (w - 40 * s) / 2;
   const gy = (h - 40 * s) / 2;
   const dot = badge ? `<circle cx="${w * 0.8}" cy="${h * 0.2}" r="${Math.min(w, h) * 0.13}" fill="${t.danger}" stroke="${t.raised}" stroke-width="${Math.min(w, h) * 0.04}"/>` : '';

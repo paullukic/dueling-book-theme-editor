@@ -6,6 +6,7 @@
 
 import { isHex, mix } from '../../lib/color.js';
 import { FX_ID } from './scenes.js';
+import { crystal } from './scenes/snow.js';
 
 export const LAYER_ID = 'dbte-skin-layer';
 export const MOTIF_ID = 'dbte-skin-motif';
@@ -190,7 +191,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
   // Divine Beasts: Ra gold, Obelisk blue, Slifer red; glyph walls and a sunlit sky.
   // Light: aged paper grain with a warm vignette and inked corners on pop-ups.
   parchment: (t) =>
-    layer(`${url(motifs.grain(t))}, ${url(motifs.grain(t))}, radial-gradient(ellipse at 50% 40%, transparent 55%, ${alpha(t.border, 0.45)} 100%)`) +
+    layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 50% 0%, ${alpha('#ffffff', 0.45)}, transparent 55%), radial-gradient(ellipse at 50% 40%, transparent 60%, ${alpha(t.border, 0.18)} 100%)`) +
     tileHoverGlow(t.accent) +
     dialogCorners(t.accent),
 
@@ -202,9 +203,20 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
 
   graphite: (t) => layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent),
 
-  snow: (t) =>
-    layer(`${url(motifs.dots(t))}, linear-gradient(180deg, ${alpha('#ffffff', 0.6)}, transparent 40%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) +
-    tileHoverGlow(t.accent),
+  // Snow (light): frost. Fine ice crystals on the page, frosted-glass tiles and crystals in the pop-up corners.
+  snow: (t) => {
+    const frost = svg(560, 460, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="1.2" stroke-linecap="round">${crystal(90, 110, 18)}${crystal(400, 70, 9)}${crystal(300, 290, 13)}${crystal(500, 400, 7)}${crystal(150, 390, 6)}</g>`);
+    const corner = svg(56, 56, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.4" stroke-width="1.6" stroke-linecap="round">${crystal(22, 22, 18)}</g>`);
+    return (
+      layer(`${url(frost)}, linear-gradient(180deg, ${alpha('#ffffff', 0.65)}, transparent 45%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent2, 0.08)}, transparent 60%)`) +
+      `${TILE} { background-image: linear-gradient(180deg, ${alpha('#ffffff', 0.9)}, transparent 60%), radial-gradient(ellipse at 100% 0%, ${alpha(t.accent2, 0.1)}, transparent 55%) !important; }
+${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${alpha(t.accent, 0.55)}, inset 3px 0 0 ${t.accent}, 0 12px 24px -12px ${alpha(t.accent, 0.45)} !important; }
+${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.accent2, 0.06)}, transparent 35%) !important; }
+${dialogSel('::before')}, ${dialogSel('::after')} { content: ""; position: absolute; width: 56px; height: 56px; pointer-events: none; z-index: 1; background: ${url(corner)} no-repeat; }
+${dialogSel('::before')} { left: 8px; top: 8px; }
+${dialogSel('::after')} { right: 8px; bottom: 8px; transform: rotate(180deg); }`
+    );
+  },
 
   // Ritual: a candle-lit summoning circle under a cobalt sky.
   ritual: (t) =>
@@ -301,6 +313,25 @@ ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 20px -6px ${t.accen
     tileHoverGlow(t.accent) +
     fieldGlow(t, 2),
 
+  // Constellar: violet nebula and crosshair stars; the scene draws the star knight.
+  constellar: (t) =>
+    layer(`${url(svg(260, 260, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="0.8"><circle cx="60" cy="70" r="5"/><path d="M60 60v20M50 70h20"/><circle cx="190" cy="190" r="3.5"/><path d="M190 183v14M183 190h14"/></g><path d="M60 70L140 40L190 190" fill="none" stroke="${t.accent}" stroke-opacity="0.07"/>`))}, ${url(motifs.stars(t, t.text, 22, 200))}, radial-gradient(ellipse 55% 45% at 78% 22%, ${alpha(t.self, 0.16)}, transparent 70%), radial-gradient(ellipse 50% 40% at 15% 90%, ${alpha(t.accent2, 0.07)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent2) +
+    fieldGlow(t, 2),
+
+  // Fire King: sacred fire glowing up from below, ash in the air.
+  'fire-king': (t) =>
+    layer(`${url(motifs.grain(t))}, radial-gradient(ellipse 70% 45% at 70% 110%, ${alpha(t.self, 0.3)}, transparent 70%), radial-gradient(ellipse 40% 30% at 80% 25%, ${alpha(t.accent, 0.12)}, transparent 70%), radial-gradient(ellipse at 0% 100%, ${alpha(t.accent2, 0.06)}, transparent 50%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+
+  // Mermail: light falling from the surface into deep water; the scene adds Atlantis.
+  mermail: (t) =>
+    layer(`${url(svg(180, 180, `<g fill="none" stroke="${t.text}" stroke-opacity="0.08"><circle cx="40" cy="50" r="5"/><circle cx="52" cy="30" r="2.5"/><circle cx="140" cy="130" r="4"/><circle cx="130" cy="150" r="2"/></g>`))}, linear-gradient(180deg, ${alpha(t.accent, 0.14)}, transparent 45%), radial-gradient(ellipse 60% 40% at 60% -5%, ${alpha('#ffffff', 0.08)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
   divine: (t) =>
     layer(`radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
     `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.16)}, transparent 50%) !important; box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.7)}, 0 10px 24px -14px var(--dbt-shade-strong) !important; }
@@ -308,7 +339,94 @@ ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 22px -6px ${t.accen
 ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 0 4px ${alpha(t.self, 0.8)}, 0 0 0 6px ${t.surface}, 0 0 0 7px ${alpha(t.opp, 0.8)}, 0 24px 60px -20px var(--dbt-shade-strong) !important; }` +
     dialogCorners(t.accent) +
     fieldGlow(t, 3),
+
+  // Starlight: the foil's hairline grain and a faint prism sheen; the scene and
+  // shader draw the full prismatic foil.
+  starlight: (t) => starlightSkin(t, 1),
+  'starlight-light': (t) => starlightSkin(t, 0.55),
+  // Dracotail: plum eclipse night with gold and jade; the scene draws the astrolabe and tail.
+  dracotail: (t) =>
+    layer(`${url(motifs.stars(t, t.accent, 24))}, radial-gradient(ellipse at 78% 40%, ${alpha(t.accent, 0.14)}, transparent 50%), radial-gradient(ellipse at 10% 100%, ${alpha(t.accent2, 0.12)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent) +
+    fieldGlow(t, 2),
+
+  // Power Patron: a cold glow under the eye; the scene draws the sigil, blades and prism road.
+  'power-patron': (t) =>
+    layer(`radial-gradient(ellipse at 78% 30%, ${alpha(t.accent, 0.14)}, transparent 50%), radial-gradient(ellipse at 85% 110%, ${alpha(t.accent2, 0.1)}, transparent 55%), radial-gradient(ellipse at 0% 0%, ${alpha(t.border, 0.3)}, transparent 50%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Ryzeal: ignition heat behind the engine; the scene draws the stator, rotor and coils.
+  ryzeal: (t) =>
+    layer(`radial-gradient(ellipse at 78% 47%, ${alpha(t.accent, 0.2)}, transparent 50%), radial-gradient(ellipse at 78% 47%, ${alpha(t.accent2, 0.1)}, transparent 30%), radial-gradient(ellipse at 0% 100%, ${alpha(t.accent, 0.08)}, transparent 45%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+
+  // Attack on Titan: coursed wall stone, steam heat behind the wall; the scene draws Wall Maria.
+  'attack-on-titan': (t) =>
+    layer(`${url(svg(120, 60, `<g fill="none" stroke="${t.text}" stroke-opacity="0.045" stroke-width="1.2"><path d="M0 0.6H120M0 30.6H120M40 0.6V30.6M100 0.6V30.6M10 30.6V60M70 30.6V60"/></g>`))}, radial-gradient(ellipse 60% 45% at 78% 40%, ${alpha(t.accent2, 0.16)}, transparent 70%), linear-gradient(180deg, ${alpha(t.muted, 0.06)}, transparent 45%), radial-gradient(ellipse at 10% 110%, ${alpha(t.accent, 0.1)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Demon Slayer: seigaiha water waves, a crimson night; the scene draws the breathing forms.
+  'demon-slayer': (t) =>
+    layer(`${url(svg(48, 24, `<g fill="none" stroke="${t.accent2}" stroke-opacity="0.07" stroke-width="1"><path d="M0 24a12 12 0 0 1 24 0a12 12 0 0 1 24 0M4 24a8 8 0 0 1 16 0M28 24a8 8 0 0 1 16 0M-12 12a12 12 0 0 1 24 0M12 12a12 12 0 0 1 24 0M36 12a12 12 0 0 1 24 0"/></g>`))}, radial-gradient(ellipse 55% 50% at 80% 30%, ${alpha(t.accent, 0.14)}, transparent 70%), radial-gradient(ellipse at 15% 110%, ${alpha(t.accent2, 0.14)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Jujutsu Kaisen: ink speckle and a cursed-energy night; the scene draws the hollow purple.
+  'jujutsu-kaisen': (t) =>
+    layer(`${url(svg(180, 180, `<g fill="${t.text}" fill-opacity="0.05"><circle cx="30" cy="40" r="3"/><circle cx="38" cy="47" r="1.2"/><circle cx="140" cy="120" r="2.4"/><circle cx="131" cy="128" r="1"/><circle cx="96" cy="160" r="1.6"/></g>`))}, radial-gradient(ellipse 50% 50% at 78% 38%, ${alpha(t.accent, 0.18)}, transparent 70%), radial-gradient(ellipse at 0% 100%, ${alpha(t.opp, 0.1)}, transparent 50%), radial-gradient(ellipse at 100% 100%, ${alpha(t.accent2, 0.08)}, transparent 50%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+  // One Piece: dusk on the Grand Line, a faint sea-chart grid; the scene draws the ship and sea.
+  'one-piece': (t) =>
+    layer(`${url(svg(240, 240, `<g fill="none" stroke="${t.text}" stroke-opacity="0.045"><path d="M0 120H240M120 0V240"/></g><path d="M30 200Q90 150 130 170T220 60" fill="none" stroke="${t.accent}" stroke-opacity="0.09" stroke-width="1.4" stroke-dasharray="5 6"/><path d="M214 54l10 10M224 54l-10 10" stroke="${t.accent2}" stroke-opacity="0.08" stroke-width="2"/>`))}, radial-gradient(ellipse 60% 40% at 78% 62%, ${alpha(t.accent, 0.16)}, transparent 70%), linear-gradient(180deg, transparent 55%, ${alpha(t.opp, 0.08)})`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Naruto: dusk over the leaf village, a faint spiral; the scene draws the village and the chakra sphere.
+  naruto: (t) =>
+    layer(`${url(svg(200, 200, `<path d="M100 100m0-3a3 3 0 1 1-3 3a7 7 0 0 1 7-7a11 11 0 0 1 11 11a15 15 0 0 1-15 15a19 19 0 0 1-19-19" fill="none" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="1.6"/><path d="M30 40q8-10 16 0q-8 10-16 0z" fill="${t.success}" fill-opacity="0.06" transform="rotate(-30 38 40)"/>`))}, radial-gradient(ellipse 45% 40% at 80% 34%, ${alpha(t.accent2, 0.14)}, transparent 70%), radial-gradient(ellipse 80% 40% at 50% 110%, ${alpha(t.accent, 0.14)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Dragon Ball: a golden ki glow and faint four-point stars; the scene draws the orbs and the wasteland.
+  'dragon-ball': (t) =>
+    layer(`${url(svg(260, 260, `<g fill="${t.accent2}"><path d="M50 40l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill-opacity="0.16"/><path d="M190 150l1.5 4.5 4.5 1.5-4.5 1.5-1.5 4.5-1.5-4.5-4.5-1.5 4.5-1.5z" fill-opacity="0.12"/></g><circle cx="120" cy="220" r="1.2" fill="${t.text}" fill-opacity="0.2"/>`))}, radial-gradient(ellipse 45% 50% at 78% 48%, ${alpha(t.accent2, 0.16)}, transparent 70%), radial-gradient(ellipse 70% 40% at 20% 110%, ${alpha(t.accent, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent2) +
+    fieldGlow(t, 3),
+
+  // Death Note: the notebook's ruled lines, cold light from above, a red ember low; the scene draws the falling notebook.
+  'death-note': (t) =>
+    layer(`${url(svg(64, 28, `<path d="M0 27.5H64" stroke="${t.accent2}" stroke-opacity="0.05"/>`))}, radial-gradient(ellipse 50% 60% at 86% 0%, ${alpha(t.accent2, 0.14)}, transparent 70%), radial-gradient(ellipse 60% 40% at 72% 100%, ${alpha(t.accent, 0.09)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Fullmetal Alchemist: a faint chalk transmutation circle (hexagram and square), the Gate's pale glow and alchemy blue; the scene draws the Gate of Truth.
+  'fullmetal-alchemist': (t) =>
+    layer(`${url(svg(600, 600, `<g fill="none" stroke="${t.text}" stroke-opacity="0.12"><circle cx="300" cy="300" r="290" stroke-width="2"/><circle cx="300" cy="300" r="250"/><circle cx="300" cy="300" r="90"/><path d="M300 60L508 420H92ZM300 540L92 180H508ZM172 172H428V428H172Z" stroke-width="1.5"/></g>`))} right -8% bottom -14% / min(80vh, 760px) no-repeat, radial-gradient(ellipse 40% 55% at 80% 42%, ${alpha(t.text, 0.08)}, transparent 70%), radial-gradient(ellipse 50% 40% at 78% 90%, ${alpha(t.accent2, 0.12)}, transparent 70%), radial-gradient(ellipse 60% 40% at 0% 100%, ${alpha(t.accent, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.accent2) +
+    fieldGlow(t, 2),
+
+  // Solo Leveling: System scanlines, the Gate's blue glare and shadow violet below; the scene draws the Gate and the shadow army.
+  'solo-leveling': (t) =>
+    layer(`${url(svg(6, 6, `<path d="M0 .5H6" stroke="${t.accent}" stroke-opacity="0.028"/>`))}, radial-gradient(ellipse 45% 50% at 80% 20%, ${alpha(t.accent, 0.18)}, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 105%, ${alpha(t.accent2, 0.16)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
 };
+
+// Starlight Rare foil, dark or light (`k` scales the sheen).
+function starlightSkin(t, k) {
+  const prism = [t.danger, t.warning, t.success, t.accent, t.link, t.accent2].map((c, i) => `${alpha(c, 0.07 * k)} ${30 + i * 8}%`).join(', ');
+  return (
+    layer(`${url(svg(6, 6, `<path d="M0 .5H6" stroke="${t.text}" stroke-opacity="${n2(0.035 * k)}"/>`))}, linear-gradient(112deg, transparent 22%, ${prism}, transparent 78%), radial-gradient(ellipse at 80% 0%, ${alpha(t.accent2, 0.12 * k)}, transparent 55%), radial-gradient(ellipse at 10% 110%, ${alpha(t.accent, 0.1 * k)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2)
+  );
+}
+const n2 = (v) => Math.round(v * 1000) / 1000;
 
 export const SKIN_IDS = Object.keys(SKINS);
 
