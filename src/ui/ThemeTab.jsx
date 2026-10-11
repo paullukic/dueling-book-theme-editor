@@ -359,11 +359,30 @@ const StyleView = ({ s, onPick }) => {
 const BackgroundView = ({ s }) => (
   <>
     <Group title="Your own background">
-      <p className="note">Any picture behind DuelingBook. It is shrunk and stored on this computer only.</p>
-      <BackgroundPicker />
-      <ToggleRow label="Show my image" checked={s.backgroundEnabled} onChange={set('backgroundEnabled')}>
+      <div className="segmented-row">
+        <span id="dbte-bg-mode-label">Use</span>
+        <div className="segmented" role="group" aria-labelledby="dbte-bg-mode-label">
+          {[
+            ['image', 'Picture'],
+            ['color', 'Solid colour'],
+          ].map(([id, label]) => (
+            <button key={id} type="button" aria-pressed={s.backgroundMode === id} onClick={() => updateSettings({ backgroundMode: id, backgroundEnabled: true })}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {s.backgroundMode === 'color' ? (
+        <ColorRow label="Background colour" value={s.backgroundColor} onChange={set('backgroundColor')} />
+      ) : (
+        <>
+          <p className="note">Any picture behind DuelingBook. It is shrunk and stored on this computer only.</p>
+          <BackgroundPicker />
+        </>
+      )}
+      <ToggleRow label="Show my background" checked={s.backgroundEnabled} onChange={set('backgroundEnabled')}>
         <SliderRow
-          label="Image strength"
+          label={s.backgroundMode === 'color' ? 'Colour strength' : 'Image strength'}
           value={s.backgroundOpacity}
           min={0.1}
           max={1}
@@ -373,8 +392,8 @@ const BackgroundView = ({ s }) => (
         />
         {s.themeEnabled && s.themeEffects && s.themeMotif && (
           <ToggleRow
-            label="Theme pattern on my image"
-            description="Draws the theme’s artwork over your picture. Off: only the theme’s glow tints it."
+            label="Theme pattern on my background"
+            description="Draws the theme’s artwork over your background. Off: only the theme’s glow tints it."
             checked={s.backgroundThemeOverlay}
             onChange={set('backgroundThemeOverlay')}
           />

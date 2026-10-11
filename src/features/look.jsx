@@ -163,9 +163,10 @@ ${MENU_HOVER_CSS}`
 };
 
 export const BackgroundEffect = () => {
-  const { backgroundEnabled, backgroundOpacity, backgroundThemeOverlay } = useSettings();
+  const { backgroundEnabled, backgroundOpacity, backgroundThemeOverlay, backgroundMode, backgroundColor } = useSettings();
   const [image] = useLocal('background', '');
-  const active = backgroundEnabled && !!image;
+  const solid = backgroundMode === 'color';
+  const active = backgroundEnabled && (solid || !!image);
   // The picture sits under the theme's motif layer (z-index -1 vs 0), or the
   // motif is hidden so the picture shows clean.
   useStyle(
@@ -181,13 +182,17 @@ ${backgroundThemeOverlay ? '' : '#dbte-skin-motif, #dbte-skin-fx { display: none
 
   useEffect(() => {
     if (!active) return undefined;
-    const img = document.createElement('img');
+    // A picture, or a plain block of colour in the same place.
+    const img = document.createElement(solid ? 'div' : 'img');
     img.id = 'dbte-background-img';
-    img.alt = '';
     img.style.cssText =
       'position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;';
     img.style.opacity = String(backgroundOpacity);
-    img.src = image;
+    if (solid) img.style.backgroundColor = backgroundColor;
+    else {
+      img.alt = '';
+      img.src = image;
+    }
     const cancel = whenElement('#content', (content) => {
       content.parentNode.insertBefore(img, content);
     });
@@ -197,7 +202,7 @@ ${backgroundThemeOverlay ? '' : '#dbte-skin-motif, #dbte-skin-fx { display: none
     };
     // Opacity changes are applied by the effect below without re-inserting.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, image]);
+  }, [active, image, solid, backgroundColor]);
 
   useEffect(() => {
     const img = document.getElementById('dbte-background-img');

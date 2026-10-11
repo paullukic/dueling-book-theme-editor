@@ -115,10 +115,10 @@ const ThemeEffect = () => {
   const scene = useMemo(
     () =>
       // Hidden under the user's own picture (pattern overlay off): don't run it at all.
-      on && s.themeEffects && s.themeMotif && !(s.backgroundEnabled && bgImage && !s.backgroundThemeOverlay)
+      on && s.themeEffects && s.themeMotif && !(s.backgroundEnabled && (bgImage || s.backgroundMode === 'color') && !s.backgroundThemeOverlay)
         ? sceneMarkup(s.themePreset, artTokens, { still: !s.themeMotion, particles: !!PARTICLES[s.themePreset] })
         : '',
-    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens, s.backgroundEnabled, bgImage, s.backgroundThemeOverlay],
+    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens, s.backgroundEnabled, bgImage, s.backgroundMode, s.backgroundThemeOverlay],
   );
   useEffect(() => {
     const el = document.getElementById(FX_ID);

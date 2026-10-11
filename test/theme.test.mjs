@@ -401,3 +401,10 @@ test('particles: events (shooting stars, flashes, bursts) fire and finish', () =
     live.forEach((sys) => { if (sys.active) assert.ok(sys.active.age <= sys.active.life + 0.05, id); });
   });
 });
+
+test('background: solid colour mode is validated like every colour', () => {
+  assert.equal(DEFAULTS.backgroundMode, 'image');
+  assert.equal(withDefaults({ backgroundMode: 'color', backgroundColor: '#123abc' }).backgroundColor, '#123abc');
+  assert.equal(withDefaults({ backgroundColor: 'red;}body{display:none' }).backgroundColor, DEFAULTS.backgroundColor);
+  assert.equal(withDefaults({ backgroundMode: 'video' }).backgroundMode, 'image');
+});

@@ -4,6 +4,7 @@
 
 import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme/presets.js';
 import { cleanAliases, fitBytes } from './chatCommands.js';
+import { isHex } from './color.js';
 
 export const CUSTOM_SLOTS = 5;
 
@@ -61,6 +62,8 @@ export const DEFAULTS = {
     edgeAlpha: 0.65,
   },
   backgroundEnabled: false,
+  backgroundMode: 'image', // 'image' (the user's picture) or 'color' (a solid colour)
+  backgroundColor: '#14161c',
   backgroundThemeOverlay: true, // the theme's motif drawn over the user's own picture
   backgroundOpacity: 0.5,
 
@@ -189,6 +192,7 @@ const RANGES = {
 };
 
 const ONE_OF = {
+  backgroundMode: ['image', 'color'],
   themeFont: FONTS.map((f) => f.id),
   cardTextFont: CARD_TEXT_FONTS.map((f) => f.id),
   themePreset: PRESETS.map((p) => p.id),
@@ -210,6 +214,8 @@ const cleanValue = (k, v, d) => {
   }
   if (typeof d === 'string') {
     if (ONE_OF[k]) return ONE_OF[k].includes(v) ? v : d;
+    // Colours go into page CSS: only #rrggbb.
+    if (k.endsWith('Color')) return isHex(v) ? v : d;
     return v.slice(0, 40);
   }
   if (Array.isArray(d)) {
