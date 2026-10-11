@@ -1,7 +1,7 @@
 // Snake-Eye: ember flame and serpent scales. Warm charcoal plates laid with
-// diamond serpent scales, a row of gold flames licking up from the bottom
-// edge, a gold flame ring crowning every phase, a serpent divider under
-// titles and the single slit-pupil Snake-Eye watching the life bar.
+// diamond serpent scales, ember flames licking up the foot of the pop-ups,
+// a ring of scales round every phase (the active one opens into a slit-pupil
+// eye), a serpent divider under titles and the Snake-Eye on tiles and life bar.
 
 import { mix } from '../../../lib/color.js';
 
@@ -11,7 +11,6 @@ const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 // Compact data URI: only the characters CSS and URLs need escaped.
 const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
 
-const ghostGrad = (t, id) => `<linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.opp}"/><stop offset="0.6" stop-color="${mix(t.opp, '#ffffff', 0.5)}"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0.1"/></linearGradient>`;
 const flameGrad = (t, id) => `<linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.55" stop-color="${t.accent2}"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0.2"/></linearGradient>`;
 
 // One flame tongue standing on (0,0), h tall, leaning by `lean`.
@@ -28,23 +27,29 @@ const flameRow = (t, kit) => {
   const hs = [9, 15, 7, 13, 10, 16, 8, 12];
   const outer = hs.map((h, i) => `<path transform="translate(${i * 10 + 5} 16)" d="${tongue(h, 5.6, i % 2 ? -2.5 : 3)}"/>`).join('');
   const inner = hs.map((h, i) => `<path transform="translate(${i * 10 + 5.5} 16)" d="${tongue(h * 0.55, 2.6, i % 2 ? -1.2 : 1.6)}"/>`).join('');
-  return kit.svg(80, 16, `<defs>${ghostGrad(t, 'f')}</defs><g fill="url(#f)" fill-opacity="0.7">${outer}</g><g fill="#ffffff" fill-opacity="0.35">${inner}</g>`);
+  return kit.svg(80, 16, `<defs>${flameGrad(t, 'f')}</defs><g fill="url(#f)" fill-opacity="0.75">${outer}</g><g fill="${t.accent2}" fill-opacity="0.55">${inner}</g>`);
 };
 
-// A wheel of fire around a phase button: tongues swept round the circle.
-const flameRing = (t, kit) => {
+// A ring of serpent scales round a phase button: two offset rows of
+// overlapping rounded scales, each shaded dark to ember with a gold edge,
+// between two smooth gold rims (lit: the active phase).
+const scaleRing = (t, kit, lit) => {
+  const scale = 'M-6.6 -3.5C-6.6 3 -3.6 6.6 0 7.2C3.6 6.6 6.6 3 6.6 -3.5Z';
   let sc = '';
-  for (let i = 0; i < 20; i++) sc += `<path transform="rotate(${i * 18} 50 50)" d="M50 9L54.5 15L50 21L45.5 15Z"/>`;
-  return kit.svg(100, 100, `<g fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent2}" stroke-opacity="0.8" stroke-width="0.8" stroke-linejoin="round">${sc}</g><circle cx="50" cy="50" r="34.5" fill="none" stroke="${t.accent2}" stroke-width="1.6"/><circle cx="50" cy="9" r="5.5" fill="${t.danger}" stroke="${t.accent2}" stroke-width="1.2"/><path d="M50 5.2Q48.6 9 50 12.8Q51.4 9 50 5.2Z" fill="#000000"/>`);
+  [[40.5, 0.5], [36, 0]].forEach(([r, off]) => {
+    for (let i = 0; i < 18; i++) sc += `<use href="#s" transform="rotate(${r1(((i + off) * 360) / 18 + 180)} 50 50) translate(50 ${r1(50 + r)})"/>`;
+  });
+  const edge = lit ? t.accent2 : mix(t.accent2, t.bg, 0.3);
+  return kit.svg(100, 100, `<defs><radialGradient id="g" cx="0.5" cy="0.2" r="0.9"><stop offset="0" stop-color="${mix(t.bg, t.accent, lit ? 0.7 : 0.4)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.3)}"/></radialGradient><path id="s" d="${scale}"/></defs><circle cx="50" cy="50" r="41" fill="none" stroke="${mix(t.bg, '#000000', 0.3)}" stroke-width="13"/><g fill="url(#g)" stroke="${edge}" stroke-width="0.9" stroke-linejoin="round">${sc}</g><circle cx="50" cy="50" r="47.6" fill="none" stroke="${edge}" stroke-width="1.4"/><circle cx="50" cy="50" r="34.6" fill="none" stroke="${edge}" stroke-width="1.4"/>`);
 };
 
 // A band of crimson serpent scales with gold edges, for the foot of a plate.
 const scaleBand = (t, kit) =>
   kit.svg(12, 10, `<path d="M6 0L12 5L6 10L0 5Z" fill="${mix(t.danger, t.bg, 0.45)}" stroke="${t.accent2}" stroke-opacity="0.75" stroke-width="0.8"/><path d="M6 2L9 5L6 6.4Z" fill="${t.accent2}" fill-opacity="0.35"/><path d="M0 0L6 0L0 5ZM12 0L6 0L12 5Z" fill="${mix(t.danger, t.bg, 0.6)}" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="0.6"/>`);
 
-// The Snake-Eye orb: a red sphere in a gold setting, vertical slit.
-const orb = (t, kit) =>
-  kit.svg(20, 20, `<defs><radialGradient id="o" cx="0.4" cy="0.35"><stop offset="0" stop-color="${mix(t.danger, '#ffffff', 0.45)}"/><stop offset="0.5" stop-color="${t.danger}"/><stop offset="1" stop-color="${mix(t.danger, '#000000', 0.55)}"/></radialGradient></defs><circle cx="10" cy="10" r="9" fill="url(#o)" stroke="${t.accent2}" stroke-width="1.6"/><path d="M10 4Q8.6 10 10 16Q11.4 10 10 4Z" fill="#000000"/>`);
+// The Snake-Eye: an almond eye in gold lids, an ember iris, a vertical slit.
+const tileEye = (t, kit) =>
+  kit.svg(28, 18, `<defs><radialGradient id="i" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent2}"/><stop offset="0.6" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></radialGradient></defs><path d="M1 9Q14 -3 27 9Q14 21 1 9Z" fill="${mix(t.bg, '#000000', 0.3)}" stroke="${t.accent2}" stroke-width="1.4" stroke-linejoin="round"/><circle cx="14" cy="9" r="6.6" fill="url(#i)"/><path d="M14 2.8Q12.2 9 14 15.2Q15.8 9 14 2.8Z" fill="#000000"/><circle cx="11.6" cy="6.4" r="1.3" fill="#ffffff" fill-opacity="0.8"/>`);
 
 // Pop-up buttons: an ember plate, dark label, gold inset.
 const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
@@ -90,7 +95,7 @@ html body {
   --se-scales: ${svgUrl(scales(t, kit))};
   --se-flames: ${svgUrl(flameRow(t, kit))};
   --se-band: ${svgUrl(scaleBand(t, kit))};
-  --se-orb: ${svgUrl(orb(t, kit))};
+  --se-eye: ${svgUrl(tileEye(t, kit))};
   --se-serpent: ${svgUrl(serpent(t, kit))};
 }
 
@@ -102,8 +107,8 @@ ${SEL.tile} {
   box-shadow: inset 0 0 0 1px ${goldRim}, inset 0 1px 0 ${alpha(t.accent2, 0.35)}, 0 14px 28px -14px #000000 !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 14px; pointer-events: none;
-  background: var(--se-orb) center bottom / 14px 14px no-repeat, var(--se-band) left 0 bottom 0 / 10px 8px repeat-x; border-radius: 0 0 5px 5px; opacity: 0.9; transition: opacity 0.25s;
+  content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 20px; pointer-events: none;
+  background: var(--se-eye) center bottom 1px / 28px 18px no-repeat, var(--se-band) left 0 bottom 0 / 10px 8px repeat-x; border-radius: 0 0 5px 5px; opacity: 0.92; transition: opacity 0.25s;
 }
 ${SEL.tileHover} {
   background: ${ember(0.55)}, var(--se-scales), ${charcoal} !important;
@@ -167,9 +172,9 @@ ${pseudo(SEL.dialogTitle, 'after')} {
   background: var(--se-serpent) center / 100% 100% no-repeat;
 }
 
-/* Chat: a gold-lipped header, flames along its foot. */
+/* Chat: a gold-lipped header, a band of serpent scales along its foot. */
 ${SEL.chatTop} {
-  background: var(--se-flames) left bottom / 80px 16px repeat-x, var(--se-scales), ${charcoal} !important;
+  background: var(--se-band) left 0 bottom 0 / 10px 8px repeat-x, var(--se-scales), ${charcoal} !important;
   box-shadow: inset 0 1px 0 ${alpha(t.accent2, 0.5)}, inset 0 0 0 1px ${goldRim}, inset 0 -1px 0 ${t.accent} !important;
   border-radius: 6px 6px 0 0 !important;
 }
@@ -177,7 +182,7 @@ ${SEL.chat} { background: ${ember(0.14)}, ${t.surface} !important; box-shadow: i
 ${sel(['#chats .chat .cout_txt'])} { background-color: ${mix(t.bg, t.surface, 0.4)} !important; border-color: ${alpha(t.accent2, 0.25)} !important; }
 ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important; }
 
-/* Duel: the Snake-Eye on the life bar; gold flame rings around the phases. */
+/* Duel: the Snake-Eye on the life bar; scale rings round the phases, the active one an open eye. */
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px #000000, 0 0 16px -4px ${alpha(t.accent, 0.9)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -26px; top: 50%; width: 42px; height: 42px; margin-top: -21px; pointer-events: none;
@@ -194,9 +199,11 @@ ${sel(['#duel .phase .background .background_inner'])} { background: radial-grad
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
   content: ""; position: absolute; inset: -14px; pointer-events: none;
-  background: ${svgUrl(flameRing(t, kit))} center / 100% 100% no-repeat; opacity: 0.85;
+  background: ${svgUrl(scaleRing(t, kit, false))} center / 100% 100% no-repeat;
 }
-${sel(['#duel .phase.active .background::after'])} { opacity: 1; filter: drop-shadow(0 0 4px ${t.accent}); }
+${sel(['#duel .phase.active .background::after'])} { background-image: ${svgUrl(scaleRing(t, kit, true))}; filter: drop-shadow(0 0 5px ${t.accent}); }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(ellipse 7% 40% at 50% 50%, ${alpha('#000000', 0.55)} 75%, transparent 100%), radial-gradient(circle at 50% 50%, ${t.accent2} 0%, ${t.accent} 50%, ${mix(t.accent, t.bg, 0.55)} 100%) !important; }
+${sel(['#duel .phase.active:has(.phase_inner) span.phase_txt'])} { color: ${t.text} !important; text-shadow: 0 0 3px #000000, 0 1px 0 #000000, 0 0 6px #000000 !important; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.self, 0.85)} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 22px ${alpha(t.opp, 0.75)} !important; }
 ${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }

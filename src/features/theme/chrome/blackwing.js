@@ -28,36 +28,51 @@ const feather = (len, w, t) =>
   `<path d="M0 0C${r1(len * 0.3)} ${r1(-w * 0.5)} ${r1(len * 0.75)} ${r1(-w * 0.5)} ${len} 0${trailing(len, w)}Z" fill="${t.bg}" stroke="${t.accent}" stroke-width="0.6" stroke-linejoin="round"/>`
   + `<path d="M${r1(-len * 0.04)} 0L${r1(len * 0.9)} 0" stroke="${mix(t.accent, t.bg, 0.45)}" stroke-width="0.6"/>`;
 
-// Four overlapping quills fanned up and left out of a bottom-right base.
-const quills = (t, kit) => {
-  const f = (a, len, w) => `<g transform="translate(90 54) rotate(${a})">${feather(len, w, t)}</g>`;
-  return kit.svg(92, 56, `${f(232, 44, 8)}${f(218, 60, 9)}${f(204, 76, 10)}${f(192, 88, 10.5)}`);
+// Barbs: fine diagonal lines raking up and out from the rachis on both vanes.
+const barbs = (L, w) => {
+  let d = '';
+  for (let y = L * 0.12; y < L * 0.62; y += L * 0.055) d += `M0.6 ${r1(-y)}l${r1(w * 0.78)} ${r1(-w * 0.55)}`;
+  for (let y = L * 0.12; y < L * 0.78; y += L * 0.07) d += `M-0.6 ${r1(-y)}l${r1(-w * 0.3)} ${r1(-w * 0.4)}`;
+  return d;
 };
 
-// A crow's wing tip fanned from the left edge of a plate: seven long tapered
-// primaries, black with an oil-slick sheen (teal along the leading edge,
-// violet along the trailing edge), each with a pale rachis.
-const wingEdge = (t, kit, teal) => {
-  const prim = (L, w) => `M0 ${-w * 0.3}C${r1(L * 0.35)} ${r1(-w * 0.55)} ${r1(L * 0.75)} ${r1(-w * 0.5)} ${L} 0C${r1(L * 0.78)} ${r1(w * 0.75)} ${r1(L * 0.35)} ${r1(w * 1.05)} 0 ${r1(w * 0.75)}Z`;
-  let s = '';
-  for (let i = 5; i >= 0; i--) {
-    const L = 96 + i * 13;
-    const w = 17 + i * 0.8;
-    s += `<g transform="translate(-8 ${r1(74 - i * 3)}) rotate(${-46 + i * 7.6})"><path d="${prim(L, w)}" fill="url(#bk)" stroke="#000000" stroke-width="0.6"/><path d="M${r1(L * 0.08)} ${r1(-w * 0.42)}C${r1(L * 0.4)} ${r1(-w * 0.56)} ${r1(L * 0.75)} ${r1(-w * 0.5)} ${L} 0" fill="none" stroke="url(#lt)" stroke-width="1.3"/><path d="M${L} 0C${r1(L * 0.78)} ${r1(w * 0.75)} ${r1(L * 0.35)} ${r1(w * 1.05)} ${r1(L * 0.1)} ${r1(w * 0.85)}" fill="none" stroke="url(#tr)" stroke-width="0.9"/><path d="M0 0L${r1(L * 0.94)} 0" stroke="${mix(t.text, t.accent, 0.5)}" stroke-opacity="0.45" stroke-width="0.7"/></g>`;
-  }
-  const defs = `<linearGradient id="bk" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="${mix('#000000', teal, 0.55)}"/><stop offset="0.3" stop-color="#000000"/><stop offset="0.6" stop-color="#000000"/><stop offset="1" stop-color="${mix('#000000', t.accent, 0.5)}"/></linearGradient><linearGradient id="lt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${teal}" stop-opacity="0.2"/><stop offset="0.6" stop-color="${teal}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient><linearGradient id="tr" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.1"/></linearGradient>`;
-  return kit.svg(200, 68, `<defs>${defs}</defs>${s}`);
+// A broad crow primary pointing up (-y) from its base at the origin: a narrow
+// leading vane, a broad trailing vane with one notch, a visible rachis.
+const primary = (L, w, rim, shaft, fine = true) =>
+  `<path d="M-1 0C${r1(-w * 0.45)} ${r1(-L * 0.3)} ${r1(-w * 0.4)} ${r1(-L * 0.78)} 0 ${-L}C${r1(w * 0.5)} ${r1(-L * 0.92)} ${w} ${r1(-L * 0.76)} ${w} ${r1(-L * 0.6)}L${r1(w * 0.72)} ${r1(-L * 0.55)}L${r1(w * 0.98)} ${r1(-L * 0.5)}C${r1(w * 0.95)} ${r1(-L * 0.28)} ${r1(w * 0.6)} ${r1(-L * 0.06)} 1 0Z" fill="url(#bk)" stroke="url(#ed)" stroke-width="0.7" stroke-linejoin="round"/>`
+  + `<path d="M-1 ${r1(-L * 0.05)}C${r1(-w * 0.45)} ${r1(-L * 0.32)} ${r1(-w * 0.4)} ${r1(-L * 0.78)} 0 ${-L}" fill="none" stroke="${rim}" stroke-width="1.3" stroke-linecap="round"/>`
+  + (fine ? `<path d="${barbs(L, w)}" stroke="${rim}" stroke-opacity="0.32" stroke-width="0.5"/>` : '')
+  + `<path d="M0 2L${r1(w * 0.06)} ${r1(-L * 0.9)}" stroke="${shaft}" stroke-width="0.9" stroke-linecap="round"/>`;
+
+// Jet with an oil sheen: teal toward the leading edge, violet at the trailing edge.
+const featherDefs = (t, teal) => `<defs><linearGradient id="bk" x1="0" y1="0" x2="1" y2="0.2"><stop offset="0" stop-color="${mix('#000000', teal, 0.4)}"/><stop offset="0.3" stop-color="${mix('#000000', t.accent, 0.05)}"/><stop offset="0.8" stop-color="${mix('#000000', t.accent, 0.14)}"/><stop offset="1" stop-color="${mix('#000000', t.accent, 0.35)}"/></linearGradient><linearGradient id="ed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.3)}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></linearGradient><radialGradient id="gl"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.8"/><stop offset="0.6" stop-color="${t.accent}" stop-opacity="0.3"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient></defs>`;
+
+// Primaries overlapping like a folded crow wing: rim light teal on the front
+// feather, violet on the ones behind.
+const cluster = (t, kit, teal, W, H, feathers, glow = '') => {
+  const shaft = mix(t.text, t.accent, 0.5);
+  const s = feathers.map(([x, y, a, L, w], i) => `<g transform="translate(${x} ${y}) rotate(${a})">${primary(L, w, i === feathers.length - 1 ? teal : t.accent, shaft)}</g>`).join('');
+  return kit.svg(W, H, `${featherDefs(t, teal)}${glow}${s}`);
 };
+// Menu tiles: a folded wing edge standing in the left strip.
+const wingStrip = (t, kit, teal) => cluster(t, kit, teal, 34, 100, [[22, 99, 13, 76, 11], [15, 99, 2, 88, 12], [8, 99, -9, 95, 12]], '<ellipse cx="16" cy="56" rx="17" ry="46" fill="url(#gl)"/>');
+// Corner crest: three primaries fanned out of a bottom-right corner (or,
+// turned round, out of the top-left one).
+const crestFeathers = [[54, 48, -20, 36, 9], [54, 48, -42, 42, 10], [54, 48, -64, 46, 10]];
+const quills = (t, kit, teal) => cluster(t, kit, teal, 60, 50, crestFeathers);
+const quillsTL = (t, kit, teal) => cluster(t, kit, teal, 60, 50, crestFeathers.map(([x, y, a, L, w]) => [60 - x, 50 - y, a + 180, L, w]));
 
 // A quill divider: long shaft, black vane with a violet rim, a red nib.
 const quillLine = (t, kit) =>
   kit.svg(240, 12, `<path d="M8 6L234 6" stroke="${t.accent}" stroke-width="0.8"/><path d="M58 6C110 0.8 190 1.4 232 6C190 10 110 11 58 6Z" fill="${t.bg}" stroke="${t.accent}" stroke-width="0.6"/><path d="M96 6l6-4M132 6l6-4.4M168 6l6-4M114 6l6 4M150 6l6 4.2M186 6l6 3.6" stroke="${mix(t.accent, t.bg, 0.5)}" stroke-width="0.6"/><path d="M1 6l6-2.6 4 2.6-4 2.6z" fill="${t.accent2}"/>`).replace('<svg ', '<svg preserveAspectRatio="none" ');
 
-// A wreath of black feathers swept round a phase button.
-const wreath = (t, kit) => {
+// A ruff of broad black feathers laid round a phase button, each overlapping
+// the next, violet and teal rim light alternating.
+const wreath = (t, kit, teal) => {
+  const shaft = mix(t.text, t.accent, 0.3);
   let s = '';
-  for (let i = 0; i < 10; i++) s += `<g transform="rotate(${i * 36 - 90} 50 50) translate(50 13) rotate(24)">${feather(22, 6.5, t)}</g>`;
-  return kit.svg(100, 100, `${s}<circle cx="50" cy="50" r="33.5" fill="none" stroke="${mix(t.success, t.accent, 0.35)}" stroke-opacity="0.7" stroke-width="0.8"/>`);
+  for (let i = 0; i < 14; i++) s += `<use href="#${i % 2 ? 'a' : 'b'}" transform="rotate(${r1(i * (360 / 14))} 50 50) translate(50 16) rotate(84)"/>`;
+  return kit.svg(100, 100, `${featherDefs(t, teal)}<defs><g id="a">${primary(18, 7.5, t.accent, shaft, false)}</g><g id="b">${primary(18, 7.5, teal, shaft, false)}</g></defs>${s}`);
 };
 
 // A folded wing at the start of the life bar.
@@ -104,12 +119,13 @@ export default (t, kit) => {
 
   return `
 html body {
-  --bw-quills: ${svgUrl(quills(t, kit))};
-  --bw-edge: ${svgUrl(wingEdge(t, kit, teal))};
+  --bw-quills: ${svgUrl(quills(t, kit, teal))};
+  --bw-crest: ${svgUrl(quillsTL(t, kit, teal))};
+  --bw-edge: ${svgUrl(wingStrip(t, kit, teal))};
   --bw-quill: ${svgUrl(quillLine(t, kit))};
 }
 
-/* Menu tiles: jet plates, an oil-sheen rim, black quills folded into the corner. */
+/* Menu tiles: jet plates, an oil-sheen rim, a folded crow wing standing in the left strip. */
 ${SEL.tile} {
   background: ${jet} !important;
   border-color: transparent !important;
@@ -119,8 +135,7 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: var(--bw-edge) left bottom / auto 100% no-repeat; transition: filter 0.2s;
-  -webkit-mask: linear-gradient(90deg, #000000 22%, transparent 66%); mask: linear-gradient(90deg, #000000 22%, transparent 66%);
+  background: var(--bw-edge) 3px center / auto 94% no-repeat; transition: filter 0.2s;
 }
 ${SEL.tileHover} {
   background: ${oil(0.2)}, ${jet} !important;
@@ -173,15 +188,15 @@ ${field} {
 }
 ${fieldFocus} { outline: 1px solid ${teal} !important; box-shadow: inset 0 2px 5px #000000, 0 0 10px ${alpha(t.accent, 0.5)} !important; }
 
-/* Pop-ups: jet with an oil-sheen frame, quills folded into the corner. */
+/* Pop-ups: jet in a double oil-sheen frame, feather crests in two corners. */
 ${SEL.dialog} {
   background: ${oil(0.06)}, ${jet} !important;
   border-radius: 0 !important;
-  box-shadow: 0 0 40px -12px ${alpha(t.accent, 0.5)}, 0 24px 60px -18px #000000 !important;
+  box-shadow: inset 0 0 0 4px ${panel}, inset 0 0 0 5px ${alpha(t.accent, 0.45)}, 0 0 40px -12px ${alpha(t.accent, 0.5)}, 0 24px 60px -18px #000000 !important;
 }
 ${pseudo(SEL.dialog, 'before')} {
-  content: ""; position: absolute; left: auto; top: auto; right: 6px; bottom: 6px; width: 92px; height: 56px; transform: none; pointer-events: none; z-index: 1;
-  background: ${qBR(92, 56)};
+  content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; transform: none; pointer-events: none; z-index: 1;
+  background: var(--bw-crest) left top / 78px 65px no-repeat, ${qBR(78, 65)};
 }
 ${pseudo(SEL.dialog, 'after')} {
   content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: auto; height: auto; transform: none; pointer-events: none;
@@ -220,7 +235,7 @@ ${sel(['#duel .phase .background .background_inner'])} { background: ${jet} !imp
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
   content: ""; position: absolute; inset: -14px; pointer-events: none;
-  background: ${svgUrl(wreath(t, kit))} center / 100% 100% no-repeat;
+  background: ${svgUrl(wreath(t, kit, teal))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 18px ${alpha(t.self, 0.75)} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 18px ${alpha(t.opp, 0.75)} !important; }
@@ -232,7 +247,7 @@ ${sel(['#duel #watchers'])} { background: ${panel} !important; box-shadow: inset
 /* Duel room panels: jet, an oil-sheen ring, quills in the corner. */
 ${panels} { background: ${alpha(panel, 0.94)} !important; border-radius: 0 !important; }
 ${pseudo(panels, 'before')} { filter: none !important; border-radius: 0 !important; background: ${iris} !important; }
-${pseudo(panels, 'after')} { content: ""; position: absolute; right: 6px; bottom: 6px; width: 46px; height: 28px; pointer-events: none; background: ${qBR(46, 28)}; }
+${pseudo(panels, 'after')} { content: ""; position: absolute; right: 6px; bottom: 6px; width: 48px; height: 40px; pointer-events: none; background: ${qBR(48, 40)}; }
 ${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000 !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${jet} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${oil(0.2)}, ${jet} !important; }
@@ -244,7 +259,7 @@ ${sel(['#deck_constructor .deck_bg'])} { background: ${panel} !important; box-sh
 ${sel(['#deck_constructor .side_bg'])} { background: ${mix(panel, t.accent, 0.1)} !important; box-shadow: inset 0 0 0 1px ${alpha(t.accent, 0.4)}, inset 3px 0 0 ${teal} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: ${mix(panel, teal, 0.07)} !important; box-shadow: inset 0 0 0 1px ${alpha(teal, 0.4)}, inset 3px 0 0 ${t.accent2} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: ${jet} !important; box-shadow: none !important; border-radius: 0 !important; }
-${pseudo(deckFrames, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; border: 1px solid transparent; border-image: ${iris} 1; background: ${qBR(60, 36)}; background-origin: content-box; }
+${pseudo(deckFrames, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; border: 1px solid transparent; border-image: ${iris} 1; background: ${qBR(54, 45)}; background-origin: content-box; }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; opacity: 1 !important; text-shadow: 0 0 12px ${alpha(t.accent, 0.55)} !important; }
 ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.45)} !important; }
 
