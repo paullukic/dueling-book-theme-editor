@@ -31,8 +31,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Fountain-pen nib: the cap of the life bars.
   const nib = svg(18, 40, `<defs><linearGradient id="n" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${boneDim}"/><stop offset="0.5" stop-color="${bone}"/><stop offset="1" stop-color="${boneDim}"/></linearGradient></defs><path d="M9 39C6 30 2.5 22 2.5 14V2H15.5V14C15.5 22 12 30 9 39Z" fill="url(#n)" stroke="${ink}" stroke-width="1"/><path d="M9 38V18" stroke="${ink}" stroke-width="1.1"/><circle cx="9" cy="16" r="2" fill="${ink}"/><path d="M2.5 6H15.5" stroke="${ink}" stroke-opacity="0.6"/>`);
 
-  // Gothic tracery head for the pop-ups: a pointed band with a red cabochon, like the notebook's rules page.
-  const head = svg(180, 34, `<path d="M8 30H172" stroke="${bone}" stroke-opacity="0.8" stroke-width="1.6"/><path d="M8 26.5H172" stroke="${bone}" stroke-opacity="0.35"/><path d="M60 30C70 30 78 20 90 6C102 20 110 30 120 30" fill="${leather}" stroke="${bone}" stroke-width="1.3"/><path d="M72 30C80 28 85 22 90 14C95 22 100 28 108 30" fill="none" stroke="${bone}" stroke-opacity="0.5"/><path d="M90 18l3.4 5.2-3.4 5.2-3.4-5.2z" fill="${red}" stroke="${mix(red, '#ffffff', 0.4)}" stroke-width="0.6"/><g fill="${bone}"><path d="M20 30l4-5 4 5zM152 30l4-5 4 5z"/><circle cx="40" cy="28" r="1.6"/><circle cx="140" cy="28" r="1.6"/></g>`);
+  // A quill laid across a red ribbon bookmark: the pop-ups' corner ornament.
+  const head = svg(120, 100, `<defs><linearGradient id="r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${redDeep}"/><stop offset="0.45" stop-color="${red}"/><stop offset="1" stop-color="${redDeep}"/></linearGradient><linearGradient id="q" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${ink}"/><stop offset="1" stop-color="${mix(leather, t.raised, 0.8)}"/></linearGradient></defs><path d="M72 0H88V96L80 87L72 96Z" fill="url(#r)"/><path d="M76 0V86" stroke="#ffffff" stroke-opacity="0.2"/><path d="M14 84C40 52 76 24 116 4C104 22 84 40 60 56C46 66 30 76 14 84Z" fill="url(#q)" stroke="${boneDim}" stroke-width="1"/><path d="M14 84C44 60 80 30 116 4" fill="none" stroke="${bone}" stroke-opacity="0.7" stroke-width="1.1"/><path d="M40 62l-6 -10M56 50l-5 -11M72 38l-4 -11M88 26l-3 -10" stroke="${bone}" stroke-opacity="0.25"/><path d="M14 84L4 96L9 82Z" fill="${bone}" stroke="${ink}" stroke-width="0.8"/>`);
 
   // Wax seal for the active phase and for OK: a pressed rim.
   const seal = svg(45, 45, `<g fill="none" stroke="#ffffff" stroke-opacity="0.22"><circle cx="22.5" cy="22.5" r="17"/><circle cx="22.5" cy="22.5" r="13.5" stroke-dasharray="2 2"/></g>`);
@@ -72,12 +72,13 @@ ${SEL.tileLabel} { ${label} }
 ${SEL.button} { background: var(--dbtc-u1), linear-gradient(180deg, ${mix(leather, t.raised, 0.55)}, ${leather}) !important; border-color: ${mix(t.border, t.bg, 0.15)} !important; color: ${bone} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 2px ${leather}, inset 0 0 0 3px ${alpha(bone, 0.28)}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: var(--dbtc-u1), linear-gradient(180deg, ${mix(red, leather, 0.55)}, ${mix(red, '#000000', 0.62)}) !important; border-color: ${redDeep} !important; color: #ffffff !important; box-shadow: inset 0 0 0 2px ${redDeep}, inset 0 0 0 3px ${alpha(bone, 0.45)}, 0 0 10px -2px ${alpha(red, 0.7)} !important; }
 ${SEL.buttonDown} { background: ${mix(red, '#000000', 0.65)} !important; border-color: ${red} !important; box-shadow: inset 0 2px 5px #000000 !important; }
+${sel(['#content .button.proxy::before'])} { content: ""; position: absolute; left: 3px; top: -2px; width: 7px; height: 70%; pointer-events: none; background: var(--dbtc-u4) center / 100% 100% no-repeat; filter: drop-shadow(1px 1px 1px #000000); }
 ${sel(['#content .button.disabled'])} { opacity: 0.55 !important; }
 
-/* Pop-ups: the notebook's black rules page, stitched, under a gothic head with a red stone; a ribbon hangs from the top. */
+/* Pop-ups: the notebook's black rules page, stitched; a quill lies across a red ribbon bookmark over the top edge. */
 ${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 0%, ${alpha(cold, 0.1)}, transparent 70%), var(--dbtc-u3), var(--dbtc-u2), linear-gradient(180deg, ${mix(leather, t.raised, 0.25)}, ${mix(t.bg, '#000000', 0.3)}) !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${mix(t.border, t.bg, 0.2)}, 0 0 0 4px ${ink}, 0 0 0 5px ${alpha(bone, 0.45)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(12)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 135px); top: -40px; right: auto; bottom: auto; width: 270px; height: 51px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: auto; top: -14px; right: 26px; bottom: auto; width: 96px; height: 80px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a stitched leather band; the window is a ruled page. */

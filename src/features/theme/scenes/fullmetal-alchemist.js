@@ -3,7 +3,7 @@ import { H, n1, polar, rng, W } from './kit.js';
 
 // Fullmetal Alchemist: the Gate of Truth. A stone double door carved with the
 // Tree of Life stands in a pale void; the doors part a hand's width and close
-// again, and in the dark between them eyes open. At its foot a chalk
+// again, and in the dark between them eyes open and black tendrils reach out. At its foot a chalk
 // transmutation circle is active: blue-white alchemical arcs crackle off its
 // rim and sparks rise. Shader: the void's haze and the arcs' flicker.
 
@@ -18,7 +18,7 @@ const PATHS = [[0, 1], [0, 2], [0, 5], [1, 2], [1, 3], [1, 5], [2, 4], [2, 5], [
 
 const scene = (t) => {
   const rand = rng(1903);
-  const stone = mix(mix(t.muted, t.bg, 0.38), t.accent2, 0.06);
+  const stone = mix(mix(t.muted, t.bg, 0.45), t.accent2, 0.08);
   const stoneHi = mix(t.text, t.muted, 0.3);
   const stoneLo = mix(t.muted, t.bg, 0.7);
   const groove = mix(t.bg, '#000000', 0.2);
@@ -61,7 +61,7 @@ const scene = (t) => {
   // Carved bands of script across each leaf.
   const band = (x0, x1, y) => {
     let d = '';
-    for (let x = x0; x < x1 - 3; x += 3 + rand() * 3) d += `M${n1(x)} ${n1(y - 3 - rand() * 3)}v${n1(4 + rand() * 4)}`;
+    for (let x = x0; x < x1 - 3; x += 4 + rand() * 4) d += `M${Math.round(x)} ${Math.round(y - 3 - rand() * 3)}v${Math.round(4 + rand() * 4)}`;
     return d;
   };
 
@@ -77,6 +77,37 @@ const scene = (t) => {
   // Eyes waking in the dark between the doors.
   const eyes = [[gx - 2, 330, 0], [gx + 3, 470, 2.2], [gx - 1, 610, 4.1], [gx + 2, 270, 6.3], [gx, 540, 8.5]]
     .map(([x, y, d]) => `<g transform="translate(${x} ${y})"><g style="animation: dbtefx-fma-eye 16s ease-in-out ${-d}s infinite; transform-box: fill-box; transform-origin: center;"><path d="M-9 0Q0 -7 9 0Q0 7 -9 0Z" fill="${mix(t.text, '#ffffff', 0.4)}"/><circle r="3.4" fill="${mix(t.accent, t.bg, 0.2)}"/></g></g>`)
+    .join('');
+
+  // Black tendrils spilling out of the gap: tapered, curling, swaying from the seam.
+  // One tapered stroke along a wavy centreline from (x0, y0) heading `ang` degrees.
+  const arm = (x0, y0, ang, len, w0, bend, wave) => {
+    const pts = [];
+    let [x, y] = [x0, y0];
+    let a = ang;
+    for (let i = 0; i <= 10; i++) {
+      pts.push([x, y, w0 * (1 - (i / 10) * 0.94)]);
+      a += bend + Math.sin(i * 1.3 + wave) * 7;
+      x += Math.cos((a * Math.PI) / 180) * (len / 10);
+      y += Math.sin((a * Math.PI) / 180) * (len / 10);
+    }
+    const side = (sgn) => pts.map(([px, py, w], i) => {
+      const [nx, ny] = i < 10 ? [pts[i + 1][0] - px, pts[i + 1][1] - py] : [px - pts[i - 1][0], py - pts[i - 1][1]];
+      const l = Math.hypot(nx, ny) || 1;
+      return `${Math.round(px - (ny / l) * w * sgn)} ${Math.round(py + (nx / l) * w * sgn)}`;
+    });
+    return { d: `M${side(1).join('L')}L${side(-1).reverse().join('L')}Z`, tip: pts[7] };
+  };
+  // Black arms spilling out of the gap, each splitting into grasping fingers.
+  const tendril = (y0, dir, len, bend, w0, delay) => {
+    const main = arm(gx, y0, dir > 0 ? -8 : 188, len, w0, bend * dir, delay);
+    const [fx, fy, fw] = main.tip;
+    const base = dir > 0 ? -8 + bend * 7 : 188 - bend * 7;
+    const fingers = [-30, 0, 28].map((o, i) => arm(fx, fy, base + o, len * 0.32, fw * 0.9, bend * dir * 1.5, i).d).join('');
+    return `<g style="transform-origin: ${gx}px ${y0}px; animation: dbtefx-fma-reach ${n1(7 + delay)}s ease-in-out ${n1(-delay * 1.7)}s infinite;"><path d="${main.d}${fingers}" fill="url(#dbtefx-fma-ink)"/></g>`;
+  };
+  const tendrils = [[310, -1, 170, -3, 15, 0], [390, 1, 180, -2, 16, 1.3], [480, -1, 200, 2, 17, 2.1], [560, 1, 150, 3, 13, 0.6], [620, -1, 130, 4, 12, 2.8]]
+    .map(([y, d, l, bend, w, del]) => tendril(y, d, l, bend, w, del))
     .join('');
 
   // The transmutation circle, drawn flat (r 300) and squashed into perspective.
@@ -132,6 +163,8 @@ const scene = (t) => {
 <linearGradient id="dbtefx-fma-frame" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${stoneLo}"/><stop offset="0.5" stop-color="${mix(stone, stoneHi, 0.35)}"/><stop offset="1" stop-color="${stoneLo}"/></linearGradient>
 <linearGradient id="dbtefx-fma-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.text}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.text}" stop-opacity="0"/></linearGradient>
 <radialGradient id="dbtefx-fma-pool" gradientUnits="userSpaceOnUse" cx="${gx}" cy="${cy}" r="${R}" gradientTransform="translate(0 ${n1(cy * (1 - 0.24))}) scale(1 0.24)"><stop offset="0" stop-color="${blue}" stop-opacity="0.3"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-fma-ink" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.4)}"/></linearGradient>
+<linearGradient id="dbtefx-fma-grime" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.1"/><stop offset="0.5" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.4"/></linearGradient>
 <linearGradient id="dbtefx-fma-shadow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.5"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-fma-void)"/>
@@ -140,14 +173,17 @@ const scene = (t) => {
 <rect x="${gx - dw}" y="${iy}" width="${dw * 2}" height="${ih}" fill="${mix(t.bg, '#000000', 0.5)}"/>
 ${eyes}
 ${leaf(-1)}${leaf(1)}
+<rect x="${gx - dw}" y="${iy}" width="${dw * 2}" height="${ih}" fill="url(#dbtefx-fma-grime)"/>
+${tendrils}
 ${arch}
 <!--near-->
 <ellipse cx="${gx}" cy="${cy}" rx="${R + 40}" ry="${n1((R + 40) * 0.24)}" fill="url(#dbtefx-fma-pool)" style="animation: dbtefx-pulse 3.2s ease-in-out infinite;"/>
 <g transform="translate(${gx} ${cy}) scale(1 ${ry})" fill="none"><g stroke="${blue}" stroke-opacity="0.3" stroke-width="9" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${blue}" stroke-opacity="0.5" stroke-width="3.5" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${bluePale}" stroke-width="1.6" vector-effect="non-scaling-stroke">${circle}</g></g>
 <g fill="none" stroke-linecap="round" stroke-linejoin="round">${bolts}</g>
 <style>
-@keyframes dbtefx-fma-doorl { 0%, 30%, 100% { transform: translateX(0); } 55%, 72% { transform: translateX(-9px); } }
-@keyframes dbtefx-fma-doorr { 0%, 30%, 100% { transform: translateX(0); } 55%, 72% { transform: translateX(9px); } }
+@keyframes dbtefx-fma-doorl { 0%, 30%, 100% { transform: translateX(-8px); } 55%, 72% { transform: translateX(-20px); } }
+@keyframes dbtefx-fma-doorr { 0%, 30%, 100% { transform: translateX(8px); } 55%, 72% { transform: translateX(20px); } }
+@keyframes dbtefx-fma-reach { 0%, 100% { transform: rotate(-5deg) scale(0.92); } 50% { transform: rotate(6deg) scale(1.04); } }
 @keyframes dbtefx-fma-eye { 0%, 40%, 88%, 100% { transform: scaleY(0.05); opacity: 0; } 52%, 76% { transform: scaleY(1); opacity: 1; } }
 @keyframes dbtefx-fma-arc { 0% { opacity: 0; } 6% { opacity: 1; } 14% { opacity: 0.25; } 20% { opacity: 1; } 30% { opacity: 0.5; } 36%, 100% { opacity: 0; } }
 </style>`;

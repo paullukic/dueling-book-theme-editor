@@ -29,7 +29,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   };
 
   // Brushed steel and a faint chalk circle for big panels.
-  const watermark = svg(240, 240, array(240, chalk, 0.07, 1.4));
+  const watermark = svg(240, 240, array(240, chalk, 0.045, 1.4));
   const rivet = (x, y, r = 2.6) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${brassDim}"/><circle cx="${x - r * 0.3}" cy="${y - r * 0.3}" r="${n1(r * 0.55)}" fill="${brass}"/>`;
   // Nine-slice: brass rim, an inner steel line, a rivet in each corner.
   const frameSvg = svg(60, 60, `<rect x="0.8" y="0.8" width="58.4" height="58.4" rx="2" fill="none" stroke="${brass}" stroke-width="1.6"/><rect x="3.6" y="3.6" width="52.8" height="52.8" rx="1" fill="none" stroke="${ironDark}" stroke-width="1.6"/>${rivet(7.5, 7.5)}${rivet(52.5, 7.5)}${rivet(7.5, 52.5)}${rivet(52.5, 52.5)}`);
@@ -62,7 +62,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const well = `var(--dbtc-u1) center / 220px no-repeat, ${brushed}, linear-gradient(180deg, ${mix(t.surface, t.bg, 0.3)}, ${mix(t.bg, '#000000', 0.2)})`;
+  const well = `${brushed}, linear-gradient(180deg, ${mix(t.surface, t.bg, 0.3)}, ${mix(t.bg, '#000000', 0.2)})`;
 
   const vars = [frameSvg, watermark, bolt, medal(60), phaseArray].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
@@ -82,7 +82,7 @@ ${SEL.buttonDown} { background: linear-gradient(180deg, ${crimsonDeep}, ${mix(cr
 ${sel(['#content .button.disabled'])} { opacity: 0.55 !important; }
 
 /* Pop-ups: a riveted plate with a chalked transmutation circle and a brass array medallion. */
-${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 0%, ${alpha(brass, 0.1)}, transparent 70%), var(--dbtc-u1) center 60% / min(300px, 80%) no-repeat, ${brushed}, linear-gradient(180deg, ${mix(iron, t.surface, 0.5)}, ${mix(t.bg, '#000000', 0.2)}) !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${brassDim}, 0 0 0 4px ${ironDark}, 0 0 0 5px ${alpha(brass, 0.6)}, 0 24px 60px -12px #000000 !important; }
+${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 0%, ${alpha(brass, 0.1)}, transparent 70%), var(--dbtc-u1) right -40px bottom -60px / 220px no-repeat, ${brushed}, linear-gradient(180deg, ${mix(iron, t.surface, 0.5)}, ${mix(t.bg, '#000000', 0.2)}) !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${brassDim}, 0 0 0 4px ${ironDark}, 0 0 0 5px ${alpha(brass, 0.6)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(14)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 30px); top: -40px; right: auto; bottom: auto; width: 60px; height: 60px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 4px #000000) drop-shadow(0 0 6px ${alpha(blue, 0.5)}); }
 ${SEL.dialogTitle} { ${label} }

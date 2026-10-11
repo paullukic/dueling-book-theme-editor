@@ -5,7 +5,7 @@ import { anim, H, n1, rng, W } from './kit.js';
 // It hangs open in a shaft of cold light above night-time Tokyo: the black
 // first page printed with its rules in white blackletter, the ruled page
 // beside it half full of handwritten names, a red ribbon trailing from the
-// spine. One bitten red apple turns below it. Torn pages drift down; storm
+// spine. One bitten red apple slips from the pages and falls. Torn pages drift down; storm
 // clouds churn behind (shader).
 
 // Joined-up handwriting along a ruled line: loops and strokes in words.
@@ -142,7 +142,7 @@ ${tower}
 <g style="transform-origin: 2px 126px; animation: dbtefx-dn-ribbon 6s ease-in-out infinite;"><path d="M-2 120C-6 170 10 210 2 262L12 254L18 266C24 214 8 172 10 120Z" fill="url(#dbtefx-dn-ribbon)"/></g>
 </g>
 </g>
-<g transform="translate(1100 690)"><g ${anim('dn-apple', 16, 3, 'ease-in-out')}>
+<g transform="translate(1340 470)"><g style="animation: dbtefx-dn-apple 12s cubic-bezier(0.5, 0, 0.9, 0.6) -4s infinite;">
 <path d="${apple}" fill="url(#dbtefx-dn-apple)"/>
 <path d="M49 -16C41 -14 36 -8 39 -1C33 3 33 11 39 16C35 21 38 27 45 25C50 14 51 0 49 -16Z" fill="url(#dbtefx-dn-flesh)" stroke="${mix(red, '#000000', 0.45)}" stroke-width="1.4"/>
 <path d="M14 -40C32 -42 48 -32 52 -12" fill="none" stroke="${mix(cold, '#ffffff', 0.4)}" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>
@@ -155,7 +155,7 @@ ${[1500, 1060, 140, 1380].map((sx, i) => scrap(sx, 0.6 + rand() * 0.35, i)).join
 @keyframes dbtefx-dn-drift { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-10px, 14px) rotate(-1.6deg); } }
 @keyframes dbtefx-dn-page { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.93) skewY(-1.2deg); } }
 @keyframes dbtefx-dn-ribbon { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(7deg); } }
-@keyframes dbtefx-dn-apple { 0%, 100% { transform: translate(0, 0) rotate(-6deg); } 50% { transform: translate(6px, -12px) rotate(9deg); } }
+@keyframes dbtefx-dn-apple { 0% { transform: translate(0, 0) rotate(-10deg); opacity: 0; } 6% { opacity: 1; } 62% { transform: translate(-18px, 400px) rotate(150deg); opacity: 1; } 68%, 100% { transform: translate(-20px, 440px) rotate(160deg); opacity: 0; } }
 </style>`;
 };
 
