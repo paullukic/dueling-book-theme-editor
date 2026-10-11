@@ -107,6 +107,12 @@ const MENU_HOVER_CSS = `
 
 const SMALL_MENU_CSS = `
 .dbte-small-menu { height: 30px !important; font-size: large !important; padding-bottom: 4px !important; }
+/* The tile's inner box keeps DuelingBook's 4px borders: size it with them
+   (30px total) so it fits its 34px slot instead of overlapping the next tile,
+   and centre the label in what is left. */
+.dbte-small-menu.content, .dbte-small-menu .content {
+  box-sizing: border-box !important; height: 30px !important; padding: 0 !important; line-height: 22px !important;
+}
 .dbte-small-menu span { top: -12px !important; }
 `;
 
