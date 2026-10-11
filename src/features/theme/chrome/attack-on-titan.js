@@ -1,8 +1,8 @@
 // attack-on-titan: the Survey Corps kit. Riveted ODM-gear steel plates, harness
 // leather straps with stitching, Survey Corps green cloth for the primary
 // actions, Wall stone in the pop-ups, life bars cut like ODM blades with
-// their snap-off scores, gas-canister caps for the phases and a crossed-blades
-// crest over a stone shield with a wall battlement. (t, kit) -> CSS string; see chrome/kit.js.
+// their snap-off scores, gas-canister caps for the phases and a crest of one
+// ODM blade laid over a stretch of crenellated wall. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
@@ -27,18 +27,12 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const frameSvg = svg(60, 60, `<g fill="none"><rect x="1" y="1" width="58" height="58" stroke="${steel}" stroke-width="2"/><rect x="4.5" y="4.5" width="51" height="51" stroke="${steelDim}" stroke-width="0.8"/></g>${rivet(9, 9)}${rivet(51, 9)}${rivet(9, 51)}${rivet(51, 51)}`);
   const frame = (px = 18) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u0) 20 / ${px}px stretch; box-sizing: border-box;`;
 
-  // Our own garrison device (no real insignia): a crenellated wall line.
-  const battlement = (x, y, w, c) => {
-    const step = w / 7;
-    let d = `M${x} ${y + step * 1.6}V${y}`;
-    for (let i = 0; i < 7; i++) d += `H${(x + step * (i + 0.5)).toFixed(2)}V${(y + (i % 2 ? 0 : step * 0.7)).toFixed(2)}`;
-    return `<path d="${d}H${x + w}V${y + step * 1.6}Z" fill="${c}"/>`;
-  };
-  // Crest: a stone shield with the battlement, over two crossed ODM blades.
-  const blade = (rot) => `<g transform="rotate(${rot} 80 34)"><path d="M18 30H128L146 34L128 38H18Z" fill="${steel}" stroke="${t.bg}" stroke-width="1"/><path d="M18 30.2H128L146 34" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="0.9"/><path d="M42 30.2L37 37.8M66 30.2L61 37.8M90 30.2L85 37.8M114 30.2L109 37.8" stroke="${t.bg}" stroke-opacity="0.7" stroke-width="1"/><path d="M4 29.5H18V38.5H4Z" fill="${leather}" stroke="${t.bg}" stroke-width="1"/><path d="M8 29.5V38.5M12 29.5V38.5" stroke="${leatherHi}" stroke-width="0.8"/></g>`;
-  const crest = svg(160, 64, `${blade(-14)}${blade(14)}<path d="M62 8H98V34Q98 48 80 56Q62 48 62 34Z" fill="${stone}" stroke="${steel}" stroke-width="2"/><path d="M66 12H94V33Q94 44 80 51Q66 44 66 33Z" fill="none" stroke="${steelDim}" stroke-width="0.8"/><path d="M66 22H94M66 32H94M75 12V22M86 22V32M71 32V42M84 32V44" stroke="${t.bg}" stroke-opacity="0.45" stroke-width="0.8"/>${battlement(68, 14, 24, mix(t.text, t.muted, 0.3))}<path d="M66 40H94" stroke="${t.accent}" stroke-width="2"/>`);
-  // Small crest for menu tiles: a steel shield engraved with two crossed blades.
-  const badge = svg(30, 34, `<path d="M3 2H27V19Q27 28 15 33Q3 28 3 19Z" fill="${plateDeep}" stroke="${steel}" stroke-width="1.6"/><path d="M8 8L22 24M22 8L8 24" stroke="${steel}" stroke-width="2.2" stroke-linecap="round"/><path d="M6.5 6.5L9.5 9.5M23.5 6.5L20.5 9.5" stroke="${leatherHi}" stroke-width="3" stroke-linecap="round"/><path d="M5 20H25" stroke="${t.accent}" stroke-width="1.4"/>`);
+  // Crest: a single ODM blade laid over a stretch of crenellated wall (our own device).
+  const blade = `<g transform="translate(0 -20)"><path d="M18 30H128L146 34L128 38H18Z" fill="${steel}" stroke="${t.bg}" stroke-width="1"/><path d="M18 30.2H128L146 34" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="0.9"/><path d="M42 30.2L37 37.8M66 30.2L61 37.8M90 30.2L85 37.8M114 30.2L109 37.8" stroke="${t.bg}" stroke-opacity="0.7" stroke-width="1"/><path d="M4 29.5H18V38.5H4Z" fill="${leather}" stroke="${t.bg}" stroke-width="1"/><path d="M8 29.5V38.5M12 29.5V38.5" stroke="${leatherHi}" stroke-width="0.8"/></g>`;
+  const rampart = `<path d="M18 58V34H140V58Z" fill="${stone}" stroke="${steel}" stroke-width="1.6"/><path d="M18 46H140M44 34V46M84 34V46M122 34V46M30 46V58M66 46V58M104 46V58" stroke="${t.bg}" stroke-opacity="0.5" stroke-width="0.8"/><g fill="${stone}" stroke="${steel}" stroke-width="1.2">${[18, 33, 48, 63, 78, 93, 108, 123].map((x) => `<path d="M${x} 34.6V26H${x + 9}V34.6"/>`).join('')}</g><path d="M19 35H139" stroke="${stone}" stroke-width="1.4"/><path d="M18 55H140" stroke="${t.accent}" stroke-width="2"/>`;
+  const crest = svg(160, 64, `${rampart}${blade}`);
+  // Small badge for menu tiles: an ODM gas canister strapped in leather.
+  const badge = svg(30, 34, `<rect x="12" y="1.5" width="6" height="5" rx="1" fill="${steel}" stroke="${t.bg}" stroke-width="0.8"/><rect x="7.5" y="6" width="15" height="26.5" rx="7" fill="${plateDeep}" stroke="${steel}" stroke-width="1.6"/><path d="M11 10V28" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.4" stroke-linecap="round"/><path d="M5.5 13.5H24.5M5.5 24.5H24.5" stroke="${leatherHi}" stroke-width="3"/><path d="M5.5 13.5H24.5M5.5 24.5H24.5" stroke="${leather}" stroke-width="0.8" stroke-dasharray="2 1.5"/><path d="M9 19H21" stroke="${t.accent}" stroke-width="1.4"/>`);
 
   // Leather strap with stitching and a steel buckle (chat headers).
   const strap = svg(80, 12, `<rect y="1" width="80" height="10" fill="${leather}"/><path d="M0 2.8H80M0 9.2H80" stroke="${leatherHi}" stroke-width="0.8" stroke-dasharray="3 2"/>`);
@@ -79,7 +73,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const vars = [frameSvg, badge, grain, crest, strap, buckle, cap, hilt, masonry].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
-/* Menu tiles: riveted steel plates, a green cloth strip on the left edge, a crossed-blades badge on top. */
+/* Menu tiles: riveted steel plates, a green cloth strip on the left edge, a gas-canister badge on top. */
 ${SEL.tile} { background: linear-gradient(90deg, ${cloth} 0 6px, ${alpha(t.bg, 0.8)} 6px 7px, transparent 7px), ${steelBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: inset 0 -8px 14px -8px ${alpha('#000000', 0.6)}, 0 10px 20px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 13px); top: -14px; width: 26px; height: 30px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
@@ -91,7 +85,7 @@ ${SEL.button} { background: linear-gradient(180deg, ${mix(plate, t.text, 0.14)},
 ${SEL.buttonHover} { background: linear-gradient(180deg, ${mix(t.accent, t.bg, 0.4)}, ${clothDeep}) !important; border-color: ${t.accent} !important; color: #ffffff !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.25)}, 0 0 10px -2px ${alpha(t.accent, 0.7)} !important; }
 ${SEL.buttonDown} { background: ${plateDeep} !important; border-color: ${t.accent} !important; box-shadow: inset 0 2px 5px #000000 !important; }
 
-/* Pop-ups: a block of Wall stone in a riveted steel frame, the crossed-blades crest on top. */
+/* Pop-ups: a block of Wall stone in a riveted steel frame, the blade-and-wall crest on top. */
 ${SEL.dialog} { background: radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(t.accent2, 0.1)}, transparent 70%), var(--dbtc-u8), linear-gradient(180deg, ${stone}, ${mix(stone, t.bg, 0.6)}) !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${steelDim}, 0 0 0 4px ${plateDeep}, 0 0 0 5px ${alpha(steel, 0.55)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8px; right: 8px; bottom: 8px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(18)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 80px); top: -44px; right: auto; bottom: auto; width: 160px; height: 64px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 3px #000000); }
@@ -114,8 +108,10 @@ ${SEL.phase} { background: conic-gradient(from 210deg, ${steel}, ${steelDim}, ${
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${plateDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(plate, t.text, 0.08)} 30%, ${plateDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.7)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.7)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.accent2, t.bg, 0.45)} 45%, ${mix(t.accent2, t.bg, 0.65)}) !important; box-shadow: 0 0 0 2px ${t.accent2}, 0 0 16px 2px ${alpha(t.accent2, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.accent2, t.bg, 0.45)} 45%, ${mix(t.accent2, t.bg, 0.65)}) !important; box-shadow: 0 0 0 2px ${t.accent2}, 0 0 16px 2px ${alpha(t.accent2, 0.8)}; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 210deg, ${t.accent2}, ${mix(t.accent2, t.bg, 0.5)}, ${mix(t.accent2, '#ffffff', 0.3)}, ${mix(t.accent2, t.bg, 0.5)}, ${t.accent2}) !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px ${mix(t.accent2, t.bg, 0.7)} !important; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, plate, 0.3)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${steelDim}, inset 0 0 0 4px ${alpha(plateDeep, 0.9)}, inset 0 0 0 5px ${alpha(steel, 0.3)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steel}, 0 0 0 4px ${plateDeep}, 0 0 0 5px ${alpha(steel, 0.45)} !important; }

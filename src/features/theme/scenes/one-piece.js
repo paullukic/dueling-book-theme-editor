@@ -154,6 +154,15 @@ ${hat(1270, 330, 1.2, t.accent, t.accent2, ink)}
 <g fill="${ink}"><circle cx="1350" cy="584" r="5"/><circle cx="1378" cy="582" r="5"/><circle cx="1404" cy="580" r="5"/></g>
 <circle cx="1428" cy="548" r="14" fill="${t.accent}" fill-opacity="0.35" ${anim('pulse', 3.2, 0, 'ease-in-out')}/><rect x="1424" y="542" width="8" height="12" rx="2" fill="${rim}"/>
 </g>
+<g transform="translate(1508 566) scale(0.54)"><g style="transform-origin: 0 10px; animation: dbtefx-op-rock 9s ease-in-out -3s infinite;">
+<path d="M0 6V-176M-46 8V-118" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>
+<path d="${sail(-22, 62, -166, -42, 16)}" fill="url(#dbtefx-op-canvas)"/>
+<path d="${sail(-72, -18, -110, -30, 10)}" fill="url(#dbtefx-op-canvas)" opacity="0.92"/>
+<path d="M-28 -168H68M-26 -40H68M-78 -112H-14" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>
+<path d="M0 -176Q-24 -174 -50 -166Q-24 -160 0 -160Z" fill="${ink}"/>
+<path d="M-96 2Q-20 18 70 4L76 -10L92 -12L86 18Q80 34 64 40H-66Q-86 28 -96 2Z" fill="url(#dbtefx-op-hull)"/>
+<path d="M-96 2Q-20 18 70 4L76 -10L92 -12" fill="none" stroke="${rim}" stroke-width="3" stroke-linejoin="round"/>
+</g></g>
 <path d="M1088 664Q1060 650 1030 664Q1070 672 1110 668ZM1380 664Q1440 660 1520 672Q1440 676 1390 670Z" fill="${mix(t.text, t.opp, 0.2)}" fill-opacity="0.75" ${anim('pulse', 2.6, 0, 'ease-in-out')}/>
 <path d="M1050 668H1430" stroke="${mix(t.text, t.opp, 0.3)}" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
 <!--near-->

@@ -5,7 +5,7 @@ import { anim, H, n1, polar, rng, star, W } from './kit.js';
 // four-star orb hangs in a golden ki aura, the other six orbs ringed around
 // it and lighting up in turn, rocks lifting off the ground in the power-up.
 // The shader draws the sky and the aura's rising flame.
-const C = [1210, 470];
+const C = [1290, 470];
 const R = 138;
 
 const dragonBall = (t) => {
@@ -44,8 +44,8 @@ ${stars}
   };
 
   // The six other orbs on an arc around the hero, each glowing in turn.
-  const ring = [[200, 1], [228, 2], [256, 3], [292, 5], [320, 6], [346, 7]].map(([a, n], i) => {
-    const [x, y] = [n1(C[0] + Math.cos((a * Math.PI) / 180) * 222), n1(C[1] + Math.sin((a * Math.PI) / 180) * 300)];
+  const ring = [[160, 1], [228, 2], [256, 3], [292, 5], [320, 6], [346, 7]].map(([a, n], i) => {
+    const [x, y] = [n1(C[0] + Math.cos((a * Math.PI) / 180) * 190), n1(C[1] + Math.sin((a * Math.PI) / 180) * 300)];
     const rad = 24 + (i % 3) * 3;
     return `<circle cx="${x}" cy="${y}" r="${rad * 2.6}" fill="url(#dbtefx-db-halo)" style="animation: dbtefx-db-call 6s ease-in-out ${n1(-6 + i)}s infinite;"/><g ${anim('bob', n1(5 + i * 0.6), i, 'ease-in-out')}>${orb(x, y, rad, n)}</g>`;
   }).join('');
@@ -91,7 +91,7 @@ ${stars}
 
   // Ki lightning crackling around the aura, flashing rarely.
   let bolts = '';
-  [[1050, 300, 3, 0], [1380, 560, 9, 3.8]].forEach(([x, y, seed, delay]) => {
+  [[1130, 300, 3, 0], [1460, 560, 9, 3.8]].forEach(([x, y, seed, delay]) => {
     const lr = rng(seed);
     let d = `M${x} ${y}`;
     let [px, py] = [x, y];

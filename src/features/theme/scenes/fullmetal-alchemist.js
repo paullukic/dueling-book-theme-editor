@@ -140,7 +140,7 @@ const scene = (t) => {
       d += `L${n1(x)} ${n1(y)}`;
       if (k === 3 && rand() < 0.7) d += `M${n1(x)} ${n1(y)}l${n1((rand() - 0.5) * 50)} ${n1(-len * 0.25)}M${n1(x)} ${n1(y)}`;
     }
-    return `<g style="animation: dbtefx-fma-arc ${n1(1.8 + rand() * 1.4)}s steps(1, end) ${n1(-i * 0.73)}s infinite;"><path d="${d}" stroke="${blue}" stroke-opacity="0.3" stroke-width="11"/><path d="${d}" stroke="${blue}" stroke-opacity="0.6" stroke-width="4.5"/><path d="${d}" stroke="#ffffff" stroke-width="1.6"/></g>`;
+    return `<g style="animation: dbtefx-fma-arc ${n1(1.8 + rand() * 1.4)}s steps(1, end) ${n1(-i * 0.73)}s infinite;"><path d="${d}" stroke="${blue}" stroke-opacity="0.2" stroke-width="11"/><path d="${d}" stroke="${blue}" stroke-opacity="0.5" stroke-width="4.5"/><path d="${d}" stroke="#ffffff" stroke-width="1.6"/></g>`;
   };
   const bolts = [[200, 150], [222, 210], [250, 120], [290, 180], [318, 230], [340, 140], [160, 110], [20, 120], [140, 170], [185, 260], [270, 90], [330, 200]].map(([a, l], i) => bolt(a, l, i)).join('');
 
@@ -179,7 +179,7 @@ ${arch}
 <!--near-->
 <ellipse cx="${gx}" cy="${cy}" rx="${R + 40}" ry="${n1((R + 40) * 0.24)}" fill="url(#dbtefx-fma-pool)" style="animation: dbtefx-pulse 3.2s ease-in-out infinite;"/>
 <g transform="translate(${gx} ${cy}) scale(1 ${ry})" fill="none"><g stroke="${blue}" stroke-opacity="0.3" stroke-width="9" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${blue}" stroke-opacity="0.5" stroke-width="3.5" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${bluePale}" stroke-width="1.6" vector-effect="non-scaling-stroke">${circle}</g></g>
-<g fill="none" stroke-linecap="round" stroke-linejoin="round">${bolts}</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">${bolts}</g>
 <style>
 @keyframes dbtefx-fma-doorl { 0%, 30%, 100% { transform: translateX(-8px); } 55%, 72% { transform: translateX(-20px); } }
 @keyframes dbtefx-fma-doorr { 0%, 30%, 100% { transform: translateX(8px); } 55%, 72% { transform: translateX(20px); } }

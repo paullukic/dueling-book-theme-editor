@@ -19,7 +19,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Ichimatsu check: the haori pattern, as a tile and as a faint texture.
   const checker = svg(16, 16, `<rect width="16" height="16" fill="${checkInk}"/><rect width="8" height="8" fill="${check}"/><rect x="8" y="8" width="8" height="8" fill="${check}"/>`);
-  const checkerFaint = svg(24, 24, `<rect width="12" height="12" fill="${t.text}" fill-opacity="0.025"/><rect x="12" y="12" width="12" height="12" fill="${t.text}" fill-opacity="0.025"/>`);
+  const checkerFaint = svg(24, 24, `<rect width="12" height="12" fill="${t.text}" fill-opacity="0.0125"/><rect x="12" y="12" width="12" height="12" fill="${t.text}" fill-opacity="0.0125"/>`);
   // Seigaiha waves (water breathing) for pop-up panels.
   const waves = svg(40, 20, `<g fill="none" stroke="${t.accent2}" stroke-opacity="0.09"><path d="M0 20a10 10 0 0 1 20 0a10 10 0 0 1 20 0M4 20a6 6 0 0 1 12 0M24 20a6 6 0 0 1 12 0M-10 10a10 10 0 0 1 20 0M10 10a10 10 0 0 1 20 0M30 10a10 10 0 0 1 20 0"/></g>`);
 
@@ -42,8 +42,19 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
     holes += `<ellipse cx="${(22.5 + Math.cos(a) * 15).toFixed(2)}" cy="${(22.5 + Math.sin(a) * 15).toFixed(2)}" rx="3" ry="1.6" transform="rotate(${(a * 180) / Math.PI + 90} ${(22.5 + Math.cos(a) * 15).toFixed(2)} ${(22.5 + Math.sin(a) * 15).toFixed(2)})"/>`;
   }
   const guard = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${gold}" stroke-opacity="0.7" stroke-width="1.5"/><g fill="${t.bg}" fill-opacity="0.55">${holes}</g>`);
+  // Mokko tsuba outline around each phase disc: four lobes on the diagonals,
+  // cusped at the sides, with seppa plates at top and bottom; open in the middle.
+  let lobe = '';
+  for (let i = 0; i <= 96; i++) {
+    const a = (i / 96) * Math.PI * 2;
+    const rad = 25.3 + 4.4 * Math.pow(Math.abs(Math.sin(2 * a)), 0.55);
+    lobe += `${i ? 'L' : 'M'}${(30 + Math.cos(a) * rad).toFixed(2)} ${(30 + Math.sin(a) * rad).toFixed(2)}`;
+  }
+  const tsubaRim = svg(60, 60, `<path d="${lobe}ZM30 5.7A24.3 24.3 0 1 0 30 54.3A24.3 24.3 0 1 0 30 5.7Z" fill="${gold}" fill-rule="evenodd" stroke="${checkInk}" stroke-width="1"/><path d="${lobe}Z" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="0.6" transform="translate(30 30) scale(0.96) translate(-30 -30)"/><g fill="${goldDim}" stroke="${checkInk}" stroke-width="0.6"><rect x="26.5" y="3.2" width="7" height="3.6" rx="0.8"/><rect x="26.5" y="53.2" width="7" height="3.6" rx="0.8"/></g>`);
   // The hamon: a soft wave along a blade's edge (life bars).
-  const hamon = svg(40, 20, `<path d="M0 13Q5 8 10 13T20 13T30 13T40 13V20H0Z" fill="#ffffff" fill-opacity="0.22"/><path d="M0 13Q5 8 10 13T20 13T30 13T40 13" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="0.8"/>`);
+  let wave = 'M0 13';
+  for (let x = 0; x < 60; x += 10) wave += `Q${x + 5} 8 ${x + 10} 13`;
+  const hamon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><defs><linearGradient id="f"><stop offset="0" stop-color="#ffffff" stop-opacity="1"/><stop offset="0.45" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><path d="${wave}V20H0Z" fill="url(#f)" fill-opacity="0.22"/><path d="${wave}" fill="none" stroke="url(#f)" stroke-opacity="0.5" stroke-width="0.8" vector-effect="non-scaling-stroke"/></svg>`;
   // The hilt end of the life bar: wrapped grip with a tsuba.
   let grip = '';
   for (let y = 9; y < 32; y += 5) grip += `M5 ${y}L13 ${y + 5}M13 ${y}L5 ${y + 5}`;
@@ -69,7 +80,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
-  const vars = [frameSvg, badge, checkerFaint, sword, checker, waves, guard, hamon, hilt].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [frameSvg, badge, checkerFaint, sword, checker, waves, guard, hamon, hilt, tsubaRim].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: black lacquer in a vermilion frame, a haori check along the foot, a tsuba crest. */
@@ -99,11 +110,13 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: life bars as nichirin blades with a hamon, a wrapped hilt at the end; tsuba phases. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${checkInk}, 0 0 0 2px ${alpha(vermilion, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: var(--dbtc-u7) 0 100% / 40px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: var(--dbtc-u7) 0 100% / 40px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: var(--dbtc-u7) 0 0 / 100% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
+${SEL.lifeOpp} { background: var(--dbtc-u7) 0 0 / 100% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -5px; width: 18px; height: 40px; pointer-events: none; background: var(--dbtc-u8) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: conic-gradient(from 200deg, ${gold}, ${goldDim}, ${mix(gold, '#ffffff', 0.4)}, ${goldDim}, ${gold}) !important; box-shadow: 0 0 0 1px ${checkInk}, 0 4px 10px -2px #000000 !important; }
+${SEL.phase} { background: conic-gradient(from 200deg, ${goldDim}, ${checkInk}, ${goldDim}, ${checkInk}, ${goldDim}) !important; box-shadow: 0 0 0 1px ${checkInk}, 0 4px 10px -2px #000000 !important; }
+${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -5px; top: -5px; right: -5px; bottom: -5px; pointer-events: none; background: var(--dbtc-u9) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 3px #000000); }
+${sel(['#duel .phase.active::before'])} { filter: drop-shadow(0 0 6px ${alpha(gold, 0.9)}) drop-shadow(0 2px 3px #000000); }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${checkInk} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${lacquerHi} 30%, ${lacquer}) !important; }

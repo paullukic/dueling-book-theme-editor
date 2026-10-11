@@ -6,7 +6,7 @@ import { anim, glow, n1, polar, rng, W, H } from './kit.js';
 // converge; black-flash lightning cracks around it, sealing talismans drift
 // down, ink splatter on the edges.
 
-const SX = 1310;
+const SX = 1420;
 const SY = 290;
 
 const scene = (t) => {
@@ -92,7 +92,7 @@ const scene = (t) => {
     return { d: `M${left.join('L')}L${right.join('L')}Z`, pts };
   };
   let strikes = '';
-  [[1300, 405, 1280, 650, 9, 3], [1400, 400, 1450, 640, 8, 5], [1440, 260, 1540, 200, 6, 7]].forEach(([ax, ay, bx, by, w, sd]) => {
+  [[1410, 405, 1390, 650, 9, 3], [1510, 400, 1550, 640, 8, 5], [1550, 250, 1600, 150, 6, 7]].forEach(([ax, ay, bx, by, w, sd]) => {
     const main = zig(ax, ay, bx, by, w, sd);
     strikes += main.d;
     const [mx, my] = main.pts[3];
@@ -181,7 +181,7 @@ void main() {
   float f = fbm(q * 1.6 + w * 2.2 + vec2(0.0, t * 1.8));
   // Rising tongues: stretched noise moving upward.
   float tongues = fbm(vec2(q.x * 3.0 + w.x, q.y * 1.2 + t * 2.5));
-  float near = smoothstep(560.0, 80.0, length(p - vec2(1310.0, 290.0)));
+  float near = smoothstep(560.0, 80.0, length(p - vec2(1420.0, 290.0)));
   float energy = smoothstep(0.45, 0.9, f * 0.7 + tongues * 0.5) * (0.35 + 0.65 * near);
   vec3 col = u_bg;
   col = mix(col, u_opp * 0.45, energy * 0.75 * (1.0 - uv.y * 0.3));
@@ -189,7 +189,7 @@ void main() {
   // Black wisps cut through.
   col *= 1.0 - 0.5 * smoothstep(0.55, 0.75, fbm(q * 2.4 - w + vec2(t, 0.0))) * near;
   // Hollow purple: a turbulent ball of violet energy, white-hot at the core.
-  vec2 sp = p - vec2(1310.0, 290.0);
+  vec2 sp = p - vec2(1420.0, 290.0);
   float sr = length(sp) / 108.0;
   float tw = sr * 3.2 - u_time * 0.6;
   vec2 tp = mat2(cos(tw), -sin(tw), sin(tw), cos(tw)) * (sp / 108.0);

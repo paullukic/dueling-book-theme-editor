@@ -87,15 +87,18 @@ ${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 10px
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -17px; top: -3px; width: 18px; height: 36px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(cyan, 0.9)}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 6px ${alpha(cyan, 0.8)}, 0 1px 2px #000000 !important; }
 ${SEL.phase} { background: linear-gradient(180deg, ${cyan}, ${edgeDim}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(cyan, 0.6)} !important; }
+${sel(['#duel .phase.active .background'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.4)}, ${violet}) !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: 0 0 3px ${alpha('#ffffff', 0.7)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${glassBot} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, ${scan}, radial-gradient(circle, ${mix(t.bg, cyan, 0.22)}, ${glassBot} 75%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.35)} 15%, ${mix(t.self, t.bg, 0.45)}) !important; box-shadow: 0 0 16px ${alpha(t.self, 0.9)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.35)} 15%, ${mix(t.opp, t.bg, 0.45)}) !important; box-shadow: 0 0 16px ${alpha(t.opp, 0.9)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, #ffffff 0, ${mix(violet, '#ffffff', 0.55)} 18%, ${violet} 46%, ${mix(violet, t.bg, 0.55)} 80%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.4)}, 0 0 18px 4px ${alpha(violet, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, #ffffff 0, ${mix(violet, '#ffffff', 0.55)} 18%, ${violet} 46%, ${mix(violet, t.bg, 0.55)} 80%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.4)}, 0 0 18px 4px ${alpha(violet, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${ice} !important; text-shadow: 0 0 6px ${alpha(cyan, 0.8)}, 0 1px 2px #000000 !important; }
 ${sel(['#duel .cout_txt'])} { background: ${header(0)}, ${glass()} !important; box-shadow: inset 0 0 0 1px ${edgeDim}, inset 0 0 0 3px ${alpha(t.bg, 0.9)}, inset 0 0 0 4px ${alpha(cyan, 0.3)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 1px ${cyan}, 0 0 0 4px ${t.bg}, 0 0 0 5px ${alpha(cyan, 0.4)}, 0 0 14px ${alpha(cyan, 0.4)} !important; }
-${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${cyan}, ${edgeDim}) !important; }
+${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.3)}, ${mix(violet, t.bg, 0.4)}) !important; }
+${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: radial-gradient(circle, ${mix(violet, t.bg, 0.3)}, ${mix(violet, t.bg, 0.6)}) !important; box-shadow: inset 0 0 0 2px ${mix(violet, '#ffffff', 0.35)}, 0 0 12px ${alpha(violet, 0.7)} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${scan}, linear-gradient(180deg, ${mix(t.bg, violet, 0.45)}, ${mix(t.bg, violet, 0.2)}) !important; }
 
 /* Duel room: bracketed System panels. */

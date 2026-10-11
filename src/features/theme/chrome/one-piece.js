@@ -101,14 +101,15 @@ ${SEL.dialogTitle} { ${label} }
 ${SEL.chatTop} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180deg, ${timberLit}, ${timberDeep}) !important; box-shadow: inset 0 -3px 0 ${rope}, inset 0 -5px 0 ${ropeDark}, inset 0 1px 0 ${alpha(brass, 0.4)} !important; }
 ${SEL.chat} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180deg, ${mix(timberDeep, t.surface, 0.2)}, ${mix(timberDeep, t.bg, 0.5)}) !important; box-shadow: inset 2px 0 0 ${ropeDark}, inset -2px 0 0 ${ropeDark}, inset 0 -2px 0 ${ropeDark} !important; }
 
-/* Duel: brass-banded life bars led by a log pose; compass-rose phases. */
+/* Duel: brass-banded life bars led by a log pose; rope-rimmed compass-rose phases. */
 ${SEL.life} { border-color: ${brass} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${ropeDark}, 0 0 0 4px ${alpha(rope, 0.6)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.accent, t.bg, 0.6)}, ${brass}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -6px; width: 22px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: conic-gradient(from 200deg, ${brass}, ${brassDim}, ${mix(brass, '#ffffff', 0.4)}, ${brassDim}, ${brass}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }
+${SEL.phase} { background: radial-gradient(circle, transparent 58%, ${alpha('#ffffff', 0.22)} 70%, transparent 82%, ${alpha('#000000', 0.45)} 100%), repeating-conic-gradient(from 8deg, ${rope} 0 6deg, ${mix(rope, '#ffffff', 0.3)} 6deg 9deg, ${ropeDark} 9deg 12deg) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, ${brass}, ${brassDim}, ${mix(brass, '#ffffff', 0.4)}, ${brassDim}, ${brass}) !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${sea} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(sea, t.raised, 0.5)} 30%, ${mix(sea, t.bg, 0.5)}) !important; }

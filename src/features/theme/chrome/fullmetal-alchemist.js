@@ -39,6 +39,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const medal = (s) => svg(s, s, `<circle cx="${s / 2}" cy="${s / 2}" r="${s / 2 - 1}" fill="${ironDark}" stroke="${brass}" stroke-width="2"/><circle cx="${s / 2}" cy="${s / 2}" r="${s / 2 - 4}" fill="none" stroke="${brassDim}" stroke-width="1"/><g transform="translate(5 5)">${array(s - 10, chalk, 0.85, 1, 12)}</g>`);
   // Hex bolt: the cap of the life bars.
   const bolt = svg(20, 34, `<path d="M3 4H17V30H3Z" fill="${iron}" stroke="${brassDim}"/><path d="M10 9l5.2 3v6l-5.2 3-5.2-3v-6z" fill="${brass}" stroke="${brassDim}" stroke-width="0.8"/><circle cx="10" cy="15" r="2" fill="${ironDark}"/>${rivet(10, 26, 1.8)}`);
+  // Riveted brass collar around each phase disc: a band outside the disc with eight rivets.
+  let collarRivets = '';
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+    collarRivets += rivet(n1(26.5 + Math.cos(a) * 24.2), n1(26.5 + Math.sin(a) * 24.2), 1.7);
+  }
+  const collar = svg(53, 53, `<path d="M26.5 0.6A25.9 25.9 0 1 1 26.5 52.4A25.9 25.9 0 1 1 26.5 0.6ZM26.5 4.3A22.2 22.2 0 1 0 26.5 48.7A22.2 22.2 0 1 0 26.5 4.3Z" fill="${brassDim}" fill-rule="evenodd" stroke="${ironDark}" stroke-width="0.8"/><circle cx="26.5" cy="26.5" r="24.6" fill="none" stroke="${brass}" stroke-opacity="0.55" stroke-width="0.8"/>${collarRivets}`);
   // A small array laid over the phase discs.
   const phaseArray = svg(45, 45, array(45, chalk, 0.4, 0.9, 12));
 
@@ -64,7 +71,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   const well = `${brushed}, linear-gradient(180deg, ${mix(t.surface, t.bg, 0.3)}, ${mix(t.bg, '#000000', 0.2)})`;
 
-  const vars = [frameSvg, watermark, bolt, medal(60), phaseArray].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [frameSvg, watermark, bolt, medal(60), phaseArray, collar].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: riveted automail plates, a brass array medallion on top; the array lights blue on hover. */
@@ -92,7 +99,7 @@ ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.08)}, 
 ${sel(['#chats .chat .chat_top span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.chat} { background: ${well} !important; box-shadow: inset 1px 0 0 ${brassDim}, inset -1px 0 0 ${brassDim}, inset 0 -1px 0 ${brassDim} !important; }
 
-/* Duel: brass-rimmed life gauges capped with a hex bolt; phases chalked with arrays, lit when active. */
+/* Duel: brass-rimmed life gauges capped with a hex bolt; phases chalked with arrays in riveted brass collars, lit when active. */
 ${SEL.life} { border-color: ${brass} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ironDark}, 0 0 0 2px ${alpha(brass, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), ${brushed}, linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self}) !important; }
@@ -100,6 +107,7 @@ ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, 
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 20px; height: 36px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${chalk} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${brass}, ${brassDim}, ${mix(brass, '#ffffff', 0.3)}, ${brassDim}, ${brass}) !important; box-shadow: 0 0 0 1px ${ironDark}, 0 4px 10px -2px #000000 !important; }
+${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -4px; top: -4px; right: -4px; bottom: -4px; pointer-events: none; background: var(--dbtc-u5) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ironDark} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(iron, t.text, 0.12)}, ${ironDark} 75%) !important; }

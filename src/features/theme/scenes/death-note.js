@@ -99,7 +99,7 @@ const scene = (t) => {
   const tx = 330;
   const tower = `<path d="M${tx} 640L${tx - 3} 700L${tx - 9} 744H${tx - 13}V752H${tx - 11}L${tx - 22} 812H${tx - 27}V820H${tx - 24}L${tx - 40} ${H}H${tx + 40}L${tx + 24} 820H${tx + 27}V812H${tx + 22}L${tx + 11} 752H${tx + 13}V744H${tx + 9}L${tx + 3} 700Z" fill="${mix(t.bg, cold, 0.1)}"/><circle cx="${tx}" cy="640" r="2.4" fill="${t.danger}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/>`;
 
-  const bx = 1236;
+  const bx = 1380;
   const by = 340;
   const apple = 'M0 -34C20 -50 50 -42 50 -6C50 32 28 56 6 52C0 50 -6 50 -12 52C-32 56 -52 32 -50 -6C-50 -42 -20 -50 0 -34Z';
   return `<defs>
@@ -142,7 +142,7 @@ ${tower}
 <g style="transform-origin: 2px 126px; animation: dbtefx-dn-ribbon 6s ease-in-out infinite;"><path d="M-2 120C-6 170 10 210 2 262L12 254L18 266C24 214 8 172 10 120Z" fill="url(#dbtefx-dn-ribbon)"/></g>
 </g>
 </g>
-<g transform="translate(1340 470)"><g style="animation: dbtefx-dn-apple 12s cubic-bezier(0.5, 0, 0.9, 0.6) -4s infinite;">
+<g transform="translate(${bx + 104} 470)"><g style="animation: dbtefx-dn-apple 12s cubic-bezier(0.5, 0, 0.9, 0.6) -4s infinite;">
 <path d="${apple}" fill="url(#dbtefx-dn-apple)"/>
 <path d="M49 -16C41 -14 36 -8 39 -1C33 3 33 11 39 16C35 21 38 27 45 25C50 14 51 0 49 -16Z" fill="url(#dbtefx-dn-flesh)" stroke="${mix(red, '#000000', 0.45)}" stroke-width="1.4"/>
 <path d="M14 -40C32 -42 48 -32 52 -12" fill="none" stroke="${mix(cold, '#ffffff', 0.4)}" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>

@@ -126,10 +126,10 @@ const scene = (t) => {
     windows += `<rect x="${n1(wx)}" y="${n1(856 + rand() * 30)}" width="5" height="7" fill="${heat}" fill-opacity="${n1(0.35 + rand() * 0.4)}"/>`;
   }
 
-  // The banner: two crossed ODM blades over a crenellated wall line, our own
+  // The banner: one ODM blade laid over a crenellated wall line, our own
   // garrison device (no real insignia).
-  const flagBlade = (rot) => `<g transform="rotate(${rot})"><path d="M-34 -2.6H22L30 0L22 2.6H-34Z" fill="${mix(t.text, t.muted, 0.2)}"/><path d="M-20 -2.6L-23 2.6M-6 -2.6L-9 2.6M8 -2.6L5 2.6" stroke="${ink}" stroke-width="0.8"/><path d="M-44 -3H-34V3H-44Z" fill="${mix(t.warning, t.bg, 0.45)}"/></g>`;
-  const device = `${flagBlade(-32)}${flagBlade(212)}<path d="M-30 30V22H-24V26H-18V22H-12V26H-6V22H0V26H6V22H12V26H18V22H24V26H30V22V30Z" fill="${mix(t.text, t.muted, 0.35)}"/>`;
+  const flagBlade = `<g><path d="M-34 -2.6H22L30 0L22 2.6H-34Z" fill="${mix(t.text, t.muted, 0.2)}"/><path d="M-20 -2.6L-23 2.6M-6 -2.6L-9 2.6M8 -2.6L5 2.6" stroke="${ink}" stroke-width="0.8"/><path d="M-44 -3H-34V3H-44Z" fill="${mix(t.warning, t.bg, 0.45)}"/></g>`;
+  const device = `<g transform="translate(4 -6) scale(1.25 1.4)">${flagBlade}</g><path d="M-30 30V22H-24V26H-18V22H-12V26H-6V22H0V26H6V22H12V26H18V22H24V26H30V22V30Z" fill="${mix(t.text, t.muted, 0.35)}"/>`;
   const banner = `<g transform="translate(1268 640)"><path d="M0 0V250" stroke="${ink}" stroke-width="6"/><circle cx="0" cy="-4" r="6" fill="${ink}"/><g style="transform-origin: 0 10px; animation: dbtefx-aot-flag 7s ease-in-out infinite;"><path d="M-3 8H120Q112 50 120 92H-3Z" fill="${cloak}" stroke="${mix(t.accent, t.bg, 0.2)}" stroke-width="1.5"/><path d="M6 16H111M6 84H111" stroke="${mix(t.accent, t.text, 0.4)}" stroke-opacity="0.5"/><g transform="translate(60 46) scale(1.1)">${device}</g></g></g>`;
 
   return `<style>@keyframes dbtefx-aot-swing { 0%, 100% { transform: rotate(4deg); } 50% { transform: rotate(16deg); } }

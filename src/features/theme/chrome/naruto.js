@@ -1,6 +1,6 @@
 // naruto: a shinobi's kit. Every panel is an unrolled ninja scroll of dark
 // washi between lacquered wooden rollers; crests are forged steel headband
-// plates engraved with a spiral; buttons are paper seal tags; a kunai leads
+// plates engraved with a single kunai; buttons are paper seal tags; a kunai leads
 // the life bars and shuriken sit on the phases. (t, kit) -> CSS string.
 import { mix } from '../../../lib/color.js';
 
@@ -21,7 +21,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   [[8, 12, 22, 1], [70, 6, 14, -1], [110, 30, 26, 0.5], [22, 58, 18, -0.6], [96, 86, 12, 1.2], [12, 104, 24, 0.4], [60, 118, 16, -1], [48, 40, 10, 0.8], [118, 66, 9, -0.5]].forEach(([x, y, l, d]) => {
     fibres += `M${x} ${y}l${l} ${d}`;
   });
-  const washi = svg(130, 130, `<path d="${fibres}" fill="none" stroke="${t.text}" stroke-opacity="0.045" stroke-width="0.7"/><g fill="${t.text}" fill-opacity="0.05"><circle cx="30" cy="24" r="0.8"/><circle cx="66" cy="54" r="0.7"/><circle cx="16" cy="64" r="0.6"/></g>`);
+  const washi = svg(130, 130, `<path d="${fibres}" fill="none" stroke="${t.text}" stroke-opacity="0.085" stroke-width="0.7"/><path d="M34 14l9 1.5M84 44l-11 2M4 88l13-1M102 108l10 1.8M40 76l7 -1.2M76 124l12 0.6" fill="none" stroke="${t.text}" stroke-opacity="0.06" stroke-width="1.1"/><g fill="${t.text}" fill-opacity="0.08"><circle cx="30" cy="24" r="0.8"/><circle cx="66" cy="54" r="0.7"/><circle cx="16" cy="64" r="0.6"/><circle cx="90" cy="20" r="0.7"/><circle cx="110" cy="96" r="0.9"/><circle cx="44" cy="100" r="0.6"/></g>`);
 
   // Nine-slice scroll frame: lacquered rollers on the left and right edges
   // with orange end caps, a double ink rule along the top and bottom.
@@ -29,18 +29,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const scrollFrame = svg(60, 60, `<defs><linearGradient id="w" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(wood, t.bg, 0.4)}"/><stop offset="0.4" stop-color="${mix(wood, seal, 0.35)}"/><stop offset="1" stop-color="${mix(wood, t.bg, 0.5)}"/></linearGradient></defs><path d="M13 4.5H47M13 7.5H47M13 55.5H47M13 52.5H47" stroke="${steelDim}" stroke-width="0.9"/>${roller(1)}${roller(47)}`);
   const frame = (px = 14) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u0) 20 / ${px}px stretch; box-sizing: border-box;`;
 
-  // A spiral engraved into steel (the series' swirl), centred at cx cy.
-  const swirl = (cx, cy, r) => {
-    let d = '';
-    for (let i = 0; i <= 40; i++) {
-      const k = i / 40;
-      const a = k * Math.PI * 3.2;
-      const rad = r * (0.12 + k * 0.88);
-      d += `${i ? 'L' : 'M'}${(cx + Math.cos(a) * rad).toFixed(2)} ${(cy + Math.sin(a) * rad).toFixed(2)}`;
-    }
-    return `<path d="${d}" fill="none" stroke="${ink}" stroke-width="${(r * 0.22).toFixed(2)}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="${(r * 0.08).toFixed(2)}" stroke-linecap="round" transform="translate(0 -${(r * 0.1).toFixed(2)})"/>`;
+  // One kunai engraved lengthwise into the steel plate, centred at cx cy, length l.
+  const kunaiMark = (cx, cy, l) => {
+    const x0 = cx - l / 2;
+    const h = l * 0.11;
+    return `<g fill="none" stroke="${ink}" stroke-linecap="round"><circle cx="${x0 + h}" cy="${cy}" r="${h}" stroke-width="${(h * 0.5).toFixed(2)}"/><path d="M${x0 + h * 2} ${cy}H${x0 + l * 0.48}" stroke-width="${(h * 0.9).toFixed(2)}" stroke-dasharray="${(h * 0.5).toFixed(2)} ${(h * 0.35).toFixed(2)}"/></g><path d="M${x0 + l * 0.46} ${cy}L${x0 + l * 0.6} ${cy - h * 1.5}L${x0 + l} ${cy}L${x0 + l * 0.6} ${cy + h * 1.5}Z" fill="${ink}"/><path d="M${x0 + l * 0.52} ${cy - h * 0.3}L${x0 + l * 0.9} ${cy - h * 0.1}" stroke="#ffffff" stroke-opacity="0.4" stroke-width="${(h * 0.3).toFixed(2)}"/>`;
   };
-  const plate = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.18}" fill="url(#s)" stroke="${ink}" stroke-width="1.2"/><rect x="${x + 1.6}" y="${y + 1.6}" width="${w - 3.2}" height="${h - 3.2}" rx="${h * 0.14}" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="0.8"/><g fill="${steelDim}" stroke="${ink}" stroke-width="0.5">${[[x + 4.5, y + h / 2], [x + w - 4.5, y + h / 2]].map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="1.7"/>`).join('')}</g>${swirl(x + w / 2, y + h / 2, h * 0.36)}`;
+  const plate = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.18}" fill="url(#s)" stroke="${ink}" stroke-width="1.2"/><rect x="${x + 1.6}" y="${y + 1.6}" width="${w - 3.2}" height="${h - 3.2}" rx="${h * 0.14}" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="0.8"/><g fill="${steelDim}" stroke="${ink}" stroke-width="0.5">${[[x + 4.5, y + h / 2], [x + w - 4.5, y + h / 2]].map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="1.7"/>`).join('')}</g>${kunaiMark(x + w / 2, y + h / 2, w * 0.62)}`;
   const steelDefs = `<defs><linearGradient id="s" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="${mix(steel, '#ffffff', 0.35)}"/><stop offset="0.45" stop-color="${steel}"/><stop offset="0.55" stop-color="${mix(steel, t.bg, 0.25)}"/><stop offset="1" stop-color="${mix(steel, '#ffffff', 0.15)}"/></linearGradient></defs>`;
   const tilePlate = svg(72, 24, `${steelDefs}<rect x="0" y="7" width="72" height="10" fill="${cloth}"/><path d="M0 8H72M0 16H72" stroke="${ink}" stroke-opacity="0.5" stroke-width="0.6"/>${plate(16, 1, 40, 22)}`);
   const headband = svg(200, 52, `${steelDefs}<path d="M0 18H200V34H0Z" fill="${cloth}"/><path d="M0 19.5H200M0 32.5H200" stroke="${ink}" stroke-opacity="0.5"/><path d="M14 34L4 52M24 34L20 50M186 34L196 52M176 34L180 50" stroke="${cloth}" stroke-width="5" stroke-linecap="round"/>${plate(62, 4, 76, 44)}`);
@@ -48,16 +43,15 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Kunai leading the life bar: ring pommel, cord grip, leaf blade.
   const kunai = svg(16, 42, `<circle cx="8" cy="5" r="3.6" fill="none" stroke="${steel}" stroke-width="2"/><rect x="6" y="9" width="4" height="12" fill="${cloth}"/><path d="M6 11h4M6 14h4M6 17h4M6 20h4" stroke="${mix(t.text, cloth, 0.5)}" stroke-width="0.9"/><path d="M8 21L12.5 26L8 41L3.5 26Z" fill="url(#s)" stroke="${ink}" stroke-width="0.8"/><path d="M8 22.5V39" stroke="#ffffff" stroke-opacity="0.5" stroke-width="0.7"/>${steelDefs}`);
 
-  // A four-point shuriken laid over the phase discs.
+  // A shuriken rim on the phase discs: a thin steel ring with four blade
+  // tips biting in from the edge, so the label in the middle stays clear.
   let points = '';
   for (let i = 0; i < 4; i++) {
-    const a = (i * Math.PI) / 2 - Math.PI / 2;
-    const [px, py] = [22.5 + Math.cos(a) * 20, 22.5 + Math.sin(a) * 20];
-    const [lx, ly] = [22.5 + Math.cos(a + 0.9) * 6, 22.5 + Math.sin(a + 0.9) * 6];
-    const [rx, ry] = [22.5 + Math.cos(a - 0.35) * 5, 22.5 + Math.sin(a - 0.35) * 5];
-    points += `M${rx.toFixed(2)} ${ry.toFixed(2)}L${px.toFixed(2)} ${py.toFixed(2)}L${lx.toFixed(2)} ${ly.toFixed(2)}`;
+    const a = (i * Math.PI) / 2 - Math.PI / 4;
+    const p = (rad, da) => `${(22.5 + Math.cos(a + da) * rad).toFixed(2)} ${(22.5 + Math.sin(a + da) * rad).toFixed(2)}`;
+    points += `M${p(21.6, -0.2)}L${p(16.4, 0.06)}L${p(21.6, 0.16)}Z`;
   }
-  const shuriken = svg(45, 45, `<path d="${points}Z" fill="${steel}" fill-opacity="0.3" stroke="${ink}" stroke-opacity="0.6" stroke-width="0.8" stroke-linejoin="round"/><circle cx="22.5" cy="22.5" r="3" fill="${ink}" fill-opacity="0.6" stroke="${steel}" stroke-opacity="0.5"/><circle cx="22.5" cy="22.5" r="20.6" fill="none" stroke="${seal}" stroke-opacity="0.35" stroke-width="0.8"/>`);
+  const shuriken = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20.4" fill="none" stroke="${steel}" stroke-opacity="0.55" stroke-width="1"/><path d="${points}" fill="${steel}" fill-opacity="0.7" stroke="${ink}" stroke-opacity="0.7" stroke-width="0.6" stroke-linejoin="round"/>`);
 
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${ink}, 0 0 8px ${ink} !important;`;
   const paperBg = (lift = 0) => `radial-gradient(ellipse 80% 90% at 50% 0%, ${alpha(seal, 0.1 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${paper}, ${paperDeep})`;
@@ -90,7 +84,7 @@ ${SEL.tileHover} { background: ${paperBg(0.14)} !important; box-shadow: inset 0 
 ${SEL.tileLabel} { ${label} }
 
 /* Buttons: paper seal tags with an orange band down the left edge. */
-${SEL.button} { background: linear-gradient(90deg, ${seal} 0 4px, transparent 4px), var(--dbtc-u2), linear-gradient(180deg, ${mix(paper, t.raised, 0.7)}, ${paperDeep}) !important; border-color: ${steelDim} !important; color: ${t.text} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha(steel, 0.25)}, 0 2px 5px -2px #000000 !important; }
+${SEL.button} { background: linear-gradient(90deg, ${seal} 0 4px, transparent 4px), var(--dbtc-u2), linear-gradient(180deg, ${mix(paper, t.raised, 0.7)}, ${paperDeep}) !important; border-color: ${steelDim} !important; color: ${t.text} !important; text-shadow: 0 1px 0 ${ink}, 0 0 4px ${ink} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha(steel, 0.25)}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(90deg, ${seal} 0 6px, transparent 6px), var(--dbtc-u2), linear-gradient(180deg, ${mix(t.raised, seal, 0.22)}, ${paperDeep}) !important; border-color: ${seal} !important; box-shadow: inset 0 1px 0 ${alpha(steel, 0.4)}, 0 0 10px -2px ${alpha(seal, 0.75)} !important; }
 ${SEL.buttonDown} { background: ${paperDeep} !important; border-color: ${seal} !important; box-shadow: inset 0 2px 5px #000000 !important; }
 
