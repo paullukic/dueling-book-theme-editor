@@ -926,11 +926,17 @@ textarea.field {
 /* Theme tab: section switcher (and Undo bar), kept in view while scrolling */
 .theme-head {
   position: sticky;
-  top: 0;
+  /* .panel-body's 4px top padding insets the sticky edge; cover it */
+  top: -4px;
   z-index: 1;
   margin: 0 -14px;
-  padding: 0 14px 2px;
+  padding: 12px 14px 2px;
   background: var(--plate);
+}
+
+/* The head's own padding holds the gap, so scrolled content never shows above the switcher */
+.theme-head > .subnav {
+  margin-top: 0;
 }
 
 .undo-bar {
