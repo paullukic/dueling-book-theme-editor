@@ -82,7 +82,7 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 10px ${moon}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 4px ${night}, 0 0 0 2px ${night}, 2px 2px 0 2px ${red} !important; }
-${SEL.tileLabel} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 3px 3px 0 ${red} !important; }
+${SEL.tileLabel} { color: #ffffff !important; -webkit-text-stroke: 0 !important; text-shadow: ${[[2, 0], [-2, 0], [0, 2], [0, -2], [1.5, 1.5], [-1.5, 1.5], [1.5, -1.5], [-1.5, -1.5]].map(([x, y]) => `${x}px ${y}px 0 ${night}`).join(', ')}, 3px 3px 0 ${red}, 4px 4px 0 ${night} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${gold} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${gold} !important; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${red} !important; }
@@ -143,7 +143,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 
 ${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 4px 4px 0 2px ${red}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, night, 0.6)}) !important; }
+${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)}, ${t.self} 40%, ${mix(t.self, red, 0.45)} 75%, ${mix(t.self, night, 0.55)}) !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-hero-sky) 0 100% / auto 100% repeat-x, var(--dbte-hero-glow), ${night} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
@@ -159,7 +159,7 @@ ${sel(['#duel .phase.active::before'])} {
   background: linear-gradient(0deg, ${alpha(moon, 0.85)}, ${alpha(moon, 0)}); clip-path: polygon(0 0, 100% 0, 58% 100%, 42% 100%);
   animation: var(--dbte-hero-anim, dbte-hero-sweep 5s ease-in-out infinite);
 }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 0 ${night} !important; }
+${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${night}, 0 0 3px ${night} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 ${turnBg} { background: ${gold} !important; box-shadow: 0 0 0 2px ${night}, 3px 3px 0 2px ${red}; }
 ${turnInner} { background: ${beam(0.35)}, linear-gradient(180deg, ${mix(t.raised, t.opp, 0.8)}, ${night}) !important; }

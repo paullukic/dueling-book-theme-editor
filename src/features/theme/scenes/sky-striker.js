@@ -17,10 +17,10 @@ const skyStriker = (t) => {
   const shizuku = t.accent2;
   const shade = mix(t.bg, '#000000', 0.5);
   const rand = rng(17);
-  const [rx, ry] = [1296, 320]; // radar, around the ace
-  const dx = 1340; // drone and reticle, under the ace
+  const [rx, ry] = [1420, 320]; // radar, around the ace
+  const dx = 1440; // drone and reticle, under the ace
   const dy = 664;
-  const zoomTo = `transform="translate(${rx} ${ry}) scale(0.82) translate(${-rx} ${-ry})"`;
+  const zoomTo = `transform="translate(${rx} ${ry}) scale(0.72) translate(${-rx} ${-ry})"`;
   const hud = `font-family="'Arial Narrow', Arial, sans-serif" font-weight="700"`;
 
   // Dusk cloud deck: soft banks stacked toward the horizon.
@@ -37,7 +37,7 @@ const skyStriker = (t) => {
   let speed = '';
   for (let i = 0; i < 6; i++) {
     const y = n1(70 + rand() * 480);
-    const x = n1(1060 + rand() * 260);
+    const x = n1(1260 + rand() * 160);
     speed += `<rect x="${x}" y="${y}" width="${n1(120 + rand() * 140)}" height="2" fill="#ffffff" fill-opacity="0.45" style="animation: dbtefx-ss-streak ${n1(1.2 + rand())}s linear ${n1(-rand() * 2)}s infinite;"/>`;
   }
 
@@ -61,7 +61,7 @@ const skyStriker = (t) => {
 `;
 
   // Sky Striker Ace - Kagari: the real card artwork, inside the radar.
-  const ace = cardArt(t, { id: 'dbtefx-ss-ace', card: CARDS.kagari, x: 1076, y: 0, w: 440, h: 700, focus: [0.56, 0.44], zoom: 0.86, blend: 'normal', feather: 0.5, fade: 0.55, grade: 'contrast(1.12) saturate(1.05)', tint: kagari, tintAmt: 0.12, backdrop: shade, backdropAmt: 0.7, glow: kagari, breathe: 12 });
+  const ace = cardArt(t, { id: 'dbtefx-ss-ace', card: CARDS.kagari, x: 1236, y: 0, w: 370, h: 700, focus: [0.54, 0.44], zoom: 0.86, blend: 'normal', feather: 0.5, fade: 0.55, grade: 'contrast(1.12) saturate(1.05)', tint: kagari, tintAmt: 0.12, backdrop: shade, backdropAmt: 0.7, glow: kagari, breathe: 12 });
 
   const brackets = quad.map(([u, v]) => `<path d="M${dx + u * 56} ${dy + v * 30}V${dy + v * 54}H${dx + u * 30}"/>`).join('');
 
@@ -92,7 +92,7 @@ ${speed}
 <g opacity="0" ${a('lock')}><g fill="none" stroke="${kagari}" stroke-width="3.5">${brackets}</g><text x="${dx}" y="${dy + 80}" text-anchor="middle" ${hud} font-size="17" letter-spacing="5" fill="${kagari}">LOCK ON</text></g>
 <circle cx="${dx}" cy="${dy}" r="46" fill="none" stroke="${kagari}" stroke-width="3" opacity="0" ${a('ping')}/>
 <!--near-->
-<g transform="translate(1300 806) scale(0.66)">
+<g transform="translate(1430 806) scale(0.6)">
 <ellipse rx="230" ry="46" fill="url(#dbtefx-ss-pad)"/>
 <ellipse rx="180" ry="34" fill="${shade}" fill-opacity="0.75" stroke="${shizuku}" stroke-opacity="0.7" stroke-width="3"/>
 <ellipse rx="120" ry="22" fill="none" stroke="${shizuku}" stroke-opacity="0.4" stroke-dasharray="10 8" stroke-width="2"/>

@@ -1,6 +1,6 @@
 // labrynth: Lady Labrynth's silver castle. Silver gothic tracery frames,
 // pointed lancet arches, crimson velvet with a quatrefoil damask, chandelier
-// crystal and rose-window phases. (t, kit) -> CSS string; see chrome/kit.js.
+// rose-window phases and a candelabrum at the life bar. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
@@ -38,8 +38,11 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   }
   const rose = svg(45, 45, `<g fill="none" stroke="${silver}" stroke-opacity="0.32" stroke-width="0.9">${petals}<circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="6"/></g>`);
 
-  // Gothic pinnacle that caps the life bar.
-  const pinnacle = svg(16, 34, `<path d="M8 0.5L11 9H5Z" fill="${silver}"/><path d="M4.5 9.5H11.5V31H4.5Z" fill="${velvetDeep}" stroke="${silver}" stroke-width="1.2"/><path d="M8 12.5A2.6 2.6 0 0 1 10 15.5V20H6V15.5A2.6 2.6 0 0 1 8 12.5Z" fill="${t.accent}"/><path d="M2.5 31.5H13.5V33.5H2.5Z" fill="${silver}"/>`);
+  // A silver candelabrum of three lit candles standing at the life bar's end.
+  const flame = (x, y, k = 1) => `<ellipse cx="${x}" cy="${y - 4 * k}" rx="${4.6 * k}" ry="${6 * k}" fill="${alpha(t.warning, 0.28)}"/><path d="M${x} ${y - 8.5 * k}C${x + 2.6 * k} ${y - 4.5 * k} ${x + 2.4 * k} ${y} ${x} ${y}C${x - 2.4 * k} ${y} ${x - 2.6 * k} ${y - 4.5 * k} ${x} ${y - 8.5 * k}Z" fill="${t.warning}"/><path d="M${x} ${y - 5 * k}C${x + 1 * k} ${y - 3 * k} ${x + 1 * k} ${y - 0.6 * k} ${x} ${y - 0.6 * k}C${x - 1 * k} ${y - 0.6 * k} ${x - 1 * k} ${y - 3 * k} ${x} ${y - 5 * k}Z" fill="#ffffff"/>`;
+  const wax = mix(t.text, t.warning, 0.15);
+  const candle = (x, top, bot) => `<rect x="${x - 1.9}" y="${top}" width="3.8" height="${bot - top}" rx="0.8" fill="${wax}"/><path d="M${x - 3.6} ${bot}H${x + 3.6}L${x + 2.4} ${bot + 2}H${x - 2.4}Z" fill="${silver}"/>`;
+  const candelabrum = svg(36, 48, `<g fill="none" stroke="${silver}" stroke-width="1.6" stroke-linecap="round"><path d="M18 40V22"/><path d="M18 30C12 30 6 29 6 22M18 30C24 30 30 29 30 22"/></g><path d="M11 46H25L21.5 41H14.5Z" fill="${silver}"/><circle cx="18" cy="34" r="2.2" fill="${t.accent}" stroke="${silver}" stroke-width="0.8"/>${candle(6, 13, 21)}${candle(30, 13, 21)}${candle(18, 8, 21)}${flame(6, 12.5)}${flame(30, 12.5)}${flame(18, 7.5, 1.15)}`);
 
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.accent, 0.45)} !important;`;
   const velvetBg = (lift = 0) => `radial-gradient(ellipse 70% 90% at 50% 0%, ${alpha(mix(t.accent, '#ffffff', 0.15), 0.22 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${velvet}, ${velvetDeep})`;
@@ -64,7 +67,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const u1 = svgUrl(arch);
   const u2 = svgUrl(damask);
   const u3 = svgUrl(gable);
-  const u4 = svgUrl(pinnacle);
+  const u4 = svgUrl(candelabrum);
   const u5 = svgUrl(rose);
   return `
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
@@ -92,20 +95,22 @@ ${SEL.chatTop} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.acc
 ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 5px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; opacity: 0.9; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${silverDim}, inset -1px 0 0 ${silverDim}, inset 0 -1px 0 ${silverDim} !important; }
 
-/* Duel: silver-framed life bars capped with a pinnacle; rose-window phases. */
+/* Duel: silver-framed life bars lit by a candelabrum; rose-window phases. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${velvetDeep}, 0 0 0 2px ${alpha(silver, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -19px; top: -4px; width: 22px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -30px; top: -14px; width: 33px; height: 44px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${silver}, ${silverDim}, ${t.text}, ${silverDim}, ${silver}) !important; box-shadow: 0 0 0 1px ${velvetDeep}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${velvetDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(velvet, t.raised, 0.4)} 30%, ${velvetDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, ${mix(t.self, '#000000', 0.22)} 45%, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.35)}) !important; box-shadow: 0 0 16px ${alpha(t.self, 0.95)}, 0 0 4px ${mix(t.self, '#ffffff', 0.5)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, ${mix(t.opp, '#000000', 0.22)} 45%, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.35)}) !important; box-shadow: 0 0 16px ${alpha(t.opp, 0.95)}, 0 0 4px ${mix(t.opp, '#ffffff', 0.5)}; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, #ffffff, ${silver}, #ffffff, ${silver}, #ffffff) !important; }
 ${sel(['#duel .phase span'])} { color: ${silver} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${mix(t.accent, '#000000', 0.6)}, 0 0 6px ${mix(t.accent, '#000000', 0.5)} !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, velvet, 0.25)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${silverDim}, inset 0 0 0 4px ${alpha(velvetDeep, 0.9)}, inset 0 0 0 5px ${alpha(silver, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${silver}, 0 0 0 4px ${velvetDeep}, 0 0 0 5px ${alpha(silver, 0.5)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${silver}, ${silverDim}) !important; }

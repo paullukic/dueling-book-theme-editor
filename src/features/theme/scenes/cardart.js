@@ -46,6 +46,7 @@ export const CARDS = {
   tiaramisu: 5570,
   rainbowDragon: 3466,
   surgeBlitzclique: 17778,
+  ladyLabrynth: 12857,
 };
 
 export const cardArtUrl = (id) => `https://images.duelingbook.com/card-pics/${~~id}.jpg`;

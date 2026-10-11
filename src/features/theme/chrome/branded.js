@@ -189,9 +189,19 @@ ${sel(['#duel .phase .background::after'])} {
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.accent, 0.85)}, 0 0 6px ${wg} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 22px ${alpha(t.opp, 0.7)}, 0 0 6px #ffffff !important; }
-${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }
+${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${gold} !important; border-radius: 3px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${stone} !important; border-radius: 2px !important; }
+/* Quit wears the menu tile's plate: brand, fire, cracked stone, gilt lip. */
+${sel(['#duel #duel_quit_btn + .button'])} {
+  background: var(--br-sigil) 4px center / 8px 16px no-repeat, ${fire(0.3)}, var(--br-cracks), ${stone} !important;
+  border-color: ${rim} !important;
+  color: ${t.text} !important;
+  box-shadow: inset 0 0 0 1px ${rim}, inset 0 1px 0 ${alpha(wg, 0.55)}, inset 0 -2px 0 ${alpha(t.accent, 0.5)} !important;
+}
+${sel(['#duel #duel_quit_btn + .button:hover'])} { background: var(--br-sigil) 4px center / 8px 16px no-repeat, ${fire(0.6)}, var(--br-cracks), ${stone} !important; border-color: ${wg} !important; }
+/* The playmat lines keep only their own ember glow (no extra bloom). */
+${sel(['#duel img.field_zones', '#duel img.field_decks'])} { filter: drop-shadow(0 0 1px ${alpha(t.self, 0.35)}) !important; }
 ${sel(['#duel #watchers'])} { background: var(--br-cracks), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${rim}, inset 0 2px 0 ${gold} !important; }
 
 /* Pop-up buttons: black-crimson plates in a gilt rim. */

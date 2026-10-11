@@ -115,7 +115,8 @@ ${SEL.life} { border-color: ${gold} !important; border-radius: 6px !important; b
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 6px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.text, 0.3)}, ${t.self}, ${mix(t.self, gold, 0.4)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.text, 0.3)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -17px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(goldDeep, t.text, 0.45)}, ${mix(goldDeep, t.text, 0.7)}) !important; }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -31px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${gold}, ${goldPale}, #ffffff, ${goldPale}, ${gold}, ${goldDeep}, ${gold}) !important; box-shadow: 0 0 0 1px ${alpha(gold, 0.5)}, 0 0 14px ${alpha('#ffffff', 0.9)}, 0 3px 8px -2px ${ink(0.4)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${white} !important; }

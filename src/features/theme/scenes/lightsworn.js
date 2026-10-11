@@ -4,8 +4,8 @@ import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Lightsworn: Judgment descends. Judgment Dragon, the real card artwork
 // loaded live from DuelingBook (cardart.js), rises out of a blinding sun
-// above the clouds, multiplied into the parchment sky so its own pale
-// backdrop vanishes. Rays and a turning sanctuary circle make the light
+// above the clouds in its own whites and golds, faded into the parchment
+// sky by opacity and a soft feathered window. Rays and a turning sanctuary circle make the light
 // physical; offline, the sun, rays and circle still stand.
 
 const SX = 1290;
@@ -56,7 +56,7 @@ const lightsworn = (t) => {
 </style>
 <defs>
 <linearGradient id="dbtefx-ls-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent2, 0.32)}"/><stop offset="0.55" stop-color="${t.bg}"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.14)}"/></linearGradient>
-<radialGradient id="dbtefx-ls-vig" cx="${n1(SX / W)}" cy="${n1(SY / H)}" r="1.1"><stop offset="0.3" stop-color="${warm}" stop-opacity="0"/><stop offset="1" stop-color="${warm}" stop-opacity="0.55"/></radialGradient>
+<radialGradient id="dbtefx-ls-vig" cx="${n1(SX / W)}" cy="${n1(SY / H)}" r="1.1"><stop offset="0.3" stop-color="${warm}" stop-opacity="0"/><stop offset="1" stop-color="${warm}" stop-opacity="0.18"/></radialGradient>
 <radialGradient id="dbtefx-ls-ray" gradientUnits="userSpaceOnUse" cx="${SX}" cy="${SY}" r="1300"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ls-dusk" gradientUnits="userSpaceOnUse" cx="${SX}" cy="${SY}" r="1300"><stop offset="0.1" stop-color="${t.accent}" stop-opacity="0"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ls-cloud" cx="0.5" cy="0.35" r="0.6"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.6" stop-color="${mix(t.bg, '#ffffff', 0.5)}" stop-opacity="0.75"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.2)}" stop-opacity="0"/></radialGradient>
@@ -79,7 +79,7 @@ ${bank(820, 60, 150, 0.7, 3)}
 </defs>
 <circle cx="${SX}" cy="${SY}" r="420" fill="url(#dbtefx-ls-sun)"/>
 <circle cx="${SX}" cy="${SY - 60}" r="300" fill="url(#dbtefx-ls-flare)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
-${cardArt(t, { id: 'dbtefx-ls-hero', card: CARDS.judgmentDragon, x: SX - 330, y: SY - 330, w: 680, h: 640, focus: [0.5, 0.45], zoom: 0.92, feather: 0.58, fade: 0.6, blend: 'multiply', backdrop: '#ffffff', backdropAmt: 0.7, opacity: 0.92, glow: t.accent, breathe: 16 })}
+${cardArt(t, { id: 'dbtefx-ls-hero', card: CARDS.judgmentDragon, x: SX - 330, y: SY - 330, w: 680, h: 640, focus: [0.5, 0.45], zoom: 0.92, feather: 0.62, fade: 0.6, blend: 'normal', grade: 'saturate(1.15) contrast(1.05)', backdrop: '#ffffff', backdropAmt: 0.7, opacity: 0.62, glow: t.accent, breathe: 16 })}
 ${bank(850, 80, 170, 0.8, 7)}
 ${bank(905, 110, 190, 1, 11)}`;
 };

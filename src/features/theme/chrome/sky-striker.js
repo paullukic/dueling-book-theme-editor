@@ -158,8 +158,8 @@ ${SEL.life} {
   box-shadow: 0 0 12px -2px ${alpha(cyan, 0.5)} !important;
 }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 45%, ${mix(t.self, deep, 0.5)}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 45%, ${mix(t.opp, deep, 0.5)}) !important; }
+${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(cyan, '#ffffff', 0.6)}, ${cyan} 45%, ${mix(cyan, deep, 0.55)}) !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(cyan, '#ffffff', 0.45)}, ${mix(cyan, deep, 0.2)} 45%, ${mix(cyan, deep, 0.65)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-ss-scan), repeating-linear-gradient(90deg, ${alpha(cyan, 0.08)} 0 8px, transparent 8px 10px), ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: -1.5px -1.5px 0 ${deep}, 1.5px -1.5px 0 ${deep}, -1.5px 1.5px 0 ${deep}, 1.5px 1.5px 0 ${deep}, 0 0 8px ${alpha(cyan, 0.8)} !important; }
 
@@ -170,7 +170,7 @@ ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { ba
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.75)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.75)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
 ${sel(['#duel .phase.active::before'])} {
-  content: ""; position: absolute; left: -12px; top: -12px; right: -12px; bottom: -12px; pointer-events: none;
+  content: ""; position: absolute; left: -5px; top: -5px; right: -5px; bottom: -5px; pointer-events: none;
   background: var(--dbte-ss-reticle) center / contain no-repeat;
   animation: var(--dbte-ss-anim, dbte-ss-lock 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both);
 }

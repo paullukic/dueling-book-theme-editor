@@ -196,7 +196,7 @@ ${sel(['#duel .phase.active::before'])} {
 }
 ${sel(['#duel .phase.active:has(.phase_inner.blue)::before'])} { background: radial-gradient(circle at 18% 22%, ${alpha(t.opp, 0.95)} 0 1.4%, transparent 3.2%), radial-gradient(circle at 86% 74%, ${alpha(t.opp, 0.85)} 0 1.1%, transparent 2.8%), radial-gradient(circle closest-side, transparent 68%, ${alpha(t.opp, 0.75)} 74%, ${alpha(t.opp, 0.28)} 86%, transparent 100%); }
 ${sel(['#duel .phase.active::after'])} {
-  content: ""; position: absolute; right: 6%; top: -6%; width: 44%; height: 44%; pointer-events: none;
+  content: ""; position: absolute; right: -6%; top: -20%; width: 66%; height: 66%; pointer-events: none;
   background: ${lotusBloom} center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha(deep, 0.8)});
   transform-origin: 50% 80%; animation: var(--dbte-frog-anim, dbte-frog-bloom 0.6s ease-out both);
 }

@@ -48,6 +48,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const ribbon = (o) => svgUrl(svg(240, 24, `<defs><linearGradient id="r">${rainbowStops}</linearGradient></defs><path d="M2 14q34-11 76-5t82 0q40-6 78 1q-34 9-78 6t-82 2q-44 4-76-4z" fill="url(#r)" fill-opacity="${o}"/><path d="M14 12q66-6 128-1t84 1" fill="none" stroke="#ffffff" stroke-opacity="${o * 0.6}" stroke-width="0.8"/>`));
   const tracery = `repeating-conic-gradient(from 22.5deg, ${alpha(hi, 0.55)} 0 2deg, transparent 2deg 45deg)`;
   const metal = `linear-gradient(135deg, ${hi}, ${gold} 45%, ${brown})`;
+  const inkOutline = [[1.5, 0], [-1.5, 0], [0, 1.5], [0, -1.5], [1.1, 1.1], [-1.1, 1.1], [1.1, -1.1], [-1.1, -1.1]].map(([x, y]) => `${x}px ${y}px 0 ${deep}`).concat(`0 2px 2px ${deep}`).join(', ');
   const titleInk = (fill = t.text) => `color: ${fill} !important; -webkit-text-stroke: 4px ${deep}; paint-order: stroke fill; text-shadow: 0 3px 0 ${brown}, 0 0 8px ${t.surface}, 0 0 8px ${t.surface} !important;`;
   const gilt = (w) => `border-image: var(--dbte-am-bevel) 16 / ${w}px stretch !important;`;
   const framePseudo = (w, inset) => `content: ""; position: absolute; left: ${inset}px; top: ${inset}px; right: ${inset}px; bottom: ${inset}px; pointer-events: none; border: ${w}px solid transparent; border-image: var(--dbte-am-bevel) 16 / ${w}px stretch; box-shadow: inset 0 0 0 1px ${piping}, 0 6px 14px ${alpha('#000000', 0.5)};`;
@@ -85,7 +86,7 @@ ${titles} { ${titleInk()} }
 ${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: 0 3px 0 ${brown}, ${[-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${robeDark}`).join(', ')} !important; }
 
 ${SEL.tile} {
-  background: var(--dbte-am-swash) 50% 104% / 100% 56% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.1)}, transparent 60%), ${robeFill} !important;
+  background: var(--dbte-am-swash) 50% 94% / 74% 16% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.1)}, transparent 60%), ${robeFill} !important;
   ${gilt(4)}
   border-radius: 0 !important;
   box-shadow: inset 0 0 0 2px ${robe}, inset 0 0 0 3px ${piping}, inset 0 -14px 24px -12px ${alpha('#000000', 0.5)}, 0 12px 22px -12px #000000 !important;
@@ -95,7 +96,7 @@ ${SEL.tile}::before {
   background: var(--dbte-am-palette) center / contain no-repeat; filter: drop-shadow(0 1px 2px ${deep});
 }
 ${SEL.tileHover} {
-  background: var(--dbte-am-swash-on) 50% 104% / 100% 60% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.16)}, transparent 60%), ${robeFill} !important;
+  background: var(--dbte-am-swash-on) 50% 94% / 78% 18% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.16)}, transparent 60%), ${robeFill} !important;
   ${gilt(4)}
   box-shadow: inset 0 0 0 2px ${robe}, inset 0 0 0 3px ${t.text}, 0 0 22px -6px ${alpha(gold, 0.8)} !important;
 }
@@ -127,7 +128,7 @@ ${imgSel('no_btn')} { content: ${plaque('No', 153.4, false)} !important; }
 ${imgSel('cancel_btn')} { content: ${plaque('Cancel', 234.85, false)} !important; }
 
 ${SEL.dialog} {
-  background: var(--dbte-am-swash) 4% 96% / 34% 18% no-repeat, radial-gradient(ellipse at 50% -10%, ${alpha(cyan, 0.16)}, transparent 55%), ${robeFill} !important;
+  background: radial-gradient(ellipse at 50% -10%, ${alpha(cyan, 0.16)}, transparent 55%), ${robeFill} !important;
   border-radius: 0 !important;
   box-shadow: 0 30px 60px -20px #000000 !important;
 }
@@ -153,8 +154,8 @@ ${sel(['#chats .chat .black_line'])} { background: ${metal} !important; }
 
 ${SEL.life} { border-image: var(--dbte-am-bevel) 16 / 5px stretch !important; border-radius: 0 !important; box-shadow: 0 4px 10px ${alpha('#000000', 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: var(--dbte-am-ribbon) 50% 50% / 100% 100% no-repeat, linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
-${SEL.lifeOpp} { background: var(--dbte-am-ribbon) 50% 50% / 100% 100% no-repeat, linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${deep}; paint-order: stroke fill; text-shadow: none !important; }
 
@@ -170,10 +171,11 @@ ${sel(['#duel .phase.active::before'])} {
   background: var(--dbte-am-ribbon-on) center / 100% 100% no-repeat; transform-origin: 0 50%;
   animation: var(--dbte-am-anim, dbte-am-sweep 0.5s cubic-bezier(0.2, 0.8, 0.2, 1));
 }
-${sel(['#duel .phase span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${deep}; paint-order: stroke fill; text-shadow: none !important; }
+${sel(['#duel .phase span'])} { color: ${t.text} !important; -webkit-text-stroke: 0 !important; text-shadow: ${inkOutline} !important; }
+${sel(['#duel .phase.active:is(:has(.phase_inner.red), :has(.phase_inner.blue)) span'])} { color: #ffffff !important; }
 ${turnBg} { background: ${metal} !important; }
 ${turnInner} { background: ${robeFill} !important; }
-${turnTxt} { color: ${hi} !important; -webkit-text-stroke: 3px ${deep}; paint-order: stroke fill; text-shadow: none !important; }
+${turnTxt} { color: ${hi} !important; -webkit-text-stroke: 0 !important; text-shadow: ${inkOutline} !important; }
 
 ${ring('::before')} { background: ${metal} !important; filter: none; }
 ${ring('::after')} { ${framePseudo(7, -3)} }
@@ -209,5 +211,7 @@ ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${robeDark}, $
 ${SEL.settingsPanel} { background: var(--dbte-am-swash) 100% 100% / 130px 22px no-repeat, linear-gradient(180deg, ${alpha(robe, 0.95)}, ${alpha(robeDark, 0.95)}) !important; ${gilt(6)} border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${piping}, 0 12px 26px -12px #000000 !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: ${metal} !important; border-radius: 1px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, inset 0 0 0 2.5px ${brown} !important; }
+/* In a duel the stage covers the gallery: the floating brush and the small studies would peek into empty zones. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies) { display: none; }
 `;
 };

@@ -167,8 +167,8 @@ const artmage = (t) => {
 <g fill="none" stroke="${mix(t.bg, gold, 0.18)}" stroke-width="2">${panels}<path d="M0 780H${W}" stroke-width="4"/><path d="M0 790H${W}" stroke-opacity="0.6"/></g>
 <path d="M0 ${RAIL}H${W}" stroke="${mix(t.bg, gold, 0.5)}" stroke-width="4"/><path d="M0 ${RAIL + 4}H${W}" stroke="#000000" stroke-opacity="0.4" stroke-width="2"/>
 <path d="M${PX + 30} ${RAIL}H${PX + PW - 30}L${PX + PW + 130} ${H}H${PX - 130}Z" fill="url(#dbtefx-am-beam)"/>
-${study(1090, 650, 130, 96, 'ribbon', 'dbtefx-am-s1')}
-${study(1262, 628, 120, 150, 'star', 'dbtefx-am-s2')}
+<g class="dbtefx-am-studies">${study(1090, 650, 130, 96, 'ribbon', 'dbtefx-am-s1')}
+${study(1262, 628, 120, 150, 'star', 'dbtefx-am-s2')}</g>
 <!--mid-->
 <defs>
 <linearGradient id="dbtefx-am-gilt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.45)}"/><stop offset="0.25" stop-color="${gold}"/><stop offset="0.5" stop-color="${mix(gold, '#000000', 0.35)}"/><stop offset="0.7" stop-color="${mix(gold, '#ffffff', 0.25)}"/><stop offset="1" stop-color="${mix(gold, '#000000', 0.45)}"/></linearGradient>
@@ -201,7 +201,7 @@ ${frame(PX, PY, PW, PH, 30, 'dbtefx-am-gilt', true)}
 <path d="${ribbon}" fill="url(#dbtefx-am-paint)" opacity="0.85"/>
 <g fill="none" stroke="url(#dbtefx-am-paint2)" stroke-linecap="round">${bristles}</g>
 </g>
-<g ${anim('bob', 6, 0, 'ease-in-out')}>${brush}<g fill="#ffffff" style="animation: dbtefx-am-shine 2s ease-in-out infinite;">${sparkle(S0[0], S0[1], 9)}</g></g>
+<g class="dbtefx-am-brush"><g ${anim('bob', 6, 0, 'ease-in-out')}>${brush}<g fill="#ffffff" style="animation: dbtefx-am-shine 2s ease-in-out infinite;">${sparkle(S0[0], S0[1], 9)}</g></g></g>
 ${drip(PX + 64, 30, 0, t.accent)}${drip(PX + 190, 20, 2.2, t.opp)}${drip(PX + 236, 38, 4.1, gold)}`;
 };
 

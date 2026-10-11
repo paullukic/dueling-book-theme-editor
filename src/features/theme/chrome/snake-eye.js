@@ -1,7 +1,7 @@
 // Snake-Eye: ember flame and serpent scales. Warm charcoal plates laid with
 // diamond serpent scales, ember flames licking up the foot of the pop-ups,
 // a ring of scales round every phase (the active one opens into a slit-pupil
-// eye), a serpent divider under titles and the Snake-Eye on tiles and life bar.
+// eye), a serpent divider under titles and the Snake-Eye on the life bar.
 
 import { mix } from '../../../lib/color.js';
 
@@ -47,10 +47,6 @@ const scaleRing = (t, kit, lit) => {
 const scaleBand = (t, kit) =>
   kit.svg(12, 10, `<path d="M6 0L12 5L6 10L0 5Z" fill="${mix(t.danger, t.bg, 0.45)}" stroke="${t.accent2}" stroke-opacity="0.75" stroke-width="0.8"/><path d="M6 2L9 5L6 6.4Z" fill="${t.accent2}" fill-opacity="0.35"/><path d="M0 0L6 0L0 5ZM12 0L6 0L12 5Z" fill="${mix(t.danger, t.bg, 0.6)}" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="0.6"/>`);
 
-// The Snake-Eye: an almond eye in gold lids, an ember iris, a vertical slit.
-const tileEye = (t, kit) =>
-  kit.svg(28, 18, `<defs><radialGradient id="i" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent2}"/><stop offset="0.6" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></radialGradient></defs><path d="M1 9Q14 -3 27 9Q14 21 1 9Z" fill="${mix(t.bg, '#000000', 0.3)}" stroke="${t.accent2}" stroke-width="1.4" stroke-linejoin="round"/><circle cx="14" cy="9" r="6.6" fill="url(#i)"/><path d="M14 2.8Q12.2 9 14 15.2Q15.8 9 14 2.8Z" fill="#000000"/><circle cx="11.6" cy="6.4" r="1.3" fill="#ffffff" fill-opacity="0.8"/>`);
-
 // Pop-up buttons: an ember plate, dark label, gold inset.
 const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
 const popButton = (t, label, W, H, primary) => {
@@ -95,7 +91,6 @@ html body {
   --se-scales: ${svgUrl(scales(t, kit))};
   --se-flames: ${svgUrl(flameRow(t, kit))};
   --se-band: ${svgUrl(scaleBand(t, kit))};
-  --se-eye: ${svgUrl(tileEye(t, kit))};
   --se-serpent: ${svgUrl(serpent(t, kit))};
 }
 
@@ -108,7 +103,7 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 20px; pointer-events: none;
-  background: var(--se-eye) center bottom 1px / 28px 18px no-repeat, var(--se-band) left 0 bottom 0 / 10px 8px repeat-x; border-radius: 0 0 5px 5px; opacity: 0.92; transition: opacity 0.25s;
+  background: var(--se-band) left 0 bottom 0 / 10px 8px repeat-x; border-radius: 0 0 5px 5px; opacity: 0.92; transition: opacity 0.25s;
 }
 ${SEL.tileHover} {
   background: ${ember(0.55)}, var(--se-scales), ${charcoal} !important;
@@ -198,7 +193,7 @@ ${SEL.phase} { background: ${goldRim} !important; border-radius: 50% !important;
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 100%, ${alpha(t.accent, 0.3)}, transparent 60%), ${charcoal} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -14px; pointer-events: none;
+  content: ""; position: absolute; inset: -6px; pointer-events: none;
   background: ${svgUrl(scaleRing(t, kit, false))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background::after'])} { background-image: ${svgUrl(scaleRing(t, kit, true))}; filter: drop-shadow(0 0 5px ${t.accent}); }

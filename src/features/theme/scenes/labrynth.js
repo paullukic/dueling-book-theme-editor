@@ -1,9 +1,10 @@
 import { mix } from '../../../lib/color.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 import { H, n1, polar, rng, W } from './kit.js';
 
 // Labrynth: the great hall of the Silver Castle at night. A rose window of
-// stained glass throws cold light down the nave; a silver chandelier with
-// crystal drops and real candle flames hangs in the right third; crimson
+// stained glass throws cold light down the nave; Lady Labrynth stands in a
+// tall gothic window in the right third; crimson
 // velvet swags frame the top; a checkered marble floor catches the glow.
 
 const lancet = (cx, cy, r0, r1, deg, half) => {
@@ -20,7 +21,6 @@ const lancet = (cx, cy, r0, r1, deg, half) => {
 const labrynth = (t) => {
   const rand = rng(23);
   const stone = mix(t.bg, t.text, 0.42);
-  const silver = mix(t.accent2, '#ffffff', 0.35);
   const glassCols = [t.opp, t.accent2, mix(t.text, t.accent2, 0.4), mix(t.opp, t.success, 0.35)].map((c) => mix(c, t.bg, 0.2));
 
   // Rose window: sixteen lancets, eight roundels, a six-petal heart.
@@ -51,52 +51,6 @@ const labrynth = (t) => {
     const [x, y] = polar(RX, RY, 20, i * 60);
     heart += `<circle cx="${x}" cy="${y}" r="17"/>`;
   }
-
-  // Chandelier: arms on an ellipse (front ones lower and brighter).
-  const CX = 1250;
-  const CY = 330;
-  const flameAt = [];
-  const arm = (a, rx, ry, drop, lift) => {
-    const x = n1(CX + Math.cos(a) * rx);
-    const y = n1(CY + drop + Math.sin(a) * ry);
-    const mx = n1(CX + Math.cos(a) * rx * 0.55);
-    const front = Math.sin(a) > 0;
-    flameAt.push([x, y - lift, front]);
-    return {
-      front,
-      d: `M${CX} ${CY + drop * 0.3}C${mx} ${n1(y + 46)} ${n1(x - Math.cos(a) * 10)} ${n1(y + 20)} ${x} ${n1(y - lift + 14)}`,
-      x,
-      y: n1(y - lift),
-    };
-  };
-  const arms = [];
-  for (let i = 0; i < 8; i++) arms.push(arm(((i + 0.5) / 8) * Math.PI * 2, 172, 32, 36, 18));
-  for (let i = 0; i < 5; i++) arms.push(arm(((i + 0.25) / 5) * Math.PI * 2, 112, 20, -40, 16));
-  const cup = (x, y) =>
-    `<path d="M${n1(x - 13)} ${n1(y + 14)}h26l-6 6h-14Z"/><rect x="${n1(x - 5)}" y="${n1(y - 34)}" width="10" height="48" rx="2" fill="url(#dbtefx-lb-wax)"/>`;
-  const armPaths = (front) => arms.filter((a) => a.front === front).map((a) => `<path d="${a.d}"/>`).join('');
-  const cups = (front) => arms.filter((a) => a.front === front).map((a) => cup(a.x, a.y)).join('');
-  // Crystal swags: strings of drops between neighbouring lower arms.
-  let crystals = '';
-  for (let i = 0; i < 8; i++) {
-    const a = arms[i];
-    const b = arms[(i + 1) % 8];
-    if (!a.front && !b.front) continue;
-    const mx = n1((a.x + b.x) / 2);
-    const my = n1(Math.max(a.y, b.y) + 44);
-    crystals += `<path d="M${a.x} ${n1(a.y + 16)}Q${mx} ${n1(my + 18)} ${b.x} ${n1(b.y + 16)}" fill="none" stroke="${silver}" stroke-opacity="0.5" stroke-dasharray="2 5"/>`;
-    crystals += `<path d="M${mx} ${my}l6 12l-6 16l-6 -16Z" fill="url(#dbtefx-lb-crystal)"/>`;
-    if (a.front) crystals += `<path d="M${a.x} ${n1(a.y + 20)}v14" stroke="${silver}" stroke-opacity="0.5"/><path d="M${a.x} ${n1(a.y + 34)}l5 9l-5 13l-5 -13Z" fill="url(#dbtefx-lb-crystal)"/>`;
-  }
-  const fr = rng(71);
-  const flames = flameAt
-    .map(([x, y, front], i) => {
-      const fy = n1(y - 34);
-      const s = front ? 1.25 : 1;
-      const dur = n1(0.6 + fr() * 0.6);
-      return `<g opacity="${front ? 1 : 0.75}"><circle cx="${x}" cy="${n1(fy - 10)}" r="${n1(50 * s)}" fill="url(#dbtefx-lb-halo)" style="animation: dbtefx-lb-halo ${n1(dur * 2.3)}s ease-in-out ${n1(-fr() * 2)}s infinite;"/><path d="M${x} ${n1(fy - 26 * s)}C${n1(x + 8 * s)} ${n1(fy - 12 * s)} ${n1(x + 7 * s)} ${fy} ${x} ${fy}C${n1(x - 7 * s)} ${fy} ${n1(x - 8 * s)} ${n1(fy - 12 * s)} ${x} ${n1(fy - 26 * s)}Z" fill="url(#dbtefx-lb-flame)" style="transform-origin: ${x}px ${fy}px; animation: dbtefx-lb-flame ${dur}s ease-in-out ${n1(-fr())}s infinite alternate;"/></g>`;
-    })
-    .join('');
 
   // Checkered marble floor receding to the nave's vanishing point.
   const VX = 920;
@@ -159,9 +113,11 @@ const labrynth = (t) => {
     dust += `<circle cx="${n1(RX - 160 + u * 360 + rand() * 200)}" cy="${n1(260 + u * 520)}" r="${n1(0.8 + rand() * 1.6)}"/>`;
   }
 
-  return `<style>@keyframes dbtefx-lb-flame { 0% { transform: scale(1.04, 0.9); } 40% { transform: scale(0.95, 1.1); } 70% { transform: scale(1.02, 0.96); } 100% { transform: scale(0.97, 1.06); } }
-@keyframes dbtefx-lb-halo { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-@keyframes dbtefx-lb-sway { 0%, 100% { transform: rotate(-0.6deg); } 50% { transform: rotate(0.6deg); } }
+  // Lady Labrynth of the Silver Castle in a tall gothic window at the right,
+  // her own silver-and-glass hall blending into ours.
+  const lady = cardArt(t, { id: 'dbtefx-lb-lady', card: CARDS.ladyLabrynth, x: 1352, y: 60, w: 260, h: 800, frame: 'arch', focus: [0.56, 0.44], zoom: 0.92, feather: 0.4, fade: 0.55, grade: 'brightness(0.86) contrast(1.08)', tint: mix(t.accent2, t.accent, 0.3), tintAmt: 0.12, backdrop: mix(t.bg, t.accent2, 0.2), backdropAmt: 0.8, glow: t.accent2, breathe: 16 });
+
+  return `<style>${CARD_ART_KEYFRAMES}
 @keyframes dbtefx-lb-shaft { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }</style>
 <defs>
 <linearGradient id="dbtefx-lb-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.text, 0.2)}"/><stop offset="0.55" stop-color="${mix(t.bg, t.text, 0.1)}"/><stop offset="1" stop-color="${mix(t.bg, t.text, 0.05)}"/></linearGradient>
@@ -179,16 +135,11 @@ const labrynth = (t) => {
 <g fill="${t.accent2}" fill-opacity="0.5">${dust}</g>
 <path d="${tiles}" fill="url(#dbtefx-lb-floor)"/>
 ${corridor}
-<ellipse cx="${CX}" cy="${H - 40}" rx="300" ry="70" fill="url(#dbtefx-lb-pool)"/>
-${column(196, 64)}${column(1418, 64)}
+<ellipse cx="1440" cy="${H - 40}" rx="260" ry="64" fill="url(#dbtefx-lb-pool)"/>
+${column(196, 64)}${column(1585, 64)}
 <!--mid-->
 <defs>
 <radialGradient id="dbtefx-lb-glass" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
-<linearGradient id="dbtefx-lb-silver" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.accent2, t.bg, 0.7)}"/><stop offset="0.35" stop-color="${mix(t.accent2, t.bg, 0.2)}"/><stop offset="0.5" stop-color="#ffffff"/><stop offset="0.65" stop-color="${mix(t.accent2, t.bg, 0.3)}"/><stop offset="1" stop-color="${mix(t.accent2, t.bg, 0.75)}"/></linearGradient>
-<linearGradient id="dbtefx-lb-wax" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.text, t.warning, 0.3)}"/><stop offset="0.5" stop-color="#ffffff"/><stop offset="1" stop-color="${mix(t.text, t.bg, 0.4)}"/></linearGradient>
-<radialGradient id="dbtefx-lb-flame" cx="0.5" cy="0.72" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="${mix(t.warning, '#ffffff', 0.5)}"/><stop offset="0.75" stop-color="${t.warning}"/><stop offset="1" stop-color="${t.accent}"/></radialGradient>
-<radialGradient id="dbtefx-lb-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.5"/><stop offset="0.35" stop-color="${t.warning}" stop-opacity="0.16"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
-<linearGradient id="dbtefx-lb-crystal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="${t.accent2}" stop-opacity="0.7"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0.5"/></linearGradient>
 <radialGradient id="dbtefx-lb-warm" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.2"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
 </defs>
 <g>
@@ -201,23 +152,8 @@ ${glass}
 <circle cx="${RX}" cy="${RY}" r="200" fill="none" stroke="${stone}" stroke-width="12"/>
 <circle cx="${RX}" cy="${RY}" r="214" fill="none" stroke="${stone}" stroke-opacity="0.6" stroke-width="4"/>
 </g>
-<circle cx="${CX}" cy="${CY - 20}" r="320" fill="url(#dbtefx-lb-warm)"/>
-<g style="transform-origin: ${CX}px -40px; animation: dbtefx-lb-sway 16s ease-in-out infinite;">
-<path d="M${CX} -40V${CY - 140}" stroke="${silver}" stroke-width="3" stroke-dasharray="7 3"/>
-<g fill="none" stroke="${mix(t.accent2, t.bg, 0.35)}" stroke-width="5" stroke-linecap="round" opacity="0.7">${armPaths(false)}</g>
-<g fill="${silver}" opacity="0.7">${cups(false)}</g>
-<g fill="url(#dbtefx-lb-silver)" stroke="${mix(t.accent2, t.bg, 0.4)}">
-<path d="M${CX - 4} ${CY - 140}h8v60h-8Z"/><circle cx="${CX}" cy="${CY - 90}" r="11"/><path d="M${CX - 22} ${CY - 66}C${CX - 22} ${CY - 80} ${CX + 22} ${CY - 80} ${CX + 22} ${CY - 66}L${CX + 6} ${CY - 50}H${CX - 6}Z"/>
-<path d="M${CX - 5} ${CY - 50}h10v44h-10Z"/><circle cx="${CX}" cy="${CY - 14}" r="16"/>
-<path d="M${CX - 48} ${CY + 26}C${CX - 40} ${CY + 70} ${CX + 40} ${CY + 70} ${CX + 48} ${CY + 26}C${CX + 30} ${CY + 18} ${CX - 30} ${CY + 18} ${CX - 48} ${CY + 26}Z"/>
-<path d="M${CX - 4} ${CY + 2}h8v26h-8Z"/><circle cx="${CX}" cy="${CY + 70}" r="8"/></g>
-<ellipse cx="${CX}" cy="${CY + 36}" rx="44" ry="9" fill="url(#dbtefx-lb-silver)"/>
-<g fill="none" stroke="url(#dbtefx-lb-silver)" stroke-width="5.5" stroke-linecap="round">${armPaths(true)}</g>
-<g fill="url(#dbtefx-lb-silver)">${cups(true)}</g>
-${crystals}
-<path d="M${CX} ${CY + 80}l14 24l-14 42l-14 -42Z" fill="url(#dbtefx-lb-crystal)"/>
-${flames}
-</g>
+<circle cx="1480" cy="380" r="280" fill="url(#dbtefx-lb-warm)"/>
+${lady}
 <!--near-->
 <defs>
 <linearGradient id="dbtefx-lb-fold" x1="0" y1="0" x2="0" y2="1"><stop offset="0.4" stop-color="${mix(t.accent, '#000000', 0.7)}"/><stop offset="0.85" stop-color="${mix(t.accent, '#000000', 0.25)}"/><stop offset="0.95" stop-color="${mix(t.accent, '#ffffff', 0.15)}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></linearGradient>

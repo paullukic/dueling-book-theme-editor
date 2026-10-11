@@ -78,14 +78,22 @@ const motifs = {
     svg(40, 22, `<path d="M0 22a20 20 0 0 1 40 0M-20 11a20 20 0 0 1 40 0M20 11a20 20 0 0 1 40 0" fill="none" stroke="${t.accent}" stroke-opacity="0.12" stroke-width="1.2"/>`),
   petals: (t) =>
     svg(180, 180, `<g fill="${t.accent}"><path d="M30 40q10-14 20 0q-10 14-20 0z" fill-opacity="0.12" transform="rotate(25 40 40)"/><path d="M120 110q8-11 16 0q-8 11-16 0z" fill-opacity="0.09" transform="rotate(-30 128 110)"/><path d="M150 30q6-8 12 0q-6 8-12 0z" fill-opacity="0.08"/></g>`),
-  // Cherry blossoms: five notched petals round a centre, and loose single petals,
-  // scattered at varied size and turn (fixed values, so every render matches).
-  blossoms: (t) => {
-    const petal = `M0 0C-7-4-8-15-3-19L0-16L3-19C8-15 7-4 0 0Z`;
-    const flower = (x, y, k, rot, o) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})" fill="${t.accent}" fill-opacity="${o}">${[0, 72, 144, 216, 288].map((a) => `<path d="${petal}" transform="rotate(${a}) translate(0 -2)"/>`).join('')}<circle r="2.4" fill="${t.accent2}" fill-opacity="${o * 1.4}"/></g>`;
-    const single = (x, y, k, rot, o) => `<path d="${petal}" transform="translate(${x} ${y}) rotate(${rot}) scale(${k})" fill="${t.accent}" fill-opacity="${o}"/>`;
-    return svg(420, 420, flower(70, 90, 1.1, 12, 0.1) + flower(300, 250, 0.75, 47, 0.08) + flower(160, 350, 0.55, -20, 0.07) +
-      single(240, 60, 0.9, 130, 0.09) + single(380, 140, 0.7, -60, 0.07) + single(40, 260, 0.6, 200, 0.08) + single(330, 380, 1, 75, 0.06) + single(190, 200, 0.5, 15, 0.07));
+  // Midnight: a few clear stars of varied size and brightness, two with a four-point flare.
+  brightStars: (t) => {
+    const flare = (x, y, r, o) => `<path d="M${x} ${y - r}L${x + r * 0.22} ${y - r * 0.22}L${x + r} ${y}L${x + r * 0.22} ${y + r * 0.22}L${x} ${y + r}L${x - r * 0.22} ${y + r * 0.22}L${x - r} ${y}L${x - r * 0.22} ${y - r * 0.22}Z" fill="${t.text}" fill-opacity="${o}"/>`;
+    const dots = [[40, 60, 1.6, 0.8], [210, 30, 1, 0.55], [330, 150, 2.2, 0.9], [90, 260, 1.2, 0.6], [400, 330, 1, 0.5], [250, 410, 1.8, 0.75], [450, 40, 1.3, 0.65], [150, 470, 1, 0.5]];
+    return svg(500, 500, dots.map(([x, y, r, o]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${t.text}" fill-opacity="${o}"/>`).join('') + flare(330, 150, 8, 0.7) + flare(40, 60, 5, 0.55));
+  },
+  // Graphite: granite. Light, dark and amber flecks at varied size (fixed scatter).
+  granite: (t) => {
+    let f = '';
+    let seed = 7;
+    const r = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+    for (let i = 0; i < 90; i++) {
+      const c = i % 9 === 0 ? t.accent : i % 2 ? t.text : '#000000';
+      f += `<circle cx="${Math.round(r() * 2400) / 10}" cy="${Math.round(r() * 2400) / 10}" r="${Math.round((0.5 + r() * 1.4) * 10) / 10}" fill="${c}" fill-opacity="${Math.round((0.06 + r() * 0.12) * 100) / 100}"/>`;
+    }
+    return svg(240, 240, f);
   },
   // Drawn across the tile corners too, so the stripes run on without seams.
   slashes: (t) => svg(80, 80, `<path d="M-20 20L20 -20M0 80L80 0M60 100L100 60" stroke="${t.accent}" stroke-opacity="0.035" stroke-width="10"/>`),
@@ -165,13 +173,13 @@ ${dialogSel('::after')} { right: 8px; bottom: 8px; transform: rotate(180deg); }`
 const SKINS = {
   obsidian: (t) => layer(`${url(motifs.diagonal(t))}, radial-gradient(ellipse at 70% 0%, ${alpha(t.accent, 0.08)}, transparent 60%)`) + tileHoverGlow(t.accent) + restRule(t.accent) + quietBoard,
   midnight: (t) =>
-    layer(`${url(motifs.stars(t, t.accent2))}, radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) +
+    layer(`${url(motifs.brightStars(t))}, radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) +
     tileHoverGlow(t.accent) +
     bands(mix(t.border, t.text, 0.35), t.accent) +
     quietBoard,
   crimson: (t) => layer(`${url(motifs.slashes(t))}, radial-gradient(ellipse at 0% 100%, ${alpha(t.accent, 0.14)}, transparent 55%)`) + tileHoverGlow(t.accent),
   verdant: (t) => layer(`${url(svg(24, 24, `<circle cx="12" cy="12" r="2.2" fill="${t.accent}" fill-opacity="0.06"/>`))}, radial-gradient(ellipse at 100% 100%, ${alpha(t.accent, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent) + quietBoard,
-  sakura: (t) => layer(`${url(motifs.blossoms(t))}, radial-gradient(ellipse at 20% 10%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent) + quietBoard,
+  sakura: (t) => layer(`radial-gradient(ellipse at 20% 10%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent) + quietBoard,
   oled: () => '',
   spell: (t) => layer(`${url(motifs.arcane(t))} center / min(90vh, 900px) no-repeat, radial-gradient(circle at 50% 50%, ${alpha(t.accent, 0.1)}, transparent 60%)`) + tileHoverGlow(t.accent),
   trap: (t) => layer(`${url(motifs.chains(t))}, radial-gradient(ellipse at 50% 100%, ${alpha(t.accent, 0.12)}, transparent 60%)`) + tileHoverGlow(t.accent),
@@ -235,7 +243,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
 
   // Graphite: honed stone. Visible grain, an amber rule on every tile, warm deck bands.
   graphite: (t) =>
-    layer(`${url(motifs.grain(t, 0.1))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) +
+    layer(`${url(motifs.granite(t))}, ${url(motifs.grain(t, 0.1))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) +
     tileHoverGlow(t.accent) +
     restRule(t.accent) +
     bands(t.accent, t.warning) +

@@ -54,8 +54,6 @@ const cluster = (t, kit, teal, W, H, feathers, glow = '') => {
   const s = feathers.map(([x, y, a, L, w], i) => `<g transform="translate(${x} ${y}) rotate(${a})">${primary(L, w, i === feathers.length - 1 ? teal : t.accent, shaft)}</g>`).join('');
   return kit.svg(W, H, `${featherDefs(t, teal)}${glow}${s}`);
 };
-// Menu tiles: a folded wing edge standing in the left strip.
-const wingStrip = (t, kit, teal) => cluster(t, kit, teal, 34, 100, [[22, 99, 13, 76, 11], [15, 99, 2, 88, 12], [8, 99, -9, 95, 12]], '<ellipse cx="16" cy="56" rx="17" ry="46" fill="url(#gl)"/>');
 // Corner crest: three primaries fanned out of a bottom-right corner (or,
 // turned round, out of the top-left one).
 const crestFeathers = [[54, 48, -20, 36, 9], [54, 48, -42, 42, 10], [54, 48, -64, 46, 10]];
@@ -75,10 +73,46 @@ const wreath = (t, kit, teal) => {
   return kit.svg(100, 100, `${featherDefs(t, teal)}<defs><g id="a">${primary(18, 7.5, t.accent, shaft, false)}</g><g id="b">${primary(18, 7.5, teal, shaft, false)}</g></defs>${s}`);
 };
 
-// A folded wing at the start of the life bar.
-const lifeWing = (t, kit) => {
-  const f = (a, len, w, y) => `<g transform="translate(58 ${y}) scale(1 -1) rotate(${a})">${feather(len, w, t)}</g>`;
-  return kit.svg(62, 40, `${f(160, 34, 7, 24)}${f(170, 46, 8, 21)}${f(180, 56, 8.5, 18)}`);
+// The life blade's wing: seven long crow primaries fanned back from the
+// blade's hilt (up-left round to down-left), violet-edged with dark gaps
+// between them, the lowest rimmed teal, and three short coverts laid over
+// their bases. Pivot at (118, 36); the blade's square end hides it.
+const lifeWing = (t, kit, teal) => {
+  const shaft = mix(t.text, t.accent, 0.5);
+  const fan = [[-38, 58, 7], [-52, 74, 7.5], [-66, 86, 8], [-80, 92, 8], [-94, 88, 8], [-108, 76, 7.5], [-122, 60, 7]];
+  const coverts = [[-58, 34, 9], [-80, 40, 9.5], [-102, 34, 9]];
+  const at = ([a, L, w], rim) => `<g transform="translate(118 36) rotate(${a})">${primary(L, w, rim, shaft)}</g>`;
+  return kit.svg(125, 72, `${featherDefs(t, teal)}${fan.map((f, i) => at(f, i === fan.length - 1 ? teal : t.accent)).join('')}${coverts.map((f) => at(f, mix(t.accent, teal, 0.5))).join('')}`);
+};
+
+// Menu tiles: the same wing spread from the tile's bottom-left corner,
+// primaries raking up and right behind the label.
+const tileWing = (t, kit, teal) => {
+  const shaft = mix(t.text, t.accent, 0.5);
+  const fan = [[14, 52, 6.5], [30, 66, 7], [46, 80, 7.5], [62, 92, 7.5], [78, 100, 7.5], [92, 104, 7]];
+  return kit.svg(150, 70, `${featherDefs(t, teal)}${fan.map(([a, L, w], i) => `<g transform="translate(4 68) rotate(${a})">${primary(L, w, i === 0 ? teal : t.accent, shaft)}</g>`).join('')}`);
+};
+
+// The life blade: a jet bevel band round the gauge, the left end cut square
+// for the wing, the right end drawn to a blade point, an iridescent outer rim
+// (teal to violet; danger when low), a fuller groove along the top band and
+// a fine violet lip round the window. Box coords: the gauge window is 3..153 x 3..28.
+const lifeBlade = (t, kit, teal, low = false) => {
+  const rimA = low ? t.danger : teal;
+  const rimB = low ? mix(t.danger, '#000000', 0.25) : t.accent;
+  const outer = 'M2 -2H149L162 15.5L149 33H2L-4 27V4Z';
+  const hole = 'M7 3H149L153 7V24L149 28H7L3 24V7Z';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="168" height="37" viewBox="-5 -3 168 37"><defs>`
+    + `<linearGradient id="j" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.12)}"/><stop offset="0.22" stop-color="${t.raised}"/><stop offset="0.5" stop-color="${t.bg}"/><stop offset="0.82" stop-color="#000000"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.25)}"/></linearGradient>`
+    + `<linearGradient id="r" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="${rimA}"/><stop offset="0.45" stop-color="${rimB}"/><stop offset="0.7" stop-color="${mix(rimA, rimB, 0.5)}"/><stop offset="1" stop-color="${rimB}"/></linearGradient></defs>`
+    + `<path d="${outer}${hole}" fill="url(#j)" fill-rule="evenodd"/>`
+    + `<path d="${outer}" fill="none" stroke="url(#r)" stroke-width="1.4" stroke-linejoin="miter"/>`
+    + `<path d="${hole}" fill="none" stroke="${low ? mix(t.danger, t.bg, 0.3) : mix(t.accent, t.bg, 0.25)}" stroke-width="0.9"/>`
+    + `<path d="M10 0.4H146" stroke="${mix(t.text, rimA, 0.4)}" stroke-opacity="0.55" stroke-width="0.6"/>`
+    + `<path d="M10 30.8H146" stroke="#000000" stroke-width="0.8"/>`
+    + `<path d="M151 2.4L159.6 15.5L151 28.6" fill="none" stroke="${mix(t.text, rimA, 0.3)}" stroke-opacity="0.5" stroke-width="0.6"/>`
+    + `<path d="M156.4 15.5l-2.6-2.4v4.8z" fill="${low ? t.danger : t.accent2}"/>`
+    + '</svg>';
 };
 
 // Pop-up buttons: near-square jet plates with one notched corner, an
@@ -121,28 +155,30 @@ export default (t, kit) => {
 html body {
   --bw-quills: ${svgUrl(quills(t, kit, teal))};
   --bw-crest: ${svgUrl(quillsTL(t, kit, teal))};
-  --bw-edge: ${svgUrl(wingStrip(t, kit, teal))};
   --bw-quill: ${svgUrl(quillLine(t, kit))};
+  --bw-wing: ${svgUrl(tileWing(t, kit, teal))};
 }
 
-/* Menu tiles: jet plates, an oil-sheen rim, a folded crow wing standing in the left strip. */
+/* Menu tiles: jet plates cut at two corners, an oil-sheen rim and a raking
+   sheen, crow-feather crests fanned out of the cut corners (as on the pop-ups). */
 ${SEL.tile} {
-  background: ${jet} !important;
+  background: ${notchLine(teal)}, linear-gradient(-45deg, transparent calc(50% - 0.7px), ${t.accent} 0 calc(50% + 0.7px), transparent 0) right bottom / 9px 9px no-repeat, ${oil(0.09)}, ${jet} !important;
   border-color: transparent !important;
   border-image: ${iris} 1 / 1px !important;
   border-radius: 0 !important;
-  box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.25)}, 0 14px 26px -12px #000000 !important;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 7px);
+  box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.25)}, inset 0 1px 0 ${alpha(t.text, 0.08)} !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: var(--bw-edge) 3px center / auto 94% no-repeat; transition: filter 0.2s;
+  content: ""; position: absolute; inset: 1px; pointer-events: none; opacity: 0.7;
+  background: var(--bw-wing) left bottom / auto 96% no-repeat, var(--bw-quills) right bottom / auto 62% no-repeat; transition: filter 0.2s, opacity 0.2s;
 }
 ${SEL.tileHover} {
-  background: ${oil(0.2)}, ${jet} !important;
+  background: ${notchLine(teal)}, linear-gradient(-45deg, transparent calc(50% - 0.7px), ${t.accent} 0 calc(50% + 0.7px), transparent 0) right bottom / 9px 9px no-repeat, ${oil(0.24)}, ${jet} !important;
   border-image: ${irisLit} 1 / 1px !important;
-  box-shadow: 0 0 20px -6px ${alpha(t.accent, 0.9)}, 0 0 14px -8px ${teal} !important;
+  box-shadow: inset 0 0 18px -4px ${alpha(t.accent, 0.7)}, inset 0 -2px 0 ${teal} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: brightness(1.35) drop-shadow(0 0 3px ${alpha(teal, 0.7)}); }
+${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: brightness(1.35) drop-shadow(0 0 3px ${alpha(teal, 0.7)}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${t.bg} !important; box-shadow: inset 0 3px 8px #000000, inset 0 -2px 0 ${t.accent2} !important; }
 ${sel(['#main_menu .menu_btn .content span', '#main_menu .menu_btn span'])} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 12px ${alpha(t.accent, 0.4)} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${teal} !important; border-radius: 1px !important; transform: rotate(45deg) scale(0.8); }
@@ -218,17 +254,28 @@ ${SEL.chat} { background: ${panel} !important; box-shadow: inset 1px 0 0 ${alpha
 ${sel(['#chats .chat .cout_txt'])} { background-color: ${t.bg} !important; border-color: ${alpha(t.accent, 0.25)} !important; }
 ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important; }
 
-/* Duel: a jet life blade with a folded wing; phases in feather wreaths. */
-${SEL.life} { border-color: ${t.accent} !important; border-radius: 0 !important; box-shadow: 0 0 0 1px #000000, 0 0 0 2px ${alpha(teal, 0.5)}, 0 0 14px -4px ${alpha(t.accent, 0.8)} !important; }
+/* Duel: the life gauge set in a jet blade (chamfered end, blade point,
+   iridescent rim), a fanned crow wing at its hilt; teal oil-sheen fill for
+   you, violet for the opponent. */
+${SEL.life} { border-color: transparent !important; border-image: none !important; border-radius: 0 !important; box-shadow: none !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -38px; top: -8px; width: 62px; height: 40px; pointer-events: none;
-  background: ${svgUrl(lifeWing(t, kit))} center / contain no-repeat;
+  content: ""; position: absolute; left: -8px; top: -6px; width: 168px; height: 37px; pointer-events: none;
+  background: ${svgUrl(lifeBlade(t, kit, teal))} center / 100% 100% no-repeat;
+}
+${sel(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border::before'])} { background-image: ${svgUrl(lifeBlade(t, kit, teal, true))}; }
+${sel(['#duel .lifepoints::before'])} {
+  content: ""; position: absolute; left: -112px; top: -20px; width: 125px; height: 72px; pointer-events: none;
+  background: ${svgUrl(lifeWing(t, kit, teal))} center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 3px #000000);
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: #000000 !important; }
-${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 2px #000000 !important; }
+${SEL.lifeSelf} { background: ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
+${SEL.lifeOpp} { background: ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(t.bg, t.raised, 0.6)}, #000000) !important; }
+${sel(['#duel .lifepoints[data-dbte-lp~="hit"] .life_bar::after'])} {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 20%, ${alpha(teal, 0.55)} 42%, ${alpha('#ffffff', 0.5)} 50%, ${alpha(teal, 0.4)} 58%, transparent 78%);
+}
 
 ${SEL.phase} { background: ${mix(t.border, t.accent, 0.5)} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${jet} !important; border-radius: 50% !important; }

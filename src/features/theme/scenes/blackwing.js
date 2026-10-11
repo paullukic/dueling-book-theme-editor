@@ -24,8 +24,9 @@ const blackwing = (t) => {
 <g fill="${t.text}" fill-opacity="0.05"><ellipse cx="400" cy="230" rx="420" ry="30"/><ellipse cx="1150" cy="330" rx="380" ry="24"/></g>
 <!--mid-->
 <g fill="url(#dbtefx-bw-wing)" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="1.5">${wing(120, 900, 1)}${wing(1480, 900, -1)}</g>
-<ellipse cx="800" cy="460" rx="8" ry="4" fill="${t.accent2}" fill-opacity="0.7" ${anim('pulse', 3, 0, 'ease-in-out')}/>
-<ellipse cx="840" cy="460" rx="8" ry="4" fill="${t.accent2}" fill-opacity="0.7" ${anim('pulse', 3, 0, 'ease-in-out')}/>
+<g transform="translate(1452 350)"><path d="M-62 -26C-50 -66 50 -66 62 -26C66 -6 48 14 22 28L0 78L-22 28C-48 14 -66 -6 -62 -26Z" fill="${t.bg}" fill-opacity="0.8" stroke="${t.accent}" stroke-opacity="0.32" stroke-width="1.4"/><path d="M-22 28L0 78L22 28C10 34 -10 34 -22 28Z" fill="${mix(t.bg, t.accent, 0.18)}" fill-opacity="0.9"/>
+<ellipse cx="-24" cy="-6" rx="13" ry="4.5" transform="rotate(14 -24 -6)" fill="${t.accent2}" fill-opacity="0.8" ${anim('pulse', 3, 0, 'ease-in-out')}/>
+<ellipse cx="24" cy="-6" rx="13" ry="4.5" transform="rotate(-14 24 -6)" fill="${t.accent2}" fill-opacity="0.8" ${anim('pulse', 3, 0, 'ease-in-out')}/></g>
 <!--near-->
 ${Array.from({ length: 20 }, () => feather(rand() * W, 1.1 + rand() * 1.2)).join('')}`;
 };

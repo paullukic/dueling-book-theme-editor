@@ -88,7 +88,7 @@ ${back}<ellipse cx="${x}" cy="${n1(y - h * 0.42)}" rx="${n1(wd * 0.8)}" ry="${n1
       const spread = 16 + depth * 150;
       const len = 6 + depth * (40 + rand() * 50);
       const th = 0.5 + depth * 2.2;
-      const cx = 1330 + (rand() - 0.5) * spread * 1.6;
+      const cx = 1100 + (rand() - 0.5) * spread * 1.6;
       lens += `M${n1(cx - len)} ${n1(y)}Q${n1(cx)} ${n1(y - th)} ${n1(cx + len)} ${n1(y)}Q${n1(cx)} ${n1(y + th)} ${n1(cx - len)} ${n1(y)}Z`;
     }
     shimmer += `<path d="${lens}" fill="${moon}" style="animation: dbtefx-fr-glint 3s ease-in-out ${-g}s infinite;"/>`;
@@ -120,15 +120,15 @@ ${back}<ellipse cx="${x}" cy="${n1(y - h * 0.42)}" rx="${n1(wd * 0.8)}" ry="${n1
 </defs>
 <rect width="${W}" height="${horizon}" fill="url(#dbtefx-fr-sky)"/>
 <path d="${stars}" stroke="${t.text}" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
-<circle cx="1330" cy="170" r="320" fill="url(#dbtefx-fr-moon)"/>
-<circle cx="1330" cy="170" r="60" fill="url(#dbtefx-fr-disc)"/>
+<circle cx="1100" cy="110" r="300" fill="url(#dbtefx-fr-moon)"/>
+<circle cx="1100" cy="110" r="56" fill="url(#dbtefx-fr-disc)"/>
 <g fill="${mix(moon, sky, 0.5)}" fill-opacity="0.06"><ellipse cx="1312" cy="150" rx="17" ry="13"/><ellipse cx="1350" cy="190" rx="13" ry="10"/><ellipse cx="1338" cy="146" rx="7" ry="6"/><ellipse cx="1305" cy="196" rx="8" ry="6"/></g>
 <g id="dbtefx-fr-bank"><g fill="${mix(sky, t.bg, 0.5)}"><path d="${bank(horizon - 10, 12, 40, 7)}"/></g>
 <path d="${bank(horizon, 8, 26, 11)}" fill="${deep}"/></g>
 <rect y="${horizon}" width="${W}" height="${H - horizon}" fill="url(#dbtefx-fr-water)"/>
 <use href="#dbtefx-fr-bank" transform="matrix(1 0 0 -0.6 0 ${n1(horizon * 1.6 + 6)})" opacity="0.4"/>
 <path d="${surface}" stroke="${moon}" stroke-opacity="0.07" stroke-width="1.5"/>
-<ellipse cx="1330" cy="${horizon + 140}" rx="240" ry="170" fill="url(#dbtefx-fr-moon)"/>
+<ellipse cx="1100" cy="${horizon + 140}" rx="240" ry="170" fill="url(#dbtefx-fr-moon)"/>
 ${shimmer}
 <ellipse cx="420" cy="${horizon + 6}" rx="560" ry="30" fill="url(#dbtefx-fr-mist)" ${anim('drift', 30, 0, 'ease-in-out')}/>
 <ellipse cx="1150" cy="${horizon + 12}" rx="480" ry="26" fill="url(#dbtefx-fr-mist)" ${anim('drift', 36, 12, 'ease-in-out')}/>
@@ -141,7 +141,7 @@ ${pad(1500, 640, 112, 110, 0.33, 0.3)}
 ${lotus(1130, 712, 1.1, 3)}
 ${pad(1150, 836, 130, 300, 0.36, 0.3)}
 ${pad(1400, 770, 290, 215, 0.33, 0.34)}
-${cardArt(t, { id: 'dbtefx-fr-hero', card: CARDS.desFrog, x: 1040, y: 430, w: 440, h: 400, focus: [0.58, 0.58], zoom: 1.05, blend: 'normal', feather: 0.7, fade: 0.55, backdrop: mix(t.bg, t.accent, 0.1), backdropAmt: 0.5, glow: t.accent, breathe: 10 })}
+${cardArt(t, { id: 'dbtefx-fr-hero', card: CARDS.desFrog, x: 1040, y: 430, w: 440, h: 400, focus: [0.58, 0.58], zoom: 1.05, blend: 'normal', feather: 0.82, fade: 0.55, grade: 'saturate(0.85)', tint: mix(t.accent, t.bg, 0.25), tintAmt: 0.35, backdrop: mix(t.bg, t.accent, 0.1), backdropAmt: 0.5, glow: t.accent, breathe: 10 })}
 <!--near-->
 <g fill="${reedC}" stroke="${moon}" stroke-opacity="0.18">${blade(1490, 400, -40, 9)}${blade(1450, 300, 18, 8)}${blade(1530, 250, -30, 7)}</g>${cattail(1470, 500, -28, 2)}${cattail(1420, 410, -8, 0.7)}`;
 };
