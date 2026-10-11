@@ -563,7 +563,7 @@ export const PRESETS = [
       border: '#9aa3b0',
       text: '#151a22',
       muted: '#4a5363',
-      link: '#0b5cad',
+      link: '#084a8c',
       accent: '#0d6ecd',
       accentText: '#ffffff',
       accent2: '#d0312d',

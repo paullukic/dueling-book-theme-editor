@@ -5,11 +5,13 @@ import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, skinCss } from './skins';
+import { clearInk, inkCss, inkPass } from './inkGuard';
 
 const AREA_IDS = Object.keys(AREA_CSS);
 const CUSTOM_ID = 'dbte-theme-custom';
 const ART_DELAY_MS = 150;
 const FIELD_RETRY_MS = [5000, 15000, 45000];
+const INK_DELAY_MS = 600; // after DuelingBook stops changing the page
 
 // One <style> per area so each can be switched off on its own. Area sheets
 // are static; colour edits rewrite the variables block in place, and the
@@ -127,6 +129,28 @@ const ThemeEffect = () => {
     };
   }, [fieldOn, artTokens, fieldRetry]);
   useStyle('dbte-theme-field', fieldOn ? field : null);
+
+  // Re-inks DuelingBook text that the theme left unreadable; runs after the
+  // page settles and again whenever DuelingBook adds or changes text.
+  const textColor = tokens.text;
+  useStyle('dbte-theme-ink', on ? inkCss : null);
+  useEffect(() => {
+    if (!on) return undefined;
+    const root = document.getElementById('content') || document.body;
+    let timer = null;
+    const schedule = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => inkPass(root, textColor), INK_DELAY_MS);
+    };
+    const observer = new MutationObserver(schedule);
+    observer.observe(root, { childList: true, subtree: true, characterData: true });
+    schedule();
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      clearInk(root);
+    };
+  }, [on, textColor, tokens, areas]);
 
   const custom = s.customCssEnabled && customCss ? customCss : null;
   useStyle(CUSTOM_ID, custom);

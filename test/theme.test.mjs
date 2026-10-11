@@ -9,6 +9,7 @@ import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCs
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { launcherBottom } from '../src/lib/layout.js';
+import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
 
 test('theme: off by default so updates change nothing', () => {
   assert.equal(DEFAULTS.themeEnabled, false);
@@ -278,4 +279,14 @@ test('skins: chips and spiral art follow the theme', () => {
     assert.ok(skinBackdrop(id, tokens).length > 20, `${id} backdrop for chip`);
     assert.match(skinCss(id, tokens), /#spiral \{ filter: grayscale\(1\) sepia\(1\) saturate\(2\.6\) hue-rotate\(-?\d+deg\)/, id);
   });
+});
+
+test('ink guard: re-inks only unreadable text, preferring the theme colour', () => {
+  assert.equal(inkFor('#ffffff', '#101418', '#eeeeee'), null, 'readable stays');
+  assert.equal(inkFor('#ffffff', '#f6efdc', '#2b2115'), 'theme', 'white on parchment takes the theme text');
+  assert.equal(inkFor('#ffffff', '#f6efdc', '#f0f0f0'), 'dark', 'theme text unreadable there too');
+  assert.equal(inkFor('#000000', '#0d0f13', '#000000'), 'light');
+  assert.equal(inkFor('rgb(1,2,3)', '#ffffff', '#000000'), null, 'only hex input');
+  assert.ok(inkCss.includes('html body #content [data-dbte-ink="theme"][data-dbte-ink][data-dbte-ink]'));
+  assert.ok(inkCss.includes('{ color: var(--dbt-text) !important; }'));
 });
