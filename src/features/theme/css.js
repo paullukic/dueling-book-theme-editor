@@ -26,9 +26,6 @@ const lightCss = `
 :root { --dbt-glass-soft: color-mix(in srgb, var(--dbt-surface) 94%, transparent); --dbt-title: color-mix(in srgb, var(--dbt-text) 88%, var(--dbt-accent)); }
 /* The black veil DuelingBook lays over its stage greys the whole page. */
 html body #dark { background-color: transparent !important; }
-html body #main_menu .menu_btn > span { color: var(--dbt-text) !important; text-shadow: none !important; }
-/* Long labels ("Deck Constructor") touch the tile edges: shrink the label only, around its centre. */
-html body #main_menu .menu_btn > .content:not(.dbte-small-menu) + span { transform: scale(0.88); }
 /* Panel titles: tinted ink on a plate of the panel colour, so no border line runs through the words. */
 html body #duel_room .format_txt, html body #duel_room span.arial_black2, html body #settings .admin_lbl {
   color: var(--dbt-title) !important; text-shadow: none !important;
@@ -142,7 +139,7 @@ const ROUNDED_TEXT = [
   '.body_txt', '.chat_top span', '.arial_rounded18', '.arial_rounded20', '.arial_rounded25', '.bisque',
   '.kristenitc', '.connection_status', '.connection_status2',
 ];
-const TITLE_TEXT = ['.menu_btn .content span', '.title1', '.title2', '.subtitle', '.title_txt', '.arial_black', '.arial_black2'];
+const TITLE_TEXT = ['.menu_btn > span', '.title1', '.title2', '.subtitle', '.title_txt', '.arial_black', '.arial_black2'];
 const sel = (list, extra = []) => [...list.map((x) => `html #content ${x}`), ...extra].join(', ');
 
 // Vertical metrics of the fonts DuelingBook positions its text for (OS/2
@@ -362,10 +359,14 @@ html #main_menu .menu_btn .content {
   box-shadow: var(--dbt-rest-cue), inset 0 1px 0 var(--dbt-lit), inset 0 -3px 0 var(--dbt-shade), inset 0 0 0 1px var(--dbt-line), 0 12px 26px -14px var(--dbt-shade-strong) !important;
   transition: background-color 0.15s, border-color 0.15s, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s;
 }
-html #main_menu .menu_btn .content span { color: var(--dbt-text) !important; text-shadow: none !important; }
+/* The label is the tile's sibling span, not inside .content. */
+html #main_menu .menu_btn > span { color: var(--dbt-text) !important; text-shadow: none !important; transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1); }
 /* Long labels ("Deck Constructor") are wider than the full-size tile; shrink
    the label only, around its own centre, so nothing else moves. */
-html #main_menu .menu_btn .content:not(.dbte-small-menu) span { transform: scale(0.86); }
+html #main_menu .menu_btn > .content:not(.dbte-small-menu) + span { transform: scale(0.86); }
+/* The label rides up with the lifted tile and settles back with it when pressed. */
+html #main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span { transform: translateY(-3px) scale(0.86); }
+html #main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span { transform: scale(0.86); transition-duration: 0.05s; }
 html #main_menu .menu_btn:hover .content {
   background: var(--dbt-hover) !important;
   border-left-color: var(--dbt-accent) !important;
