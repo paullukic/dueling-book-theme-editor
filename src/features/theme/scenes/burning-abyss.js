@@ -1,12 +1,14 @@
 import { mix } from '../../../lib/color.js';
 import { n1, rng } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Burning Abyss: the Inferno seen from its rim. On the far rim stands the
 // Gate of Hell, its inscription glowing; below it nine terraced circles fall
 // away to a sulphur-white pit. Smoke climbs out of the abyss and Malebranche
 // glide over it; one crouches on the gate's apex like a gargoyle, wings
-// spread. In the foreground Dante the Pilgrim, seen from behind on a rock,
-// laurel-crowned, holds his book out like a lamp toward the Gate.
+// spread. On the near rim stands Dante, Traveler of the Burning Abyss: the
+// real card artwork (loaded live from DuelingBook, cardart.js), lit from the
+// pit; offline the funnel, gate and rock still stand.
 const burningAbyss = (t) => {
   const rand = rng(77);
   const sulphur = t.accent;
@@ -60,7 +62,7 @@ const burningAbyss = (t) => {
     const wing = (d) => `<path d="M0 0C${n1(d * 14 * s)} ${n1(-16 * s)} ${n1(d * 34 * s)} ${n1(-20 * s)} ${n1(d * 52 * s)} ${n1(-12 * s)}L${n1(d * 46 * s)} ${n1(-4 * s)}L${n1(d * 40 * s)} ${n1(2 * s)}L${n1(d * 30 * s)} ${n1(-1 * s)}L${n1(d * 22 * s)} ${n1(5 * s)}L${n1(d * 12 * s)} ${n1(2 * s)}Z"/>`;
     return `<g transform="translate(${x} ${y})"><g style="animation: dbtefx-ba-glide ${dur}s ease-in-out ${n1(-delay)}s infinite;"><g style="animation: dbtefx-ba-flap ${n1(1.8 + s * 0.4)}s ease-in-out ${n1(-delay)}s infinite;">${wing(1)}${wing(-1)}</g><path d="M0 ${n1(-9 * s)}L${n1(2.6 * s)} ${n1(-4 * s)}L${n1(2 * s)} ${n1(9 * s)}L0 ${n1(16 * s)}L${n1(-2 * s)} ${n1(9 * s)}L${n1(-2.6 * s)} ${n1(-4 * s)}Z"/><path d="M${n1(-1.6 * s)} ${n1(-8 * s)}L${n1(-4 * s)} ${n1(-14 * s)}M${n1(1.6 * s)} ${n1(-8 * s)}L${n1(4 * s)} ${n1(-14 * s)}M0 ${n1(15 * s)}Q${n1(5 * s)} ${n1(24 * s)} ${n1(-2 * s)} ${n1(32 * s)}" fill="none" stroke="${ink}" stroke-width="${n1(1.4 * s)}"/></g></g>`;
   };
-  const flyers = flyer(1120, 560, 1.5, 17, 0) + flyer(1330, 610, 1.1, 21, 7) + flyer(1240, 500, 1.9, 25, 13);
+  const flyers = flyer(1120, 560, 1.5, 17, 0) + flyer(1060, 600, 1.1, 21, 7) + flyer(1240, 500, 1.9, 25, 13);
 
   // Jagged ridges.
   const ridge = (y0, amp, seed, step, x0 = -20, x1 = 1620) => {
@@ -96,41 +98,10 @@ const burningAbyss = (t) => {
 
   // Mirror a half-path (drawn for the left side) to the right.
   const mirror = (d) => d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (m, x, y) => `${n1(-x)} ${y}`);
-  const pair = (d) => d + mirror(d);
 
-  // Dante the Pilgrim in the foreground, seen from behind on a rock above
-  // the abyss: red traveller's tunic, satchel strap, sword at the hip, dark
-  // braid under the laurel crown, holding his book out like a lamp toward
-  // the Gate. Lit from the pit on his left, in shadow on his right.
-  let wreath = '';
-  for (let i = 0; i < 11; i++) {
-    const an = Math.PI * (0.05 + i * 0.09);
-    const lx = n1(Math.cos(an) * 26);
-    const ly = n1(-372 - Math.sin(an) * 6);
-    wreath += `<ellipse cx="${lx}" cy="${ly}" rx="6" ry="2.6" transform="rotate(${n1(-25 + i * 6)} ${lx} ${ly})"/>`;
-  }
-  const dante = `<g transform="translate(1322 892) scale(1.05)">
-<ellipse cx="-128" cy="-346" rx="110" ry="110" fill="url(#dbtefx-ba-book)" style="animation: dbtefx-pulse 5s ease-in-out infinite;"/>
-<path d="M-40 -244L-88 -112" stroke="${ink}" stroke-width="9" stroke-linecap="round"/><path d="M-50 -256L-30 -246" stroke="${sulphurLit}" stroke-width="4" stroke-linecap="round"/>
-<path d="${pair('M-6 -150L-28 -146L-26 -64L-24 -14L-38 0H-8L-8 -14L-6 -64Z')}" fill="${ink}"/>
-<path d="M-28 -146L-26 -64L-24 -14" stroke="${sulphur}" stroke-opacity="0.5" stroke-width="2"/>
-<path d="${pair('M0 -252H-38C-44 -212 -52 -172 -58 -142C-30 -134 -10 -136 0 -138Z')}" fill="url(#dbtefx-ba-tunic)"/>
-<path d="${pair('M0 -342H-30C-46 -340 -56 -332 -58 -318C-54 -292 -44 -270 -38 -252H0Z')}" fill="url(#dbtefx-ba-tunic)"/>
-<path d="M-40 -256H40V-244H-40Z" fill="${ink}"/>
-<path d="M-38 -336L42 -240" stroke="${mix(ash, ink, 0.55)}" stroke-width="8"/>
-<path d="M30 -250H62V-212C62 -206 58 -202 52 -202H36C32 -202 30 -206 30 -212Z" fill="${mix(ash, ink, 0.6)}" stroke="${ink}" stroke-width="2"/>
-<path d="M52 -322Q66 -290 62 -262Q60 -236 58 -214" fill="none" stroke="${ink}" stroke-width="15" stroke-linecap="round"/>
-<path d="M-50 -326Q-80 -320 -94 -298" fill="none" stroke="url(#dbtefx-ba-tunic)" stroke-width="19" stroke-linecap="round"/>
-<path d="M-94 -298Q-110 -316 -120 -338" fill="none" stroke="${ink}" stroke-width="13" stroke-linecap="round"/>
-<path d="M-8 -352H8V-336H-8Z" fill="${ink}"/>
-<ellipse cx="0" cy="-364" rx="24" ry="28" fill="${ink}"/>
-<path d="M-4 -342C-6 -320 2 -300 -2 -270C2 -292 10 -318 6 -342Z" fill="${ink}"/>
-<path d="M-2 -332l6 8M-2 -318l6 8M-2 -304l5 8" stroke="${mix(ink, t.accent2, 0.3)}" stroke-width="1.6"/>
-<g fill="${sulphur}">${wreath}</g>
-<path d="M-24 -364C-24 -384 -12 -392 0 -392M-58 -318C-54 -292 -44 -270 -38 -252C-44 -212 -52 -172 -58 -142M-50 -334Q-80 -326 -96 -306" fill="none" stroke="${sulphurLit}" stroke-opacity="0.75" stroke-width="2.2"/>
-<path d="M58 -318C54 -292 44 -270 38 -252C44 -212 52 -172 58 -142" fill="none" stroke="${ember}" stroke-opacity="0.35" stroke-width="2"/>
-<path d="M-142 -344L-128 -354L-114 -346L-114 -330L-128 -338L-142 -330Z" fill="${sulphurLit}"/><path d="M-128 -354V-338" stroke="${sulphur}" stroke-width="1.2"/>
-</g>`;
+  // Dante, Traveler of the Burning Abyss: the real card artwork on the near
+  // rim, lit from the pit below.
+  const dante = cardArt(t, { id: 'dbtefx-ba-hero', card: CARDS.dante, x: 1160, y: 290, w: 380, h: 640, focus: [0.48, 0.36], zoom: 0.86, blend: 'normal', feather: 0.8, fade: 0.65, grade: 'brightness(0.8) contrast(1.35) saturate(0.9)', tint: ember, tintAmt: 0.3, backdrop: ink, backdropAmt: 0.5, glow: sulphur, breathe: 16 });
   const outcrop = `<path d="M1240 920L1262 880L1300 862L1350 858L1400 870L1470 866L1520 852L1580 846L1640 850V920Z" fill="url(#dbtefx-ba-spire)"/><path d="M1262 880L1300 862L1350 858L1400 870L1470 866L1520 852L1580 846L1640 850" fill="none" stroke="${ember}" stroke-opacity="0.5" stroke-width="2.4"/>`;
 
   // The crouching Malebranche on the gate: horned bone skull, hunched
@@ -169,7 +140,7 @@ ${demonWing(-1)}${demonWing(1)}
 @keyframes dbtefx-ba-glide { 0%, 100% { transform: translate(0, 0) rotate(-6deg); } 50% { transform: translate(-70px, -26px) rotate(8deg); } }
 @keyframes dbtefx-ba-wingl { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-7deg); } }
 @keyframes dbtefx-ba-wingr { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(7deg); } }
-@keyframes dbtefx-ba-breathe { 0%, 100% { opacity: 0.7; transform: scale(0.94); } 50% { opacity: 1; transform: scale(1.08); } }</style>
+@keyframes dbtefx-ba-breathe { 0%, 100% { opacity: 0.7; transform: scale(0.94); } 50% { opacity: 1; transform: scale(1.08); } } ${CARD_ART_KEYFRAMES}</style>
 <defs>${walls}
 <linearGradient id="dbtefx-ba-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${ink}"/><stop offset="0.5" stop-color="${t.bg}"/><stop offset="1" stop-color="${mix(t.bg, ember, 0.2)}"/></linearGradient>
 <radialGradient id="dbtefx-ba-haze" cx="0.79" cy="0.62" r="0.55"><stop offset="0" stop-color="${sulphur}" stop-opacity="0.3"/><stop offset="0.45" stop-color="${ember}" stop-opacity="0.12"/><stop offset="1" stop-color="${ember}" stop-opacity="0"/></radialGradient>
@@ -179,13 +150,11 @@ ${demonWing(-1)}${demonWing(1)}
 <radialGradient id="dbtefx-ba-pit"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.2" stop-color="${sulphurLit}" stop-opacity="0.9"/><stop offset="0.5" stop-color="${sulphur}" stop-opacity="0.5"/><stop offset="1" stop-color="${ember}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ba-rimglow"><stop offset="0.55" stop-color="${ember}" stop-opacity="0.2"/><stop offset="1" stop-color="${ember}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ba-smoke"><stop offset="0" stop-color="${mix(ash, sulphur, 0.5)}" stop-opacity="0.55"/><stop offset="1" stop-color="${ash}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-ba-book"><stop offset="0" stop-color="${sulphurLit}" stop-opacity="0.8"/><stop offset="1" stop-color="${sulphur}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-ba-body" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="${mix(ember, ink, 0.35)}"/><stop offset="0.25" stop-color="${ink}"/><stop offset="0.8" stop-color="${ink}"/><stop offset="1" stop-color="${mix(ember, ink, 0.55)}"/></linearGradient>
 <linearGradient id="dbtefx-ba-horn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(bone, ink, 0.3)}"/><stop offset="1" stop-color="${ink}"/></linearGradient>
 <linearGradient id="dbtefx-ba-skull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(bone, ink, 0.5)}"/><stop offset="1" stop-color="${mix(bone, ink, 0.85)}"/></linearGradient>
 <linearGradient id="dbtefx-ba-wingl" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${ink}" stop-opacity="0.95"/><stop offset="1" stop-color="${mix(ember, t.bg, 0.45)}" stop-opacity="0.9"/></linearGradient>
 <linearGradient id="dbtefx-ba-wingr" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${ink}" stop-opacity="0.95"/><stop offset="1" stop-color="${mix(ember, t.bg, 0.55)}" stop-opacity="0.9"/></linearGradient>
-<linearGradient id="dbtefx-ba-tunic" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.danger, sulphur, 0.25)}"/><stop offset="0.35" stop-color="${mix(t.danger, t.bg, 0.45)}"/><stop offset="1" stop-color="${mix(t.danger, ink, 0.75)}"/></linearGradient>
 <linearGradient id="dbtefx-ba-spire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(rock, ember, 0.3)}"/><stop offset="0.3" stop-color="${ink}"/></linearGradient>
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-ba-sky)"/>
@@ -204,8 +173,8 @@ ${demon}
 ${smoke}
 <g fill="${ink}">${flyers}</g>
 <!--near-->
-${outcrop}
 ${dante}
+${outcrop}
 `;
 };
 

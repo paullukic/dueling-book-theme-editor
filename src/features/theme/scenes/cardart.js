@@ -20,6 +20,26 @@ export const CARDS = {
   albaz: 10814,
   mirrorjade: 12578,
   albion: 11543,
+  blueEyes: 513,
+  redEyes: 3514,
+  darkMagician: 1000,
+  flamberge: 14415,
+  sacredGarunix: 14621,
+  faimena: 16480,
+  desFrog: 1105,
+  stardust: 4032,
+  utopia: 5095,
+  ancientGearGolem: 158,
+  doomKingArmageddon: 6892,
+  yubel: 4885,
+  dogma: 1130,
+  dante: 6836,
+  heraklinos: 1893,
+  judgmentDragon: 2333,
+  cyberDragon: 856,
+  neos: 1393,
+  elShaddollConstruct: 6535,
+  trishula: 6943,
 };
 
 export const cardArtUrl = (id) => `https://images.duelingbook.com/card-pics/${~~id}.jpg`;
@@ -58,9 +78,12 @@ const frames = {
  *   opacity  of the art
  *   rim      frame stroke colour (null: none); glow: halo colour (null: none)
  *   breathe  seconds of one slow breath (0: still), delay seconds
+ *   grade    CSS filter on the picture (e.g. 'contrast(1.4) brightness(0.8)'
+ *            sinks a busy card background so only the subject glows)
+ *   tint     colour washed over the art (blend 'color'), tintAmt its opacity
  */
 export const cardArt = (t, o) => {
-  const { id, card, x, y, w, h, frame = 'feather', feather = 0.5, fade = 0.5, focus = [0.5, 0.5], zoom = 1.1, blend = 'normal', backdrop = t.bg, backdropAmt = 0.9, opacity = 1, rim = null, glow = null, breathe = 14, delay = 0 } = o;
+  const { id, card, x, y, w, h, frame = 'feather', feather = 0.5, fade = 0.5, focus = [0.5, 0.5], zoom = 1.1, blend = 'normal', backdrop = t.bg, backdropAmt = 0.9, opacity = 1, rim = null, glow = null, breathe = 14, delay = 0, grade = '', tint = null, tintAmt = 0.4 } = o;
   const S = Math.max(w, h) * zoom;
   // Art at least as big as the window covers it; smaller art floats inside.
   const clamp = (v, lo, hi) => (lo > hi ? v : Math.min(hi, Math.max(lo, v)));
@@ -79,17 +102,34 @@ export const cardArt = (t, o) => {
     ? `<path transform="translate(${n1(x)} ${n1(y)})" d="${shapeD}" fill="none" stroke="url(#${id}-r)" stroke-width="2.5"/>`
     : '';
   const solid = n1((1 - feather) * 100) / 100;
+  // Smoothstep falloff from solid to the window's edge: no visible rim where
+  // a linear ramp would stop dead.
+  const falloff = [0, 0.2, 0.4, 0.6, 0.8, 1]
+    .map((k) => `<stop offset="${n1((solid + (1 - solid) * k) * 1000) / 1000}" stop-color="${mix('#000000', '#ffffff', 1 - k * k * (3 - 2 * k))}"/>`)
+    .join('');
   // The picture's own edges fade too (it floats when smaller than its
   // window); a CSS mask, so the fade moves with the breathing art.
   const ramp = (dir) => `linear-gradient(${dir}, transparent, #000000 12%, #000000 88%, transparent)`;
-  const edges = `-webkit-mask-image: ${ramp('to right')}, ${ramp('to bottom')}; -webkit-mask-composite: source-in; mask-image: ${ramp('to right')}, ${ramp('to bottom')}; mask-composite: intersect;`;
-  const art = `<foreignObject x="${ix}" y="${iy}" width="${n1(S)}" height="${n1(S)}"${motion}><div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; background: url(${cardArtUrl(card)}) center / cover no-repeat; ${edges}"></div></foreignObject>`;
+  const cssMask = (a, b) => `-webkit-mask-image: ${a}, ${b}; -webkit-mask-composite: source-in; mask-image: ${a}, ${b}; mask-composite: intersect;`;
+  const picture = `background: url(${cardArtUrl(card)}) center / cover no-repeat; ${cssMask(ramp('to right'), ramp('to bottom'))}${grade ? ` filter: ${grade};` : ''}`;
+  // The soft window is a CSS mask too: Chrome hard-edges an SVG mask on a
+  // foreignObject. A frame shape keeps the SVG mask (its edge is the frame).
+  const feathered = !shapeD;
+  const css = (k) => `rgba(0, 0, 0, ${n1((1 - k * k * (3 - 2 * k)) * 1000) / 1000}) ${n1((solid + (1 - solid) * k) * 1000) / 10}%`;
+  const windowMask = cssMask(
+    `radial-gradient(closest-side, ${[0, 0.2, 0.4, 0.6, 0.8, 1].map(css).join(', ')})`,
+    `linear-gradient(to bottom, #000000 45%, rgba(0, 0, 0, ${n1((1 - fade) * 1000) / 1000}))`,
+  );
+  const breath = breathe ? ` transform-origin: ${n1(cx - ix)}px ${n1(cy - iy)}px; animation: dbtefx-ca-breathe ${breathe}s ease-in-out ${n1(-delay)}s infinite;` : '';
+  const art = feathered
+    ? `<foreignObject ${box}><div xmlns="http://www.w3.org/1999/xhtml" style="position: relative; width: 100%; height: 100%; overflow: hidden; ${windowMask}"><div style="position: absolute; left: ${n1(ix - x)}px; top: ${n1(iy - y)}px; width: ${n1(S)}px; height: ${n1(S)}px; ${picture}${breath}"></div></div></foreignObject>`
+    : `<foreignObject x="${ix}" y="${iy}" width="${n1(S)}" height="${n1(S)}"${motion}><div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; ${picture}"></div></foreignObject>`;
   return `<defs>
-<radialGradient id="${id}-f" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff"/><stop offset="${solid}" stop-color="#ffffff"/><stop offset="1" stop-color="#000000"/></radialGradient>
+<radialGradient id="${id}-f" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff"/>${falloff}</radialGradient>
 <linearGradient id="${id}-s" x1="0" y1="0" x2="0" y2="1"><stop offset="0.45" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="${fade}"/></linearGradient>
-<radialGradient id="${id}-b" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${backdrop}" stop-opacity="${backdropAmt}"/><stop offset="${solid}" stop-color="${backdrop}" stop-opacity="${n1(backdropAmt * 80) / 100}"/><stop offset="1" stop-color="${backdrop}" stop-opacity="0"/></radialGradient>
+<radialGradient id="${id}-b" cx="0.5" cy="0.5" r="0.5">${[0, 0.25, 0.5, 0.7, 0.85, 1].map((k) => `<stop offset="${k}" stop-color="${backdrop}" stop-opacity="${n1(backdropAmt * (1 - k * k * (3 - 2 * k)) * 1000) / 1000}"/>`).join('')}</radialGradient>
 <mask id="${id}-m" maskUnits="userSpaceOnUse" ${box}>${fill(`url(#${id}-f)`)}<rect ${box} fill="url(#${id}-s)"/></mask>
 ${glow ? `<radialGradient id="${id}-g"><stop offset="0" stop-color="${glow}" stop-opacity="0.45"/><stop offset="0.6" stop-color="${glow}" stop-opacity="0.12"/><stop offset="1" stop-color="${glow}" stop-opacity="0"/></radialGradient>` : ''}
 ${rim ? `<linearGradient id="${id}-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(rim, '#ffffff', 0.35)}"/><stop offset="0.6" stop-color="${rim}" stop-opacity="0.6"/><stop offset="1" stop-color="${rim}" stop-opacity="0"/></linearGradient>` : ''}
-</defs>${halo}${fill(`url(#${id}-b)`)}<g mask="url(#${id}-m)" opacity="${opacity}" style="mix-blend-mode: ${blend};">${art}</g>${rimLine}`;
+</defs>${halo}${fill(`url(#${id}-b)`)}<g${feathered ? '' : ` mask="url(#${id}-m)"`} opacity="${opacity}" style="mix-blend-mode: ${blend};">${art}</g>${tint ? `<rect ${box} mask="url(#${id}-m)" fill="${tint}" opacity="${tintAmt}" style="mix-blend-mode: color;"/>` : ''}${rimLine}`;
 };
