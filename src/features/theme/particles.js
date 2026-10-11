@@ -169,15 +169,25 @@ export const stepSystems = (systems, dt, t, w, h) => {
 
 // ---------- drawing ----------
 
-const SHAPES = {
+const SHAPE_PATHS = {
   petal: 'M0 -1C0.75 -0.85 0.85 0.35 0 1C-0.85 0.35 -0.75 -0.85 -0.16 -0.76L0 -1Z',
   leaf: 'M0 -1C0.6 -0.6 0.6 0.6 0 1C-0.6 0.6 -0.6 -0.6 0 -1ZM0 -1V1.2',
   feather: 'M0 -1C0.32 -0.5 0.3 0.5 0 1C-0.3 0.5 -0.32 -0.5 0 -1ZM0 -1.05V1.15',
 };
+// Parsed once, on first draw (Path2D exists only in the browser).
+let shapes = null;
+const shapeOf = (kind) => {
+  if (!shapes) shapes = Object.fromEntries(Object.entries(SHAPE_PATHS).map(([k, d]) => [k, new Path2D(d)]));
+  return shapes[kind];
+};
 
+// Glow sprites per colour; colour-picker drags would add one per tick, so
+// the cache starts over once it holds more than a theme could use.
 const sprites = new Map();
+const MAX_SPRITES = 48;
 const glowSprite = (hex) => {
   if (!sprites.has(hex)) {
+    if (sprites.size >= MAX_SPRITES) sprites.clear();
     const c = document.createElement('canvas');
     c.width = 64;
     c.height = 64;
@@ -248,7 +258,7 @@ const drawSystems = (ctx, systems, tokens, t, w, h, px, py, light) => {
         ctx.scale(p.size * (0.25 + 0.75 * Math.abs(Math.cos(t * (k.flutter || 1) + p.phase))), p.size);
         ctx.globalAlpha = alpha * 0.85;
         ctx.fillStyle = col;
-        const path = new Path2D(SHAPES[sys.kind]);
+        const path = shapeOf(sys.kind);
         ctx.fill(path);
         if (sys.kind !== 'petal') {
           ctx.lineWidth = 0.08;
@@ -303,10 +313,13 @@ const drawSystems = (ctx, systems, tokens, t, w, h, px, py, light) => {
 const TILT_X = 4;
 const TILT_Y = 6;
 const IDLE_S = 4;
+const RESIZE_MS = 200;
 
 // Runs a theme's fx inside `root` (the stage from sceneMarkup): the camera
 // tilt and the particle canvas, in one animation loop. Returns a stop
-// function. `still` draws one frame and holds (Motion off or reduced motion).
+// function. Still (Motion off, or the system asks for reduced motion, even
+// later on) draws one frame and redraws it only when the window resizes.
+// Without particles the loop runs only while the camera is moving.
 export const startFx = (root, presetId, tokens, { still = false } = {}) => {
   const stage = root && root.querySelector('.dbtefx-stage');
   const canvas = root && root.querySelector('.dbtefx-canvas');
@@ -314,44 +327,54 @@ export const startFx = (root, presetId, tokens, { still = false } = {}) => {
   const ctx = canvas ? canvas.getContext('2d') : null;
   const light = luminance(tokens.surface) > 0.4;
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  const mql = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  const isStill = () => still || (mql && mql.matches);
   let w = 0;
   let h = 0;
   let systems = [];
-  const resize = () => {
-    w = window.innerWidth;
-    h = window.innerHeight;
-    if (!ctx) return;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    systems = createSystems(presetId, w, h);
-  };
-  resize();
+  let raf = 0;
+  let t = 0;
+  let last = 0;
   let px = 0;
   let py = 0;
   let tx = 0;
   let ty = 0;
   let idle = IDLE_S;
-  const onPointer = (e) => {
-    tx = e.clientX / w - 0.5;
-    ty = e.clientY / h - 0.5;
-    idle = 0;
-  };
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (still || reduce) {
+
+  const drawStill = () => {
+    stage.style.transform = '';
     if (ctx) drawSystems(ctx, systems, tokens, 0, w, h, 0, 0, light);
-    return () => ctx && ctx.clearRect(0, 0, w, h);
-  }
-  let raf = 0;
-  let last = performance.now();
-  let t = 0;
+  };
+  // The canvas fills the (slightly oversized) stage: size its bitmap to its
+  // own layout box so particles stay sharp.
+  const resize = () => {
+    w = (canvas && canvas.offsetWidth) || window.innerWidth;
+    h = (canvas && canvas.offsetHeight) || window.innerHeight;
+    if (ctx) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      systems = createSystems(presetId, w, h);
+    }
+    if (isStill()) drawStill();
+  };
+  let resizeTimer = 0;
+  const onResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, RESIZE_MS);
+  };
+
   const frame = (now) => {
+    raf = 0;
+    if (isStill() || document.hidden) return;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     t += dt;
     idle += dt;
-    const gx = idle > IDLE_S ? 0.22 * Math.sin(t * 0.07) : tx;
-    const gy = idle > IDLE_S ? 0.14 * Math.cos(t * 0.05) : ty;
+    // The idle drift only runs alongside particles; a tilt-only scene settles and sleeps.
+    const drift = ctx && idle > IDLE_S;
+    const gx = drift ? 0.22 * Math.sin(t * 0.07) : tx;
+    const gy = drift ? 0.14 * Math.cos(t * 0.05) : ty;
     px += (gx - px) * Math.min(1, dt * 2.5);
     py += (gy - py) * Math.min(1, dt * 2.5);
     stage.style.transform = `rotateX(${(-py * TILT_X).toFixed(3)}deg) rotateY(${(px * TILT_Y).toFixed(3)}deg)`;
@@ -359,24 +382,43 @@ export const startFx = (root, presetId, tokens, { still = false } = {}) => {
       stepSystems(systems, dt, t, w, h);
       drawSystems(ctx, systems, tokens, t, w, h, px, py, light);
     }
+    const settled = Math.abs(gx - px) < 0.001 && Math.abs(gy - py) < 0.001;
+    if (ctx || !settled) raf = requestAnimationFrame(frame);
+  };
+  const wake = () => {
+    if (raf || isStill() || document.hidden) return;
+    last = performance.now();
     raf = requestAnimationFrame(frame);
   };
-  const onVisibility = () => {
-    cancelAnimationFrame(raf);
-    if (!document.hidden) {
-      last = performance.now();
-      raf = requestAnimationFrame(frame);
-    }
+  const onPointer = (e) => {
+    tx = e.clientX / window.innerWidth - 0.5;
+    ty = e.clientY / window.innerHeight - 0.5;
+    idle = 0;
+    wake();
   };
-  window.addEventListener('resize', resize);
+  const onVisibility = () => (document.hidden ? (cancelAnimationFrame(raf), (raf = 0)) : wake());
+  const onMotionPref = () => {
+    if (isStill()) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      drawStill();
+    } else wake();
+  };
+
+  resize();
+  window.addEventListener('resize', onResize);
   window.addEventListener('pointermove', onPointer, { passive: true });
   document.addEventListener('visibilitychange', onVisibility);
-  raf = requestAnimationFrame(frame);
+  if (mql && mql.addEventListener) mql.addEventListener('change', onMotionPref);
+  if (isStill()) drawStill();
+  else wake();
   return () => {
     cancelAnimationFrame(raf);
-    window.removeEventListener('resize', resize);
+    clearTimeout(resizeTimer);
+    window.removeEventListener('resize', onResize);
     window.removeEventListener('pointermove', onPointer);
     document.removeEventListener('visibilitychange', onVisibility);
+    if (mql && mql.removeEventListener) mql.removeEventListener('change', onMotionPref);
     stage.style.transform = '';
     if (ctx) ctx.clearRect(0, 0, w, h);
   };

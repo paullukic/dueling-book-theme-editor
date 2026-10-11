@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { classifyStorageError } from './storageErrors';
+import { sameShape } from './shape.js';
 
 // Per-key value in chrome.storage.local (5 MB budget, no write quota) for
 // bulky data: notes text, the action log, the background image.
@@ -129,11 +130,6 @@ export const mutateLocal = (key, fn) => {
 
 // [value, setValue, loaded]. Function updates are applied to the stored value
 // (see mutateLocal); plain values replace it.
-// A stored value only counts when it has the same shape as the default, so a
-// damaged entry (say a number where text belongs) cannot crash the panel.
-const sameShape = (v, initial) =>
-  initial === undefined || (Array.isArray(initial) ? Array.isArray(v) : typeof v === typeof initial && (v === null) === (initial === null));
-
 export const useLocal = (key, initial) => {
   const [value, setValue] = useState(initial);
   const [loaded, setLoaded] = useState(false);

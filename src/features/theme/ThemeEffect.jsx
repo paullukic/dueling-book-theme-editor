@@ -14,6 +14,7 @@ const CUSTOM_ID = 'dbte-theme-custom';
 const ART_DELAY_MS = 150;
 const FIELD_RETRY_MS = [5000, 15000, 45000];
 const INK_DELAY_MS = 600; // after DuelingBook stops changing the page
+const INK_FULL_PASS = 200; // more changed spots than this: check the whole page
 
 // One <style> per area so each can be switched off on its own. Area sheets
 // are static; colour edits rewrite the variables block in place, and the
@@ -65,6 +66,7 @@ const useCustomLast = (active) => {
 const ThemeEffect = () => {
   const s = useSettings();
   const [customCss] = useLocal('customCss', '');
+  const [bgImage] = useLocal('background', '');
   const on = s.themeEnabled;
   const areas = s.themeAreas;
   const tokens = useStableTokens(s.themeTokens);
@@ -112,10 +114,11 @@ const ThemeEffect = () => {
   // tilted toward the pointer.
   const scene = useMemo(
     () =>
-      on && s.themeEffects && s.themeMotif
+      // Hidden under the user's own picture (pattern overlay off): don't run it at all.
+      on && s.themeEffects && s.themeMotif && !(s.backgroundEnabled && bgImage && !s.backgroundThemeOverlay)
         ? sceneMarkup(s.themePreset, artTokens, { still: !s.themeMotion, particles: !!PARTICLES[s.themePreset] })
         : '',
-    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens],
+    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens, s.backgroundEnabled, bgImage, s.backgroundThemeOverlay],
   );
   useEffect(() => {
     const el = document.getElementById(FX_ID);
@@ -165,14 +168,25 @@ const ThemeEffect = () => {
   useEffect(() => {
     if (!on) return undefined;
     const root = document.getElementById('content') || document.body;
+    // After the first full pass only what DuelingBook changed is checked, so
+    // a long chat log is not rescanned for every new line.
+    let pending = [root];
     let timer = null;
-    const schedule = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => inkPass(root, textColor), INK_DELAY_MS);
+    const flush = () => {
+      const roots = pending.length > INK_FULL_PASS ? [root] : pending;
+      pending = [];
+      inkPass(roots, textColor);
     };
-    const observer = new MutationObserver(schedule);
+    const observer = new MutationObserver((records) => {
+      records.forEach((r) => {
+        const target = r.type === 'characterData' ? r.target.parentElement : r.target;
+        if (target) pending.push(target);
+      });
+      clearTimeout(timer);
+      timer = setTimeout(flush, INK_DELAY_MS);
+    });
     observer.observe(root, { childList: true, subtree: true, characterData: true });
-    schedule();
+    timer = setTimeout(flush, INK_DELAY_MS);
     return () => {
       observer.disconnect();
       clearTimeout(timer);

@@ -11,6 +11,7 @@ import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { SCENE_IDS, sceneMarkup } from '../src/features/theme/scenes.js';
 import { PARTICLES, PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
 import { launcherBottom } from '../src/lib/layout.js';
+import { sameShape } from '../src/lib/shape.js';
 import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
 
 test('theme: off by default so updates change nothing', () => {
@@ -100,7 +101,9 @@ test('css: variables cover every token and areas use only variables', () => {
     // Shadows may use plain black or white for depth; every other colour comes from a token.
     const values = css.replace(/\[[^\]]*\]/g, '').replace(/(text|box)-shadow\s*:[^;]*;/g, '');
     assert.doesNotMatch(values, /#[0-9a-f]{3,8}\b|rgba?\(\s*\d/i, `${id} has a hard-coded colour`);
-    assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|font-size|line-height|left|top)\s*:/i, `${id} changes layout`);
+    // Our own pseudo-elements (e.g. the click strip under a lifted tile) may be positioned.
+    const own = css.replace(/[^{}]*::(before|after)[^{}]*\{[^}]*\}/g, '');
+    assert.doesNotMatch(own, /(?<![-\w])(width|height|padding|font-size|line-height|left|top)\s*:/i, `${id} changes layout`);
   });
 });
 
@@ -370,7 +373,31 @@ test('particles: every config is valid and the simulation keeps particles alive 
   assert.equal(PARTICLES.oled, undefined, 'OLED stays bare');
 });
 
-test('3D: UI depth uses transforms and shadows only', () => {
+test('3D: UI depth never moves a pressed control out from under the pointer', () => {
   assert.match(AREA_CSS.menu, /menu_btn:hover \.content \{[^}]*transform: translateY\(-3px\)/);
-  assert.match(AREA_CSS.widgets, /\.button:active[^{]*\{[^}]*transform: translateY\(1px\)/);
+  assert.match(AREA_CSS.menu, /menu_btn:hover \.content::after \{[^}]*bottom: -4px/, 'lifted tile keeps its old edge clickable');
+  assert.match(AREA_CSS.menu, /menu_btn:active \.content \{[^}]*transform: none/);
+  assert.doesNotMatch(AREA_CSS.widgets, /transform:/, 'buttons never move');
+});
+
+test('local values: a stored value only counts when it has the default shape', () => {
+  assert.equal(sameShape('a', ''), true);
+  assert.equal(sameShape(12345, ''), false);
+  assert.equal(sameShape([], {}), false);
+  assert.equal(sameShape({}, []), false);
+  assert.equal(sameShape(null, {}), false);
+  assert.equal(sameShape({ a: 1 }, {}), true);
+});
+
+test('particles: events (shooting stars, flashes, bursts) fire and finish', () => {
+  ['midnight', 'white-dragon', 'branded'].forEach((id) => {
+    const live = createSystems(id, 1280, 800);
+    let fired = 0;
+    for (let i = 0; i < 900; i++) {
+      stepSystems(live, 1 / 30, i / 30, 1280, 800);
+      live.forEach((sys) => { if (sys.active && sys.active.age === 0) fired++; });
+    }
+    assert.ok(fired >= 1, `${id} fired ${fired}`);
+    live.forEach((sys) => { if (sys.active) assert.ok(sys.active.age <= sys.active.life + 0.05, id); });
+  });
 });

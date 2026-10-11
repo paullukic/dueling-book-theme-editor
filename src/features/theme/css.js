@@ -142,7 +142,7 @@ html #content .button, html #content input[type=submit], html #content input[typ
   border-radius: var(--dbt-radius) !important;
   text-shadow: none !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.22), 0 3px 8px -4px rgba(0, 0, 0, 0.7);
-  transition: background-color 0.12s, border-color 0.12s, transform 0.08s;
+  transition: background-color 0.12s, border-color 0.12s, box-shadow 0.08s;
 }
 html #content .button.button_selected, html #content .button:hover,
 html #content input[type=submit]:hover, html #content input[type=button]:hover {
@@ -153,7 +153,6 @@ html #content .button.button_down, html #content .button:active, html #content i
   background: var(--dbt-press) !important;
   border-color: var(--dbt-accent) !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
-  transform: translateY(1px);
 }
 html #content .button.disabled, html #content .button2.disabled { color: var(--dbt-muted) !important; }
 
@@ -303,7 +302,11 @@ html #main_menu .menu_btn:hover .content {
   border-left-color: var(--dbt-accent) !important;
   transform: translateY(-3px);
 }
-html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: translateY(1px); transition-duration: 0.05s; }
+/* While lifted, an invisible strip keeps the tile's old bottom edge clickable. */
+html #main_menu .menu_btn:hover .content::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 4px; }
+/* Pressed: shadow only. Moving the tile under a held pointer could send the
+   mouseup elsewhere and lose the click. */
+html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: none; box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--dbt-line) !important; transition-duration: 0.05s; }
 html #main_menu .menu_btn.administrator_btn:hover .content { border-left-color: var(--dbt-warning) !important; }
 html #main_menu .main_menu_circle { border-color: var(--dbt-muted) !important; }
 html #main_menu .main_menu_circle .background { background-color: var(--dbt-accent) !important; }

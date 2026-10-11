@@ -30,16 +30,23 @@ ${sel('dark')} { color: #111111 !important; }
 
 const ownsText = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
 
-// Checks every visible element that holds text directly; returns how many
-// changed. Clears, reads, then writes in separate passes so the page is
-// restyled once, not once per element.
-export const inkPass = (root, themeText) => {
-  const els = [...root.querySelectorAll('*')].filter((el) => ownsText(el) && !el.closest(SKIP));
+// Checks every visible element under `roots` (an element or a list) that
+// holds text directly; returns how many changed. Clears, reads, then writes
+// in separate passes so the page is restyled once, not once per element.
+export const inkPass = (roots, themeText) => {
+  const seen = new Set();
+  (Array.isArray(roots) ? roots : [roots]).forEach((root) => {
+    if (root.nodeType !== 1 || !root.isConnected) return;
+    seen.add(root);
+    root.querySelectorAll('*').forEach((el) => seen.add(el));
+  });
+  const els = [...seen].filter((el) => ownsText(el) && !el.closest(SKIP));
   const had = els.map((el) => el.getAttribute(INK_ATTR));
   // Judge DuelingBook's own colour, not one we set on an earlier pass.
   els.forEach((el, i) => had[i] && el.removeAttribute(INK_ATTR));
   const inks = els.map((el) => {
-    if (el.offsetParent === null) return null;
+    // Hidden (display: none anywhere above) has no boxes; fixed text still counts.
+    if (!el.getClientRects().length) return null;
     const rgb = parseCssColor(getComputedStyle(el).color);
     const bg = rgb && backgroundBehind(el);
     return rgb && bg ? inkFor(toHex(rgb), bg, themeText) : null;

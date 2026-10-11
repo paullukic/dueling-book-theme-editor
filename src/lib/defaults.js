@@ -72,9 +72,9 @@ export const DEFAULTS = {
   themeBackdrop: 0.25,
   themeFont: 'original',
   themeAreas: DEFAULT_AREAS,
-  themeEffects: true,
+  themeEffects: true, // the preset's signature skin (backdrop motif, glows, ornaments)
   themeMotif: true, // the skin's artwork; its glows stay when this is off
-  themeMotion: true, // archetype scenes move (always still with reduced motion) // the preset's signature skin (backdrop motif, glows, ornaments)
+  themeMotion: true, // scenes move (always still with reduced motion)
   customCssEnabled: false,
 
   // Duel
