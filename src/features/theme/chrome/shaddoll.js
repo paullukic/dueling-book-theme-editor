@@ -85,7 +85,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: gold-framed life bars hung from a lens; phases are core lenses. */
 ${SEL.life} { border-color: ${mix(violet, t.bg, 0.55)} !important; border-radius: 2px !important; outline: 1px dashed ${alpha(thread, 0.85)} !important; outline-offset: 2px !important; box-shadow: inset 0 0 0 1px ${alpha(thread, 0.35)}, 0 0 0 4px ${ink}, 0 0 10px 3px ${alpha(violet, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.35)}, ${mix(t.self, '#ffffff', 0.38)} 60%, ${mix(t.self, '#ffffff', 0.2)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -6px; width: 18px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -132,5 +132,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in lacquer and gold. */
 ${popCss}
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-puppet { opacity: 0; }
 `;
 };

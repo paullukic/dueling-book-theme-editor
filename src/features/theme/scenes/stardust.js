@@ -73,11 +73,16 @@ const stardust = (t) => {
   const trailD = pathOf(trail);
   const strands = pathOf(strand(-34, 16)) + pathOf(strand(30, -10));
   let sparkles = '';
+  // Sparkles over the duel stage (x ~430-1190) are hidden while a duel is open (chrome).
+  let stageSparkles = '';
   const nSp = 24;
   for (let i = 0; i < nSp; i++) {
     const p = trail[Math.round(((i + 0.5) / nSp) * (trail.length - 1))];
     const s = 5 + rand() * 7 * (1 - i / nSp) + 4;
-    sparkles += `<path d="${glint(p[0] + (rand() - 0.5) * 60, p[1] + (rand() - 0.5) * 48, s)}" fill="${i % 4 ? '#ffffff' : t.accent}" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-sd-flare 6s ease-in-out ${n1(-(i / nSp) * 6)}s infinite;"/>`;
+    const gx = p[0] + (rand() - 0.5) * 60;
+    const piece = `<path d="${glint(gx, p[1] + (rand() - 0.5) * 48, s)}" fill="${i % 4 ? '#ffffff' : t.accent}" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-sd-flare 6s ease-in-out ${n1(-(i / nSp) * 6)}s infinite;"/>`;
+    if (gx > 430 && gx < 1190) stageSparkles += piece;
+    else sparkles += piece;
   }
   const dust = [[], []];
   for (let i = 0; i < 120; i++) {
@@ -136,6 +141,7 @@ ${CARD_ART_KEYFRAMES}
 <path d="${strands}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="5" stroke-linecap="round"/>
 <g stroke="${mix(t.accent, '#ffffff', 0.55)}" stroke-linecap="round"><path d="${dots(dust[0])}" stroke-width="1.6" stroke-opacity="0.7"/><path d="${dots(dust[1])}" stroke-width="2.6" stroke-opacity="0.85"/></g>
 ${sparkles}
+<g class="dbtefx-sd-stage">${stageSparkles}</g>
 <ellipse cx="1290" cy="340" rx="340" ry="400" fill="url(#dbtefx-sd-halo)" style="animation: dbtefx-sd-glow 7s ease-in-out infinite;"/>
 ${hero}
 <!--near-->

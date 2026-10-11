@@ -74,10 +74,10 @@ ${CARD_ART_KEYFRAMES}
 <path d="${city}" fill="${mix(night, t.opp, 0.16)}"/>
 <path d="${lights}" stroke="${t.opp}" stroke-opacity="0.7" stroke-width="2.4" stroke-linecap="round"/>
 <!--mid-->
-<rect width="1600" height="900" fill="url(#dbtefx-ut-sun)"/>
+<g class="dbtefx-ut-sunglow"><rect width="1600" height="900" fill="url(#dbtefx-ut-sun)"/>
 <g style="transform-origin: ${cx}px 300px; animation: dbtefx-spin 160s linear infinite;"><path d="${rays}" fill="url(#dbtefx-ut-rays)"/></g>
 <circle cx="${cx}" cy="300" r="240" fill="none" stroke="${goldHi}" stroke-opacity="0.45" stroke-width="3" style="transform-origin: ${cx}px 300px; animation: dbtefx-ut-halo 6s ease-in-out infinite;"/>
-<circle cx="${cx}" cy="300" r="262" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="2 10"/>
+<circle cx="${cx}" cy="300" r="262" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="2 10"/></g>
 <ellipse cx="${cx}" cy="880" rx="340" ry="120" fill="url(#dbtefx-ut-mist)"/>
 ${hero}
 <!--near-->

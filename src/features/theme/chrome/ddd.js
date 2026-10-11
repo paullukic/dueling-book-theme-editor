@@ -66,7 +66,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   let phaseTicks = '';
   for (let i = 0; i < 12; i++) {
     const a = (i * 30 * Math.PI) / 180;
-    const r1 = i % 3 ? 17 : 14.5;
+    const r1 = i % 3 ? 18.6 : 17.4;
     phaseTicks += `M${f1(22.5 + Math.cos(a) * r1)} ${f1(22.5 + Math.sin(a) * r1)}L${f1(22.5 + Math.cos(a) * 20)} ${f1(22.5 + Math.sin(a) * 20)}`;
   }
   const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${gold}" stroke-width="1.6"/><path d="${phaseTicks}" stroke="${gold}" stroke-width="1.6"/>`);
@@ -126,7 +126,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, $
 /* Duel: gold-bound life bars led by the wax seal; phases are clock dials. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${goldDeep}, inset 0 0 0 1px ${alpha(goldLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.15)}, ${t.self} 50%, ${mix(t.self, t.bg, 0.22)}) !important; box-shadow: inset 0 -2px 0 ${alpha(violet, 0.85)}, inset 0 1px 0 ${alpha(violet, 0.5)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.15)}, ${mix(t.self, t.danger, 0.22)} 50%, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.45)}) !important; box-shadow: inset 0 0 0 1px ${ink}, inset 0 -2px 0 ${alpha(violet, 0.85)}, inset 0 1px 0 ${alpha(violet, 0.5)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.1)}, ${t.opp} 50%, ${mix(t.opp, t.bg, 0.3)}) !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -134,8 +134,8 @@ ${SEL.phase} { background: radial-gradient(circle, ${obsidianDeep} 62%, ${goldLi
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${goldDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${obsidian} 30%, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, violet, 0.35)} 70%, ${mix(violet, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${alpha(violet, 0.9)}, 0 0 18px 2px ${alpha(violet, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 40%, ${mix(violet, t.bg, 0.36)} 0%, ${mix(violet, t.bg, 0.52)} 55%, ${mix(violet, t.bg, 0.75)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 0 3px ${ink}, 0 0 20px 4px ${alpha(violet, 0.9)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 40%, ${mix(t.opp, t.bg, 0.36)} 0%, ${mix(t.opp, t.bg, 0.52)} 55%, ${mix(t.opp, t.bg, 0.75)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 0 3px ${ink}, 0 0 20px 4px ${alpha(t.opp, 0.9)}; }
 ${sel(['#duel .phase span'])} { color: ${goldLit} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 0 2px #000000, 0 1px 3px #000000, 0 0 8px ${alpha(violet, 0.9)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${goldDeep} !important; }

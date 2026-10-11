@@ -103,7 +103,8 @@ const crystalBeast = (t) => {
     const col = column(x, y, s, broken);
     const gy = n1(col.top - 36 * s);
     const settingW = 24 * s;
-    columns += `${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/>${gem(x, gy, s * 1.4, gems[i], i)}`;
+    // Front-right columns straddle the chat column's edge in a duel: chrome slides them into the gutter.
+    columns += x > 1380 ? `<g class="dbtefx-cb-edge">${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/>${gem(x, gy, s * 1.4, gems[i], i)}</g>` : `${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/>${gem(x, gy, s * 1.4, gems[i], i)}`;
     const delay = n1(-((6 - i) / 7) * 7);
     beams += `<path d="M${n1(x - 8 * s)} ${n1(gy - 8)}L${n1(px0 - 4)} ${py0}H${n1(px0 + 4)}L${n1(x + 8 * s)} ${n1(gy - 8)}Z" fill="url(#dbtefx-cb-beam${i})" style="animation: dbtefx-cb-beam 7s ease-in-out ${delay}s infinite;"/>`;
   });

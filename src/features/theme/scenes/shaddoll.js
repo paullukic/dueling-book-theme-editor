@@ -77,7 +77,7 @@ const scene = (t) => {
 <ellipse cx="${cx}" cy="880" rx="300" ry="60" fill="url(#dbtefx-sd-pool)"/>
 ${shards}
 <!--mid-->
-<g style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
+<g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${cardArt(t, { id: 'dbtefx-sd-hero', card: CARDS.elShaddollConstruct, x: ax, y: ay - 90, w: aw, h: 790, focus: [0.5, 0.508], zoom: 0.76, feather: 0.4, fade: 0.7, blend: 'normal', backdrop: mix(t.bg, violet, 0.25), backdropAmt: 0.8, glow: violet, breathe: 0, tint: navy, tintAmt: 0.3 })}
 <g fill="none" stroke="${violet}"><path d="${strings.join('')}" stroke="${ink}" stroke-opacity="0.55" stroke-width="3.5"/><path d="${strings.join('')}" stroke-opacity="0.2" stroke-width="7"/><path d="${strings.join('')}" stroke="${thread}" stroke-width="1.4"/><path d="${above}" stroke="${thread}" stroke-opacity="0.5" stroke-width="1.2"/></g>
 <g fill="none" stroke="#ffffff" stroke-width="1.6" stroke-opacity="0.85">${glints}</g>

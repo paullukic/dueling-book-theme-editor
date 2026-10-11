@@ -147,5 +147,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* Duel: no sparkles over the stage; zone borders calmed toward silver. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-stage { display: none; }
+${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;
 };

@@ -80,8 +80,8 @@ ${rot(6, 60, 'steps(60, end)', `<path d="M${kx - 1.5} ${ky + 22}V${ky - 88}H${kx
 <linearGradient id="dbtefx-dh-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${steel}" stop-opacity="0"/><stop offset="1" stop-color="${steel}" stop-opacity="0.04"/></linearGradient>
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-dh-sky)"/>
-<circle cx="${kx}" cy="210" r="330" fill="url(#dbtefx-dh-halo)"/>
-<circle cx="${kx}" cy="210" r="190" fill="url(#dbtefx-dh-moon)"/>
+<g class="dbtefx-dh-moon"><circle cx="${kx}" cy="210" r="330" fill="url(#dbtefx-dh-halo)"/>
+<circle cx="${kx}" cy="210" r="190" fill="url(#dbtefx-dh-moon)"/></g>
 <g fill="${ink}" fill-opacity="0.4" style="animation: dbtefx-drift 40s ease-in-out infinite;"><ellipse cx="${kx - 40}" cy="168" rx="250" ry="7"/><ellipse cx="${kx + 60}" cy="252" rx="230" ry="10"/><ellipse cx="${kx - 120}" cy="300" rx="160" ry="5"/></g>
 <path d="${city}" fill="${mix(t.bg, '#000000', 0.25)}"/>
 <g fill="${mix(t.warning, t.bg, 0.45)}">${lit}</g>

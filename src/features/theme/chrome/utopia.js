@@ -148,5 +148,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* Duel: the sunburst hot spot dims behind the opponent's avatar; zone borders calmed. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.35; }
+${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;
 };

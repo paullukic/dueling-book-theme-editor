@@ -45,7 +45,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // A wrapped hilt (tsuka) with its guard: the blade is the life bar.
   let wrap = '';
   for (let i = 0; i < 4; i++) wrap += `<path d="M${3 + i * 4.6} 10l2.3 5 2.3-5-2.3-5Z" fill="${shu}" fill-opacity="0.85"/>`;
-  const hilt = svg(30, 30, `<rect x="1" y="9" width="21" height="12" rx="2" fill="${sumi}" stroke="${gold}" stroke-width="0.8"/><g transform="translate(0 5)">${wrap}</g><rect x="0" y="10" width="2" height="10" fill="${gold}"/><ellipse cx="25" cy="15" rx="3.6" ry="13" fill="${sumi}" stroke="${gold}" stroke-width="1.2"/><rect x="28" y="10.5" width="2" height="9" fill="${gold}"/>`);
+  const hilt = svg(30, 30, `<rect x="1" y="9" width="21" height="12" rx="2" fill="${sumi}" stroke="${gold}" stroke-width="0.8"/><g transform="translate(0 5)">${wrap}</g><rect x="0" y="10" width="2" height="10" fill="${gold}"/><ellipse cx="25.4" cy="15" rx="4.4" ry="14" fill="${sumi}" stroke="${gold}" stroke-width="1.4"/><ellipse cx="25.4" cy="15" rx="2.2" ry="10.5" fill="none" stroke="${shu}" stroke-width="0.9"/><path d="M25.4 3.4v3M25.4 23.6v3" stroke="${gold}" stroke-width="1"/><rect x="28.6" y="9.5" width="1.4" height="11" fill="${gold}"/>`);
 
   // The tempered line (hamon) along the blade.
   const hamon = svg(40, 26, `<path d="M0 17q5-4 10 0t10 0t10 0t10 0" fill="none" stroke="${mix(gold, '#ffffff', 0.35)}" stroke-opacity="0.4" stroke-width="1.4"/>`);
@@ -108,7 +108,7 @@ ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px 14px 14px 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbtc-u2) 0 0 / 40px 20px, ${sumi} !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -34px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -30px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${gold}, ${mix(gold, sumi, 0.5)}, ${gold}, ${mix(gold, sumi, 0.6)}, ${gold}) !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
@@ -117,6 +117,7 @@ ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { ba
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${shuLit} 25%, ${shuDeep}) !important; box-shadow: 0 0 14px ${alpha(shu, 0.8)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${steel} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${sumi}, -1px 0 0 ${sumi}, 0 1px 0 ${sumi}, 0 -1px 0 ${sumi}, 0 2px 3px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${sumi} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${shuLit}, ${shuDeep}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 0 0 2px ${shu}, inset 0 0 0 5px ${sumi}, inset 0 0 0 6px ${alpha(steel, 0.35)} !important; }

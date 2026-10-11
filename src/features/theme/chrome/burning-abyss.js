@@ -51,9 +51,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const gateArch = (cx, base, w, h) => `M${cx - w} ${base}V${base - h * 0.5}C${cx - w} ${base - h * 0.82} ${f1(cx - w * 0.5)} ${base - h * 0.96} ${cx} ${base - h}C${f1(cx + w * 0.5)} ${base - h * 0.96} ${cx + w} ${base - h * 0.82} ${cx + w} ${base - h * 0.5}V${base}Z`;
   const crown = svg(170, 96, `<defs><linearGradient id="v" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(sulphur, ember, 0.4)}"/><stop offset="0.6" stop-color="${mix(t.bg, ember, 0.3)}"/><stop offset="1" stop-color="${ink}"/></linearGradient></defs><path d="${gateArch(85, 92, 56, 90)}" fill="${mix(stone, bone, 0.1)}" stroke="${bone}" stroke-opacity="0.75" stroke-width="2"/><path d="M29 60H45M125 60H141M29 76H45M125 76H141" stroke="${ink}" stroke-width="1.6"/><path d="${gateArch(85, 92, 38, 70)}" fill="url(#v)"/><path d="M${85 - 47} 56C${85 - 44} 30 ${85 - 22} 13 85 9C${85 + 22} 13 ${85 + 44} 30 ${85 + 47} 56" fill="none" stroke="${sulphur}" stroke-width="4.5" stroke-dasharray="6 2.5 2.5 2.5 9 2.5"/><path d="M22 92H148" stroke="${bone}" stroke-opacity="0.75" stroke-width="2.4"/>${wreath(85, 80, 1.3)}`);
 
-  // Phase discs: the nine circles, descending rings toward a sulphur pit.
+  // Phase discs: the outer circles of the descent, on the rim only (clear of the label).
   let rings = '';
-  for (let i = 0; i < 5; i++) rings += `<circle cx="22.5" cy="${f1(22.5 + i * 0.9)}" r="${f1(20 - i * 3.6)}" fill="none" stroke="${sulphur}" stroke-opacity="${f1(0.35 + i * 0.13)}" stroke-width="${i ? 1.2 : 2}"/>`;
+  for (let i = 0; i < 2; i++) rings += `<circle cx="22.5" cy="${f1(22.5 + i * 0.9)}" r="${f1(20 - i * 3.6)}" fill="none" stroke="${sulphur}" stroke-opacity="${f1(0.35 + i * 0.13)}" stroke-width="${i ? 1.2 : 2}"/>`;
   const phaseRing = svg(45, 45, rings);
   const lifeCrest = svg(40, 40, `<circle cx="20" cy="20" r="17" fill="${ink}" stroke="${bone}" stroke-opacity="0.7" stroke-width="2"/>${wreath(20, 16, 0.95)}`);
 

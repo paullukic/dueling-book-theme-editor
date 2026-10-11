@@ -1,7 +1,7 @@
 // power-patron: the Patron's sigil. Monochrome black lace: obsidian lacquer
 // with a faint lace lattice, black thorn spikes at the corners, ice-cyan
-// hairlines and the forked eye sigil as the crest. The prism (Nerva crimson,
-// Vidolium gold, Jupiter green) is kept for one accent: the active phase. (t, kit) -> CSS string; see chrome/kit.js.
+// hairlines and the forked eye sigil as the crest; the active phase glows solid
+// ice. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
@@ -13,7 +13,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const lace = mix(ice, t.bg, 0.25);
   const obsidian = mix(t.bg, '#000000', 0.35);
   const glass = mix(t.raised, t.surface, 0.5);
-  const prism = `${t.accent2}, ${t.warning}, ${t.success}, ${ice}, ${t.link}`;
   const seam = `linear-gradient(90deg, transparent 4%, ${alpha(ice, 0.7)} 25% 75%, transparent 96%) left bottom / 100% 1px no-repeat`;
 
   // Lace: rows of slotted piercings, faint gold.
@@ -102,12 +101,14 @@ ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, 
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: -6px; width: 16px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${iceHi}, ${iceDim}, ${ice}, ${iceDim}, ${iceHi}) !important; box-shadow: 0 0 0 1px ${obsidian}, 0 4px 10px -2px #000000 !important; }
-${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 0deg, ${prism}, ${t.accent2}) !important; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 210deg, #ffffff, ${iceHi}, ${ice}, ${iceHi}, #ffffff) !important; box-shadow: 0 0 0 1px ${obsidian}, 0 0 18px 4px ${alpha(ice, 0.75)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${obsidian} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${glass} 35%, ${obsidian}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.2)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.2)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 40% 35%, ${mix(t.self, '#ffffff', 0.3)}, ${t.self} 60%, ${mix(t.self, t.bg, 0.2)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 35%, ${mix(t.opp, '#ffffff', 0.3)}, ${t.opp} 60%, ${mix(t.opp, t.bg, 0.2)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.accentText} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.5)} !important; }
+${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: grayscale(1) brightness(1.5) drop-shadow(0 0 2px ${alpha(ice, 0.45)}) !important; }
 ${sel(['#duel .phase span'])} { color: ${iceHi} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${obsidian}) !important; box-shadow: inset 0 0 0 1px ${iceDim}, inset 0 0 0 4px ${alpha(obsidian, 0.9)}, inset 0 -2px 0 4px ${alpha(ice, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ice}, 0 0 0 4px ${obsidian}, 0 0 0 5px ${alpha(ice, 0.45)} !important; }

@@ -145,8 +145,8 @@ const scene = (t) => {
 <radialGradient id="dbtefx-md-halo"><stop offset="0" stop-color="${gold}" stop-opacity="0.6"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-md-sky)" fill-opacity="0.9"/>
-<circle cx="1020" cy="140" r="260" fill="url(#dbtefx-md-moonglow)"/>
-<circle cx="1020" cy="140" r="54" fill="url(#dbtefx-md-moon)"/>
+<g class="dbtefx-md-moon"><circle cx="1020" cy="140" r="260" fill="url(#dbtefx-md-moonglow)"/>
+<circle cx="1020" cy="140" r="54" fill="url(#dbtefx-md-moon)"/></g>
 <g fill="${mix(cream, gold, 0.4)}" fill-opacity="0.35"><circle cx="1004" cy="128" r="9"/><circle cx="1034" cy="160" r="6"/><circle cx="1040" cy="122" r="4"/></g>
 ${stars}
 <g fill="${mix(t.bg, t.accent, 0.2)}" fill-opacity="0.8">${town}</g>
@@ -181,7 +181,7 @@ ${tier(cx - 165, cx + 165, 690, [[50, sponge], [8, cream], [8, jam], [44, sponge
 ${win(cx - 136, 730, 28, 48, 9)}${win(cx - 82, 730, 28, 48, 10)}${win(cx + 54, 730, 28, 48, 11)}${win(cx + 108, 730, 28, 48, 12)}
 <path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840L${cx + 186} 852Q${cx} 882 ${cx - 186} 852Z" fill="url(#dbtefx-md-gold)"/><path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840" fill="none" stroke="${cream}" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>
 <ellipse cx="${cx}" cy="858" rx="150" ry="22" fill="url(#dbtefx-md-halo)"/>
-${lolly(cx - 196, 0)}${lolly(cx + 196, 1)}
+${lolly(cx - 196, 0)}<g class="dbtefx-md-lolly">${lolly(cx + 196, 1)}</g>
 </g>
 ${sweets}
 <!--near-->

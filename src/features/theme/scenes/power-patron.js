@@ -67,12 +67,12 @@ const powerPatron = (t) => {
     script += `<path d="${d}" transform="translate(${x} ${y}) rotate(${n1(a + 90)})"/>`;
   }
 
-  // The eye sigil: almond, iris, forked rays above and below.
+  // The eye sigil: almond, iris, forked rays below (nothing above: the front page's links sit there).
   const fork = (dir) => {
     const s = dir;
     return `M${ex} ${ey + s * 62}V${ey + s * 196}M${ex} ${ey + s * 150}L${ex - 30} ${ey + s * 180}V${ey + s * 214}M${ex} ${ey + s * 150}L${ex + 30} ${ey + s * 180}V${ey + s * 214}M${ex} ${ey + s * 108}L${ex - 54} ${ey + s * 140}V${ey + s * 160}M${ex} ${ey + s * 108}L${ex + 54} ${ey + s * 140}V${ey + s * 160}`;
   };
-  const nodes = [[0, 196], [-30, 214], [30, 214], [-54, 160], [54, 160]].flatMap(([dx, dy]) => [[ex + dx, ey + dy], [ex + dx, ey - dy]])
+  const nodes = [[0, 196], [-30, 214], [30, 214], [-54, 160], [54, 160]].map(([dx, dy]) => [ex + dx, ey + dy])
     .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4.5"/>`).join('');
   const almond = `M${ex - 128} ${ey}Q${ex} ${ey - 92} ${ex + 128} ${ey}Q${ex} ${ey + 92} ${ex - 128} ${ey}Z`;
   const tendril = (s) => `M${ex + s * 128} ${ey}C${ex + s * 160} ${ey - 4} ${ex + s * 176} ${ey - 30} ${ex + s * 168} ${ey - 46}C${ex + s * 160} ${ey - 60} ${ex + s * 140} ${ey - 52} ${ex + s * 146} ${ey - 38}M${ex + s * 128} ${ey}C${ex + s * 160} ${ey + 4} ${ex + s * 176} ${ey + 30} ${ex + s * 168} ${ey + 46}C${ex + s * 160} ${ey + 60} ${ex + s * 140} ${ey + 52} ${ex + s * 146} ${ey + 38}`;
@@ -137,8 +137,8 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <circle cx="${ex}" cy="${ey}" r="96" fill="${obsidian}" stroke="${ice}" stroke-opacity="0.5" stroke-width="2"/>
 <g style="transform-origin: ${ex}px ${ey}px; animation: dbtefx-spin 200s linear infinite;" fill="none" stroke="${iceHi}" stroke-opacity="0.55" stroke-width="1.4" stroke-linecap="round">${script}<circle cx="${ex}" cy="${ey}" r="134" stroke-opacity="0.3"/><circle cx="${ex}" cy="${ey}" r="166" stroke-opacity="0.3" stroke-dasharray="2 6"/></g>
 <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-<path d="${fork(-1)}${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${ice}" stroke-opacity="0.35" stroke-width="10"/>
-<path d="${fork(-1)}${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${iceHi}" stroke-width="3"/>
+<path d="${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${ice}" stroke-opacity="0.35" stroke-width="10"/>
+<path d="${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${iceHi}" stroke-width="3"/>
 </g>
 <g fill="${iceHi}">${nodes}</g>
 <g ${anim('blink', 9, 2, 'ease-in-out')}>

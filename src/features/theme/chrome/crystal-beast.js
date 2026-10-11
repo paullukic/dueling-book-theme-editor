@@ -76,7 +76,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   // Prism-cut life bar: facet bands over the side colour.
-  const prism = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, ${alpha('#ffffff', 0.12)} 40%, transparent 41%, transparent 70%, ${alpha(night, 0.35)}), linear-gradient(105deg, transparent 8%, ${alpha(gems[0], 0.22)} 14%, ${alpha(gems[2], 0.22)} 20%, ${alpha(gems[3], 0.22)} 26%, ${alpha(gems[4], 0.22)} 32%, ${alpha(gems[6], 0.22)} 38%, transparent 46%), linear-gradient(90deg, ${mix(c, t.bg, 0.5)}, ${c} 55%, ${mix(c, t.bg, 0.2)})`;
+  const prism = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.34)} 0 30%, ${alpha('#ffffff', 0.1)} 30% 54%, transparent 54% 76%, ${alpha(night, 0.32)} 76%), linear-gradient(112deg, transparent 0 16%, ${alpha('#ffffff', 0.6)} 16% 18.5%, transparent 18.5% 21%, ${alpha('#ffffff', 0.25)} 21% 22%, transparent 22%), linear-gradient(90deg, ${mix(c, t.bg, 0.45)}, ${c} 50%, ${mix(c, t.bg, 0.25)})`;
   const capGem = svg(36, 36, `<path d="M10 2H26L34 10V26L26 34H10L2 26V10Z" fill="${goldDk}" stroke="${gold}" stroke-width="1.6"/><path d="M12 6H24L30 12V24L24 30H12L6 24V12Z" fill="${amethyst}"/><path d="M12 6L18 18L6 12ZM24 6L18 18L30 12Z" fill="${mix(amethyst, '#ffffff', 0.5)}"/><path d="M6 24L18 18L12 30ZM30 24L18 18L24 30Z" fill="${mix(amethyst, '#000000', 0.35)}"/><path d="M14 13H22L24 18L22 23H14L12 18Z" fill="${mix(amethyst, '#ffffff', 0.25)}" stroke="${mix(amethyst, '#ffffff', 0.7)}" stroke-width="0.7"/><path d="M12 6H24L30 12V24L24 30H12L6 24V12Z" fill="none" stroke="${mix(amethyst, '#ffffff', 0.7)}" stroke-width="0.7"/><path d="M15 15L18 14" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>`);
   const vars = [frameSvg, facets, gable, finial, brilliant, ...crests, capGem].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
   const tileCrest = (k) => `${on(sel([`#main_menu .menu_btn:nth-child(7n+${k + 1}) .content`]), 'before')} { background-image: var(--dbtc-u${5 + k}); }`;
@@ -108,20 +108,23 @@ ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shad
 ${SEL.chat} { background: var(--dbtc-u1), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${goldDk}, inset -1px 0 0 ${goldDk}, inset 0 -1px 0 ${goldDk} !important; }
 
 /* Duel: prism-cut life bars capped with a set gem; brilliant-cut phases. */
-${SEL.life} { border-color: ${gold} !important; border-image: linear-gradient(90deg, ${gems.join(', ')}) 1 !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${goldDk}, 0 0 0 3px ${gold}, 0 0 0 4px ${night}, 0 4px 10px -3px #000000 !important; }
+${SEL.life} { border-color: ${gold} !important; border-image: linear-gradient(90deg, ${gems.map((g) => mix(g, t.bg, 0.4)).join(', ')}) 1 !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${goldDk}, 0 0 0 3px ${gold}, 0 0 0 4px ${night}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: ${prism(t.self)} !important; }
 ${SEL.lifeOpp} { background: ${prism(t.opp)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -3px; width: 34px; height: 34px; z-index: 2; pointer-events: none; background: var(--dbtc-u${5 + gems.length}) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 html body:has(#duel:not([style*="none"])) .dbtefx-cb-bow { opacity: 0.4; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(44px, 0); }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: conic-gradient(from 0deg, ${gems.join(', ')}, ${gems[0]}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: conic-gradient(from 0deg, ${gems.join(', ')}, ${gems[0]}) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }
+${SEL.phase} { background: radial-gradient(circle, ${night} 62%, ${gold} 66%, ${goldDk} 76%) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${night} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glassHi} 35%, ${night}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.35)} 15%, ${t.self} 45%, ${mix(t.self, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.35)} 15%, ${t.opp} 45%, ${mix(t.opp, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, t.bg, 0.38)} 15%, ${mix(t.self, t.bg, 0.5)} 50%, ${mix(t.self, t.bg, 0.72)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, t.bg, 0.38)} 15%, ${mix(t.opp, t.bg, 0.5)} 50%, ${mix(t.opp, t.bg, 0.72)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u1), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${amethyst}, inset 0 0 0 1px ${goldDk} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${gold}, 0 0 0 4px ${night}, 0 0 0 5px ${alpha(amethyst, 0.7)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${goldHi}, ${goldDk}) !important; }

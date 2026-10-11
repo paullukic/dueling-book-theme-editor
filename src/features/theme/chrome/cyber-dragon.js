@@ -190,7 +190,7 @@ ${SEL.life} {
 }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
 ${SEL.lifeSelf} {
-  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(180deg, ${alpha(t.accent, 0.55)} 0 2px, transparent 2px), linear-gradient(90deg, ${mix(t.border, t.bg, 0.35)}, ${mix(t.self, t.border, 0.5)}) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(180deg, ${alpha(t.accent, 0.8)} 0 2px, transparent 2px), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.2)}, ${t.self} 55%, ${mix(t.self, t.accent, 0.6)} 85%, ${t.accent}) !important;
 }
 ${SEL.lifeOpp} {
   background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp}) !important;

@@ -110,7 +110,7 @@ ${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${al
 /* Duel: plated life bars with a king at the end; checkered phase discs. */
 ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, transparent 50%), linear-gradient(90deg, ${mix(ivory, gold, 0.45)}, ${mix(ivory, gold, 0.15)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(gold, ivory, 0.55)}, ${mix(gold, ivory, 0.3)}) !important; box-shadow: inset 0 0 0 1.5px ${goldDeep}, inset 0 -3px 0 ${alpha(goldDeep, 0.5)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(army, t.bg, 0.3)}, ${army}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
@@ -129,9 +129,9 @@ ${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: ${plate} !import
 ${sel(['#duel #turn .red'])} { box-shadow: inset 0 -3px 0 ${mix(ivory, gold, 0.5)} !important; }
 ${sel(['#duel #turn .blue'])} { box-shadow: inset 0 -3px 0 ${army} !important; }
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: #000000 !important; text-shadow: none !important; }
-/* Chat speakers and name strips in their army's colour: ivory for you, gold for the opponent. */
-${sel(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]'])} { color: ${ivory} !important; }
-${sel(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${army} !important; }
+/* Chat speakers and name strips per side: gold-banded ivory for you, periwinkle for the opponent. */
+${sel(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]'])} { color: ${gold} !important; }
+${sel(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${mix(t.opp, '#ffffff', 0.35)} !important; }
 /* The winged king stands behind the chat column in a duel: only a lone wing showed, so he waits for the menu. */
 html body:has(#duel:not([style*="none"])) .dbtefx-ae-hero { opacity: 0; }
 ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
@@ -170,7 +170,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss(popPrimary, popSecondary)}
 /* Player name strips: dark plate, ivory name. */
 ${sel(['#duel #avatar1', '#duel #avatar3'])} { background: ${plate} !important; }
-${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(army, '#ffffff', 0.25)}, ${army} 55%, ${mix(army, t.bg, 0.3)}) !important; }
+${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(t.opp, '#ffffff', 0.5)}, ${mix(t.opp, '#ffffff', 0.12)} 60%, ${t.opp}) !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { color: #000000 !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 `;
 };

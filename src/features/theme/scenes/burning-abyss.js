@@ -101,7 +101,7 @@ const burningAbyss = (t) => {
 
   // Dante, Traveler of the Burning Abyss: the real card artwork on the near
   // rim, lit from the pit below.
-  const dante = cardArt(t, { id: 'dbtefx-ba-hero', card: CARDS.dante, x: 1265, y: 290, w: 380, h: 640, focus: [0.48, 0.36], zoom: 0.86, blend: 'normal', feather: 0.8, fade: 0.65, grade: 'brightness(0.8) contrast(1.35) saturate(0.9)', tint: ember, tintAmt: 0.3, backdrop: ink, backdropAmt: 0.5, glow: sulphur, breathe: 16 });
+  const dante = cardArt(t, { id: 'dbtefx-ba-hero', card: CARDS.dante, x: 1251, y: 290, w: 380, h: 640, focus: [0.48, 0.36], zoom: 0.86, blend: 'normal', feather: 0.8, fade: 0.65, grade: 'brightness(0.8) contrast(1.35) saturate(0.9)', tint: ember, tintAmt: 0.3, backdrop: ink, backdropAmt: 0.5, glow: sulphur, breathe: 16 });
   const outcrop = `<path d="M1240 920L1262 880L1300 862L1350 858L1400 870L1470 866L1520 852L1580 846L1640 850V920Z" fill="url(#dbtefx-ba-spire)"/><path d="M1262 880L1300 862L1350 858L1400 870L1470 866L1520 852L1580 846L1640 850" fill="none" stroke="${ember}" stroke-opacity="0.5" stroke-width="2.4"/>`;
 
   // The crouching Malebranche on the gate: horned bone skull, hunched
