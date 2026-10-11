@@ -3,7 +3,7 @@ import { useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { removePageStyle, rgba, setPageStyle, whenElement } from '../lib/dom';
 import { darkModeCSS } from './darkModeCss';
-import { psctCss, unwrap, wrap } from './psct';
+import { isLoreCard, psctCss, unwrap, wrap } from './psct';
 
 // Each effect applies its change while enabled and fully undoes it in cleanup,
 // so turning a feature off restores DuelingBook's own look.
@@ -44,15 +44,24 @@ export const PsctEffect = () => {
     if (!psctEnabled) return undefined;
     let preview = null;
     let observer = null;
+    // The previewed card's frame tells Normal Monsters (lore) apart; it may
+    // change just after the text, so a frame change re-colours too.
+    let lastLore;
     const rewrap = () => {
       observer.disconnect();
+      lastLore = isLoreCard(preview);
       unwrap(preview);
-      wrap(preview);
+      wrap(preview, { lore: lastLore });
       observer.observe(preview, { childList: true, subtree: true, characterData: true });
+      if (preview.parentElement) observer.observe(preview.parentElement, { attributes: true, attributeFilter: ['src'], subtree: true });
+    };
+    const onChange = (records) => {
+      const textChanged = records.some((r) => r.type !== 'attributes');
+      if (textChanged || isLoreCard(preview) !== lastLore) rewrap();
     };
     const cancel = whenElement('#preview_txt', (el) => {
       preview = el;
-      observer = new MutationObserver(rewrap);
+      observer = new MutationObserver(onChange);
       rewrap();
     });
     return () => {

@@ -37,10 +37,11 @@
   box-sizing: border-box;
 }
 
-.dbte button,
-.dbte input,
-.dbte select,
-.dbte textarea {
+/* Zero-specificity reset, so component classes (.btn-gold, .tab, ...) win. */
+:where(.dbte) button,
+:where(.dbte) input,
+:where(.dbte) select,
+:where(.dbte) textarea {
   font: inherit;
   color: inherit;
 }
