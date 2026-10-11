@@ -191,6 +191,47 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
     tileHoverGlow(t.accent) +
     fieldGlow(t, 2),
 
+  graphite: (t) => layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent),
+
+  snow: (t) =>
+    layer(`${url(motifs.dots(t))}, linear-gradient(180deg, ${alpha('#ffffff', 0.6)}, transparent 40%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) +
+    tileHoverGlow(t.accent),
+
+  // Ritual: a candle-lit summoning circle under a cobalt sky.
+  ritual: (t) =>
+    layer(`${url(motifs.magicCircle(t))} center / min(95vh, 950px) no-repeat, ${url(motifs.stars(t, t.accent2, 14))}, radial-gradient(circle at 50% 55%, ${alpha(t.accent2, 0.1)}, transparent 45%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent2) +
+    fieldGlow(t, 3),
+
+  // Shadow Realm: drifting fog banks in two sickly colours.
+  'shadow-realm': (t) =>
+    layer(`radial-gradient(ellipse 60% 40% at 15% 80%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 50% 35% at 85% 25%, ${alpha(t.accent2, 0.18)}, transparent 70%), radial-gradient(ellipse 70% 30% at 50% 100%, ${alpha(t.accent2, 0.14)}, transparent 70%), ${url(motifs.grain(t))}`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 4),
+
+  // Sky Striker: launch-bay HUD grid, red and cyan sweep lines.
+  'sky-striker': (t) =>
+    layer(`repeating-linear-gradient(0deg, ${alpha(t.accent2, 0.06)} 0 1px, transparent 1px 40px), repeating-linear-gradient(90deg, ${alpha(t.accent2, 0.06)} 0 1px, transparent 1px 40px), linear-gradient(120deg, transparent 40%, ${alpha(t.accent, 0.18)} 41%, transparent 43%, transparent 57%, ${alpha(t.accent2, 0.16)} 58%, transparent 60%)`) +
+    `${TILE} { background-image: linear-gradient(90deg, ${alpha(t.accent, 0.22)}, transparent 40%) !important; }
+${TILE_HOVER} { box-shadow: inset 3px 0 0 ${t.accent}, inset 0 0 0 1px ${t.accent2}, 0 0 18px -6px ${t.accent2} !important; }` +
+    dialogCorners(t.accent2) +
+    fieldGlow(t, 3),
+
+  // Snake-Eye: ember scales glowing up from below.
+  'snake-eye': (t) =>
+    layer(`${url(motifs.scales(t))}, radial-gradient(ellipse at 50% 115%, ${alpha(t.accent, 0.3)}, transparent 55%), radial-gradient(ellipse at 50% -10%, ${alpha(t.accent2, 0.08)}, transparent 50%)`) +
+    `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.24)}, transparent 60%) !important; }
+${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 24px -4px ${alpha(t.accent, 0.85)} !important; }` +
+    fieldGlow(t, 4),
+
+  // Labrynth: gothic arches and stained glass in wine and silver.
+  labrynth: (t) =>
+    layer(`${url(motifs.diagonal(t))}, radial-gradient(ellipse 40% 60% at 50% 0%, ${alpha(t.accent2, 0.14)}, transparent 70%), radial-gradient(ellipse at 50% 110%, ${alpha(t.accent, 0.18)}, transparent 55%)`) +
+    tileHoverGlow(t.accent2) +
+    dialogCorners(t.accent2) +
+    fieldGlow(t, 2),
+
   divine: (t) =>
     layer(`${url(motifs.glyphs(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
     `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.16)}, transparent 50%) !important; box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.7)}, 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important; }

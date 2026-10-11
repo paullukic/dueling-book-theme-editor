@@ -256,7 +256,7 @@ test('css: text field edges reach 3:1 in every preset', () => {
 
 test('light themes: there are some, and they switch the page and panel to light controls', () => {
   const light = PRESETS.filter((p) => isLightTheme(p.tokens));
-  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'parchment']);
+  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'parchment', 'snow']);
   light.forEach(({ tokens, radius }) => {
     assert.ok(varsCss({ tokens, radius, backdrop: 0.25 }).includes('--dbt-scheme: light'));
     assert.equal(panelVars(tokens).colorScheme, 'light');

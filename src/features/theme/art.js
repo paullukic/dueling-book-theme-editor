@@ -31,6 +31,10 @@ export const ICON_STYLES = {
   millennium: 'eye',
   link: 'hex',
   spell: 'rune',
+  ritual: 'circle',
+  'sky-striker': 'hud',
+  'snake-eye': 'fang',
+  labrynth: 'arch',
   'dark-magic': 'circle',
 };
 
@@ -76,6 +80,18 @@ const frame = (style, w, h, t, radius) => {
     }
     case 'rune':
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${rr - sw * 2}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${sw * 0.6}"/>`;
+    case 'hud': {
+      // Targeting brackets on a dark plate with a red tick.
+      const k = Math.min(fw, fh) * 0.28;
+      const corner = (px, py, dx, dy) => `M${px + dx * k} ${py}H${px}V${py + dy * k}`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" fill="${t.raised}" fill-opacity="0.9"/><path d="${corner(x, y, 1, 1)}${corner(x + fw, y, -1, 1)}${corner(x, y + fh, 1, -1)}${corner(x + fw, y + fh, -1, -1)}" fill="none" stroke="${t.accent2}" stroke-width="${sw * 1.2}"/><rect x="${x + fw * 0.42}" y="${y}" width="${fw * 0.16}" height="${sw * 1.2}" fill="${t.accent}"/>`;
+    }
+    case 'fang':
+      // A shield tapering to a fang point, ember gradient.
+      return `<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.raised}"/><stop offset="1" stop-color="${mix(t.raised, t.accent, 0.5)}"/></linearGradient></defs><path d="M${x} ${y + r}Q${x} ${y} ${x + r} ${y}H${x + fw - r}Q${x + fw} ${y} ${x + fw} ${y + r}V${y + fh * 0.62}Q${x + fw} ${y + fh * 0.8} ${cx} ${y + fh}Q${x} ${y + fh * 0.8} ${x} ${y + fh * 0.62}Z" fill="url(#f)" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+    case 'arch':
+      // A gothic pointed arch with a silver inner line.
+      return `<path d="M${x} ${y + fh}V${y + fh * 0.4}Q${x} ${y + fh * 0.05} ${cx} ${y}Q${x + fw} ${y + fh * 0.05} ${x + fw} ${y + fh * 0.4}V${y + fh}Z" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${x + sw * 2.2} ${y + fh - sw}V${y + fh * 0.42}Q${x + sw * 2.2} ${y + fh * 0.12} ${cx} ${y + sw * 2.4}Q${x + fw - sw * 2.2} ${y + fh * 0.12} ${x + fw - sw * 2.2} ${y + fh * 0.42}V${y + fh - sw}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${sw * 0.6}"/>`;
     case 'hex': {
       const pts = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = (Math.PI / 3) * i;
