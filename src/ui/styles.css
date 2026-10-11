@@ -1693,3 +1693,15 @@ textarea.field {
   width: 12px;
   height: 12px;
 }
+
+/* Theme gallery: request link under the grid */
+.gallery-request {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.gallery-request a {
+  color: var(--gold);
+}

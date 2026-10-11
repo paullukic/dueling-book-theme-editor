@@ -8,6 +8,7 @@ const DONATE_URL = 'https://www.buymeacoffee.com/sudbina';
 const STORE_URL = 'https://chromewebstore.google.com/detail/fpehmkbiafgdeaheeehcbpgahmlkolac';
 const REVIEW_URL = `${STORE_URL}/reviews`;
 const YOUTUBE_URL = 'https://www.youtube.com/@PsyYGO';
+const DISCORD_URL = 'https://discord.gg/XtP5Vj4q3C';
 
 const DAY = 24 * 60 * 60 * 1000;
 const NUDGE_AFTER_DAYS = 7;
@@ -264,6 +265,10 @@ export const SupportTab = () => {
           <span className="sr-only" role="status">
             {copied ? 'Link copied to the clipboard.' : ''}
           </span>
+          <a className="btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            <ShareIcon />
+            Join the Discord: request themes and report bugs
+          </a>
           <a className="btn" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">
             <PlayIcon />
             Watch PsyYGO on YouTube

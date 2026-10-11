@@ -7,6 +7,8 @@ import { setNav, useNav } from './nav';
 import { CHIP_LOOKS } from './chipLooks';
 import { CloseIcon, SearchIcon, StarIcon } from './icons';
 
+const DISCORD_URL = 'https://discord.gg/XtP5Vj4q3C';
+
 const GROUPS = PRESET_GROUPS.filter((g) => PRESETS.some((p) => p.group === g.id));
 const known = (ids) => ids.map(presetById).filter(Boolean);
 
@@ -318,6 +320,12 @@ export const ThemeGallery = ({ s, isPressed, onPick }) => {
           ))
         )}
       </div>
+      <p className="gallery-request">
+        Missing a theme?{' '}
+        <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+          Request it on Discord
+        </a>
+      </p>
     </section>
   );
 };

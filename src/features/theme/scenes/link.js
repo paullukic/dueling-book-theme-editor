@@ -17,7 +17,8 @@ const link = (t) => {
   const k = 1.4; // portal scale
   const s = 112 * k; // half side of the portal frame
   const lit = mix(t.accent2, '#ffffff', 0.6);
-  const halo = mix(t.self, t.warning, 0.3);
+  const halo = mix(t.danger, t.warning, 0.15);
+  const red = t.danger;
   const dim = mix(t.bg, t.accent, 0.3);
   const line = t.accent2;
 
@@ -31,14 +32,26 @@ const link = (t) => {
     const [x, y] = polar(cx, cy, reach(i), i * 45 - 90);
     return `translate(${x} ${y}) rotate(${i * 45}) scale(${k})`;
   };
+  // A bevelled arrow: gradient body, a lit left facet, shaded right and base
+  // facets, and a raised inner face. Points are [outer, inner] triangles.
+  const pt = (d) => d.match(/-?[\d.]+/g).map(Number);
+  const arrow = (shape, inner, body, face, rim) => {
+    const [ax, ay, bx, by, cx2, cy2] = pt(shape);
+    const [px, py, qx, qy, rx, ry] = pt(inner);
+    return `<path d="${shape}" fill="url(#${body})" stroke="${rim}" stroke-width="1.5" stroke-linejoin="round"/>`
+      + `<path d="M${ax} ${ay}L${bx} ${by}L${qx} ${qy}L${px} ${py}Z" fill="#ffffff" fill-opacity="0.4"/>`
+      + `<path d="M${bx} ${by}L${cx2} ${cy2}L${rx} ${ry}L${qx} ${qy}Z" fill="#000000" fill-opacity="0.16"/>`
+      + `<path d="M${ax} ${ay}L${cx2} ${cy2}L${rx} ${ry}L${px} ${py}Z" fill="#000000" fill-opacity="0.32"/>`
+      + `<path d="${inner}" fill="url(#${face})"/>`;
+  };
   let bases = '';
   let lights = '';
   for (let i = 0; i < 8; i++) {
     const shape = i % 2 ? corner : edge;
     const inner = i % 2 ? cornerIn : edgeIn;
-    bases += `<g transform="${place(i)}"><path d="${shape}" fill="${dim}" stroke="${line}" stroke-opacity="0.6" stroke-width="2"/><path d="${inner}" fill="${t.bg}" fill-opacity="0.6"/></g>`;
-    // Still frames show the first three arrows set.
-    lights += `<g transform="${place(i)}"><g opacity="${i < 3 ? 1 : 0}" ${a('arm', i * STEP)}><circle cy="-14" r="52" fill="url(#dbtefx-lk-halo)"/><path d="${shape}" fill="${lit}" stroke="#ffffff" stroke-width="1.5"/><path d="${inner}" fill="#ffffff"/></g></g>`;
+    bases += `<g transform="${place(i)}" opacity="0.85">${arrow(shape, inner, 'dbtefx-lk-cyan', 'dbtefx-lk-cyanf', line)}</g>`;
+    // Active arrows light red, as on a Link card. Still frames show the first three set.
+    lights += `<g transform="${place(i)}"><g opacity="${i < 3 ? 1 : 0}" ${a('arm', i * STEP)}><circle cy="-14" r="52" fill="url(#dbtefx-lk-halo)"/>${arrow(shape, inner, 'dbtefx-lk-red', 'dbtefx-lk-redf', '#ffffff')}</g></g>`;
   }
 
   // Three circuit traces feed the portal: from the top, the right and the floor.
@@ -62,6 +75,10 @@ const link = (t) => {
 @keyframes dbtefx-lk-spin { to { transform: rotate(360deg); } }
 </style>
 <defs>${glow('dbtefx-lk-halo', halo, 0.5, 0.5, 0.5, 0.6)}${glow('dbtefx-lk-sky', t.accent, 0.5, 0.5, 0.5, 0.3)}${glow('dbtefx-lk-core', line, 0.5, 0.5, 0.5, 0.75)}${glow('dbtefx-lk-burst', lit, 0.5, 0.5, 0.5, 0.95)}
+<linearGradient id="dbtefx-lk-cyan" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(line, t.accent, 0.5)}"/><stop offset="0.55" stop-color="${line}"/><stop offset="1" stop-color="${mix(line, '#ffffff', 0.85)}"/></linearGradient>
+<linearGradient id="dbtefx-lk-cyanf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(line, '#ffffff', 0.35)}"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<linearGradient id="dbtefx-lk-red" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(red, '#000000', 0.45)}"/><stop offset="0.6" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, '#ffffff', 0.5)}"/></linearGradient>
+<linearGradient id="dbtefx-lk-redf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, '#ffffff', 0.75)}"/></linearGradient>
 <linearGradient id="dbtefx-lk-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${line}" stop-opacity="0"/><stop offset="1" stop-color="${line}" stop-opacity="0.5"/></linearGradient>
 <linearGradient id="dbtefx-lk-shaft" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="0.4" stop-color="${lit}" stop-opacity="0.45"/><stop offset="1" stop-color="${lit}" stop-opacity="0"/></linearGradient></defs>
 <ellipse cx="${cx}" cy="${cy}" rx="620" ry="500" fill="url(#dbtefx-lk-sky)"/>
