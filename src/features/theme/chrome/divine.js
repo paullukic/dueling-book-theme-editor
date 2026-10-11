@@ -51,6 +51,12 @@ export default (t, kit) => {
   const ankh = svgUrl(svg(14, 22, `${grad}<g fill="none" stroke="url(#g)" stroke-linecap="round"><path d="M7 9C2.6 6.6 3.4 1.2 7 1.2s4.4 5.4 0 7.8z" stroke-width="2"/><path d="M7 9v12M2.2 11.4h9.6" stroke-width="2.4"/></g>`));
 
   const goldText = `color: ${hi} !important; text-shadow: var(--dv-title) !important;`;
+  // Page and pop-up titles: a soft shadow only, no backing plate.
+  const pageText = `color: ${hi} !important; text-shadow: 0 1px 0 ${lo}, 0 2px 8px ${alpha('#000000', 0.9)}, 0 0 18px ${alpha(gold, 0.35)} !important;`;
+  // The three gods as accents, one per group: Ra gold, Slifer red, Obelisk blue.
+  const gods = [gold, slifer, obelisk];
+  const band = (c) => `linear-gradient(180deg, ${mix(c, '#ffffff', 0.45)}, ${c} 30%, ${mix(c, t.bg, 0.5)} 70%, ${c})`;
+  const TILE_IDS = ['room_btn', 'deck_btn', 'profile_btn', 'my_profile_btn', 'rankings_btn', 'main_exit_btn', 'tourneys_btn', 'settings_btn', 'all_messages_btn', 'browse_btn', 'friends_btn', 'records_btn'];
   const papyrus = `repeating-linear-gradient(90deg, ${alpha(gold, 0.035)} 0 1px, transparent 1px 5px)`;
 
   const SETTINGS = SEL.settingsPanel;
@@ -68,8 +74,9 @@ html body {
 ${SEL.tile} {
   background: var(--dv-glyph) 50% calc(100% - 1px) / 54px 9px repeat-x, linear-gradient(180deg, ${t.raised}, ${deep} 70%, ${mix(deep, gold, 0.12)}) !important;
   border-image: var(--dv-frame) 16 / 16px / 0 stretch !important;
-  box-shadow: 0 10px 22px -12px ${alpha('#000000', 0.9)}, 0 0 0 1px ${alpha('#000000', 0.5)} !important;
+  box-shadow: inset 0 -3px 0 var(--dv-god, ${gold}), 0 10px 22px -12px ${alpha('#000000', 0.9)}, 0 0 0 1px ${alpha('#000000', 0.5)} !important;
 }
+${TILE_IDS.map((id, i) => `${sel([`#main_menu #${id}`])} { --dv-god: ${gods[i % 3]}; }`).join('\n')}
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; left: 50%; top: -11px; width: 64px; height: 17px; margin-left: -32px;
   background: var(--dv-sun) center / contain no-repeat; pointer-events: none;
@@ -77,7 +84,7 @@ ${sel(['#main_menu .menu_btn .content::before'])} {
 }
 ${SEL.tileHover} {
   background: var(--dv-glyph) 50% calc(100% - 1px) / 54px 9px repeat-x, radial-gradient(ellipse 70% 120% at 50% 110%, ${alpha(gold, 0.32)}, transparent 70%), linear-gradient(180deg, ${mix(t.raised, gold, 0.1)}, ${deep}) !important;
-  box-shadow: 0 0 22px -6px ${alpha(gold, 0.7)}, 0 12px 24px -12px ${alpha('#000000', 0.9)} !important;
+  box-shadow: inset 0 -3px 0 var(--dv-god, ${gold}), 0 0 22px -6px var(--dv-god, ${gold}), 0 12px 24px -12px ${alpha('#000000', 0.9)} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 6px ${alpha(gold, 0.9)}); }
 ${sel(['#main_menu .menu_btn:active .content'])} {
@@ -92,7 +99,8 @@ ${sel(['#main_menu .main_menu_circle'])} { border-color: ${lo} !important; }
 ${sel(['#main_menu #tourney_sidebar', '#main_menu #streams'])} { box-shadow: inset 0 0 0 1px ${alpha(gold, 0.35)}; }
 
 /* ---------- Headings: engraved gold ---------- */
-${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .admin_lbl'])} { ${goldText} }
+${sel(['#content .title1', '#content .title2', '#content .subtitle'])} { ${pageText} }
+${sel(['#content .admin_lbl'])} { ${goldText} }
 
 /* ---------- Buttons: small cartouches, the shen bar at the right end ---------- */
 ${SEL.button} {
@@ -138,7 +146,7 @@ ${sel(['#content #msg::after', '#content #link::after', '#content #confirm::afte
   background: var(--dv-sun) center / contain no-repeat; pointer-events: none; z-index: 1;
   filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.8)});
 }
-${SEL.dialogTitle} { ${goldText} }
+${SEL.dialogTitle} { ${pageText} }
 
 /* ---------- Chat: a gold-banded lintel over papyrus ---------- */
 ${SEL.chatTop} {
@@ -195,12 +203,13 @@ ${sel(['#duel .cout_txt'])} { background: ${papyrus}, linear-gradient(180deg, ${
 ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 1px ${alpha(gold, 0.4)}, inset 0 3px 0 ${alpha(gold, 0.2)}; }
 
 /* ---------- Duel room: gilded panels with a hieroglyph frieze ---------- */
-${sel(['#duel_room #formats .format > .border::before', '#duel_room #decklist > .border::before', '#duel_room #mode > .border::before', '#duel_room #filter > .border::before', '#duel_room #host_bg > .border::before'])} {
-  background: linear-gradient(180deg, ${hi}, ${gold} 30%, ${lo} 70%, ${gold}) !important; filter: none !important;
-}
+${sel(['#duel_room #formats .format > .border::before'])} { background: ${band(gold)} !important; filter: none !important; }
+${sel(['#duel_room #decklist > .border::before', '#duel_room #mode > .border::before', '#duel_room #filter > .border::before'])} { background: ${band(slifer)} !important; filter: none !important; }
+${sel(['#duel_room #host_bg > .border::before'])} { background: ${band(obelisk)} !important; filter: none !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(180deg, ${hi}, ${hi} 30%, ${gold}) !important; }
+${sel(['#duel_room #formats .format > .border'])} { background-image: var(--dv-glyph-soft), ${papyrus}, linear-gradient(180deg, ${alpha(t.surface, 0.92)}, ${alpha(deep, 0.95)}) !important; background-position: 50% calc(100% - 5px), 0 0, 0 0 !important; background-size: 84px 14px, auto, auto !important; background-repeat: repeat-x, repeat, no-repeat !important; }
 ${sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border'])} {
-  background: var(--dv-glyph-soft) 50% calc(100% - 7px) / 84px 14px repeat-x, ${papyrus}, linear-gradient(180deg, ${alpha(t.surface, 0.92)}, ${alpha(deep, 0.95)}) !important;
+  background: ${papyrus}, linear-gradient(180deg, ${alpha(t.surface, 0.92)}, ${alpha(deep, 0.95)}) !important;
   box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.9)};
 }
 ${sel(['#duel_room .format_txt', '#duel_room span.arial_black2', '#duel_room .title_txt.arial_black2'])} { ${goldText} }
@@ -211,14 +220,16 @@ ${sel(['#duel_room .duelbutton .game_type'])} { color: ${gold} !important; }
 /* ---------- Deck constructor: tomb chambers ---------- */
 ${sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg'])} {
   background: var(--dv-col) 6px 50% / 14px 84px repeat-y, ${papyrus}, linear-gradient(90deg, ${mix(t.surface, gold, 0.1)}, ${deep} 12%, ${deep}) !important;
-  box-shadow: inset 0 0 0 1px ${lo}, inset 0 0 0 3px ${t.bg}, inset 0 0 0 4px ${alpha(gold, 0.3)} !important;
+  box-shadow: inset 0 0 0 1px ${lo}, inset 0 0 0 3px ${t.bg}, inset 0 0 0 4px ${alpha(gold, 0.3)}, inset 0 3px 0 var(--dv-god, ${gold}) !important;
 }
+${sel(['#deck_constructor .side_bg'])} { --dv-god: ${slifer}; }
+${sel(['#deck_constructor .extra_bg'])} { --dv-god: ${obelisk}; }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { ${goldText} opacity: 1 !important; }
 ${sel(['#deck_constructor #search .search_bg'])} {
   background: radial-gradient(ellipse 90% 30% at 50% 0%, ${alpha(gold, 0.2)}, transparent 70%), ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important;
   box-shadow: inset 0 0 0 1px ${lo}, inset 0 3px 0 ${alpha(gold, 0.5)} !important;
 }
-${sel(['#deck_constructor #search .title_txt'])} { ${goldText} }
+${sel(['#deck_constructor #search .title_txt'])} { ${pageText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${gold} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${hi} !important; }
 
@@ -226,7 +237,8 @@ ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #s
 ${popButtons(btnFace([hi, gold, lo, mix(gold, t.bg, 0.78), alpha('#ffffff', 0.55), t.accentText], [mix(t.raised, gold, 0.18), t.surface, deep, lo, alpha(gold, 0.55), hi], 29, (w, h, p) => `<rect x="${n1(w - 24)}" y="15" width="3.5" height="${n1(h - 30)}" rx="1.5" fill="${p ? mix(gold, t.bg, 0.78) : gold}"/>`))}
 
 /* ---------- Settings panels ---------- */
-${SETTINGS} { background: ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important; border-image: var(--dv-frame) 16 / 16px / 0 stretch !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.9)} !important; }
+${[1, 2, 0].map((k, i) => `${sel([`#content #settings_content > div:not(.title_txt):nth-child(3n+${i + 1})`])} { --dv-god: ${gods[k]}; }`).join('\n')}
+${SETTINGS} { background: ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important; border-image: var(--dv-frame) 16 / 16px / 0 stretch !important; box-shadow: inset 0 3px 0 var(--dv-god, ${gold}), 0 12px 26px -12px ${alpha('#000000', 0.9)} !important; }
 
 /* ---------- Scrollbars: gold rods ---------- */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${lo}, ${gold}, ${lo}) !important; }

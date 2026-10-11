@@ -1,6 +1,6 @@
 // Pendulum: a Pendulum card frame (monster orange melting into Spell green),
 // its two Scale boxes (blue Scale 1, red Scale 12) and the ARC-V Pendulum
-// Summon: twin pillars of light with the scales above them and a pendulum
+// Summon: the two Scales crowning each pop-up and a pendulum
 // swinging its arc between them.
 import { mix } from '../../../lib/color.js';
 
@@ -27,13 +27,11 @@ export default (t, kit) => {
 
   // A Scale box as on the card: the arrow lozenge above, the number below.
   const scale = (c, dir, n) =>
-    svgUrl(svg(28, 36, `<rect x="1" y="1" width="26" height="34" rx="3" fill="${chip}" stroke="${ink}" stroke-width="1.6"/><path d="M14 3.5L22 11.5 14 19.5 6 11.5z" fill="${c}" stroke="${ink}" stroke-width="1"/><path d="${dir < 0 ? 'M16.5 8L11 11.5 16.5 15z' : 'M11.5 8L17 11.5 11.5 15z'}" fill="${t.text}"/><text x="14" y="31" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="${n > 9 ? 11 : 12}" fill="${ink}">${n}</text>`));
+    svgUrl(svg(28, 36, `<rect x="1" y="1" width="26" height="34" rx="3" fill="${chip}" stroke="${ink}" stroke-width="1.6"/><path d="M14 3L19.5 8.5 14 14 8.5 8.5z" fill="${c}" stroke="${ink}" stroke-width=".8"/><path d="${dir < 0 ? 'M15.6 6L12 8.5 15.6 11z' : 'M12.4 6L16 8.5 12.4 11z'}" fill="${t.text}"/><text x="14" y="32" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="${n > 9 ? 15 : 18}" fill="${ink}">${n}</text>`));
 
   // The pendulum: pivot, rod, a two-colour bob and the dashed arc of its swing.
   const pend = svgUrl(svg(100, 40, `<path d="M14 6A44 30 0 0 0 86 6" fill="none" stroke="${gold}" stroke-opacity=".8" stroke-width="1.6" stroke-dasharray="3 3"/><path d="M50 2V28" stroke="${chip}" stroke-width="1.6"/><circle cx="50" cy="2.6" r="2.4" fill="${gold}"/><path d="M50 22L57 31 50 39 43 31z" fill="${orange}" stroke="${t.text}" stroke-width="1.2"/><path d="M43 31H57L50 39z" fill="${green}"/>`));
 
-  // Twin pillars of light at a panel's ends.
-  const pillars = (w, a) => `linear-gradient(90deg, transparent, ${alpha(blueScale, a)}, transparent) 14px 0 / ${w}px 100% no-repeat, linear-gradient(90deg, transparent, ${alpha(redScale, a)}, transparent) calc(100% - 14px) 0 / ${w}px 100% no-repeat`;
   const scales = (size, x, y) => `var(--pe-s1) ${x}px ${y}px / ${size}px ${n1(size * 1.29)}px no-repeat, var(--pe-s12) calc(100% - ${x}px) ${y}px / ${size}px ${n1(size * 1.29)}px no-repeat`;
 
   // DuelingBook's pop-up buttons (OK/Yes primary, No/Cancel secondary) are
@@ -53,6 +51,8 @@ export default (t, kit) => {
   // Panel titles straddle the frame: shifted copies in the panel colour close the word gaps.
   const halo = [3, 7, 11].map((x) => `-${x}px 0 2px ${dark}, ${x}px 0 2px ${dark}`).join(', ');
   const titleText = `color: ${t.text} !important; text-shadow: var(--pe-title) !important;`;
+  // Page and pop-up titles: a soft shadow only, no backing plate.
+  const pageText = `color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 2px 8px ${alpha('#000000', 0.85)}, 0 0 16px ${alpha(green, 0.45)} !important;`;
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
@@ -67,32 +67,27 @@ html body {
   --pe-title: -1px -1px 0 ${warm}, 1px 2px 0 ${mix(green, t.bg, 0.5)}, ${halo}, 0 -3px 2px ${dark}, 0 3px 3px ${dark}, 0 0 14px ${alpha(green, 0.35)};
 }
 /* The page backdrop: the two halves meet in a wide blend, never a hard seam. */
-html body #dbte-skin-layer, html body #dbte-skin-layer::before { background: linear-gradient(180deg, ${alpha(orange, 0.3)}, ${alpha(orange, 0.08)} 35%, ${alpha(green, 0.08)} 65%, ${alpha(green, 0.3)}) !important; }
+html body #dbte-skin-layer, html body #dbte-skin-layer::before { background: radial-gradient(ellipse 80% 45% at 50% -8%, ${alpha(orange, 0.26)}, transparent 70%), linear-gradient(180deg, ${mix(t.bg, '#000000', 0.35)}, ${t.bg} 45%, ${alpha(green, 0.12)} 75%, ${alpha(green, 0.26)}) !important; }
 
-/* ---------- Menu tiles: Pendulum cards stacked between two pillars of light
-   (the Pendulum Zones), Scale 1 and Scale 12 set in the first card ---------- */
+/* ---------- Menu tiles: Pendulum cards, a blue Scale rule on the left edge and a red one on the right ---------- */
 ${SEL.tile} {
-  background: ${pillars(22, 0.3)}, ${halves(0.32)}, ${dark} !important;
+  background: ${halves(0.32)}, ${dark} !important;
   border-image: var(--pe-frame) 14 / 8px / 0 stretch !important;
-  box-shadow: 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
-}
-${sel(['#main_menu #room_btn .content::before'])} {
-  content: ""; position: absolute; left: 10px; right: 10px; top: 50%; height: 32px; margin-top: -16px; pointer-events: none;
-  background: ${scales(25, 0, 0)}; filter: drop-shadow(0 0 6px ${alpha(gold, 0.55)}) drop-shadow(0 1px 2px ${alpha('#000000', 0.85)});
+  box-shadow: inset 2px 0 0 ${blueScale}, inset -2px 0 0 ${redScale}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
 ${SEL.tileHover} {
-  background: ${pillars(26, 0.55)}, ${halves(0.5)}, ${dark} !important;
-  box-shadow: 0 0 20px -6px ${alpha(gold, 0.6)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
+  background: ${halves(0.5)}, ${dark} !important;
+  box-shadow: inset 2px 0 0 ${blueScale}, inset -2px 0 0 ${redScale}, 0 0 20px -6px ${alpha(gold, 0.6)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${halves(0.15)}, ${mix(dark, t.bg, 0.5)} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
 ${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)}, 0 0 8px ${alpha(t.bg, 0.9)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; background: ${dark} !important; box-shadow: inset 3px 0 0 ${blueScale}, inset -3px 0 0 ${redScale} !important; }
-${sel(['#main_menu #room_btn .content.dbte-small-menu::before'])} { content: none; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${warm} !important; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${orange} !important; }
 
 /* ---------- Headings ---------- */
-${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .admin_lbl'])} { ${titleText} }
+${sel(['#content .title1', '#content .title2', '#content .subtitle'])} { ${pageText} }
+${sel(['#content .admin_lbl'])} { ${titleText} }
 
 /* ---------- Buttons: little Pendulum cards ---------- */
 ${SEL.button} {
@@ -122,14 +117,14 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 /* ---------- Pop-ups: the Pendulum Summon. Pillars of light hold Scale 1 and
    Scale 12; the pendulum swings its arc between them. ---------- */
 ${SEL.dialog} {
-  background: ${pillars(30, 0.4)}, ${halves(0.24)}, ${dark} !important;
+  background: ${halves(0.24)}, ${dark} !important;
   border-radius: 6px !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 30px 70px -20px ${alpha('#000000', 0.95)}, 0 0 50px -20px ${alpha(gold, 0.5)} !important;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   content: ""; position: absolute; inset: 0; width: auto; height: auto; transform: none;
   border: 14px solid transparent; border-image: var(--pe-frame) 14 / 14px / 0 stretch;
-  background: ${scales(26, 6, 6)}; pointer-events: none; z-index: 0;
+  background: ${scales(40, 4, 4)}; pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
   content: ""; position: absolute; left: 50%; top: -50px; right: auto; bottom: auto; width: 140px; height: 56px; margin-left: -70px;
@@ -138,7 +133,8 @@ ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
   filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.8)});
 }
 @keyframes dbte-pendulum-swing { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
-${SEL.dialogTitle} { ${titleText} }
+${SEL.dialogTitle} { ${pageText} }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: ${t.text} !important; }
 
 /* ---------- Pop-up buttons ---------- */
 ${popButtons}
@@ -161,11 +157,6 @@ ${SEL.life} {
   background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 10px -3px ${alpha(gold, 0.6)} !important;
 }
-${sel(['#duel #lifepoints1 .life_border::before', '#duel #lifepoints2 .life_border::before'])} {
-  content: ""; position: absolute; left: -25px; top: -6px; width: 20px; height: 26px; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
-}
-${sel(['#duel #lifepoints1 .life_border::before'])} { background: var(--pe-s1) center / contain no-repeat; }
-${sel(['#duel #lifepoints2 .life_border::before'])} { background: var(--pe-s12) center / contain no-repeat; }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.55)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
@@ -191,14 +182,10 @@ ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${warm}, inset 0 3px 0
 ${sel(['#duel .cout_txt'])} { background: ${halves(0.12)}, ${dark} !important; box-shadow: inset 0 0 0 2px ${warm}, inset 0 3px 0 ${orange} !important; }
 ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 1px ${warm}, inset 0 3px 0 ${alpha(orange, 0.6)}; }
 
-/* ---------- Duel room: warm frames split along the top edge, the two Scales at the foot ---------- */
+/* ---------- Duel room: warm frames split along the top edge ---------- */
 ${panel('::before')} { background: ${topEdge(4)}, ${warm} !important; filter: none !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${topEdge(4)}, ${warmHi} !important; }
 ${panel()} { background: ${halves(0.12)}, ${dark} !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.95)}; }
-${sel(['#duel_room #formats .format > .border::after'])} {
-  content: ""; position: absolute; left: 8px; right: 8px; bottom: -14px; height: 26px; background: ${scales(20, 0, 0)};
-  filter: drop-shadow(0 1px 2px ${alpha('#000000', 0.85)}); pointer-events: none;
-}
 ${sel(['#duel_room #formats .format .format_inner', '#duel_room #formats .format_inner[id]'])} { background-color: ${alpha(dark, 0.85)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background-color: ${t.raised} !important; opacity: 0.88 !important; }
 ${sel(['#duel_room .format_txt', '#duel_room span.arial_black2', '#duel_room .title_txt.arial_black2'])} { ${titleText} }
@@ -212,7 +199,7 @@ ${sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constr
   box-shadow: inset 0 0 0 2px ${warm}, inset 0 0 0 3px ${alpha('#000000', 0.5)} !important;
 }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { ${titleText} opacity: 1 !important; }
-${sel(['#deck_constructor #search .title_txt'])} { ${titleText} }
+${sel(['#deck_constructor #search .title_txt'])} { ${pageText} }
 ${sel(['#deck_constructor #search .search_prev_btn'])} { background-color: ${blueScale} !important; }
 ${sel(['#deck_constructor #search .search_next_btn'])} { background-color: ${redScale} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${gold} !important; }

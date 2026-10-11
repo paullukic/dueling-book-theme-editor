@@ -14,7 +14,7 @@ const scene = (t) => {
   const stone = mix(t.bg, t.muted, 0.16);
   const bronze = mix(t.accent, '#000000', 0.72);
   const night = mix(t.bg, t.accent2, 0.3);
-  const cx = 1232;
+  const cx = 1352;
   const ry = 560;
 
   // Tomb ceiling: lapis band with gold stars and a khekher frieze under it.
@@ -144,5 +144,5 @@ export default scene;
 // Particle systems for this theme (kinds and options: particles.js).
 export const particles = [
   { kind: 'mote', count: 70, colors: ['accent', 'warning'], speed: 0.6 },
-  { kind: 'spark', count: 14, colors: ['accent'], speed: 0.4, column: true, columnX: 0.8 },
+  { kind: 'spark', count: 14, colors: ['accent'], speed: 0.4, column: true, columnX: 0.85 },
 ];

@@ -2,10 +2,11 @@ import { mix } from '../../../lib/color.js';
 import { anim, H, n1, polar, rng, W } from './kit.js';
 
 // Divine Beasts: the three Egyptian Gods stacked in the right-hand column,
-// one rendering for all three: a deep body, a lighter plane, a thin rim of
-// the god's own colour and one breathing inner glow. Obelisk the Tormentor
-// looms behind, the Winged Dragon of Ra rises before its turning sun, and
-// Slifer the Sky Dragon coils below with both mouths open.
+// stepping down the right edge in one rendering: a deep body, a lighter
+// plane, a thin rim of the god's own colour and one breathing inner glow.
+// Obelisk the Tormentor (blue) stands at the top, the Winged Dragon of Ra
+// (gold) rises before its turning sun below him, and Slifer the Sky Dragon
+// (crimson) coils at the foot with both mouths open.
 
 // Samples a chain of cubic segments [[p0, p1, p2, p3], ...] into points.
 const sample = (segs, steps) => {
@@ -49,7 +50,7 @@ const scene = (t) => {
   const gold = t.accent;
   const goldDeep = mix(gold, '#000000', 0.62);
   const goldMid = mix(gold, '#000000', 0.38);
-  const red = t.self;
+  const red = mix(t.danger, '#000000', 0.12);
   const redDeep = mix(red, '#000000', 0.58);
   const redBelly = mix(red, '#000000', 0.38);
   const blue = t.opp;
@@ -146,7 +147,7 @@ const scene = (t) => {
   return `<defs>
 <linearGradient id="dbtefx-dv-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, gold, 0.12)}" stop-opacity="0.95"/><stop offset="0.55" stop-color="${t.bg}" stop-opacity="0.92"/><stop offset="1" stop-color="${mix(t.bg, red, 0.08)}" stop-opacity="0.95"/></linearGradient>
 <radialGradient id="dbtefx-dv-haze" gradientUnits="userSpaceOnUse" cx="${raX}" cy="${raY - 150}" r="700"><stop offset="0" stop-color="${gold}" stop-opacity="0.3"/><stop offset="0.4" stop-color="${gold}" stop-opacity="0.08"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
-<linearGradient id="dbtefx-dv-titan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(blueDeep, blue, 0.25)}"/><stop offset="0.6" stop-color="${blueDeep}" stop-opacity="0.9"/><stop offset="1" stop-color="${blueDeep}" stop-opacity="0"/></linearGradient>
+<linearGradient id="dbtefx-dv-titan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(blueDeep, blue, 0.5)}"/><stop offset="0.6" stop-color="${mix(blueDeep, blue, 0.2)}" stop-opacity="0.95"/><stop offset="1" stop-color="${blueDeep}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-dv-trim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(blue, '#ffffff', 0.35)}"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></linearGradient>
 <radialGradient id="dbtefx-dv-oeye"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="${blue}" stop-opacity="0.85"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dv-sun"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="0.35" stop-color="${mix(gold, '#ffffff', 0.4)}" stop-opacity="0.7"/><stop offset="0.75" stop-color="${gold}" stop-opacity="0.2"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
@@ -158,7 +159,7 @@ const scene = (t) => {
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dv-sky)"/>
 <g fill="none" stroke="${gold}" stroke-opacity="0.05" stroke-width="2.5" stroke-linecap="round">${cartouches}</g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dv-haze)"/>
-<g transform="translate(1352 136) scale(0.5)">
+<g transform="translate(1346 222) scale(0.52)">
 <path d="${titan}" fill="url(#dbtefx-dv-titan)"/><path d="${titan}" fill="url(#dbtefx-dv-titan)" transform="scale(-1 1)"/>
 <g fill="none" stroke="${blue}" stroke-opacity="0.3" stroke-width="2.5"><path d="${titanPlanes}"/><path d="${titanPlanes}" transform="scale(-1 1)"/></g>
 <g fill="none" stroke="url(#dbtefx-dv-trim)" stroke-width="3" stroke-linejoin="round"><path d="${titanRim}"/><path d="${titanRim}" transform="scale(-1 1)"/></g>
@@ -166,7 +167,7 @@ const scene = (t) => {
 <g ${anim('pulse', 6, 0, 'ease-in-out')}><circle cx="-19" cy="-1" r="34" fill="url(#dbtefx-dv-oeye)"/><circle cx="19" cy="-1" r="34" fill="url(#dbtefx-dv-oeye)"/></g>
 </g>
 <!--mid-->
-<g transform="translate(${raX + 56} ${raY}) scale(0.8) translate(${-raX} ${-raY})">
+<g transform="translate(1226 560) scale(0.68) translate(${-raX} ${-raY})">
 <g transform="translate(${raX + 10} ${raY - 150})"><path d="${rays}" fill="${gold}" fill-opacity="0.16" style="animation: dbtefx-spin 60s linear infinite;"/></g>
 <circle cx="${raX + 10}" cy="${raY - 150}" r="170" fill="url(#dbtefx-dv-sun)" ${anim('bloom', 6, 2, 'ease-in-out')}/>
 <circle cx="${raX + 10}" cy="${raY - 150}" r="150" fill="none" stroke="${mix(gold, '#ffffff', 0.5)}" stroke-opacity="0.45" stroke-width="2"/>
@@ -187,7 +188,7 @@ ${wing(1, 1)}
 </g>
 </g>
 <!--near-->
-<g transform="translate(1326 712) scale(0.64) translate(-1300 -700)">
+<g transform="translate(1372 760) scale(0.58) translate(-1300 -700)">
 <path d="${sl.d}" fill="${redDeep}"/>
 <path d="${belly.d}" fill="${redBelly}"/>
 <path d="${ribs}" stroke="${redDeep}" stroke-width="2.5"/>

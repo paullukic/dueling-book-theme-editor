@@ -53,6 +53,8 @@ export default (t, kit) => {
   const bevel = `inset 1px 1px 0 ${alpha(frameHi, 0.45)}, inset -1px -1px 0 ${alpha('#000000', 0.6)}`;
   const art = `radial-gradient(ellipse 80% 70% at 50% 40%, ${alpha(green, 0.12)}, transparent 70%), linear-gradient(180deg, ${mix(artBg, green, 0.08)}, ${artBg})`;
   const nameText = `color: ${mix(green, '#ffffff', 0.72)} !important; text-shadow: var(--sp-title) !important;`;
+  // Page and pop-up titles: a soft shadow only, no backing plate.
+  const pageText = `color: ${mix(green, '#ffffff', 0.72)} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 2px 8px ${alpha('#000000', 0.85)}, 0 0 16px ${alpha(green, 0.45)} !important;`;
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
@@ -92,11 +94,12 @@ ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: non
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${green} !important; }
 
 /* ---------- Headings ---------- */
-${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .admin_lbl'])} { ${nameText} }
+${sel(['#content .title1', '#content .title2', '#content .subtitle'])} { ${pageText} }
+${sel(['#content .admin_lbl'])} { ${nameText} }
 
 /* ---------- Buttons: name boxes on a Spell card frame ---------- */
 ${SEL.button} {
-  background: var(--sp-foil), linear-gradient(180deg, ${mix(frame, t.raised, 0.25)}, ${mix(frame, t.bg, 0.4)}) !important;
+  background: linear-gradient(180deg, ${mix(green, t.raised, 0.45)}, ${frame} 55%, ${mix(frame, t.bg, 0.35)}) !important;
   border-color: ${ink} !important;
   border-radius: 2px !important;
   color: ${t.text} !important;
@@ -104,7 +107,7 @@ ${SEL.button} {
   box-shadow: ${bevel}, 0 2px 3px ${alpha('#000000', 0.7)} !important;
 }
 ${SEL.buttonHover} {
-  background: var(--sp-foil), linear-gradient(180deg, ${mix(green, '#ffffff', 0.1)}, ${frame}) !important;
+  background: linear-gradient(180deg, ${mix(green, '#ffffff', 0.1)}, ${green} 50%, ${frame}) !important;
   border-color: ${frameHi} !important;
   color: ${t.text} !important;
   box-shadow: ${bevel}, 0 0 10px -1px ${alpha(green, 0.85)} !important;
@@ -134,7 +137,8 @@ ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
   content: ""; position: absolute; left: auto; right: -14px; top: -14px; bottom: auto; width: 40px; height: 40px; transform: none;
   background: var(--sp-medal) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${alpha('#000000', 0.85)}); pointer-events: none; z-index: 1;
 }
-${SEL.dialogTitle} { ${nameText} }
+${SEL.dialogTitle} { ${pageText} }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: ${t.text} !important; }
 
 /* ---------- Chat: green frame header, art-artBg body ---------- */
 ${SEL.chatTop} {
@@ -188,10 +192,6 @@ ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 2px ${frame}, inset 0 0
 ${panel('::before')} { background: linear-gradient(135deg, ${frameHi}, ${green} 30%, ${frame} 65%, ${green}) !important; filter: none !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(135deg, ${mix(gold, '#ffffff', 0.3)}, ${gold} 35%, ${green}) !important; }
 ${panel()} { background: ${art} !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.95)}, 0 0 0 1px ${ink}; }
-${panel('::after')} {
-  content: ""; position: absolute; right: -8px; top: -8px; width: 22px; height: 22px; background: var(--sp-medal) center / contain no-repeat;
-  filter: drop-shadow(0 1px 2px ${alpha('#000000', 0.85)});
-}
 ${sel(['#duel_room #formats .format .format_inner', '#duel_room #formats .format_inner[id]'])} { background-color: ${alpha(artBg, 0.85)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background-color: ${mix(artBg, green, 0.1)} !important; opacity: 0.9 !important; }
 ${sel(['#duel_room .format_txt', '#duel_room span.arial_black2', '#duel_room .title_txt.arial_black2'])} { ${nameText} }
@@ -209,7 +209,7 @@ ${sel(['#deck_constructor #search .search_bg'])} {
   background: ${art} !important;
   box-shadow: inset 0 0 0 1px ${ink}, inset 0 0 0 4px ${frame}, inset 0 0 0 5px ${alpha('#000000', 0.6)} !important;
 }
-${sel(['#deck_constructor #search .title_txt'])} { ${nameText} }
+${sel(['#deck_constructor #search .title_txt'])} { ${pageText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${green} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${frameHi} !important; }
 

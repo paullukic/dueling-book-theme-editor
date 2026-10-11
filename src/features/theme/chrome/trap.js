@@ -1,5 +1,5 @@
-// Trap Card: something is set and waiting. Riveted plates in Trap magenta,
-// hazard chevrons along the edges, chains binding the corners, the TRAP
+// Trap Card: something is set and waiting. Riveted dark-iron plates in Trap magenta,
+// hazard chevrons along the edges, a chain at each life total, the TRAP
 // medallion, and phase buttons ringed like sprung jaws.
 import { mix } from '../../../lib/color.js';
 
@@ -21,7 +21,8 @@ export default (t, kit) => {
   // Panel titles straddle the frame line: copies of the glyphs in the panel
   // colour, shifted sideways, close the word gaps so the line never shows.
   const titleHalo = (c) => `${[3, 7, 11].map((x) => `-${x}px 0 2px ${c}, ${x}px 0 2px ${c}`).join(', ')}, 0 -3px 2px ${c}, 0 3px 3px ${c}`;
-  const mag = t.accent;
+  // Trap magenta-purple over dark iron (not candy pink).
+  const mag = mix(mix(t.accent, t.opp, 0.15), t.bg, 0.25);
   const amber = t.accent2;
   const magHi = mix(mag, '#ffffff', 0.35);
   const magLo = mix(mag, t.bg, 0.55);
@@ -37,17 +38,17 @@ export default (t, kit) => {
   // Chain links, steel tinted with Trap magenta.
   const linkStroke = mix(steelHi, mag, 0.15);
   const chainRow = svgUrl(svg(22, 10, `<rect x="1" y="1.8" width="12.5" height="6.4" rx="3.2" fill="none" stroke="${linkStroke}" stroke-width="1.8"/><rect x="11.5" y="4" width="10.5" height="2" rx="1" fill="${linkStroke}"/><rect x="1" y="1.8" width="12.5" height="6.4" rx="3.2" fill="none" stroke="${alpha('#000000', 0.5)}" stroke-width=".6" transform="translate(.6 .8)"/>`));
-  // Three links bound diagonally across a corner.
-  const cornerChain = svgUrl(svg(44, 44, `<g transform="rotate(-45 22 22)" fill="none" stroke-linecap="round"><g stroke="${alpha('#000000', 0.6)}" stroke-width="3.6" transform="translate(1 1.4)"><rect x="-2" y="18.5" width="15" height="7" rx="3.5"/><rect x="11" y="21" width="12" height="2" rx="1"/><rect x="21" y="18.5" width="15" height="7" rx="3.5"/><rect x="34" y="21" width="12" height="2" rx="1"/></g><g stroke="${linkStroke}" stroke-width="2.2"><rect x="-2" y="18.5" width="15" height="7" rx="3.5"/><rect x="11" y="21" width="12" height="2" rx="1"/><rect x="21" y="18.5" width="15" height="7" rx="3.5"/><rect x="34" y="21" width="12" height="2" rx="1"/></g></g>`));
 
-  // TRAP medallion: magenta disc, white rim, a sprung jaw.
-  const medal = svgUrl(svg(32, 32, `<defs><radialGradient id="m" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="${magHi}"/><stop offset=".6" stop-color="${mag}"/><stop offset="1" stop-color="${magLo}"/></radialGradient></defs><circle cx="16" cy="16" r="14.5" fill="url(#m)" stroke="${t.text}" stroke-width="2"/><g fill="none" stroke="${t.text}" stroke-width="1.8" stroke-linejoin="round"><path d="M7 13.5l3 3.2 3-3.2 3 3.2 3-3.2 3 3.2 3-3.2"/><path d="M7 19l3-3 3 3 3-3 3 3 3-3 3 3"/><path d="M6.5 11.5Q16 4 25.5 11.5M6.5 21Q16 28.5 25.5 21"/></g>`));
+  // TRAP medallion: magenta disc, white rim, the Trap kanji as on the card's attribute icon.
+  const medal = svgUrl(svg(32, 32, `<defs><radialGradient id="m" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="${magHi}"/><stop offset=".6" stop-color="${mag}"/><stop offset="1" stop-color="${magLo}"/></radialGradient></defs><circle cx="16" cy="16" r="14.5" fill="url(#m)" stroke="${t.text}" stroke-width="2"/><circle cx="16" cy="16" r="10.5" fill="none" stroke="${alpha(t.text, 0.5)}" stroke-width=".8"/><text x="16" y="16.5" dominant-baseline="central" text-anchor="middle" font-family="Yu Mincho,MS Mincho,Noto Serif CJK JP,serif" font-weight="700" font-size="15" fill="${t.text}">罠</text>`));
 
 
   const bevel = `inset 1px 1px 0 ${alpha(magHi, 0.35)}, inset -1px -1px 0 ${alpha('#000000', 0.7)}`;
   const brushed = `repeating-linear-gradient(90deg, ${alpha(t.text, 0.025)} 0 1px, transparent 1px 3px)`;
   const plateBg = `${brushed}, linear-gradient(180deg, ${plate}, ${plateDark})`;
   const warnText = `color: ${mix(mag, '#ffffff', 0.62)} !important; text-shadow: var(--tr-title) !important;`;
+  // Page and pop-up titles: a soft shadow only, no backing plate.
+  const pageText = `color: ${mix(mag, '#ffffff', 0.62)} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 2px 8px ${alpha('#000000', 0.85)}, 0 0 16px ${alpha(mag, 0.45)} !important;`;
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
@@ -61,12 +62,11 @@ html body {
   --tr-rv-l: ${rivets(10)};
   --tr-title: 0 1px 0 ${alpha('#000000', 0.9)}, ${titleHalo(plateDark)}, 0 0 14px ${alpha(mag, 0.6)};
   --tr-chain: ${chainRow};
-  --tr-corner: ${cornerChain};
   --tr-medal: ${medal};
 }
 /* The skin's chain wallpaper: larger links, much fainter, so the feed reads. */
-html body #dbte-skin-motif { opacity: 0.38 !important; }
-html body #dbte-skin-motif, html body #dbte-skin-motif::before { background-size: 120px 120px !important; }
+/* The skin's chain wallpaper read as paperclips behind the feed: the iron plates carry the theme instead. */
+html body #dbte-skin-motif, html body #dbte-skin-motif::before { background: none !important; }
 
 /* ---------- Menu tiles: riveted plates, a hazard strip, chains bound at the corner ---------- */
 ${SEL.tile} {
@@ -75,16 +75,11 @@ ${SEL.tile} {
   border-radius: 2px !important;
   box-shadow: ${bevel}, inset 0 0 0 1px ${alpha(mag, 0.35)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
-${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; right: -17px; top: -17px; width: 40px; height: 40px; pointer-events: none; transform: scaleX(-1);
-  background: var(--tr-corner) center / contain no-repeat; transition: filter 0.2s;
-}
 ${SEL.tileHover} {
   background: var(--tr-rv-m), ${hazard(5)} 0 100% / 100% 5px no-repeat, radial-gradient(ellipse 70% 120% at 50% 100%, ${alpha(mag, 0.35)}, transparent 70%), ${plateBg} !important;
   border-color: ${mag} !important;
   box-shadow: ${bevel}, inset 0 0 0 1px ${mag}, 0 0 20px -6px ${alpha(mag, 0.9)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: drop-shadow(0 0 4px ${amber}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateDark} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
 ${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(amber, '#ffffff', 0.4)} !important; }
@@ -93,7 +88,8 @@ ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: non
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${mag} !important; }
 
 /* ---------- Headings ---------- */
-${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .admin_lbl'])} { ${warnText} }
+${sel(['#content .title1', '#content .title2', '#content .subtitle'])} { ${pageText} }
+${sel(['#content .admin_lbl'])} { ${warnText} }
 
 /* ---------- Buttons: riveted switch plates; hover arms them ---------- */
 ${SEL.button} {
@@ -127,14 +123,15 @@ ${SEL.dialog} {
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   content: ""; position: absolute; inset: 0; width: auto; height: auto; transform: none; border: none;
-  background: var(--tr-corner) -24px -24px / 60px 60px no-repeat;
+  background: none;
   pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
   content: ""; position: absolute; left: auto; right: -16px; top: -16px; bottom: auto; width: 42px; height: 42px; transform: none;
   background: var(--tr-medal) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${alpha('#000000', 0.85)}); pointer-events: none; z-index: 1;
 }
-${SEL.dialogTitle} { ${warnText} }
+${SEL.dialogTitle} { ${pageText} }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: ${t.text} !important; }
 
 /* ---------- Chat: a hazard-banded hatch ---------- */
 ${SEL.chatTop} {
@@ -189,9 +186,6 @@ ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 1px ${magLo}, inset 0 3
 ${panel('::before')} { background: linear-gradient(135deg, ${magHi}, ${mag} 35%, ${magLo} 70%, ${mag}) !important; filter: none !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${hazard(6)} !important; }
 ${panel()} { background: var(--tr-rv-l), ${plateBg} !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.95)}; }
-${panel('::after')} {
-  content: ""; position: absolute; left: -12px; bottom: -12px; width: 34px; height: 34px; background: var(--tr-corner) center / contain no-repeat; transform: scaleY(-1);
-}
 ${sel(['#duel_room #formats .format .format_inner', '#duel_room #formats .format_inner[id]'])} { background-color: ${alpha(plateDark, 0.85)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background-color: ${plate} !important; opacity: 0.88 !important; }
 ${sel(['#duel_room .format_txt', '#duel_room span.arial_black2', '#duel_room .title_txt.arial_black2'])} { ${warnText} }
@@ -209,7 +203,7 @@ ${sel(['#deck_constructor #search .search_bg'])} {
   background: ${hazard(6)} 0 0 / 100% 6px no-repeat, var(--tr-rv-l), ${plateBg} !important;
   box-shadow: inset 0 0 0 2px ${magLo} !important;
 }
-${sel(['#deck_constructor #search .title_txt'])} { ${warnText} }
+${sel(['#deck_constructor #search .title_txt'])} { ${pageText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${mag} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${amber} !important; }
 

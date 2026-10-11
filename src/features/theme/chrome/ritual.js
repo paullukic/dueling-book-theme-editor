@@ -47,7 +47,7 @@ export default (t, kit) => {
       });
       return `<path d="M${p.join('L')}Z"/>`;
     };
-    return svg(120, 120, `<g fill="none" stroke="${c}" stroke-opacity="${o}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="57"/><circle cx="60" cy="60" r="44"/><g stroke-width="${sw * 0.9}">${runes}</g>${tri(0)}${tri(180)}<circle cx="60" cy="60" r="18"/></g><circle cx="60" cy="60" r="3" fill="${c}" fill-opacity="${o}"/>`);
+    return svg(120, 120, `<g fill="none" stroke="${c}" stroke-opacity="${o}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="57"/><circle cx="60" cy="60" r="44"/><g stroke-width="${sw * 0.9}">${runes}</g>${tri(180)}<circle cx="60" cy="60" r="18"/></g><circle cx="60" cy="60" r="3" fill="${c}" fill-opacity="${o}"/>`);
   };
 
   // A candle flame (inner white-gold, outer candle gold) on a stub of wax.
@@ -58,6 +58,8 @@ export default (t, kit) => {
   const slab = `var(--ri-grain), linear-gradient(160deg, ${stone}, ${stoneDark})`;
   const cardBlue = `var(--ri-mottle), var(--ri-grain), linear-gradient(180deg, ${mix(frameBlue, t.raised, 0.3)}, ${mix(frameBlue, t.bg, 0.45)})`;
   const runeText = `color: ${mix(blue, '#ffffff', 0.35)} !important; text-shadow: var(--ri-title) !important;`;
+  // Page and pop-up titles: a soft shadow only, no backing plate.
+  const pageText = `color: ${mix(blue, '#ffffff', 0.35)} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 2px 8px ${alpha('#000000', 0.85)}, 0 0 16px ${alpha(blue, 0.45)} !important;`;
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
@@ -74,25 +76,19 @@ html body {
   --ri-circle-glow: ${svgUrl(circle(candle, 0.5, 1.6))};
   --ri-candles: ${candles};
 }
-/* ---------- Menu tiles: altar slabs, a circle carved under each name, candles at the corners ---------- */
+/* ---------- Menu tiles: chiselled altar slabs, candle-lit on hover ---------- */
 ${SEL.tile} {
-  background: var(--ri-etch) 50% 50% / 56px 56px no-repeat, ${slab} !important;
+  background: ${slab} !important;
   border-color: ${frameBlue} !important;
   border-radius: 3px !important;
   box-shadow: ${bevel}, inset 0 0 0 1px ${alpha(t.bg, 0.8)}, inset 0 0 0 2px ${alpha(blue, 0.25)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
-${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: 3px; right: 3px; top: -19px; height: 24px; pointer-events: none;
-  background: var(--ri-candles) 0 0 / 14px 24px no-repeat, var(--ri-candles) 100% 0 / 14px 24px no-repeat;
-  filter: drop-shadow(0 0 4px ${alpha(candle, 0.7)}); opacity: 0.9; transition: opacity 0.25s, filter 0.25s;
-}
 ${SEL.tileHover} {
-  background: var(--ri-circle-glow) 50% 50% / 56px 56px no-repeat, radial-gradient(ellipse 60% 90% at 50% 50%, ${alpha(candle, 0.18)}, transparent 70%), ${slab} !important;
+  background: radial-gradient(ellipse 60% 90% at 50% 50%, ${alpha(candle, 0.18)}, transparent 70%), ${slab} !important;
   border-color: ${mix(candle, frameBlue, 0.4)} !important;
   box-shadow: ${bevel}, inset 0 0 0 2px ${alpha(candle, 0.35)}, 0 0 20px -6px ${alpha(candle, 0.7)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 7px ${candle}); }
-${sel(['#main_menu .menu_btn:active .content'])} { background: var(--ri-circle-glow) 50% 50% / 56px 56px no-repeat, ${stoneDark} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
+${sel(['#main_menu .menu_btn:active .content'])} { background: ${stoneDark} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
 ${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(candle, '#ffffff', 0.55)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { background: ${slab} !important; box-shadow: inset 0 -1px 0 ${alpha(blue, 0.3)} !important; }
@@ -100,7 +96,8 @@ ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: non
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${candle} !important; }
 
 /* ---------- Headings: carved, lit from within ---------- */
-${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .admin_lbl'])} { ${runeText} }
+${sel(['#content .title1', '#content .title2', '#content .subtitle'])} { ${pageText} }
+${sel(['#content .admin_lbl'])} { ${runeText} }
 
 /* ---------- Buttons: small chiselled stones, candle-lit on hover ---------- */
 ${SEL.button} {
@@ -128,7 +125,7 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* ---------- Pop-ups: the altar, its summoning circle and two candles ---------- */
 ${SEL.dialog} {
-  background: var(--ri-circle) 50% calc(50% + 70px) / 290px 290px no-repeat, radial-gradient(ellipse 60% 60% at 50% 70%, ${alpha(blue, 0.12)}, transparent 70%), ${slab} !important;
+  background: var(--ri-circle) 50% calc(50% + 160px) / 260px 260px no-repeat, radial-gradient(ellipse 60% 60% at 50% 100%, ${alpha(blue, 0.12)}, transparent 70%), ${slab} !important;
   border-radius: 4px !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 0 5px ${frameBlue}, 0 0 0 6px ${alpha(blue, 0.6)}, 0 30px 70px -20px ${alpha('#000000', 0.95)}, 0 0 50px -10px ${alpha(blue, 0.35)} !important;
 }
@@ -137,11 +134,12 @@ ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   border: 1px solid ${alpha(blue, 0.35)}; border-radius: 2px; box-shadow: ${bevel}, inset 0 0 30px ${alpha('#000000', 0.5)}; pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
-  content: ""; position: absolute; left: 14px; right: 14px; top: -26px; bottom: auto; width: auto; height: 34px; transform: none;
-  background: var(--ri-candles) 0 0 / 20px 34px no-repeat, var(--ri-candles) 100% 0 / 20px 34px no-repeat;
+  content: ""; position: absolute; left: 16px; right: 16px; top: -40px; bottom: auto; width: auto; height: 50px; transform: none;
+  background: var(--ri-candles) 0 0 / 29px 50px no-repeat, var(--ri-candles) 100% 0 / 29px 50px no-repeat;
   filter: drop-shadow(0 0 6px ${alpha(candle, 0.85)}); pointer-events: none; z-index: 1;
 }
-${SEL.dialogTitle} { ${runeText} }
+${SEL.dialogTitle} { ${pageText} }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: ${t.text} !important; }
 
 /* ---------- Chat: a Ritual-blue lintel over the altar ---------- */
 ${SEL.chatTop} {
@@ -161,10 +159,6 @@ ${SEL.life} {
   border-color: ${frameBlue} !important;
   background: repeating-linear-gradient(90deg, transparent 0 14px, ${alpha(t.bg, 0.55)} 14px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, inset 0 0 0 1px ${alpha(blue, 0.4)}, 0 0 10px -2px ${alpha(blue, 0.55)} !important;
-}
-${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -17px; top: -8px; width: 12px; height: 21px;
-  background: var(--ri-candles) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(candle, 0.9)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, candle, 0.5)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
@@ -212,7 +206,7 @@ ${sel(['#deck_constructor #search .search_bg'])} {
   background: var(--ri-circle) 50% 100% / 200px 200px no-repeat, ${slab} !important;
   box-shadow: inset 0 0 0 2px ${frameBlue}, inset 0 4px 0 ${alpha(blue, 0.45)} !important;
 }
-${sel(['#deck_constructor #search .title_txt'])} { ${runeText} }
+${sel(['#deck_constructor #search .title_txt'])} { ${pageText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${blue} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${candle} !important; }
 
