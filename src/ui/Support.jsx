@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { getSettings, replaceSettings, resetSettings, updateSettings, useSettings } from '../lib/settings';
 import { Group, ToggleRow } from './controls';
+import { placeById } from './places';
 import { HeartIcon, PlayIcon, ShareIcon, StarIcon } from './icons';
 
 const DONATE_URL = 'https://www.buymeacoffee.com/sudbina';
@@ -17,6 +18,7 @@ const version = () => chrome.runtime.getManifest().version;
 
 // Shown once after an update, until dismissed.
 const NEWS = [
+  'Search: find any setting or theme from the box at the top of the panel, and star your favourite themes',
   'Full theme: a sleek look for every DuelingBook screen, with 21 themes, each with its own signature look (Branded embers, Artmage paint, HERO city, Pendulum, Divine Beasts…)',
   'Share your theme as a code, or add your own CSS',
   'Reconnect automatically when DuelingBook drops you, and chat commands like /calc and /gl',
@@ -149,15 +151,14 @@ const SettingsTransfer = () => {
 
   const { showLauncher } = useSettings();
   return (
-    <Group title="Your settings">
+    <Group place="yourSettings">
       <ToggleRow
-        label="Corner button"
-        description="The round button in the bottom-right corner that opens this panel. The toolbar icon always works."
+        place="showLauncher"
         checked={showLauncher}
         onChange={(v) => updateSettings({ showLauncher: v })}
       />
-      <p className="note">Move your setup to another browser or share a theme with a friend.</p>
-      <div className="btn-row">
+      <p className="note">{placeById.settingsTransfer.desc}</p>
+      <div className="btn-row" data-place="settingsTransfer">
         <button
           type="button"
           className="btn"
@@ -187,7 +188,7 @@ const SettingsTransfer = () => {
           }}
         />
       </div>
-      <div className="btn-row">
+      <div className="btn-row" data-place="resetAll">
         {confirmReset ? (
           <>
             <button
@@ -239,10 +240,10 @@ export const SupportTab = () => {
   return (
     <>
       <SettingsTransfer />
-      <Group title="Privacy">
-        <p className="note">Your settings stay in your browser. Nothing is collected or sent anywhere.</p>
+      <Group place="privacy">
+        <p className="note">{placeById.privacy.desc}</p>
       </Group>
-      <div className="card-callout gold">
+      <div className="card-callout gold" data-place="support">
         <h3>Keep Theme Editor free</h3>
         <p>No ads, no tracking, no paid features. If it makes your duels nicer, a coffee pays for the next update.</p>
         <a className="btn btn-gold" href={DONATE_URL} target="_blank" rel="noopener noreferrer">
@@ -250,7 +251,7 @@ export const SupportTab = () => {
           Buy me a coffee
         </a>
       </div>
-      <Group title="Other ways to help">
+      <Group place="help">
         <div className="link-list">
           <a className="btn" href={REVIEW_URL} target="_blank" rel="noopener noreferrer">
             <StarIcon />

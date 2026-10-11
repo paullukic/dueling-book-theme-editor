@@ -1,25 +1,40 @@
 import { useId } from 'react';
+import { placeById } from './places';
 
-export const Disclosure = ({ title, children }) => (
-  <details className="sub disclosure">
-    <summary>{title}</summary>
+// `place` names the control's entry in places.js: its label and description
+// come from there unless passed in, and data-place lets search jump to it.
+const copy = (place, label, description) => {
+  const p = place ? placeById[place] : null;
+  return {
+    label: label !== undefined ? label : p && p.label,
+    description: description !== undefined ? description : p && p.desc,
+  };
+};
+
+export const Disclosure = ({ title, place, children }) => (
+  <details className="sub disclosure" data-place={place}>
+    <summary>{copy(place, title).label}</summary>
     {children}
   </details>
 );
 
-export const Group = ({ title, children }) => (
-  <section className="group">
-    {title && <h2>{title}</h2>}
-    {children}
-  </section>
-);
+export const Group = ({ title, place, children }) => {
+  const heading = copy(place, title).label;
+  return (
+    <section className="group" data-place={place}>
+      {heading && <h2>{heading}</h2>}
+      {children}
+    </section>
+  );
+};
 
 // A labelled on/off row. The label and the switch both toggle it.
-export const ToggleRow = ({ label, description, checked, onChange, children }) => {
+export const ToggleRow = ({ place, checked, onChange, children, ...text }) => {
   const id = useId();
+  const { label, description } = copy(place, text.label, text.description);
   return (
     <>
-      <div className="row">
+      <div className="row" data-place={place}>
         <div className="row-text">
           <label className="row-label" htmlFor={id}>
             {label}
@@ -52,12 +67,13 @@ export const ToggleRow = ({ label, description, checked, onChange, children }) =
 };
 
 // `values` turns the slider into a list of fixed stops (e.g. Default, 10, 11…).
-export const SliderRow = ({ label, value, min, max, step, values, format = String, onChange }) => {
+export const SliderRow = ({ place, value, min, max, step, values, format = String, onChange, ...text }) => {
   const id = useId();
+  const { label } = copy(place, text.label);
   if (values) {
     const index = Math.max(0, values.indexOf(value));
     return (
-      <div className="slider-row">
+      <div className="slider-row" data-place={place}>
         <label htmlFor={id}>{label}</label>
         <output htmlFor={id}>{format(values[index])}</output>
         <input
@@ -74,7 +90,7 @@ export const SliderRow = ({ label, value, min, max, step, values, format = Strin
     );
   }
   return (
-    <div className="slider-row">
+    <div className="slider-row" data-place={place}>
       <label htmlFor={id}>{label}</label>
       <output htmlFor={id}>{format(value)}</output>
       <input
@@ -91,10 +107,11 @@ export const SliderRow = ({ label, value, min, max, step, values, format = Strin
   );
 };
 
-export const ColorRow = ({ label, value, onChange }) => {
+export const ColorRow = ({ place, value, onChange, ...text }) => {
   const id = useId();
+  const { label } = copy(place, text.label);
   return (
-    <div className="color-row">
+    <div className="color-row" data-place={place}>
       <label htmlFor={id}>{label}</label>
       <input id={id} type="color" value={value} onChange={(e) => onChange(e.target.value)} />
     </div>

@@ -63,9 +63,16 @@ export const HeartIcon = () => (
   </Icon>
 );
 
-export const StarIcon = () => (
+export const StarIcon = ({ filled = false }) => (
   <Icon>
-    <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />
+    <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill={filled ? 'currentColor' : 'none'} />
+  </Icon>
+);
+
+export const SearchIcon = () => (
+  <Icon>
+    <circle cx="10.5" cy="10.5" r="6.5" />
+    <path d="M15.5 15.5L20 20" />
   </Icon>
 );
 

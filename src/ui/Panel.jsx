@@ -1,23 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { retryStorage, updateSettings, useSettings, useStorageProblem } from '../lib/settings';
 import { useLocal, useLocalProblem } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
+import { isTypingEvent } from '../lib/dom';
 import { Disclosure, Group, SliderRow, ToggleRow } from './controls';
 import ThemeTab from './ThemeTab';
 import AliasEditor from './AliasEditor';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
 import { SupportNudge, SupportTab, WhatsNew } from './Support';
+import { SearchField, SearchResults, searchAll } from './GlobalSearch';
+import { TABS as TAB_LIST, placeById, placeChain } from './places';
+import { setNav } from './nav';
 import { CardsIcon, ChatIcon, CloseIcon, GearIcon, PaletteIcon, SwordsIcon } from './icons';
 
-const TABS = [
-  { id: 'look', label: 'Theme', Icon: PaletteIcon },
-  { id: 'duel', label: 'Duel', Icon: SwordsIcon },
-  { id: 'chat', label: 'Chat', Icon: ChatIcon },
-  { id: 'deck', label: 'Deck', Icon: CardsIcon },
-  { id: 'more', label: 'Settings', Icon: GearIcon },
-];
+const ICONS = { look: PaletteIcon, duel: SwordsIcon, chat: ChatIcon, deck: CardsIcon, more: GearIcon };
+const TABS = TAB_LIST.map((t) => ({ ...t, Icon: ICONS[t.id] }));
 
 const set = (key) => (value) => updateSettings({ [key]: value });
 
@@ -38,25 +37,23 @@ const DuelTab = () => {
   const anyAlert = s.alertDuelFound || s.alertMyTurn;
   return (
     <>
-      <Group title="Alerts">
+      <Group place="alerts">
         <ToggleRow
-          label="Duel found"
-          description="Get a ping when your match starts, so you can wait in another tab."
+          place="alertDuelFound"
           checked={s.alertDuelFound}
           onChange={set('alertDuelFound')}
         />
         <ToggleRow
-          label="Your turn"
-          description="Get a ping each time your turn starts."
+          place="alertMyTurn"
           checked={s.alertMyTurn}
           onChange={set('alertMyTurn')}
         />
         {anyAlert && (
           <div className="sub">
-            <ToggleRow label="Play a sound" checked={s.alertSound} onChange={set('alertSound')} />
-            <ToggleRow label="Flash the tab title" checked={s.alertTitle} onChange={set('alertTitle')} />
+            <ToggleRow place="alertSound" checked={s.alertSound} onChange={set('alertSound')} />
+            <ToggleRow place="alertTitle" checked={s.alertTitle} onChange={set('alertTitle')} />
             <ToggleRow
-              label="Desktop notification"
+              place="alertDesktop"
               description={
                 permission === 'denied'
                   ? 'Blocked by your browser. Allow notifications for duelingbook.com in the address bar, then try again.'
@@ -66,7 +63,7 @@ const DuelTab = () => {
               onChange={enableDesktop}
             />
             <ToggleRow
-              label="Only when I’m away"
+              place="alertOnlyWhenHidden"
               description="Stay quiet while the DuelingBook tab is focused."
               checked={s.alertOnlyWhenHidden}
               onChange={set('alertOnlyWhenHidden')}
@@ -74,21 +71,19 @@ const DuelTab = () => {
           </div>
         )}
       </Group>
-      <Group title="Speed">
+      <Group place="speed">
         <ToggleRow
-          label="Skip the intro"
-          description="Goes straight past the title screen and connects to the main menu each time DuelingBook loads."
+          place="skipIntro"
           checked={s.skipIntro}
           onChange={set('skipIntro')}
         />
         <ToggleRow
-          label="Reconnect automatically"
-          description="When DuelingBook drops the connection or is full, reloads and connects again after 5, 10, 20, 40 and 60 seconds, with a Cancel button. Never when you are logged in elsewhere or kicked."
+          place="autoReconnect"
           checked={s.autoReconnect}
           onChange={set('autoReconnect')}
         />
         <SliderRow
-          label="Animation speed"
+          place="animationSpeed"
           value={s.animationSpeed}
           min={1}
           max={4}
@@ -97,29 +92,27 @@ const DuelTab = () => {
           onChange={set('animationSpeed')}
         />
       </Group>
-      <Group title="Tools">
+      <Group place="tools">
         <ToggleRow
-          label="Notes"
-          description="A notepad that floats over the duel and keeps what you write."
+          place="notesEnabled"
           checked={s.notesEnabled}
           onChange={set('notesEnabled')}
         />
         <ToggleRow
-          label="Action log"
-          description="Lists cards added, set, revealed or returned, plus your opponent’s hand whenever it is revealed."
+          place="trackerEnabled"
           checked={s.trackerEnabled}
           onChange={set('trackerEnabled')}
         >
           <ToggleRow
-            label="Clear when a new duel starts"
+            place="trackerAutoClear"
             checked={s.trackerAutoClear}
             onChange={set('trackerAutoClear')}
           />
         </ToggleRow>
       </Group>
-      <Group title="Keyboard shortcuts">
+      <Group place="shortcuts">
         <ToggleRow
-          label="Shortcuts in duels"
+          place="shortcutsEnabled"
           description={
             <>
               One key per action while a duel is open. Ignored while you type, and with <kbd>Shift</kbd>, <kbd>Ctrl</kbd> or <kbd>Alt</kbd> held.
@@ -130,14 +123,14 @@ const DuelTab = () => {
         />
         {s.shortcutsEnabled && (
           <>
-            <Disclosure title="Actions">
+            <Disclosure place="shortcutActions" title="Actions">
               <ShortcutEditor which="actions" />
             </Disclosure>
-            <Disclosure title="Phase questions">
+            <Disclosure place="shortcutPhases" title="Phase questions">
               <p className="note">Asks your opponent in chat, then moves to that phase.</p>
               <ShortcutEditor which="phases" />
             </Disclosure>
-            <Disclosure title="Chat messages">
+            <Disclosure place="shortcutChat" title="Chat messages">
               <ShortcutEditor which="chat" />
             </Disclosure>
           </>
@@ -172,8 +165,8 @@ const ChatTab = () => {
   };
   return (
     <>
-      <Group title="Muted players">
-        <p className="note">Their chat lines are hidden. They are not told.</p>
+      <Group place="mutedPlayers">
+        <p className="note">{placeById.mutedPlayers.desc}</p>
         <form
           className="inline-form"
           onSubmit={(e) => {
@@ -227,24 +220,21 @@ const ChatTab = () => {
           <p className="note">Nobody is muted.</p>
         )}
       </Group>
-      <Group title="Mentions">
+      <Group place="mentions">
         <ToggleRow
-          label="Highlight my name"
-          description="Marks chat lines that mention your username."
+          place="chatHighlightMentions"
           checked={s.chatHighlightMentions}
           onChange={set('chatHighlightMentions')}
         />
         <ToggleRow
-          label="Alert me when mentioned"
-          description="Uses the sound, title and notification choices from Duel → Alerts."
+          place="chatMentionAlert"
           checked={s.chatMentionAlert}
           onChange={set('chatMentionAlert')}
         />
       </Group>
-      <Group title="Commands">
+      <Group place="commands">
         <ToggleRow
-          label="Chat commands"
-          description="Type /help in duel chat. /calc and /note stay on your screen and are never sent; DuelingBook’s own commands like /draw 2 work as always."
+          place="chatCommandsEnabled"
           checked={s.chatCommandsEnabled}
           onChange={set('chatCommandsEnabled')}
         >
@@ -296,11 +286,90 @@ const StorageProblem = () => {
   );
 };
 
+// Scrolls el to the middle of its scroll box without moving the page.
+const centerIn = (box, el, smooth) => {
+  if (!box) return;
+  const r = el.getBoundingClientRect();
+  const b = box.getBoundingClientRect();
+  const top = box.scrollTop + r.top - b.top - Math.max(8, (b.height - r.height) / 2);
+  box.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+};
+
+// After a search jump: find the setting (or the nearest parent on screen),
+// open what hides it, scroll to it, focus it and pulse it.
+const reveal = (root, jump) => {
+  const chain = placeChain(jump.place);
+  let el = jump.selector ? root.querySelector(jump.selector) : null;
+  let found = el ? jump.place : null;
+  for (let i = 0; !el && i < chain.length; i += 1) {
+    el = root.querySelector(`[data-place="${chain[i]}"]`);
+    if (el) found = chain[i];
+  }
+  const target = placeById[jump.place];
+  if (!el) return target.needs ? `“${target.label}” ${target.needs}.` : '';
+  for (let d = el.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true;
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const inner = el.closest('.gallery-scroll');
+  if (inner) centerIn(inner, el, false);
+  centerIn(root, el, smooth);
+  const control = el.matches('button, input, summary') ? el : el.querySelector('[role="switch"], input, summary, button');
+  if (control) control.focus({ preventScroll: true });
+  el.classList.remove('place-flash');
+  // Restart the animation when the same place is opened twice in a row.
+  void el.offsetWidth;
+  el.classList.add('place-flash');
+  setTimeout(() => el.classList.remove('place-flash'), 1700);
+  if (found === jump.place) return '';
+  return `“${target.label}” ${target.needs || `is inside “${placeById[found].label}”`}.`;
+};
+
 const Panel = ({ onClose, logoUrl }) => {
   const { panelTab } = useSettings();
   const tab = TABS.some((t) => t.id === panelTab) ? panelTab : 'look';
   const bodyRef = useRef(null);
+  const searchRef = useRef(null);
   const [meta, setMeta] = useLocal('meta', {});
+  const [query, setQuery] = useState('');
+  const [active, setActive] = useState(0);
+  const [jump, setJump] = useState(null);
+  const [hint, setHint] = useState('');
+  const results = useMemo(() => searchAll(query), [query]);
+  const searching = query.trim().length > 0;
+
+  const onQuery = (q, refocus) => {
+    setQuery(q);
+    setActive(0);
+    setHint('');
+    if (refocus && searchRef.current) searchRef.current.focus();
+  };
+
+  const open = (r) => {
+    if (!r) return;
+    if (r.kind === 'theme') {
+      setNav({ themeView: 'style', galleryFilter: 'all', galleryQuery: r.theme.name });
+      updateSettings({ panelTab: 'look' });
+      setJump({ place: 'themeGallery', selector: `.preset-chip[data-theme-id="${r.theme.id}"]`, at: Date.now() });
+    } else {
+      if (r.place.view) setNav({ themeView: r.place.view });
+      updateSettings({ panelTab: r.place.tab });
+      setJump({ place: r.place.id, at: Date.now() });
+    }
+    setQuery('');
+    setActive(0);
+  };
+
+  useEffect(() => {
+    if (!jump || !bodyRef.current) return undefined;
+    const frame = requestAnimationFrame(() => setHint(reveal(bodyRef.current, jump)));
+    return () => cancelAnimationFrame(frame);
+  }, [jump]);
+
+  // "/" jumps to search from anywhere in the panel, as in most apps.
+  const onPanelKey = (e) => {
+    if (e.key !== '/' || e.ctrlKey || e.altKey || e.metaKey || isTypingEvent(e)) return;
+    e.preventDefault();
+    if (searchRef.current) searchRef.current.focus();
+  };
 
   useEffect(() => {
     setMeta((m) => ({ ...(m || {}), panelOpens: ((m && m.panelOpens) || 0) + 1 }));
@@ -310,6 +379,19 @@ const Panel = ({ onClose, logoUrl }) => {
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = 0;
   }, [tab]);
+
+  // Results start at the top; clearing the search returns to where you were.
+  const savedScroll = useRef(0);
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+    if (searching) {
+      savedScroll.current = body.scrollTop;
+      body.scrollTop = 0;
+    } else {
+      body.scrollTop = savedScroll.current;
+    }
+  }, [searching]);
 
   const onTabKey = (e) => {
     const i = TABS.findIndex((t) => t.id === tab);
@@ -321,12 +403,14 @@ const Panel = ({ onClose, logoUrl }) => {
     if (!next) return;
     e.preventDefault();
     updateSettings({ panelTab: next.id });
+    setQuery('');
+    setHint('');
     const btn = e.currentTarget.querySelector(`[data-tab="${next.id}"]`);
     if (btn) btn.focus();
   };
 
   return (
-    <div className="panel" role="dialog" aria-label="DuelingBook Theme Editor">
+    <div className="panel" role="dialog" aria-label="DuelingBook Theme Editor" onKeyDown={onPanelKey}>
       <header className="panel-head">
         {logoUrl && <img className="panel-logo" src={logoUrl} alt="" />}
         <div className="panel-title">
@@ -337,6 +421,15 @@ const Panel = ({ onClose, logoUrl }) => {
           <CloseIcon />
         </button>
       </header>
+      <SearchField
+        ref={searchRef}
+        query={query}
+        onQuery={onQuery}
+        results={results}
+        active={active}
+        onActive={setActive}
+        onOpen={open}
+      />
       <div className="tabs" role="tablist" aria-label="Sections" onKeyDown={onTabKey}>
         {TABS.map(({ id, label, Icon }) => (
           <button
@@ -349,7 +442,11 @@ const Panel = ({ onClose, logoUrl }) => {
             aria-controls="dbte-tabpanel"
             tabIndex={tab === id ? 0 : -1}
             className="tab"
-            onClick={() => updateSettings({ panelTab: id })}
+            onClick={() => {
+              updateSettings({ panelTab: id });
+              setQuery('');
+              setHint('');
+            }}
           >
             <Icon />
             {label}
@@ -364,13 +461,29 @@ const Panel = ({ onClose, logoUrl }) => {
         aria-labelledby={`dbte-tab-${tab}`}
       >
         <StorageProblem />
-        <WhatsNew meta={meta} setMeta={setMeta} />
-        {tab !== 'more' && <SupportNudge meta={meta} setMeta={setMeta} />}
-        {tab === 'look' && <ThemeTab />}
-        {tab === 'duel' && <DuelTab />}
-        {tab === 'chat' && <ChatTab />}
-        {tab === 'deck' && <DeckTools />}
-        {tab === 'more' && <SupportTab />}
+        {searching && (
+          <SearchResults query={query} results={results} active={active} onActive={setActive} onOpen={open} onQuery={onQuery} />
+        )}
+        <div role="status" className={hint ? 'note jump-hint' : 'sr-only'}>
+          {hint && (
+            <>
+              <span>{hint}</span>
+              <button type="button" className="link-btn" onClick={() => setHint('')}>
+                OK
+              </button>
+            </>
+          )}
+        </div>
+        {/* Hidden, not unmounted, while searching: tabs keep their state (loaded deck, Undo, typed text). */}
+        <div hidden={searching}>
+          <WhatsNew meta={meta} setMeta={setMeta} />
+          {tab !== 'more' && <SupportNudge meta={meta} setMeta={setMeta} />}
+          {tab === 'look' && <ThemeTab />}
+          {tab === 'duel' && <DuelTab />}
+          {tab === 'chat' && <ChatTab />}
+          {tab === 'deck' && <DeckTools />}
+          {tab === 'more' && <SupportTab />}
+        </div>
       </div>
     </div>
   );

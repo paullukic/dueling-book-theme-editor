@@ -3,41 +3,19 @@ import { updateSettings, useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { contrast } from '../lib/color';
 import { CARD_TEXT_FONTS, CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
-import { AREAS, FONTS, PRESETS, PRESET_GROUPS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
+import { pushRecent } from '../lib/favourites';
+import { AREAS, FONTS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
 import { MAX_CODE_LENGTH, MAX_CUSTOM_CSS, THEME_KEYS, decodeTheme, encodeTheme } from '../features/theme/share';
-import { ICON_STYLES, iconPreview } from '../features/theme/art';
-import { skinBackdrop } from '../features/theme/skins';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
 import BackgroundPicker from './BackgroundPicker';
+import { ThemeGallery, ThemeHero } from './ThemeGallery';
+import { THEME_VIEWS, placeById } from './places';
+import { setNav, useNav } from './nav';
 
 // The Theme tab, split into four short views so nothing is buried:
-// Style (presets, shape, lettering, colours), Background, Card text, More.
-const VIEWS = [
-  { id: 'style', label: 'Style' },
-  { id: 'background', label: 'Background' },
-  { id: 'cards', label: 'Text' },
-  { id: 'more', label: 'More' },
-];
-// Remembered while the page is open, so reopening the panel keeps the view.
-let lastView = 'style';
+// Style (current theme, gallery, theme options), Background, Card text, More.
 
 const set = (key) => (value) => updateSettings({ [key]: value });
-
-// Each chip previews its preset as it will look: the skin's backdrop, a
-// framed icon and the accent. Presets never change, so build them once.
-const CHIP_LOOKS = Object.fromEntries(
-  PRESETS.map((p) => [
-    p.id,
-    {
-      style: {
-        '--p-text': p.tokens.text,
-        '--p-accent': p.tokens.accent,
-        background: [skinBackdrop(p.id, p.tokens), p.tokens.bg].filter(Boolean).join(', '),
-      },
-      icon: iconPreview(p.tokens, p.radius, ICON_STYLES[p.id]),
-    },
-  ]),
-);
 
 const sameTokens = (a, b) => TOKENS.every(({ key }) => (a[key] || '').toLowerCase() === (b[key] || '').toLowerCase());
 const isEdited = (s) => {
@@ -45,34 +23,6 @@ const isEdited = (s) => {
   return !sameTokens(s.themeTokens, base.tokens) || s.themeRadius !== base.radius;
 };
 const snapshot = (s) => Object.fromEntries(['themeEnabled', ...THEME_KEYS].map((k) => [k, s[k]]));
-
-const PresetPicker = ({ s, onPick }) => (
-  <>
-    {PRESET_GROUPS.map((g) => (
-      <div key={g.id} className="preset-group">
-        <h3 className="preset-group-title" id={`dbte-presets-${g.id}`}>
-          {g.label}
-        </h3>
-        <div className="preset-chips" role="group" aria-labelledby={`dbte-presets-${g.id}`}>
-          {PRESETS.filter((p) => p.group === g.id).map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              className="preset-chip"
-              aria-pressed={s.themeEnabled && s.themePreset === p.id && !isEdited(s)}
-              title={p.blurb}
-              onClick={() => onPick(p)}
-              style={CHIP_LOOKS[p.id].style}
-            >
-              <img className="preset-chip-icon" src={CHIP_LOOKS[p.id].icon} alt="" />
-              <span className="preset-chip-name">{p.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    ))}
-  </>
-);
 
 const CHECKS = [
   { a: 'text', b: 'surface', min: 4.5, label: 'Text on panels' },
@@ -105,7 +55,7 @@ const TokenEditor = ({ s }) => {
         <div className="token-group" key={group}>
           <h3>{group}</h3>
           {TOKENS.filter((t) => t.group === group).map((t) => (
-            <ColorRow key={t.key} label={t.label} value={s.themeTokens[t.key]} onChange={setToken(t.key)} />
+            <ColorRow key={t.key} place={`token-${t.key}`} value={s.themeTokens[t.key]} onChange={setToken(t.key)} />
           ))}
         </div>
       ))}
@@ -152,8 +102,7 @@ const CustomCss = ({ s }) => {
     <>
       <ImportedCss setSaved={setSaved} />
       <ToggleRow
-        label="Use my CSS"
-        description="Applied on top of everything else, on this computer only. Turn it off if the page looks broken."
+        place="customCssEnabled"
         checked={s.customCssEnabled}
         onChange={(v) => updateSettings({ customCssEnabled: v })}
       />
@@ -281,55 +230,18 @@ const ShareTheme = ({ s, onBeforeApply }) => {
 const StyleView = ({ s, onPick }) => {
   const base = presetById(s.themePreset);
   const edited = isEdited(s);
-  let status = 'Theme is off: DuelingBook looks as usual.';
-  if (s.themeEnabled) status = edited ? `Custom colours, based on ${base.name}.` : `Using ${base.name}.`;
+  const isPressed = (p) => s.themeEnabled && s.themePreset === p.id && !edited;
   return (
     <>
-      <Group>
-        <p className="note theme-status">
-          <span aria-live="polite">{status}</span>
-          {s.themeEnabled && edited && (
-            <button type="button" className="link-btn" onClick={() => onPick(base)}>
-              Reset
-            </button>
-          )}
-        </p>
-        <button
-          type="button"
-          className="preset-off"
-          aria-pressed={!s.themeEnabled}
-          onClick={() => updateSettings({ themeEnabled: false })}
-        >
-          Off: DuelingBook’s own look
-        </button>
-        <PresetPicker s={s} onPick={onPick} />
-      </Group>
+      <ThemeHero s={s} base={base} edited={edited} onPick={onPick} />
+      <ThemeGallery s={s} isPressed={isPressed} onPick={onPick} />
       {s.themeEnabled && (
-        <Group title="Shape and lettering">
-          <ToggleRow
-            label="Theme effects"
-            description="Each theme’s signature look: background motif, glows and ornaments. Switch off for plain colours."
-            checked={s.themeEffects}
-            onChange={set('themeEffects')}
-          />
-          {s.themeEffects && (
-            <ToggleRow
-              label="Background pattern"
-              description="The theme’s artwork behind the game. Its glows and frames stay when this is off."
-              checked={s.themeMotif}
-              onChange={set('themeMotif')}
-            />
-          )}
-          {s.themeEffects && s.themeMotif && (
-            <ToggleRow
-              label="Motion"
-              description="The animated scene: illustration, particles and effects. Off removes it; colours, playmat, icons and the background pattern stay. Held still if your system asks for reduced motion."
-              checked={s.themeMotion}
-              onChange={set('themeMotion')}
-            />
-          )}
+        <Group place="themeOptions">
+          <ToggleRow place="themeEffects" checked={s.themeEffects} onChange={set('themeEffects')} />
+          {s.themeEffects && <ToggleRow place="themeMotif" checked={s.themeMotif} onChange={set('themeMotif')} />}
+          {s.themeEffects && s.themeMotif && <ToggleRow place="themeMotion" checked={s.themeMotion} onChange={set('themeMotion')} />}
           {s.themeEffects && s.themeMotif && s.themeMotion && (
-            <div className="segmented-row">
+            <div className="segmented-row" data-place="themeQuality">
               <span id="dbte-quality-label">Visual quality</span>
               <div className="segmented" role="group" aria-labelledby="dbte-quality-label">
                 {[
@@ -345,7 +257,7 @@ const StyleView = ({ s, onPick }) => {
             </div>
           )}
           <SliderRow
-            label="Corner roundness"
+            place="themeRadius"
             value={s.themeRadius}
             min={0}
             max={16}
@@ -353,7 +265,7 @@ const StyleView = ({ s, onPick }) => {
             format={(v) => (v === 0 ? 'Square' : `${v}px`)}
             onChange={set('themeRadius')}
           />
-          <div className="segmented-row">
+          <div className="segmented-row" data-place="themeFont">
             <span id="dbte-font-label">Lettering</span>
             <div className="segmented" role="group" aria-labelledby="dbte-font-label">
               {FONTS.map((f) => (
@@ -363,7 +275,7 @@ const StyleView = ({ s, onPick }) => {
               ))}
             </div>
           </div>
-          <Disclosure title="Edit colours">
+          <Disclosure place="themeColours">
             <TokenEditor s={s} />
           </Disclosure>
         </Group>
@@ -374,8 +286,8 @@ const StyleView = ({ s, onPick }) => {
 
 const BackgroundView = ({ s }) => (
   <>
-    <Group title="Your own background">
-      <div className="segmented-row">
+    <Group place="ownBackground">
+      <div className="segmented-row" data-place="backgroundMode">
         <span id="dbte-bg-mode-label">Use</span>
         <div className="segmented" role="group" aria-labelledby="dbte-bg-mode-label">
           {[
@@ -389,15 +301,16 @@ const BackgroundView = ({ s }) => (
         </div>
       </div>
       {s.backgroundMode === 'color' ? (
-        <ColorRow label="Background colour" value={s.backgroundColor} onChange={set('backgroundColor')} />
+        <ColorRow place="backgroundColor" value={s.backgroundColor} onChange={set('backgroundColor')} />
       ) : (
-        <>
-          <p className="note">Any picture behind DuelingBook. It is shrunk and stored on this computer only.</p>
+        <div data-place="backgroundImage">
+          <p className="note">{placeById.backgroundImage.desc}</p>
           <BackgroundPicker />
-        </>
+        </div>
       )}
-      <ToggleRow label="Show my background" checked={s.backgroundEnabled} onChange={set('backgroundEnabled')}>
+      <ToggleRow place="backgroundEnabled" checked={s.backgroundEnabled} onChange={set('backgroundEnabled')}>
         <SliderRow
+          place="backgroundOpacity"
           label={s.backgroundMode === 'color' ? 'Colour strength' : 'Image strength'}
           value={s.backgroundOpacity}
           min={0.1}
@@ -408,18 +321,17 @@ const BackgroundView = ({ s }) => (
         />
         {s.themeEnabled && s.themeEffects && s.themeMotif && (
           <ToggleRow
-            label="Theme pattern on my background"
-            description="Draws the theme’s artwork over your background. Off: only the theme’s glow tints it."
+            place="backgroundThemeOverlay"
             checked={s.backgroundThemeOverlay}
             onChange={set('backgroundThemeOverlay')}
           />
         )}
       </ToggleRow>
     </Group>
-    <Group title="DuelingBook’s background art">
+    <Group place="duelingbookArt">
       {s.themeEnabled ? (
         <SliderRow
-          label="Circuit-board art"
+          place="themeBackdrop"
           value={s.themeBackdrop}
           min={0}
           max={1}
@@ -443,35 +355,33 @@ const CardTextView = ({ s }) => {
   const setPsctColor = (k) => (v) => updateSettings({ psctColors: { ...s.psctColors, [k]: v } });
   return (
     <>
-    <Group title="Card text">
+    <Group place="cardText">
       <ToggleRow
-        label="Colour card text"
-        description="Colours each part of an effect: when it activates, its cost or target, what it does, and its limits. Works for Pendulum and Rush Duel cards too."
+        place="psctEnabled"
         checked={s.psctEnabled}
         onChange={set('psctEnabled')}
       >
-        <ColorRow label="Condition (before :)" value={s.psctColors.condition} onChange={setPsctColor('condition')} />
-        <ColorRow label="Cost or target (before ;)" value={s.psctColors.cost} onChange={setPsctColor('cost')} />
-        <ColorRow label="Effect" value={s.psctColors.effect} onChange={setPsctColor('effect')} />
-        <ColorRow label="Limits (once per turn…)" value={s.psctColors.restriction} onChange={setPsctColor('restriction')} />
+        <ColorRow place="psctCondition" value={s.psctColors.condition} onChange={setPsctColor('condition')} />
+        <ColorRow place="psctCost" value={s.psctColors.cost} onChange={setPsctColor('cost')} />
+        <ColorRow place="psctEffect" value={s.psctColors.effect} onChange={setPsctColor('effect')} />
+        <ColorRow place="psctRestriction" value={s.psctColors.restriction} onChange={setPsctColor('restriction')} />
         <button type="button" className="btn btn-quiet" onClick={() => updateSettings({ psctColors: DEFAULT_PSCT_COLORS })}>
           Reset colours
         </button>
       </ToggleRow>
       <ToggleRow
-        label="New line per sentence (OCG style)"
-        description="Starts a new line after every full stop and after each activation condition’s colon, like OCG cards."
+        place="psctLineBreaks"
         checked={s.psctLineBreaks}
         onChange={set('psctLineBreaks')}
       />
       <SliderRow
-        label="Card text size"
+        place="cardTextSize"
         value={s.cardTextSize}
         values={CARD_TEXT_SIZES}
         format={(v) => (v === 0 ? 'Default' : `${v}px`)}
         onChange={set('cardTextSize')}
       />
-      <div className="segmented-row">
+      <div className="segmented-row" data-place="cardTextFont">
         <span id="dbte-card-font-label">Card text font</span>
         <div className="segmented" role="group" aria-labelledby="dbte-card-font-label">
           {CARD_TEXT_FONTS.map((f) => (
@@ -482,9 +392,9 @@ const CardTextView = ({ s }) => {
         </div>
       </div>
     </Group>
-    <Group title="Chat and log text">
+    <Group place="readingText">
       <SliderRow
-        label="Text size"
+        place="readingTextScale"
         value={s.readingTextScale}
         min={0.85}
         max={1.6}
@@ -504,33 +414,31 @@ const MoreView = ({ s, onBeforeApply }) => {
   const pct = (v) => `${Math.round(v * 100)}%`;
   return (
     <>
-      <Group title="Theme extras">
-        <Disclosure title="Share a theme">
+      <Group place="themeExtras">
+        <Disclosure place="shareTheme">
           <ShareTheme s={s} onBeforeApply={onBeforeApply} />
         </Disclosure>
         {s.themeEnabled && (
-          <Disclosure title="What to restyle">
-            <p className="note">Switch an area off to keep DuelingBook’s own look there.</p>
+          <Disclosure place="themeAreas">
+            <p className="note">{placeById.themeAreas.desc}</p>
             {AREAS.map((a) => (
-              <ToggleRow key={a.id} label={a.label} description={a.description} checked={!!s.themeAreas[a.id]} onChange={setAreas(a.id)} />
+              <ToggleRow key={a.id} place={`area-${a.id}`} checked={!!s.themeAreas[a.id]} onChange={setAreas(a.id)} />
             ))}
           </Disclosure>
         )}
-        <Disclosure title="Custom CSS">
+        <Disclosure place="customCss">
           <CustomCss s={s} />
         </Disclosure>
       </Group>
-      <Group title="Main menu">
+      <Group place="mainMenu">
         <ToggleRow
-          label="Compact buttons"
-          description="Shorter main menu buttons so the whole menu fits on small screens."
+          place="smallerMenu"
           checked={s.smallerMenu}
           onChange={set('smallerMenu')}
         />
         {!(s.themeEnabled && s.themeAreas.menu) && (
         <ToggleRow
-          label="Button colours"
-          description="Pick the fill, border and glow of the main menu buttons."
+          place="menuColorsEnabled"
           checked={s.menuColorsEnabled}
           onChange={set('menuColorsEnabled')}
         >
@@ -544,10 +452,9 @@ const MoreView = ({ s, onBeforeApply }) => {
         )}
       </Group>
       {!s.themeEnabled && (
-        <Group title="Without the full theme">
+        <Group place="withoutTheme">
           <ToggleRow
-            label="Simple dark mode"
-            description="Darkens only the lobby, chat, search and deck panels."
+            place="darkMode"
             checked={s.darkMode}
             onChange={set('darkMode')}
           />
@@ -560,12 +467,9 @@ const MoreView = ({ s, onBeforeApply }) => {
 const ThemeTab = () => {
   const s = useSettings();
   const [, setImported] = useLocal('customCssImported', '');
-  const [view, setView] = useState(lastView);
+  const { themeView: view } = useNav();
   const [undo, setUndo] = useState(null);
-  const show = (id) => {
-    lastView = id;
-    setView(id);
-  };
+  const show = (id) => setNav({ themeView: id });
   // Keeps what was there before a preset click or a pasted code replaced
   // hand-made colours. Undo is offered only while nothing else has changed
   // since, so it can never wipe later edits.
@@ -576,7 +480,7 @@ const ThemeTab = () => {
     const patch = { themeEnabled: true, themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius };
     if (isEdited(s)) remember(patch, `Switched to ${p.name}; your custom colours were replaced.`);
     else setUndo(null);
-    updateSettings(patch);
+    updateSettings({ ...patch, themeRecent: pushRecent(s.themeRecent, p.id) });
   };
   const onApplyCode = (patch, importedCss) => remember(patch, 'Theme code applied.', importedCss);
   const onUndo = () => {
@@ -588,7 +492,7 @@ const ThemeTab = () => {
     <>
       <div className="theme-head">
         <div className="subnav" role="group" aria-label="Theme sections">
-          {VIEWS.map((v) => (
+          {THEME_VIEWS.map((v) => (
             <button key={v.id} type="button" aria-pressed={view === v.id} onClick={() => show(v.id)}>
               {v.label}
             </button>

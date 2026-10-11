@@ -97,6 +97,9 @@ const App = ({ shadowRoot }) => {
       if (e.key !== 'Escape') return;
       const fromUs = e.composedPath().includes(shadowRoot.host);
       if (!fromUs && isTypingEvent(e)) return;
+      // Esc in a search field with text clears it; the field handles that.
+      const field = e.composedPath()[0];
+      if (fromUs && field && field.hasAttribute && field.hasAttribute('data-clear-on-escape') && field.value) return;
       close();
     };
     window.addEventListener('keydown', onKey, true);

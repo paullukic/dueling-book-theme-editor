@@ -5,6 +5,7 @@
 import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme/presets.js';
 import { cleanAliases, fitBytes } from './chatCommands.js';
 import { isHex } from './color.js';
+import { MAX_FAVOURITES, MAX_RECENT, cleanIds } from './favourites.js';
 
 export const CUSTOM_SLOTS = 5;
 
@@ -80,6 +81,8 @@ export const DEFAULTS = {
   themeMotion: true, // scenes move (always still with reduced motion)
   themeQuality: 'low', // WebGL scene effects: 'off' | 'low' (half resolution, 30 fps) | 'high'
   customCssEnabled: false,
+  themeFavourites: [], // preset ids the user starred
+  themeRecent: [], // preset ids picked last on this device, newest first
 
   // Duel
   skipIntro: false,
@@ -119,7 +122,7 @@ export const DEFAULTS = {
 // Each setting is stored as its own item: "dbte:s:<name>".
 export const SETTING_PREFIX = 'dbte:s:';
 // Per-device UI state: kept in storage.local, never synced.
-export const LOCAL_SETTING_KEYS = ['windows', 'panelTab'];
+export const LOCAL_SETTING_KEYS = ['windows', 'panelTab', 'themeRecent'];
 export const META_KEY = 'dbte:meta';
 
 // v1.0 stored each setting under its own sync key; migrateLegacy reads them
@@ -227,6 +230,8 @@ const cleanValue = (k, v, d) => {
       return msgs;
     }
     if (k === 'chatAliases') return cleanAliases(v);
+    if (k === 'themeFavourites') return cleanIds(v, MAX_FAVOURITES);
+    if (k === 'themeRecent') return cleanIds(v, MAX_RECENT);
     if (k === 'chatMuted') return fitBytes(v.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.slice(0, 40)).slice(0, 100));
     return v;
   }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { requestDeck, useDuelState } from '../lib/bridge';
 import { Group } from '../ui/controls';
+import { placeById } from '../ui/places';
 import { atLeastOne } from '../lib/odds';
 
 const artUrl = (c) => (c.id && /^\d+$/.test(c.id) ? `https://images.duelingbook.com/card-pics/${c.id}.jpg` : '');
@@ -91,10 +92,8 @@ const DeckTools = () => {
 
   return (
     <>
-      <Group title="Test hand">
-        <p className="note">
-          Draw sample opening hands from the deck loaded in the Deck Constructor. Nothing is sent to DuelingBook.
-        </p>
+      <Group place="testHand">
+        <p className="note">{placeById.testHand.desc}</p>
         <div className="btn-row">
           <button type="button" className="btn btn-gold" onClick={load} disabled={loading}>
             {deck ? 'Reload deck' : 'Load my deck'}
@@ -163,7 +162,7 @@ const DeckTools = () => {
       </Group>
 
       {deck && (
-        <Group title="Opening odds">
+        <Group place="openingOdds">
           <p className="note">Tick the cards that count as a good start, like your starters.</p>
           {picked.size > 0 && (
             <div className="odds-result" role="status">
