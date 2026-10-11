@@ -61,7 +61,7 @@ const whiteDragon = (t) => {
 <path d="${range}" fill="none" stroke="${ice}" stroke-opacity="0.35" stroke-width="2"/>
 <!--mid-->
 <circle cx="1300" cy="300" r="300" fill="url(#dbtefx-wd-halo)"/>
-${cardArt(t, { id: 'dbtefx-wd-hero', card: CARDS.blueEyes, x: 1150, y: 10, w: 400, h: 720, focus: [0.62, 0.5], zoom: 0.78, blend: 'luminosity', feather: 0.6, fade: 0.6, backdrop: mix(t.bg, ice, 0.55), glow: ice, breathe: 16 })}
+${cardArt(t, { id: 'dbtefx-wd-hero', card: CARDS.blueEyes, x: 1300, y: 10, w: 400, h: 720, focus: [0.62, 0.5], zoom: 0.78, blend: 'normal', grade: 'saturate(0.9) brightness(1.05)', tint: ice, tintAmt: 0.22, feather: 0.6, fade: 0.6, backdrop: mix(t.bg, ice, 0.55), glow: ice, breathe: 16 })}
 <g style="animation: dbtefx-wd-strike 5s linear infinite;">${strike(1)}</g>
 <circle cx="${mx}" cy="${my}" r="60" fill="url(#dbtefx-wd-orb)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-wd-charge 2.5s ease-in-out infinite;"/>
 <!--near-->

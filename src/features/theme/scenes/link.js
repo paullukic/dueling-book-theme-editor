@@ -14,6 +14,10 @@ const a = (name, start = 0, origin = 'center') =>
 const link = (t) => {
   const cx = 1050;
   const cy = 360;
+  // The portal is drawn around (cx, cy) and placed at (PX, PY), clear of the menu feed.
+  const PX = 1490;
+  const PY = 400;
+  const PK = 0.5;
   const k = 1.4; // portal scale
   const s = 112 * k; // half side of the portal frame
   const lit = mix(t.accent2, '#ffffff', 0.6);
@@ -63,7 +67,7 @@ const link = (t) => {
   // Cyberse floor: a perspective grid to a vanishing point under the portal.
   const hy = 660;
   let grid = '';
-  for (let j = -14; j <= 14; j++) grid += `<path d="M${cx + j * 24} ${hy}L${cx + j * 260} ${H + 20}"/>`;
+  for (let j = -14; j <= 14; j++) grid += `<path d="M${PX + j * 24} ${hy}L${PX + j * 260} ${H + 20}"/>`;
   for (let j = 1; j < 9; j++) grid += `<path d="M0 ${n1(hy + (H + 20 - hy) * (j / 8) ** 1.8)}H${W}"/>`;
 
   return `<style>
@@ -81,9 +85,10 @@ const link = (t) => {
 <linearGradient id="dbtefx-lk-redf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, '#ffffff', 0.75)}"/></linearGradient>
 <linearGradient id="dbtefx-lk-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${line}" stop-opacity="0"/><stop offset="1" stop-color="${line}" stop-opacity="0.5"/></linearGradient>
 <linearGradient id="dbtefx-lk-shaft" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="0.4" stop-color="${lit}" stop-opacity="0.45"/><stop offset="1" stop-color="${lit}" stop-opacity="0"/></linearGradient></defs>
-<ellipse cx="${cx}" cy="${cy}" rx="620" ry="500" fill="url(#dbtefx-lk-sky)"/>
+<ellipse cx="${PX}" cy="${PY}" rx="520" ry="440" fill="url(#dbtefx-lk-sky)"/>
 <g stroke="url(#dbtefx-lk-floor)" stroke-width="1.5" fill="none">${grid}</g>
 <!--mid-->
+<g transform="translate(${PX} ${PY}) scale(${PK}) translate(${-cx} ${-cy})">
 <g fill="none" stroke="${line}" stroke-opacity="0.35" stroke-width="2.5">${feed(0, 1, 260)}${feed(2, -1, 420)}${feed(4, 1, 300)}</g>
 <path d="M${cx - 56} ${cy}L${cx - 18} -40H${cx + 18}L${cx + 56} ${cy}Z" fill="url(#dbtefx-lk-shaft)" opacity="0" ${a('beam', 0, '50% 100%')}/>
 <g fill="none" stroke="${line}">
@@ -97,7 +102,8 @@ const link = (t) => {
 <circle cx="${cx}" cy="${cy}" r="150" fill="url(#dbtefx-lk-burst)" opacity="0" ${a('fire')}/>
 ${bases}
 ${lights}
-<rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" fill="none" stroke="${lit}" stroke-width="2.5" opacity="0" ${a('wave')}/>`;
+<rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" fill="none" stroke="${lit}" stroke-width="2.5" opacity="0" ${a('wave')}/>
+</g>`;
 };
 
 export default link;

@@ -146,6 +146,7 @@ ${SEL.chat} {
   box-shadow: inset 2px 0 0 ${magLo}, inset -2px 0 0 ${magLo}, inset 3px 0 0 ${alpha('#000000', 0.6)}, inset -3px 0 0 ${alpha('#000000', 0.6)} !important;
 }
 ${sel(['#chats .chat .cout_txt', '#chats .chat .log_txt'])} { background-color: transparent !important; }
+${sel(['#duel .cout_txt b > font[color]', '#chats .chat .cout_txt b > font[color]'])} { color: ${mix(t.accent, '#ffffff', 0.22)} !important; text-shadow: 0 0 6px ${alpha(t.accent, 0.45)} !important; }
 ${sel(['#chats .chat .chat_bottom'])} { background: var(--tr-chain) 0 0 / 14px 6px repeat-x, ${plateDark} !important; }
 
 /* ---------- Duel ---------- */
@@ -159,7 +160,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: var(--tr-chain) 0 50% / 21px 9.5px repeat-x; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${mix(t.opp, '#000000', 0.22)} 70%, ${mix(t.opp, '#000000', 0.35)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: steel jaws; the active one is sprung */

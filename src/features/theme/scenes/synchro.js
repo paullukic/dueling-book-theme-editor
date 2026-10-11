@@ -4,7 +4,7 @@ import { glow, H, n1, rng, W } from './kit.js';
 // Synchro: the Synchro Summon. A tuner has become a column of glowing green
 // rings; the non-tuner levels rise through them as stars, and a pearl-white
 // beam climbs the column to the summon flare at the top.
-const cx = 1250;
+const cx = 1480;
 
 const synchro = (t) => {
   const green = mix(t.success, t.self, 0.5);
@@ -14,16 +14,16 @@ const synchro = (t) => {
 
   // Tuner rings in perspective: the far half sits behind the beam, the near half in front.
   const rings = [
-    { y: 280, rx: 105, ry: 22 },
-    { y: 430, rx: 130, ry: 27 },
-    { y: 590, rx: 155, ry: 32 },
+    { y: 280, rx: 70, ry: 16 },
+    { y: 430, rx: 86, ry: 20 },
+    { y: 590, rx: 102, ry: 24 },
   ];
   const arc = (rx, ry, y, back) => `M${cx - rx} ${y}A${rx} ${ry} 0 0 ${back ? 1 : 0} ${cx + rx} ${y}`;
   let backs = '';
   let fronts = '';
   rings.forEach(({ y, rx, ry }, i) => {
     const a = `style="transform-box: fill-box; transform-origin: center; animation: dbtefx-sy-ring 4s ease-in-out ${n1(-i * 0.6)}s infinite;"`;
-    backs += `<ellipse cx="${cx}" cy="${y}" rx="${rx + 60}" ry="${ry + 30}" fill="url(#dbtefx-sy-halo)"/>`;
+    backs += `<ellipse cx="${cx}" cy="${y}" rx="${rx + 40}" ry="${ry + 22}" fill="url(#dbtefx-sy-halo)"/>`;
     backs += `<path d="${arc(rx, ry, y, true)}" fill="none" stroke="${green}" stroke-opacity="0.45" stroke-width="7" stroke-linecap="round"/>`;
     fronts += `<g ${a}><path d="${arc(rx, ry, y, false)}" fill="none" stroke="${green}" stroke-opacity="0.18" stroke-width="26" stroke-linecap="round"/>`;
     fronts += `<path d="${arc(rx, ry, y, false)}" fill="none" stroke="${green}" stroke-width="9" stroke-linecap="round"/>`;
@@ -42,7 +42,7 @@ const synchro = (t) => {
   const rs = rng(41);
   let streaks = '';
   for (let i = 0; i < 6; i++) {
-    const x = n1(cx + (rs() - 0.5) * 120);
+    const x = n1(cx + (rs() - 0.5) * 90);
     const len = n1(80 + rs() * 120);
     streaks += `<rect x="${x}" y="900" width="${n1(1.5 + rs() * 2)}" height="${len}" rx="1.5" fill="url(#dbtefx-sy-streak)" style="animation: dbtefx-sy-climb ${n1(2.4 + rs() * 1.8)}s cubic-bezier(0.4, 0, 1, 1) ${n1(-rs() * 4)}s infinite;"/>`;
   }
@@ -77,7 +77,7 @@ ${glow('dbtefx-sy-pool', cool, 0.5, 0.5, 0.5, 0.35)}
 ${dust}
 <rect x="-200" y="-200" width="2000" height="1300" fill="url(#dbtefx-sy-wash)"/>
 <!--mid-->
-<ellipse cx="${cx}" cy="830" rx="300" ry="54" fill="url(#dbtefx-sy-pool)"/>
+<ellipse cx="${cx}" cy="830" rx="200" ry="40" fill="url(#dbtefx-sy-pool)"/>
 ${backs}
 <g mask="url(#dbtefx-sy-mask)">
 <rect x="${cx - 110}" y="-20" width="220" height="940" fill="url(#dbtefx-sy-glow)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-sy-beam 4s ease-in-out infinite;"/>
@@ -86,8 +86,8 @@ ${streaks}
 </g>
 ${stars}
 ${fronts}
-<ellipse cx="${cx}" cy="130" rx="240" ry="80" fill="url(#dbtefx-sy-flare)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-bloom 4s ease-in-out infinite;"/>
-<path d="M${cx - 230} 130L${cx} 125L${cx + 230} 130L${cx} 135Z" fill="#ffffff" opacity="0.8"/>`;
+<ellipse cx="${cx}" cy="130" rx="170" ry="60" fill="url(#dbtefx-sy-flare)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-bloom 4s ease-in-out infinite;"/>
+<path d="M${cx - 160} 130L${cx} 125L${cx + 160} 130L${cx} 135Z" fill="#ffffff" opacity="0.8"/>`;
 };
 
 export default synchro;

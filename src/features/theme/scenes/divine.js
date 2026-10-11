@@ -27,8 +27,8 @@ const scene = (t) => {
   }
 
   // Ra's sun: turning rays behind the middle cartouche.
-  const raX = 1300;
-  const raY = 470;
+  const raX = 1470;
+  const raY = 430;
   let rays = '';
   for (let i = 0; i < 36; i++) {
     const [x1, y1] = polar(0, 0, 150, i * 10 - 1.6);
@@ -50,9 +50,9 @@ const scene = (t) => {
 <!--mid-->
 <g transform="translate(${raX} ${raY})"><path d="${rays}" fill="${gold}" fill-opacity="0.14" style="animation: dbtefx-spin 80s linear infinite;"/></g>
 <circle cx="${raX}" cy="${raY}" r="190" fill="url(#dbtefx-dv-sun)" opacity="0.22" ${anim('bloom', 8, 2, 'ease-in-out')}/>
-${god('obelisk', 1166, -40, 300, 390, [0.5, 0.4], 1.0, 0, { blend: 'multiply', backdrop: mix(blue, t.bg, 0.62), glow: blue })}
-${god('slifer', 1160, 540, 310, 380, [0.45, 0.5], 1.0, 10, { blend: 'screen', backdrop: mix(red, t.bg, 0.8), glow: red })}
-${god('ra', 1140, 262, 320, 370, [0.55, 0.45], 1.0, 5, { blend: 'screen', backdrop: mix(gold, t.bg, 0.72), fade: 0.35 })}`;
+${god('obelisk', -60, 150, 250, 680, [0.5, 0.35], 1.0, 0, { blend: 'multiply', backdrop: mix(blue, t.bg, 0.62), glow: blue })}
+${god('slifer', 1380, -40, 260, 250, [0.45, 0.4], 1.0, 10, { blend: 'screen', backdrop: mix(red, t.bg, 0.8), glow: red })}
+${god('ra', 1300, 170, 330, 640, [0.55, 0.45], 1.0, 5, { blend: 'screen', backdrop: mix(gold, t.bg, 0.72), fade: 0.45 })}`;
 };
 
 export default scene;

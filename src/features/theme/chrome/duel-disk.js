@@ -37,7 +37,7 @@ ${screws ? [[s / 2, s / 2], [48 - s / 2, s / 2], [s / 2, 48 - s / 2], [48 - s / 
   const plate = `linear-gradient(180deg, ${t.raised}, ${t.surface} 60%, ${mix(t.surface, steel, 0.5)})`;
   const lift = `0 1px 0 ${alpha('#ffffff', 0.8)}, 0 3px 6px -2px ${alpha(ink, 0.35)}`;
 
-  const tileFrame = U(bezel(12, 4));
+  const tileFrame = U(bezel(12, 4, false));
   const thinFrame = U(bezel(8, 3, false));
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const dlg = (suffix = '') => T(DIALOGS.map((d) => `#content ${d}${suffix}`));
@@ -131,7 +131,7 @@ ${T(['#chats .chat .black_line'])} { background-color: ${groove} !important; }
 ${SEL.life} { border-color: transparent !important; border-image: ${U(bezel(10, 4))} 12 / 9px / 3px stretch !important; border-radius: 0 !important; box-shadow: 0 2px 6px ${alpha(ink, 0.35)} !important; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 1px !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(lcd, 0.45)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, lcd, 0.45)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(lcd, 0.45)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, lcd, 0.45)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(lcd, 0.45)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, lcd, 0.2)}, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha('#ffffff', 0.05)} 6px 7px), linear-gradient(180deg, ${mix(lcd, '#ffffff', 0.1)}, ${lcd}) !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 2px ${lcd}, 0 1px 0 ${lcd}, 0 0 8px ${alpha(lcd, 0.8)} !important; }
 ${SEL.phase} {

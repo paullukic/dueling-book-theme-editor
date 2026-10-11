@@ -189,7 +189,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent2} !important
 /* Duel: life points sealed by a spell circle, phases inside glyph rings. */
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 2px ${alpha(t.accent, 0.7)}, 0 0 18px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -30px; top: 50%; width: 44px; height: 44px; margin-top: -22px; pointer-events: none;
+  content: ""; position: absolute; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
   background: var(--dm-gold) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 999px !important; }
@@ -209,7 +209,7 @@ html body { --dm-ring: ${svgUrl(phaseRing(t, kit))}; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 20px ${alpha(t.self, 0.7)}, 0 0 8px ${t.accent2} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 20px ${alpha(t.opp, 0.7)} !important; }
 ${sel(['#duel .phase.active .background::after'])} { opacity: 1; filter: drop-shadow(0 0 3px ${t.accent2}); }
-${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 ${t.bg} !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.22)} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 4px ${t.bg} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${t.accent2} !important; border-radius: 999px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${vellum} !important; border-radius: 999px !important; }
 ${sel(['#duel #watchers'])} { background: ${t.surface} !important; box-shadow: inset 0 0 0 1px ${trim}, inset 0 3px 0 ${t.accent} !important; }

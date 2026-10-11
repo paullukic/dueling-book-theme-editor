@@ -179,8 +179,8 @@ ${sel(['#duel .lifepoints .life_border::after'])} {
   content: ""; position: absolute; right: -9px; top: -5px; width: 4px; height: 29px; border-radius: 2px;
   background: linear-gradient(180deg, ${hi}, ${gold} 50%, ${lo}); box-shadow: 0 0 0 1px ${alpha('#000000', 0.6)};
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(self, '#000000', 0.55)}, ${self} 70%, ${mix(self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(obelisk, '#000000', 0.55)}, ${obelisk} 70%, ${mix(obelisk, '#ffffff', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 45%), linear-gradient(90deg, ${mix(self, '#000000', 0.62)}, ${mix(mix(self, t.danger, 0.28), '#000000', 0.3)} 70%, ${mix(mix(self, t.danger, 0.32), '#000000', 0.4)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(obelisk, '#000000', 0.6)}, ${mix(obelisk, '#000000', 0.2)} 70%, ${mix(obelisk, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: gold sun discs; the active one radiates */
@@ -191,9 +191,10 @@ ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { ba
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 35%, ${mix(self, '#ffffff', 0.25)}, ${self} 45%, ${mix(self, '#000000', 0.5)} 80%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 35%, ${mix(obelisk, '#ffffff', 0.25)}, ${obelisk} 45%, ${mix(obelisk, '#000000', 0.5)} 80%) !important; }
 ${sel(['#duel .phase.active .background::before'])} {
-  content: ""; position: absolute; inset: -8px; border-radius: 50%;
-  background: repeating-conic-gradient(${alpha(gold, 0.85)} 0deg 5deg, transparent 5deg 15deg);
-  -webkit-mask: radial-gradient(circle, transparent 54%, #000000 57%, transparent 72%); mask: radial-gradient(circle, transparent 54%, #000000 57%, transparent 72%);
+  content: ""; position: absolute; inset: -13px; border-radius: 50%;
+  background: repeating-conic-gradient(${hi} 0deg 7deg, transparent 7deg 15deg);
+  -webkit-mask: radial-gradient(circle, transparent 52%, #000000 55%, #000000 66%, transparent 76%); mask: radial-gradient(circle, transparent 52%, #000000 55%, #000000 66%, transparent 76%);
+  filter: drop-shadow(0 0 3px ${alpha(gold, 0.9)});
 }
 ${sel(['#duel .phase span'])} { color: ${lo} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }

@@ -9,7 +9,7 @@ import { mix } from '../../../lib/color.js';
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
 export const starlightChrome = (t, { SEL, sel, svg, svgUrl, alpha }, light) => {
-  const prism = [t.danger, t.warning, t.success, t.accent, t.link, t.accent2].map((c) => (light ? mix(c, '#ffffff', 0.1) : mix(c, t.text, 0.22)));
+  const prism = [t.danger, t.warning, t.success, t.accent, t.link, t.accent2].map((c) => (light ? mix(c, '#ffffff', 0.42) : mix(c, t.text, 0.22)));
   const silverHi = light ? '#ffffff' : t.text;
   const silver = light ? mix(t.border, t.text, 0.25) : mix(t.text, t.muted, 0.45);
   const silverDim = light ? t.border : mix(t.muted, t.border, 0.5);
@@ -22,6 +22,8 @@ export const starlightChrome = (t, { SEL, sel, svg, svgUrl, alpha }, light) => {
   const rim = (deg = 115) => `linear-gradient(${deg}deg, ${silver} 0%, ${prism.map((c, i) => `${c} ${12 + i * 14}%`).join(', ')}, ${silver} 100%)`;
   // Faint prism sheen for wide panels (low alpha: text stays at 4.5:1 on it).
   const sheen = (a, deg = 115) => `linear-gradient(${deg}deg, transparent 30%, ${prism.map((c, i) => `${alpha(c, a)} ${38 + i * 6}%`).join(', ')}, transparent 76%)`;
+  // The same prism as a narrow band along the top-left edge (pop-ups: none of it behind the text).
+  const edgeSheen = (a) => `linear-gradient(160deg, ${prism.map((c, i) => `${alpha(c, a)} ${i * 2.4}%`).join(', ')}, transparent 16%)`;
   // A holo catch in a corner: prism rings fading out from the top-right.
   const cornerCatch = (a) => `radial-gradient(ellipse 70% 55% at 100% 0%, transparent 8%, ${prism.map((c, i) => `${alpha(c, a)} ${18 + i * 7}%`).join(', ')}, transparent 66%)`;
   // Starlight hairlines: the horizontal line pattern of the foil.
@@ -94,7 +96,7 @@ ${SEL.buttonDown} { background: ${light ? mix(t.surface, t.bg, 0.8) : t.bg} !imp
 ${sel(['#content .button.disabled'])} { border-image: none !important; border-color: ${silverDim} !important; opacity: 0.6; }
 
 /* Pop-ups: a foil card. Stock with hairlines and a sheen in the top band, an inner prism frame, a star glint on the corner. */
-${SEL.dialog} { background: ${lines(light ? 0.03 : 0.04)}, ${cornerCatch(light ? 0.16 : 0.14)}, ${light ? `${sheen(0.1, 125)}, ${stockBg()}` : `linear-gradient(180deg, ${mix(t.surface, t.raised, 0.4)}, ${stockLo})`} !important; border-radius: 8px !important; box-shadow: 0 0 0 1px ${silverDim}, 0 0 0 3px ${light ? t.raised : t.bg}, 0 0 0 4px ${alpha(silver, 0.7)}, 0 24px 60px -12px ${shade(0.9)} !important; }
+${SEL.dialog} { background: ${lines(light ? 0.03 : 0.04)}, ${cornerCatch(light ? 0.16 : 0.14)}, ${light ? `${edgeSheen(0.16)}, ${stockBg()}` : `linear-gradient(180deg, ${mix(t.surface, t.raised, 0.4)}, ${stockLo})`} !important; border-radius: 8px !important; box-shadow: 0 0 0 1px ${silverDim}, 0 0 0 3px ${light ? t.raised : t.bg}, 0 0 0 4px ${alpha(silver, 0.7)}, 0 24px 60px -12px ${shade(0.9)} !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 7px; top: 7px; right: 7px; bottom: 7px; width: auto; height: auto; pointer-events: none; z-index: 0; border: 2px solid transparent; border-image: var(--dbtc-rim) 1; border-radius: 0; background: none; transform: none; opacity: ${light ? 0.85 : 0.75}; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; right: -14px; top: -14px; left: auto; bottom: auto; width: 34px; height: 34px; pointer-events: none; z-index: 1; background: var(--dbtc-u0) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { ${nameFoil} }
@@ -109,16 +111,16 @@ ${on(sel(['#chats .chat']), 'after')} { content: ""; position: absolute; right: 
 /* Duel: life bars in a prism rim with a hairline sheen; holo-disc phases. */
 ${SEL.life} { border-color: ${silver} !important; border-image: ${rim(90)} 1 !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -3px ${shade(0.8)} !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), ${lines(0.1)}, linear-gradient(90deg, ${mix(t.self, light ? t.text : t.bg, 0.45)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), ${lines(0.1)}, linear-gradient(90deg, ${mix(t.opp, light ? t.text : t.bg, 0.45)}, ${t.opp}) !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: ${lines(light ? 0.04 : 0.05)}, linear-gradient(180deg, ${light ? mix(t.surface, t.bg, 0.6) : t.bg}, ${light ? t.bg : mix(t.bg, t.surface, 0.5)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), ${lines(0.1)}, linear-gradient(90deg, ${mix(t.opp, light ? t.text : t.bg, 0.5)}, ${mix(t.opp, light ? t.text : t.bg, 0.22)}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: ${lines(light ? 0.04 : 0.05)}, linear-gradient(180deg, ${light ? mix(t.border, t.bg, 0.38) : t.bg}, ${light ? mix(t.border, t.bg, 0.5) : mix(t.bg, t.surface, 0.5)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: -11px; width: 24px; height: 24px; pointer-events: none; background: var(--dbtc-u0) center / contain no-repeat; z-index: 2; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 5px ${light ? t.text : '#000000'} !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${prism.join(', ')}, ${prism[0]}) !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -2px ${shade(0.8)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${light ? t.raised : t.bg} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, ${lines(light ? 0.035 : 0.05)}, radial-gradient(circle at 35% 30%, ${light ? '#ffffff' : mix(t.raised, t.border, 0.3)}, ${light ? mix(t.surface, t.bg, 0.7) : t.surface}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.25)}, ${mix(t.self, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.25)}, ${mix(t.opp, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.25)}, ${mix(t.self, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 12px 3px ${alpha(light ? t.self : '#ffffff', 0.7)}, 0 0 22px 4px ${alpha(t.self, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.25)}, ${mix(t.opp, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 12px 3px ${alpha(light ? t.opp : '#ffffff', 0.7)}, 0 0 22px 4px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: ${light ? `0 1px 0 #ffffff` : `0 1px 2px #000000`} !important; }
 ${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 4px ${light ? t.text : '#000000'} !important; }
 ${SEL.duelLog} { background: ${lines(light ? 0.025 : 0.035)}, ${stockBg()} !important; box-shadow: ${panelInset} !important; }

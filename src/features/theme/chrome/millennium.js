@@ -191,14 +191,14 @@ ${sel(['#chats .chat .chat_bottom'])} { background: ${lapisNight} !important; bo
 ${SEL.life} {
   border-color: ${gold} !important;
   background: linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 45%) !important;
-  box-shadow: 0 0 0 1px ${brown}, 0 0 0 3px ${lapis}, 0 0 12px -2px ${alpha(gold, 0.55)} !important;
+  box-shadow: 0 0 0 1px ${brown}, 0 0 12px -2px ${alpha(gold, 0.55)} !important;
 }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -44px; top: -4px; width: 38px; height: 19px;
-  background: var(--mi-eye) center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
+  content: ""; position: absolute; left: 7px; top: 50%; width: 30px; height: 15px; transform: translateY(-50%); pointer-events: none;
+  background: var(--mi-eye) center / contain no-repeat; filter: drop-shadow(0 0 2px ${alpha('#000000', 0.95)}) drop-shadow(0 0 1px ${alpha('#000000', 0.95)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, gold, 0.4)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(lapis, '#000000', 0.45)}, ${lapis} 70%, ${mix(lapis, gold, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: sandstone discs in gold; the active one wears the Puzzle crest */
@@ -217,7 +217,8 @@ ${inked(['#duel .phase span'])} { color: ${ink} !important; text-shadow: 0 1px 0
 ${inked(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${goldBand} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${sand}, ${sandLow}) !important; }
-${inked(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${ink} !important; }
+${inked(['#duel #start_turn span', '#duel #end_turn span'])} { color: ${ink} !important; }
+${inked(['#duel #turn span'])} { color: ${glint} !important; text-shadow: 0 1px 0 ${brown}, 0 0 4px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 3px ${brown}; }
 ${SEL.duelLog} { background: ${ceiling} !important; box-shadow: inset 0 0 0 3px ${gold}, inset 0 0 0 4px ${brown}, inset 0 0 0 6px ${lapis} !important; }
 ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 3px ${brown}; }

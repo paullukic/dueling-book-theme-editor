@@ -64,8 +64,8 @@ ${[300, 380, 460].map((y) => `<rect x="-70" y="${y}" width="140" height="10" rx=
 <rect x="-70" y="-58" width="140" height="116" rx="12" fill="url(#dbtefx-dd-m)" stroke="${groove}" stroke-width="3"/>
 <rect x="-58" y="-44" width="116" height="74" rx="6" fill="${lcd}" stroke="${ink}" stroke-opacity=".5" stroke-width="2"/>
 <ellipse cx="0" cy="-7" rx="70" ry="40" fill="url(#dbtefx-dd-lcdglow)"/>
-<text x="0" y="6" text-anchor="middle" font-family="Consolas, 'Courier New', monospace" font-weight="700" font-size="40" fill="${lit}">4000</text>
-<text x="-50" y="-28" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="11" fill="${lit}" fill-opacity=".8">LP</text>
+${[0, 1, 2, 3, 4, 5, 6, 7].map((k) => `<rect x="${-48 + k * 12}" y="-30" width="9" height="46" rx="1.5" fill="${lit}" fill-opacity="${k < 6 ? 0.85 : 0.18}"/>`).join('')}
+<path d="M-50 22H50" stroke="${lit}" stroke-opacity=".45" stroke-width="2"/>
 <rect x="-56" y="38" width="22" height="9" rx="2" fill="${red}" style="animation: dbtefx-dd-led 2.4s ease-in-out infinite;"/><rect x="-28" y="38" width="22" height="9" rx="2" fill="${blade}" fill-opacity=".85"/>
 </g></g></g>`;
 

@@ -9,11 +9,11 @@ const SWING = 7; // seconds per full swing (there and back)
 const pendulum = (t) => {
   const left = t.self;
   const right = t.opp;
-  const hx = 1270; // hinge, inside the portal
+  const hx = 1405; // hinge, inside the portal, right of the feed
   const hy = 232;
-  const len = 340;
-  const lx = 1150; // scale pillars, right of the feed
-  const rx = 1390;
+  const len = 250;
+  const lx = 118; // scale pillars flank the page (and the duel field) in the gutters
+  const rx = 1480;
   const ground = 800;
 
   // The arc of light: short arc pieces fading away from the bob, one trail for each direction.
@@ -49,10 +49,10 @@ ${[0, 1, 2].map((i) => `<ellipse cx="${x}" cy="${ground}" rx="44" ry="10" fill="
 <linearGradient id="dbtefx-pe-cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.4)}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-pe-gem" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.self}"/><stop offset="0.5" stop-color="${mix(t.self, t.accent, 0.5)}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-pe-sky)"/>
-<ellipse cx="${hx}" cy="${hy}" rx="320" ry="170" fill="url(#dbtefx-pe-portal)"/>
-<g transform="translate(${hx} ${hy}) scale(1 0.26)">${runeRing(t, 0, 0, 200, mix(t.accent, '#ffffff', 0.4), 40)}${runeRing(t, 0, 0, 140, t.self, 26, true)}<circle r="92" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="5"/></g>
-<ellipse cx="${hx}" cy="${hy}" rx="96" ry="26" fill="url(#dbtefx-pe-bob)" ${anim('bloom', 5, 0, 'ease-in-out')}/>
-<g fill="url(#dbtefx-pe-cone)">${[1, 0.75, 0.5, 0.28].map((k) => `<path d="M${n1(hx - 50 * k)} ${hy}L${n1(hx - (hx - lx - 60) * k)} ${ground}H${n1(hx + (rx - 60 - hx) * k)}L${n1(hx + 50 * k)} ${hy}Z"/>`).join('')}</g>
+<ellipse cx="${hx}" cy="${hy}" rx="200" ry="120" fill="url(#dbtefx-pe-portal)"/>
+<g transform="translate(${hx} ${hy}) scale(0.62 0.17)">${runeRing(t, 0, 0, 200, mix(t.accent, '#ffffff', 0.4), 40)}${runeRing(t, 0, 0, 140, t.self, 26, true)}<circle r="92" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="5"/></g>
+<ellipse cx="${hx}" cy="${hy}" rx="64" ry="18" fill="url(#dbtefx-pe-bob)" ${anim('bloom', 5, 0, 'ease-in-out')}/>
+<g fill="url(#dbtefx-pe-cone)">${[1, 0.75, 0.5, 0.28].map((k) => `<path d="M${n1(hx - 50 * k)} ${hy}L${n1(hx - 120 * k)} ${ground}H${n1(hx + 120 * k)}L${n1(hx + 50 * k)} ${hy}Z"/>`).join('')}</g>
 <!--mid-->
 ${pillar(lx, left, 1, left, 'l', 0)}
 ${pillar(rx, right, 12, right, 'r', 0.7)}
@@ -60,7 +60,7 @@ ${pillar(rx, right, 12, right, 'r', 0.7)}
 <g transform="translate(${hx} ${hy})"><g style="animation: dbtefx-pe-swing ${SWING}s ease-in-out infinite;">
 <g fill="none" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-linecap="round"><g style="animation: dbtefx-pe-ta ${SWING}s linear infinite;">${trail(1)}</g><g style="animation: dbtefx-pe-tb ${SWING}s linear infinite;">${trail(-1)}</g></g>
 <path d="M0 0V${len - 64}" stroke="${t.text}" stroke-opacity="0.55" stroke-width="2.5"/>
-<circle cy="${len}" r="120" fill="url(#dbtefx-pe-bob)"/>
+<circle cy="${len}" r="84" fill="url(#dbtefx-pe-bob)"/>
 <path d="M0 ${len - 70}L30 ${len - 18}L0 ${len + 62}L-30 ${len - 18}Z" fill="url(#dbtefx-pe-gem)" fill-opacity="0.85" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"/>
 <path d="M0 ${len - 70}L30 ${len - 18}L0 ${len - 4}Z" fill="#ffffff" fill-opacity="0.3"/><path d="M0 ${len - 70}V${len + 62}M-30 ${len - 18}H30" stroke="#ffffff" stroke-opacity="0.35"/>
 <circle cy="${len - 76}" r="7" fill="none" stroke="${t.text}" stroke-opacity="0.7" stroke-width="2.5"/>
@@ -71,7 +71,7 @@ ${[[lx, left, 1, -1], [rx, right, 12, 1]].map(([x, c, lit, side]) => Array.from(
     return `<path d="M${x + side * 6} ${y}H${x + side * (on ? 22 : 13)}" stroke="${on ? mix(c, '#ffffff', 0.3) : t.text}" stroke-opacity="${on ? 0.95 : 0.3}" stroke-width="${on ? 3 : 1.5}"/>${side > 0 ? `<text x="${x + 30}" y="${y + 4}" font-family="Georgia, 'Times New Roman', serif" font-size="12" fill="${on ? '#ffffff' : t.text}" fill-opacity="${on ? 0.9 : 0.4}">${i + 1}</text>` : ''}`;
   }).join('')).join('')}
 <!--near-->
-<ellipse cx="${hx}" cy="${ground + 10}" rx="300" ry="50" fill="url(#dbtefx-pe-pool)"/>
+<ellipse cx="${hx}" cy="${ground + 10}" rx="180" ry="36" fill="url(#dbtefx-pe-pool)"/>
 <path d="M0 ${ground}H${W}" stroke="${t.text}" stroke-opacity="0.14" stroke-width="2"/>
 ${[[lx, left], [rx, right]].map(([x, c]) => `<ellipse cx="${x}" cy="${ground}" rx="90" ry="16" fill="none" stroke="${c}" stroke-opacity="0.7" stroke-width="3"/><ellipse cx="${x}" cy="${ground}" rx="56" ry="9" fill="${mix(c, '#ffffff', 0.5)}" fill-opacity="0.5" ${anim('pulse', 2.4, x / 1000, 'ease-in-out')}/>`).join('')}
 <rect y="${ground}" width="${W}" height="${H - ground}" fill="${t.bg}" fill-opacity="0.35"/>`;

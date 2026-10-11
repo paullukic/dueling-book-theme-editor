@@ -7,6 +7,10 @@ import { anim, H, n1, polar, W } from './kit.js';
 
 const cx = 1252;
 const cy = 392;
+// The altar is drawn around cx and placed, smaller, in the right gutter (AX), clear of the menu feed.
+const AX = 1478;
+const AY = 880;
+const AK = 0.62;
 
 // Tiny engraved runes for the seal's rune band.
 const RUNES = ['M-3 -4V4M-3 0L3 -4M-3 0L3 4', 'M-4 4L0 -4L4 4M-2 1H2', 'M-3 -4V4H3M-3 0H2', 'M0 -4V4M-4 -1L0 -4L4 -1', 'M-4 -4H4L0 4Z', 'M-4 0H4M0 -4V4M-3 -3L3 3'];
@@ -86,7 +90,7 @@ const scene = (t) => {
 
   return `<defs>
 <linearGradient id="dbtefx-ri-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, '#000000', 0.35)}" stop-opacity="0.96"/><stop offset="0.6" stop-color="${mix(t.bg, blue, 0.08)}" stop-opacity="0.93"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.3)}" stop-opacity="0.96"/></linearGradient>
-<radialGradient id="dbtefx-ri-halo" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="520"><stop offset="0" stop-color="${blue}" stop-opacity="0.32"/><stop offset="0.35" stop-color="${blue}" stop-opacity="0.08"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-ri-halo" gradientUnits="userSpaceOnUse" cx="${AX}" cy="${n1(AY - (AY - cy) * AK)}" r="380"><stop offset="0" stop-color="${blue}" stop-opacity="0.32"/><stop offset="0.35" stop-color="${blue}" stop-opacity="0.08"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ri-core"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="0.3" stop-color="${pale}" stop-opacity="0.5"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-ri-beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${blue}" stop-opacity="0"/><stop offset="0.5" stop-color="${pale}" stop-opacity="0.3"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-ri-stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${stoneHi}"/><stop offset="0.12" stop-color="${stone}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
@@ -102,8 +106,9 @@ const scene = (t) => {
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-sky)"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-halo)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
-<g fill="none" stroke="${blue}" stroke-opacity="0.12"><circle cx="${cx}" cy="${cy}" r="172" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="214" stroke-width="1" stroke-dasharray="2 10"/></g>
+<g fill="none" stroke="${blue}" stroke-opacity="0.12" transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})"><circle cx="${cx}" cy="${cy}" r="172" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="214" stroke-width="1" stroke-dasharray="2 10"/></g>
 <!--mid-->
+<g transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})">
 <path d="M${cx - 14} ${cy + 96}H${cx + 14}L${cx + 70} 690H${cx - 70}Z" fill="url(#dbtefx-ri-beam)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
 <g transform="translate(${cx} ${cy}) scale(0.9)">
 <circle r="160" fill="url(#dbtefx-ri-core)" opacity="0.35"/>
@@ -150,6 +155,7 @@ ${[-1, 1].map((d) => `<circle cx="${cx + d * 67}" cy="788" r="4" fill="${dark}" 
 <g fill="${gold}" fill-opacity="0.8">${dishes}</g>
 ${flames}
 <g fill="none" stroke="url(#dbtefx-ri-smoke)" stroke-width="2.5" stroke-linecap="round">${smoke}</g>
+</g>
 <style>@keyframes dbtefx-ri-pulse { 0%, 30% { transform: scale(0.4); opacity: 0; } 40% { opacity: 0.8; } 100% { transform: scale(2.2); opacity: 0; } }
 @keyframes dbtefx-ri-smoke { 0% { transform: translateY(10px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(6px, -70px); opacity: 0; } }
 @keyframes dbtefx-ri-glim { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }</style>

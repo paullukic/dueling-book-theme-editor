@@ -29,7 +29,7 @@ const scene = (t) => {
 
   // Eyes splitting open in the clouds: slit pupils, staggered blinks.
   const eye = (x, y, s, d) => `<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="90" ry="44" fill="url(#dbtefx-sr-eglow)"/><path d="M-70 4Q-30 -26 0 -24Q34 -22 66 -2Q30 22 0 22Q-34 24 -70 4Z" fill="${mix(t.bg, violet, 0.12)}"/><g style="animation: dbtefx-sr-blink ${n1(8 + d)}s ease-in-out ${n1(-d * 1.9)}s infinite; transform-box: fill-box; transform-origin: center;"><path d="M-56 2Q-24 -20 0 -19Q28 -18 54 0Q26 17 0 17Q-26 18 -56 2Z" fill="${mix(t.bg, violet, 0.35)}"/><circle r="16" fill="url(#dbtefx-sr-iris)"/><path d="M0 -14Q4 0 0 14Q-4 0 0 -14Z" fill="#000000"/><circle cx="-6" cy="-6" r="2.5" fill="#ffffff" fill-opacity="0.8"/></g></g>`;
-  const eyes = [[350, 96, 0.7], [640, 66, 0.55], [900, 86, 0.75], [1400, 270, 0.7], [1400, 84, 0.5]]
+  const eyes = [[350, 96, 0.7], [640, 66, 0.55], [900, 86, 0.75], [1400, 270, 0.7], [1400, 84, 0.5], [1478, 600, 0.5]]
     .map(([x, y, s], i) => eye(x, y, s, i * 1.1)).join('');
 
   // Lost souls: hollow figures in glowing outline, drifting.

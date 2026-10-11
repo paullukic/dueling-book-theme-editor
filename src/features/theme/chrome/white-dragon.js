@@ -132,7 +132,8 @@ ${sel(['#duel .phase span'])} { color: ${navy} !important; text-shadow: 0 1px 0 
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${navy} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${deep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; }
-${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { ${navyText} }
+${sel(['#duel #start_turn span', '#duel #end_turn span'])} { ${navyText} }
+${sel(['#duel #turn span', '#duel #turn span[data-dbte-ink][data-dbte-ink]'])} { color: ${mix(t.accent, '#ffffff', 0.75)} !important; text-shadow: 0 1px 1px ${navy}, 0 0 6px ${alpha(navy, 0.9)} !important; }
 ${SEL.duelLog} { background: linear-gradient(180deg, ${t.surface}, ${navy}) !important; box-shadow: inset 0 0 0 3px ${paleIce}, inset 0 0 0 4px ${deep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${paleIce}, 0 0 0 3px ${deep}, 0 0 14px -2px ${alpha(ice, 0.7)} !important; }
 ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${paleIce} !important; }
@@ -181,7 +182,7 @@ ${sel(['#content .checkbox:hover', '#content .radiobutton:hover'])} { box-shadow
 ${sel(['#content .checkbox img.check', '#content .radiobutton img.check'])} { filter: brightness(0) !important; }
 
 /* Opponent side in ice and silver, never lilac. */
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(silver, navy, 0.45)}, ${mix(frost, ice, 0.35)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(silver, navy, 0.62)}, ${mix(ice, navy, 0.42)}) !important; }
 ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${silver}, ${deep}) !important; }
 ${sel(['#duel #status2 .status_txt', '#duel #countdown2'])} { text-shadow: 0 0 10px ${ice}, 0 0 2px ${navy} !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { box-shadow: 0 0 16px ${alpha(frost, 0.9)}; }

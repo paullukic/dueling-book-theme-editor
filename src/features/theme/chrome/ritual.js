@@ -159,11 +159,11 @@ ${sel(['#chats .chat .chat_bottom'])} { box-shadow: inset 0 1px 0 ${alpha(candle
 /* ---------- Duel: life carved with runes, a candle at its end ---------- */
 ${SEL.life} {
   border-color: ${frameBlue} !important;
-  background: repeating-linear-gradient(90deg, transparent 0 14px, ${alpha(t.bg, 0.55)} 14px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 14px, ${alpha(t.bg, 0.55)} 14px 15px) left top / 56% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, inset 0 0 0 1px ${alpha(blue, 0.4)}, 0 0 10px -2px ${alpha(blue, 0.55)} !important;
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, candle, 0.5)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.58)}, ${mix(mix(t.self, t.danger, 0.12), '#000000', 0.2)} 70%, ${mix(mix(t.self, t.danger, 0.15), '#000000', 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.58)}, ${mix(t.opp, '#000000', 0.2)} 70%, ${mix(t.opp, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: rune-ringed stones; the active one is a lit summoning circle */

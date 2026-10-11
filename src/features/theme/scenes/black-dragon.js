@@ -14,7 +14,7 @@ const blackDragon = (t) => {
   const rand = rng(89);
 
   // Embers drawn into the charging fireball.
-  const fx = 1216;
+  const fx = 1436;
   const fy = 552;
   const embers = [200, 235, 160, 290].map((deg, i) => `<g transform="translate(${fx} ${fy}) rotate(${deg})"><circle cx="0" cy="0" r="${3 - (i % 2)}" fill="${core}" style="animation: dbtefx-rb-draw 2.4s ease-in ${n1(-i * 0.6)}s infinite;"/></g>`).join('');
 
@@ -42,7 +42,7 @@ ${CARD_ART_KEYFRAMES}
 ${smoke}
 <path d="${ridge}" fill="${ink}"/>
 <!--mid-->
-${cardArt(t, { id: 'dbtefx-rb-hero', card: CARDS.redEyes, x: 1110, y: 0, w: 400, h: 740, focus: [0.55, 0.5], zoom: 0.8, blend: 'luminosity', feather: 0.6, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.55), breathe: 14 })}
+${cardArt(t, { id: 'dbtefx-rb-hero', card: CARDS.redEyes, x: 1330, y: 0, w: 400, h: 740, focus: [0.55, 0.5], zoom: 0.8, blend: 'luminosity', feather: 0.6, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.55), breathe: 14 })}
 <circle cx="${fx}" cy="${fy}" r="56" fill="url(#dbtefx-rb-ball)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-rb-charge 2.4s ease-in-out infinite;"/>
 ${embers}
 <!--near-->

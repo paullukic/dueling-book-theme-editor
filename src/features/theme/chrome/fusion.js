@@ -140,7 +140,8 @@ ${T(['#chats .chat .black_line'])} { background: linear-gradient(90deg, ${vi}, $
 
 /* ---- Duel: LP capsule ringed in the merge; phases as fusion vortices ---- */
 ${SEL.life} { border-color: ${merge} !important; border-radius: 15px !important; box-shadow: inset 0 0 0 1px ${t.bg}, 0 0 12px -2px ${alpha(merge, 0.8)} !important; }
-${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -10px; top: 50%; width: 22px; height: 22px; margin-top: -11px; background: ${U(swirl(48, 1, 4.5))} center / 100% no-repeat; pointer-events: none; }
+${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: 4px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(swirl(48, 1, 4.5))} center / 100% no-repeat; opacity: 0.8; pointer-events: none; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#000000', 0.35)}, transparent 60%), ${mix(t.bg, '#000000', 0.15)} !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, vi, 0.45)}, ${t.self} 70%) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, vi, 0.45)}, ${t.opp} 70%) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${plum} !important; }

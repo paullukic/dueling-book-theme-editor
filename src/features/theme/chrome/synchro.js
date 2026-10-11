@@ -145,8 +145,8 @@ ${T(['#chats .chat .black_line'])} { background-color: ${silver} !important; }
 /* ---- Duel: LP in a white frame with a starlight streak; phases as tuner rings ---- */
 ${SEL.life} { border-color: transparent !important; border-image: ${slimFrame} 16 / 7px / 1px stretch !important; border-radius: 0 !important; box-shadow: 0 0 12px -3px ${alpha(glow, 0.8)} !important; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 38%, ${alpha('#ffffff', 0.75)} 46%, transparent 54%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, transparent 38%, ${alpha('#ffffff', 0.75)} 46%, transparent 54%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 12%, ${alpha('#ffffff', 0.6)} 21%, transparent 31%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, transparent 12%, ${alpha('#ffffff', 0.6)} 21%, transparent 31%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${dust} 0 0 / 60px, ${deep} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 ${SEL.phase} {

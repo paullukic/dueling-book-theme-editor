@@ -183,7 +183,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.accent2, 0.55)}, transparent 40%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 40%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 40%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--bd-scales), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
 
@@ -197,7 +197,7 @@ ${sel(['#duel .phase .background::after'])} {
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.self, 0.8)} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 22px ${alpha(t.opp, 0.75)} !important; }
 ${sel(['#duel .phase.active .background::after'])} { filter: drop-shadow(0 0 3px ${t.accent}); }
-${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.15)} !important; text-shadow: 0 1px 0 #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${steel} !important; border-radius: 0 !important; clip-path: ${cut(6)}; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${metal} !important; border-radius: 0 !important; }
 ${sel(['#duel #watchers'])} { background: var(--bd-scales), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${steel}, inset 0 -2px 0 ${t.accent} !important; }

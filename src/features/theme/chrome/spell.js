@@ -166,7 +166,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: var(--sp-medal) center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${mix(t.opp, '#000000', 0.25)} 70%, ${mix(mix(t.opp, t.danger, 0.15), '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: SPELL medallions; the active one turns an arcane circle */
@@ -182,7 +182,7 @@ ${sel(['#duel .phase.active .background::before'])} {
   animation: dbte-spell-turn 30s linear infinite;
 }
 @keyframes dbte-spell-turn { to { transform: rotate(-360deg); } }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.3)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${frameHi}, ${green} 50%, ${frameLo}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${artBg} !important; }

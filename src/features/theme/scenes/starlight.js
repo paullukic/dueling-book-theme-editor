@@ -76,7 +76,7 @@ export const foil = (t, light) => {
 
   // Background glints: a few foil sparkles in the top band and around the card.
   const glints = [
-    [1372, 112, 40, 0], [1018, 128, 30, 1.6], [1392, 742, 38, 3.1], [1090, 700, 22, 4.4], [214, 96, 30, 2.2], [612, 62, 18, 5.2],
+    [1542, 150, 24, 0], [72, 470, 20, 1.6], [1528, 640, 18, 3.1], [96, 820, 14, 4.4], [214, 96, 18, 2.2], [612, 50, 12, 5.2],
   ]
     .map(([gx, gy, r, d]) => `<g style="transform-origin: ${gx}px ${gy}px; animation: dbtefx-sl-twinkle ${n1(5.5 + rand() * 3)}s ease-in-out ${-d}s infinite;"><path d="${glint(gx, gy, r)}" fill="${light ? mix(t.accent, '#ffffff', 0.35) : silverHi}"/><path d="${glint(gx, gy, r * 0.45, 0.22)}" fill="#ffffff"/></g>`)
     .join('');

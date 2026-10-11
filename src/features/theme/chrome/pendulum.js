@@ -160,7 +160,7 @@ ${SEL.life} {
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 10px -3px ${alpha(gold, 0.6)} !important;
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.55)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp} 75%, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.accent, '#000000', 0.6)}, ${mix(t.accent, '#000000', 0.25)} 75%, ${mix(mix(t.accent, t.opp, 0.3), '#000000', 0.3)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: Pendulum-card rings; the active one carries the swing's arc */

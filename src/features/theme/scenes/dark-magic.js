@@ -56,7 +56,7 @@ ${runeBand(cx, cy, 247, 40, 1.1, t.accent, 1.3, 77).replace('<g ', '<g stroke-op
 <!--mid-->
 <circle cx="${cx}" cy="${cy}" r="420" fill="url(#dbtefx-dm-core)"/>
 <g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 240s linear infinite;">${circle}</g>
-${cardArt(t, { id: 'dbtefx-dm-hero', card: CARDS.darkMagician, x: 1150, y: 110, w: 330, h: 640, focus: [0.5, 0.45], zoom: 0.9, blend: 'normal', feather: 0.55, fade: 0.6, backdrop: mix(t.bg, t.accent, 0.15), backdropAmt: 0.7, glow: t.accent, breathe: 14 })}`;
+${cardArt(t, { id: 'dbtefx-dm-hero', card: CARDS.darkMagician, x: 1330, y: 120, w: 300, h: 620, focus: [0.5, 0.45], zoom: 0.9, blend: 'normal', feather: 0.55, fade: 0.6, backdrop: mix(t.bg, t.accent, 0.15), backdropAmt: 0.7, glow: t.accent, breathe: 14 })}`;
 };
 
 export default darkMagic;
