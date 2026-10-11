@@ -15,6 +15,7 @@ import {
 import { AlertsEffect, AnimationSpeedEffect, ShortcutsEffect, SkipIntroEffect } from '../features/duel';
 import { ChatEffect } from '../features/chat';
 import ThemeEffect from '../features/theme/ThemeEffect';
+import ReconnectNotice from '../features/reconnect';
 import { NotesWindow, TrackerWindow } from '../features/windows';
 
 const logoUrl = (() => {
@@ -128,6 +129,7 @@ const App = ({ shadowRoot }) => {
       <AlertsEffect />
       <ChatEffect />
 
+      <ReconnectNotice />
       <NotesWindow />
       <TrackerWindow />
 

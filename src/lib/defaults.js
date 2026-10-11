@@ -64,6 +64,7 @@ export const DEFAULTS = {
 
   // Duel
   skipIntro: false,
+  autoReconnect: false,
   animationSpeed: 1,
   shortcutsEnabled: true,
   shortcutKeys: DEFAULT_SHORTCUT_KEYS,

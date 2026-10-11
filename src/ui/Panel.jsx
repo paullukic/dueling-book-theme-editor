@@ -168,9 +168,15 @@ const DuelTab = () => {
       <Group title="Speed">
         <ToggleRow
           label="Skip the intro"
-          description="Goes straight past the title screen each time DuelingBook loads."
+          description="Goes straight past the title screen and connects to the main menu each time DuelingBook loads."
           checked={s.skipIntro}
           onChange={set('skipIntro')}
+        />
+        <ToggleRow
+          label="Reconnect automatically"
+          description="When DuelingBook drops the connection or is full, reloads and connects again after 5, 10, 20, 40 and 60 seconds, with a Cancel button. Never when you are logged in elsewhere or kicked."
+          checked={s.autoReconnect}
+          onChange={set('autoReconnect')}
         />
         <SliderRow
           label="Animation speed"

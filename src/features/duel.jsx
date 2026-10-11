@@ -3,6 +3,7 @@ import { getSettings, useSettings } from '../lib/settings';
 import { hasModifier, isTypingEvent, isVisible, sendDuelChat } from '../lib/dom';
 import { onDuelState, setAnimationSpeed } from '../lib/bridge';
 import { alertUser } from '../lib/notify';
+import { takeConnectOnce } from './reconnect';
 
 export const CUSTOM_PREFIX = 'custom_chat_';
 
@@ -95,7 +96,9 @@ export const ShortcutsEffect = () => {
 export const SkipIntroEffect = () => {
   const ran = useRef(false);
   useEffect(() => {
-    if (ran.current || !getSettings().skipIntro) return undefined;
+    // After an automatic reconnect, connect once even if "Skip the intro" is off.
+    const connectOnce = takeConnectOnce();
+    if (ran.current || !(getSettings().skipIntro || connectOnce)) return undefined;
     ran.current = true;
     const started = Date.now();
     let skipped = false;
