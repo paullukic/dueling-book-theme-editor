@@ -1,8 +1,10 @@
-// Theme scenes: one full-screen illustration per archetype and duel theme, drawn
-// as inline SVG behind the game (#dbte-skin-fx) in the theme's colours, with
-// a few slow animations (transform and opacity only). Three depth planes:
-// far (silhouettes), middle (the centrepiece), near (particles).
-// `still` stops every animation; so does the system's reduced-motion setting.
+// Theme scenes: a full-screen illustration per theme, drawn as inline SVG in
+// the theme's colours on three planes of a CSS 3D stage (#dbte-skin-fx):
+// far (ambient: sky, silhouettes), middle (the centrepiece), near (foreground
+// props). The particle canvas sits between middle and near, and the stage
+// tilts toward the pointer, so nearer planes move more (real parallax).
+// Animations move only transform and opacity. `still` stops every animation;
+// so does the system's reduced-motion setting.
 
 import { isHex, mix } from '../../lib/color.js';
 
@@ -22,7 +24,6 @@ const H = 900;
 
 // Shared keyframes. Every animated element sets its own duration and delay.
 const KEYFRAMES = `
-@keyframes dbtefx-rise { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 85% { opacity: 0.8; } 100% { transform: translateY(-980px); opacity: 0; } }
 @keyframes dbtefx-fall { 0% { transform: translate(0, -120px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 50% { transform: translate(60px, 440px) rotate(140deg); } 100% { transform: translate(-30px, 1040px) rotate(300deg); opacity: 0.6; } }
 @keyframes dbtefx-spin { to { transform: rotate(360deg); } }
 @keyframes dbtefx-sway { 0%, 100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg); } }
@@ -42,39 +43,41 @@ const KEYFRAMES = `
 const anim = (name, dur, delay = 0, extra = '') =>
   `style="animation: dbtefx-${name} ${dur}s ${extra || 'linear'} ${n1(-delay)}s infinite;${name === 'fall' || name === 'sway' || name === 'blink' || name === 'flicker' || name === 'ripple' || name === 'bloom' ? ' transform-box: fill-box; transform-origin: center;' : ''}"`;
 
-const embers = (rand, colors, count, { x0 = 0, x1 = W, size = 1 } = {}) => {
-  let s = '';
-  for (let i = 0; i < count; i++) {
-    const x = x0 + rand() * (x1 - x0);
-    const r = (0.9 + rand() * 2.2) * size;
-    const c = colors[i % colors.length];
-    s += `<ellipse cx="${n1(x)}" cy="${n1(H + 20)}" rx="${n1(r)}" ry="${n1(r * 2.3)}" fill="${c}" ${anim('rise', n1(9 + rand() * 9), rand() * 18)}/>`;
-  }
-  return s;
-};
-
 // ---------- Branded: Dogmatika cathedral, the brand, rising embers ----------
 const branded = (t) => {
-  const rand = rng(3);
-  let towers = '';
-  const spires = [[120, 70, 300], [260, 50, 220], [380, 110, 380], [540, 60, 250], [1040, 60, 260], [1180, 110, 400], [1330, 50, 230], [1460, 80, 320]];
-  spires.forEach(([x, w, h]) => {
-    towers += `<path d="M${x} ${H}V${H - h}L${x + w / 2} ${H - h - w * 1.3}L${x + w} ${H - h}V${H}Z"/>`;
+  const ice = mix(t.text, '#9fd8ff', 0.55);
+  // Mirrorjade's ice blades fanned in a crown above the fusion vortex.
+  let blades = '';
+  for (let i = 0; i < 9; i++) {
+    const ang = -90 + (i - 4) * 17;
+    const len = 300 - Math.abs(i - 4) * 26;
+    const [tx, ty] = polar(1120, 330, len, ang);
+    const [lx, ly] = polar(1120, 330, len * 0.42, ang - 5);
+    const [rx, ry] = polar(1120, 330, len * 0.42, ang + 5);
+    blades += `<path d="M1120 330L${lx} ${ly}L${tx} ${ty}L${rx} ${ry}Z" fill="url(#dbtefx-bd-ice)" stroke="${ice}" stroke-opacity="0.7" stroke-width="2"/>`;
+  }
+  // Jagged crags of the burning wasteland.
+  let crags = `M0 ${H}`;
+  [[0, 700], [90, 640], [160, 690], [260, 600], [330, 660], [420, 620], [520, 700], [640, 650], [760, 710], [900, 660], [1010, 700], [1120, 610], [1220, 670], [1330, 590], [1440, 660], [1600, 620]].forEach(([x, y]) => {
+    crags += `L${x} ${y}`;
   });
+  crags += `L${W} ${H}Z`;
+  // Albaz's chains hanging from the top-left corner.
+  let chain = '';
+  for (let i = 0; i < 9; i++) chain += `<ellipse cx="${150 + i * 26}" cy="${40 + i * 30}" rx="14" ry="22" transform="rotate(${i % 2 ? 60 : -30} ${150 + i * 26} ${40 + i * 30})"/>`;
   return `<defs>
-<linearGradient id="dbtefx-bd-brand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent2}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient>
-<radialGradient id="dbtefx-bd-heat" cx="0.5" cy="1" r="0.7"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-bd-ice" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${ice}" stop-opacity="0.15"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.55"/></linearGradient>
+<radialGradient id="dbtefx-bd-fire" cx="0.3" cy="1" r="0.75"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.6"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.18"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-bd-core"><stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="0.35" stop-color="${t.accent2}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
-<rect x="0" y="420" width="${W}" height="480" fill="url(#dbtefx-bd-heat)" ${anim('pulse', 7, 0, 'ease-in-out')}/>
-<g fill="${mix(t.bg, t.accent, 0.14)}" opacity="0.9">${towers}<rect x="0" y="${H - 60}" width="${W}" height="60"/></g>
-<g fill="none" stroke="${t.accent2}" stroke-opacity="0.2" stroke-width="2"><circle cx="800" cy="400" r="330" stroke-dasharray="420 60"/><circle cx="800" cy="400" r="296" stroke-dasharray="6 16"/></g>
-<g opacity="0.3" fill="url(#dbtefx-bd-brand)">
-<path d="M800 110C812 220 822 320 818 400C822 500 812 600 800 700C788 600 778 500 782 400C778 320 788 220 800 110Z"/>
-<path d="M560 330C660 352 740 360 800 352C860 360 940 352 1040 330C950 392 870 412 800 418C730 412 650 392 560 330Z"/>
-<path d="M800 470C760 520 700 560 640 580C710 590 770 560 800 520C830 560 890 590 960 580C900 560 840 520 800 470Z" opacity="0.8"/>
-</g>
-<circle cx="800" cy="396" r="22" fill="${t.accent2}" fill-opacity="0.45" ${anim('pulse', 4, 1, 'ease-in-out')}/>
-${embers(rand, [t.accent2, t.accent, t.warning], 26)}`;
+<rect width="${W}" height="${H}" fill="url(#dbtefx-bd-fire)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
+<path d="${crags}" fill="${mix(t.bg, t.accent, 0.1)}"/>
+<!--mid-->
+<g ${anim('bloom', 7, 0, 'ease-in-out')}>${blades}</g>
+<g style="transform-origin: 1120px 330px; animation: dbtefx-spin 24s linear infinite;" fill="none" stroke-width="5" stroke-linecap="round"><path d="M1120 230A100 100 0 0 1 1220 330" stroke="${t.accent}" stroke-opacity="0.7"/><path d="M1120 430A100 100 0 0 1 1020 330" stroke="${ice}" stroke-opacity="0.7"/><path d="M1190 260A100 100 0 0 1 1190 400" stroke="${t.accent2}" stroke-opacity="0.4" stroke-dasharray="4 10"/></g>
+<circle cx="1120" cy="330" r="120" fill="url(#dbtefx-bd-core)" ${anim('pulse', 3.5, 0, 'ease-in-out')}/>
+<!--near-->
+<g fill="none" stroke="${mix(t.bg, t.text, 0.35)}" stroke-width="7" opacity="0.8" style="transform-origin: 150px 0px; animation: dbtefx-reed 7s ease-in-out infinite;">${chain}</g>`;
 };
 
 // ---------- Artmage: gilded frame, sweeping paint, blooming splashes ----------
@@ -101,14 +104,14 @@ const artmage = (t) => {
 </defs>
 <path d="M-40 260C300 160 620 300 900 230S1400 120 1660 200L1660 250C1400 190 1180 300 900 300S300 230 -40 330Z" fill="url(#dbtefx-am-a)" opacity="0.22"/>
 <path d="M-40 640C320 720 640 560 960 640S1420 760 1660 660L1660 700C1420 800 1200 690 960 700S320 780 -40 700Z" fill="url(#dbtefx-am-b)" opacity="0.18"/>
+<!--mid-->
 ${splats}
 <g fill="none" stroke="${t.accent2}" stroke-linecap="round">
 <ellipse cx="800" cy="450" rx="330" ry="392" stroke-width="4" stroke-opacity="0.3"/>
 <ellipse cx="800" cy="450" rx="312" ry="374" stroke-width="1.5" stroke-opacity="0.2"/>
 <g stroke-width="3" stroke-opacity="0.34">${curls.map((p) => curl(...p)).join('')}</g>
 </g>
-${[[568, 180], [1032, 180], [568, 720], [1032, 720]].map(([x, y]) => `<path d="M${x} ${y - 12}L${x + 8} ${y}L${x} ${y + 12}L${x - 8} ${y}Z" fill="${t.accent2}" fill-opacity="0.45"/>`).join('')}
-${Array.from({ length: 10 }, (_, i) => `<circle cx="${n1(80 + rand() * 1440)}" cy="${n1(80 + rand() * 740)}" r="${n1(2 + rand() * 4)}" fill="${[t.accent, t.opp, t.accent2][i % 3]}" fill-opacity="0.35" ${anim('drift', n1(10 + rand() * 8), rand() * 10, 'ease-in-out')}/>`).join('')}`;
+${[[568, 180], [1032, 180], [568, 720], [1032, 720]].map(([x, y]) => `<path d="M${x} ${y - 12}L${x + 8} ${y}L${x} ${y + 12}L${x - 8} ${y}Z" fill="${t.accent2}" fill-opacity="0.45"/>`).join('')}`;
 };
 
 // ---------- Sky Striker: launch-bay HUD, rotating radar, scanline ----------
@@ -130,10 +133,12 @@ const skyStriker = (t) => {
 <linearGradient id="dbtefx-ss-trail" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0"/><stop offset="0.7" stop-color="${t.accent}" stop-opacity="0.5"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.7"/></linearGradient>
 </defs>
 <path d="M-60 980L760 -40L790 -40L-20 980Z" fill="url(#dbtefx-ss-trail)" opacity="0.35"/>
+<!--mid-->
 <g fill="none" stroke="${t.accent2}"><circle cx="${cx}" cy="${cy}" r="302" stroke-width="3" stroke-opacity="0.38"/>${[220, 140, 60].map((r) => `<circle cx="${cx}" cy="${cy}" r="${r}" stroke-opacity="0.2"/>`).join('')}
 <path d="M${cx - 320} ${cy}H${cx + 320}M${cx} ${cy - 320}V${cy + 320}" stroke-opacity="0.16"/><g stroke-opacity="0.4" stroke-width="1.5">${ticks}</g></g>
 <g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 6s linear infinite;"><path d="M${cx} ${cy}L${cx + 302} ${cy}A302 302 0 0 0 ${ex} ${ey}Z" fill="url(#dbtefx-ss-sweep)"/></g>
 ${blip(polar(cx, cy, 190, -30), 0)}${blip(polar(cx, cy, 110, 140), 0.8)}${blip(polar(cx, cy, 250, 75), 1.6)}
+<!--near-->
 <g fill="none" stroke="${t.accent2}" stroke-width="3" stroke-opacity="0.45">${bracket(40, 40, 1, 1)}${bracket(W - 40, 40, -1, 1)}${bracket(40, H - 40, 1, -1)}${bracket(W - 40, H - 40, -1, -1)}</g>
 <rect x="0" y="0" width="${W}" height="40" fill="url(#dbtefx-ss-scan)" ${anim('scan', 7)}/>
 <g fill="${t.accent2}" fill-opacity="0.25">${[0, 1, 2, 3].map((i) => `<rect x="70" y="${720 + i * 22}" width="${120 + ((i * 53) % 90)}" height="6"/>`).join('')}</g>
@@ -142,7 +147,6 @@ ${blip(polar(cx, cy, 190, -30), 0)}${blip(polar(cx, cy, 110, 140), 0.8)}${blip(p
 
 // ---------- Snake-Eye: the serpent's eye, a coiled body, embers ----------
 const snakeEye = (t) => {
-  const rand = rng(23);
   let fibres = '';
   for (let a = 0; a < 360; a += 8) {
     const [x1, y1] = polar(800, 200, 70, a);
@@ -158,14 +162,14 @@ const snakeEye = (t) => {
 <rect width="${W}" height="${H}" fill="url(#dbtefx-se-glow)"/>
 <path d="${coil}" fill="none" stroke="url(#dbtefx-se-body)" stroke-width="86" stroke-linecap="round"/>
 <path d="${coil}" fill="none" stroke="${t.accent2}" stroke-opacity="0.22" stroke-width="64" stroke-dasharray="3 15" stroke-linecap="round"/>
+<!--mid-->
 <g ${anim('blink', 9, 2, 'ease-in-out')}>
 <path d="M380 200Q800 -80 1220 200Q800 480 380 200Z" fill="${t.bg}" fill-opacity="0.6" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="4"/>
 <circle cx="800" cy="200" r="168" fill="url(#dbtefx-se-iris)" opacity="0.75" ${anim('pulse', 5, 0, 'ease-in-out')}/>
 <g stroke="${t.accent2}" stroke-opacity="0.22">${fibres}</g>
 <ellipse cx="800" cy="200" rx="24" ry="150" fill="${t.bg}" fill-opacity="0.92" stroke="${t.accent}" stroke-opacity="0.6" stroke-width="2"/>
 <ellipse cx="748" cy="132" rx="22" ry="10" fill="#ffffff" fill-opacity="0.18" transform="rotate(-25 748 132)"/>
-</g>
-${embers(rand, [t.accent, t.accent2], 24)}`;
+</g>`;
 };
 
 // ---------- Labrynth: rose window, candlelit colonnade ----------
@@ -186,7 +190,9 @@ const labrynth = (t) => {
   }
   return `<defs><radialGradient id="dbtefx-lb-light" cx="0.5" cy="0.28" r="0.45"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.22"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-lb-light)"/>
+<!--mid-->
 <g ${anim('pulse', 6, 0, 'ease-in-out')}><circle cx="800" cy="250" r="236" fill="${t.bg}" fill-opacity="0.35" stroke="${t.accent2}" stroke-opacity="0.45" stroke-width="5"/>${glass}<circle cx="800" cy="250" r="44" fill="${t.accent}" fill-opacity="0.3" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="3"/></g>
+<!--near-->
 <g fill="${mix(t.bg, t.surface, 0.5)}" stroke="${t.accent2}" stroke-opacity="0.2" stroke-width="2">${arches}</g>
 ${candles}`;
 };
@@ -198,6 +204,7 @@ const hero = (t) => {
   const rand = rng(5);
   return `<defs><linearGradient id="dbtefx-hr-beam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.32"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient></defs>
 ${beam(330, 0)}${beam(1270, 5)}
+<!--mid-->
 <path d="M760 120L840 120L860 150L800 220L740 150Z" fill="${t.accent}" fill-opacity="0.12" stroke="${t.accent}" stroke-opacity="0.3" stroke-width="3"/>
 <text x="800" y="176" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="${t.accent}" fill-opacity="0.3">H</text>
 ${Array.from({ length: 14 }, () => `<rect x="${n1(rand() * W)}" y="${n1(H - 60 - rand() * 300)}" width="5" height="7" fill="${t.warning}" ${anim('pulse', n1(2 + rand() * 4), rand() * 4, 'steps(2)')}/>`).join('')}`;
@@ -227,15 +234,16 @@ const blackwing = (t) => {
 <circle cx="1060" cy="150" r="240" fill="url(#dbtefx-bw-moon)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
 <path d="M1060 60A92 92 0 1 0 1106 232A78 78 0 1 1 1060 60Z" fill="${t.text}" fill-opacity="0.45"/>
 <g fill="${t.text}" fill-opacity="0.05"><ellipse cx="400" cy="230" rx="420" ry="30"/><ellipse cx="1150" cy="330" rx="380" ry="24"/></g>
+<!--mid-->
 <g fill="url(#dbtefx-bw-wing)" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="1.5">${wing(120, 900, 1)}${wing(1480, 900, -1)}</g>
 <ellipse cx="800" cy="460" rx="8" ry="4" fill="${t.accent2}" fill-opacity="0.7" ${anim('pulse', 3, 0, 'ease-in-out')}/>
 <ellipse cx="840" cy="460" rx="8" ry="4" fill="${t.accent2}" fill-opacity="0.7" ${anim('pulse', 3, 0, 'ease-in-out')}/>
+<!--near-->
 ${Array.from({ length: 20 }, () => feather(rand() * W, 1.1 + rand() * 1.2)).join('')}`;
 };
 
 // ---------- Lightsworn: dawn sunburst, halo rings, rising motes ----------
 const lightsworn = (t) => {
-  const rand = rng(41);
   let rays = '';
   for (let i = 0; i < 36; i++) {
     const [x1, y1] = polar(800, -60, 1400, i * 10 - 2);
@@ -246,8 +254,8 @@ const lightsworn = (t) => {
 <g fill="${t.accent}" fill-opacity="0.07" style="transform-origin: 800px -60px; animation: dbtefx-spin 160s linear infinite;">${rays}</g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ls-sun)"/>
 <g fill="none" stroke="${t.accent}"><circle cx="800" cy="-60" r="260" stroke-opacity="0.22" stroke-width="3"/><circle cx="800" cy="-60" r="330" stroke-opacity="0.14" stroke-dasharray="4 12" stroke-width="2"/><circle cx="800" cy="-60" r="420" stroke-opacity="0.1"/></g>
-<g fill="${t.accent}" fill-opacity="0.12"><path d="M800 300L828 380L800 620L772 380Z"/><path d="M700 400L800 380L900 400L800 420Z"/></g>
-${embers(rand, ['#ffffff', t.accent, t.warning], 22, { size: 1.1 })}`;
+<!--mid-->
+<g fill="${t.accent}" fill-opacity="0.12"><path d="M800 300L828 380L800 620L772 380Z"/><path d="M700 400L800 380L900 400L800 420Z"/></g>`;
 };
 
 // ---------- Frog: moonlit pond, lily pads, ripples, fireflies, reeds ----------
@@ -263,10 +271,11 @@ const frog = (t) => {
   return `<defs><linearGradient id="dbtefx-fr-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0.45" stop-color="${t.accent}" stop-opacity="0"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0.16"/></linearGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-fr-water)"/>
 ${ripple(420, 690, 0)}${ripple(1180, 760, 2)}${ripple(820, 820, 4)}
+<!--mid-->
 ${pad(300, 620, 90, 0)}${pad(560, 780, 120, 1)}${pad(1060, 660, 100, 2)}${pad(1320, 820, 130, 3)}${pad(880, 560, 70, 1.5)}
 ${lotus(560, 760)}${lotus(1320, 800)}
-${reed(40, 420, 18, 0)}${reed(90, 340, -10, 1)}${reed(1520, 460, -20, 2)}${reed(1570, 360, 12, 0.5)}
-${Array.from({ length: 14 }, () => `<circle cx="${n1(80 + rand() * 1440)}" cy="${n1(120 + rand() * 520)}" r="${n1(2 + rand() * 2.5)}" fill="${t.warning}" ${anim('pulse', n1(2.5 + rand() * 3), rand() * 5, 'ease-in-out')}/>`).join('')}`;
+<!--near-->
+${reed(40, 420, 18, 0)}${reed(90, 340, -10, 1)}${reed(1520, 460, -20, 2)}${reed(1570, 360, 12, 0.5)}`;
 };
 
 // ---------- Duel themes ----------
@@ -288,24 +297,14 @@ const star = (cx, cy, r, points = 5) => {
   return `M${p.join('L')}Z`;
 };
 
-const sparkles = (rand, color, count, area = [0, 0, W, H]) =>
-  Array.from({ length: count }, () => {
-    const x = area[0] + rand() * area[2];
-    const y = area[1] + rand() * area[3];
-    const r = 3 + rand() * 6;
-    return `<path d="M${n1(x)} ${n1(y - r)}L${n1(x + r * 0.25)} ${n1(y - r * 0.25)}L${n1(x + r)} ${n1(y)}L${n1(x + r * 0.25)} ${n1(y + r * 0.25)}L${n1(x)} ${n1(y + r)}L${n1(x - r * 0.25)} ${n1(y + r * 0.25)}L${n1(x - r)} ${n1(y)}L${n1(x - r * 0.25)} ${n1(y - r * 0.25)}Z" fill="${color}" ${anim('pulse', n1(2 + rand() * 3), rand() * 4, 'ease-in-out')}/>`;
-  }).join('');
-
 const glow = (id, color, cx = 0.5, cy = 0.5, r = 0.5, o = 0.25) =>
   `<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}"><stop offset="0" stop-color="${color}" stop-opacity="${o}"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient>`;
 
 // Spell Card: a turning spell circle, sparkles rising like cast magic.
 const spell = (t) => {
-  const rand = rng(61);
   return `<defs>${glow('dbtefx-sp-g', t.accent)}</defs><rect width="${W}" height="${H}" fill="url(#dbtefx-sp-g)"/>
 ${runeRing(t, 800, 450, 340, t.accent, 90)}${runeRing(t, 800, 450, 220, t.accent2, 60, true)}
-<path d="${star(800, 450, 190, 6)}" fill="none" stroke="${t.accent}" stroke-opacity="0.25" stroke-width="2"/>
-${embers(rand, [t.accent, t.accent2], 18, { size: 0.9 })}`;
+<path d="${star(800, 450, 190, 6)}" fill="none" stroke="${t.accent}" stroke-opacity="0.25" stroke-width="2"/>`;
 };
 
 // Trap Card: two chains cross the screen, a trap hole pulses below.
@@ -345,27 +344,23 @@ const fusion = (t) => {
 
 // Synchro: tuner rings stacked in a column of light, stars passing through.
 const synchro = (t) => {
-  const rand = rng(67);
   let rings = '';
   for (let i = 0; i < 5; i++) {
     rings += `<ellipse cx="800" cy="${170 + i * 140}" rx="230" ry="40" fill="none" stroke="${t.accent2}" stroke-opacity="0.45" stroke-width="4" ${anim('bloom', 3, i * 0.4, 'ease-in-out')}/>`;
   }
   return `<defs><linearGradient id="dbtefx-sy-beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.3"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient></defs>
-<rect x="640" y="0" width="320" height="${H}" fill="url(#dbtefx-sy-beam)" ${anim('pulse', 4, 0, 'ease-in-out')}/>${rings}
-${Array.from({ length: 10 }, () => `<circle cx="${n1(720 + rand() * 160)}" cy="${H + 10}" r="${n1(2 + rand() * 3)}" fill="${t.text}" ${anim('rise', n1(4 + rand() * 3), rand() * 6)}/>`).join('')}`;
+<rect x="640" y="0" width="320" height="${H}" fill="url(#dbtefx-sy-beam)" ${anim('pulse', 4, 0, 'ease-in-out')}/>${rings}`;
 };
 
 // Xyz: overlay units orbiting a black hole, rank stars twinkling.
 const xyz = (t) => {
-  const rand = rng(71);
   const unit = (r, dur, delay, size) =>
     `<g style="transform-origin: 800px 450px; animation: dbtefx-spin ${dur}s linear ${-delay}s infinite;"><circle cx="${800 + r}" cy="450" r="${size}" fill="${t.accent}" fill-opacity="0.8"/><circle cx="${800 + r}" cy="450" r="${size * 2.6}" fill="${t.accent}" fill-opacity="0.15"/></g>`;
   return `<defs>${glow('dbtefx-xy-hole', t.accent, 0.5, 0.5, 0.5, 0.3)}</defs>
 <circle cx="800" cy="450" r="330" fill="url(#dbtefx-xy-hole)"/>
 <g fill="none" stroke="${t.accent}" stroke-opacity="0.2"><ellipse cx="800" cy="450" rx="300" ry="300"/><ellipse cx="800" cy="450" rx="210" ry="210" stroke-dasharray="4 10"/></g>
 <circle cx="800" cy="450" r="120" fill="${t.bg}" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="3"/>
-${unit(300, 14, 0, 9)}${unit(210, 10, 3, 7)}${unit(300, 14, 7, 9)}
-${sparkles(rand, t.accent, 16)}`;
+${unit(300, 14, 0, 9)}${unit(210, 10, 3, 7)}${unit(300, 14, 7, 9)}`;
 };
 
 // Link: eight link arrows around a marker, lighting in turn; circuit traces.
@@ -413,12 +408,10 @@ ${Array.from({ length: 10 }, () => {
 
 // Dark Magic: a pentagram circle turning, violet sparkles, a wand's streak.
 const darkMagic = (t) => {
-  const rand = rng(83);
   return `<defs>${glow('dbtefx-dm-g', t.accent, 0.5, 0.5, 0.5, 0.25)}</defs><rect width="${W}" height="${H}" fill="url(#dbtefx-dm-g)"/>
 ${runeRing(t, 800, 450, 320, t.accent, 120)}
 <g style="transform-origin: 800px 450px; animation: dbtefx-spin 60s linear infinite reverse;"><path d="${star(800, 450, 270)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.35" stroke-width="3"/></g>
-<path d="M200 760Q700 520 1400 140" fill="none" stroke="${t.accent2}" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round"/>
-${sparkles(rand, t.accent2, 18)}`;
+<path d="M200 760Q700 520 1400 140" fill="none" stroke="${t.accent2}" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round"/>`;
 };
 
 // Black Dragon: two red eyes in the dark, molten cracks, embers.
@@ -439,20 +432,18 @@ const blackDragon = (t) => {
 <rect width="${W}" height="${H}" fill="url(#dbtefx-bd-eyes)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <g ${anim('blink', 10, 3, 'ease-in-out')}>${eye(690)}${eye(910)}</g>
 <rect y="500" width="${W}" height="400" fill="url(#dbtefx-bd-lava)"/>
-<g fill="none" stroke="${t.warning}" stroke-opacity="0.45" stroke-width="3" ${anim('pulse', 3, 1, 'ease-in-out')}>${cracks}</g>
-${embers(rand, [t.accent, t.warning], 22)}`;
+<!--near-->
+<g fill="none" stroke="${t.warning}" stroke-opacity="0.45" stroke-width="3" ${anim('pulse', 3, 1, 'ease-in-out')}>${cracks}</g>`;
 };
 
 // Millennium: the Eye of Wdjat over a pyramid, drifting sand.
 const millennium = (t) => {
-  const rand = rng(97);
   return `<defs>${glow('dbtefx-mi-g', t.accent, 0.5, 0.4, 0.45, 0.3)}</defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-mi-g)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <path d="M800 140L1220 860H380Z" fill="${t.accent}" fill-opacity="0.05" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="3"/>
 <g fill="none" stroke="${t.accent}" stroke-opacity="0.6" stroke-width="5" stroke-linecap="round">
 <path d="M690 470Q800 390 910 470Q800 530 690 470Z"/><circle cx="800" cy="468" r="26" fill="${t.accent}" fill-opacity="0.5"/>
-<path d="M690 470L640 470M780 500Q770 560 730 590Q760 600 770 570M820 500Q840 540 880 560"/></g>
-${Array.from({ length: 24 }, () => `<circle cx="${n1(rand() * W)}" cy="${n1(500 + rand() * 400)}" r="${n1(1 + rand() * 2)}" fill="${t.accent}" fill-opacity="0.5" ${anim('drift', n1(6 + rand() * 6), rand() * 6, 'ease-in-out')}/>`).join('')}`;
+<path d="M690 470L640 470M780 500Q770 560 730 590Q760 600 770 570M820 500Q840 540 880 560"/></g>`;
 };
 
 // Pendulum: two scale pillars and a swinging pendulum between them.
@@ -461,18 +452,17 @@ const pendulum = (t) =>
 <linearGradient id="dbtefx-pe-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.05"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.45"/></linearGradient></defs>
 <rect x="250" y="80" width="110" height="820" rx="10" fill="url(#dbtefx-pe-l)"/><rect x="1240" y="80" width="110" height="820" rx="10" fill="url(#dbtefx-pe-r)"/>
 <path d="M360 140H1240" stroke="${t.text}" stroke-opacity="0.18" stroke-width="3"/>
+<!--mid-->
 <g style="transform-origin: 800px 140px; animation: dbtefx-sway 4s ease-in-out infinite;"><path d="M800 140V560" stroke="${t.text}" stroke-opacity="0.3" stroke-width="3"/>
 <path d="M800 540L850 600L800 690L750 600Z" fill="${t.accent}" fill-opacity="0.35" stroke="${t.self}" stroke-opacity="0.6" stroke-width="3"/></g>`;
 
 // Divine Beasts: Ra's sun disk, Obelisk's pillar of light, Slifer's coil.
 const divine = (t) => {
-  const rand = rng(101);
   return `<defs>${glow('dbtefx-dv-sun', t.accent, 0.5, 0.5, 0.5, 0.6)}<linearGradient id="dbtefx-dv-ob" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.opp}" stop-opacity="0"/><stop offset="0.5" stop-color="${t.opp}" stop-opacity="0.35"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0"/></linearGradient></defs>
 <rect x="160" y="0" width="200" height="${H}" fill="url(#dbtefx-dv-ob)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
 <path d="M1700 120C1400 160 1500 360 1300 420S1100 700 1340 820" fill="none" stroke="${t.self}" stroke-opacity="0.3" stroke-width="40" stroke-linecap="round"/>
 <circle cx="800" cy="260" r="220" fill="url(#dbtefx-dv-sun)" ${anim('bloom', 6, 0, 'ease-in-out')}/>
-${runeRing(t, 800, 260, 170, t.accent, 80)}
-${embers(rand, [t.accent, t.warning], 14, { x0: 500, x1: 1100 })}`;
+${runeRing(t, 800, 260, 170, t.accent, 80)}`;
 };
 
 // Duel Disk (light): the disk's rotating blade ring and a metallic sheen.
@@ -509,15 +499,11 @@ ${Array.from({ length: 3 }, (_, i) => {
     const x = 300 + i * 500 + rand() * 120;
     const y = 300 + rand() * 300;
     return `<g ${anim('pulse', n1(5 + rand() * 4), rand() * 5, 'ease-in-out')}><ellipse cx="${n1(x)}" cy="${n1(y)}" rx="14" ry="5" fill="${t.accent}" fill-opacity="0.7"/><ellipse cx="${n1(x + 40)}" cy="${n1(y)}" rx="14" ry="5" fill="${t.accent}" fill-opacity="0.7"/></g>`;
-  }).join('')}
-${embers(rand, [t.accent, t.accent2], 16, { size: 1.4 })}`;
+  }).join('')}`;
 };
 
 // Sakura: a blossoming branch in the corner, petals drifting down.
 const sakura = (t) => {
-  const rand = rng(113);
-  const petal = (x, s) =>
-    `<g transform="translate(${n1(x)} 0)"><g ${anim('fall', n1(11 + rand() * 9), rand() * 20, 'ease-in-out')}><path d="M0 ${-12 * s}C${9 * s} ${-10 * s} ${10 * s} ${4 * s} 0 ${12 * s}C${-10 * s} ${4 * s} ${-9 * s} ${-10 * s} -2 ${-9 * s}L0 ${-12 * s}Z" fill="${rand() < 0.5 ? t.accent : mix(t.accent, '#ffffff', 0.4)}" fill-opacity="${n1(0.5 + rand() * 0.35)}"/></g></g>`;
   const blossom = (x, y, r) => {
     let p = '';
     for (let i = 0; i < 5; i++) {
@@ -529,10 +515,63 @@ const sakura = (t) => {
   const flowers = [[300, 120, 22], [420, 70, 18], [520, 160, 24], [230, 230, 20], [640, 110, 16], [380, 200, 14], [700, 190, 20], [150, 60, 18]];
   return `<defs><radialGradient id="dbtefx-sk-g" cx="0.15" cy="0.1" r="0.6"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.22"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sk-g)"/>
+<!--near-->
 <g fill="none" stroke="${mix(t.bg, t.text, 0.25)}" stroke-linecap="round"><path d="M-30 40Q200 90 380 130T760 180" stroke-width="14"/><path d="M260 106Q300 170 250 240" stroke-width="8"/><path d="M470 140Q520 90 640 100" stroke-width="7"/></g>
-${flowers.map(([x, y, r]) => blossom(x, y, r)).join('')}
-${Array.from({ length: 22 }, () => petal(rand() * W, 0.8 + rand() * 0.8)).join('')}`;
+${flowers.map(([x, y, r]) => blossom(x, y, r)).join('')}`;
 };
+
+// ---------- Clean themes: quiet scenes, the particles do most of the work ----------
+
+// Midnight: a gold crescent and a faint nebula.
+const midnight = (t) => `<defs>${glow('dbtefx-mn-neb', t.accent2, 0.3, 0.3, 0.5, 0.16)}${glow('dbtefx-mn-moon', t.accent, 0.5, 0.5, 0.5, 0.3)}</defs>
+<rect width="${W}" height="${H}" fill="url(#dbtefx-mn-neb)"/>
+<!--mid-->
+<circle cx="1180" cy="200" r="200" fill="url(#dbtefx-mn-moon)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
+<path d="M1180 110A90 90 0 1 0 1226 282A76 76 0 1 1 1180 110Z" fill="${t.accent}" fill-opacity="0.5"/>`;
+
+// Snow: layered hills and pines under falling snow.
+const snow = (t) => {
+  const pine = (x, y, h) => `<path d="M${x} ${y - h}L${x + h * 0.32} ${y - h * 0.45}H${x + h * 0.16}L${x + h * 0.4} ${y}H${x - h * 0.4}L${x - h * 0.16} ${y - h * 0.45}H${x - h * 0.32}Z"/>`;
+  return `<path d="M0 640Q300 560 620 620T1240 580T1600 600V900H0Z" fill="${t.border}" fill-opacity="0.35"/>
+<g fill="${t.border}" fill-opacity="0.45">${pine(160, 640, 150)}${pine(260, 620, 110)}${pine(1380, 600, 170)}${pine(1490, 610, 120)}</g>
+<!--near-->
+<path d="M0 760Q400 690 800 750T1600 720V900H0Z" fill="${t.raised}" fill-opacity="0.85"/>
+<g fill="${t.muted}" fill-opacity="0.5">${pine(80, 780, 200)}${pine(1530, 760, 220)}</g>`;
+};
+
+// Verdant: vines hanging from the top corners.
+const verdant = (t) => {
+  const vine = (x, len, dir) => {
+    let leaves = '';
+    for (let y = 40; y < len; y += 46) {
+      const lx = x + Math.sin(y / 60) * 20 * dir;
+      leaves += `<ellipse cx="${n1(lx + 14 * dir)}" cy="${y}" rx="16" ry="7" transform="rotate(${dir * 30} ${n1(lx + 14 * dir)} ${y})"/>`;
+    }
+    return `<path d="M${x} 0Q${x + 30 * dir} ${len / 2} ${x} ${len}" fill="none" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="3"/><g fill="${t.accent}" fill-opacity="0.3">${leaves}</g>`;
+  };
+  return `<defs>${glow('dbtefx-vd-g', t.accent, 0.5, 0, 0.6, 0.12)}</defs><rect width="${W}" height="${H}" fill="url(#dbtefx-vd-g)"/>
+<!--near-->
+<g style="transform-origin: 60px 0px; animation: dbtefx-reed 9s ease-in-out infinite;">${vine(60, 420, 1)}${vine(130, 280, 1)}</g>
+<g style="transform-origin: 1540px 0px; animation: dbtefx-reed 10s ease-in-out -3s infinite;">${vine(1540, 460, -1)}${vine(1470, 300, -1)}</g>`;
+};
+
+// Parchment (light): a shaft of window light with dust in it.
+const parchment = (t) => `<defs><linearGradient id="dbtefx-pc-beam" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs>
+<path d="M120 -20L520 -20L1180 920L540 920Z" fill="url(#dbtefx-pc-beam)" ${anim('pulse', 10, 0, 'ease-in-out')}/>
+<!--mid-->
+<g fill="none" stroke="${t.accent}" stroke-opacity="0.12" stroke-width="2"><circle cx="1320" cy="680" r="150"/><circle cx="1320" cy="680" r="120" stroke-dasharray="3 9"/><path d="M1320 510V850M1150 680H1490M1200 560L1440 800M1440 560L1200 800"/></g>`;
+
+// Obsidian: volcanic glass shards catching light at the edges.
+const obsidian = (t) => {
+  const shard = (pts, delay) => `<g ${anim('pulse', 6, delay, 'ease-in-out')}><path d="M${pts}Z" fill="${mix(t.surface, t.accent, 0.08)}" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="1.5"/></g>`;
+  return `<!--near-->${shard('0 600L140 520L220 900L0 900', 0)}${shard('1600 200L1460 340L1520 560L1600 520', 2)}${shard('1600 700L1400 780L1460 900L1600 900', 4)}${shard('0 0L180 0L60 160', 1)}`;
+};
+
+// Crimson: two diagonal blade slashes glowing in red.
+const crimson = (t) => `<defs><linearGradient id="dbtefx-cr-slash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t.accent}" stop-opacity="0"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient></defs>
+<!--mid-->
+<path d="M1000 -40L1600 560L1590 580L980 -30Z" fill="url(#dbtefx-cr-slash)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
+<path d="M-40 420L560 960L540 970L-50 440Z" fill="url(#dbtefx-cr-slash)" ${anim('pulse', 5, 2.5, 'ease-in-out')}/>`;
 
 const SCENES = {
   branded,
@@ -545,6 +584,12 @@ const SCENES = {
   lightsworn,
   frog,
   sakura,
+  midnight,
+  snow,
+  verdant,
+  parchment,
+  obsidian,
+  crimson,
   spell,
   trap,
   fusion,
@@ -564,12 +609,27 @@ const SCENES = {
 
 export const SCENE_IDS = Object.keys(SCENES);
 
-// The scene's markup for the fx layer, or '' when the preset has none.
-export const sceneSvg = (presetId, tokens, { still = false } = {}) => {
+const plane = (cls, body) =>
+  `<svg class="${cls}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">${body}</svg>`;
+
+// The 3D stage for the fx layer: far, middle and near SVG planes with the
+// particle canvas between middle and near; '' when the theme has neither a
+// scene nor particles. Colours go straight into markup: only hex values.
+export const sceneMarkup = (presetId, tokens, { still = false, particles = false } = {}) => {
   const draw = SCENES[presetId];
-  // Colours go straight into markup: only well-formed hex values.
-  if (!draw || !Object.values(tokens || {}).every(isHex)) return '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" class="${still ? 'dbtefx-still' : ''}"><style>${KEYFRAMES}
-.dbtefx-still * { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }</style>${draw(tokens)}</svg>`;
+  if ((!draw && !particles) || !Object.values(tokens || {}).every(isHex)) return '';
+  // Text before <!--mid--> is the far plane, after <!--near--> the near one;
+  // a scene without markers is all middle plane.
+  const body = draw ? draw(tokens) : '';
+  const planes = { far: '', mid: '', near: '' };
+  let current = /<!--mid-->/.test(body) ? 'far' : 'mid';
+  body.split(/(<!--mid-->|<!--near-->)/).forEach((chunk) => {
+    if (chunk === '<!--mid-->') current = 'mid';
+    else if (chunk === '<!--near-->') current = 'near';
+    else planes[current] += chunk;
+  });
+  const parts = [planes.far.trim(), planes.mid.trim(), planes.near.trim()];
+  return `<style>${KEYFRAMES}
+#${FX_ID}.dbtefx-still *, #${FX_ID} .dbtefx-still * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { #${FX_ID} * { animation: none !important; } }</style><div class="dbtefx-stage${still ? ' dbtefx-still' : ''}">${parts[0] ? plane('dbtefx-far', parts[0]) : ''}${parts[1] ? plane('dbtefx-mid', parts[1]) : ''}${particles ? '<canvas class="dbtefx-canvas"></canvas>' : ''}${parts[2] ? plane('dbtefx-near', parts[2]) : ''}</div>`;
 };

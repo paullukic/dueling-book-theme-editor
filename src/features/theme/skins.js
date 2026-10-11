@@ -354,7 +354,14 @@ export const skinCss = (presetId, tokens, areas = {}, { motif = true } = {}) => 
   // stage turns see-through so the motif shows.
   return `#${LAYER_ID}, #${MOTIF_ID}, #${FX_ID} { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-repeat: repeat; overflow: hidden; }
 #${LAYER_ID}::before, #${MOTIF_ID}::before { content: ""; position: absolute; inset: 0; }
-#${FX_ID} > svg { display: block; width: 100%; height: 100%; }
+#${FX_ID} { perspective: 1400px; perspective-origin: 50% 45%; }
+/* The stage is a little larger than the window so tilting never shows its edge.
+   Planes sit at depth; each is scaled back to fill the window at rest. */
+#${FX_ID} .dbtefx-stage { position: absolute; inset: -6%; transform-style: preserve-3d; will-change: transform; }
+#${FX_ID} .dbtefx-stage > * { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#${FX_ID} .dbtefx-far { transform: translateZ(-420px) scale(1.3); }
+#${FX_ID} .dbtefx-canvas { transform: translateZ(120px) scale(0.914); }
+#${FX_ID} .dbtefx-near { transform: translateZ(220px) scale(0.843); }
 html #spiral { filter: ${tintFilter(tokens.accent)} brightness(0.8) !important; }
 html #circuit_cover { background-color: transparent !important; }
 html #circuit_board { opacity: calc(var(--dbt-backdrop) * 0.18) !important; }

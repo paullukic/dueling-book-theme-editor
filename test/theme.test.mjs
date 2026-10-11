@@ -8,7 +8,8 @@ import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
-import { SCENE_IDS, sceneSvg } from '../src/features/theme/scenes.js';
+import { SCENE_IDS, sceneMarkup } from '../src/features/theme/scenes.js';
+import { PARTICLES, PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
 import { launcherBottom } from '../src/lib/layout.js';
 import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
 
@@ -308,8 +309,8 @@ test('skins: the pattern switch removes only the artwork, glows stay', () => {
 test('skins: archetype art renders the same every time and stays compact', () => {
   SCENE_IDS.forEach((id) => {
     const t = PRESETS.find((p) => p.id === id).tokens;
-    const a = sceneSvg(id, t);
-    assert.equal(a, sceneSvg(id, t), id);
+    const a = sceneMarkup(id, t);
+    assert.equal(a, sceneMarkup(id, t), id);
     assert.doesNotMatch(a, /NaN|undefined/, id);
     assert.ok(a.length > 1500 && a.length < 40000, `${id} is ${a.length} bytes`);
   });
@@ -318,21 +319,58 @@ test('skins: archetype art renders the same every time and stays compact', () =>
 test('scenes: every archetype has one, it can hold still, and bad colours draw nothing', () => {
   PRESETS.filter((p) => p.group !== 'clean').forEach((p) => assert.ok(SCENE_IDS.includes(p.id), p.id));
   const t = PRESETS.find((p) => p.id === 'blackwing').tokens;
-  const moving = sceneSvg('blackwing', t);
+  const moving = sceneMarkup('blackwing', t);
   assert.match(moving, /animation: dbtefx-fall/);
-  assert.match(moving, /prefers-reduced-motion: reduce/);
-  assert.match(sceneSvg('blackwing', t, { still: true }), /class="dbtefx-still"/);
-  assert.equal(sceneSvg('blackwing', { ...t, accent: '"/><script>' }), '');
-  assert.equal(sceneSvg('obsidian', PRESETS[0].tokens), '');
+  assert.match(moving, /prefers-reduced-motion: reduce\) \{ #dbte-skin-fx \* \{ animation: none/, 'reduced motion is scoped to our layer, never the page');
+  assert.doesNotMatch(moving, /\n\* \{|\{ \* \{/, 'no page-wide selectors');
+  assert.match(sceneMarkup('blackwing', t, { still: true }), /class="dbtefx-stage dbtefx-still"/);
+  assert.equal(sceneMarkup('blackwing', { ...t, accent: '"/><script>' }), '');
+  assert.equal(sceneMarkup('oled', PRESETS.find((p) => p.id === 'oled').tokens), '');
   assert.doesNotMatch(moving, /<script|on\w+=/i);
   assert.equal(DEFAULTS.themeMotion, true);
 });
 
 test('scenes: only transform and opacity move (cheap to animate)', () => {
-  const css = sceneSvg('frog', PRESETS.find((p) => p.id === 'frog').tokens).match(/@keyframes[^}]*\{([^@]*?)\}\s*\}/g).join('');
+  const css = sceneMarkup('frog', PRESETS.find((p) => p.id === 'frog').tokens).match(/@keyframes[^}]*\{([^@]*?)\}\s*\}/g).join('');
   assert.doesNotMatch(css.replace(/@keyframes [\w-]+/g, ''), /(?<![-\w])(width|height|left|top|r|cx|cy|fill|stroke|filter)\s*:/);
 });
 
 test('scenes: Sakura petals fall', () => {
-  assert.match(sceneSvg('sakura', PRESETS.find((p) => p.id === 'sakura').tokens), /animation: dbtefx-fall/);
+  assert.ok(PARTICLES.sakura.some((sys) => sys.kind === 'petal'));
+});
+
+test('3D: scenes split into far, middle and near planes around the particle canvas', () => {
+  const t = PRESETS.find((p) => p.id === 'blackwing').tokens;
+  const m = sceneMarkup('blackwing', t, { particles: true });
+  const order = ['dbtefx-far', 'dbtefx-mid', 'dbtefx-canvas', 'dbtefx-near'].map((c) => m.indexOf(c));
+  order.forEach((i) => assert.ok(i > 0));
+  assert.deepEqual([...order].sort((a, b) => a - b), order, 'far, mid, canvas, near in paint order');
+  const branded = sceneMarkup('branded', PRESETS.find((p) => p.id === 'branded').tokens);
+  assert.doesNotMatch(branded, /cathedral|towers/i);
+  assert.match(branded, /dbtefx-bd-ice/, 'Mirrorjade ice blades');
+});
+
+test('particles: every config is valid and the simulation keeps particles alive and on screen', () => {
+  Object.entries(PARTICLES).forEach(([id, systems]) => {
+    const preset = PRESETS.find((p) => p.id === id);
+    assert.ok(preset, `${id} is a preset`);
+    systems.forEach((sys) => {
+      assert.ok(PARTICLE_KINDS.includes(sys.kind), `${id} ${sys.kind}`);
+      sys.colors.forEach((c) => assert.ok(/^#[0-9a-f]{6}$/i.test(preset.tokens[c]), `${id} colour ${c}`));
+    });
+    const live = createSystems(id, 1280, 800);
+    const before = live.reduce((n, s) => n + s.particles.length, 0);
+    for (let i = 0; i < 600; i++) stepSystems(live, 1 / 30, i / 30, 1280, 800);
+    live.forEach((s) => s.particles.forEach((p) => {
+      assert.ok(Number.isFinite(p.x) && Number.isFinite(p.y), `${id} finite`);
+      assert.ok(p.x > -200 && p.x < 1480 && p.y > -200 && p.y < 1000, `${id} on screen`);
+    }));
+    assert.equal(live.reduce((n, s) => n + s.particles.length, 0), before, `${id} count steady`);
+  });
+  assert.equal(PARTICLES.oled, undefined, 'OLED stays bare');
+});
+
+test('3D: UI depth uses transforms and shadows only', () => {
+  assert.match(AREA_CSS.menu, /menu_btn:hover \.content \{[^}]*transform: translateY\(-3px\)/);
+  assert.match(AREA_CSS.widgets, /\.button:active[^{]*\{[^}]*transform: translateY\(1px\)/);
 });

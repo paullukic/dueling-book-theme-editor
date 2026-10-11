@@ -5,7 +5,8 @@ import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
-import { FX_ID, sceneSvg } from './scenes';
+import { FX_ID, sceneMarkup } from './scenes';
+import { PARTICLES, startFx } from './particles';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
 const AREA_IDS = Object.keys(AREA_CSS);
@@ -107,14 +108,26 @@ const ThemeEffect = () => {
     return () => els.forEach((el) => el.remove());
   }, [hasSkin]);
 
-  // The archetype scene: inline SVG so its parts can move.
+  // The theme's scene: a 3D stage of SVG planes and a particle canvas,
+  // tilted toward the pointer.
   const scene = useMemo(
-    () => (on && s.themeEffects && s.themeMotif ? sceneSvg(s.themePreset, artTokens, { still: !s.themeMotion }) : ''),
+    () =>
+      on && s.themeEffects && s.themeMotif
+        ? sceneMarkup(s.themePreset, artTokens, { still: !s.themeMotion, particles: !!PARTICLES[s.themePreset] })
+        : '',
     [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens],
   );
   useEffect(() => {
     const el = document.getElementById(FX_ID);
-    if (el && el.innerHTML !== scene) el.innerHTML = scene;
+    if (!el) return undefined;
+    el.innerHTML = scene;
+    if (!scene) return undefined;
+    const stop = startFx(el, s.themePreset, artTokens, { still: !s.themeMotion });
+    return () => {
+      stop();
+      el.innerHTML = '';
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene, hasSkin]);
 
   const [field, setField] = useState(null);

@@ -141,8 +141,8 @@ html #content .button, html #content input[type=submit], html #content input[typ
   color: var(--dbt-text) !important;
   border-radius: var(--dbt-radius) !important;
   text-shadow: none !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: background-color 0.12s, border-color 0.12s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.22), 0 3px 8px -4px rgba(0, 0, 0, 0.7);
+  transition: background-color 0.12s, border-color 0.12s, transform 0.08s;
 }
 html #content .button.button_selected, html #content .button:hover,
 html #content input[type=submit]:hover, html #content input[type=button]:hover {
@@ -152,6 +152,8 @@ html #content input[type=submit]:hover, html #content input[type=button]:hover {
 html #content .button.button_down, html #content .button:active, html #content input[type=submit]:active {
   background: var(--dbt-press) !important;
   border-color: var(--dbt-accent) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+  transform: translateY(1px);
 }
 html #content .button.disabled, html #content .button2.disabled { color: var(--dbt-muted) !important; }
 
@@ -288,8 +290,9 @@ html #main_menu .menu_btn .content {
   background: var(--dbt-glass) !important;
   border-color: transparent !important;
   border-radius: var(--dbt-radius) !important;
-  box-shadow: inset 0 0 0 1px var(--dbt-line), 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important;
-  transition: background-color 0.15s, border-color 0.15s;
+  /* Depth: a lit top edge, a shaded bottom edge and a cast shadow. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 0 -3px 0 rgba(0, 0, 0, 0.28), inset 0 0 0 1px var(--dbt-line), 0 12px 26px -14px rgba(0, 0, 0, 0.95) !important;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s;
 }
 html #main_menu .menu_btn .content span { color: var(--dbt-text) !important; text-shadow: none !important; }
 /* Long labels ("Deck Constructor") are wider than the full-size tile; shrink
@@ -298,8 +301,9 @@ html #main_menu .menu_btn .content:not(.dbte-small-menu) span { transform: scale
 html #main_menu .menu_btn:hover .content {
   background: var(--dbt-hover) !important;
   border-left-color: var(--dbt-accent) !important;
+  transform: translateY(-3px);
 }
-html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; }
+html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: translateY(1px); transition-duration: 0.05s; }
 html #main_menu .menu_btn.administrator_btn:hover .content { border-left-color: var(--dbt-warning) !important; }
 html #main_menu .main_menu_circle { border-color: var(--dbt-muted) !important; }
 html #main_menu .main_menu_circle .background { background-color: var(--dbt-accent) !important; }
@@ -468,7 +472,8 @@ html #content #input, html #content #input2, html #content #combo {
   background-image: none !important;
   background-color: var(--dbt-surface) !important;
   border-radius: calc(var(--dbt-radius) * 2 + 4px) !important;
-  box-shadow: 0 0 0 1px var(--dbt-border), var(--dbt-shadow) !important;
+  /* Layered shadows read as a panel floating above the page. */
+  box-shadow: 0 0 0 1px var(--dbt-border), inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 24px -6px rgba(0, 0, 0, 0.5), var(--dbt-shadow) !important;
 }
 html #content #msg .title_txt, html #content #link .title_txt, html #content #confirm .title_txt,
 html #content #confirm2 .title_txt, html #content #input .title_txt, html #content #input2 .title_txt,
