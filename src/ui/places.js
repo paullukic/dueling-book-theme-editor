@@ -300,11 +300,12 @@ export const PLACES = [
   ...[
     ['alertSound', 'Play a sound', 'audio beep alert'],
     ['alertTitle', 'Flash the tab title', 'blink tab alert'],
-    ['alertDesktop', 'Desktop notification', 'system notification popup alert'],
-    ['alertOnlyWhenHidden', 'Only when I’m away', 'focused hidden background tab alert'],
-  ].map(([id, label, keywords]) => ({
+    ['alertDesktop', 'Desktop notification', 'system notification popup alert', 'Shows a system notification. Your browser asks once.'],
+    ['alertOnlyWhenHidden', 'Only when I’m away', 'focused hidden background tab alert', 'Stay quiet while the DuelingBook tab is focused.'],
+  ].map(([id, label, keywords, desc]) => ({
     id,
     label,
+    desc,
     keywords,
     parent: 'alerts',
     needs: 'shows once Duel found or Your turn is on',

@@ -221,14 +221,110 @@
   cursor: pointer;
 }
 
-.row-desc {
+/* Label plus its (?): the description lives in a tooltip so rows stay one line. */
+.row-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Always visible: a warning or state the user must see without hovering. */
+.row-note {
   display: block;
   margin-top: 2px;
   font-size: 12px;
-  color: var(--ink-muted);
+  color: var(--danger);
 }
 
-.row-desc kbd,
+.info-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: -3px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: help;
+}
+
+.info-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.info-btn:hover,
+.info-btn[aria-expanded="true"] {
+  color: var(--gold);
+}
+
+/* Closed: kept for screen readers (aria-describedby), visually hidden. */
+.info-tip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.info-tip.is-open {
+  position: fixed;
+  z-index: 2147483001;
+  width: auto;
+  height: auto;
+  padding: 8px 10px;
+  overflow: visible;
+  clip: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--plate-raised);
+  box-shadow: 0 8px 22px rgba(5, 3, 20, 0.45), 0 1px 3px rgba(5, 3, 20, 0.35);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--ink);
+  white-space: normal;
+  pointer-events: none;
+  animation: dbte-tip-in 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The arrow points at the (?) wherever the bubble was clamped to. */
+.info-tip.is-open::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: calc(var(--tip-arrow, 50%) - 5px);
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: var(--plate-raised);
+  transform: rotate(45deg);
+}
+
+.info-tip.is-open.is-above::before {
+  top: auto;
+  bottom: -5px;
+  transform: rotate(225deg);
+}
+
+@keyframes dbte-tip-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-tip.is-open {
+    animation: none;
+  }
+}
+
+.info-tip kbd,
 .kbd {
   display: inline-block;
   min-width: 18px;

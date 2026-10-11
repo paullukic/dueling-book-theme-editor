@@ -69,6 +69,14 @@ export const StarIcon = ({ filled = false }) => (
   </Icon>
 );
 
+export const HelpIcon = () => (
+  <Icon>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.7 9.4a2.4 2.4 0 0 1 4.7.7c0 1.6-2.4 2-2.4 3.5" />
+    <path d="M12 17.2v.1" />
+  </Icon>
+);
+
 export const SearchIcon = () => (
   <Icon>
     <circle cx="10.5" cy="10.5" r="6.5" />

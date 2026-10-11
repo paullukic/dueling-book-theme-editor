@@ -54,17 +54,16 @@ const DuelTab = () => {
             <ToggleRow place="alertTitle" checked={s.alertTitle} onChange={set('alertTitle')} />
             <ToggleRow
               place="alertDesktop"
-              description={
+              note={
                 permission === 'denied'
                   ? 'Blocked by your browser. Allow notifications for duelingbook.com in the address bar, then try again.'
-                  : 'Shows a system notification. Your browser asks once.'
+                  : null
               }
               checked={s.alertDesktop}
               onChange={enableDesktop}
             />
             <ToggleRow
               place="alertOnlyWhenHidden"
-              description="Stay quiet while the DuelingBook tab is focused."
               checked={s.alertOnlyWhenHidden}
               onChange={set('alertOnlyWhenHidden')}
             />
@@ -113,11 +112,6 @@ const DuelTab = () => {
       <Group place="shortcuts">
         <ToggleRow
           place="shortcutsEnabled"
-          description={
-            <>
-              One key per action while a duel is open. Ignored while you type, and with <kbd>Shift</kbd>, <kbd>Ctrl</kbd> or <kbd>Alt</kbd> held.
-            </>
-          }
           checked={s.shortcutsEnabled}
           onChange={set('shortcutsEnabled')}
         />

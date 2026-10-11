@@ -100,6 +100,8 @@ const App = ({ shadowRoot }) => {
       // Esc in a search field with text clears it; the field handles that.
       const field = e.composedPath()[0];
       if (fromUs && field && field.hasAttribute && field.hasAttribute('data-clear-on-escape') && field.value) return;
+      // Esc on an open (?) closes the tip first.
+      if (fromUs && field && field.hasAttribute && field.hasAttribute('data-tip') && field.getAttribute('aria-expanded') === 'true') return;
       close();
     };
     window.addEventListener('keydown', onKey, true);
