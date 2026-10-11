@@ -6,7 +6,10 @@
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
-export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
+// A compact SVG data URI: only the characters CSS or the URI needs are escaped.
+const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+
+export default (t, { SEL, sel, svg, alpha }) => {
   const gold = t.accent;
   const red = t.accent2;
   const night = mix(t.bg, '#000000', 0.6);
@@ -33,9 +36,11 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
     return svgUrl(svg(x, 48, s));
   })();
   const halftone = svgUrl(svg(8, 8, `<circle cx="4" cy="4" r="1.2" fill="${t.text}" fill-opacity="0.07"/>`));
-  // Comic hero lettering: navy outline, red drop.
-  const letter = (w = 2, drop = 3) =>
-    [[-w, -w], [w, -w], [-w, w], [w, w], [0, w], [w, 0], [0, -w], [-w, 0]].map(([x, y]) => `${x}px ${y}px 0 ${night}`).join(', ') + `, ${drop}px ${drop}px 0 ${red}`;
+  const smear = (c) => [-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${c}`).join(', ');
+  // Pop-up buttons: a comic-cover plate, gold (primary) or navy (secondary), night edge, red drop.
+  const plate = (label, w, primary) =>
+    svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} 78.5"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? mix(gold, '#ffffff', 0.6) : mix(t.raised, t.opp, 0.75)}"/><stop offset="1" stop-color="${primary ? gold : t.surface}"/></linearGradient></defs><rect x="10" y="14" width="${w - 16}" height="58" rx="6" fill="${red}"/><rect x="5" y="9" width="${w - 16}" height="58" rx="6" fill="url(#g)" stroke="${night}" stroke-width="4"/><rect x="10" y="14" width="${w - 26}" height="48" rx="3" fill="none" stroke="${primary ? alpha('#ffffff', 0.55) : alpha(gold, 0.8)}" stroke-width="1.5"/><text x="${(w - 6) / 2}" y="39" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="${primary ? night : t.text}">${label}</text></svg>`);
+  const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const beam = (a) => `linear-gradient(105deg, transparent 38%, ${alpha(moon, a)} 46%, ${alpha(moon, a * 0.4)} 52%, transparent 58%)`;
   const frame = (drop = 5) => `inset 0 0 0 1px ${alpha(gold, 0.9)}, inset 0 0 0 3px ${night}, 0 0 0 2px ${night}, ${drop}px ${drop}px 0 2px ${red}`;
 
@@ -49,7 +54,6 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const turnBg = T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background']);
   const turnInner = T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner']);
   const turnTxt = T(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span']);
-  const settings = T(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
   const duelPanels = T(['#duel .cout_txt', '#duel #watchers']);
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
 
@@ -58,7 +62,7 @@ html body { --dbte-hero-sky: ${skyline}; --dbte-hero-dots: ${halftone}; --dbte-h
 @keyframes dbte-hero-sweep { 0%, 100% { transform: rotate(-9deg); opacity: 0.55 } 50% { transform: rotate(9deg); opacity: 0.9 } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-hero-anim: none } }
 
-${titles} { color: ${gold} !important; text-shadow: ${letter(2, 3)} !important; }
+${titles} { color: ${gold} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 3px 3px 0 ${red} !important; }
 
 ${SEL.tile} {
   background: var(--dbte-hero-sky) 0 100% / auto 46% repeat-x, var(--dbte-hero-glow), var(--dbte-hero-dots), linear-gradient(180deg, ${mix(t.raised, t.opp, 0.85)}, ${t.surface} 70%) !important;
@@ -67,7 +71,7 @@ ${SEL.tile} {
   box-shadow: ${frame(5)} !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; right: 8px; bottom: 3px; width: 15px; height: 15px; pointer-events: none;
+  content: ""; position: absolute; left: 6px; top: 5px; width: 18px; height: 18px; pointer-events: none;
   background: ${signal(gold)} center / contain no-repeat;
   filter: drop-shadow(0 0 6px ${alpha(moon, 0.5)}); opacity: 0.9;
 }
@@ -78,7 +82,7 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 10px ${moon}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 4px ${night}, 0 0 0 2px ${night}, 2px 2px 0 2px ${red} !important; }
-${SEL.tileLabel} { color: ${t.text} !important; text-shadow: ${letter(2, 3)} !important; }
+${SEL.tileLabel} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 3px 3px 0 ${red} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${gold} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${gold} !important; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${red} !important; }
@@ -117,7 +121,12 @@ ${dlg('::after')} {
   background: linear-gradient(180deg, ${alpha(moon, 0.22)}, transparent); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
   animation: var(--dbte-hero-anim, dbte-hero-sweep 7s ease-in-out infinite);
 }
-${SEL.dialogTitle} { color: ${gold} !important; text-shadow: ${letter(2, 3)} !important; }
+${SEL.dialogTitle} { color: ${gold} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 3px 3px 0 ${red} !important; }
+${imgSel('ok_btn')} { content: ${plate('OK', 153.4, true)} !important; }
+${imgSel('yes_btn')} { content: ${plate('Yes', 153.4, true)} !important; }
+${imgSel('no_btn')} { content: ${plate('No', 153.4, false)} !important; }
+${imgSel('cancel_btn')} { content: ${plate('Cancel', 234.85, false)} !important; }
+${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: 3px 3px 0 ${red}, ${smear(t.surface)} !important; }
 ${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 ${SEL.chatTop} {
@@ -125,7 +134,7 @@ ${SEL.chatTop} {
   border-radius: 4px 4px 0 0 !important;
   box-shadow: inset 0 0 0 2px ${night}, inset 0 -4px 0 ${night} !important;
 }
-${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shadow: ${letter(1.5, 2)} !important; }
+${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 ${SEL.chat} {
   background: var(--dbte-hero-sky) 0 100% / auto 44px repeat-x, var(--dbte-hero-glow), var(--dbte-hero-dots), linear-gradient(180deg, ${t.surface}, ${t.bg}) !important;
   box-shadow: inset 0 0 0 1px ${alpha(gold, 0.8)}, 0 0 0 2px ${night}, 5px 5px 0 2px ${red} !important;
@@ -137,7 +146,7 @@ ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, night, 0.6)}) !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-hero-sky) 0 100% / auto 100% repeat-x, var(--dbte-hero-glow), ${night} !important; }
-${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: ${letter(2, 2)} !important; }
+${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 
 ${SEL.phase} { background: linear-gradient(135deg, ${gold}, ${mix(gold, red, 0.4)}) !important; border-radius: 10px !important; box-shadow: 0 0 0 2px ${night}, 3px 3px 0 2px ${red} !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${night} !important; border-radius: 8px !important; }
@@ -151,10 +160,10 @@ ${sel(['#duel .phase.active::before'])} {
   animation: var(--dbte-hero-anim, dbte-hero-sweep 5s ease-in-out infinite);
 }
 ${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 0 ${night} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: ${letter(1.5, 2)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 ${turnBg} { background: ${gold} !important; box-shadow: 0 0 0 2px ${night}, 3px 3px 0 2px ${red}; }
 ${turnInner} { background: ${beam(0.35)}, linear-gradient(180deg, ${mix(t.raised, t.opp, 0.8)}, ${night}) !important; }
-${turnTxt} { color: ${gold} !important; text-shadow: ${letter(1.5, 2)} !important; }
+${turnTxt} { color: ${gold} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${gold}, ${mix(gold, red, 0.5)} 60%, ${red}) !important; filter: none; }
 ${ring('')} {
@@ -174,7 +183,7 @@ ${sel(['#deck_constructor #search .search_bg'])} {
   background: var(--dbte-hero-sky) 0 100% / auto 90px repeat-x, var(--dbte-hero-glow), var(--dbte-hero-dots), linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; border-radius: 4px !important;
   box-shadow: inset 0 0 0 1px ${alpha(gold, 0.7)}, 0 0 0 2px ${night}, 5px 5px 0 2px ${red} !important;
 }
-${deckLabels} { color: ${gold} !important; opacity: 1 !important; text-shadow: ${letter(2, 2)} !important; }
+${deckLabels} { color: ${gold} !important; opacity: 1 !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 ${sel(['#deck_constructor .total_bg', '#deck_constructor .total_effect_bg', '#deck_constructor .total_spell_bg', '#deck_constructor .total_trap_bg'])} {
   background: linear-gradient(180deg, ${t.raised}, ${night}) !important; border-radius: 4px !important;
   box-shadow: inset 0 0 0 1px ${gold}, inset 0 -4px 0 var(--dbt-stripe, ${gold}), 2px 2px 0 ${red} !important;
@@ -191,7 +200,7 @@ ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus',
 
 ${duelPanels} { border-color: ${night} !important; border-radius: 4px !important; box-shadow: inset 0 0 0 1px ${alpha(gold, 0.7)}, 0 0 0 2px ${night}, 4px 4px 0 2px ${red} !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbte-hero-dots), linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; }
-${settings} { border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 6px 6px 0 2px ${red} !important; }
+${SEL.settingsPanel} { border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 6px 6px 0 2px ${red} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${gold}, ${mix(gold, red, 0.5)}) !important; border-radius: 2px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, 2px 2px 0 ${red} !important; }
 `;

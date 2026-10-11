@@ -1,12 +1,15 @@
 // toon: Toon World comic book. Ink-outlined panels with hard offset shadows and
-// a cyan misprint, Ben-Day dot corners, speech-balloon pop-ups and chat, comic
-// lettering (ink outline + red drop) on titles, POW bursts on hover and on the
-// active phase.
+// a cyan misprint, Ben-Day dots, cream speech-balloon pop-ups with comic plate
+// buttons, ink-stroked lettering with a solid ink drop, paper-white phase discs
+// and POW bursts on hover and on the active phase.
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
-export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
+// A compact SVG data URI: only the characters CSS or the URI needs are escaped.
+const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+
+export default (t, { SEL, sel, svg, alpha }) => {
   const ink = mix(t.bg, '#000000', 0.42);
   const paper = t.text;
   const pop = t.accent;
@@ -35,6 +38,14 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   // Panel frame: ink line, cream inner keyline, hard ink drop and a cyan misprint.
   const panel = (drop = 6) => `0 0 0 3px ${ink}, ${drop}px ${drop}px 0 3px ${ink}, -3px -3px 0 3px ${alpha(cyan, 0.5)}`;
   const keyline = `inset 0 0 0 2px ${alpha(paper, 0.85)}`;
+  // Lettering: thick ink stroke under the fill and a solid ink drop; panel
+  // titles also smear the panel colour sideways so no border line shows in word gaps.
+  const stroke = (w = 4) => `-webkit-text-stroke: ${w}px ${ink}; paint-order: stroke fill;`;
+  const smear = (c) => [-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${c}`).join(', ');
+  // Pop-up buttons: a comic plate with a thick ink edge and a hard ink drop.
+  const plate = (label, w, fill, txt) =>
+    svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} 78.5"><rect x="10" y="14" width="${w - 16}" height="58" rx="16" fill="${ink}"/><rect x="5" y="9" width="${w - 16}" height="58" rx="16" fill="${fill}" stroke="${ink}" stroke-width="4"/><path d="M18 18h${w * 0.45}" stroke="#ffffff" stroke-opacity="0.55" stroke-width="4" stroke-linecap="round"/><text x="${(w - 6) / 2}" y="39" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="27" fill="${txt}">${label}</text></svg>`);
+  const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
 
   const T = (list) => sel(list);
   const titles = T(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#content .subtitle']);
@@ -47,7 +58,6 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const turnBg = T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background']);
   const turnInner = T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner']);
   const turnTxt = T(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span']);
-  const settings = T(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
   const chatTitle = T(['#chats .chat .chat_top span']);
 
   return `
@@ -55,10 +65,11 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
 @keyframes dbte-toon-wobble { 0%, 100% { transform: rotate(-4deg) } 50% { transform: rotate(4deg) scale(1.04) } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-toon-anim: none } }
 
-${titles} { color: ${paper} !important; text-shadow: ${letter(2, 4)} !important; }
+${titles} { color: ${paper} !important; ${stroke(5)} text-shadow: 3px 3px 0 ${ink} !important; }
+${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: 3px 3px 0 ${ink}, ${smear(t.surface)} !important; }
 
 ${SEL.tile} {
-  background: linear-gradient(135deg, ${t.raised} 42%, ${alpha(t.raised, 0)} 78%), ${dots(pop, 0.55)}, linear-gradient(${t.raised}, ${mix(t.raised, t.bg, 0.6)}) !important;
+  background: ${dots(pop, 0.08)}, linear-gradient(${t.raised}, ${mix(t.raised, t.bg, 0.6)}) !important;
   border-color: ${ink} !important;
   border-radius: 6px !important;
   box-shadow: ${keyline}, ${panel(7)} !important;
@@ -69,15 +80,15 @@ ${SEL.tile}::before {
   transition: opacity 0.15s, transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 ${SEL.tileHover} {
-  background: linear-gradient(135deg, ${pop} 42%, ${alpha(pop, 0)} 80%), ${dots(red, 0.7)}, ${pop} !important;
+  background: ${dots(red, 0.16)}, ${pop} !important;
   border-color: ${ink} !important;
   box-shadow: inset 0 0 0 2px ${paper}, 0 0 0 3px ${ink}, 9px 9px 0 3px ${ink}, -3px -3px 0 3px ${alpha(red, 0.7)} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; transform: none; animation: var(--dbte-toon-anim, dbte-toon-pop 0.32s cubic-bezier(0.3, 1.6, 0.5, 1)); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 0 0 2px ${paper}, 0 0 0 3px ${ink}, 2px 2px 0 3px ${ink} !important; }
-${SEL.tileLabel} { color: ${paper} !important; text-shadow: ${letter(2, 4)} !important; }
-${sel(['#main_menu .menu_btn:hover span'])} { color: ${ink} !important; text-shadow: 2px 2px 0 ${paper}, 4px 4px 0 ${red} !important; }
-${sel(['#main_menu .menu_btn.administrator_btn:hover .content'])} { background: linear-gradient(135deg, ${t.warning} 42%, ${alpha(t.warning, 0)} 80%), ${dots(red, 0.7)}, ${t.warning} !important; }
+${SEL.tileLabel} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
+${sel(['#main_menu .menu_btn:hover span'])} { color: ${paper} !important; text-shadow: 2px 2px 0 ${ink} !important; }
+${sel(['#main_menu .menu_btn.administrator_btn:hover .content'])} { background: ${dots(red, 0.16)}, ${t.warning} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${ink} !important; background: ${paper} !important; box-shadow: 2px 2px 0 ${ink}; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${red} !important; }
 
@@ -102,20 +113,24 @@ ${SEL.buttonDown} {
 }
 
 ${SEL.dialog} {
-  background: ${dots(pop, 0.12, 9, 1.6)}, radial-gradient(ellipse at 30% 0%, ${t.raised}, ${t.surface} 70%) !important;
+  background: ${dots(red, 0.1, 9, 1.6)}, ${paper} !important;
   border-radius: 46px !important;
-  box-shadow: inset 0 0 0 3px ${alpha(paper, 0.9)}, 0 0 0 5px ${ink}, 10px 12px 0 5px ${ink}, -4px -4px 0 5px ${alpha(cyan, 0.55)}, 0 30px 60px -20px #000000 !important;
+  box-shadow: inset 0 0 0 3px ${alpha(ink, 0.25)}, 0 0 0 5px ${ink}, 10px 12px 0 5px ${ink}, -4px -4px 0 5px ${alpha(cyan, 0.55)}, 0 30px 60px -20px #000000 !important;
 }
 ${sel(['#content #msg::after', '#content #link::after', '#content #confirm::after', '#content #confirm2::after', '#content #input::after', '#content #input2::after', '#content #combo::after'])} {
   content: ""; position: absolute; left: 84px; bottom: -36px; width: 52px; height: 38px; pointer-events: none;
-  background: ${tail(t.surface)} 0 0 / 100% 100% no-repeat; filter: drop-shadow(8px 8px 0 ${ink});
+  background: ${tail(paper)} 0 0 / 100% 100% no-repeat; filter: drop-shadow(8px 8px 0 ${ink});
 }
 ${sel(['#content #msg::before', '#content #link::before', '#content #confirm::before', '#content #confirm2::before', '#content #input::before', '#content #input2::before', '#content #combo::before'])} {
   content: ""; position: absolute; right: -26px; top: -30px; width: 76px; height: 76px; pointer-events: none;
   background: ${burst(pop)} center / contain no-repeat; transform: rotate(-8deg);
 }
-${SEL.dialogTitle} { color: ${paper} !important; text-shadow: ${letter(2, 4)} !important; }
-${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${paper} !important; }
+${SEL.dialogTitle} { color: ${pop} !important; ${stroke(5)} text-shadow: 3px 3px 0 ${ink} !important; }
+${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${ink} !important; }
+${imgSel('ok_btn')} { content: ${plate('OK', 153.4, pop, ink)} !important; }
+${imgSel('yes_btn')} { content: ${plate('Yes', 153.4, pop, ink)} !important; }
+${imgSel('no_btn')} { content: ${plate('No', 153.4, '#ffffff', ink)} !important; }
+${imgSel('cancel_btn')} { content: ${plate('Cancel', 234.85, '#ffffff', ink)} !important; }
 
 ${SEL.chatTop} {
   background: ${dots(red, 0.3, 7, 1.3)}, ${pop} !important;
@@ -145,12 +160,12 @@ ${SEL.life} {
 ${SEL.lifeSelf} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.75)}, ${t.self} 55%, ${mix(t.self, ink, 0.7)}) !important; border-radius: 10px !important; }
 ${SEL.lifeOpp} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.75)}, ${t.opp} 55%, ${mix(t.opp, ink, 0.7)}) !important; border-radius: 10px !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(-45deg, ${ink} 0 5px, ${t.bg} 5px 9px) !important; }
-${sel(['#duel .lifepoints .life_txt'])} { color: ${paper} !important; text-shadow: ${letter(2, 3)} !important; }
+${sel(['#duel .lifepoints .life_txt'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 
 ${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 4px 4px 0 ${ink}, -2px -2px 0 ${alpha(cyan, 0.45)} !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${paper} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(ink, 0.18, 6, 1.2)}, radial-gradient(circle at 35% 30%, ${t.raised}, ${t.surface}) !important; border-radius: 50% !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(ink, 0.1, 6, 1.2)}, radial-gradient(circle at 35% 30%, #ffffff, ${paper} 70%) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 60%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 60%) !important; }
 ${sel(['#duel .phase.active::before'])} {
@@ -158,8 +173,10 @@ ${sel(['#duel .phase.active::before'])} {
   background: ${burst(pop, 14)} center / contain no-repeat;
   animation: var(--dbte-toon-anim, dbte-toon-wobble 2.4s ease-in-out infinite);
 }
-${sel(['#duel .phase span'])} { color: ${paper} !important; text-shadow: ${letter(2, 0)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${paper} !important; text-shadow: ${letter(2, 3)} !important; }
+${sel(['#duel .phase span'])} { color: ${ink} !important; -webkit-text-stroke: 0; text-shadow: none !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
+${sel(['#duel .duel_avatar .username_txt'])} { ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
+${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: brightness(0.85) saturate(0.8) !important; }
 ${turnBg} { background: ${ink} !important; box-shadow: 4px 4px 0 ${ink}; }
 ${turnInner} { background: ${dots(red, 0.4, 6, 1.2)}, ${pop} !important; }
 ${turnTxt} { color: ${ink} !important; text-shadow: 2px 2px 0 ${paper} !important; }
@@ -170,7 +187,7 @@ ${ring('')} {
   box-shadow: inset 0 0 0 6px ${alpha(paper, 0.8)}, 8px 8px 0 0 ${ink}, -4px -4px 0 0 ${alpha(cyan, 0.45)} !important;
 }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${red} !important; }
-${sel(['#duel_room .format_txt'])} { color: ${paper} !important; text-shadow: ${letter(2, 4)} !important; }
+${sel(['#duel_room .format_txt'])} { color: ${paper} !important; ${stroke(5)} text-shadow: 3px 3px 0 ${ink}, ${smear(t.surface)} !important; }
 ${sel(['#duel_room #formats .format .format_inner'])} { background-color: ${alpha(t.bg, 0.55)} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${ink} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${dots(pop, 0.25, 7, 1.3)}, ${t.raised} !important; }
@@ -183,7 +200,7 @@ ${sel(['#deck_constructor #search .search_bg'])} {
   background: ${dots(pop, 0.08, 9, 1.5)}, ${t.surface} !important; border-radius: 14px !important;
   box-shadow: inset 0 0 0 2px ${alpha(paper, 0.6)}, 0 0 0 3px ${ink}, 7px 7px 0 3px ${ink} !important;
 }
-${deckLabels} { color: ${paper} !important; opacity: 1 !important; text-shadow: ${letter(2, 3)} !important; }
+${deckLabels} { color: ${paper} !important; opacity: 1 !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#deck_constructor .total_bg', '#deck_constructor .total_effect_bg', '#deck_constructor .total_spell_bg', '#deck_constructor .total_trap_bg'])} {
   background: ${paper} !important; border-radius: 50% !important;
   box-shadow: 0 0 0 2px ${ink}, inset 0 -4px 0 var(--dbt-stripe, ${pop}), 3px 3px 0 2px ${ink} !important;
@@ -201,7 +218,7 @@ ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus',
 
 ${duelPanels} { border-color: ${ink} !important; border-radius: 10px !important; box-shadow: inset 0 0 0 2px ${alpha(paper, 0.5)}, 0 0 0 2px ${ink}, 6px 6px 0 2px ${ink}, -3px -3px 0 2px ${alpha(cyan, 0.45)} !important; }
 ${sel(['#duel .cout_txt'])} { background: ${dots(paper, 0.05, 9, 1.4)}, ${t.surface} !important; }
-${settings} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${ink}, 8px 8px 0 3px ${ink} !important; }
+${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${ink}, 8px 8px 0 3px ${ink} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }

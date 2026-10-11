@@ -1,16 +1,18 @@
 // sky-striker: the Sky Striker Ace cockpit HUD. Chamfered panels with corner
 // brackets and targeting ticks, the hex wireframe of the Sky Striker frames,
-// scanlines, and the three ace colours (Kagari red, Shizuku blue, Hayate green)
+// scanlines, and the two ace colours (Raye/Kagari red, Roze/Shizuku blue)
 // as per-tile system stripes; segmented HUD life gauges, chamfered phase keys
 // with a lock-on reticle on the active one.
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
-export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
+// A compact SVG data URI: only the characters CSS or the URI needs are escaped.
+const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+
+export default (t, { SEL, sel, svg, alpha }) => {
   const red = t.accent;
   const cyan = t.accent2;
-  const green = t.success;
   const deep = mix(t.bg, '#000000', 0.6);
   const hexes = svgUrl(svg(28, 48, `<path d="M14 0l14 8v16l-14 8L0 24V8zM14 32v16" fill="none" stroke="${cyan}" stroke-opacity="0.07" stroke-width="1"/>`));
   const scan = `repeating-linear-gradient(0deg, ${alpha(cyan, 0.035)} 0 1px, transparent 1px 4px)`;
@@ -31,6 +33,15 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const cut = (n, below = 0) => `polygon(${n}px 0, 100% 0, 100% calc(100% - ${n}px), calc(100% - ${n}px) calc(100% + ${below}px), 0 calc(100% + ${below}px), 0 ${n}px)`;
   // The diagonal edge lines along the two chamfers.
   const chamferLines = (c, n) => def(`linear-gradient(135deg, transparent ${n / 1.414 - 1}px, ${c} ${n / 1.414 - 1}px, ${c} ${n / 1.414 + 0.6}px, transparent ${n / 1.414 + 0.6}px) 0 0 / ${n * 2}px ${n * 2}px no-repeat, linear-gradient(315deg, transparent ${n / 1.414 - 1}px, ${c} ${n / 1.414 - 1}px, ${c} ${n / 1.414 + 0.6}px, transparent ${n / 1.414 + 0.6}px) 100% 100% / ${n * 2}px ${n * 2}px no-repeat`);
+  const smear = (c) => [-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${c}`).join(', ');
+  // Pop-up buttons: an angled launch-key slab (chamfered like the tiles), white label.
+  const slab = (label, w, primary) => {
+    const h = 78.5;
+    const c = 12;
+    const pts = `6,${10 + c} ${6 + c},10 ${w - 6},10 ${w - 6},${h - 10 - c} ${w - 6 - c},${h - 10} 6,${h - 10}`;
+    return svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? mix(red, '#ffffff', 0.8) : mix(t.raised, cyan, 0.8)}"/><stop offset="1" stop-color="${primary ? mix(red, deep, 0.55) : deep}"/></linearGradient></defs><polygon points="${pts}" fill="url(#s)" stroke="${primary ? mix(red, '#ffffff', 0.6) : cyan}" stroke-width="2"/><path d="M${6 + c + 6} 15H${w * 0.42}" stroke="#ffffff" stroke-opacity="0.5" stroke-width="2"/><path d="M${w - 20} ${h - 16}H${w - 50}" stroke="${primary ? '#ffffff' : cyan}" stroke-opacity="0.6" stroke-width="2"/><text x="${w / 2}" y="${h / 2}" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="25" letter-spacing="1.5" fill="#ffffff" stroke="${deep}" stroke-width="3" paint-order="stroke">${label}</text></svg>`);
+  };
+  const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const hudText = (c) => `0 0 6px ${alpha(c, 0.85)}, 0 0 1px ${c}, 2px 2px 0 ${deep}`;
   const reticle = svgUrl(svg(80, 80, `<g fill="none" stroke="${red}" stroke-width="2.5"><path d="M4 22V4h18M58 4h18v18M76 58v18H58M22 76H4V58"/><circle cx="40" cy="40" r="34" stroke-width="1" stroke-dasharray="4 6" stroke-opacity="0.8"/></g><g stroke="${red}" stroke-width="2"><path d="M40 0v9M40 71v9M0 40h9M71 40h9"/></g>`));
 
@@ -45,11 +56,9 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const turnBg = T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background']);
   const turnInner = T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner']);
   const turnTxt = T(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span']);
-  const settings = T(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
   const duelPanels = T(['#duel .cout_txt', '#duel #watchers']);
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
-  const ace = (n) => `#main_menu .menu_btn:nth-of-type(3n+${n}) .content`;
-  const panelFill = `${scan}, var(--dbte-ss-hex), linear-gradient(180deg, ${mix(t.raised, cyan, 0.9)}, ${t.surface} 60%, ${mix(t.surface, deep, 0.6)})`;
+    const panelFill = `${scan}, var(--dbte-ss-hex), linear-gradient(180deg, ${mix(t.raised, cyan, 0.9)}, ${t.surface} 60%, ${mix(t.surface, deep, 0.6)})`;
 
   const body = `
 html body { --dbte-ss-scan: ${scan}; --dbte-ss-fill: ${panelFill}; --dbte-ss-hex: ${hexes}; --dbte-ss-reticle: ${reticle}; --dbte-ss-ace: ${red}; }
@@ -59,9 +68,8 @@ html body { --dbte-ss-scan: ${scan}; --dbte-ss-fill: ${panelFill}; --dbte-ss-hex
 
 ${titles} { color: ${t.text} !important; text-shadow: ${hudText(cyan)}, -2px 0 0 ${alpha(red, 0.6)} !important; }
 
-${sel([ace(1)])} { --dbte-ss-ace: ${red}; }
-${sel([ace(2)])} { --dbte-ss-ace: ${cyan}; }
-${sel([ace(0)])} { --dbte-ss-ace: ${green}; }
+${sel(['#main_menu .menu_btn:nth-of-type(2n+1) .content'])} { --dbte-ss-ace: ${red}; }
+${sel(['#main_menu .menu_btn:nth-of-type(2n) .content'])} { --dbte-ss-ace: ${cyan}; }
 ${SEL.tile} {
   background: ${brackets(cyan, 16, 2)}, ${chamferLines(cyan, 14)}, linear-gradient(90deg, var(--dbte-ss-ace) 0 5px, transparent 5px), linear-gradient(90deg, color-mix(in srgb, var(--dbte-ss-ace) 22%, transparent), transparent 45%), var(--dbte-ss-fill) !important;
   border-color: ${alpha(cyan, 0.25)} !important;
@@ -119,10 +127,15 @@ ${dlg('::before')} {
   box-shadow: inset 0 0 0 1.5px ${alpha(cyan, 0.7)}, inset 0 0 40px ${alpha(cyan, 0.12)};
 }
 ${dlg('::after')} {
-  content: ""; position: absolute; left: -10px; top: -10px; right: -10px; bottom: -10px; width: auto; height: auto; z-index: auto; transform: none; pointer-events: none;
+  content: ""; position: absolute; left: -3px; top: -3px; right: -3px; bottom: -3px; width: auto; height: auto; z-index: auto; transform: none; pointer-events: none;
   background: ${brackets(cyan, 26, 3)}, ${ticks(alpha(cyan, 0.8), 10, 2)};
 }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: ${hudText(cyan)}, -2px 0 0 ${alpha(red, 0.6)} !important; }
+${imgSel('ok_btn')} { content: ${slab('OK', 153.4, true)} !important; }
+${imgSel('yes_btn')} { content: ${slab('Yes', 153.4, true)} !important; }
+${imgSel('no_btn')} { content: ${slab('No', 153.4, false)} !important; }
+${imgSel('cancel_btn')} { content: ${slab('Cancel', 234.85, false)} !important; }
+${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: ${hudText(cyan)}, ${smear(t.surface)} !important; }
 ${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 ${SEL.chatTop} {
@@ -131,7 +144,7 @@ ${SEL.chatTop} {
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
   box-shadow: inset 0 -2px 0 ${cyan}, inset 0 0 0 1px ${alpha(cyan, 0.35)} !important;
 }
-${sel(['#chats #private_chat .chat_top_bg', '#chats #calls .chat_top_bg', '#chats #duel_log .chat_top_bg'])} { box-shadow: inset 0 -2px 0 ${green}, inset 0 0 0 1px ${alpha(green, 0.35)} !important; }
+${sel(['#chats #private_chat .chat_top_bg', '#chats #calls .chat_top_bg', '#chats #duel_log .chat_top_bg'])} { box-shadow: inset 0 -2px 0 ${red}, inset 0 0 0 1px ${alpha(red, 0.35)} !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shadow: ${hudText(cyan)} !important; }
 ${SEL.chat} {
   background: ${brackets(cyan, 12, 2)}, var(--dbte-ss-scan), var(--dbte-ss-hex), ${t.surface} !important;
@@ -181,7 +194,7 @@ ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradie
 
 ${T(deckList)} { border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${alpha(cyan, 0.35)}, inset 0 0 30px ${alpha(cyan, 0.06)} !important; }
 ${sel(['#deck_constructor .deck_bg'])} { background: ${brackets(cyan, 20, 2)}, var(--dbte-ss-scan), var(--dbte-ss-hex), linear-gradient(180deg, ${mix(t.surface, cyan, 0.92)}, ${t.bg}) !important; }
-${sel(['#deck_constructor .side_bg'])} { background: ${brackets(green, 14, 2)}, var(--dbte-ss-scan), ${mix(t.surface, green, 0.88)} !important; }
+${sel(['#deck_constructor .side_bg'])} { background: ${brackets(cyan, 14, 2)}, var(--dbte-ss-scan), ${mix(t.surface, cyan, 0.88)} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: ${brackets(red, 14, 2)}, var(--dbte-ss-scan), ${mix(t.surface, red, 0.88)} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: ${brackets(cyan, 20, 2)}, var(--dbte-ss-scan), var(--dbte-ss-hex), ${t.surface} !important; }
 ${deckLabels} { color: ${t.text} !important; opacity: 1 !important; text-shadow: ${hudText(cyan)} !important; }
@@ -200,7 +213,7 @@ ${SEL.field} {
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { outline: 1px solid ${cyan} !important; box-shadow: inset 0 -2px 0 ${red}, 0 0 12px -2px ${alpha(cyan, 0.8)} !important; }
 
 ${duelPanels} { background: ${brackets(cyan, 10, 2)}, var(--dbte-ss-scan), var(--dbte-ss-hex), ${t.surface} !important; border-color: ${alpha(cyan, 0.4)} !important; border-radius: 0 !important; }
-${settings} { background-image: ${brackets(t.text, 14, 2)} !important; border-radius: 0 !important; box-shadow: inset 0 0 26px ${alpha(cyan, 0.06)}, 0 0 16px -6px ${alpha(cyan, 0.5)} !important; }
+${SEL.settingsPanel} { background-image: ${brackets(t.text, 14, 2)} !important; border-radius: 0 !important; box-shadow: inset 0 0 26px ${alpha(cyan, 0.06)}, 0 0 16px -6px ${alpha(cyan, 0.5)} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradient(0deg, ${cyan} 0 4px, transparent 4px 6px) !important; border-radius: 0 !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { border-radius: 0 !important; box-shadow: inset 0 0 0 1.5px ${cyan} !important; }
 ${sel(['#content .radiobutton'])} { transform: rotate(45deg) scale(0.85); }

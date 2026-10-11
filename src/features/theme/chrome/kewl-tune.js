@@ -6,7 +6,10 @@
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
-export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
+// A compact SVG data URI: only the characters CSS or the URI needs are escaped.
+const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+
+export default (t, { SEL, sel, svg, alpha }) => {
   const pink = t.accent;
   const teal = t.accent2;
   const amber = t.warning;
@@ -17,7 +20,7 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const rivets = (o = 7) => [rivet(`${o}px`, `${o}px`), rivet(`calc(100% - ${o}px)`, `${o}px`), rivet(`${o}px`, `calc(100% - ${o}px)`), rivet(`calc(100% - ${o}px)`, `calc(100% - ${o}px)`)].join(', ');
   // LED meter: lit segments green-to-pink, 'on' share lit.
   const leds = (on, a = 1) =>
-    `repeating-linear-gradient(90deg, transparent 0 5px, ${deep} 5px 7px), linear-gradient(90deg, ${alpha(teal, a)} 0 55%, ${alpha(amber, a)} 55% 78%, ${alpha(pink, a)} 78% ${on}%, ${alpha(t.text, 0.08)} ${on}%)`;
+    `repeating-linear-gradient(90deg, transparent 0 5px, ${deep} 5px 7px), linear-gradient(90deg, ${alpha(teal, a)} 0 ${Math.min(on, 55)}%, ${alpha(amber, a)} ${Math.min(on, 55)}% ${Math.min(on, 78)}%, ${alpha(pink, a)} ${Math.min(on, 78)}% ${on}%, ${alpha(t.text, 0.08)} ${on}%)`;
   const neon = (c, r = 12) => `0 0 0 1px ${alpha(c, 0.9)}, 0 0 ${r}px -2px ${alpha(c, 0.9)}, inset 0 0 ${r}px -4px ${alpha(c, 0.7)}`;
   // Analog VU dial: cream face, scale, red zone, needle.
   const dial = (() => {
@@ -30,12 +33,15 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
     }
     return svgUrl(svg(80, 52, `<rect x="1" y="1" width="78" height="50" rx="7" fill="${metal}" stroke="${deep}" stroke-width="2"/><rect x="5" y="5" width="70" height="42" rx="4" fill="${mix(t.text, amber, 0.82)}"/>${ticks}<path d="M60 18 A30 30 0 0 1 66 26" fill="none" stroke="${pink}" stroke-width="3"/><line x1="40" y1="44" x2="57" y2="20" stroke="${deep}" stroke-width="1.6" stroke-linecap="round"/><circle cx="40" cy="44" r="3.5" fill="${deep}"/><text x="12" y="42" font-family="Arial" font-weight="700" font-size="7" fill="${deep}">VU</text>`));
   })();
-  // Rack ear: a metal strip with two slotted screw holes.
-  const ear = svgUrl(svg(18, 120, `<rect x="0.5" y="0.5" width="17" height="119" rx="3" fill="${metal}" stroke="${deep}"/><rect x="5" y="14" width="8" height="12" rx="4" fill="${deep}"/><rect x="5" y="94" width="8" height="12" rx="4" fill="${deep}"/><path d="M2 40h14M2 44h14M2 76h14M2 80h14" stroke="${alpha(deep, 0.5)}"/>`));
   // Vinyl grooves for big panels.
   const vinyl = `repeating-radial-gradient(circle at 100% 100%, ${alpha(t.text, 0.03)} 0 1px, transparent 1px 4px)`;
   // Knob ticks around the phase buttons.
   const ticks = `repeating-conic-gradient(from -2deg, ${alpha(t.text, 0.55)} 0 4deg, transparent 4deg 30deg)`;
+  const smear = (c) => [-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${c}`).join(', ');
+  // Pop-up buttons: a mixer key in brushed metal with an LED strip; pink lit for primary.
+  const key = (label, w, primary) =>
+    svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} 78.5"><defs><linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(metal, '#ffffff', 0.6)}"/><stop offset="0.5" stop-color="${metal}"/><stop offset="1" stop-color="${mix(metal, deep, 0.5)}"/></linearGradient></defs><rect x="5" y="9" width="${w - 10}" height="60" rx="7" fill="${deep}"/><rect x="8" y="12" width="${w - 16}" height="54" rx="5" fill="url(#m)" stroke="${deep}" stroke-width="1.5"/><rect x="16" y="56" width="${w - 32}" height="5" rx="2" fill="${primary ? pink : teal}"/><rect x="16" y="56" width="${w - 32}" height="5" rx="2" fill="none" stroke="${primary ? pink : teal}" stroke-opacity="0.5" stroke-width="4"/><text x="${w / 2}" y="34" dominant-baseline="central" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="25" letter-spacing="1" fill="${deep}">${label}</text></svg>`);
+  const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const neonText = (c) => `0 0 2px ${t.text}, 0 0 8px ${alpha(c, 0.95)}, 0 0 18px ${alpha(c, 0.6)}, 2px 2px 0 ${deep}`;
 
   const T = (list) => sel(list);
@@ -48,12 +54,11 @@ export default (t, { SEL, sel, svgUrl, svg, alpha }) => {
   const turnBg = T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background']);
   const turnInner = T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner']);
   const turnTxt = T(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span']);
-  const settings = T(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
   const duelPanels = T(['#duel .cout_txt', '#duel #watchers']);
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
 
   return `
-html body { --dbte-kt-ear: ${ear}; --dbte-kt-dial: ${dial}; }
+html body { --dbte-kt-dial: ${dial}; }
 @keyframes dbte-kt-pulse { 0%, 100% { opacity: 0.75 } 50% { opacity: 1 } }
 @keyframes dbte-kt-meter { 0%, 100% { transform: scaleX(0.82) } 30% { transform: scaleX(1) } 60% { transform: scaleX(0.9) } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-kt-anim: none } }
@@ -76,7 +81,7 @@ ${SEL.tileHover} {
   border-color: ${deep} !important;
   box-shadow: inset 0 1px 0 ${alpha(t.text, 0.18)}, ${neon(pink, 16)}, 0 0 0 2px ${deep} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { background: ${leds(96, 1)}; box-shadow: 0 0 10px ${alpha(pink, 0.7)}; animation: var(--dbte-kt-anim, dbte-kt-meter 0.9s ease-in-out infinite); }
+${sel(['#main_menu .menu_btn:hover .content::before'])} { background: ${leds(96, 1)} !important; box-shadow: 0 0 10px ${alpha(pink, 0.7)}; animation: var(--dbte-kt-anim, dbte-kt-meter 0.9s ease-in-out infinite); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 3px 8px #000000, ${neon(teal, 10)} !important; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${deep}, 0 0 10px ${alpha(teal, 0.35)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(t.text, pink, 0.6)} !important; text-shadow: ${neonText(pink)} !important; }
@@ -108,17 +113,18 @@ ${SEL.dialog} {
   border-radius: 8px !important;
   box-shadow: inset 0 1px 0 ${alpha(t.text, 0.18)}, inset 0 0 0 1px ${alpha(metal, 0.6)}, 0 0 0 2px ${deep}, ${neon(pink, 22)}, 0 30px 60px -20px #000000 !important;
 }
-${dlg('::before')} {
-  content: ""; position: absolute; left: -16px; top: 50%; width: 16px; height: 120px; margin-top: -60px; pointer-events: none;
-  background: var(--dbte-kt-ear) center / 100% 100% no-repeat;
-  filter: drop-shadow(0 0 0 ${deep});
-}
 ${dlg('::after')} {
   content: ""; position: absolute; right: 18px; top: 14px; width: 74px; height: 48px; pointer-events: none;
   background: var(--dbte-kt-dial) center / contain no-repeat;
   filter: drop-shadow(0 2px 3px #000000);
 }
 ${SEL.dialogTitle} { color: ${mix(t.text, teal, 0.6)} !important; text-shadow: ${neonText(teal)} !important; }
+${imgSel('ok_btn')} { content: ${key('OK', 153.4, true)} !important; }
+${imgSel('yes_btn')} { content: ${key('Yes', 153.4, true)} !important; }
+${imgSel('no_btn')} { content: ${key('No', 153.4, false)} !important; }
+${imgSel('cancel_btn')} { content: ${key('Cancel', 234.85, false)} !important; }
+${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: ${neonText(pink)}, ${smear(t.surface)} !important; }
+${[38, 62, 46, 74, 54, 30, 66, 42].map((v, i) => `${sel([`#main_menu .menu_btn:nth-of-type(${i + 1}) .content::before`])} { background: ${leds(v, 0.85)}; }`).join(' ')}
 ${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 ${SEL.chatTop} {
@@ -185,7 +191,7 @@ ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus',
 
 ${duelPanels} { border-color: ${deep} !important; border-radius: 5px !important; box-shadow: inset 0 0 0 1px ${alpha(metal, 0.45)}, 0 0 0 1px ${deep} !important; }
 ${sel(['#duel .cout_txt'])} { background: ${vinyl}, linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; }
-${settings} { border-radius: 8px !important; box-shadow: 0 0 18px -6px ${alpha(teal, 0.6)}, inset 0 0 0 1px ${alpha(metal, 0.4)} !important; }
+${SEL.settingsPanel} { border-radius: 8px !important; box-shadow: 0 0 18px -6px ${alpha(teal, 0.6)}, inset 0 0 0 1px ${alpha(metal, 0.4)} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(0deg, ${deep} 0 44%, ${pink} 44% 56%, ${deep} 56%), ${metal} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 1px ${metal}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { background-color: ${deep} !important; box-shadow: inset 0 0 0 1px ${metal}, 0 0 6px -1px ${alpha(teal, 0.6)} !important; }
 `;
