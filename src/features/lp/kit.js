@@ -16,8 +16,13 @@ export { svgUrl, svg, alpha } from '../theme/chrome/kit.js';
 // The life left, 0-1, written on each .lifepoints by LifePointsEffect.
 export const LP_VAR = '--dbte-lp';
 export const lp = `var(${LP_VAR}, 1)`;
-// Effects state on each .lifepoints: "hit" | "heal", plus "low" | "zero".
+// The frame's corner radius, recorded when a pulse starts (hit ring shape).
+export const LP_RADIUS_VAR = '--dbte-lp-radius';
+// State on each .lifepoints: "hit" | "heal", "low" | "zero", "wide".
 export const STATE_ATTR = 'data-dbte-lp';
+// On <html> while a life point style (not the theme's look) is drawn, so the
+// theme's own LP rules (numeral plate, low state) stand aside.
+export const STYLE_ATTR = 'data-dbte-lpstyle';
 
 // Seven-segment faces. The ascent override sits the digits where
 // DuelingBook's 20px Arial numbers sit, without touching line-height.

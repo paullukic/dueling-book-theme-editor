@@ -8,4 +8,5 @@ ${k.bar} { border-radius: 6px !important; }
 ${k.on(k.self, 'life_bar')} { background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 55%), var(--dbt-self, #d9452f) !important; }
 ${k.on(k.opp, 'life_bar')} { background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 55%), var(--dbt-opp, #2f7fd9) !important; }
 ${k.txt} { color: #ffffff !important; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 1px #000000 !important; font-variant-numeric: tabular-nums; }
+${k.when('low', 'life_border')}, ${k.when('zero', 'life_border')} { border-color: var(--dbt-danger, #ff3b2f) !important; }
 `;

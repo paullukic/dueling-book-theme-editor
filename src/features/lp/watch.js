@@ -1,12 +1,14 @@
-import { LP_VAR, STATE_ATTR } from './kit.js';
+import { LP_RADIUS_VAR, LP_VAR, STATE_ATTR } from './kit.js';
 import { WIDE_LP, lifeRatio, lpChange, lpLevel, lpState, parseLp } from './logic.js';
 
 const PULSE_MS = 900; // a hit or heal glow, from the last change of a count
 
 // Follows one side's life: DuelingBook animates the lost-life bar's inline
 // width and counts the number up or down. Writes the life left as a CSS
-// variable and the state (effects, and "wide" for five digits) as an
-// attribute on that side's .lifepoints.
+// variable and the state as an attribute on that side's .lifepoints: the
+// level ("low", "zero") and "wide" for five digits always, the hit and heal
+// pulses only with effects on. A pulse also records the frame's corner
+// radius, so the hit ring takes the frame's shape.
 // Only the bar's style and the number are observed, never .lifepoints itself,
 // so these writes never wake the observer.
 export const watchSide = (box, effects) => {
@@ -26,6 +28,7 @@ export const watchSide = (box, effects) => {
       prev = value;
       if (change) {
         pulse = change;
+        box.style.setProperty(LP_RADIUS_VAR, getComputedStyle(box.querySelector('.life_border') || box).borderRadius);
         clearTimeout(timer);
         timer = setTimeout(() => {
           pulse = null;
@@ -33,7 +36,7 @@ export const watchSide = (box, effects) => {
         }, PULSE_MS);
       }
     }
-    const state = lpState(pulse, effects ? lpLevel(value, ratio) : null, value >= WIDE_LP);
+    const state = lpState(pulse, lpLevel(value, ratio), value >= WIDE_LP);
     if ((box.getAttribute(STATE_ATTR) || '') === state) return;
     if (state) box.setAttribute(STATE_ATTR, state);
     else box.removeAttribute(STATE_ATTR);
@@ -49,6 +52,7 @@ export const watchSide = (box, effects) => {
     txtObs.disconnect();
     clearTimeout(timer);
     box.style.removeProperty(LP_VAR);
+    box.style.removeProperty(LP_RADIUS_VAR);
     box.removeAttribute(STATE_ATTR);
   };
 };

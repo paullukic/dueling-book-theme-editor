@@ -88,13 +88,13 @@ test('lp styles: every style restyles both sides without layout changes', () => 
   });
 });
 
-test('lp effects: damage, heal, low and zero states; only the box filter animates; reduced motion is still', () => {
+test('lp effects: damage, heal, low and zero states; only filter, opacity and transform animate; reduced motion is still', () => {
   ['hit', 'heal', 'low', 'zero'].forEach((s) => assert.match(effectsCss, new RegExp(`data-dbte-lp~="${s}"`)));
   const frames = effectsCss.match(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*\s*\}/g);
-  assert.equal(frames.length, 3);
+  assert.equal(frames.length, 4);
   frames.forEach((f) => {
     const props = [...f.matchAll(/([a-z-]+)\s*:/g)].map((m) => m[1]);
-    props.forEach((p) => assert.equal(p, 'filter', `${p} animates`));
+    props.forEach((p) => assert.ok(['filter', 'opacity', 'transform'].includes(p), `${p} animates`));
   });
   assert.match(effectsCss, /@media \(prefers-reduced-motion: reduce\)/);
   assert.equal((effectsCss.match(/infinite/g) || []).length, 1);
@@ -120,4 +120,11 @@ test('theme numerals: every preset gets a crisp number and ink outline at 7:1, n
     if (isLightTheme(p.tokens)) assert.notEqual(ink.toLowerCase(), '#000000', p.id);
     assert.match(varsCss({ tokens: p.tokens, radius: 4, backdrop: 0.25 }), new RegExp(`--dbt-lp-num: ${num};[^]*--dbt-lp-ink: ${ink};`), p.id);
   });
+});
+
+test('duel accent: the active phase and TURN pill take the deepened accent, white lettering at 4.5:1 on every preset', async () => {
+  const { PRESETS } = await import('../src/features/theme/presets.js');
+  const { accentDeep } = await import('../src/features/theme/css.js');
+  const { contrast } = await import('../src/lib/color.js');
+  PRESETS.forEach((p) => assert.ok(contrast('#ffffff', accentDeep(p.tokens)) >= 4.5, p.id));
 });

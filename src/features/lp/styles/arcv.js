@@ -1,7 +1,8 @@
 // ARC-V: the pendulum fan. A bright gold plate whose right end sweeps down
 // and back in a curve, a double gold rim, a pendulum (ring, chain and cyan
 // crystal) on the left and a scale of ticks along the bottom that lights up
-// to the life left. White heavy numerals with a dark outline.
+// to the life left. White heavy numerals with a dark outline on a deeper
+// gold band.
 
 const W = 156;
 const H = 31;
@@ -14,9 +15,11 @@ const plate = (svg) =>
 <radialGradient id="g" cx=".45" cy=".35" r=".8"><stop offset="0" stop-color="#fff7a8"/><stop offset=".55" stop-color="#f2d24a"/><stop offset="1" stop-color="#c79a16"/></radialGradient>
 <linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset=".5" stop-color="#c8961c"/><stop offset="1" stop-color="#8a6210"/></linearGradient>
 <linearGradient id="c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8fdff"/><stop offset=".5" stop-color="#40c8e8"/><stop offset="1" stop-color="#1a6e9a"/></linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5204" stop-opacity="0"/><stop offset=".35" stop-color="#7a5204" stop-opacity=".55"/><stop offset="1" stop-color="#7a5204" stop-opacity=".7"/></linearGradient>
 </defs>
 <path d="M2 1H148Q155.5 1 155 8.5Q151 27.5 120 30H2Z" fill="url(#g)" stroke="#7a5608"/>
 <path d="M4 3H147.4Q153.2 3 152.8 8.6Q149 25.6 120 28H4Z" fill="none" stroke="url(#r)" stroke-width="1.2"/>
+<path d="M62 5H147Q152.4 5 151.9 9Q148.6 24.4 121 26.6H62Z" fill="url(#d)"/>
 <path d="M5 4.2H130" stroke="#fffbe0" stroke-opacity=".8" stroke-width=".7"/>
 <circle cx="9" cy="6.5" r="3.2" fill="none" stroke="url(#r)" stroke-width="1.6"/>
 <circle cx="9" cy="6.5" r="1.3" fill="#fff2a0"/>
@@ -38,6 +41,6 @@ ${k.border}::before {
 }
 ${k.txt} {
   font-family: "Arial Black", Arial, sans-serif !important; color: #ffffff !important;
-  text-shadow: ${k.outline('#404040', 1.4, '0 2px 2px rgba(90, 60, 0, 0.6)')} !important;
+  text-shadow: ${k.outline('#2a1c00', 1.4, '0 2px 2px rgba(60, 40, 0, 0.7)')} !important;
 }
 `;

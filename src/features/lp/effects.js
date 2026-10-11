@@ -1,43 +1,57 @@
-// Life point effects: the LP block glows red when a side loses life, green
-// when it gains, breathes slowly under 25% and stays lit at 0. The glow is a
-// drop-shadow filter on the .lifepoints box itself, so it takes the exact
-// silhouette of whatever frame is drawn there: a theme's rounded, square or
-// chamfered border and its crest, or a life point style's plate. A style may
-// tune the colours with --lp-hit and --lp-heal. Short pulses and the low-life
-// breath animate the filter on that small box only; reduced motion gets the
-// same states, still. Filters are never !important: an !important value
-// would beat the keyframes.
+// Life point effects. Glows are drop-shadow filters on the .lifepoints box
+// itself, so they trace the exact silhouette of whatever frame is drawn there
+// (a theme's rounded, square or chamfered border and its crest, or a style's
+// plate), kept tight (a lit rim, a short bloom) so they never blur into a slab.
+//   hit   a white-hot flash (the whole counter brightens), an amber-to-red rim
+//         and a ring that bursts outward from the frame (our ::after, the
+//         frame's own radius); unmistakable on any theme.
+//   heal  a green rim that swells and fades.
+//   low   an amber-to-red rim breathing slowly, a colour pair no side colour
+//         uses at rest.
+//   zero  a steady red rim, the number in red.
+// The top counter sits at the page edge: its glow leans down. A style may tune
+// colours with --lp-hit and --lp-heal. Filters are never !important (it would
+// beat the keyframes); reduced motion gets the same states, still.
 
-import { PAGE } from './kit.js';
+import { LP_RADIUS_VAR, PAGE } from './kit.js';
 
 const hit = 'var(--lp-hit, #ff3b2f)';
+const amber = '#ffb21e';
 const heal = 'var(--lp-heal, #3cf08c)';
-// A tight bright rim, then a wider bloom: reads as a lit edge, not a haze.
-// Every value has the same function list, so keyframes interpolate smoothly.
-const glow = (c, rim, bloom, lift = 1) =>
-  `drop-shadow(0 0 ${rim}px ${c}) drop-shadow(0 0 ${rim}px ${c}) drop-shadow(0 0 ${bloom}px ${c}) brightness(${lift})`;
+// Same function list everywhere, so keyframes interpolate smoothly.
+const rim = (c1, c2, r1, r2, lift = 1) =>
+  `drop-shadow(0 var(--lp-fx-dy, 0px) ${r1}px ${c1}) drop-shadow(0 var(--lp-fx-dy, 0px) ${r1}px ${c1}) drop-shadow(0 var(--lp-fx-dy, 0px) ${r2}px ${c2}) brightness(${lift})`;
 
 export const fxCss = (k) => `
-${k.when('low')} { filter: ${glow(hit, 1, 6)}; animation: dbte-lp-breathe 1.8s ease-in-out infinite alternate !important; }
-${k.when('zero')} { filter: ${glow(hit, 1.5, 9)}; animation: none !important; }
-${k.when('hit')} { animation: dbte-lp-hit 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) both !important; }
+${k.opp} { --lp-fx-dy: 1.5px; }
+${k.when('low')} { filter: ${rim(amber, hit, 1, 2.5)}; animation: dbte-lp-breathe 1.6s ease-in-out infinite alternate !important; }
+${k.when('zero')} { filter: ${rim(hit, hit, 1.2, 3)}; animation: none !important; }
+${k.when('hit')} { animation: dbte-lp-hit 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) both !important; }
 ${k.when('heal')} { animation: dbte-lp-heal 1.1s ease-out both !important; }
+${k.when('hit')}::after {
+  content: "" !important; position: absolute; left: 0; top: 0; width: 150px; height: 25px; pointer-events: none;
+  border: 3px solid #ffffff; border-radius: var(${LP_RADIUS_VAR}, 15px); box-sizing: content-box;
+  box-shadow: 0 0 6px ${amber}, inset 0 0 6px ${amber};
+  animation: dbte-lp-burst 0.45s cubic-bezier(0.1, 0.6, 0.3, 1) both;
+}
 ${k.when('zero', 'life_txt')} { color: ${hit} !important; -webkit-text-fill-color: currentColor !important; }
 @keyframes dbte-lp-hit {
-  0% { filter: ${glow('#ffffff', 1, 4)}; }
-  12% { filter: ${glow(hit, 2, 14, 1.25)}; }
-  40% { filter: ${glow(hit, 1.5, 10)}; }
-  100% { filter: ${glow(hit, 0, 0)}; }
+  0% { filter: ${rim('#ffffff', amber, 1.5, 3.5, 1.9)}; }
+  14% { filter: ${rim(amber, hit, 1.5, 3.5, 1.4)}; }
+  45% { filter: ${rim(hit, hit, 1.2, 3, 1)}; }
+  100% { filter: ${rim(hit, hit, 0, 0, 1)}; }
 }
+@keyframes dbte-lp-burst { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18, 1.6); } }
 @keyframes dbte-lp-heal {
-  0% { filter: ${glow(heal, 0, 0)}; }
-  30% { filter: ${glow(heal, 1.5, 12, 1.12)}; }
-  100% { filter: ${glow(heal, 0, 0)}; }
+  0% { filter: ${rim(heal, heal, 0, 0, 1)}; }
+  30% { filter: ${rim(heal, heal, 1.5, 6, 1.15)}; }
+  100% { filter: ${rim(heal, heal, 0, 0, 1)}; }
 }
-@keyframes dbte-lp-breathe { from { filter: ${glow(hit, 0.5, 3)}; } to { filter: ${glow(hit, 1.5, 9)}; } }
+@keyframes dbte-lp-breathe { from { filter: ${rim(amber, hit, 0.6, 1.5)}; } to { filter: ${rim(hit, amber, 1.4, 3)}; } }
 @media (prefers-reduced-motion: reduce) {
-  ${k.when('hit')} { animation: none !important; filter: ${glow(hit, 1.5, 10)}; }
-  ${k.when('heal')} { animation: none !important; filter: ${glow(heal, 1.5, 10)}; }
+  ${k.when('hit')} { animation: none !important; filter: ${rim('#ffffff', hit, 1.5, 6, 1.3)}; }
+  ${k.when('hit')}::after { animation: none; opacity: 0; }
+  ${k.when('heal')} { animation: none !important; filter: ${rim(heal, heal, 1.5, 6)}; }
   ${k.when('low')} { animation: none !important; }
 }
 `;

@@ -1,4 +1,5 @@
-// Rush Duel (SEVENS, Go Rush!!): a chunky lime-glass panel in a silver and
+// Rush Duel (SEVENS, Go Rush!!): a chunky glass panel tinted by the life left
+// (lime when full, through yellow, to red), in a silver and
 // white double frame with chamfered right corners, an orange inner line and
 // an orange faceted gem badge carrying "LP". The inner line along the bottom
 // fills to the life left. Blocky white numerals with a dark double outline.
@@ -11,7 +12,7 @@ const plate = (svg) =>
     W,
     H,
     `<defs>
-<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eefaa8"/><stop offset=".5" stop-color="#c8ea78"/><stop offset="1" stop-color="#9ccc54"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#eef2ea"/><stop offset="1" stop-color="#d6ddd0"/></linearGradient>
 <linearGradient id="o" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd23a"/><stop offset="1" stop-color="#f08a1a"/></linearGradient>
 <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe060"/><stop offset=".5" stop-color="#f7a21c"/><stop offset="1" stop-color="#e06a10"/></linearGradient>
 </defs>
@@ -30,6 +31,11 @@ export default (k) => `
 ${k.bar} { opacity: 0 !important; }
 ${k.border} { background: ${k.svgUrl(plate(k.svg))} 0 0 / 100% 100% border-box no-repeat !important; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) !important; }
 ${k.border}::before {
+  content: "" !important; ${k.box(17.5, 4.5, 133.6, 22)} mix-blend-mode: multiply;
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
+  background: linear-gradient(180deg, hsl(calc(${k.lp} * 105) 90% 80%), hsl(calc(${k.lp} * 105) 75% 55%));
+}
+${k.border}::after {
   content: "" !important; ${k.box(27, 24.4, 120, 2)}
   background: ${k.fill('#f08a1a', 'rgba(240, 138, 26, 0.18)')};
   border-radius: 1px;

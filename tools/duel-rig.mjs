@@ -19,7 +19,7 @@ import { FX_ID, sceneMarkup } from '../src/features/theme/scenes.js';
 import { inkPass } from '../src/features/theme/inkGuard.js';
 import { lpCss } from '../src/features/lp/index.js';
 import { effectsCss } from '../src/features/lp/effects.js';
-import { LP_VAR, STATE_ATTR } from '../src/features/lp/kit.js';
+import { LP_RADIUS_VAR, LP_VAR, STATE_ATTR, STYLE_ATTR } from '../src/features/lp/kit.js';
 import { FULL_BAR_PX, WIDE_LP, lifeRatio, lpLevel, lpState } from '../src/features/lp/logic.js';
 import { duelChatCss } from '../src/features/look.jsx';
 
@@ -77,6 +77,9 @@ const layers = async (theme) => {
 const lpStyle = (id, effects = true) => {
   style('dbte-lp-style', lpCss(id) || null);
   style('dbte-lp-effects', effects ? effectsCss : null);
+  // As LifePointsEffect: the theme's own LP rules stand aside under a style.
+  if (id && id !== 'theme') document.documentElement.setAttribute(STYLE_ATTR, '');
+  else document.documentElement.removeAttribute(STYLE_ATTR);
 };
 
 const chat = (alpha) => style('dbte-duel-chat', alpha < 1 ? duelChatCss(alpha) : null);
@@ -95,13 +98,15 @@ const setLp = (side, lp, state) => {
   const value = lpState(null, state === undefined ? lpLevel(lp, ratio) : state, lp >= WIDE_LP);
   if (value) box.setAttribute(STATE_ATTR, value);
   else box.removeAttribute(STATE_ATTR);
+  // As watch.js does when a pulse starts: the hit ring takes the frame's radius.
+  box.style.setProperty(LP_RADIUS_VAR, getComputedStyle(box.querySelector('.life_border') || box).borderRadius);
   return true;
 };
 
 // A screenshot catches an animation wherever it is; hold each glow at its
-// brightest instead: the hit flash at 12%, the heal at 30%, the low breath at
-// its "to" frame.
-const PEAKS = { 'dbte-lp-hit': 0.12, 'dbte-lp-heal': 0.3, 'dbte-lp-breathe': 0.999 };
+// brightest instead: the hit flash at 8% (its burst ring a third of the way
+// out), the heal at 30%, the low breath at its "to" frame.
+const PEAKS = { 'dbte-lp-hit': 0.08, 'dbte-lp-burst': 0.3, 'dbte-lp-heal': 0.3, 'dbte-lp-breathe': 0.999 };
 const freezeLp = () =>
   document.getAnimations().filter((a) => {
     const at = PEAKS[a.animationName];

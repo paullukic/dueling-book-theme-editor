@@ -25,6 +25,17 @@ export const fieldEdgeMix = (tokens) => (isLightTheme(tokens) ? 0.55 : 0.4);
 // white...), else white; the outline is the theme's darkest ink (never black
 // on light themes). Number against outline stays at 7:1 or more.
 export const LP_NUM_CONTRAST = 7;
+
+// The accent deepened (into black, or into the ink on light themes) just
+// enough for white lettering at 4.5:1: the active phase and the TURN pill.
+export const accentDeep = (t) => {
+  const into = isLightTheme(t) ? mix(t.text, '#000000', 0.2) : '#000000';
+  for (let k = 0.35; k < 1; k += 0.05) {
+    const c = mix(t.accent, into, k);
+    if (contrast('#ffffff', c) >= 4.5) return c;
+  }
+  return into;
+};
 export const lpInk = (t) => {
   const num = luminance(t.text) > 0.55 ? t.text : '#ffffff';
   const ink = isLightTheme(t) ? mix(t.text, '#000000', 0.2) : mix(t.bg, '#000000', 0.65);
@@ -43,9 +54,6 @@ html body #dark { background-color: transparent !important; }
 html body #duel_room .duelbutton .tcg_title, html body #duel_room .duelbutton .ocg_title {
   color: color-mix(in srgb, var(--dbt-accent) 15%, var(--dbt-raised)) !important; opacity: 1 !important;
 }
-/* Light presets keep their side colours dark enough for white text, so the turn pill stays bright. */
-html body #duel #turn .red { background: radial-gradient(circle, var(--dbt-self), color-mix(in srgb, var(--dbt-self) 80%, var(--dbt-text))) !important; }
-html body #duel #turn .blue { background: radial-gradient(circle, var(--dbt-opp), color-mix(in srgb, var(--dbt-opp) 80%, var(--dbt-text))) !important; }
 /* DuelingBook's white-chrome logo needs an ink edge on paper. */
 html body #yugioh_logo img, html body #db_logo_bottom, html body #db_logo_top { filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--dbt-text) 55%, transparent)) drop-shadow(0 3px 6px color-mix(in srgb, var(--dbt-text) 30%, transparent)); }
 /* Duel: side colours deepen into the ink, never into black. */
@@ -119,6 +127,7 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
 ${lines.join('\n')}
   --dbt-lp-num: ${lp.num};
   --dbt-lp-ink: ${lp.ink};
+  --dbt-accent-deep: ${accentDeep(tokens)};
   --dbt-bg-rgb: ${r}, ${g}, ${b};
   --dbt-self-text: ${textOn(tokens.self)};
   --dbt-opp-text: ${textOn(tokens.opp)};
@@ -528,9 +537,11 @@ html #content .total_txt, html #content .total_effect_txt, html #content .total_
 `;
 
 const duel = `
-/* Life points */
-html #duel .lifepoints .life_border { border-color: var(--dbt-border) !important; }
+/* Life points: the frame trim carries the theme accent; the fill the side colour. */
+html #duel .lifepoints .life_border { border-color: var(--dbt-accent) !important; }
 html #duel .lifepoints .black_bar { background-color: var(--dbt-bg) !important; }
+/* The fill and the lost-life bar stay inside the frame's rounded ends. */
+html body #duel .lifepoints .life_bar { overflow: hidden !important; }
 html #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 55%, black), var(--dbt-self)) !important; }
 html #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 55%, black), var(--dbt-opp)) !important; }
 /* The number: one crisp ink outline over fill and trough alike (two ids, so
@@ -541,6 +552,29 @@ html body #duel #lifepoints1 .life_txt, html body #duel #lifepoints2 .life_txt {
     1px 1px 0 var(--dbt-lp-ink), -1px 1px 0 var(--dbt-lp-ink), 1px -1px 0 var(--dbt-lp-ink), -1px -1px 0 var(--dbt-lp-ink),
     0 2px 3px color-mix(in srgb, var(--dbt-lp-ink) 65%, transparent) !important;
 }
+/* The number always sits on a dark value: the fill fades into the theme's
+   ink under it (the opponent's fill ends bright there), dimming any fill
+   decoration too. Drawn inside the bar, so it keeps the frame's shape. Stands
+   aside when a life point style draws the counter. */
+html:not([data-dbte-lpstyle]) body #duel #lifepoints1 .life_bar::before, html:not([data-dbte-lpstyle]) body #duel #lifepoints2 .life_bar::before {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 92px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--dbt-lp-ink) 45%, transparent) 40%, color-mix(in srgb, var(--dbt-lp-ink) 62%, transparent));
+}
+/* Low and zero: the frame and the fill go to the danger colour, the empty
+   track glows dark red with fine hazard lines, and the number is forced light
+   on its ink outline, so low never reads like a healthy (red) side colour and
+   never costs the number its contrast. */
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border { border-color: var(--dbt-danger) !important; border-image: none !important; }
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_bar {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, black 14%, transparent) 0 1.5px, transparent 1.5px 7px), linear-gradient(90deg, color-mix(in srgb, var(--dbt-danger) 55%, black), var(--dbt-danger)) !important;
+}
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .black_bar {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--dbt-danger) 18%, transparent) 0 1.5px, transparent 1.5px 7px), color-mix(in srgb, var(--dbt-danger) 16%, black) !important;
+}
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_txt {
+  color: white !important; -webkit-text-fill-color: currentColor !important;
+  text-shadow: 1px 0 0 var(--dbt-lp-ink), -1px 0 0 var(--dbt-lp-ink), 0 1px 0 var(--dbt-lp-ink), 0 -1px 0 var(--dbt-lp-ink), 1px 1px 0 var(--dbt-lp-ink), -1px 1px 0 var(--dbt-lp-ink), 1px -1px 0 var(--dbt-lp-ink), -1px -1px 0 var(--dbt-lp-ink), 0 2px 3px var(--dbt-lp-ink) !important;
+}
 
 /* Phase buttons: dim ring, side colour when active */
 html #duel .phase .background { background: var(--dbt-border) !important; }
@@ -549,19 +583,25 @@ html #duel .phase .background .background_inner { background: var(--dbt-raised) 
 html #duel .phase .phase_inner.red, html #duel .phase .phase_inner.blue {
   background: radial-gradient(circle, var(--dbt-raised) 30%, var(--dbt-surface)) !important;
 }
-html #duel .phase.active .phase_inner.red { background: radial-gradient(circle, var(--dbt-self) 25%, color-mix(in srgb, var(--dbt-self) 45%, black)) !important; }
-html #duel .phase.active .phase_inner.blue { background: radial-gradient(circle, var(--dbt-opp) 25%, color-mix(in srgb, var(--dbt-opp) 45%, black)) !important; }
+/* The active phase: the accent, deepened for white lettering; its ring keeps
+   the side colour (red = you, blue = the opponent). */
+html #duel .phase.active .phase_inner.red, html #duel .phase.active .phase_inner.blue {
+  background: radial-gradient(circle, var(--dbt-accent-deep) 35%, color-mix(in srgb, var(--dbt-accent-deep) 70%, var(--dbt-lp-ink))) !important;
+}
+html #duel .phase.active:has(.phase_inner.red) .background { background: var(--dbt-self) !important; }
+html #duel .phase.active:has(.phase_inner.blue) .background { background: var(--dbt-opp) !important; }
 html #duel .phase span { color: var(--dbt-muted) !important; text-shadow: none !important; }
-html #duel .phase.active:has(.phase_inner.red) span { color: var(--dbt-self-text) !important; }
-html #duel .phase.active:has(.phase_inner.blue) span { color: var(--dbt-opp-text) !important; }
+html #duel .phase.active span { color: white !important; }
 
 /* Turn buttons */
 html #duel #turn .background, html #duel #start_turn .background, html #duel #end_turn .background { background: var(--dbt-border) !important; }
 html #duel #turn .background_inner, html #duel #start_turn .background_inner, html #duel #end_turn .background_inner { background: var(--dbt-raised) !important; }
 html #duel #start_turn span, html #duel #end_turn span { color: var(--dbt-text) !important; }
-/* Whose turn: the side colours, deepened so white lettering reads (4.5:1 or better). */
-html #duel #turn .red { background: radial-gradient(circle, color-mix(in srgb, var(--dbt-self) 47%, black), color-mix(in srgb, var(--dbt-self) 32%, black)) !important; }
-html #duel #turn .blue { background: radial-gradient(circle, color-mix(in srgb, var(--dbt-opp) 47%, black), color-mix(in srgb, var(--dbt-opp) 32%, black)) !important; }
+/* Whose turn: the deepened accent (white lettering at 4.5:1), ringed in the
+   side colour. */
+html #duel #turn .red, html #duel #turn .blue { background: radial-gradient(circle, var(--dbt-accent-deep) 40%, color-mix(in srgb, var(--dbt-accent-deep) 75%, var(--dbt-lp-ink))) !important; }
+html #duel #turn .red { box-shadow: inset 0 0 0 2px var(--dbt-self) !important; }
+html #duel #turn .blue { box-shadow: inset 0 0 0 2px var(--dbt-opp) !important; }
 html #duel #turn span { color: white !important; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) !important; }
 
 /* Avatars, status, countdowns */
