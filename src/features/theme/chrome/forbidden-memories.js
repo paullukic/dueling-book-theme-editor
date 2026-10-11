@@ -104,7 +104,7 @@ ${SEL.chat} { ${platePanel} box-shadow: inset 2px 0 0 ${stone}, inset -2px 0 0 $
 /* Duel: flat white numerals in the game's navy LP boxes, a YOU (red) or COM (navy) tag at the left, a thin
    gold strip along the foot for the life left; square navy phase chips in a gold rim, gold when active. */
 ${SEL.life} { border-color: ${rim} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -42px; top: 3px; width: 38px; height: 20px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
@@ -113,13 +113,14 @@ ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { color
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
 ${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
 ${SEL.phase} { background: ${gold} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${gold} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; border-radius: 3px !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: #000000 !important; border-radius: 2px !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { border-radius: 2px !important; background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 55%), ${navy} !important; }
 ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 55%), ${gold} !important; box-shadow: 0 0 12px ${alpha(gold, 0.7)}; }
 ${sel(['#duel .phase span'])} { color: ${gold} !important; text-shadow: 2px 2px 0 #000000 !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.accentText} !important; text-shadow: none !important; }
-${SEL.duelLog} { ${platePanel} box-shadow: inset 0 0 0 6px ${stone}, inset 0 1px 0 7px ${stoneHi}, inset 0 0 0 8px ${gold}, inset 0 0 0 9px #000000 !important; }
+${SEL.duelLog} { ${platePanel} box-shadow: 0 0 0 2px ${gold}, 0 0 0 5px ${stone}, 0 0 0 6px #000000 !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${gold}, 0 0 0 5px ${stone}, 0 0 0 6px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${rim} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${navy} !important; }

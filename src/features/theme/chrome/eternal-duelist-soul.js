@@ -58,6 +58,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
+  const lpAt = (state, part) => ['#lifepoints1', '#lifepoints2'].map((id) => `html:not([data-dbte-lpstyle]) body #duel ${id}.lifepoints${state} ${part}`).join(', ');
   const u = [svgUrl(bevelSvg(hi, lo)), svgUrl(brackets), svgUrl(lpTag)];
   return `
 @font-face { font-family: "DBTE Pixel"; src: url(${PIXEL_DIGITS}) format("woff"); }
@@ -93,10 +94,15 @@ ${SEL.lifeOpp} { background: linear-gradient(0deg, ${orange} 0 4px, ${ink} 4px 6
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 1px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; image-rendering: pixelated; }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${navy} !important; -webkit-text-fill-color: currentColor !important; text-shadow: none !important; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
-${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
-${sel(['#duel #lifepoints1[data-dbte-lp~="low"] .life_txt', '#duel #lifepoints2[data-dbte-lp~="low"] .life_txt', '#duel #lifepoints1[data-dbte-lp~="zero"] .life_txt', '#duel #lifepoints2[data-dbte-lp~="zero"] .life_txt'])} { color: #ffffff !important; text-shadow: ${outline(ink, 2)} !important; }
+/* The number sits on a solid mint plate with a navy rule, like the LP panels in the game; low keeps
+   the plate and turns the rule red. */
+${lpAt('', '.life_txt')} { isolation: isolate; }
+${lpAt('', '.life_txt::before')} { content: ""; position: absolute; left: -6px; right: -4px; top: 1px; bottom: 1px; z-index: -1; pointer-events: none; background: linear-gradient(180deg, ${mintHi} 0 2px, ${mint} 2px); box-shadow: 0 0 0 2px ${ink}; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt::before')} { box-shadow: 0 0 0 2px ${t.danger}; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt')} { color: ${navy} !important; text-shadow: none !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${ink} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; border-radius: 0 !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${blue} !important; border-radius: 0 !important; box-shadow: inset 3px 3px 0 ${hi}, inset -3px -3px 0 ${ink} !important; }

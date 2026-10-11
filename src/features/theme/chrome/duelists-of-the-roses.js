@@ -112,7 +112,8 @@ ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { color
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
 ${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
 ${SEL.phase} { background: var(--dbtc-u6) center / 100% 100% no-repeat !important; border-radius: 0 !important; box-shadow: none !important; filter: drop-shadow(0 3px 3px ${alpha('#000000', 0.7)}) drop-shadow(0 0 6px ${alpha(gold, 0.35)}); }
-${sel(['#duel .phase.active .background'])} { background: var(--dbtc-u6) center / 100% 100% no-repeat !important; border-radius: 0 !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: var(--dbtc-u6) center / 100% 100% no-repeat !important; border-radius: 0 !important; }
+${sel(['#duel .phase .background .background_inner', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue', '#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue', '#duel .phase.active .background .background_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${lacquer}, ${lacquerDeep}) !important; }

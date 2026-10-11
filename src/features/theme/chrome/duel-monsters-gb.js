@@ -36,6 +36,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const arrow = crisp(6, 9, `<path d="M0 0h2v1h1v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-1v1h-2z" fill="${ink}"/>`);
   // Pixel heart-less "LP" chip for the life bar.
   const lpChip = crisp(15, 9, `<rect width="15" height="9" fill="${ink}"/><path d="${pxText('LP', 2, 1, 1)}" fill="${pale}"/>`);
+  const lpChipLow = crisp(15, 9, `<rect width="15" height="9" fill="${ink}"/><rect x="1" y="1" width="13" height="7" fill="${pale}"/><path d="${pxText('LP', 2, 1, 1)}" fill="${ink}"/>`);
   // Segmented LCD bar: one-pixel gaps every 6px.
   const segs = (c) => `repeating-linear-gradient(90deg, ${c} 0 5px, ${pale} 5px 6px)`;
 
@@ -72,14 +73,16 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const lcdImages = sel(['#content .avatar img.image', '#duel #field_spell_pic img', ...lcdIcons.map((n) => `img[src*="/svg/${n}"]`)]);
   // Avatar frame: an LCD window ring around the picture.
   const avatarFrame = crisp(64, 64, `${ring(64, 0, 4, ink)}${ring(64, 5, 2, dark)}`);
+  const lpAt = (state, part) => ['#lifepoints1', '#lifepoints2'].map((id) => `html:not([data-dbte-lpstyle]) body #duel ${id}.lifepoints${state} ${part}`).join(', ');
   const u0 = svgUrl(frameSvg);
   const u1 = svgUrl(grid);
   const u2 = svgUrl(arrow);
   const u3 = svgUrl(lpChip);
   const u4 = svgUrl(avatarFrame);
+  const u5 = svgUrl(lpChipLow);
   return `
 @font-face { font-family: "DBTE Pixel"; src: url(${PIXEL_DIGITS}) format("woff"); }
-html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
+html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: LCD windows; the hovered one gets the blinking arrow cursor and an inverted bar. */
 ${SEL.tile} { background: ${flat()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 4 / 9px stretch !important; border-radius: 0 !important; box-shadow: 4px 4px 0 ${alpha(ink, 0.35)} !important; image-rendering: pixelated; }
 ${SEL.tileHover} { background: ${flat(light)} !important; box-shadow: 4px 4px 0 ${ink} !important; }
@@ -113,8 +116,19 @@ ${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -36px; top: 2px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${pale} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 ${ink}, 2px 0 0 ${ink} !important; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
-${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
+/* The number sits on a solid darkest-green plate. Low life inverts the counter within the four shades:
+   pale frame and plate, ink digits, and the LP chip blinks. */
+${lpAt('', '.life_txt')} { isolation: isolate; }
+${lpAt('', '.life_txt::before')} { content: ""; position: absolute; left: -6px; right: -4px; top: 1px; bottom: 1px; z-index: -1; pointer-events: none; background: ${ink}; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt::before')} { background: ${pale}; box-shadow: inset 0 0 0 2px ${ink}; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt')} { color: ${ink} !important; text-shadow: none !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_border')} { border-color: ${pale} !important; box-shadow: 0 0 0 2px ${ink}, inset 0 0 0 2px ${ink} !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_bar')} { background: ${segs(dark)} !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.black_bar')} { background: repeating-linear-gradient(90deg, ${pale} 0 5px, ${light} 5px 6px) !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '').replace(/ ,/g, ',').trim()} { filter: none !important; }
+${on(sel(['#duel #lifepoints1[data-dbte-lp~="low"]', '#duel #lifepoints2[data-dbte-lp~="low"]', '#duel #lifepoints1[data-dbte-lp~="zero"]', '#duel #lifepoints2[data-dbte-lp~="zero"]']), 'before')} { background-image: var(--dbtc-u5) !important; animation: dbtc-gb-blink 0.7s steps(1, end) infinite; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; box-shadow: 3px 3px 0 ${alpha(ink, 0.35)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${ink} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${pale} !important; border-radius: 0 !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${flat()} !important; border-radius: 0 !important; box-shadow: inset 0 0 0 2px ${dark} !important; }

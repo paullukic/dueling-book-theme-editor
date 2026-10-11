@@ -91,8 +91,6 @@ const scene = (t) => {
 <clipPath id="dbtefx-eds-top"><rect x="0" y="${wy}" width="1600" height="${3 * p}"/></clipPath>
 </defs>
 <style>@keyframes dbtefx-eds-pop { 0% { transform: scale(0.2); opacity: 0; } 6% { transform: scale(1.25); opacity: 1; } 10%, 55% { transform: scale(1); opacity: 1; } 60%, 100% { transform: scale(1); opacity: 0; } }
-@keyframes dbtefx-eds-lpa { 0%, 49.9% { opacity: 1; } 50%, 100% { opacity: 0; } }
-@keyframes dbtefx-eds-lpb { 0%, 49.9% { opacity: 0; } 50%, 100% { opacity: 1; } }
 @keyframes dbtefx-eds-lunge { 0%, 8%, 100% { transform: translateY(0); } 3% { transform: translateY(-24px); } }</style>
 <rect width="1600" height="900" fill="${t.bg}"/>
 <ellipse cx="1150" cy="420" rx="900" ry="560" fill="url(#dbtefx-eds-glow)"/>
@@ -100,7 +98,6 @@ const scene = (t) => {
 <path d="${grid}" stroke="${t.success}" stroke-opacity="0.22" stroke-width="1.5"/>
 <!--mid-->
 <g shape-rendering="crispEdges" opacity="0.18">
-${lpPanel(92, 'OPPONENT')}<g style="animation: dbtefx-eds-lpa 10s steps(1, end) infinite;">${lpDigits(92, '8000')}</g><g style="animation: dbtefx-eds-lpb 10s steps(1, end) infinite;">${lpDigits(92, '6500')}</g>
 <rect x="${bx - A}" y="${by - A}" width="${bw + 2 * A}" height="${bh + 2 * A}" fill="${ink}"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="url(#dbtefx-eds-brick)"/>${slots}${faceDown(1, 0)}${faceDown(3, 1)}${faceDown(0, 1)}
 <g style="animation: dbtefx-eds-lunge 5s steps(2, end) infinite;">${ours}</g>
 ${lpPanel(584, 'YOU')}${lpDigits(584, '8000')}
