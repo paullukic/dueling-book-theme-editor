@@ -90,7 +90,7 @@ ${sel(['#chats .chat .chat_top span'])} { color: ${ink} !important; text-shadow:
 ${SEL.chat} { background: var(--dbtc-u0), linear-gradient(180deg, ${glass}, ${mix(t.bg, '#000000', 0.2)}) !important; box-shadow: inset 1px 0 0 ${silverDeep}, inset -1px 0 0 ${silverDeep}, inset 0 -1px 0 ${silverDeep} !important; }
 
 /* Duel: black LP header bars with the blue LP tag; silver phase chips, the active one in the cursor frame. */
-${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important; background-color: ${ink} !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${mix(blue, t.bg, 0.55)}, 0 0 0 4px ${alpha(silver, 0.6)}, 0 3px 8px -2px #000000 !important; }
+${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${mix(blue, t.bg, 0.55)}, 0 0 0 4px ${alpha(silver, 0.6)}, 0 3px 8px -2px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: ${gloss(1.6)}, linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: ${gloss(1.6)}, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }

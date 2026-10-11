@@ -1801,3 +1801,117 @@ textarea.field {
 .gallery-request a {
   color: var(--gold);
 }
+
+/* Life points style picker: each style drawn on a copy of DuelingBook's LP
+   markup (155x30 stage px, same geometry as DuelingBook's own CSS). */
+.lp-styles {
+  padding: 6px 0;
+}
+
+.lp-styles-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.lp-style-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.lp-style {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 7px 4px 5px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: #0c0e12;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lp-style:hover {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.lp-style[aria-pressed="true"] {
+  border-color: var(--cyan);
+  box-shadow: inset 0 0 0 1px var(--cyan);
+  color: var(--ink);
+}
+
+.lp-pv {
+  position: relative;
+  display: block;
+  width: 132px;
+  height: 26px;
+}
+
+.lp-pv .lifepoints {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 155px;
+  height: 30px;
+  font-family: Arial, sans-serif;
+  line-height: normal;
+  transform: scale(0.85);
+  transform-origin: 0 0;
+}
+
+.lp-pv .lifepoints *,
+.lp-pv .lifepoints *::before,
+.lp-pv .lifepoints *::after {
+  box-sizing: content-box;
+}
+
+.lp-pv .lifepoints > span,
+.lp-pv .black_bar {
+  position: absolute;
+  display: block;
+}
+
+.lp-pv .life_bar {
+  left: 2px;
+  top: 2px;
+  width: 151px;
+  height: 26px;
+  background: linear-gradient(90deg, #ffff00, #ff0000);
+  border-radius: 15px;
+}
+
+.lp-pv .black_bar {
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: #000000;
+}
+
+.lp-pv .life_border {
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 25px;
+  border: 3px solid #999999;
+  border-radius: 15px;
+}
+
+.lp-pv .life_txt {
+  left: 75px;
+  top: 3.5px;
+  width: 73px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: right;
+  white-space: nowrap;
+}

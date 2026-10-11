@@ -6,6 +6,7 @@ import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme
 import { cleanAliases, fitBytes } from './chatCommands.js';
 import { isHex } from './color.js';
 import { MAX_FAVOURITES, MAX_RECENT, cleanIds } from './favourites.js';
+import { DEFAULT_LP_STYLE, LP_STYLE_IDS } from '../features/lp/index.js';
 
 export const CUSTOM_SLOTS = 5;
 
@@ -49,6 +50,7 @@ export const DEFAULTS = {
   cardTextSize: 0, // 0 = DuelingBook default
   cardTextFont: 'original',
   readingTextScale: 1, // chat, logs and bulletin; 1 = DuelingBook default
+  duelChatOpacity: 1, // duel screen chat panel background; 1 = solid (DuelingBook default)
   psctEnabled: false,
   psctColors: DEFAULT_PSCT_COLORS,
   psctLineBreaks: false, // OCG style: new line after each sentence and condition
@@ -100,6 +102,8 @@ export const DEFAULTS = {
   notesEnabled: false,
   trackerEnabled: false,
   trackerAutoClear: true,
+  lpStyle: DEFAULT_LP_STYLE, // 'theme' = the theme's own life points (or DuelingBook's)
+  lpEffects: false, // damage, heal, low and zero glows on the life points
 
   // Chat
   chatMuted: [],
@@ -192,6 +196,7 @@ const RANGES = {
   animationSpeed: [1, 4],
   themeRadius: [0, 16],
   readingTextScale: [0.85, 1.6],
+  duelChatOpacity: [0.3, 1],
   themeBackdrop: [0, 1],
 };
 
@@ -201,6 +206,7 @@ const ONE_OF = {
   themeFont: FONTS.map((f) => f.id),
   cardTextFont: CARD_TEXT_FONTS.map((f) => f.id),
   themePreset: PRESETS.map((p) => p.id),
+  lpStyle: LP_STYLE_IDS,
 };
 
 const isPlainObject = (v) => !!v && typeof v === 'object' && !Array.isArray(v);

@@ -11,11 +11,13 @@ import {
   MenuColorsEffect,
   PsctEffect,
   ReadingTextEffect,
+  DuelChatEffect,
   SmallerMenuEffect,
 } from '../features/look';
 import { AlertsEffect, AnimationSpeedEffect, ShortcutsEffect, SkipIntroEffect } from '../features/duel';
 import { ChatEffect } from '../features/chat';
 import ThemeEffect from '../features/theme/ThemeEffect';
+import LifePointsEffect from '../features/lp/LifePointsEffect';
 import { panelVars } from '../features/theme/css';
 import ReconnectNotice from '../features/reconnect';
 import ChatCommandsEffect from '../features/chatCommands';
@@ -129,10 +131,12 @@ const App = ({ shadowRoot }) => {
   return (
     <div className="dbte" style={panelStyle || undefined}>
       <ThemeEffect />
+      <LifePointsEffect />
       <DarkModeEffect />
       <PsctEffect />
       <CardTextSizeEffect />
       <ReadingTextEffect />
+      <DuelChatEffect />
       <SmallerMenuEffect />
       <MenuColorsEffect />
       <BackgroundEffect />

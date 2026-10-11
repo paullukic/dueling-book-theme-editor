@@ -161,6 +161,5 @@ ${popCss(popPrimary, popSecondary)}
 /* Player name strips: dark plate, ivory name. */
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { background: linear-gradient(160deg, ${t.raised}, ${t.bg}) !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000 !important; }
-${sel(['#duel #lifepoints1 .life_txt'])} { color: ${t.bg} !important; text-shadow: 0 0 2px ${ivory}, 0 0 4px ${ivory}, 0 0 8px ${ivory} !important; }
 `;
 };

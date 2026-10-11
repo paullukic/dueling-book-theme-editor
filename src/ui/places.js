@@ -318,6 +318,15 @@ export const PLACES = [
     parent: 'lifePoints',
     ...duel,
   },
+  { id: 'duelChat', label: 'Duel chat', keywords: 'chat panel duel screen', ...duel },
+  {
+    id: 'duelChatOpacity',
+    label: 'Chat and card text background',
+    desc: 'How solid the chat panel and the card text box on the duel screen are. Lower lets the field and theme show through; the text stays fully readable.',
+    keywords: 'transparent transparency opacity see through chat duel panel background card text effect description preview',
+    parent: 'duelChat',
+    ...duel,
+  },
   { id: 'speed', label: 'Speed', keywords: 'faster quick', ...duel },
   {
     id: 'skipIntro',

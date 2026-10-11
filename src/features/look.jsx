@@ -37,6 +37,23 @@ export const CardTextSizeEffect = () => {
   return null;
 };
 
+// The duel screen's chat panel and card text box: a see-through background, text untouched.
+// Wins over theme chrome (same weight plus #content) so every theme honours it.
+export const duelChatCss = (alpha) => {
+  const pct = Math.round(alpha * 100);
+  return `html body #content #duel .cout_txt, html body #content #duel #preview_txt {
+  background-color: color-mix(in srgb, var(--dbt-surface, #ffffff) ${pct}%, transparent) !important;
+  background-image: none !important;
+  backdrop-filter: blur(${Math.round((1 - alpha) * 6)}px);
+}`;
+};
+
+export const DuelChatEffect = () => {
+  const { duelChatOpacity } = useSettings();
+  useStyle('dbte-duel-chat', duelChatOpacity < 1 ? duelChatCss(duelChatOpacity) : null);
+  return null;
+};
+
 export const ReadingTextEffect = () => {
   const { readingTextScale } = useSettings();
   useStyle('dbte-reading-text', readingTextScale !== 1 ? readingTextCss(readingTextScale) : null);

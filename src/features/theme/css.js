@@ -19,6 +19,19 @@ const textOn = (hex) => (contrast(hex, '#ffffff') >= contrast(hex, '#111111') ? 
 export const isLightTheme = (tokens) => luminance(tokens.surface) > 0.4;
 export const fieldEdgeMix = (tokens) => (isLightTheme(tokens) ? 0.55 : 0.4);
 
+// Life point numerals: the number sits over the coloured fill and the empty
+// trough alike, so it carries its own crisp ink outline. The number is the
+// theme's own text colour when that is light (Game Boy green, parchment
+// white...), else white; the outline is the theme's darkest ink (never black
+// on light themes). Number against outline stays at 7:1 or more.
+export const LP_NUM_CONTRAST = 7;
+export const lpInk = (t) => {
+  const num = luminance(t.text) > 0.55 ? t.text : '#ffffff';
+  const ink = isLightTheme(t) ? mix(t.text, '#000000', 0.2) : mix(t.bg, '#000000', 0.65);
+  if (contrast(num, ink) >= LP_NUM_CONTRAST) return { num, ink };
+  return { num: '#ffffff', ink: isLightTheme(t) ? mix(t.text, '#000000', 0.5) : '#050505' };
+};
+
 // Light themes only (dark themes never see it): DuelingBook's own art assumes
 // a dark page, so its veils, white labels and grey watermarks turn to mush on
 // paper. Same "html body" weight as the chrome sheets, which come later and win.
@@ -38,9 +51,8 @@ html body #yugioh_logo img, html body #db_logo_bottom, html body #db_logo_top { 
 /* Duel: side colours deepen into the ink, never into black. */
 html body #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 70%, var(--dbt-text)), var(--dbt-self)) !important; }
 html body #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-text)), var(--dbt-opp)) !important; }
-/* An ink trough under the bar, so white numerals read whatever the life left. */
+/* An ink trough under the bar, so the numerals read whatever the life left. */
 html body #duel .lifepoints .black_bar { background-color: color-mix(in srgb, var(--dbt-text) 82%, var(--dbt-surface)) !important; }
-html body #duel .lifepoints .life_txt { color: var(--dbt-raised) !important; text-shadow: 0 1px 2px var(--dbt-text) !important; }
 `;
 
 // Name colours in user lists (following, admins, adjudicators): each role gets
@@ -102,8 +114,11 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
   --dbt-link-hover: var(--dbt-accent);
   --dbt-skin-cover: 0;
   --dbt-shadow: 0 16px 34px -18px rgba(0, 0, 0, 0.7);`;
+  const lp = lpInk(tokens);
   return `:root {
 ${lines.join('\n')}
+  --dbt-lp-num: ${lp.num};
+  --dbt-lp-ink: ${lp.ink};
   --dbt-bg-rgb: ${r}, ${g}, ${b};
   --dbt-self-text: ${textOn(tokens.self)};
   --dbt-opp-text: ${textOn(tokens.opp)};
@@ -518,7 +533,14 @@ html #duel .lifepoints .life_border { border-color: var(--dbt-border) !important
 html #duel .lifepoints .black_bar { background-color: var(--dbt-bg) !important; }
 html #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 55%, black), var(--dbt-self)) !important; }
 html #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 55%, black), var(--dbt-opp)) !important; }
-html #duel .lifepoints .life_txt { color: var(--dbt-text) !important; text-shadow: 0 1px 2px var(--dbt-halo) !important; }
+/* The number: one crisp ink outline over fill and trough alike (two ids, so
+   it wins over every theme's chrome; the life point styles outrank it). */
+html body #duel #lifepoints1 .life_txt, html body #duel #lifepoints2 .life_txt {
+  color: var(--dbt-lp-num) !important; -webkit-text-fill-color: currentColor !important; background: none !important; -webkit-text-stroke: 0 !important;
+  text-shadow: 1px 0 0 var(--dbt-lp-ink), -1px 0 0 var(--dbt-lp-ink), 0 1px 0 var(--dbt-lp-ink), 0 -1px 0 var(--dbt-lp-ink),
+    1px 1px 0 var(--dbt-lp-ink), -1px 1px 0 var(--dbt-lp-ink), 1px -1px 0 var(--dbt-lp-ink), -1px -1px 0 var(--dbt-lp-ink),
+    0 2px 3px color-mix(in srgb, var(--dbt-lp-ink) 65%, transparent) !important;
+}
 
 /* Phase buttons: dim ring, side colour when active */
 html #duel .phase .background { background: var(--dbt-border) !important; }

@@ -8,6 +8,7 @@ import { Disclosure, Group, SliderRow, ToggleRow } from './controls';
 import ThemeTab from './ThemeTab';
 import AliasEditor from './AliasEditor';
 import ShortcutEditor from './ShortcutEditor';
+import LpStylePicker from './LpStylePicker';
 import DeckTools from '../features/deck';
 import { SupportNudge, SupportTab, WhatsNew } from './Support';
 import { SearchField, SearchResults, searchAll } from './GlobalSearch';
@@ -69,6 +70,21 @@ const DuelTab = () => {
             />
           </div>
         )}
+      </Group>
+      <Group place="lifePoints">
+        <LpStylePicker value={s.lpStyle} />
+        <ToggleRow place="lpEffects" checked={s.lpEffects} onChange={set('lpEffects')} />
+      </Group>
+      <Group place="duelChat">
+        <SliderRow
+          place="duelChatOpacity"
+          value={s.duelChatOpacity}
+          min={0.3}
+          max={1}
+          step={0.05}
+          format={(v) => (v === 1 ? 'Solid' : `${Math.round(v * 100)}%`)}
+          onChange={set('duelChatOpacity')}
+        />
       </Group>
       <Group place="speed">
         <ToggleRow
