@@ -6,13 +6,26 @@
 import { mix } from '../../../lib/color.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
+const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
+
+// Pop-up buttons: a dark crimson plate, claw-cut corners, a red-eye gem.
+const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
+const popButton = (t, label, W, H, primary) => {
+  const x = 8;
+  const w = W - 16;
+  const n = 10;
+  const d = `M${x + n} 10H${x + w}V${68 - n}L${x + w - n} 68H${x}V${10 + n}Z`;
+  const fill = primary ? mix(t.accent, t.bg, 0.55) : mix(t.raised, t.bg, 0.2);
+  const gem = primary ? `<path d="M${x + 22} 30l9 9-9 9-9-9z" fill="${t.accent}" stroke="${t.text}" stroke-opacity="0.6" stroke-width="1"/><path d="M${x + 22} 33q-2 6 0 12q2-6 0-12z" fill="#000000"/>` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(fill, t.text, 0.12)}"/><stop offset="0.3" stop-color="${fill}"/><stop offset="1" stop-color="${mix(fill, '#000000', 0.45)}"/></linearGradient></defs><path d="${d}" fill="url(#f)" stroke="${primary ? t.accent : mix(t.border, t.text, 0.25)}" stroke-width="2"/>${gem}<text x="${primary ? W / 2 + 8 : W / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${t.text}">${label}</text></svg>`;
+};
 
 // Compact data URI: only the characters CSS and URLs need escaped.
 const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
 
 // Overlapping dragon scales, very faint.
 const scales = (t, kit) =>
-  kit.svg(20, 12, `<path d="M0 12a10 10 0 0 1 20 0M-10 6a10 10 0 0 1 20 0M10 6a10 10 0 0 1 20 0" fill="none" stroke="${t.text}" stroke-opacity="0.07" stroke-width="0.8"/>`);
+  kit.svg(20, 12, `<path d="M0 12a10 10 0 0 1 20 0M-10 6a10 10 0 0 1 20 0M10 6a10 10 0 0 1 20 0" fill="#000000" fill-opacity="0.12" stroke="${t.text}" stroke-opacity="0.08" stroke-width="1"/>`);
 
 // Three claw gouges raked down from the top-right corner, molten inside.
 const claws = (t, kit) => {
@@ -44,13 +57,17 @@ const jaw = (t, kit) => {
 const eye = (t, kit) =>
   kit.svg(48, 48, `<defs><radialGradient id="i"><stop offset="0" stop-color="${t.accent2}"/><stop offset="0.55" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.55)}"/></radialGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.5)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient></defs><path d="M24 2L46 24L24 46L2 24Z" fill="url(#s)" stroke="${t.accent}" stroke-width="1.2"/><path d="M8 24Q24 10 40 24Q24 38 8 24Z" fill="url(#i)" stroke="${t.bg}" stroke-width="1"/><path d="M24 15.5Q21.6 24 24 32.5Q26.4 24 24 15.5Z" fill="${t.bg}"/><circle cx="21" cy="21" r="1.4" fill="#ffffff" fill-opacity="0.8"/>`);
 
-export default (t, kit) => {
+export default (tokens, kit) => {
+  // Crimson and graphite only: the second accent is a pale hot crimson, never orange.
+  const t = { ...tokens, accent2: mix(tokens.accent, tokens.text, 0.4) };
   const { sel, SEL, alpha } = kit;
   const pseudo = (list, p) => list.split(', ').map((s) => `${s}::${p}`).join(', ');
   // Gunmetal: dark plate with a cold highlight band across the upper third.
   const metal = `linear-gradient(180deg, ${mix(t.raised, t.text, 0.1)} 0%, ${t.raised} 22%, ${t.surface} 60%, ${mix(t.surface, t.bg, 0.6)} 100%)`;
   const heat = (o) => `radial-gradient(ellipse 70% 50% at 50% 115%, ${alpha(t.accent, o)}, transparent 70%)`;
   const steel = mix(t.border, t.text, 0.18);
+  const plate = t.surface;
+  const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
   const cut = (n) => `polygon(${n}px 0, 100% 0, 100% calc(100% - ${n}px), calc(100% - ${n}px) 100%, 0 100%, 0 ${n}px)`;
   const bevel = (n, c) => `linear-gradient(135deg, transparent calc(50% - 0.8px), ${c} 0 calc(50% + 0.8px), transparent 0) left top / ${n}px ${n}px no-repeat, linear-gradient(135deg, transparent calc(50% - 0.8px), ${c} 0 calc(50% + 0.8px), transparent 0) right bottom / ${n}px ${n}px no-repeat`;
 
@@ -79,8 +96,8 @@ ${SEL.tile} {
   box-shadow: inset 0 0 0 1px ${steel}, inset 0 1px 0 ${alpha(t.text, 0.16)}, inset 0 -2px 0 ${alpha(t.accent, 0.55)} !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; right: 4px; top: 2px; width: 44px; height: 34px; pointer-events: none;
-  background: var(--bd-claws) center / contain no-repeat; opacity: 0.85; transition: opacity 0.2s, filter 0.2s;
+  content: ""; position: absolute; right: 10px; top: 6px; width: 28px; height: 22px; pointer-events: none;
+  background: var(--bd-claws) center / contain no-repeat; opacity: 0.7; transition: opacity 0.2s, filter 0.2s;
 }
 ${SEL.tileHover} {
   background: ${bevel(12, t.accent2)}, ${heat(0.45)}, var(--bd-scales), ${metal} !important;
@@ -186,11 +203,14 @@ ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_t
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${metal} !important; border-radius: 0 !important; }
 ${sel(['#duel #watchers'])} { background: var(--bd-scales), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${steel}, inset 0 -2px 0 ${t.accent} !important; }
 
+/* Pop-up buttons: dark crimson plates with a red-eye gem. */
+${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(popButton(t, label, w, h, p))} !important; }`).join(' ')}
+
 /* Duel room panels: obsidian plates with a steel-to-ember rim and claw marks. */
 ${panels} { background: ${heat(0.1)}, var(--bd-scales), ${alpha(t.surface, 0.9)} !important; border-radius: 0 !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(160deg, ${steel}, ${t.border} 40%, ${t.border} 60%, ${t.accent} 90%, ${t.accent2}) !important; }
 ${pseudo(panels, 'after')} { content: ""; position: absolute; right: 8px; bottom: 6px; width: 50px; height: 38px; pointer-events: none; background: var(--bd-claws) center / contain no-repeat; transform: rotate(180deg); opacity: 0.85; }
-${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span'])} { text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.55)} !important; }
+${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.55)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${metal} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${heat(0.35)}, ${metal} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(t.accent, 0.25)} !important; }
@@ -207,7 +227,7 @@ ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000,
 
 /* Settings boxes: steel plates, their colour family as a heated top edge. */
 ${setPanels} { background-image: var(--bd-scales), linear-gradient(180deg, ${alpha(t.text, 0.05)}, transparent 40%) !important; border-radius: 0 !important; }
-${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t[tk]}) !important; border-color: color-mix(in srgb, ${t[tk]} 30%, ${steel}) !important; box-shadow: inset 0 3px 0 ${alpha(t[tk], 0.75)} !important; }`).join(' ')}
+${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t.accent}) !important; border-color: color-mix(in srgb, ${t.accent} 30%, ${steel}) !important; box-shadow: inset 0 3px 0 ${alpha(t.accent, 0.75)} !important; }`).join(' ')}
 
 /* Scrollbars: a red-hot rod. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(t.accent, t.bg, 0.4)}, ${t.accent2} 50%, ${mix(t.accent, t.bg, 0.4)}) !important; border-radius: 0 !important; }

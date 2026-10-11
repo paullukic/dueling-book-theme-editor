@@ -6,10 +6,12 @@
 import { mix } from '../../../lib/color.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
+const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 
 // Compact data URI: only the characters CSS and URLs need escaped.
 const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
 
+const ghostGrad = (t, id) => `<linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.opp}"/><stop offset="0.6" stop-color="${mix(t.opp, '#ffffff', 0.5)}"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0.1"/></linearGradient>`;
 const flameGrad = (t, id) => `<linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.55" stop-color="${t.accent2}"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0.2"/></linearGradient>`;
 
 // One flame tongue standing on (0,0), h tall, leaning by `lean`.
@@ -26,16 +28,30 @@ const flameRow = (t, kit) => {
   const hs = [9, 15, 7, 13, 10, 16, 8, 12];
   const outer = hs.map((h, i) => `<path transform="translate(${i * 10 + 5} 16)" d="${tongue(h, 5.6, i % 2 ? -2.5 : 3)}"/>`).join('');
   const inner = hs.map((h, i) => `<path transform="translate(${i * 10 + 5.5} 16)" d="${tongue(h * 0.55, 2.6, i % 2 ? -1.2 : 1.6)}"/>`).join('');
-  return kit.svg(80, 16, `<defs>${flameGrad(t, 'f')}</defs><g fill="url(#f)" fill-opacity="0.7">${outer}</g><g fill="${t.accent2}" fill-opacity="0.55">${inner}</g>`);
+  return kit.svg(80, 16, `<defs>${ghostGrad(t, 'f')}</defs><g fill="url(#f)" fill-opacity="0.7">${outer}</g><g fill="#ffffff" fill-opacity="0.35">${inner}</g>`);
 };
 
 // A wheel of fire around a phase button: tongues swept round the circle.
 const flameRing = (t, kit) => {
-  let s = '';
-  for (let i = 0; i < 18; i++) {
-    s += `<path transform="rotate(${i * 20} 50 50) translate(50 17)" d="${tongue(i % 3 === 0 ? 14 : i % 3 === 1 ? 10 : 12, 4.6, 6)}"/>`;
-  }
-  return kit.svg(100, 100, `<defs><linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.35"/><stop offset="0.5" stop-color="${t.accent2}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient></defs><g fill="url(#r)">${s}</g><circle cx="50" cy="50" r="34.5" fill="none" stroke="${t.accent2}" stroke-width="1.8"/>`);
+  let sc = '';
+  for (let i = 0; i < 20; i++) sc += `<path transform="rotate(${i * 18} 50 50)" d="M50 9L54.5 15L50 21L45.5 15Z"/>`;
+  return kit.svg(100, 100, `<g fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent2}" stroke-opacity="0.8" stroke-width="0.8" stroke-linejoin="round">${sc}</g><circle cx="50" cy="50" r="34.5" fill="none" stroke="${t.accent2}" stroke-width="1.6"/><circle cx="50" cy="9" r="5.5" fill="${t.danger}" stroke="${t.accent2}" stroke-width="1.2"/><path d="M50 5.2Q48.6 9 50 12.8Q51.4 9 50 5.2Z" fill="#000000"/>`);
+};
+
+// A snake coiled on itself: scaled body, head raised, one red slit eye.
+const coil = (t, kit) => {
+  const body = 'M8 30Q8 18 22 18Q36 18 36 26Q36 32 28 32Q20 32 20 26Q20 22 25 22';
+  return kit.svg(48, 36, `<defs><pattern id="s" width="4" height="5" patternUnits="userSpaceOnUse"><path d="M2 0L4 2.5L2 5L0 2.5Z" fill="none" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="0.5"/></pattern></defs><path d="${body}" fill="none" stroke="${mix(t.danger, t.bg, 0.35)}" stroke-width="6" stroke-linecap="round"/><path d="${body}" fill="none" stroke="url(#s)" stroke-width="6" stroke-linecap="round"/><path d="${body}" fill="none" stroke="${t.accent2}" stroke-opacity="0.7" stroke-width="0.6"/><path d="M8 30Q2 32 4 22Q6 12 14 10Q22 8 26 4L30 3Q32 5 30 8Q26 12 20 12Q12 14 10 22Z" fill="${mix(t.danger, t.bg, 0.3)}" stroke="${t.accent2}" stroke-width="0.8"/><path d="M27 4.5L32 1M28 6L33 6" stroke="${t.danger}" stroke-width="0.8"/><circle cx="26.5" cy="6" r="2" fill="${t.accent2}"/><path d="M26.5 4.6V7.4" stroke="#000000" stroke-width="0.6"/>`);
+};
+
+// Pop-up buttons: an ember plate, dark label, gold inset.
+const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
+const popButton = (t, label, W, H, primary) => {
+  const x = 8;
+  const w = W - 16;
+  const top = primary ? t.accent2 : t.raised;
+  const bot = primary ? t.accent : mix(t.raised, t.bg, 0.5);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><rect x="${x}" y="10" width="${w}" height="58" rx="10" fill="url(#f)" stroke="${primary ? mix(t.accent, t.bg, 0.4) : mix(t.border, t.accent2, 0.45)}" stroke-width="2"/><rect x="${x + 4}" y="14" width="${w - 8}" height="50" rx="7" fill="none" stroke="${primary ? mix(t.accent2, '#ffffff', 0.4) : t.accent2}" stroke-opacity="${primary ? 0.9 : 0.5}" stroke-width="1.4"/><text x="${W / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text></svg>`;
 };
 
 // A serpent: a sinuous gold body with a head at the right.
@@ -55,6 +71,8 @@ export default (t, kit) => {
   const charcoal = `linear-gradient(178deg, ${mix(t.raised, t.accent, 0.1)} 0%, ${t.surface} 55%, ${mix(t.surface, t.bg, 0.6)} 100%)`;
   const ember = (o) => `radial-gradient(ellipse 80% 55% at 50% 118%, ${alpha(t.accent, o)}, transparent 72%)`;
   const goldRim = mix(t.border, t.accent2, 0.45);
+  const plate = t.surface;
+  const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
   const flames = 'var(--se-flames) left bottom / 80px 16px repeat-x';
 
   const panels = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
@@ -69,6 +87,7 @@ export default (t, kit) => {
 html body {
   --se-scales: ${svgUrl(scales(t, kit))};
   --se-flames: ${svgUrl(flameRow(t, kit))};
+  --se-coil: ${svgUrl(coil(t, kit))};
   --se-serpent: ${svgUrl(serpent(t, kit))};
 }
 
@@ -80,9 +99,8 @@ ${SEL.tile} {
   box-shadow: inset 0 0 0 1px ${goldRim}, inset 0 1px 0 ${alpha(t.accent2, 0.35)}, 0 14px 28px -14px #000000 !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: 2px; right: 2px; bottom: 1px; height: 16px; pointer-events: none;
-  background: ${flames}; opacity: 0.55; transition: opacity 0.25s;
-  border-radius: 0 0 5px 5px;
+  content: ""; position: absolute; right: 3px; bottom: 2px; width: 38px; height: 28px; pointer-events: none;
+  background: var(--se-coil) center / contain no-repeat; opacity: 0.85; transition: opacity 0.25s;
 }
 ${SEL.tileHover} {
   background: ${ember(0.55)}, var(--se-scales), ${charcoal} !important;
@@ -136,8 +154,8 @@ ${SEL.dialog} {
   box-shadow: 0 0 0 1px ${t.accent2}, inset 0 0 0 4px ${t.surface}, inset 0 0 0 5px ${alpha(t.accent2, 0.5)}, 0 0 50px -12px ${alpha(t.accent, 0.7)}, 0 24px 60px -18px #000000 !important;
 }
 ${pseudo(SEL.dialog, 'before')} {
-  content: ""; position: absolute; left: 6px; right: 6px; top: auto; bottom: 6px; width: auto; height: 20px; transform: none; pointer-events: none; z-index: 1;
-  background: var(--se-flames) left bottom / 100px 20px repeat-x; opacity: 0.8; border-radius: 0 0 6px 6px;
+  content: ""; position: absolute; left: 6px; right: 6px; top: auto; bottom: 5px; width: auto; height: 14px; transform: none; pointer-events: none; z-index: 1;
+  background: var(--se-flames) left bottom / 70px 14px repeat-x; opacity: 0.6; border-radius: 0 0 6px 6px;
 }
 ${pseudo(SEL.dialog, 'after')} { content: none; }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.65)} !important; }
@@ -173,7 +191,7 @@ ${sel(['#duel .phase .background .background_inner'])} { background: radial-grad
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
   content: ""; position: absolute; inset: -14px; pointer-events: none;
-  background: ${svgUrl(flameRing(t, kit))} center / 100% 100% no-repeat; opacity: 0.55;
+  background: ${svgUrl(flameRing(t, kit))} center / 100% 100% no-repeat; opacity: 0.85;
 }
 ${sel(['#duel .phase.active .background::after'])} { opacity: 1; filter: drop-shadow(0 0 4px ${t.accent}); }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.self, 0.85)} !important; }
@@ -183,11 +201,14 @@ ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_t
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${charcoal} !important; border-radius: 999px !important; }
 ${sel(['#duel #watchers'])} { background: var(--se-scales), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${goldRim}, inset 0 -2px 0 ${t.accent} !important; }
 
+/* Pop-up buttons: ember plates with a gold inset. */
+${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(popButton(t, label, w, h, p))} !important; }`).join(' ')}
+
 /* Duel room panels: scaled plates, a gold-to-ember rim, flames at the foot. */
 ${panels} { background: ${ember(0.18)}, var(--se-scales), ${alpha(t.surface, 0.9)} !important; border-radius: 10px !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(180deg, ${t.accent2}, ${goldRim} 30%, ${t.border} 60%, ${t.accent}) !important; }
-${pseudo(panels, 'after')} { content: ""; position: absolute; left: 5px; right: 5px; bottom: 5px; height: 14px; pointer-events: none; background: ${flames}; opacity: 0.6; border-radius: 0 0 6px 6px; }
-${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span'])} { text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.65)} !important; }
+${pseudo(panels, 'after')} { content: ""; position: absolute; right: 8px; bottom: 6px; width: 48px; height: 36px; pointer-events: none; background: var(--se-coil) center / contain no-repeat; opacity: 0.7; }
+${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.65)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${charcoal} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${ember(0.4)}, ${charcoal} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(t.accent2, 0.22)} !important; }
@@ -203,7 +224,7 @@ ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000,
 
 /* Settings boxes: scaled plates, family colour as the rim. */
 ${setPanels} { background-image: ${ember(0.15)}, var(--se-scales) !important; border-radius: 10px !important; }
-${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t[tk]}) !important; border-color: color-mix(in srgb, ${t[tk]} 38%, ${t.border}) !important; box-shadow: inset 0 1px 0 ${alpha(t.accent2, 0.35)}, 0 16px 30px -16px #000000 !important; }`).join(' ')}
+${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t.accent}) !important; border-color: color-mix(in srgb, ${t.accent} 38%, ${t.border}) !important; box-shadow: inset 0 1px 0 ${alpha(t.accent2, 0.35)}, 0 16px 30px -16px #000000 !important; }`).join(' ')}
 
 /* Scrollbars: a gold scale strip. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.accent}, ${t.accent2} 50%, ${t.accent}) !important; border-radius: 99px !important; }

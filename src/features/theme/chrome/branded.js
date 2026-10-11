@@ -1,18 +1,21 @@
-// Branded: Albaz's brand fire against Mirrorjade's ice. Charred oxblood stone
-// split by ember cracks, gold chains along the top edges and around every
+// Branded: Albaz's brand fire against Mirrorjade's ice, in the Despia
+// cathedral. Oxblood stone glazed with harlequin diamond glass, lancet-window
+// emblems, gold chains along the top edges and around every
 // phase, the brand flame-sigil in one corner and a cluster of ice shards in
 // the other; buttons burn when hovered and frost over when pressed.
 
 import { mix } from '../../../lib/color.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
+const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 
 // Compact data URI: only the characters CSS and URLs need escaped.
 const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
 
-// Ember cracks in charred stone.
+// The Despia cathedral's harlequin glass (Branded in Red): a lattice of
+// diamond panes, alternate panes faintly lit crimson and violet.
 const cracks = (t, kit) =>
-  kit.svg(90, 90, `<g fill="none" stroke="${t.accent}" stroke-linejoin="round"><path d="M0 22L14 26L22 18L38 24L46 40" stroke-opacity="0.16" stroke-width="1"/><path d="M58 90L62 74L76 68L80 56L90 52" stroke-opacity="0.13" stroke-width="1"/><path d="M22 18L26 8M62 74L50 70" stroke-opacity="0.1" stroke-width="0.7"/></g>`);
+  kit.svg(28, 40, `<path d="M14 0L28 20L14 40L0 20Z" fill="${t.accent}" fill-opacity="0.05"/><path d="M0 0L14 20L0 40M28 0L14 20L28 40" fill="none" stroke="${t.accent2}" stroke-opacity="0.1" stroke-width="0.8"/><path d="M14 0L28 20L14 40L0 20Z" fill="none" stroke="${t.accent2}" stroke-opacity="0.1" stroke-width="0.8"/>`);
 
 // A gold chain, one oval link and one edge-on link per tile.
 const chain = (t, kit) => {
@@ -20,13 +23,14 @@ const chain = (t, kit) => {
   return kit.svg(26, 10, `<rect x="1.5" y="1.5" width="15" height="7" rx="3.5" fill="none" stroke="${mix(gold, t.bg, 0.5)}" stroke-width="2.6"/><rect x="1.5" y="1.5" width="15" height="7" rx="3.5" fill="none" stroke="${gold}" stroke-width="1.4"/><rect x="13" y="3.6" width="13" height="2.8" rx="1.4" fill="${gold}" stroke="${mix(gold, t.bg, 0.55)}" stroke-width="0.6"/><path d="M4 3h9" stroke="${t.text}" stroke-opacity="0.5" stroke-width="0.6"/>`);
 };
 
-// The brand: a gold flame sigil with a red heart and two swept horns.
+// The emblem: a gothic lancet window (the Despia cathedral) with diamond
+// panes in crimson, set in gold.
 const sigil = (t, kit) =>
-  kit.svg(44, 52, `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.warning}"/><stop offset="1" stop-color="${mix(t.accent2, t.accent, 0.4)}"/></linearGradient></defs><path d="M22 2C27 13 36 18 32 33C30 42 25 49 22 50C19 49 14 42 12 33C8 18 17 13 22 2Z" fill="url(#g)" stroke="${t.bg}" stroke-width="1.2"/><path d="M22 18C25 25 28 29 26 37C25 41 23 44 22 44C21 44 19 41 18 37C16 29 19 25 22 18Z" fill="${t.accent}"/><path d="M12 30C5 27 3 20 6 13M32 30C39 27 41 20 38 13" fill="none" stroke="${t.accent2}" stroke-width="2" stroke-linecap="round"/>`);
+  kit.svg(28, 40, `<path d="M3 39V16Q3 6 14 1Q25 6 25 16V39Z" fill="${mix(t.accent, t.bg, 0.4)}" stroke="${t.accent2}" stroke-width="2"/><path d="M6 36L14 26L22 36M6 26L14 16L22 26M14 6L22 16M14 6L6 16M14 16V36" fill="none" stroke="${t.accent2}" stroke-width="1"/><path d="M14 26L18 31L14 36L10 31Z" fill="${t.accent}"/>`);
 
 // Mirrorjade's ice: a cluster of shards growing out of a corner.
 const ice = (t, kit) => {
-  const shard = (pts, o) => `<path d="M${pts}Z" fill="${t.text}" fill-opacity="${o}" stroke="#ffffff" stroke-opacity="0.85" stroke-width="0.7" stroke-linejoin="round"/>`;
+  const shard = (pts, o) => `<path d="M${pts}Z" fill="${mix(t.text, t.accent, 0.7)}" fill-opacity="${o}" stroke="${mix('#ffffff', t.accent, 0.7)}" stroke-opacity="0.85" stroke-width="0.7" stroke-linejoin="round"/>`;
   return kit.svg(64, 50, `${shard('64 50L22 30L40 50', 0.42)}${shard('64 50L36 8L52 50', 0.65)}${shard('64 50L54 2L64 40', 0.55)}${shard('64 50L6 40L30 50', 0.32)}<path d="M36 8L46 50M54 2L58 50M22 30L46 50" stroke="${t.opp}" stroke-opacity="0.6" stroke-width="0.5"/>`);
 };
 
@@ -52,6 +56,16 @@ const shackle = (t, kit) => {
   return kit.svg(48, 24, `<rect x="2" y="7" width="12" height="10" rx="5" fill="none" stroke="${gold}" stroke-width="2.2"/><rect x="12" y="10.6" width="11" height="2.8" rx="1.4" fill="${gold}"/><rect x="21" y="8" width="13" height="8" rx="4" fill="none" stroke="${gold}" stroke-width="2"/><rect x="32" y="10.6" width="10" height="2.8" rx="1.4" fill="${gold}"/><path d="M40 4h6v16h-6" fill="none" stroke="${gold}" stroke-width="2.4"/>`);
 };
 
+// Pop-up buttons: an oxblood plate bound by a gold chain-link border.
+const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
+const popButton = (t, label, W, H, primary) => {
+  const gold = mix(t.accent2, t.bg, 0.1);
+  const x = 8;
+  const w = W - 16;
+  const fill = primary ? mix(t.accent, t.bg, 0.45) : mix(t.raised, t.bg, 0.2);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(fill, t.accent2, 0.15)}"/><stop offset="1" stop-color="${mix(fill, '#000000', 0.4)}"/></linearGradient><pattern id="c" width="26" height="10" patternUnits="userSpaceOnUse" x="${x}"><rect x="1.5" y="1.5" width="12" height="7" rx="3.5" fill="none" stroke="${gold}" stroke-width="1.6"/><rect x="12" y="3.6" width="13" height="2.8" rx="1.4" fill="${gold}"/></pattern></defs><rect x="${x}" y="10" width="${w}" height="58" rx="3" fill="url(#f)" stroke="${gold}" stroke-opacity="0.6" stroke-width="1.2"/><path d="M${x} 16V62M${x + w} 16V62" stroke="${gold}" stroke-width="2.4"/><rect x="${x}" y="5" width="${w}" height="10" fill="url(#c)"/><rect x="${x}" y="63" width="${w}" height="10" fill="url(#c)"/><text x="${W / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${t.text}">${label}</text></svg>`;
+};
+
 export default (t, kit) => {
   const { sel, SEL, alpha } = kit;
   const pseudo = (list, p) => list.split(', ').map((s) => `${s}::${p}`).join(', ');
@@ -59,6 +73,8 @@ export default (t, kit) => {
   const fire = (o) => `radial-gradient(ellipse 80% 60% at 50% 120%, ${alpha(t.accent, o)}, ${alpha(t.accent2, o * 0.25)} 45%, transparent 75%)`;
   const gold = mix(t.accent2, t.bg, 0.15);
   const rim = mix(t.border, t.accent2, 0.3);
+  const plate = t.surface;
+  const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
   const chains = 'var(--br-chain) left top / 26px 10px repeat-x';
 
   const panels = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
@@ -80,13 +96,13 @@ html body {
 
 /* Menu tiles: charred stone, brand sigil on the left, ice on the right, fire beneath. */
 ${SEL.tile} {
-  background: var(--br-sigil) 7px 5px / 15px 18px no-repeat, var(--br-ice) right bottom / 40px 31px no-repeat, ${fire(0.3)}, var(--br-cracks), ${stone} !important;
+  background: var(--br-sigil) 6px 6px / 14px 20px no-repeat, var(--br-ice) right bottom / 40px 31px no-repeat, ${fire(0.3)}, var(--br-cracks), ${stone} !important;
   border-color: transparent !important;
   border-radius: 3px !important;
   box-shadow: inset 0 0 0 1px ${rim}, inset 0 2px 0 ${alpha(t.accent2, 0.55)}, inset 0 -2px 0 ${alpha(t.accent, 0.5)}, 0 14px 28px -14px #000000 !important;
 }
 ${SEL.tileHover} {
-  background: var(--br-sigil) 7px 5px / 15px 18px no-repeat, var(--br-ice) right bottom / 40px 31px no-repeat, ${fire(0.6)}, var(--br-cracks), ${stone} !important;
+  background: var(--br-sigil) 6px 6px / 14px 20px no-repeat, var(--br-ice) right bottom / 40px 31px no-repeat, ${fire(0.6)}, var(--br-cracks), ${stone} !important;
   box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 -3px 0 ${t.accent}, inset 0 -16px 20px -14px ${alpha(t.warning, 0.6)}, 0 0 22px -6px ${alpha(t.accent, 0.9)} !important;
 }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${stone} !important; box-shadow: inset 0 3px 10px #000000, inset 0 0 0 1px ${t.text} !important; }
@@ -142,7 +158,7 @@ ${pseudo(SEL.dialog, 'before')} {
 }
 ${pseudo(SEL.dialog, 'after')} {
   content: ""; position: absolute; left: 8px; right: 6px; top: 12px; bottom: 6px; width: auto; height: auto; transform: none; pointer-events: none;
-  background: var(--br-sigil) left top / 30px 36px no-repeat, var(--br-ice) right bottom / 64px 50px no-repeat;
+  background: var(--br-sigil) left top / 22px 32px no-repeat, var(--br-ice) right bottom / 64px 50px no-repeat;
 }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.6)} !important; }
 
@@ -182,11 +198,14 @@ ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_t
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${stone} !important; border-radius: 2px !important; }
 ${sel(['#duel #watchers'])} { background: var(--br-cracks), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${rim}, inset 0 2px 0 ${gold} !important; }
 
+/* Pop-up buttons: oxblood plates bound in gold chain. */
+${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(popButton(t, label, w, h, p))} !important; }`).join(' ')}
+
 /* Duel room panels: chained stone, fire at the foot, ice in the corner. */
 ${panels} { background: ${fire(0.16)}, var(--br-cracks), ${alpha(t.surface, 0.9)} !important; border-radius: 4px !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(180deg, ${gold}, ${t.border} 30%, ${t.border} 70%, ${t.accent}) !important; }
 ${pseudo(panels, 'after')} { content: ""; position: absolute; inset: 4px; pointer-events: none; background: var(--br-ice) right bottom / 48px 38px no-repeat; }
-${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span'])} { text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.6)} !important; }
+${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.6)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${stone} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${fire(0.4)}, ${stone} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(t.accent2, 0.22)} !important; }
@@ -203,7 +222,7 @@ ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000,
 
 /* Settings boxes: stone tablets, family colour as the rim, a chain over the top. */
 ${setPanels} { background-image: ${chains}, var(--br-cracks) !important; border-radius: 4px !important; }
-${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t[tk]}) !important; border-color: color-mix(in srgb, ${t[tk]} 35%, ${t.border}) !important; box-shadow: 0 16px 30px -16px #000000 !important; }`).join(' ')}
+${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 90%, ${t.accent}) !important; border-color: color-mix(in srgb, ${t.accent} 35%, ${t.border}) !important; box-shadow: 0 16px 30px -16px #000000 !important; }`).join(' ')}
 
 /* Scrollbars: a gold chain bar. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
