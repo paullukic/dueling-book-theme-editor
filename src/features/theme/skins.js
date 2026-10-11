@@ -81,24 +81,6 @@ const motifs = {
   dots: (t, color = t.accent, o = 0.1) => svg(26, 26, `<circle cx="13" cy="13" r="1.6" fill="${color}" fill-opacity="${o}"/>`),
   diagonal: (t) => svg(12, 12, `<path d="M0 12L12 0" stroke="${t.text}" stroke-opacity="0.035"/>`),
   halftone: (t) => svg(8, 8, `<circle cx="4" cy="4" r="1.3" fill="${t.text}" fill-opacity="0.08"/>`),
-  skyline: (t) => {
-    // A night city, Skyscraper-style: buildings with lit windows.
-    const widths = [70, 46, 90, 54, 120, 64, 84, 40, 110, 58, 76, 96, 50, 88];
-    const heights = [160, 230, 190, 300, 210, 260, 170, 330, 240, 180, 280, 200, 250, 150];
-    let x = 0;
-    let s = '';
-    widths.forEach((w, i) => {
-      const h = heights[i];
-      s += `<rect x="${x}" y="${400 - h}" width="${w - 4}" height="${h}" fill="${t.surface}"/>`;
-      for (let wy = 400 - h + 12; wy < 392; wy += 16) {
-        for (let wx = x + 8; wx < x + w - 12; wx += 12) {
-          if ((wx * 7 + wy * 3 + i) % 5 < 2) s += `<rect x="${wx}" y="${wy}" width="5" height="7" fill="${t.warning}" fill-opacity="0.7"/>`;
-        }
-      }
-      x += w;
-    });
-    return svg(x, 400, s);
-  },
   brush: (t, color) =>
     svg(240, 20, `<path d="M4 12q30-9 70-4t82 0q40-5 80 2q-38 7-80 4t-82 2q-40 3-70-4z" fill="${color}"/>`),
   feathers: (t) =>
@@ -191,7 +173,7 @@ ${dialogSel()} { background-image: ${url(motifs.grain(t))} !important; box-shado
 
   // Elemental HERO: the Skyscraper city at night, comic halftone, a heroic glint.
   hero: (t) =>
-    layer(`${url(motifs.skyline(t))} bottom center / auto 42vh repeat-x, ${url(motifs.stars(t, t.text, 30))}, linear-gradient(180deg, ${mix(t.bg, t.opp, 0.18)} 0%, ${t.bg} 55%, ${mix(t.bg, t.accent2, 0.1)} 100%)`) +
+    layer(`${url(motifs.stars(t, t.text, 30))}, linear-gradient(180deg, ${mix(t.bg, t.opp, 0.18)} 0%, ${t.bg} 55%, ${mix(t.bg, t.accent2, 0.1)} 100%)`) +
     `${TILE} { background-image: ${url(motifs.halftone(t))} !important; }
 ${TILE_HOVER} { background-image: linear-gradient(115deg, transparent 30%, ${alpha(t.text, 0.16)} 45%, transparent 60%), ${url(motifs.halftone(t))} !important; box-shadow: inset 0 0 0 2px ${t.accent}, 4px 4px 0 ${t.accent2} !important; }
 ${dialogSel()} { box-shadow: 0 0 0 3px ${t.text}, 8px 8px 0 ${t.accent2}, 0 24px 60px -20px rgba(0, 0, 0, 0.8) !important; background-image: ${url(motifs.halftone(t))} !important; }` +
@@ -300,6 +282,24 @@ ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 24px -4px ${alpha(t
 ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 20px -6px ${t.accent} !important; }` +
     dialogCorners(t.accent) +
     fieldGlow(t, 3),
+
+  // Toon: halftone pop over ink navy; the scene draws Toon World.
+  toon: (t) =>
+    layer(`${url(motifs.halftone(t))}, radial-gradient(ellipse at 75% 20%, ${alpha(t.accent, 0.14)}, transparent 55%), radial-gradient(ellipse at 20% 110%, ${alpha(t.accent2, 0.12)}, transparent 60%)`) +
+    `${TILE_HOVER} { box-shadow: inset 0 0 0 2px ${t.text}, 4px 4px 0 ${t.accent2} !important; }` +
+    fieldGlow(t, 2),
+
+  // Kewl Tune: club lighting; the scene draws the stage.
+  'kewl-tune': (t) =>
+    layer(`radial-gradient(ellipse at 80% 10%, ${alpha(t.accent, 0.18)}, transparent 50%), radial-gradient(ellipse at 10% 100%, ${alpha(t.accent2, 0.14)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+
+  // Cyber Dragon: cold chrome sheen; the scene draws the serpent.
+  'cyber-dragon': (t) =>
+    layer(`linear-gradient(115deg, transparent 30%, ${alpha(t.text, 0.04)} 45%, transparent 60%), radial-gradient(ellipse at 75% 30%, ${alpha(t.accent, 0.12)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
 
   divine: (t) =>
     layer(`radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +

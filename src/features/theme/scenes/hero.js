@@ -1,112 +1,149 @@
 import { mix } from '../../../lib/color.js';
 import { anim, glow, H, n1, rng } from './kit.js';
 
-// Elemental HERO: searchlights over the Skyscraper city, the HERO signal in
-// the sky and a caped hero on the rooftop; apartment lights come and go.
+// Elemental HERO: the Skyscraper city at night. Searchlights sweep, a rooftop
+// lamp throws the HERO H onto the clouds, a finned hero keeps watch, and
+// apartment lights switch on and off across the skyline.
 const hero = (t) => {
   const rand = rng(5);
   const beam = (x, delay) =>
     `<g style="transform-origin: ${x}px ${H}px; animation: dbtefx-sway 11s ease-in-out ${-delay}s infinite;"><path d="M${x - 10} ${H}L${x - 140} -40L${x + 140} -40L${x + 10} ${H}Z" fill="url(#dbtefx-hr-beam)"/></g>`;
 
-  // The signal: a rooftop searchlight throws the H onto the clouds.
-  const [cx, cy, r] = [1300, 178, 96];
-  const [lx, ly, aim] = [1414, 462, -110];
+  // The signal: the beam cone ends in a pool of light on the cloud base.
+  const [cx, cy, prx, pry, tilt] = [1312, 168, 114, 66, -8];
+  const [lx, ly, aim] = [1414, 462, -112];
   const [sx, sy] = [n1(lx + 20 * Math.cos((aim * Math.PI) / 180)), n1(ly + 20 * Math.sin((aim * Math.PI) / 180))];
-  const len = Math.hypot(cx - sx, cy - sy);
-  const [px, py] = [-(cy - sy) / len, (cx - sx) / len];
-  const signalBeam = `M${n1(sx - px * 15)} ${n1(sy - py * 15)}L${n1(cx - px * r)} ${n1(cy - py * r)}L${n1(cx + px * r)} ${n1(cy + py * r)}L${n1(sx + px * 15)} ${n1(sy + py * 15)}Z`;
+  const tr = (tilt * Math.PI) / 180;
+  const [ax, ay] = [n1(cx - prx * Math.cos(tr)), n1(cy - prx * Math.sin(tr))];
+  const [bx, by] = [n1(cx + prx * Math.cos(tr)), n1(cy + prx * Math.sin(tr))];
+  const signalBeam = `M${sx - 12} ${sy}L${ax} ${ay}L${bx} ${by}L${sx + 12} ${sy}Z`;
   let rays = '';
-  for (let i = 0; i < 16; i++) {
-    const a = (i / 16) * Math.PI * 2;
-    const reach = i % 2 ? 250 : 380;
-    rays += `M${n1(cx + Math.cos(a - 0.05) * r)} ${n1(cy + Math.sin(a - 0.05) * r)}L${n1(cx + Math.cos(a) * reach)} ${n1(cy + Math.sin(a) * reach)}L${n1(cx + Math.cos(a + 0.05) * r)} ${n1(cy + Math.sin(a + 0.05) * r)}Z`;
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2;
+    rays += `M${cx} ${cy}L${n1(cx + Math.cos(a - 0.04) * 330)} ${n1(cy + Math.sin(a - 0.04) * 170)}L${n1(cx + Math.cos(a + 0.04) * 330)} ${n1(cy + Math.sin(a + 0.04) * 170)}Z`;
   }
-
-  // Towers: dark, close, rim-lit. Lit windows are warm; some apartments switch.
-  const facade = mix(t.bg, '#000000', 0.35);
-  const towers = [
-    { x: 40, top: 410, w: 236, crown: 'water', rim: 'right' },
-    { x: 262, top: 620, w: 150, rim: 'right' },
-    { x: 1330, top: 500, w: 300, crown: 'roof', rim: 'left' },
-    { x: 1190, top: 660, w: 150, rim: 'left' },
-  ];
-  let dark = '';
-  let lit = '';
-  let moving = '';
-  let movers = 0;
-  const kinds = ['lit', 'lit', 'lit', 'tube', 'tv'];
-  towers.forEach(({ x, top, w }, ti) => {
-    for (let wy = top + 26; wy < H - 10; wy += 34) {
-      for (let wx = x + 16; wx < x + w - 26; wx += 26) {
-        if (wx < 0) continue;
-        const roll = rand();
-        const rect = `x="${n1(wx)}" y="${n1(wy)}" width="14" height="19"`;
-        if (roll < 0.3) lit += `<rect ${rect}/>`;
-        else if (roll < 0.42 && movers < 28 && ti !== 3) {
-          const kind = kinds[movers % kinds.length];
-          const dur = n1(30 + rand() * 40);
-          const delay = rand() * dur;
-          const fill = kind === 'tv' ? t.link : t.warning;
-          dark += `<rect ${rect}/>`;
-          moving += `<rect ${rect} fill="${fill}" style="animation: dbtefx-hr-${kind} ${dur}s linear ${n1(-delay)}s infinite;"/>`;
-          movers += 1;
-        } else dark += `<rect ${rect}/>`;
-      }
-    }
-  });
-
-  const shapes = towers
-    .map(({ x, top, w, crown, rim }) => {
-      const rx = rim === 'left' ? x : x + w - 3;
-      let s = `<rect x="${x}" y="${top}" width="${w}" height="${H - top + 10}" fill="${facade}"/><rect x="${x}" y="${top}" width="${w}" height="6" fill="${t.border}" fill-opacity="0.8"/><rect x="${rx}" y="${top}" width="3" height="${H - top}" fill="${rim === 'left' ? t.accent : t.opp}" fill-opacity="0.3"/>`;
-      for (let ly = top + 128; ly < H; ly += 136) s += `<rect x="${x}" y="${ly}" width="${w}" height="3" fill="${t.border}" fill-opacity="0.35"/>`;
-      if (crown === 'water')
-        s += `<g fill="${facade}"><path d="M${x + 40} ${top}v-34h8v34zM${x + 92} ${top}v-34h8v34z"/><path d="M${x + 30} ${top - 34}h80v-46q-40-16-80 0z"/><path d="M${x + 28} ${top - 80}l42-20 42 20z"/><rect x="${x + 170}" y="${top - 70}" width="4" height="70"/></g><circle cx="${x + 172}" cy="${top - 74}" r="4" fill="${t.accent2}" ${anim('hr-air', 2.4, 0)}/>`;
-      if (crown === 'roof')
-        s += `<path d="M${x + 60} ${top}v-14h${w - 60}v14z" fill="${facade}"/><path d="M${lx - 16} ${top - 14}L${lx - 6} ${ly + 10}H${lx + 6}L${lx + 16} ${top - 14}z" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><g transform="translate(${lx} ${ly}) rotate(${aim})"><rect x="-21" y="-14" width="8" height="28" rx="2" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><rect x="-14" y="-22" width="30" height="44" rx="4" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><ellipse cx="17" cy="0" rx="5" ry="20" fill="${mix(t.accent, '#ffffff', 0.75)}"/></g>`;
-      return s;
-    })
+  const puff = (x, y, rx, ry, o) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="url(#dbtefx-hr-cloud)" fill-opacity="${o}"/>`;
+  const cloudBank = [
+    [1160, 150, 220, 70, 0.9],
+    [1330, 120, 260, 80, 0.95],
+    [1500, 160, 200, 70, 0.9],
+    [1260, 200, 240, 50, 0.8],
+    [1100, 120, 160, 50, 0.5],
+  ]
+    .map((p) => puff(...p))
     .join('');
 
-  // A caped hero, fists on hips, watches from the right tower's roof.
+  // The city: windows are two patterns (dim grid, scattered lit) so every
+  // building costs three shapes; a few apartments switch with a short fade.
+  const cell = [12, 16];
+  let litTile = '';
+  for (let c = 0; c < 7; c++) for (let r = 0; r < 9; r++) if (rand() < 0.27) litTile += `<rect x="${c * 12 + 3}" y="${r * 16 + 4}" width="5" height="7"/>`;
+  let switches = '';
+  let switching = 0;
+  const switcher = (x, y, w, h) => {
+    if (switching >= 22) return;
+    const dur = n1(9 + rand() * 6);
+    const fill = switching === 7 ? t.link : t.warning;
+    switches += `<rect x="${n1(x)}" y="${n1(y)}" width="${n1(w)}" height="${n1(h)}" fill="${fill}" style="animation: dbtefx-hr-${switching === 7 ? 'tv' : 'sw'} ${dur}s linear ${n1(-rand() * dur)}s infinite;"/>`;
+    switching += 1;
+  };
+  const building = (x, top, w, tone, scale, crown, sw) => {
+    const [gx, gy] = [cell[0] * scale, cell[1] * scale];
+    const x0 = Math.ceil((x + 5) / gx) * gx;
+    const x1 = Math.floor((x + w - 5) / gx) * gx;
+    const y0 = Math.ceil((top + 8) / gy) * gy;
+    const id = scale === 1 ? '' : scale === 1.6 ? '-m' : '-n';
+    let s = `<rect x="${n1(x)}" y="${n1(top)}" width="${n1(w)}" height="${n1(H - top + 10)}" fill="${tone}"/>`;
+    const rx = n1(x + w / 2);
+    if (crown === 'water') s += `<path d="M${rx - 18} ${top}v-14h4v14zM${rx + 14} ${top}v-14h4v14zM${rx - 22} ${top - 14}h44v-22q-22-8-44 0z" fill="${tone}"/><path d="M${rx - 24} ${top - 36}l24-10 24 10z" fill="${tone}"/>`;
+    if (crown === 'mast') s += `<rect x="${rx - 2}" y="${top - 70}" width="4" height="70" fill="${tone}"/><circle cx="${rx}" cy="${top - 72}" r="3" fill="${t.accent2}" ${anim('hr-air', 2.6, rand() * 2)}/>`;
+    if (crown === 'setback') s += `<rect x="${n1(x + w * 0.18)}" y="${top - 40}" width="${n1(w * 0.64)}" height="40" fill="${tone}"/><rect x="${n1(x + w * 0.34)}" y="${top - 64}" width="${n1(w * 0.32)}" height="24" fill="${tone}"/>`;
+    if (crown === 'spire') s += `<path d="M${n1(x + w * 0.15)} ${top}V${top - 30}H${n1(x + w * 0.3)}V${top - 56}H${n1(x + w * 0.42)}L${rx} ${top - 130}L${n1(x + w * 0.58)} ${top - 56}H${n1(x + w * 0.7)}V${top - 30}H${n1(x + w * 0.85)}V${top}Z" fill="${tone}"/>`;
+    if (crown === 'slant') s += `<path d="M${n1(x)} ${top}L${n1(x + w)} ${top - 34}V${top}Z" fill="${tone}"/>`;
+    if (x1 > x0) {
+      const win = `x="${n1(x0)}" y="${n1(y0)}" width="${n1(x1 - x0)}" height="${n1(H - y0)}"`;
+      s += `<rect ${win} fill="url(#dbtefx-hr-grid${id})"/><rect ${win} fill="url(#dbtefx-hr-lit${id})"/>`;
+      for (let k = 0; k < sw; k++) {
+        const c = Math.floor(rand() * ((x1 - x0) / gx));
+        const r = 1 + Math.floor(rand() * 6);
+        switcher(x0 + c * gx + 3 * scale, y0 + r * gy + 4 * scale, 5 * scale, 7 * scale);
+      }
+    }
+    return s;
+  };
+
+  const crowns = ['flat', 'water', 'setback', 'flat', 'slant', 'mast', 'flat', 'spire', 'water', 'flat', 'setback'];
+  let back = '';
+  for (let x = -20, i = 0; x < 1620; i++) {
+    const w = 54 + rand() * 66;
+    back += building(x, n1(486 + rand() * 80), w, mix(t.bg, t.surface, 0.75), 1, crowns[i % crowns.length], i % 4 === 0 ? 1 : 0);
+    x += w + 2;
+  }
+  let middle = '';
+  for (let x = -40, i = 0; x < 1640; i++) {
+    const w = 80 + rand() * 80;
+    middle += building(x, n1(640 + rand() * 110), w, mix(t.bg, t.surface, 0.35), 1.6, crowns[(i + 4) % crowns.length], i % 2);
+    x += w + 24 + rand() * 60;
+  }
+
+  // Foreground towers: darkest, rim-lit; the right one carries the lamp.
+  const facade = mix(t.bg, '#000000', 0.35);
+  const front = [
+    [40, 410, 236, 'water', t.opp, 268],
+    [262, 640, 150, 'flat', t.opp, 404],
+    [1330, 500, 300, 'flat', t.accent, 1330],
+    [1186, 670, 150, 'flat', t.accent, 1186],
+  ]
+    .map(([x, top, w, crown, rimColor, rimX]) => `${building(x, top, w, facade, 2.2, crown, 4)}<rect x="${rimX}" y="${top}" width="3" height="${H - top}" fill="${rimColor}" fill-opacity="0.3"/><rect x="${x}" y="${top}" width="${w}" height="5" fill="${t.border}" fill-opacity="0.8"/>`)
+    .join('');
+  const lamp = `<path d="M${lx - 16} 500L${lx - 6} ${ly + 10}H${lx + 6}L${lx + 16} 500z" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><g transform="translate(${lx} ${ly}) rotate(${aim})"><rect x="-21" y="-14" width="8" height="28" rx="2" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><rect x="-14" y="-22" width="30" height="44" rx="4" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><ellipse cx="17" cy="0" rx="5" ry="20" fill="${mix(t.accent, '#ffffff', 0.75)}"/></g>`;
+
+  // The hero: Neos-style swept head fin and pointed shoulder guards, cape in
+  // the wind, rim-lit by the lamp.
   const ink = mix(t.bg, '#000000', 0.55);
-  const figure = `<g transform="translate(1358 500)">
-<g style="transform-origin: -18px -117px; animation: dbtefx-hr-cape 5s ease-in-out infinite;"><path d="M-20 -117C-36 -100 -52 -70 -70 -30L-58 -34L-62 -18L-46 -26L-44 -12C-28 -50 -6 -90 20 -117Z" fill="${mix(t.accent2, t.bg, 0.3)}"/><path d="M-22 -108C-34 -88 -44 -62 -56 -36L-50 -38C-40 -64 -28 -90 -16 -112Z" fill="#000000" fill-opacity="0.3"/></g>
+  const figure = `<g transform="translate(1362 500)">
+<g style="transform-origin: -18px -117px; animation: dbtefx-hr-cape 4.5s ease-in-out infinite;"><path d="M-20 -117C-36 -100 -52 -70 -70 -30L-58 -34L-62 -18L-46 -26L-44 -12C-28 -50 -6 -90 20 -117Z" fill="${mix(t.accent2, t.bg, 0.3)}"/><path d="M-22 -108C-34 -88 -44 -62 -56 -36L-50 -38C-40 -64 -28 -90 -16 -112Z" fill="#000000" fill-opacity="0.3"/></g>
 <path fill-rule="evenodd" fill="${ink}" d="M-4 -127L4 -127L6 -123L22 -117Q28 -115 29 -108L37 -88Q37 -84 33 -82L20 -73L15 -68L18 -36L20 -4L25 0L11 0L9 -32L2 -58L-2 -58L-9 -32L-11 0L-25 0L-20 -4L-18 -36L-15 -68L-20 -73L-33 -82Q-37 -84 -37 -88L-29 -108Q-28 -115 -22 -117L-6 -123ZM20 -101L28 -89L18 -80L14 -88ZM-20 -101L-28 -89L-18 -80L-14 -88Z"/>
-<ellipse cx="0" cy="-136" rx="7.5" ry="9.5" fill="${ink}"/><path d="M-3 -142Q6 -150 15 -152Q7 -144 5 -133Z" fill="${ink}"/>
-<path d="M6 -123L22 -117Q28 -115 29 -108L37 -88M6 -144Q8 -136 5 -128" fill="none" stroke="${t.accent}" stroke-opacity="0.8" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M18 -118L34 -126L30 -110ZM-18 -118L-34 -126L-30 -110Z" fill="${ink}"/>
+<ellipse cx="0" cy="-136" rx="7.5" ry="9.5" fill="${ink}"/><path d="M-5 -140C-2 -152 8 -162 22 -167C13 -157 9 -146 7 -132Z" fill="${ink}"/>
+<path d="M6 -123L22 -117L34 -126M29 -108L37 -88M8 -140C10 -150 14 -160 22 -167" fill="none" stroke="${t.accent}" stroke-opacity="0.8" stroke-width="1.6" stroke-linejoin="round"/>
 </g>`;
 
-  // The H: two horned blades with barbs and a rising bar, slanted forward.
-  const glyph = `<g transform="translate(${cx} ${cy + 2}) skewX(-10) scale(0.92)" fill="${mix(t.bg, '#000000', 0.2)}" fill-opacity="0.9">
+  // The H, cast onto the cloud: two horned blades with barbs and a rising bar,
+  // squashed and tilted to lie on the cloud base.
+  const glyph = `<g transform="translate(${cx} ${cy}) rotate(${tilt}) scale(0.6 0.46) skewX(-10)" fill="${mix(t.bg, '#000000', 0.3)}" fill-opacity="0.72">
 <path d="M-78 -70C-52 -70 -32 -60 -28 -42L-26 44L-42 84L-54 44L-54 -2L-66 -12L-54 -18L-54 -34C-56 -52 -64 -62 -78 -70Z"/>
 <path d="M80 -78C54 -76 34 -64 30 -46L28 40L44 82L56 40L56 -4L68 -14L56 -20L56 -36C58 -56 66 -68 80 -78Z"/>
 <path d="M-28 6C0 -4 16 -10 30 -14L30 8C14 10 0 14 -28 26Z"/>
 </g>`;
 
-  return `<style>@keyframes dbtefx-hr-lit { 0%, 44% { opacity: 0; } 44.5%, 86% { opacity: 1; } 86.5%, 100% { opacity: 0; } }
-@keyframes dbtefx-hr-tube { 0%, 50% { opacity: 0; } 50.4% { opacity: 1; } 50.8% { opacity: 0.1; } 51.4%, 93% { opacity: 1; } 93.4%, 100% { opacity: 0; } }
-@keyframes dbtefx-hr-tv { 0%, 30% { opacity: 0; } 31% { opacity: 0.55; } 38% { opacity: 0.9; } 46% { opacity: 0.4; } 55% { opacity: 0.8; } 63% { opacity: 0.5; } 72% { opacity: 1; } 80% { opacity: 0.45; } 88% { opacity: 0.75; } 90%, 100% { opacity: 0; } }
+  return `<style>@keyframes dbtefx-hr-sw { 0%, 46% { opacity: 0; } 48%, 96% { opacity: 1; } 98%, 100% { opacity: 0; } }
+@keyframes dbtefx-hr-tv { 0%, 30% { opacity: 0; } 32% { opacity: 0.55; } 40% { opacity: 0.9; } 48% { opacity: 0.4; } 56% { opacity: 0.8; } 64% { opacity: 0.5; } 72% { opacity: 1; } 80% { opacity: 0.45; } 88% { opacity: 0.75; } 90%, 100% { opacity: 0; } }
 @keyframes dbtefx-hr-air { 0%, 100% { opacity: 0.15; } 6% { opacity: 1; } 18% { opacity: 0.15; } }
-@keyframes dbtefx-hr-cape { 0%, 100% { transform: rotate(0deg) scaleX(1); } 50% { transform: rotate(9deg) scaleX(1.12); } }</style>
+@keyframes dbtefx-hr-cape { 0%, 100% { transform: skewY(0deg) scaleX(1); } 50% { transform: skewY(-10deg) scaleX(1.14); } }
+@keyframes dbtefx-hr-wisp { 0% { transform: translateX(-160px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { transform: translateX(220px); opacity: 0; } }</style>
 <defs><linearGradient id="dbtefx-hr-beam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.32"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
-<linearGradient id="dbtefx-hr-sig" gradientUnits="userSpaceOnUse" x1="${sx}" y1="${sy}" x2="${cx}" y2="${cy}"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.6)}" stop-opacity="0.5"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.12"/></linearGradient>
-<radialGradient id="dbtefx-hr-disc"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.8)}"/><stop offset="0.8" stop-color="${mix(t.accent, '#ffffff', 0.55)}"/><stop offset="1" stop-color="${mix(t.accent, '#ffffff', 0.3)}"/></radialGradient>
-${glow('dbtefx-hr-halo', t.accent, 0.5, 0.5, 0.5, 0.45)}${glow('dbtefx-hr-cloud', mix(t.bg, t.opp, 0.15), 0.5, 0.5, 0.5, 0.75)}</defs>
+<linearGradient id="dbtefx-hr-sig" gradientUnits="userSpaceOnUse" x1="${sx}" y1="${sy}" x2="${cx}" y2="${cy}"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.6)}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.2"/></linearGradient>
+<radialGradient id="dbtefx-hr-pool"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.7)}" stop-opacity="0.95"/><stop offset="0.75" stop-color="${mix(t.accent, '#ffffff', 0.4)}" stop-opacity="0.75"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<pattern id="dbtefx-hr-grid" width="12" height="16" patternUnits="userSpaceOnUse"><rect x="3" y="4" width="5" height="7" fill="${mix(t.bg, t.surface, 0.3)}"/></pattern>
+<pattern id="dbtefx-hr-lit" width="84" height="144" patternUnits="userSpaceOnUse"><g fill="${t.warning}" fill-opacity="0.85">${litTile}</g></pattern>
+<pattern id="dbtefx-hr-grid-m" href="#dbtefx-hr-grid" patternTransform="scale(1.6)"/><pattern id="dbtefx-hr-lit-m" href="#dbtefx-hr-lit" patternTransform="scale(1.6)"/>
+<pattern id="dbtefx-hr-grid-n" href="#dbtefx-hr-grid" patternTransform="scale(2.2)"/><pattern id="dbtefx-hr-lit-n" href="#dbtefx-hr-lit" patternTransform="scale(2.2)"/>
+${glow('dbtefx-hr-halo', t.accent, 0.5, 0.5, 0.5, 0.4)}${glow('dbtefx-hr-cloud', mix(t.bg, t.opp, 0.22), 0.5, 0.5, 0.5, 0.9)}${glow('dbtefx-hr-wispg', mix(t.bg, t.opp, 0.3), 0.5, 0.5, 0.5, 0.85)}</defs>
 ${beam(330, 0)}${beam(1270, 5)}
 <!--mid-->
-<g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 140s linear infinite;"><path d="${rays}" fill="${t.accent}" fill-opacity="0.06"/></g>
-<circle cx="${cx}" cy="${cy}" r="${r * 2.8}" fill="url(#dbtefx-hr-halo)" ${anim('bloom', 6, 0, 'ease-in-out')}/>
-<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#dbtefx-hr-disc)" fill-opacity="0.92"/>
-<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${mix(t.accent, '#000000', 0.3)}" stroke-opacity="0.35" stroke-width="2"/>
+${cloudBank}
+<g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 160s linear infinite;"><path d="${rays}" fill="${t.accent}" fill-opacity="0.05"/></g>
+<ellipse cx="${cx}" cy="${cy}" rx="${prx * 2.3}" ry="${pry * 2.6}" fill="url(#dbtefx-hr-halo)" ${anim('bloom', 6, 0, 'ease-in-out')}/>
+<ellipse cx="${cx}" cy="${cy}" rx="${prx}" ry="${pry}" transform="rotate(${tilt} ${cx} ${cy})" fill="url(#dbtefx-hr-pool)"/>
 ${glyph}
-<g ${anim('drift', 26, 0, 'ease-in-out')}><ellipse cx="${cx - 30}" cy="${cy + 62}" rx="190" ry="22" fill="url(#dbtefx-hr-cloud)" fill-opacity="0.6"/><ellipse cx="${cx + 90}" cy="${cy - 52}" rx="140" ry="14" fill="url(#dbtefx-hr-cloud)" fill-opacity="0.6"/></g>
+<g style="animation: dbtefx-hr-wisp 26s linear infinite;"><ellipse cx="${cx - 40}" cy="${cy + 26}" rx="170" ry="16" fill="url(#dbtefx-hr-wispg)"/></g>
+<g style="animation: dbtefx-hr-wisp 34s linear -15s infinite;"><ellipse cx="${cx + 10}" cy="${cy - 22}" rx="130" ry="12" fill="url(#dbtefx-hr-wispg)"/></g>
 <!--near-->
+${back}${middle}
 <path d="${signalBeam}" fill="url(#dbtefx-hr-sig)"/>
-${shapes}
-<g fill="${mix(t.bg, t.surface, 0.5)}">${dark}</g>
-<g fill="${t.warning}" fill-opacity="0.85">${lit}</g>
-${moving}
+${front}${lamp}
+${switches}
 ${figure}`;
 };
 
