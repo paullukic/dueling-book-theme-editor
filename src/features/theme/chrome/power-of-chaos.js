@@ -1,6 +1,6 @@
 // power-of-chaos: the 2003 PC game's interface. Carved sandstone plaques
 // with embossed dark lettering (the title-screen menu), red enamel title
-// plates with a gold rim, glossy blue glass phase pills, a chunky LP plate
+// plates with a gold rim, blue capsule phase pills, a chunky LP plate
 // with a heart, and pop-ups drawn as the white comic speech bubbles the
 // rivals talk in. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
@@ -26,8 +26,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const hand = svg(36, 24, `<path d="M2 9h17l-3-5c-.6-1.2.6-2.4 1.8-1.7L27 8c1.6 1 2.6 2.6 2.6 4.5V17c0 2.8-2.3 5-5 5H13c-1.7 0-2.6-1-2.6-2.3 0-1 .6-1.8 1.4-2.1-1-.4-1.6-1.2-1.6-2.2 0-.9.5-1.7 1.3-2.1H2c-1.1 0-1.7-.7-1.7-1.6S.9 9 2 9z" fill="url(#g)" stroke="${mix(gold, t.bg, 0.6)}" stroke-width="1.3" stroke-linejoin="round"/><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.55)}"/><stop offset="1" stop-color="${gold}"/></linearGradient></defs><path d="M14 14.5h7M13.5 18.5h8" stroke="${mix(gold, t.bg, 0.55)}" stroke-width="1" stroke-linecap="round"/>`);
   // LP heart (the life gauge's badge).
   const heart = svg(60, 26, `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.6)}"/><stop offset="0.5" stop-color="${gold}"/><stop offset="0.55" stop-color="${mix(gold, t.accent, 0.35)}"/><stop offset="1" stop-color="${mix(gold, '#ffffff', 0.25)}"/></linearGradient></defs><path d="M12 23S1.5 16.4 1.5 9.8C1.5 6.7 3.8 4.5 6.5 4.5c2.4 0 4 1.4 5.5 3.3 1.5-1.9 3.1-3.3 5.5-3.3 2.7 0 5 2.2 5 5.3C22.5 16.4 12 23 12 23z" fill="${t.self}" stroke="${mix(t.self, '#000000', 0.55)}" stroke-width="1.5"/><path d="M5.5 8.5c.5-1.1 1.5-1.8 2.6-1.8" stroke="#ffffff" stroke-opacity="0.8" stroke-width="1.5" stroke-linecap="round" fill="none"/><text x="25" y="20.5" font-family="Arial Black, Arial, sans-serif" font-size="17" fill="url(#g)" stroke="${ink}" stroke-width="2.4" paint-order="stroke">LP</text>`);
-  // Chain-link mesh: the fence the phase pills hang on (Joey edition).
-  const mesh = svg(12, 12, `<path d="M0 6L6 0L12 6L6 12Z" fill="none" stroke="${mix(t.muted, '#ffffff', 0.3)}" stroke-opacity="0.55" stroke-width="1.3"/>`);
   // Speech-bubble tail for the pop-ups.
   const tail = svg(64, 44, `<path d="M62 0H20L6 42L42 0" fill="${paper}"/><path d="M62 1.5L42 1.5M20 1.5L6 42L42 1.5" fill="none" stroke="#000000" stroke-width="3.2" stroke-linejoin="round"/><path d="M2 0H64" stroke="${paper}" stroke-width="3"/>`);
 
@@ -42,12 +40,12 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const popBtn = (label, wide, primary) => {
     const w = wide ? 234.85 : 153.4;
     const bw = w - 12;
-    const fillTop = primary ? mix(blue, '#ffffff', 0.4) : sandLit;
-    const fillMid = primary ? blue : sand;
-    const fillBot = primary ? mix(blue, t.bg, 0.5) : mix(sand, sandDeep, 0.5);
-    const txt = primary ? '#ffffff' : ink;
-    const stroke = primary ? mix(blue, '#000000', 0.55) : mix(sandDeep, '#000000', 0.3);
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${fillTop}"/><stop offset="0.55" stop-color="${fillMid}"/><stop offset="1" stop-color="${fillBot}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="58.5" rx="${primary ? 29 : 6}" fill="url(#g)" stroke="${stroke}" stroke-width="3"/><rect x="${primary ? 22 : 12}" y="14" width="${bw - (primary ? 32 : 12)}" height="16" rx="${primary ? 8 : 3}" fill="#ffffff" fill-opacity="${primary ? 0.4 : 0.3}"/><text x="${w / 2}" y="41" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="25" fill="${txt}" ${primary ? `stroke="${mix(blue, t.bg, 0.6)}" stroke-width="3" paint-order="stroke"` : ''} letter-spacing="1">${label}</text></svg>`;
+    const fillTop = primary ? mix(paper, '#ffffff', 0.5) : sandLit;
+    const fillMid = primary ? paper : sand;
+    const fillBot = primary ? mix(paper, sand, 0.45) : mix(sand, sandDeep, 0.5);
+    const txt = ink;
+    const stroke = primary ? mix(umber, '#000000', 0.2) : mix(sandDeep, '#000000', 0.3);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${fillTop}"/><stop offset="0.55" stop-color="${fillMid}"/><stop offset="1" stop-color="${fillBot}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="58.5" rx="${primary ? 12 : 6}" fill="url(#g)" stroke="${stroke}" stroke-width="3"/><rect x="12" y="14" width="${bw - 12}" height="14" rx="4" fill="#ffffff" fill-opacity="0.3"/><rect x="10.5" y="14.5" width="${bw - 9}" height="49.5" rx="${primary ? 9 : 4}" fill="none" stroke="${mix(umber, sand, 0.3)}" stroke-opacity="0.6"/><text x="${w / 2}" y="41" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="25" fill="${txt}" letter-spacing="1">${label}</text></svg>`;
   };
   const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
   const popCss = [['ok_btn', 'OK', true, false], ['yes_btn', 'YES', true, false], ['no_btn', 'NO', false, false], ['cancel_btn', 'CANCEL', false, true]]
@@ -60,7 +58,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const labels = sel(['#content .arial_black2:not(.title_txt):not(.title1)', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   const bodyText = sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt']);
 
-  const vars = [grain, grid, hand, heart, tail, mesh].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [grain, grid, hand, heart, tail].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: carved sandstone plaques with embossed dark lettering; the gold hand points at the one under the cursor. */
@@ -89,21 +87,22 @@ ${SEL.chatTop} { background: ${plaque()} !important; box-shadow: ${bevel}, inset
 ${sel(['#chats .chat .chat_top span'])} { ${emboss} }
 ${SEL.chat} { background: ${panel} !important; outline: 3px solid ${sand} !important; outline-offset: 0 !important; box-shadow: 0 0 0 5px ${mix(sandDeep, '#000000', 0.3)}, 0 0 0 6px ${alpha(sandLit, 0.5)}, inset 0 0 0 2px ${ink} !important; }
 
-/* Duel: a stone LP plate with the heart badge; glass phase pills. */
+/* Duel: the heart-and-gold-LP plaque on a stone bar, a sky-blue gauge that turns red when low; blue capsule phase pills on stone. */
 ${SEL.life} { border-color: ${sandLit} !important; border-radius: 5px !important; box-shadow: 0 0 0 3px ${sand}, 0 0 0 5px ${mix(sandDeep, '#000000', 0.3)}, inset 0 0 0 1px ${ink}, 0 5px 10px -2px #000000 !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.45)}, ${mix(t.self, '#ffffff', 0.15)}) !important; }
+${SEL.lifeSelf}, 
+${SEL.lifeSelf}, ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(blue, t.bg, 0.15)}, ${mix(blue, t.bg, 0.45)}) !important; box-shadow: inset 0 3px 3px -1px ${alpha('#ffffff', 0.4)} !important; }
+${sel(['#duel .lifepoints[data-dbte-lp~="low"] .life_bar', '#duel .lifepoints[data-dbte-lp~="zero"] .life_bar'])} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.1)}, ${mix(t.self, t.bg, 0.45)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, '#ffffff', 0.15)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -64px; top: 2px; width: 60px; height: 26px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${mix(gold, '#ffffff', 0.45)} !important; text-shadow: 0 2px 0 ${ink}, 0 0 3px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: var(--dbtc-u5), linear-gradient(180deg, ${mix(t.muted, t.bg, 0.45)}, ${mix(t.muted, t.bg, 0.7)}) !important; border-radius: 14px !important; box-shadow: 0 0 0 2px ${sand}, 0 0 0 3px ${mix(sandDeep, '#000000', 0.4)}, 0 3px 6px -2px #000000 !important; }
+${SEL.phase} { background: linear-gradient(180deg, ${sand}, ${sandDeep}) !important; border-radius: 14px !important; box-shadow: inset 0 1px 0 ${alpha(sandLit, 0.8)}, 0 0 0 1px ${mix(sandDeep, '#000000', 0.45)}, 0 3px 6px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; border-radius: 12px !important; }
 ${sel(['#duel .phase .background', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { border-radius: 12px !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: transparent !important; border-radius: 12px !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(ellipse 60% 30% at 50% 22%, ${alpha('#ffffff', 0.55)}, transparent 70%), linear-gradient(180deg, ${mix(blue, '#ffffff', 0.25)}, ${mix(blue, t.bg, 0.55)}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(ellipse 60% 30% at 50% 22%, ${alpha('#ffffff', 0.6)}, transparent 70%), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.3)}, ${mix(t.self, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${gold}, 0 0 14px ${alpha(t.self, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(ellipse 60% 30% at 50% 22%, ${alpha('#ffffff', 0.6)}, transparent 70%), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.35)}, ${mix(t.opp, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${gold}, 0 0 14px ${alpha(t.opp, 0.85)}; }
-${sel(['#duel .phase span'])} { color: #ffffff !important; text-shadow: 0 0 2px ${mix(blue, t.bg, 0.7)}, 0 1px 2px #000000, 0 0 4px #000000 !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: linear-gradient(180deg, ${mix(blue, t.bg, 0.35)}, ${mix(blue, t.bg, 0.65)}) !important; box-shadow: inset 0 7px 5px -4px ${alpha('#ffffff', 0.45)}, inset 0 0 0 1px ${alpha('#000000', 0.4)} !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.3)}, ${mix(t.self, t.bg, 0.6)}) !important; box-shadow: inset 0 7px 5px -4px ${alpha('#ffffff', 0.45)}, 0 0 0 3px ${gold}, 0 0 14px ${alpha(gold, 0.8)} !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${mix(t.opp, t.bg, 0.15)}, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: inset 0 7px 5px -4px ${alpha('#ffffff', 0.45)}, 0 0 0 3px ${gold}, 0 0 14px ${alpha(gold, 0.8)} !important; }
+${sel(['#duel .phase span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${mix(t.text, '#ffffff', 0.5)} !important; text-shadow: 1px 0 0 ${ink}, -1px 0 0 ${ink}, 0 1px 0 ${ink}, 0 -1px 0 ${ink}, 0 2px 2px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${sandLit}, ${sandDeep}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(red, '#ffffff', 0.15)}, ${mix(red, t.bg, 0.45)}) !important; }
 ${SEL.duelLog} { background: ${panel} !important; box-shadow: ${stoneRim} !important; }

@@ -32,7 +32,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // LP chip: white pixel lettering on a navy rounded tab.
   const lpChip = svg(40, 22, `<rect x="3" y="3" width="36" height="18" rx="5" fill="#000000" fill-opacity="0.5"/><rect x="1" y="1" width="36" height="18" rx="5" fill="${navy}" stroke="${outline}" stroke-width="2"/><text x="19" y="15" text-anchor="middle" font-family="Verdana, Tahoma, sans-serif" font-weight="700" font-size="12" fill="#ffffff">LP</text>`);
-  const touch = (top, bot) => `linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 46%), var(--dbtc-u0), linear-gradient(180deg, ${top}, ${bot})`;
+  const touch = (top, bot) => `var(--dbtc-u0), linear-gradient(180deg, ${top}, ${bot})`;
+  const gloss = `inset 0 12px 8px -6px ${alpha('#ffffff', 0.28)}`;
   const pixelEdge = (c = outline) => `inset 0 0 0 2px ${alpha(c, 0.85)}, inset 0 0 0 3px ${alpha(ink, 0.6)}, 0 0 0 2px ${ink}, 4px 4px 0 0 ${alpha('#000000', 0.55)}`;
   const label = `color: #ffffff !important; text-shadow: 1px 0 0 ${ink}, -1px 0 0 ${ink}, 0 1px 0 ${ink}, 0 -1px 0 ${ink}, 2px 2px 0 ${ink} !important;`;
   const screen = `var(--dbtc-u0), var(--dbtc-u3), linear-gradient(180deg, ${mix(navy, t.accent2, 0.12)}, ${navy} 50%, ${mix(navy, t.opp, 0.2)})`;
@@ -60,11 +61,11 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   return `
 html body { ${vars} }
 /* Menu tiles: big rounded touch buttons with a light inner outline and a hard pixel shadow; the cursor is a pair of blinking orange pixel brackets. */
-${SEL.tile} { background: ${touch(btnUp, btn)} !important; border-color: ${ink} !important; border-radius: 12px !important; box-shadow: ${pixelEdge()} !important; }
+${SEL.tile} { background: ${touch(btnUp, btn)} !important; border-color: ${ink} !important; border-radius: 12px !important; box-shadow: ${gloss}, ${pixelEdge()} !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -7px; top: -7px; right: -7px; bottom: -7px; pointer-events: none; border-style: solid; border-color: transparent; border-width: 14px; border-image: var(--dbtc-u1) 14 / 14px stretch; opacity: 0; }
 ${on(SEL.tileHover, 'before')} { opacity: 1; animation: dbtc-wc-blink 0.8s steps(1) infinite; }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
-${SEL.tileHover} { background: ${touch(mix(btnUp, t.accent, 0.3), mix(btn, t.accent, 0.15))} !important; box-shadow: ${pixelEdge(mix(t.accent, '#ffffff', 0.5))}, 0 0 18px -2px ${alpha(t.accent, 0.7)} !important; }
+${SEL.tileHover} { background: ${touch(mix(btnUp, t.accent, 0.3), mix(btn, t.accent, 0.15))} !important; box-shadow: ${gloss}, ${pixelEdge(mix(t.accent, '#ffffff', 0.5))}, 0 0 18px -2px ${alpha(t.accent, 0.7)} !important; }
 ${SEL.tileLabel} { ${label} }
 @keyframes dbtc-wc-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tileHover, 'before')} { animation: none; } }
@@ -98,10 +99,10 @@ ${SEL.phase} { background: linear-gradient(180deg, ${mix(t.text, '#ffffff', 0.4)
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; border-radius: 8px !important; }
 ${sel(['#duel .phase .background', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { border-radius: 8px !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; border-radius: 8px !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.16)}, transparent 50%), linear-gradient(180deg, ${navy}, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.2)}, ${mix(t.self, t.bg, 0.3)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 12px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.2)}, ${mix(t.opp, t.bg, 0.3)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 12px ${alpha(t.opp, 0.8)}; }
-${sel(['#duel .phase span'])} { color: #ffffff !important; text-shadow: 2px 2px 0 ${ink} !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: linear-gradient(180deg, ${navy}, ${ink}) !important; box-shadow: inset 0 6px 5px -3px ${alpha('#ffffff', 0.18)} !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.25)}, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: inset 0 6px 5px -3px ${alpha('#ffffff', 0.35)}, 0 0 0 2px #ffffff, 0 0 12px ${alpha(t.self, 0.8)} !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, t.bg, 0.55)}) !important; box-shadow: inset 0 6px 5px -3px ${alpha('#ffffff', 0.35)}, 0 0 0 2px #ffffff, 0 0 12px ${alpha(t.opp, 0.8)} !important; }
+${sel(['#duel .phase span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${ink}, -1px 0 0 ${ink}, 0 1px 0 ${ink}, 0 -1px 0 ${ink}, 2px 2px 0 ${ink} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${outline} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 50%), linear-gradient(90deg, ${mix(pink, t.bg, 0.2)}, ${pink}) !important; }
 ${SEL.duelLog} { background: ${screen} !important; box-shadow: inset 0 0 0 2px ${shellDeep}, inset 0 0 0 4px ${ink} !important; }
