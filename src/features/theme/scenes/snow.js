@@ -53,21 +53,21 @@ const facetCrystal = (cx, cy, r) => {
 // Snow: still winter light. A pale aurora far off, one great cut-ice crystal
 // on the right turning very slowly, soft drifts in front.
 const snow = (t) => {
-  const c = facetCrystal(1220, 340, 225);
+  const c = facetCrystal(1600, 300, 200);
   return `<defs><linearGradient id="dbtefx-sn-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.75"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-sn-aurora" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0"/><stop offset="0.35" stop-color="${t.accent2}" stop-opacity="0.12"/><stop offset="0.7" stop-color="${t.accent}" stop-opacity="0.1"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient><filter id="dbtefx-sn-soft" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur stdDeviation="34"/></filter>
 <linearGradient id="dbtefx-sn-ice" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="0.45" stop-color="${t.accent2}" stop-opacity="0.18"/><stop offset="0.7" stop-color="${t.accent}" stop-opacity="0.2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.6"/></linearGradient></defs>
 <rect width="1600" height="900" fill="url(#dbtefx-sn-sky)"/>
 <path d="M-100 250Q300 120 760 210T1700 150V300Q1240 360 780 300T-100 380Z" fill="url(#dbtefx-sn-aurora)" filter="url(#dbtefx-sn-soft)" ${anim('drift', 40, 0, 'ease-in-out')}/>
 <!--mid-->
-<g style="transform-origin: 1220px 340px; animation: dbtefx-spin 360s linear infinite;" stroke-linejoin="round">
+<g style="transform-origin: 1600px 300px; animation: dbtefx-spin 360s linear infinite;" stroke-linejoin="round">
 <path d="${c.lit}" fill="url(#dbtefx-sn-ice)" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="1"/>
 <path d="${c.shade}" fill="${t.accent}" fill-opacity="0.08" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="1"/>
-<circle cx="1220" cy="340" r="10" fill="#ffffff" fill-opacity="0.7" stroke="${t.accent}" stroke-opacity="0.25"/>
+<circle cx="1600" cy="300" r="10" fill="#ffffff" fill-opacity="0.7" stroke="${t.accent}" stroke-opacity="0.25"/>
 </g>
 <!--near-->
-<path d="M0 790Q420 720 860 770T1600 740V900H0Z" fill="${t.raised}" fill-opacity="0.9"/>
-<path d="M0 790Q420 720 860 770T1600 740" fill="none" stroke="${t.border}" stroke-opacity="0.7" stroke-width="1.5"/>`;
+<path d="M0 828Q420 812 860 822T1600 816V900H0Z" fill="${t.raised}" fill-opacity="0.9"/>
+<path d="M0 828Q420 812 860 822T1600 816" fill="none" stroke="${t.border}" stroke-opacity="0.7" stroke-width="1.5"/>`;
 };
 
 export default snow;
