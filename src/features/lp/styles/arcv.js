@@ -15,7 +15,7 @@ const plate = (svg) =>
 <radialGradient id="g" cx=".45" cy=".35" r=".8"><stop offset="0" stop-color="#fff7a8"/><stop offset=".55" stop-color="#f2d24a"/><stop offset="1" stop-color="#c79a16"/></radialGradient>
 <linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset=".5" stop-color="#c8961c"/><stop offset="1" stop-color="#8a6210"/></linearGradient>
 <linearGradient id="c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8fdff"/><stop offset=".5" stop-color="#40c8e8"/><stop offset="1" stop-color="#1a6e9a"/></linearGradient>
-<linearGradient id="d" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5204" stop-opacity="0"/><stop offset=".35" stop-color="#7a5204" stop-opacity=".55"/><stop offset="1" stop-color="#7a5204" stop-opacity=".7"/></linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5204" stop-opacity="0"/><stop offset=".3" stop-color="#5a3a00" stop-opacity=".72"/><stop offset="1" stop-color="#5a3a00" stop-opacity=".85"/></linearGradient>
 </defs>
 <path d="M2 1H148Q155.5 1 155 8.5Q151 27.5 120 30H2Z" fill="url(#g)" stroke="#7a5608"/>
 <path d="M4 3H147.4Q153.2 3 152.8 8.6Q149 25.6 120 28H4Z" fill="none" stroke="url(#r)" stroke-width="1.2"/>

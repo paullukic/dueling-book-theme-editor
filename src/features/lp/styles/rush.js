@@ -33,7 +33,7 @@ ${k.border} { background: ${k.svgUrl(plate(k.svg))} 0 0 / 100% 100% border-box n
 ${k.border}::before {
   content: "" !important; ${k.box(17.5, 4.5, 133.6, 22)} mix-blend-mode: multiply;
   clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
-  background: linear-gradient(180deg, hsl(calc(${k.lp} * 105) 90% 80%), hsl(calc(${k.lp} * 105) 75% 55%));
+  background: linear-gradient(180deg, hsl(calc(${k.lp} * 105) 85% 62%), hsl(calc(${k.lp} * 105) 75% 38%));
 }
 ${k.border}::after {
   content: "" !important; ${k.box(27, 24.4, 120, 2)}

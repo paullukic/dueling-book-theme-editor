@@ -59,8 +59,9 @@ html body #yugioh_logo img, html body #db_logo_bottom, html body #db_logo_top { 
 /* Duel: side colours deepen into the ink, never into black. */
 html body #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 70%, var(--dbt-text)), var(--dbt-self)) !important; }
 html body #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-text)), var(--dbt-opp)) !important; }
-/* An ink trough under the bar, so the numerals read whatever the life left. */
-html body #duel .lifepoints .black_bar { background-color: color-mix(in srgb, var(--dbt-text) 82%, var(--dbt-surface)) !important; }
+/* A vellum trough under the bar: a deepened border tone, lighter than the fill
+   so lost life reads as empty; the numerals keep their ink outline over it. */
+html body #duel .lifepoints .black_bar { background-color: color-mix(in srgb, var(--dbt-border) 70%, var(--dbt-surface)) !important; }
 `;
 
 // Name colours in user lists (following, admins, adjudicators): each role gets
@@ -397,6 +398,8 @@ html #content .ui-slider-handle { background: var(--dbt-text) !important; border
 const menu = `
 /* Status feed and page title: DuelingBook writes white/cream text here, which
    vanishes on light themes; take the theme's ink instead. */
+/* The status feed reads on a soft scrim, so scene art behind it never fights the timestamps and Reply links. */
+html body #content #statuses { background: linear-gradient(90deg, transparent, rgba(var(--dbt-bg-rgb), 0.62) 4%, rgba(var(--dbt-bg-rgb), 0.62) 96%, transparent) !important; }
 html #content #statuses .username_txt { color: var(--dbt-accent) !important; text-shadow: none !important; }
 html #content #statuses .status_txt, html #content #statuses .status_txt span { color: var(--dbt-text) !important; text-shadow: none !important; }
 html #content #statuses .date_txt { color: var(--dbt-muted) !important; }
@@ -559,14 +562,22 @@ html body #duel #lifepoints1 .life_txt, html body #duel #lifepoints2 .life_txt {
 html:not([data-dbte-lpstyle]) body #duel #lifepoints1 .life_bar::before, html:not([data-dbte-lpstyle]) body #duel #lifepoints2 .life_bar::before {
   content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 92px; pointer-events: none;
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--dbt-lp-ink) 45%, transparent) 40%, color-mix(in srgb, var(--dbt-lp-ink) 62%, transparent));
+  /* A short fill sits right under the number: below 35% life the fade
+     thins out (gone at 20%), so the sliver keeps its colour. */
+  opacity: clamp(0, calc((var(--dbte-lp, 1) - 0.2) * 6.67), 1);
 }
-/* Low and zero: the frame and the fill go to the danger colour, the empty
+/* Low and zero: the frame goes to the danger colour inside an amber hairline
+   (so it stands apart even from an all-red chrome), the fill to danger, the empty
    track glows dark red with fine hazard lines, and the number is forced light
    on its ink outline, so low never reads like a healthy (red) side colour and
    never costs the number its contrast. */
-html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border { border-color: var(--dbt-danger) !important; border-image: none !important; }
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border {
+  border-color: var(--dbt-danger) !important; border-image: none !important;
+  box-shadow: 0 0 0 1px #ffb21e, inset 0 0 0 1px #ffb21e !important;
+}
+html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_bar::before { opacity: 0; }
 html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_bar {
-  background: repeating-linear-gradient(135deg, color-mix(in srgb, black 14%, transparent) 0 1.5px, transparent 1.5px 7px), linear-gradient(90deg, color-mix(in srgb, var(--dbt-danger) 55%, black), var(--dbt-danger)) !important;
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, black 14%, transparent) 0 1.5px, transparent 1.5px 7px), linear-gradient(90deg, var(--dbt-danger), color-mix(in srgb, var(--dbt-danger) 82%, white)) !important;
 }
 html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .black_bar {
   background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--dbt-danger) 18%, transparent) 0 1.5px, transparent 1.5px 7px), color-mix(in srgb, var(--dbt-danger) 16%, black) !important;

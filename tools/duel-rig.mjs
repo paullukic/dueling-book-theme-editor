@@ -95,7 +95,8 @@ const setLp = (side, lp, state) => {
   black.style.width = `${(Math.max(0, START_LP - lp) / START_LP) * FULL_BAR_PX}px`;
   const ratio = lifeRatio(black.style.width);
   box.style.setProperty(LP_VAR, ratio.toFixed(3));
-  const value = lpState(null, state === undefined ? lpLevel(lp, ratio) : state, lp >= WIDE_LP);
+  // No state given (undefined, null or ""): the level as watch.js computes it.
+  const value = lpState(null, state ? state : lpLevel(lp, ratio), lp >= WIDE_LP);
   if (value) box.setAttribute(STATE_ATTR, value);
   else box.removeAttribute(STATE_ATTR);
   // As watch.js does when a pulse starts: the hit ring takes the frame's radius.

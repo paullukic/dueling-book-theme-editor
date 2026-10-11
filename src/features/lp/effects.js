@@ -2,9 +2,9 @@
 // itself, so they trace the exact silhouette of whatever frame is drawn there
 // (a theme's rounded, square or chamfered border and its crest, or a style's
 // plate), kept tight (a lit rim, a short bloom) so they never blur into a slab.
-//   hit   a white-hot flash (the whole counter brightens), an amber-to-red rim
-//         and a ring that bursts outward from the frame (our ::after, the
-//         frame's own radius); unmistakable on any theme.
+//   hit   a short white-hot core flash into a red rim, and a red ring with a
+//         white hairline bursting outward from the frame (our ::after, the
+//         frame's own radius); unmistakable on any theme, gold frames too.
 //   heal  a green rim that swells and fades.
 //   low   an amber-to-red rim breathing slowly, a colour pair no side colour
 //         uses at rest.
@@ -30,18 +30,18 @@ ${k.when('hit')} { animation: dbte-lp-hit 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) b
 ${k.when('heal')} { animation: dbte-lp-heal 1.1s ease-out both !important; }
 ${k.when('hit')}::after {
   content: "" !important; position: absolute; left: 0; top: 0; width: 150px; height: 25px; pointer-events: none;
-  border: 3px solid #ffffff; border-radius: var(${LP_RADIUS_VAR}, 15px); box-sizing: content-box;
-  box-shadow: 0 0 6px ${amber}, inset 0 0 6px ${amber};
-  animation: dbte-lp-burst 0.45s cubic-bezier(0.1, 0.6, 0.3, 1) both;
+  border: 3px solid ${hit}; border-radius: var(${LP_RADIUS_VAR}, 15px); box-sizing: content-box;
+  box-shadow: inset 0 0 0 1px #ffffff, 0 0 0 1px #ffffff, 0 0 12px 4px ${hit};
+  animation: dbte-lp-burst 0.5s cubic-bezier(0.1, 0.6, 0.3, 1) both;
 }
 ${k.when('zero', 'life_txt')} { color: ${hit} !important; -webkit-text-fill-color: currentColor !important; }
 @keyframes dbte-lp-hit {
-  0% { filter: ${rim('#ffffff', amber, 1.5, 3.5, 1.9)}; }
-  14% { filter: ${rim(amber, hit, 1.5, 3.5, 1.4)}; }
+  0% { filter: ${rim('#ffffff', hit, 1, 5, 1.5)}; }
+  14% { filter: ${rim(hit, hit, 1.6, 6, 1.25)}; }
   45% { filter: ${rim(hit, hit, 1.2, 3, 1)}; }
   100% { filter: ${rim(hit, hit, 0, 0, 1)}; }
 }
-@keyframes dbte-lp-burst { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18, 1.6); } }
+@keyframes dbte-lp-burst { 0% { opacity: 1; transform: scale(1); } 45% { opacity: 1; transform: scale(1.07, 1.3); } 100% { opacity: 0; transform: scale(1.16, 1.6); } }
 @keyframes dbte-lp-heal {
   0% { filter: ${rim(heal, heal, 0, 0, 1)}; }
   30% { filter: ${rim(heal, heal, 1.5, 6, 1.15)}; }
