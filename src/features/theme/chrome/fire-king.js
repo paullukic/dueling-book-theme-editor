@@ -41,10 +41,17 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Nine-slice frame: a black band ringed in gold, gold bars across it like
   // Garunix's armour, ring medallions with turquoise gems at the corners.
-  let bars = '';
-  for (let i = 16; i <= 44; i += 7) bars += `M${i} 2V11M${i} 49V58M2 ${i}H11M49 ${i}H58`;
+  // Stepped greca: gold step pyramids on black, a turquoise inlay set in each.
+  let steps = '';
+  let inlay = '';
+  for (const x0 of [13, 30]) {
+    steps += `M${x0} 10.6V10H${x0 + 3}V7H${x0 + 6}V4H${x0 + 11}V7H${x0 + 14}V10H${x0 + 17}V10.6Z`;
+    inlay += `M${x0 + 7.4} 5.4h2.2v2.2h-2.2Z`;
+  }
+  const greca = `<path d="${steps}" fill="${gold}"/><path d="${inlay}" fill="${teal}"/><path d="M9 11.2H51" stroke="${goldLit}" stroke-width="1"/>`;
+  const band = ['', 'matrix(1 0 0 -1 0 60)', 'matrix(0 1 1 0 0 0)', 'matrix(0 1 -1 0 60 0)'].map((m) => (m ? `<g transform="${m}">${greca}</g>` : greca)).join('');
   const ring = (x, y) => `<circle cx="${x}" cy="${y}" r="7.5" fill="${ink}" stroke="${goldLit}" stroke-width="2.4"/><path d="M${x} ${y - 3}l3 3l-3 3l-3 -3Z" fill="${teal}"/>`;
-  const frameSvg = svg(60, 60, `<path d="M0 0H60V60H0ZM13 13V47H47V13Z" fill="${ink}" fill-rule="evenodd"/><path d="${bars}" stroke="${gold}" stroke-width="3"/><g fill="none" stroke="${goldLit}" stroke-width="1.2"><rect x="0.8" y="0.8" width="58.4" height="58.4"/><rect x="12.4" y="12.4" width="35.2" height="35.2"/></g>${ring(6.5, 6.5)}${ring(53.5, 6.5)}${ring(6.5, 53.5)}${ring(53.5, 53.5)}`);
+  const frameSvg = svg(60, 60, `<path d="M0 0H60V60H0ZM13 13V47H47V13Z" fill="${ink}" fill-rule="evenodd"/>${band}<rect x="0.8" y="0.8" width="58.4" height="58.4" fill="none" stroke="${goldLit}" stroke-width="1.2"/><rect x="12.6" y="12.6" width="34.8" height="34.8" fill="none" stroke="${teal}" stroke-width="1.4"/>${ring(6.5, 6.5)}${ring(53.5, 6.5)}${ring(6.5, 53.5)}${ring(53.5, 53.5)}`);
   const frame = (px) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u0) 20 / ${px}px round; box-sizing: border-box;`;
 
   // Plumage texture: rows of overlapping feather scallops.
@@ -79,6 +86,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
+  const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
   const vars = [frameSvg, crestTile, chart, crown, phaseRing, lifeCrest].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
@@ -87,13 +95,13 @@ html body { ${vars} }
 /* Menu tiles: crimson lacquer in a banded gold frame, the phoenix crest above. */
 ${SEL.tile} { background: ${glassBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 10px round !important; border-radius: 0 !important; box-shadow: 0 10px 24px -12px #000000, 0 0 18px -10px ${alpha(violet, 0.6)} !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 28px); top: -24px; width: 56px; height: 34px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
-${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
+${on(sel(['#main_menu .menu_btn.dbte-small-menu .content', '#main_menu #tourneys_btn .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: linear-gradient(0deg, ${alpha(silver, 0.12)}, transparent 60%), ${glassBg(0.18)} !important; box-shadow: 0 0 22px -4px ${alpha(silver, 0.7)}, 0 0 40px -12px ${alpha(violet, 0.9)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.95)} !important; }
 
 /* Buttons: gold plates with a turquoise underline. */
-${SEL.button} { background: ${plate} !important; border-color: ${silverDeep} !important; color: ${t.accentText} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.5)}, inset 0 -2px 0 ${teal}, 0 2px 6px -2px #000000 !important; }
-${SEL.buttonHover} { background: linear-gradient(180deg, #ffffff, ${silverLit} 40%, ${silver}) !important; border-color: ${teal} !important; box-shadow: inset 0 -2px 0 ${teal}, 0 0 12px -2px ${alpha(flame, 0.9)} !important; }
+${SEL.button}, ${sel(['#content #settings_content > div.button'])} { background: ${plate} !important; border-color: ${silverDeep} !important; color: ${t.accentText} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.5)}, inset 0 -2px 0 ${teal}, 0 2px 6px -2px #000000 !important; }
+${SEL.buttonHover}, ${sel(['#content #settings_content > div.button:hover'])} { background: linear-gradient(180deg, #ffffff, ${silverLit} 40%, ${silver}) !important; border-color: ${teal} !important; box-shadow: inset 0 -2px 0 ${teal}, 0 0 12px -2px ${alpha(flame, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${mix(silver, t.bg, 0.3)} !important; border-color: ${gold} !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.5)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(t.accentText, silver, 0.5)} !important; }
 
@@ -119,8 +127,8 @@ ${SEL.phase} { background: repeating-conic-gradient(from 0deg, ${gold} 0 12deg, 
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${silverDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${teal}, 0 0 14px ${alpha(teal, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${teal}, 0 0 14px ${alpha(teal, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${silverLit} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }
@@ -131,7 +139,7 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(glass, 0.8)}, ${alpha(t.bg, 0.88)}) !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${silverLit}, ${silver} 30%, ${silverDeep} 55%, ${silver} 80%, ${silverLit}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(14)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
+${sel(['#duel_room .format .format_txt', '#deck_constructor #search .title_txt'])} { background: linear-gradient(90deg, transparent 2%, ${glassDeep} 12% 88%, transparent 98%) !important; box-shadow: none !important; }
 ${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${glassDeep} !important; box-shadow: 0 0 0 0.35em ${glassDeep} !important; border-radius: 3px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(violet, 0.25)}, transparent 45%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(violet, 0.45)}, ${alpha(silver, 0.12)}) !important; }
@@ -141,8 +149,8 @@ ${deckPanels} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(glass,
 ${on(sel(['#deck_constructor #search .search_bg']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; ${frame(16)} }
 
 /* Settings panels. */
-${SEL.settingsPanel} { border-color: ${silver} !important; background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(glass, 0.88)}, ${alpha(t.bg, 0.92)}) !important; }
-${on(SEL.settingsPanel, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(14)} }
+${settingsPanels} { border-color: ${silver} !important; background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(glass, 0.88)}, ${alpha(t.bg, 0.92)}) !important; }
+${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(14)} }
 
 /* Titles: gold leaf with a crimson glow. */
 ${titles} { color: ${silverLit} !important; text-shadow: 0 0 2px ${t.bg}, 0 0 4px ${t.bg}, 0 2px 0 ${t.bg}, 0 0 16px ${alpha(violet, 0.75)} !important; }
@@ -152,7 +160,7 @@ ${SEL.field} { background-color: ${mix(t.bg, t.surface, 0.5)} !important; border
 ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid ${silver} !important; box-shadow: inset 0 2px 4px #000000, 0 0 10px ${alpha(violet, 0.8)} !important; }
 
 /* Scrollbars: gold rods. */
-${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${silverDeep}, ${silverLit}, ${silverDeep}) !important; border-radius: 2px !important; }
+${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(teal, t.bg, 0.4)}, ${mix(teal, '#ffffff', 0.3)}, ${mix(teal, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 
 /* Pop-up buttons in the theme material. */
 ${popCss}

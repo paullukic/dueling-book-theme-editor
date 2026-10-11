@@ -47,7 +47,7 @@ const fireKing = (t) => {
       const f = i / 7;
       const [px, py] = at(0.08 + 0.6 * f);
       const a = dir > 0 ? 158 + f * 32 : 22 - f * 32;
-      const l = 104 + f * 44;
+      const l = 92 + f * 36;
       tips += feather(px, py, a, l, 34);
       reds += feather(px, py, a, l * 0.76, 32);
     }
@@ -60,7 +60,7 @@ const fireKing = (t) => {
     return `<path d="${tips}" fill="url(#dbtefx-fk-teal)"/><path d="${reds}" fill="url(#dbtefx-fk-plume)"/><path d="${shafts}" stroke="${goldLit}" stroke-opacity="0.45" stroke-width="1.2"/><path d="${coverts}" fill="url(#dbtefx-fk-covert)" stroke="${crimsonDeep}" stroke-width="1"/><path d="${arm}" fill="none" stroke="${ink}" stroke-width="16" stroke-linecap="round"/><path d="${arm}" fill="none" stroke="${gold}" stroke-width="16" stroke-linecap="round" stroke-dasharray="7 9"/><circle cx="${wx}" cy="${wy}" r="13" fill="${ink}" stroke="${gold}" stroke-width="4"/><circle cx="${wx}" cy="${wy}" r="4.5" fill="${teal}"/>`;
   };
 
-  const [bx, by] = [1222, 440];
+  const [bx, by] = [1262, 440];
   // Long tail plumes hanging into the pyre.
   let tail = '';
   for (let i = 0; i < 7; i++) {
@@ -88,21 +88,43 @@ const fireKing = (t) => {
   // Body: banded black-and-gold collar on the neck, armoured chest, crimson breast.
   let collar = '';
   for (let i = 0; i < 4; i++) collar += `<path d="M${bx - 30 + i * 2} ${342 + i * 16}Q${bx} ${352 + i * 16} ${bx + 30 - i * 2} ${340 + i * 16}" fill="none" stroke="${i % 2 ? gold : ink}" stroke-width="9"/>`;
-  const body = `<path d="M${bx - 30} 336C${bx - 84} 384 ${bx - 82} 480 ${bx - 44} 532C${bx - 24} 556 ${bx + 24} 556 ${bx + 44} 532C${bx + 82} 480 ${bx + 84} 384 ${bx + 30} 336Z" fill="url(#dbtefx-fk-breast)"/>
+  // Breast plumage: rows of overlapping scale feathers, longer and tipped in turquoise toward the belly.
+  const torso = `M${bx - 30} 336C${bx - 84} 384 ${bx - 82} 480 ${bx - 44} 532C${bx - 24} 556 ${bx + 24} 556 ${bx + 44} 532C${bx + 82} 480 ${bx + 84} 384 ${bx + 30} 336Z`;
+  let upper = '';
+  let lower = '';
+  for (let row = 0; row < 11; row++) {
+    const y = 350 + row * 18;
+    const w = 20 + row * 1.2;
+    const h = 16 + row * 1.6;
+    const last = row > 7;
+    for (let x = bx - 90 + (row % 2) * (w / 2); x < bx + 90; x += w) {
+      const d = `M${n1(x - w / 2)} ${y}C${n1(x - w / 2)} ${n1(y + h)} ${n1(x + w / 2)} ${n1(y + h)} ${n1(x + w / 2)} ${y}Z`;
+      if (last) lower += d;
+      else upper += d;
+    }
+  }
+  // Flank feathers sweeping down over the hips.
+  let flank = '';
+  for (let i = 0; i < 4; i++) {
+    for (const side of [-1, 1]) {
+      const x0 = bx + side * (54 - i * 6);
+      flank += `<path d="${feather(x0, 430 + i * 22, 90 + side * (28 - i * 6), 96 - i * 8, 26)}" fill="url(#dbtefx-fk-plume)" stroke="${crimsonDeep}" stroke-width="1"/>`;
+    }
+  }
+  const body = `<clipPath id="dbtefx-fk-torso"><path d="${torso}"/></clipPath>${flank}<path d="${torso}" fill="${crimsonDeep}"/><g clip-path="url(#dbtefx-fk-torso)"><path d="${upper}" fill="url(#dbtefx-fk-covert)" stroke="${crimsonDeep}"/><path d="${lower}" fill="url(#dbtefx-fk-plume)" stroke="${teal}" stroke-width="1.6"/></g><path d="${torso}" fill="none" stroke="${mix(crimson, flame, 0.4)}" stroke-opacity="0.6" stroke-width="2"/>
 <path d="M${bx - 56} 420Q${bx} 450 ${bx + 56} 420V450Q${bx} 480 ${bx - 56} 450Z" fill="${ink}"/>
 <path d="M${bx - 56} 424Q${bx} 454 ${bx + 56} 424M${bx - 56} 446Q${bx} 476 ${bx + 56} 446" fill="none" stroke="${gold}" stroke-width="4"/>
 <circle cx="${bx}" cy="452" r="24" fill="${ink}" stroke="${gold}" stroke-width="6"/><circle cx="${bx}" cy="452" r="12" fill="none" stroke="${goldLit}" stroke-width="3"/><circle cx="${bx}" cy="452" r="5" fill="${teal}"/>
-<path d="M${bx - 50} 494Q${bx} 512 ${bx + 50} 494M${bx - 36} 518Q${bx} 534 ${bx + 36} 518" fill="none" stroke="${crimsonDeep}" stroke-width="3"/>
 ${collar}`;
 
   // The ring of the Fire Kings: a gold ring wrapped in a crown of flame tongues.
   let tongues = '';
   for (let i = 0; i < 28; i++) {
     const a = i * (360 / 28);
-    const [x0, y0] = polar(bx, 400, 200, a - 4);
-    const [x1, y1] = polar(bx, 400, 200, a + 4);
-    const [tx, ty] = polar(bx, 400, 224 + (i % 3) * 12, a + 8);
-    tongues += `M${x0} ${y0}Q${polar(bx, 400, 214, a - 2).join(' ')} ${tx} ${ty}Q${polar(bx, 400, 212, a + 6).join(' ')} ${x1} ${y1}Z`;
+    const [x0, y0] = polar(bx, 400, 185, a - 4);
+    const [x1, y1] = polar(bx, 400, 185, a + 4);
+    const [tx, ty] = polar(bx, 400, 207 + (i % 3) * 11, a + 8);
+    tongues += `M${x0} ${y0}Q${polar(bx, 400, 198, a - 2).join(' ')} ${tx} ${ty}Q${polar(bx, 400, 196, a + 6).join(' ')} ${x1} ${y1}Z`;
   }
 
   // The pyre the phoenix rises from.
@@ -123,7 +145,7 @@ ${collar}`;
 @keyframes dbtefx-fk-wingl { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-4deg); } }
 @keyframes dbtefx-fk-wingr { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }</style>
 <defs>
-<linearGradient id="dbtefx-fk-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, '#000000', 0.2)}"/><stop offset="0.45" stop-color="${mix(t.bg, crimson, 0.18)}"/><stop offset="0.76" stop-color="${mix(crimson, flame, 0.35)}"/></linearGradient>
+<linearGradient id="dbtefx-fk-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, '#000000', 0.2)}"/><stop offset="0.5" stop-color="${mix(t.bg, crimson, 0.12)}"/><stop offset="0.7" stop-color="${mix(crimson, t.bg, 0.55)}"/><stop offset="0.76" stop-color="${mix(crimson, t.bg, 0.3)}"/></linearGradient>
 <linearGradient id="dbtefx-fk-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(sea, crimson, 0.3)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.3)}"/></linearGradient>
 <linearGradient id="dbtefx-fk-isle" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, crimson, 0.2)}"/><stop offset="1" stop-color="${ink}"/></linearGradient>
 <radialGradient id="dbtefx-fk-smoke"><stop offset="0" stop-color="${mix(t.muted, t.bg, 0.6)}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient>
@@ -141,7 +163,7 @@ ${collar}`;
 <radialGradient id="dbtefx-fk-lava"><stop offset="0" stop-color="${flame}" stop-opacity="0.9"/><stop offset="1" stop-color="${crimson}" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-fk-sky)"/>
-<ellipse cx="560" cy="${horizon}" rx="700" ry="130" fill="url(#dbtefx-fk-halo)" opacity="0.6"/>
+<ellipse cx="560" cy="${horizon}" rx="420" ry="70" fill="url(#dbtefx-fk-halo)" opacity="0.3"/>
 ${smoke}
 <path d="M240 ${horizon}C330 ${horizon - 30} 420 ${horizon - 70} 500 ${horizon - 140}L530 ${horizon - 150}H596L624 ${horizon - 136}C690 ${horizon - 80} 780 ${horizon - 40} 900 ${horizon}Z" fill="url(#dbtefx-fk-isle)"/>
 <path d="M540 ${horizon - 148}q-10 20 -4 40t-10 44M584 ${horizon - 148}q12 24 6 48t12 50" fill="none" stroke="${flame}" stroke-opacity="0.55" stroke-width="2.4" stroke-linecap="round"/>
@@ -152,13 +174,13 @@ ${smoke}
 <!--mid-->
 <circle cx="${bx}" cy="400" r="300" fill="url(#dbtefx-fk-halo)" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 <g style="transform-origin: ${bx}px 400px; animation: dbtefx-spin 90s linear infinite;"><path d="${tongues}" fill="url(#dbtefx-fk-fire)" opacity="0.7"/></g>
-<circle cx="${bx}" cy="400" r="200" fill="none" stroke="url(#dbtefx-fk-ring)" stroke-width="10"/>
-<circle cx="${bx}" cy="400" r="187" fill="none" stroke="${ink}" stroke-width="6" stroke-dasharray="14 10"/>
-<circle cx="${bx}" cy="400" r="187" fill="none" stroke="${gold}" stroke-width="2" stroke-opacity="0.6"/>
+<circle cx="${bx}" cy="400" r="185" fill="none" stroke="url(#dbtefx-fk-ring)" stroke-width="10"/>
+<circle cx="${bx}" cy="400" r="173" fill="none" stroke="${ink}" stroke-width="6" stroke-dasharray="14 10"/>
+<circle cx="${bx}" cy="400" r="173" fill="none" stroke="${gold}" stroke-width="2" stroke-opacity="0.6"/>
 <circle cx="${bx}" cy="452" r="120" fill="none" stroke="${flame}" stroke-width="8" style="animation: dbtefx-fk-reborn 8s ease-out infinite; transform-box: fill-box; transform-origin: center;"/>
 ${tail}
-<g style="transform-origin: ${bx - 28}px 420px; animation: dbtefx-fk-wingl 7s ease-in-out infinite;">${wing(bx - 30, 410, bx - 120, 300, 1)}</g>
-<g style="transform-origin: ${bx + 28}px 420px; animation: dbtefx-fk-wingr 7s ease-in-out infinite;">${wing(bx + 30, 410, bx + 120, 300, -1)}</g>
+<g style="transform-origin: ${bx - 28}px 420px; animation: dbtefx-fk-wingl 7s ease-in-out infinite;">${wing(bx - 30, 410, bx - 100, 304, 1)}</g>
+<g style="transform-origin: ${bx + 28}px 420px; animation: dbtefx-fk-wingr 7s ease-in-out infinite;">${wing(bx + 30, 410, bx + 100, 304, -1)}</g>
 ${body}
 ${head}
 <!--near-->

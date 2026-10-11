@@ -159,6 +159,7 @@ const constellar = (t) => {
 ${farFig.map((f) => f.stars.map(([x, y], i) => crossStar(x, y, i % 3 ? 1.6 : 2.4, silver, 0.45)).join('')).join('')}
 ${[[120, 330], [300, 520], [80, 820], [560, 40], [720, 300], [880, 620], [960, 180], [430, 700], [1500, 520], [1420, 860], [700, 860], [1100, 40]].map(([x, y], i) => crossStar(x, y, 2.4 + (i % 3) * 0.9, i % 4 === 1 ? gold : silver, 0.55 + (i % 3) * 0.12)).join('')}
 <!--mid-->
+<g transform="translate(${n1(1292 - 0.78 * cx)} ${n1(336 - 0.78 * cy)}) scale(0.78)">
 <circle cx="${cx}" cy="${cy}" r="330" fill="url(#dbtefx-cs-halo)" style="animation: dbtefx-pulse 9s ease-in-out infinite;"/>
 <ellipse cx="${mx}" cy="${my}" rx="90" ry="70" fill="url(#dbtefx-cs-m7)"/>
 <g fill="${t.text}" fill-opacity="0.85">${m7}</g>
@@ -178,6 +179,7 @@ ${fins}
 ${crossStar(cx, cy - 206, 6, gold)}${crossStar(cx, cy + 206, 5, silver)}
 <g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 180s linear infinite;">${crest(108)}</g>
 ${orb(0)}${orb(8)}
+</g>
 <!--near-->
 ${near}`;
 };
