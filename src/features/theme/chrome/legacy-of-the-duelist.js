@@ -83,7 +83,7 @@ ${on(titles, 'before')} { content: ""; position: absolute; left: calc(50% - 215p
 ${subTitles} { color: ${t.text} !important; text-shadow: ${outline}, 0 0 10px ${alpha(cyan, 0.5)} !important; }
 
 /* Pop-ups: a navy grid panel in the double cyan bevel with a title bar on top. */
-${SEL.dialog} { background: radial-gradient(ellipse 80% 50% at 50% 0%, ${alpha(cyan, 0.2)}, transparent 70%), ${panelFill} !important; border-radius: 10px !important; box-shadow: ${ring()}, 0 26px 60px -12px ${ink} !important; }
+${SEL.dialog} { background: radial-gradient(ellipse 80% 50% at 50% 0%, ${alpha(cyan, 0.2)}, transparent 70%), ${panelFill}, ${navyDeep} !important; border-radius: 10px !important; box-shadow: ${ring()}, 0 26px 60px -12px ${ink} !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; border-style: solid; border-color: transparent; border-width: 18px; border-image: var(--dbtc-cap) 18 / 18px stretch; box-sizing: border-box; background: none; transform: none; }
 ${SEL.dialogTitle} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.6)} !important; background: var(--dbtc-title) center / 56% 100% no-repeat !important; filter: drop-shadow(0 4px 6px ${ink}); }
 

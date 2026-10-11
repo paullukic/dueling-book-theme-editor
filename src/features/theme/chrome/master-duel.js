@@ -1,7 +1,7 @@
 // master-duel: the 2022 Master Duel UI. Black-glass slabs in a gunmetal
 // bevel with a folder-tab notch and a short bar top-right, the home menu's
 // borderless rows with a lime tick, black pill buttons with a white rim that fill lime when
-// chosen, LP plates with a coloured top stripe, gold-ringed turn orbs, and
+// chosen, LP plates with a coloured top stripe, phase orbs whose ring turns gold when active, and
 // rarity glows (UR violet-gold) round the avatars.
 // (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
@@ -67,7 +67,7 @@ ${on(titles, 'before')} { content: ""; position: absolute; left: calc(50% - 230p
 ${subTitles} { color: ${t.text} !important; text-shadow: 0 0 3px ${ink}, 0 1px 2px ${ink} !important; }
 
 /* Pop-ups: a black-glass slab, gunmetal rim, lime corner ticks. */
-${SEL.dialog} { background: radial-gradient(ellipse 70% 40% at 50% 0%, ${alpha(ur, 0.18)}, transparent 70%), ${slab()} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 2px ${gun}, inset 0 1px 0 ${alpha('#ffffff', 0.2)}, 0 0 40px -8px ${alpha(ur, 0.5)}, 0 26px 60px -12px ${ink} !important; }
+${SEL.dialog} { background: radial-gradient(ellipse 70% 40% at 50% 0%, ${alpha(ur, 0.18)}, transparent 70%), ${slab()}, ${ink} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 2px ${gun}, inset 0 1px 0 ${alpha('#ffffff', 0.2)}, 0 0 40px -8px ${alpha(ur, 0.5)}, 0 26px 60px -12px ${ink} !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 14px; right: 14px; top: 8px; bottom: auto; width: auto; height: 2px; pointer-events: none; z-index: 0; background: linear-gradient(90deg, ${lime} 0 60px, ${gun} 60px) !important; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: -3px; top: -3px; right: -3px; bottom: -3px; width: auto; height: auto; pointer-events: none; z-index: 1; background: linear-gradient(${lime}, ${lime}) left top / 34px 3px no-repeat, linear-gradient(${lime}, ${lime}) left top / 3px 34px no-repeat, linear-gradient(${lime}, ${lime}) right bottom / 34px 3px no-repeat, linear-gradient(${lime}, ${lime}) right bottom / 3px 34px no-repeat; transform: none; }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: none !important; }
@@ -83,7 +83,8 @@ ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, ink, 0.6)}, ${m
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${ink} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -38px; top: calc(50% - 11px); width: 36px; height: 22px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 3px ${ink} !important; }
-${SEL.phase} { background: conic-gradient(from 200deg, ${mix(gold, '#ffffff', 0.5)}, ${gold}, ${mix(gold, ink, 0.45)}, ${gold}, ${mix(gold, '#ffffff', 0.5)}) !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px ${ink} !important; }
+${SEL.phase} { background: conic-gradient(from 200deg, ${gunHi}, ${gun}, ${mix(gun, ink, 0.45)}, ${gun}, ${gunHi}) !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px ${ink} !important; }
+${sel(['#duel .phase.active .background', '#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: conic-gradient(from 200deg, ${mix(gold, '#ffffff', 0.55)}, ${gold}, ${mix(gold, ink, 0.35)}, ${gold}, ${mix(gold, '#ffffff', 0.55)}) !important; box-shadow: 0 0 0 1px ${ink}, 0 0 16px ${alpha(gold, 0.85)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, t.bg, 0.5)}, ${ink}) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 28%, ${alpha('#ffffff', 0.22)}, transparent 40%), radial-gradient(circle at 50% 50%, ${mix(t.self, t.bg, 0.55)}, ${mix(t.self, ink, 0.8)}) !important; border-radius: 50% !important; }

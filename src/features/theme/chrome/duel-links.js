@@ -72,7 +72,7 @@ ${on(titles, 'before')} { content: ""; position: absolute; left: calc(50% - 225p
 ${subTitles} { color: #ffffff !important; text-shadow: ${outline} !important; }
 
 /* Pop-ups: a royal-blue circuit panel with DL's angled header tab. */
-${SEL.dialog} { background: ${panelFill} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${azure}, 0 0 0 4px ${alpha(deep, 0.95)}, 0 0 0 5px ${alpha(azureHi, 0.5)}, 0 26px 60px -12px ${ink} !important; }
+${SEL.dialog} { background: ${panelFill}, ${deep} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${azure}, 0 0 0 4px ${alpha(deep, 0.95)}, 0 0 0 5px ${alpha(azureHi, 0.5)}, 0 26px 60px -12px ${ink} !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 0; top: 0; right: 0; width: auto; height: 78px; bottom: auto; pointer-events: none; z-index: 0; background: var(--dbtc-tab) left top / 100% 100% no-repeat; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; right: 18px; bottom: 14px; left: auto; top: auto; width: 54px; height: 20px; pointer-events: none; z-index: 0; background: var(--dbtc-chev) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { color: #ffffff !important; text-shadow: ${outline} !important; z-index: 1; }

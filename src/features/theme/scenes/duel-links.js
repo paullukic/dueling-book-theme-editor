@@ -4,8 +4,7 @@ import { H, n1, polar, W } from './kit.js';
 // Duel Links: the Gate of Duel World. A monumental ring gate on stepped
 // stone, its portal a turning azure vortex, rises on the right over the
 // game's holographic duel floor: a bright perspective grid of glowing tiles
-// and light shafts. Now and then the red half-tone Skill cut-in slashes across
-// the top-left sky, and » chevrons stream along the floor's edge.
+// and light shafts, and » chevrons stream along the floor's edge.
 
 const gx = 1400;
 const gy = 470;
@@ -15,7 +14,6 @@ const scene = (t) => {
   const azure = t.accent;
   const azureHi = mix(azure, '#ffffff', 0.55);
   const yellow = t.accent2;
-  const red = t.danger;
   const stone = mix(t.raised, t.muted, 0.28);
   const stoneHi = mix(stone, '#ffffff', 0.35);
   const stoneLo = mix(t.bg, t.raised, 0.5);
@@ -68,9 +66,6 @@ const scene = (t) => {
     arms += `M${pts.join('L')}`;
   }
 
-  // Skill cut-in: a red half-tone slash with a yellow edge.
-  let dots = '';
-  for (let x = 0; x < 22; x++) for (let y = 0; y < 5; y++) dots += `<circle cx="${n1(230 + x * 14 + (y % 2) * 7)}" cy="${n1(30 + y * 14)}" r="${n1(Math.max(0.6, 5.2 - x * 0.22))}"/>`;
 
   const shafts = [[1030, 0.5], [1500, 0.4], [520, 0.25]].map(([x, o], i) => `<path d="M${x - 16} ${hz - 260}H${x + 16}L${x + 40} ${H}H${x - 40}Z" fill="url(#dbtefx-dl-shaft)" opacity="${o}" style="animation: dbtefx-pulse ${5 + i * 2}s ease-in-out ${-i * 1.7}s infinite;"/>`).join('');
 
@@ -83,11 +78,9 @@ const scene = (t) => {
 <linearGradient id="dbtefx-dl-stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${stoneHi}"/><stop offset="0.4" stop-color="${stone}"/><stop offset="1" stop-color="${stoneLo}"/></linearGradient>
 <radialGradient id="dbtefx-dl-portal" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.18" stop-color="${azureHi}" stop-opacity="0.85"/><stop offset="0.6" stop-color="${azure}" stop-opacity="0.6"/><stop offset="1" stop-color="${mix(t.bg, azure, 0.4)}" stop-opacity="0.9"/></radialGradient>
 <radialGradient id="dbtefx-dl-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0.55" stop-color="${azure}" stop-opacity="0.4"/><stop offset="1" stop-color="${azure}" stop-opacity="0"/></radialGradient>
-<linearGradient id="dbtefx-dl-fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, t.bg, 0.35)}"/></linearGradient>
 <linearGradient id="dbtefx-dl-fadeg" gradientUnits="userSpaceOnUse" x1="1290" y1="0" x2="1420" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/><stop offset="1" stop-color="#ffffff"/></linearGradient><mask id="dbtefx-dl-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="url(#dbtefx-dl-fadeg)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dl-sky)"/>
-<g style="animation: dbtefx-dl-skill 11s ease-out infinite;"><g transform="translate(860 752) rotate(-3 280 70) scale(0.8)"><path d="M24 20H560L536 104H0Z" fill="url(#dbtefx-dl-fade)"/><g fill="${mix(red, '#000000', 0.5)}" fill-opacity="0.5">${dots}</g><path d="M24 20H560L557 30H21Z" fill="${mix(red, '#ffffff', 0.35)}"/><path d="M0 104H536L533 114H-3Z" fill="${yellow}"/><path d="M-26 104L4 20H18L-12 104Z" fill="${yellow}"/><path d="M562 20H580L556 104H538Z" fill="${yellow}" fill-opacity="0.85"/></g></g>
 <!--mid-->
 <g mask="url(#dbtefx-dl-mask)">
 <path d="M0 ${hz}H${W}V${H}H0Z" fill="url(#dbtefx-dl-floor)"/>
@@ -116,7 +109,6 @@ ${pylon(gx - 186, 1)}${pylon(gx + 186, -1)}
 <!--near-->
 ${[0, 0.4, 0.8, 1.2, 1.6, 2].map((d, i) => chev(1080 + i * 0, d)).join('')}
 <style>
-@keyframes dbtefx-dl-skill { 0% { transform: translateX(-90px); opacity: 0; } 5% { transform: translateX(0); opacity: 0.6; } 60% { transform: translateX(24px); opacity: 0.6; } 68% { transform: translateX(70px); opacity: 0; } 100% { transform: translateX(70px); opacity: 0; } }
 @keyframes dbtefx-dl-chev { 0% { transform: translateX(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateX(380px); opacity: 0; } }
 </style>`;
 };
