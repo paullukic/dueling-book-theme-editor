@@ -5,7 +5,9 @@ import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
-export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
+export default (t0, { SEL, sel, svg, svgUrl, alpha }) => {
+  // Your side's rose, lifted a touch so it reads brighter than the velvet around it.
+  const t = { ...t0, self: mix(t0.self, '#ffffff', 0.1) };
   const silver = mix(t.text, t.muted, 0.25);
   const silverDim = mix(t.muted, t.border, 0.35);
   const velvet = mix(t.accent, t.surface, 0.72);
@@ -147,5 +149,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss(popPrimary, popSecondary)}
+/* In a duel the rose window and the swag cords would hang over the board. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-lb-rosewin, .dbtefx-lb-tassels) { display: none; }
 `;
 };

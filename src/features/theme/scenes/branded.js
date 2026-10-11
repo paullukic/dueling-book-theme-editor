@@ -52,7 +52,7 @@ const branded = (t) => {
 <path d="${crags}" fill="${mix(t.bg, t.accent, 0.08)}"/>
 <!--mid-->
 <circle cx="1310" cy="300" r="330" fill="url(#dbtefx-bd-halo)" ${anim('bloom', 9, 0, 'ease-in-out')}/>
-${cardArt(t, { id: 'dbtefx-bd-hero', card: CARDS.albion, x: 1100, y: -40, w: 420, h: 760, focus: [0.75, 0.4], zoom: 0.8, blend: 'screen', feather: 0.6, fade: 0.7, backdrop: mix(t.bg, t.accent, 0.12), backdropAmt: 0.85, glow: t.accent, breathe: 14 })}
+<g class="dbtefx-bd-herogrp">${cardArt(t, { id: 'dbtefx-bd-hero', card: CARDS.albion, x: 1100, y: -40, w: 420, h: 760, focus: [0.75, 0.4], zoom: 0.8, blend: 'screen', feather: 0.6, fade: 0.7, backdrop: mix(t.bg, t.accent, 0.12), backdropAmt: 0.85, glow: t.accent, breathe: 14 })}</g>
 <!--near-->
 <path d="M1130 900L${ridge.slice(1)}L1600 900Z" fill="${mix(t.bg, '#000000', 0.4)}"/>
 <path d="${ridge}" fill="none" stroke="${t.accent}" stroke-opacity="0.55" stroke-width="2"/>

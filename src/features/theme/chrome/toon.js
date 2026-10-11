@@ -14,6 +14,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const paper = t.text;
   const pop = t.accent;
   const red = t.accent2;
+  // Duel panels sit beside the board for a whole game: a softer, warmer cream.
+  const duelPaper = mix(mix(t.text, t.bg, 0.93), t.accent, 0.95);
   const cyan = t.link;
   // Ben-Day dots: one dot grid in a colour, size s px.
   const dots = (c, a, s = 8, r = 1.7) => `radial-gradient(circle, ${alpha(c, a)} ${r}px, transparent ${r + 0.6}px) 0 0 / ${s}px ${s}px`;
@@ -159,7 +161,7 @@ ${SEL.life} {
 }
 ${SEL.lifeSelf} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.75)}, ${t.self} 55%, ${mix(t.self, ink, 0.7)}) !important; border-radius: 10px !important; }
 ${SEL.lifeOpp} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.75)}, ${t.opp} 55%, ${mix(t.opp, ink, 0.7)}) !important; border-radius: 10px !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(-45deg, ${ink} 0 5px, ${t.bg} 5px 9px) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: ${ink} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 
 ${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 0 0 0 2px #000000, 4px 4px 0 2px #000000 !important; }
@@ -217,11 +219,12 @@ ${SEL.field} {
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { border-color: ${pop} !important; outline: 2px solid ${ink} !important; box-shadow: 4px 4px 0 ${red} !important; }
 
 ${duelPanels} { border-color: ${ink} !important; border-radius: 10px !important; box-shadow: inset 0 0 0 2px ${alpha(paper, 0.5)}, 0 0 0 2px ${ink}, 6px 6px 0 2px ${ink} !important; }
-${T(['#duel #preview_txt'])} { background: ${dots(red, 0.08, 9, 1.4)}, ${paper} !important; color: ${ink} !important; border-radius: 14px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
+/* The card text balloon: a cream margin ring outside the box gives the text room (no padding on DuelingBook's box). */
+${T(['#duel #preview_txt'])} { background: ${dots(red, 0.04, 9, 1.4)}, ${duelPaper} !important; color: ${ink} !important; border-radius: 6px !important; box-shadow: 0 0 0 7px ${duelPaper}, 0 0 0 10px ${ink}, 6px 7px 0 10px ${ink} !important; }
 ${T(['#duel #preview_txt *'])} { color: ${ink} !important; text-shadow: none !important; }
 ${T(['#duel .button'])} { background: ${dots(red, 0.1, 6, 1.1)}, ${paper} !important; color: ${ink} !important; text-shadow: none !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.3)}, 0 0 0 2px ${ink}, 3px 3px 0 2px ${ink} !important; }
 ${T(['#duel .button:hover'])} { background: ${dots(red, 0.35, 6, 1.2)}, ${pop} !important; color: ${ink} !important; }
-${duelPanels} { background: ${dots(red, 0.08, 9, 1.4)}, ${paper} !important; border-radius: 18px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
+${duelPanels} { background: ${dots(red, 0.04, 9, 1.4)}, ${duelPaper} !important; border-radius: 18px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
 ${T(['#duel .cout_txt', '#duel .cout_txt *', '#duel #watchers .cell', '#duel .watchers_txt'])} { color: ${ink} !important; }
 ${T(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]', '#duel .cout_txt [style*="color: rgb(187, 0, 0)"]'])} { color: ${mix(red, ink, 0.6)} !important; }
 ${T(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${mix(t.opp, ink, 0.45)} !important; }
@@ -232,5 +235,8 @@ ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-464px, 450px) scale(0.44); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-pow { display: none; }
+/* Shrunk into the gutter, the book keeps a real ink line. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book [stroke="#000000"] { vector-effect: non-scaling-stroke; stroke-width: 2.2px; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx #dbtefx-tn-dots circle { fill-opacity: 0.85; }
 `;
 };

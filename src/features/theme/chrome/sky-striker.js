@@ -28,6 +28,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const brackets = (c, l = 12, w = 2) => def(bracketsRaw(c, l >= 18 ? 22 : 12, w > 2 ? 3 : 2));
   const bracketsRaw = (c, l, w) => [['0', '0', w, w, 90], ['100%', '0', `${l - w}`, w, 180], ['0', '100%', w, `${l - w}`, 0], ['100%', '100%', `${l - w}`, `${l - w}`, 270]]
     .map(([x, y, cx, cy, from]) => `conic-gradient(from ${from}deg at ${cx}px ${cy}px, transparent 25%, ${c} 0) ${x} ${y} / ${l}px ${l}px no-repeat`).join(', ');
+  // Left corners only (the life bar: its numerals run to the right edge).
+  const leftBrackets = (c) => bracketsRaw(c, 12, 2).split(', conic').filter((_, i) => i % 2 === 0).join(', conic');
   // Targeting ticks at the midpoints of each side.
   const ticks = (c, l = 8, w = 2) => def([L(c, '50%', '0', `${w}px`, `${l}px`), L(c, '50%', '100%', `${w}px`, `${l}px`), L(c, '0', '50%', `${l}px`, `${w}px`), L(c, '100%', '50%', `${l}px`, `${w}px`)].join(', '));
   const cut = (n, below = 0) => `polygon(${n}px 0, 100% 0, 100% calc(100% - ${n}px), calc(100% - ${n}px) calc(100% + ${below}px), 0 calc(100% + ${below}px), 0 ${n}px)`;
@@ -153,7 +155,7 @@ ${SEL.chat} {
 ${sel(['#chats .chat .black_line'])} { background: linear-gradient(90deg, ${red} 0 18%, ${cyan} 18%) !important; }
 
 ${SEL.life} {
-  background: ${brackets(t.text, 10, 2)} !important;
+  background: ${leftBrackets(t.text)} !important;
   border-color: ${alpha(cyan, 0.6)} !important; border-radius: 0 !important;
   box-shadow: 0 0 12px -2px ${alpha(cyan, 0.5)} !important;
 }

@@ -181,7 +181,7 @@ ${study(1262, 628, 120, 150, 'star', 'dbtefx-am-s2')}</g>
 <clipPath id="dbtefx-am-clip"><rect x="${PX}" y="${PY}" width="${PW}" height="${PH}"/></clipPath>
 <mask id="dbtefx-am-reveal" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect x="420" y="0" width="${S0[0] - 412}" height="320" fill="#ffffff" style="transform-origin: ${S0[0] + 8}px 0px; animation: dbtefx-am-paint 8s ease-in-out infinite;"/></mask>
 </defs>
-<path d="M${ax} ${RAIL}L${PX - 6} ${PY - 26}M${ax} ${RAIL}L${PX + PW + 6} ${PY - 26}" stroke="${gold}" stroke-opacity="0.55" stroke-width="1.5"/>
+<g class="dbtefx-am-gallery"><path d="M${ax} ${RAIL}L${PX - 6} ${PY - 26}M${ax} ${RAIL}L${PX + PW + 6} ${PY - 26}" stroke="${gold}" stroke-opacity="0.55" stroke-width="1.5"/>
 <ellipse cx="${ax}" cy="${PY + PH / 2}" rx="330" ry="340" fill="url(#dbtefx-am-glow)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
 <g clip-path="url(#dbtefx-am-clip)">
 <rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="url(#dbtefx-am-sky)"/>
@@ -202,7 +202,7 @@ ${frame(PX, PY, PW, PH, 30, 'dbtefx-am-gilt', true)}
 <g fill="none" stroke="url(#dbtefx-am-paint2)" stroke-linecap="round">${bristles}</g>
 </g>
 <g class="dbtefx-am-brush"><g ${anim('bob', 6, 0, 'ease-in-out')}>${brush}<g fill="#ffffff" style="animation: dbtefx-am-shine 2s ease-in-out infinite;">${sparkle(S0[0], S0[1], 9)}</g></g></g>
-${drip(PX + 64, 30, 0, t.accent)}${drip(PX + 190, 20, 2.2, t.opp)}${drip(PX + 236, 38, 4.1, gold)}`;
+${drip(PX + 64, 30, 0, t.accent)}${drip(PX + 190, 20, 2.2, t.opp)}${drip(PX + 236, 38, 4.1, gold)}</g>`;
 };
 
 export default artmage;

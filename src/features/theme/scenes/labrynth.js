@@ -142,7 +142,7 @@ ${column(196, 64)}${column(1585, 64)}
 <radialGradient id="dbtefx-lb-glass" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-lb-warm" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.2"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
 </defs>
-<g>
+<g class="dbtefx-lb-rosewin">
 <circle cx="${RX}" cy="${RY}" r="200" fill="${mix(t.bg, '#000000', 0.35)}"/>
 ${glass}
 <circle cx="${RX}" cy="${RY}" r="190" fill="url(#dbtefx-lb-glass)" style="animation: dbtefx-lb-shaft 9s ease-in-out infinite;"/>
@@ -160,7 +160,7 @@ ${lady}
 <linearGradient id="dbtefx-lb-tassel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.warning, '#000000', 0.35)}"/><stop offset="0.5" stop-color="${t.warning}"/><stop offset="1" stop-color="${mix(t.warning, '#000000', 0.45)}"/></linearGradient>
 </defs>
 ${swag(-40, 560, 92)}${swag(1180, 1660, 74)}
-${tassel(560, 120)}${tassel(1180, 104)}`;
+<g class="dbtefx-lb-tassels">${tassel(560, 120)}${tassel(1180, 104)}</g>`;
 };
 
 export default labrynth;

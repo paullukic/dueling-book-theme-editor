@@ -141,11 +141,11 @@ ${SEL.chat} {
 }
 ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 
-${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 4px 4px 0 2px ${red}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
+${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 4px 0 0 2px ${red}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)}, ${t.self} 40%, ${mix(t.self, red, 0.45)} 75%, ${mix(t.self, night, 0.55)}) !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-hero-sky) 0 100% / auto 100% repeat-x, var(--dbte-hero-glow), ${night} !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(${alpha(night, 0.7)}, ${alpha(night, 0.7)}), var(--dbte-hero-sky) 0 100% / auto 100% repeat-x, var(--dbte-hero-glow), ${night} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 
 ${SEL.phase} { background: linear-gradient(135deg, ${gold}, ${mix(gold, red, 0.4)}) !important; border-radius: 10px !important; box-shadow: 0 0 0 2px ${night}, 3px 3px 0 2px ${red} !important; }
@@ -203,5 +203,7 @@ ${sel(['#duel .cout_txt'])} { background: var(--dbte-hero-dots), linear-gradient
 ${SEL.settingsPanel} { border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 6px 6px 0 2px ${red} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${gold}, ${mix(gold, red, 0.5)}) !important; border-radius: 2px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, 2px 2px 0 ${red} !important; }
+/* Front page links over the scene art: a night outline keeps them readable. */
+${sel(['#welcome_buttons > span'])} { color: ${gold} !important; text-shadow: 0 0 3px ${night}, 0 0 6px ${night}, 2px 2px 0 ${night} !important; }
 `;
 };

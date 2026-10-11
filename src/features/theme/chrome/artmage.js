@@ -47,6 +47,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   // The Artmage paint ribbon: a rainbow brush sweep.
   const ribbon = (o) => svgUrl(svg(240, 24, `<defs><linearGradient id="r">${rainbowStops}</linearGradient></defs><path d="M2 14q34-11 76-5t82 0q40-6 78 1q-34 9-78 6t-82 2q-44 4-76-4z" fill="url(#r)" fill-opacity="${o}"/><path d="M14 12q66-6 128-1t84 1" fill="none" stroke="#ffffff" stroke-opacity="${o * 0.6}" stroke-width="0.8"/>`));
   const tracery = `repeating-conic-gradient(from 22.5deg, ${alpha(hi, 0.55)} 0 2deg, transparent 2deg 45deg)`;
+  // A plain glass centre over the tracery, so the spokes only show on the rim, never through the label.
+  const glass = (a, b) => `radial-gradient(circle closest-side, ${a}, ${b} 70%, transparent 72%)`;
   const metal = `linear-gradient(135deg, ${hi}, ${gold} 45%, ${brown})`;
   const inkOutline = [[1.5, 0], [-1.5, 0], [0, 1.5], [0, -1.5], [1.1, 1.1], [-1.1, 1.1], [1.1, -1.1], [-1.1, -1.1]].map(([x, y]) => `${x}px ${y}px 0 ${deep}`).concat(`0 2px 2px ${deep}`).join(', ');
   const titleInk = (fill = t.text) => `color: ${fill} !important; -webkit-text-stroke: 4px ${deep}; paint-order: stroke fill; text-shadow: 0 3px 0 ${brown}, 0 0 8px ${t.surface}, 0 0 8px ${t.surface} !important;`;
@@ -163,9 +165,9 @@ ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-t
 ${SEL.phase} { background: ${metal} !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${brown}, 0 4px 8px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${tracery}, radial-gradient(circle, ${robe} 30%, ${robeDark}) !important; border-radius: 50% !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: ${tracery}, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.7)} 15%, ${t.self} 50%, ${mix(t.self, deep, 0.5)}) !important; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${tracery}, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.7)} 15%, ${t.opp} 50%, ${mix(t.opp, deep, 0.5)}) !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${glass(robe, mix(robe, robeDark, 0.6))}, ${tracery}, radial-gradient(circle, ${robe} 30%, ${robeDark}) !important; border-radius: 50% !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: ${glass(mix(t.self, deep, 0.15), mix(t.self, deep, 0.35))}, ${tracery}, radial-gradient(circle, ${t.self} 50%, ${mix(t.self, deep, 0.5)}) !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${glass(mix(t.opp, deep, 0.15), mix(t.opp, deep, 0.35))}, ${tracery}, radial-gradient(circle, ${t.opp} 50%, ${mix(t.opp, deep, 0.5)}) !important; }
 ${sel(['#duel .phase.active::before'])} {
   content: ""; position: absolute; left: -12%; right: -12%; top: 88%; height: 30%; pointer-events: none;
   background: var(--dbte-am-ribbon-on) center / 100% 100% no-repeat; transform-origin: 0 50%;
@@ -211,7 +213,7 @@ ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${robeDark}, $
 ${SEL.settingsPanel} { background: var(--dbte-am-swash) 100% 100% / 130px 22px no-repeat, linear-gradient(180deg, ${alpha(robe, 0.95)}, ${alpha(robeDark, 0.95)}) !important; ${gilt(6)} border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${piping}, 0 12px 26px -12px #000000 !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: ${metal} !important; border-radius: 1px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, inset 0 0 0 2.5px ${brown} !important; }
-/* In a duel the stage covers the gallery: the floating brush and the small studies would peek into empty zones. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies) { display: none; }
+/* In a duel the stage covers the gallery: the painting, its ribbon, the brush and the studies would show through empty zones. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery) { display: none; }
 `;
 };

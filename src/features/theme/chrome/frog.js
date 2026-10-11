@@ -69,7 +69,6 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const padFill = (b, on) => `radial-gradient(circle closest-side at 45% 42%, ${mix(b, '#ffffff', on ? 0.55 : 0.88)}, ${b} 62%, ${mix(b, deep, on ? 0.6 : 0.68)})`;
   const phaseBg = (b, on) => `${on ? 'var(--dbte-frog-shine) center / 100% 100% no-repeat, ' : ''}var(--dbte-frog-phase) center / 100% 100% no-repeat, ${padFill(b, on)}`;
   const lotusBloom = svgUrl(svg(40, 40, `<g transform="translate(20 23)" stroke="${mix(lotus, deep, 0.55)}" stroke-width="0.7" stroke-linejoin="round"><path d="M-15 2q7-9 15-2q-8 7-15 2zM15 2q-7-9-15-2q8 7 15 2z" fill="${mix(lotus, deep, 0.75)}"/><path d="M-10-9q8 1 10 9q-9-1-10-9zM10-9q-8 1-10 9q9-1 10-9z" fill="${mix(lotus, '#ffffff', 0.85)}"/><path d="M0-16q7 8 0 16q-7-8 0-16z" fill="${mix(lotus, '#ffffff', 0.7)}"/><circle r="2.8" fill="${gold}" stroke="${mix(gold, deep, 0.5)}"/></g>`));
-  const selfJade = mix(t.self, t.opp, 0.72);
   const oppJade = mix(t.opp, t.self, 0.82);
   const idleJade = mix(lime, t.bg, 0.34);
   const T = (list) => sel(list);
@@ -181,13 +180,15 @@ ${SEL.life} { border-color: ${pad} !important; border-radius: 99px !important; b
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 99px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
+/* A lily pad as the life bar's end cap. */
+${sel(['#duel .lifepoints::before'])} { content: ""; position: absolute; left: -20px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbte-frog-pad) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${deep}); }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)} !important; }
 
 ${SEL.phase} { background: ${phaseBg(idleJade, false)} !important; border-radius: 50% !important; box-shadow: 0 3px 8px ${alpha(deep, 0.75)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) .background'])} { background: ${phaseBg(selfJade, true)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${phaseBg(oppJade, true)} !important; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 1px ${alpha(gold, 0.35)}, 0 3px 8px ${alpha(deep, 0.75)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background'])} { background: ${phaseBg(lime, true)} !important; box-shadow: 0 0 0 2px ${lime}, 0 0 16px ${alpha(lime, 0.9)}, 0 3px 8px ${alpha(deep, 0.75)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${phaseBg(oppJade, true)} !important; }
 ${sel(['#duel .phase .background .background_inner', '#duel .phase .background .background_top', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue', '#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: transparent !important; }
 ${sel(['#duel .phase.active::before'])} {
   content: ""; position: absolute; left: -16%; top: -16%; right: -16%; bottom: -16%; pointer-events: none; border-radius: 50%;
@@ -240,5 +241,7 @@ ${SEL.settingsPanel} { border-radius: 28px !important; box-shadow: 0 0 0 1px ${d
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${pad}, ${lime}) !important; border-radius: 99px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${lime} !important; }
 ${sel(['#content .checkbox'])} { border-radius: 5px !important; }
+/* In a duel the moon would sit inside the stage: it moves out to the right gutter. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(430px, 30px); }
 `;
 };

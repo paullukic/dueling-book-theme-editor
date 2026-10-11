@@ -77,20 +77,22 @@ const wreath = (t, kit, teal) => {
 // blade's hilt (up-left round to down-left), violet-edged with dark gaps
 // between them, the lowest rimmed teal, and three short coverts laid over
 // their bases. Pivot at (118, 36); the blade's square end hides it.
-const lifeWing = (t, kit, teal) => {
+const lifeWing = (t, kit, teal, up = false) => {
   const shaft = mix(t.text, t.accent, 0.5);
-  const fan = [[-38, 58, 7], [-52, 74, 7.5], [-66, 86, 8], [-80, 92, 8], [-94, 88, 8], [-108, 76, 7.5], [-122, 60, 7]];
-  const coverts = [[-58, 34, 9], [-80, 40, 9.5], [-102, 34, 9]];
+  const all = [[-38, 58, 7], [-52, 74, 7.5], [-66, 86, 8], [-80, 92, 8], [-94, 88, 8], [-108, 76, 7.5], [-122, 60, 7]];
+  // The opponent's blade sits at the top edge: the wing folds up and back, clear of the deck below it.
+  const fan = up ? all.slice(0, 5).map(([a, L, w]) => [a + 10, L, w]) : all;
+  const coverts = (up ? [[-48, 34, 9], [-70, 40, 9.5], [-92, 34, 9]] : [[-58, 34, 9], [-80, 40, 9.5], [-102, 34, 9]]);
   const at = ([a, L, w], rim) => `<g transform="translate(118 36) rotate(${a})">${primary(L, w, rim, shaft)}</g>`;
   return kit.svg(125, 72, `${featherDefs(t, teal)}${fan.map((f, i) => at(f, i === fan.length - 1 ? teal : t.accent)).join('')}${coverts.map((f) => at(f, mix(t.accent, teal, 0.5))).join('')}`);
 };
 
-// Menu tiles: the same wing spread from the tile's bottom-left corner,
-// primaries raking up and right behind the label.
+// Menu tiles: a narrow sheaf of the same primaries standing in the left
+// edge, clear of the label.
 const tileWing = (t, kit, teal) => {
   const shaft = mix(t.text, t.accent, 0.5);
-  const fan = [[14, 52, 6.5], [30, 66, 7], [46, 80, 7.5], [62, 92, 7.5], [78, 100, 7.5], [92, 104, 7]];
-  return kit.svg(150, 70, `${featherDefs(t, teal)}${fan.map(([a, L, w], i) => `<g transform="translate(4 68) rotate(${a})">${primary(L, w, i === 0 ? teal : t.accent, shaft)}</g>`).join('')}`);
+  const fan = [[-4, 56, 5.5], [3, 64, 6], [10, 60, 6], [17, 50, 5.5]];
+  return kit.svg(24, 70, `${featherDefs(t, teal)}${fan.map(([a, L, w], i) => `<g transform="translate(5 69) rotate(${a})">${primary(L, w, i === 0 ? teal : t.accent, shaft)}</g>`).join('')}`);
 };
 
 // The life blade: a jet bevel band round the gauge, the left end cut square
@@ -100,9 +102,9 @@ const tileWing = (t, kit, teal) => {
 const lifeBlade = (t, kit, teal, low = false) => {
   const rimA = low ? t.danger : teal;
   const rimB = low ? mix(t.danger, '#000000', 0.25) : t.accent;
-  const outer = 'M2 -2H149L162 15.5L149 33H2L-4 27V4Z';
+  const outer = 'M2 -2H149L158 15.5L149 33H2L-4 27V4Z';
   const hole = 'M7 3H149L153 7V24L149 28H7L3 24V7Z';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="168" height="37" viewBox="-5 -3 168 37"><defs>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="164" height="37" viewBox="-5 -3 164 37"><defs>`
     + `<linearGradient id="j" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.12)}"/><stop offset="0.22" stop-color="${t.raised}"/><stop offset="0.5" stop-color="${t.bg}"/><stop offset="0.82" stop-color="#000000"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.25)}"/></linearGradient>`
     + `<linearGradient id="r" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="${rimA}"/><stop offset="0.45" stop-color="${rimB}"/><stop offset="0.7" stop-color="${mix(rimA, rimB, 0.5)}"/><stop offset="1" stop-color="${rimB}"/></linearGradient></defs>`
     + `<path d="${outer}${hole}" fill="url(#j)" fill-rule="evenodd"/>`
@@ -110,8 +112,8 @@ const lifeBlade = (t, kit, teal, low = false) => {
     + `<path d="${hole}" fill="none" stroke="${low ? mix(t.danger, t.bg, 0.3) : mix(t.accent, t.bg, 0.25)}" stroke-width="0.9"/>`
     + `<path d="M10 0.4H146" stroke="${mix(t.text, rimA, 0.4)}" stroke-opacity="0.55" stroke-width="0.6"/>`
     + `<path d="M10 30.8H146" stroke="#000000" stroke-width="0.8"/>`
-    + `<path d="M151 2.4L159.6 15.5L151 28.6" fill="none" stroke="${mix(t.text, rimA, 0.3)}" stroke-opacity="0.5" stroke-width="0.6"/>`
-    + `<path d="M156.4 15.5l-2.6-2.4v4.8z" fill="${low ? t.danger : t.accent2}"/>`
+    + `<path d="M151 2.4L155.6 15.5L151 28.6" fill="none" stroke="${mix(t.text, rimA, 0.3)}" stroke-opacity="0.5" stroke-width="0.6"/>`
+    + `<path d="M153.6 15.5l-2-1.9v3.8z" fill="${low ? t.danger : t.accent2}"/>`
     + '</svg>';
 };
 
@@ -171,7 +173,7 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; inset: 1px; pointer-events: none; opacity: 0.7;
-  background: var(--bw-wing) left bottom / auto 96% no-repeat, var(--bw-quills) right bottom / auto 62% no-repeat; transition: filter 0.2s, opacity 0.2s;
+  background: linear-gradient(90deg, ${teal}, ${t.accent} 60%, transparent) left top / 100% 2px no-repeat, var(--bw-wing) 2px bottom / auto 92% no-repeat, var(--bw-quills) right bottom / auto 62% no-repeat; transition: filter 0.2s, opacity 0.2s;
 }
 ${SEL.tileHover} {
   background: ${notchLine(teal)}, linear-gradient(-45deg, transparent calc(50% - 0.7px), ${t.accent} 0 calc(50% + 0.7px), transparent 0) right bottom / 9px 9px no-repeat, ${oil(0.24)}, ${jet} !important;
@@ -259,7 +261,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important;
    you, violet for the opponent. */
 ${SEL.life} { border-color: transparent !important; border-image: none !important; border-radius: 0 !important; box-shadow: none !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -8px; top: -6px; width: 168px; height: 37px; pointer-events: none;
+  content: ""; position: absolute; left: -8px; top: -6px; width: 164px; height: 37px; pointer-events: none;
   background: ${svgUrl(lifeBlade(t, kit, teal))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border::before'])} { background-image: ${svgUrl(lifeBlade(t, kit, teal, true))}; }
@@ -268,6 +270,7 @@ ${sel(['#duel .lifepoints::before'])} {
   background: ${svgUrl(lifeWing(t, kit, teal))} center / 100% 100% no-repeat;
   filter: drop-shadow(0 2px 3px #000000);
 }
+${sel(['#duel #lifepoints2::before'])} { left: -79px; top: -10px; width: 90px; height: 52px; background-image: ${svgUrl(lifeWing(t, kit, teal, true))}; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
 ${SEL.lifeSelf} { background: ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
 ${SEL.lifeOpp} { background: ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
@@ -281,7 +284,7 @@ ${SEL.phase} { background: ${mix(t.border, t.accent, 0.5)} !important; border-ra
 ${sel(['#duel .phase .background .background_inner'])} { background: ${jet} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -14px; pointer-events: none;
+  content: ""; position: absolute; inset: -8px; pointer-events: none;
   background: ${svgUrl(wreath(t, kit, teal))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 18px ${alpha(t.self, 0.75)} !important; }

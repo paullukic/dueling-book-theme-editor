@@ -45,10 +45,14 @@ const chainRing = (t, kit) => {
   return kit.svg(100, 100, `<g stroke-linejoin="round">${s}</g>`);
 };
 
-// A short chain hanging off the end of the life bar, ending in a shackle.
+// A short chain of three interlocked oval links running into the life
+// bar's frame: open links side-on, edge-on links as thick bars between.
 const shackle = (t, kit) => {
   const gold = mix(whiteGold(t), t.bg, 0.1);
-  return kit.svg(48, 24, `<rect x="2" y="7" width="12" height="10" rx="5" fill="none" stroke="${gold}" stroke-width="2.2"/><rect x="12" y="10.6" width="11" height="2.8" rx="1.4" fill="${gold}"/><rect x="21" y="8" width="13" height="8" rx="4" fill="none" stroke="${gold}" stroke-width="2"/><rect x="32" y="10.6" width="10" height="2.8" rx="1.4" fill="${gold}"/><path d="M40 4h6v16h-6" fill="none" stroke="${gold}" stroke-width="2.4"/>`);
+  const dark = mix(gold, '#000000', 0.55);
+  const open = (x) => `<rect x="${x}" y="5" width="15" height="14" rx="7" fill="none" stroke="${dark}" stroke-width="4.4"/><rect x="${x}" y="5" width="15" height="14" rx="7" fill="none" stroke="${gold}" stroke-width="2.6"/>`;
+  const edge = (x) => `<rect x="${x}" y="9.6" width="13" height="4.8" rx="2.4" fill="${gold}" stroke="${dark}" stroke-width="1"/>`;
+  return kit.svg(48, 24, `${open(1)}${edge(12)}${open(22)}${edge(33)}`);
 };
 
 // Pop-up buttons: a black-crimson plate in a solid gilt rim, a cross-brand
@@ -231,5 +235,6 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 /* Scrollbars: a gold chain bar. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-herogrp { display: none; }
 `;
 };

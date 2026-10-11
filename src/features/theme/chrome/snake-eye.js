@@ -193,7 +193,7 @@ ${SEL.phase} { background: ${goldRim} !important; border-radius: 50% !important;
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 100%, ${alpha(t.accent, 0.3)}, transparent 60%), ${charcoal} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -6px; pointer-events: none;
+  content: ""; position: absolute; inset: -2px; pointer-events: none;
   background: ${svgUrl(scaleRing(t, kit, false))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background::after'])} { background-image: ${svgUrl(scaleRing(t, kit, true))}; filter: drop-shadow(0 0 5px ${t.accent}); }
@@ -201,7 +201,8 @@ ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner
 ${sel(['#duel .phase.active:has(.phase_inner) span.phase_txt'])} { color: ${t.text} !important; text-shadow: 0 0 3px #000000, 0 1px 0 #000000, 0 0 6px #000000 !important; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.self, 0.85)} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 22px ${alpha(t.opp, 0.75)} !important; }
-${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.25)} !important; text-shadow: 0 1px 0 #000000, 0 0 3px #000000 !important; }
+${sel(['#duel .phase.active span'])} { color: ${t.text} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${t.accent2} !important; border-radius: 999px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${charcoal} !important; border-radius: 999px !important; }
 ${sel(['#duel #watchers'])} { background: var(--se-scales), ${t.surface} !important; box-shadow: inset 0 0 0 1px ${goldRim}, inset 0 -2px 0 ${t.accent} !important; }

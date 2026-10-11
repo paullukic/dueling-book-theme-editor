@@ -120,8 +120,8 @@ ${back}<ellipse cx="${x}" cy="${n1(y - h * 0.42)}" rx="${n1(wd * 0.8)}" ry="${n1
 </defs>
 <rect width="${W}" height="${horizon}" fill="url(#dbtefx-fr-sky)"/>
 <path d="${stars}" stroke="${t.text}" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
-<circle cx="1100" cy="110" r="300" fill="url(#dbtefx-fr-moon)"/>
-<circle cx="1100" cy="110" r="56" fill="url(#dbtefx-fr-disc)"/>
+<g class="dbtefx-fr-moonup"><circle cx="1100" cy="110" r="300" fill="url(#dbtefx-fr-moon)"/>
+<circle cx="1100" cy="110" r="56" fill="url(#dbtefx-fr-disc)"/></g>
 <g fill="${mix(moon, sky, 0.5)}" fill-opacity="0.06"><ellipse cx="1312" cy="150" rx="17" ry="13"/><ellipse cx="1350" cy="190" rx="13" ry="10"/><ellipse cx="1338" cy="146" rx="7" ry="6"/><ellipse cx="1305" cy="196" rx="8" ry="6"/></g>
 <g id="dbtefx-fr-bank"><g fill="${mix(sky, t.bg, 0.5)}"><path d="${bank(horizon - 10, 12, 40, 7)}"/></g>
 <path d="${bank(horizon, 8, 26, 11)}" fill="${deep}"/></g>

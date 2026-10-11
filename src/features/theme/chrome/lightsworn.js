@@ -47,13 +47,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const wing = `<path d="M62 30C50 20 34 16 8 18C22 22 30 26 36 30C26 30 18 32 10 36C26 36 38 36 48 38C40 40 34 44 30 48C44 44 54 40 62 36Z" fill="${white}" stroke="${gold}" stroke-width="1.3" stroke-linejoin="round"/><path d="M58 31C46 25 34 22 20 21M56 34C46 33 36 33 22 34M56 37C48 39 42 42 38 45" fill="none" stroke="${goldDeep}" stroke-opacity="0.55" stroke-width="0.8"/>`;
   const wingedSun = svg(160, 60, `<ellipse cx="80" cy="30" rx="26" ry="26" fill="none" stroke="${gold}" stroke-opacity="0.55" stroke-width="1.2"/><ellipse cx="80" cy="30" rx="22" ry="22" fill="none" stroke="${gold}" stroke-width="2"/>${wing}<g transform="matrix(-1 0 0 1 160 0)">${wing}</g><g transform="translate(62 12)"><g stroke="${gold}" stroke-width="1.6" stroke-linecap="round">${sunRays}</g><circle cx="18" cy="18" r="7.5" fill="${white}" stroke="${goldDeep}" stroke-width="1.4"/><circle cx="18" cy="18" r="4" fill="${gold}"/><circle cx="18" cy="18" r="1.6" fill="${red}"/></g>`);
 
-  // Halo ring and short rays laid over the phase discs.
+  // Halo ring and short rays round the rim of the phase discs, clear of the label.
   let haloTicks = '';
   for (let i = 0; i < 12; i++) {
     const a = (i / 12) * Math.PI * 2;
-    haloTicks += `<line x1="${(22.5 + Math.cos(a) * 18).toFixed(2)}" y1="${(22.5 + Math.sin(a) * 18).toFixed(2)}" x2="${(22.5 + Math.cos(a) * 21).toFixed(2)}" y2="${(22.5 + Math.sin(a) * 21).toFixed(2)}"/>`;
+    haloTicks += `<line x1="${(22.5 + Math.cos(a) * 20.3).toFixed(2)}" y1="${(22.5 + Math.sin(a) * 20.3).toFixed(2)}" x2="${(22.5 + Math.cos(a) * 22.3).toFixed(2)}" y2="${(22.5 + Math.sin(a) * 22.3).toFixed(2)}"/>`;
   }
-  const halo = svg(45, 45, `<circle cx="22.5" cy="22.5" r="16.5" fill="none" stroke="${gold}" stroke-opacity="0.7" stroke-width="1.2"/><g stroke="${gold}" stroke-opacity="0.75" stroke-width="1.2">${haloTicks}</g>`);
+  const halo = svg(45, 45, `<circle cx="22.5" cy="22.5" r="19.8" fill="none" stroke="${gold}" stroke-opacity="0.7" stroke-width="1.2"/><g stroke="${gold}" stroke-opacity="0.75" stroke-width="1.2">${haloTicks}</g>`);
 
   // Vestment trim: a gold band with small red lozenges.
   const trim = svg(16, 6, `<rect width="16" height="6" fill="${gold}"/><path d="M8 0.8L10.6 3 8 5.2 5.4 3Z" fill="${red}" fill-opacity="0.85"/><path d="M0 0.4H16M0 5.6H16" stroke="${goldDeep}" stroke-width="0.8"/>`);
