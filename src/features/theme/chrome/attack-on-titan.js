@@ -2,7 +2,7 @@
 // leather straps with stitching, Survey Corps green cloth for the primary
 // actions, Wall stone in the pop-ups, life bars cut like ODM blades with
 // their snap-off scores, gas-canister caps for the phases and a crossed-blades
-// crest under abstracted wings. (t, kit) -> CSS string; see chrome/kit.js.
+// crest over a stone shield with a wall battlement. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
@@ -27,18 +27,18 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const frameSvg = svg(60, 60, `<g fill="none"><rect x="1" y="1" width="58" height="58" stroke="${steel}" stroke-width="2"/><rect x="4.5" y="4.5" width="51" height="51" stroke="${steelDim}" stroke-width="0.8"/></g>${rivet(9, 9)}${rivet(51, 9)}${rivet(9, 51)}${rivet(51, 51)}`);
   const frame = (px = 18) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u0) 20 / ${px}px stretch; box-sizing: border-box;`;
 
-  // Abstracted wings: two overlapping fans of feathers, pale over green.
-  const fan = (fill, flip) => {
-    let f = '';
-    for (let i = 0; i < 4; i++) f += `<path d="M0 0Q${-6 - i * 3} ${-13 + i * 4.5} ${-15 - i * 1.5} ${-15 + i * 7}Q${-7 - i * 2} ${-5 + i * 3} 0 0Z"/>`;
-    return `<g fill="${fill}"${flip ? ' transform="scale(-1 1)"' : ''}>${f}</g>`;
+  // Our own garrison device (no real insignia): a crenellated wall line.
+  const battlement = (x, y, w, c) => {
+    const step = w / 7;
+    let d = `M${x} ${y + step * 1.6}V${y}`;
+    for (let i = 0; i < 7; i++) d += `H${(x + step * (i + 0.5)).toFixed(2)}V${(y + (i % 2 ? 0 : step * 0.7)).toFixed(2)}`;
+    return `<path d="${d}H${x + w}V${y + step * 1.6}Z" fill="${c}"/>`;
   };
-  const wings = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${fan(mix(t.text, t.accent, 0.1), false)}<g transform="translate(2.5 1)">${fan(mix(t.muted, t.accent, 0.5), true)}</g></g>`;
-  // Crest: a steel shield plate with the wings, over two crossed ODM blades.
+  // Crest: a stone shield with the battlement, over two crossed ODM blades.
   const blade = (rot) => `<g transform="rotate(${rot} 80 34)"><path d="M18 30H128L146 34L128 38H18Z" fill="${steel}" stroke="${t.bg}" stroke-width="1"/><path d="M18 30.2H128L146 34" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="0.9"/><path d="M42 30.2L37 37.8M66 30.2L61 37.8M90 30.2L85 37.8M114 30.2L109 37.8" stroke="${t.bg}" stroke-opacity="0.7" stroke-width="1"/><path d="M4 29.5H18V38.5H4Z" fill="${leather}" stroke="${t.bg}" stroke-width="1"/><path d="M8 29.5V38.5M12 29.5V38.5" stroke="${leatherHi}" stroke-width="0.8"/></g>`;
-  const crest = svg(160, 64, `${blade(-14)}${blade(14)}<path d="M62 8H98V34Q98 48 80 56Q62 48 62 34Z" fill="${clothDeep}" stroke="${steel}" stroke-width="2"/><path d="M66 12H94V33Q94 44 80 51Q66 44 66 33Z" fill="none" stroke="${steelDim}" stroke-width="0.8"/>${wings(80, 36, 1.05)}`);
-  // Small crest for menu tiles: the shield and wings alone.
-  const badge = svg(30, 34, `<path d="M3 2H27V19Q27 28 15 33Q3 28 3 19Z" fill="${clothDeep}" stroke="${steel}" stroke-width="1.6"/>${wings(15, 21, 0.62)}`);
+  const crest = svg(160, 64, `${blade(-14)}${blade(14)}<path d="M62 8H98V34Q98 48 80 56Q62 48 62 34Z" fill="${stone}" stroke="${steel}" stroke-width="2"/><path d="M66 12H94V33Q94 44 80 51Q66 44 66 33Z" fill="none" stroke="${steelDim}" stroke-width="0.8"/><path d="M66 22H94M66 32H94M75 12V22M86 22V32M71 32V42M84 32V44" stroke="${t.bg}" stroke-opacity="0.45" stroke-width="0.8"/>${battlement(68, 14, 24, mix(t.text, t.muted, 0.3))}<path d="M66 40H94" stroke="${t.accent}" stroke-width="2"/>`);
+  // Small crest for menu tiles: a steel shield engraved with two crossed blades.
+  const badge = svg(30, 34, `<path d="M3 2H27V19Q27 28 15 33Q3 28 3 19Z" fill="${plateDeep}" stroke="${steel}" stroke-width="1.6"/><path d="M8 8L22 24M22 8L8 24" stroke="${steel}" stroke-width="2.2" stroke-linecap="round"/><path d="M6.5 6.5L9.5 9.5M23.5 6.5L20.5 9.5" stroke="${leatherHi}" stroke-width="3" stroke-linecap="round"/><path d="M5 20H25" stroke="${t.accent}" stroke-width="1.4"/>`);
 
   // Leather strap with stitching and a steel buckle (chat headers).
   const strap = svg(80, 12, `<rect y="1" width="80" height="10" fill="${leather}"/><path d="M0 2.8H80M0 9.2H80" stroke="${leatherHi}" stroke-width="0.8" stroke-dasharray="3 2"/>`);
@@ -79,7 +79,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const vars = [frameSvg, badge, grain, crest, strap, buckle, cap, hilt, masonry].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
-/* Menu tiles: riveted steel plates, a green cloth strip on the left edge, the wings badge on top. */
+/* Menu tiles: riveted steel plates, a green cloth strip on the left edge, a crossed-blades badge on top. */
 ${SEL.tile} { background: linear-gradient(90deg, ${cloth} 0 6px, ${alpha(t.bg, 0.8)} 6px 7px, transparent 7px), ${steelBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: inset 0 -8px 14px -8px ${alpha('#000000', 0.6)}, 0 10px 20px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 13px); top: -14px; width: 26px; height: 30px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
@@ -140,7 +140,7 @@ ${deckPanels} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(plate,
 ${on(sel(['#deck_constructor #search .search_bg']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; ${frame(16)} }
 
 /* Settings panels: the same riveted frame over wall stone. */
-${settingsPanels} { border-color: ${steelDim} !important; background: var(--dbtc-u8), linear-gradient(180deg, ${alpha(stone, 0.85)}, ${alpha(t.bg, 0.9)}) !important; }
+${settingsPanels} { border-color: ${steelDim} !important; background: var(--dbtc-u4) 0 0 / 80px 12px repeat-x, var(--dbtc-u4) 0 100% / 80px 12px repeat-x, var(--dbtc-u8), linear-gradient(180deg, ${alpha(stone, 0.85)}, ${alpha(t.bg, 0.9)}) !important; box-shadow: inset 0 0 0 1px ${leather}, inset 0 0 0 4px ${alpha(plateDeep, 0.85)}, inset 0 0 0 5px ${alpha(t.accent, 0.5)}, 0 10px 24px -12px #000000 !important; }
 ${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(16)} }
 
 /* Titles: stamped steel lettering. */

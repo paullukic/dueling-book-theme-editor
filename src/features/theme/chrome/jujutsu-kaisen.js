@@ -38,11 +38,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   };
   const btnDefs = `<defs><radialGradient id="b" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.35)}"/><stop offset="0.7" stop-color="${gold}"/><stop offset="1" stop-color="${goldDim}"/></radialGradient></defs>`;
   const badge = svg(28, 28, `${btnDefs}${spiral(14, 14, 12)}`);
-  // Pop-up crest: a broad tapered ink swash with red spatter, a sealing
-  // talisman pinned across it, the spiral button as its seal.
-  let glyph = '';
-  [[-6, 22, 12, 1], [-3, 30, 7, 5], [-6, 38, 12, -1]].forEach(([x, y, w, c]) => { glyph += `M${100 + x} ${y}q${w / 2} ${c} ${w} 0`; });
-  const crest = svg(200, 72, `${btnDefs}<path d="M6 42C36 20 92 24 122 26C152 28 178 20 196 26C176 42 140 50 108 50C70 50 38 54 6 42Z" fill="none" stroke="${cursed}" stroke-opacity="0.85" stroke-width="4" stroke-linejoin="round"/><path d="M6 42C36 20 92 24 122 26C152 28 178 20 196 26C176 42 140 50 108 50C70 50 38 54 6 42Z" fill="${ink}"/><path d="M14 39C48 30 92 33 120 33.5C148 34 170 30 186 31.5" fill="none" stroke="${cursed}" stroke-width="1.6" stroke-opacity="0.85" stroke-linecap="round"/><g fill="${red}"><circle cx="34" cy="26" r="3"/><circle cx="44" cy="22" r="1.6"/><circle cx="160" cy="48" r="2.6"/><circle cx="170" cy="52" r="1.4"/><circle cx="150" cy="22" r="1.8"/></g><path d="M86 4H114V68H86Z" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><path d="M89 7H111V65H89Z" fill="none" stroke="${red}" stroke-width="1.4"/><path d="${glyph}" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/><path d="M100 14V44" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>${spiral(100, 55, 7)}`);
+  // Pop-up crest: a short sealing talisman pinned on the top border, the
+  // spiral button as its seal.
+  const crest = svg(30, 48, `${btnDefs}<path d="M2 1H28V47H2Z" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><path d="M5 4H25V44H5Z" fill="none" stroke="${red}" stroke-width="1.3"/><path d="M15 9V31M10 13q5 -1.5 10 0M9 21q6 1.5 12 -0.5" fill="none" stroke="${ink}" stroke-width="2.2" stroke-linecap="round"/>${spiral(15, 38, 4.5)}`);
   // A talisman strip edge for chat headers: paper with a red border.
   const strip = svg(60, 14, `<rect width="60" height="14" fill="${paper}"/><path d="M0 2H60M0 12H60" stroke="${red}" stroke-width="1.2"/><path d="M8 7q4 -2 8 0M28 5l3 4M44 7q3 2 7 -1" fill="none" stroke="${ink}" stroke-width="1.4" stroke-linecap="round"/>`);
   // Phase discs: a spiral button.
@@ -70,7 +68,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const popBtn = (text, wide, c) => {
     const w = wide ? 234.85 : 153.4;
     const bw = w - 12;
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><path d="M7 11Q${w / 2} 8 ${6 + bw - 1} 11L${6 + bw} 67Q${w / 2} 70 6 67Z" fill="url(#g)" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><rect x="12" y="16" width="${bw - 12}" height="47" fill="none" stroke="${c.edge}" stroke-width="1.8"/><path d="M${w - 30} 20h10v10h-10Z" fill="${c.seal}"/><text x="${w / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="800" font-size="25" fill="${c.text}">${text}</text></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><path d="M7 11Q${w / 2} 8 ${6 + bw - 1} 11L${6 + bw} 67Q${w / 2} 70 6 67Z" fill="url(#g)" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><rect x="12" y="16" width="${bw - 12}" height="47" fill="none" stroke="${c.edge}" stroke-width="1.8"/><text x="${w / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="800" font-size="25" fill="${c.text}">${text}</text></svg>`;
   };
   const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
   const popCss = (primary, secondary) => [['ok_btn', 'OK', primary, false], ['yes_btn', 'Yes', primary, false], ['no_btn', 'No', secondary, false], ['cancel_btn', 'Cancel', secondary, true]]
@@ -87,10 +85,10 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   return `
 html body { ${vars} }
 /* Menu tiles: uniform navy in a brush-ink frame with red seals, the gold spiral button on top. */
-${SEL.tile} { background: var(--dbtc-u8) 0 100% / 60px 26px repeat-x, radial-gradient(ellipse 90% 70% at 50% 120%, ${alpha(cursed, 0.3)}, transparent 70%), ${clothBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: 0 10px 20px -12px #000000 !important; }
+${SEL.tile} { background: var(--dbtc-u8) 0 100% / 60px 13px repeat-x, radial-gradient(ellipse 90% 70% at 50% 120%, ${alpha(cursed, 0.3)}, transparent 70%), ${clothBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: 0 10px 20px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 12px); top: -12px; width: 24px; height: 24px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
-${SEL.tileHover} { background: var(--dbtc-u8) 0 100% / 60px 32px repeat-x, radial-gradient(ellipse 90% 80% at 50% 110%, ${alpha(cursed, 0.55)}, transparent 70%), ${clothBg(0.04)} !important; box-shadow: inset 0 0 18px ${alpha(cursed, 0.35)}, 0 0 18px -4px ${alpha(cursed, 0.8)}, 0 12px 24px -12px #000000 !important; }
+${SEL.tileHover} { background: var(--dbtc-u8) 0 100% / 60px 16px repeat-x, radial-gradient(ellipse 90% 80% at 50% 110%, ${alpha(cursed, 0.55)}, transparent 70%), ${clothBg(0.04)} !important; box-shadow: inset 0 0 18px ${alpha(cursed, 0.35)}, 0 0 18px -4px ${alpha(cursed, 0.8)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { ${label} }
 
 /* Buttons: navy cloth with an ink edge; hover flares cursed violet. */
@@ -101,7 +99,7 @@ ${SEL.buttonDown} { background: ${navyDeep} !important; border-color: ${red} !im
 /* Pop-ups: a navy panel in a brush-ink frame, a sealing talisman pinned across the top. */
 ${SEL.dialog} { background: radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(cursed, 0.18)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${navy}, ${mix(navyDeep, t.bg, 0.5)}) !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 4px ${navyDeep}, 0 0 0 5px ${alpha(cursed, 0.55)}, 0 0 30px -6px ${alpha(cursed, 0.45)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8px; right: 8px; bottom: 8px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(18)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 100px); top: -42px; right: auto; bottom: auto; width: 200px; height: 72px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 3px #000000); }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 15px); top: -26px; right: auto; bottom: auto; width: 30px; height: 48px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 3px #000000); }
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a talisman strip under a navy header; the window edged in cursed violet. */

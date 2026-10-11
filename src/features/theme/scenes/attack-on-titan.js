@@ -43,7 +43,7 @@ const scene = (t) => {
   let cannons = '';
   for (let i = 0; i < 7; i++) {
     const u = 0.5 + i * 0.075;
-    if (u > 0.66 && u < 0.86) continue;
+    if (u > 0.74 && u < 0.92) continue;
     const [x, y] = pt(TOP, u);
     const s = 0.4 + u * 0.9;
     cannons += `<g transform="translate(${x} ${y}) scale(${n1(s)})"><rect x="-9" y="-11" width="18" height="9" rx="2"/><path d="M-4 -9L-26 -15L-26 -10L-4 -5Z"/><circle cx="-6" cy="-3" r="4.5"/><circle cx="6" cy="-3" r="4.5"/></g>`;
@@ -64,10 +64,10 @@ const scene = (t) => {
 
   // A Survey Corps scout in flight: body leaning into the swing, cloak
   // streaming back, legs trailing, blades forward. The wire meets the belt at (0, 0).
-  const scout = (s) => `<g transform="scale(${s}) translate(2 -16)"><path d="M3 9C-5 7 -14 5 -25 9C-19 13 -18 18 -21 24C-14 21 -8 21 -4 23C-2 18 0 13 3 9Z" fill="${cloak}"/><path d="M3 9C-5 7 -14 5 -25 9" fill="none" stroke="${mix(t.accent, t.text, 0.3)}" stroke-opacity="0.5" stroke-width="0.8"/><path d="M5 7C8 8 8 12 6 15L-2 25L-12 36L-16 35L-8 25L-14 30L-22 38L-25 36L-12 22L-4 12C-2 8 2 6 5 7Z" fill="${ink}"/><circle cx="7.5" cy="3.4" r="3.5" fill="${ink}"/><path d="M-6 17L-11 21L-8 24L-3 20Z" fill="${mix(t.muted, t.bg, 0.25)}"/><path d="M6 12L30 7M4 15L27 15" stroke="${mix(t.text, t.muted, 0.2)}" stroke-width="1.3" stroke-linecap="round"/><path d="M-9 22Q-30 30 -58 26" fill="none" stroke="${t.text}" stroke-opacity="0.35" stroke-width="2.4" stroke-linecap="round"/><path d="M-9 22Q-34 34 -80 32" fill="none" stroke="${t.text}" stroke-opacity="0.16" stroke-width="5" stroke-linecap="round"/></g>`;
+  const scout = (s) => `<g transform="scale(${s}) translate(2 -16)"><path d="M3 9C-5 7 -14 5 -25 9C-19 13 -18 18 -21 24C-14 21 -8 21 -4 23C-2 18 0 13 3 9Z" fill="${cloak}"/><path d="M3 9C-5 7 -14 5 -25 9" fill="none" stroke="${mix(t.accent, t.text, 0.3)}" stroke-opacity="0.5" stroke-width="0.8"/><path d="M5 7C8 8 8 12 6 15L-2 25L-12 36L-16 35L-8 25L-14 30L-22 38L-25 36L-12 22L-4 12C-2 8 2 6 5 7Z" fill="${ink}"/><circle cx="7.5" cy="3.4" r="3.5" fill="${ink}"/><path d="M-6 17L-11 21L-8 24L-3 20Z" fill="${mix(t.muted, t.bg, 0.25)}"/><path d="M6 12L30 7M4 15L27 15" stroke="${mix(t.text, t.muted, 0.2)}" stroke-width="1.3" stroke-linecap="round"/><path d="M-9 22Q-30 30 -58 26" fill="none" stroke="${t.text}" stroke-opacity="0.35" stroke-width="1.1" stroke-linecap="round"/><path d="M-9 22Q-34 34 -80 32" fill="none" stroke="${t.text}" stroke-opacity="0.14" stroke-width="2.4" stroke-linecap="round"/></g>`;
   // Wire from an anchor in the wall face; the scout swings on it like a pendulum.
   const swing = (ax, ay, len, s, dur, delay, dir) =>
-    `<g style="transform-origin: ${ax}px ${ay}px; animation: dbtefx-aot-swing${dir < 0 ? 'b' : ''} ${dur}s ease-in-out ${n1(-delay)}s infinite;"><path d="M${ax} ${ay}V${ay + len}" stroke="${mix(t.text, t.muted, 0.5)}" stroke-opacity="0.75" stroke-width="${n1(0.9 * s)}"/><circle cx="${ax}" cy="${ay}" r="${n1(2 * s)}" fill="${ink}"/><g transform="translate(${ax} ${ay + len})${dir < 0 ? ' scale(-1 1)' : ''}">${scout(s)}</g></g>`;
+    `<g style="transform-origin: ${ax}px ${ay}px; animation: dbtefx-aot-swing${dir < 0 ? 'b' : ''} ${dur}s ease-in-out ${n1(-delay)}s infinite;"><path d="M${ax} ${ay}Q${ax + 26 * dir} ${n1(ay + len * 0.55)} ${ax} ${ay + len}" fill="none" stroke="${mix(t.text, t.muted, 0.5)}" stroke-opacity="0.75" stroke-width="${n1(0.9 * s)}"/><circle cx="${ax}" cy="${ay}" r="${n1(2 * s)}" fill="${ink}"/><g transform="translate(${ax} ${ay + len})${dir < 0 ? ' scale(-1 1)' : ''}">${scout(s)}</g></g>`;
 
   // The colossal hand: four skinless fingers hooked over the parapet from
   // behind the wall, red muscle with pale tendons, steam lifting off them.
@@ -85,12 +85,12 @@ const scene = (t) => {
   };
   // The back of the hand rises from behind the wall into the steam; the
   // fingers sit side by side, splayed a little, knuckles over the parapet.
-  const [hx, hy] = pt(TOP, 0.765);
+  const [hx, hy] = pt(TOP, 0.81);
   const fingers = [[-66, 98, 38, -12], [-22, 128, 44, -4], [22, 140, 46, 3], [66, 120, 42, 10]].map(([dx, len, w, rot]) => `<g transform="translate(${dx} 8) rotate(${rot})">${finger(len, w)}</g>`).join('');
   const back = `<path d="M-96 -2C-112 -60 -76 -128 -46 -190H54C82 -128 110 -60 92 -2Z" fill="url(#dbtefx-aot-back)"/><path d="M-66 -10Q-40 -100 -10 -190M-22 -14Q-10 -100 4 -190M22 -14Q16 -100 14 -190M66 -10Q46 -100 26 -190" fill="none" stroke="${t.text}" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round"/><path d="M-82 -20Q-62 -100 -30 -190M-44 -16Q-26 -100 -6 -190M0 -16Q4 -100 9 -190M44 -16Q32 -100 20 -190M82 -20Q64 -100 40 -190" fill="none" stroke="${ink}" stroke-opacity="0.35" stroke-width="1.6"/><path d="M-96 -2C-106 -40 -100 -70 -86 -100M92 -2C104 -40 100 -70 88 -100" fill="none" stroke="${ink}" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"/>`;
-  const hand = `<g transform="translate(${hx} ${n1(hy + 2)}) rotate(-21)">${back}${fingers}</g>`;
+  const hand = `<g transform="translate(${hx} ${n1(hy + 2)}) rotate(-21) scale(0.86)">${back}${fingers}</g>`;
   let handSteam = '';
-  [[1180, 180, 60], [1260, 150, 74], [1330, 130, 60], [1220, 120, 50], [1300, 90, 56]].forEach(([x, y, r], i) => {
+  [[1260, 160, 56], [1340, 130, 70], [1400, 110, 56], [1300, 100, 48], [1370, 70, 52]].forEach(([x, y, r], i) => {
     handSteam += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#dbtefx-aot-puff)" ${anim('aot-boil', 9 + i * 2, i * 3, 'ease-in-out')}/>`;
   });
 
@@ -126,15 +126,13 @@ const scene = (t) => {
     windows += `<rect x="${n1(wx)}" y="${n1(856 + rand() * 30)}" width="5" height="7" fill="${heat}" fill-opacity="${n1(0.35 + rand() * 0.4)}"/>`;
   }
 
-  // The Survey Corps banner: two overlapping wings, abstracted.
-  const wingFan = (fill, flip) => {
-    let f = '';
-    for (let i = 0; i < 4; i++) f += `<path d="M0 0Q${-12 - i * 6} ${-26 + i * 9} ${-30 - i * 3} ${-30 + i * 14}Q${-14 - i * 4} ${-10 + i * 6} 0 0Z"/>`;
-    return `<g fill="${fill}" transform="${flip ? 'scale(-1 1) ' : ''}">${f}</g>`;
-  };
-  const banner = `<g transform="translate(1268 640)"><path d="M0 0V250" stroke="${ink}" stroke-width="6"/><circle cx="0" cy="-4" r="6" fill="${ink}"/><g style="transform-origin: 0 10px; animation: dbtefx-aot-flag 7s ease-in-out infinite;"><path d="M-3 8H120Q112 50 120 92H-3Z" fill="${cloak}" stroke="${mix(t.accent, t.bg, 0.2)}" stroke-width="1.5"/><path d="M6 16H111M6 84H111" stroke="${mix(t.accent, t.text, 0.4)}" stroke-opacity="0.5"/><g transform="translate(60 56) scale(1.25)">${wingFan(mix(t.text, t.accent, 0.08), false)}<g transform="translate(5 2)">${wingFan(mix(t.muted, t.accent, 0.35), true)}</g></g></g></g>`;
+  // The banner: two crossed ODM blades over a crenellated wall line, our own
+  // garrison device (no real insignia).
+  const flagBlade = (rot) => `<g transform="rotate(${rot})"><path d="M-34 -2.6H22L30 0L22 2.6H-34Z" fill="${mix(t.text, t.muted, 0.2)}"/><path d="M-20 -2.6L-23 2.6M-6 -2.6L-9 2.6M8 -2.6L5 2.6" stroke="${ink}" stroke-width="0.8"/><path d="M-44 -3H-34V3H-44Z" fill="${mix(t.warning, t.bg, 0.45)}"/></g>`;
+  const device = `${flagBlade(-32)}${flagBlade(212)}<path d="M-30 30V22H-24V26H-18V22H-12V26H-6V22H0V26H6V22H12V26H18V22H24V26H30V22V30Z" fill="${mix(t.text, t.muted, 0.35)}"/>`;
+  const banner = `<g transform="translate(1268 640)"><path d="M0 0V250" stroke="${ink}" stroke-width="6"/><circle cx="0" cy="-4" r="6" fill="${ink}"/><g style="transform-origin: 0 10px; animation: dbtefx-aot-flag 7s ease-in-out infinite;"><path d="M-3 8H120Q112 50 120 92H-3Z" fill="${cloak}" stroke="${mix(t.accent, t.bg, 0.2)}" stroke-width="1.5"/><path d="M6 16H111M6 84H111" stroke="${mix(t.accent, t.text, 0.4)}" stroke-opacity="0.5"/><g transform="translate(60 46) scale(1.1)">${device}</g></g></g>`;
 
-  return `<style>@keyframes dbtefx-aot-swing { 0%, 100% { transform: rotate(-16deg); } 50% { transform: rotate(18deg); } }
+  return `<style>@keyframes dbtefx-aot-swing { 0%, 100% { transform: rotate(4deg); } 50% { transform: rotate(16deg); } }
 @keyframes dbtefx-aot-swingb { 0%, 100% { transform: rotate(14deg); } 50% { transform: rotate(-20deg); } }
 @keyframes dbtefx-aot-boil { 0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; } 50% { transform: translate(14px, -26px) scale(1.08); opacity: 1; } }
 @keyframes dbtefx-aot-glide { 0% { transform: translate(0, 0); } 50% { transform: translate(-60px, -14px); } 100% { transform: translate(0, 0); } }
@@ -152,7 +150,7 @@ ${glow('dbtefx-aot-haze', t.muted, 0.5, 0.5, 0.5, 0.16)}
 </defs>
 <rect x="0" y="0" width="${W}" height="520" fill="url(#dbtefx-aot-haze)"/>
 <path d="M-10 560L120 520L260 540L420 500L560 530L700 505L820 520L900 500V600H-10Z" fill="${mix(t.bg, t.muted, 0.12)}" fill-opacity="0.8"/>
-<ellipse cx="1290" cy="190" rx="460" ry="330" fill="url(#dbtefx-aot-heat)"/>
+<ellipse cx="1370" cy="170" rx="420" ry="320" fill="url(#dbtefx-aot-heat)"/>
 <g>${billows}</g>
 <!--mid-->
 <path d="${curvePath(TOP)}L1620 940Q820 640 -20 606Z" fill="url(#dbtefx-aot-wall)"/>
@@ -165,8 +163,7 @@ ${glow('dbtefx-aot-haze', t.muted, 0.5, 0.5, 0.5, 0.16)}
 ${bird(1080, 150, 1.2, 0)}${bird(1150, 110, 0.9, 3)}${bird(1030, 190, 0.8, 6)}${bird(1210, 80, 0.8, 9)}
 ${hand}
 ${handSteam}
-${swing(1405, 250, 200, 1.5, 7, 0, -1)}
-${swing(1060, 370, 140, 1, 6.2, 3, 1)}
+${swing(1432, 206, 290, 3.1, 8, 0, 1)}
 <!--near-->
 <rect x="0" y="760" width="${W}" height="140" fill="url(#dbtefx-aot-town)"/>
 <g fill="${ink}"><path d="${roofs}${extras}"/>${spire}</g>
@@ -201,7 +198,7 @@ void main() {
   // rolling; lit from below by the heat, shaded by a fake normal.
   float base = 0.52;
   float h = max(uv.y - base, 0.0);
-  float cx = 0.74 * aspect + 0.08 * sin(h * 4.0 + t * 2.0) + h * 0.15;
+  float cx = 0.83 * aspect + 0.06 * sin(h * 4.0 + t * 2.0) + h * 0.15;
   float width = 0.16 + h * 1.1;
   vec2 q = vec2(fbm(p * 1.6 + vec2(0.0, -t * 3.0)), fbm(p * 1.6 + vec2(4.1, -t * 2.5)));
   float b0 = steamAt(p, q, t);
@@ -214,7 +211,7 @@ void main() {
   vec3 cool = mix(u_muted * 0.45, u_text * 0.8, shade);
   vec3 warm = mix(u_accent2 * 0.55, mix(u_text, u_accent2, 0.6), shade);
   vec3 col = mix(sky, mix(cool, warm, hot), plume * 0.92);
-  col += u_accent2 * 0.3 * smoothstep(0.55, 0.0, length((p - vec2(0.8 * aspect, base + 0.05)) * vec2(0.8, 2.6)));
+  col += u_accent2 * 0.3 * smoothstep(0.55, 0.0, length((p - vec2(0.85 * aspect, base + 0.05)) * vec2(0.8, 2.6)));
   col *= 1.0 - 0.5 * dot(uv - 0.5, uv - 0.5) * 2.0;
   gl_FragColor = vec4(dither(col), 1.0);
 }`,

@@ -6,8 +6,8 @@ import { anim, glow, n1, polar, rng, W, H } from './kit.js';
 // converge; black-flash lightning cracks around it, sealing talismans drift
 // down, ink splatter on the edges.
 
-const SX = 1180;
-const SY = 330;
+const SX = 1310;
+const SY = 290;
 
 const scene = (t) => {
   const rand = rng(1031);
@@ -36,7 +36,7 @@ const scene = (t) => {
     x += w + 4;
   }
   // A tall stepped tower with an antenna, rooftop tanks, unlit billboard frames.
-  const tower = `<path d="M1286 900V420H1300V380H1316V350H1356V380H1372V420H1386V900Z" fill="${mix(ink, t.surface, 0.2)}"/><path d="M1336 350V280" stroke="${mix(ink, t.surface, 0.2)}" stroke-width="3"/><circle cx="1336" cy="280" r="3" fill="${red}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/><path d="M1296 430H1376M1296 470H1376M1296 510H1376M1296 550H1376M1296 590H1376M1296 630H1376M1296 670H1376M1296 710H1376M1296 750H1376" stroke="${mix(t.opp, ink, 0.6)}" stroke-opacity="0.6" stroke-width="2"/>`;
+  const tower = `<g transform="translate(110 130)"><path d="M1286 900V420H1300V380H1316V350H1356V380H1372V420H1386V900Z" fill="${mix(ink, t.surface, 0.2)}"/><path d="M1336 350V280" stroke="${mix(ink, t.surface, 0.2)}" stroke-width="3"/><circle cx="1336" cy="280" r="3" fill="${red}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/><path d="M1296 430H1376M1296 470H1376M1296 510H1376M1296 550H1376M1296 590H1376M1296 630H1376M1296 670H1376M1296 710H1376M1296 750H1376" stroke="${mix(t.opp, ink, 0.6)}" stroke-opacity="0.6" stroke-width="2"/></g>`;
   const extras = [[540, 712], [760, 740], [1120, 690], [1460, 700], [160, 700]].map(([bx, by]) => `<path d="M${bx} ${by}h16v-14q-8 -5 -16 0Z" fill="${ink}"/>`).join('');
   // The cylinder tower with its vertical fins.
   const cyl = `<path d="M300 900V560Q336 540 372 560V900Z" fill="${mix(ink, t.surface, 0.3)}"/>${[312, 324, 336, 348, 360].map((fx) => `<path d="M${fx} 556V900" stroke="${mix(t.muted, ink, 0.6)}" stroke-width="1.2"/>`).join('')}<path d="M300 560Q336 540 372 560" fill="none" stroke="${violet}" stroke-opacity="0.6" stroke-width="2"/>`;
@@ -47,7 +47,7 @@ const scene = (t) => {
   // rim; swirls turning within, a corona of streaks around it.
   let swirl = '';
   for (let i = 0; i < 6; i++) {
-    const r0 = 34 + i * 13;
+    const r0 = 28 + i * 12;
     const a0 = i * 67;
     const [x1, y1] = polar(SX, SY, r0, a0);
     const [x2, y2] = polar(SX, SY, r0, a0 + 150);
@@ -56,16 +56,16 @@ const scene = (t) => {
   let corona = '';
   for (let i = 0; i < 36; i++) {
     const a = i * 10 + rand() * 6;
-    const [x1, y1] = polar(SX, SY, 128, a);
-    const [x2, y2] = polar(SX, SY, 138 + rand() * (i % 3 ? 30 : 70), a);
+    const [x1, y1] = polar(SX, SY, 112, a);
+    const [x2, y2] = polar(SX, SY, 120 + rand() * (i % 3 ? 26 : 56), a);
     corona += `M${x1} ${y1}L${x2} ${y2}`;
   }
-  const purple = `<circle cx="${SX}" cy="${SY}" r="330" fill="url(#dbtefx-jjk-aura)"/>
+  const purple = `<circle cx="${SX}" cy="${SY}" r="280" fill="url(#dbtefx-jjk-aura)"/>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 80s linear infinite;"><path d="${corona}" stroke="${mix(violet, '#ffffff', 0.4)}" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/></g>
-<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="124" fill="url(#dbtefx-jjk-sphere)" fill-opacity="0.35"/><circle cx="${SX}" cy="${SY}" r="124" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
+<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="108" fill="url(#dbtefx-jjk-sphere)" fill-opacity="0.35"/><circle cx="${SX}" cy="${SY}" r="108" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 14s linear infinite reverse;" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round">${swirl}</g>`;
   // Red and blue: two orbs circling the sphere, swinging in toward it.
-  const orb = (color, r, phase, dur) => `<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin ${dur}s linear ${n1(-phase)}s infinite;"><g transform="translate(${SX + 205} ${SY})"><g ${anim('jjk-near', dur / 2, phase / 2, 'ease-in-out')}><circle r="${r * 3.4}" fill="url(#dbtefx-jjk-${color === red ? 'red' : 'blue'})"/><circle r="${r}" fill="${color}"/><circle r="${r}" fill="none" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="2"/><circle r="${n1(r * 0.5)}" fill="#ffffff" fill-opacity="0.9"/></g></g></g>`;
+  const orb = (color, r, phase, dur) => `<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin ${dur}s linear ${n1(-phase)}s infinite;"><g transform="translate(${SX + 150} ${SY})"><g ${anim('jjk-near', dur / 2, phase / 2, 'ease-in-out')}><circle r="${r * 3.4}" fill="url(#dbtefx-jjk-${color === red ? 'red' : 'blue'})"/><circle r="${r}" fill="${color}"/><circle r="${r}" fill="none" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="2"/><circle r="${n1(r * 0.5)}" fill="#ffffff" fill-opacity="0.9"/></g></g></g>`;
 
   // Black flash: jagged black lightning haloed in red, cracking from the
   // sphere's rim down toward the city, each bolt tapering and forking.
@@ -92,7 +92,7 @@ const scene = (t) => {
     return { d: `M${left.join('L')}L${right.join('L')}Z`, pts };
   };
   let strikes = '';
-  [[1100, 430, 1050, 660, 9, 3], [1250, 440, 1330, 690, 8, 5], [1300, 300, 1470, 250, 6, 7]].forEach(([ax, ay, bx, by, w, sd]) => {
+  [[1300, 405, 1280, 650, 9, 3], [1400, 400, 1450, 640, 8, 5], [1440, 260, 1540, 200, 6, 7]].forEach(([ax, ay, bx, by, w, sd]) => {
     const main = zig(ax, ay, bx, by, w, sd);
     strikes += main.d;
     const [mx, my] = main.pts[3];
@@ -181,7 +181,7 @@ void main() {
   float f = fbm(q * 1.6 + w * 2.2 + vec2(0.0, t * 1.8));
   // Rising tongues: stretched noise moving upward.
   float tongues = fbm(vec2(q.x * 3.0 + w.x, q.y * 1.2 + t * 2.5));
-  float near = smoothstep(560.0, 80.0, length(p - vec2(1180.0, 330.0)));
+  float near = smoothstep(560.0, 80.0, length(p - vec2(1310.0, 290.0)));
   float energy = smoothstep(0.45, 0.9, f * 0.7 + tongues * 0.5) * (0.35 + 0.65 * near);
   vec3 col = u_bg;
   col = mix(col, u_opp * 0.45, energy * 0.75 * (1.0 - uv.y * 0.3));
@@ -189,10 +189,10 @@ void main() {
   // Black wisps cut through.
   col *= 1.0 - 0.5 * smoothstep(0.55, 0.75, fbm(q * 2.4 - w + vec2(t, 0.0))) * near;
   // Hollow purple: a turbulent ball of violet energy, white-hot at the core.
-  vec2 sp = p - vec2(1180.0, 330.0);
-  float sr = length(sp) / 124.0;
+  vec2 sp = p - vec2(1310.0, 290.0);
+  float sr = length(sp) / 108.0;
   float tw = sr * 3.2 - u_time * 0.6;
-  vec2 tp = mat2(cos(tw), -sin(tw), sin(tw), cos(tw)) * (sp / 124.0);
+  vec2 tp = mat2(cos(tw), -sin(tw), sin(tw), cos(tw)) * (sp / 108.0);
   float swirl = fbm(tp * 2.6 + vec2(0.0, u_time * 0.1));
   float ball = smoothstep(1.05, 0.9, sr);
   vec3 core = mix(u_accent, vec3(1.0), smoothstep(0.55, 0.0, sr) * 0.85);
