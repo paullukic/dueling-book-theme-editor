@@ -5,6 +5,8 @@ import { contrast } from '../lib/color';
 import { CARD_TEXT_FONTS, CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
 import { AREAS, FONTS, PRESETS, PRESET_GROUPS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
 import { MAX_CODE_LENGTH, MAX_CUSTOM_CSS, THEME_KEYS, decodeTheme, encodeTheme } from '../features/theme/share';
+import { ICON_STYLES, iconPreview } from '../features/theme/art';
+import { skinBackdrop } from '../features/theme/skins';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
 import BackgroundPicker from './BackgroundPicker';
 
@@ -20,7 +22,22 @@ const VIEWS = [
 let lastView = 'style';
 
 const set = (key) => (value) => updateSettings({ [key]: value });
-const SWATCH_KEYS = ['bg', 'surface', 'accent', 'accent2', 'self', 'opp'];
+
+// Each chip previews its preset as it will look: the skin's backdrop, a
+// framed icon and the accent. Presets never change, so build them once.
+const CHIP_LOOKS = Object.fromEntries(
+  PRESETS.map((p) => [
+    p.id,
+    {
+      style: {
+        '--p-text': p.tokens.text,
+        '--p-accent': p.tokens.accent,
+        background: [skinBackdrop(p.id, p.tokens), p.tokens.bg].filter(Boolean).join(', '),
+      },
+      icon: iconPreview(p.tokens, p.radius, ICON_STYLES[p.id]),
+    },
+  ]),
+);
 
 const sameTokens = (a, b) => TOKENS.every(({ key }) => (a[key] || '').toLowerCase() === (b[key] || '').toLowerCase());
 const isEdited = (s) => {
@@ -45,13 +62,9 @@ const PresetPicker = ({ s, onPick }) => (
               aria-pressed={s.themeEnabled && s.themePreset === p.id && !isEdited(s)}
               title={p.blurb}
               onClick={() => onPick(p)}
-              style={{ '--p-surface': p.tokens.surface, '--p-text': p.tokens.text, '--p-accent': p.tokens.accent }}
+              style={CHIP_LOOKS[p.id].style}
             >
-              <span className="preset-chip-swatches" aria-hidden="true">
-                {SWATCH_KEYS.map((k) => (
-                  <i key={k} style={{ background: p.tokens[k] }} />
-                ))}
-              </span>
+              <img className="preset-chip-icon" src={CHIP_LOOKS[p.id].icon} alt="" />
               <span className="preset-chip-name">{p.name}</span>
             </button>
           ))}
@@ -273,13 +286,6 @@ const StyleView = ({ s, onPick }) => {
   return (
     <>
       <Group>
-        <ToggleRow
-          label="Full theme"
-          description="Restyles every DuelingBook screen. Pick a look below to start."
-          checked={s.themeEnabled}
-          onChange={set('themeEnabled')}
-        />
-        <PresetPicker s={s} onPick={onPick} />
         <p className="note theme-status">
           <span aria-live="polite">{status}</span>
           {s.themeEnabled && edited && (
@@ -288,6 +294,15 @@ const StyleView = ({ s, onPick }) => {
             </button>
           )}
         </p>
+        <button
+          type="button"
+          className="preset-off"
+          aria-pressed={!s.themeEnabled}
+          onClick={() => updateSettings({ themeEnabled: false })}
+        >
+          Off: DuelingBook’s own look
+        </button>
+        <PresetPicker s={s} onPick={onPick} />
       </Group>
       {s.themeEnabled && (
         <Group title="Shape and lettering">
@@ -328,13 +343,9 @@ const StyleView = ({ s, onPick }) => {
 const BackgroundView = ({ s }) => (
   <>
     <Group title="Your own background">
-      <ToggleRow
-        label="Use an image"
-        description="Any picture behind DuelingBook, in place of the theme’s background motif. It is shrunk and stored on this computer only."
-        checked={s.backgroundEnabled}
-        onChange={set('backgroundEnabled')}
-      >
-        <BackgroundPicker />
+      <p className="note">Any picture behind DuelingBook. It is shrunk and stored on this computer only.</p>
+      <BackgroundPicker />
+      <ToggleRow label="Show my image" checked={s.backgroundEnabled} onChange={set('backgroundEnabled')}>
         <SliderRow
           label="Image strength"
           value={s.backgroundOpacity}
@@ -344,6 +355,14 @@ const BackgroundView = ({ s }) => (
           format={(v) => `${Math.round(v * 100)}%`}
           onChange={set('backgroundOpacity')}
         />
+        {s.themeEnabled && s.themeEffects && (
+          <ToggleRow
+            label="Theme overlay on my image"
+            description="Draws the theme’s pattern and glow over your picture. Switch off to show the picture clean."
+            checked={s.backgroundThemeOverlay}
+            onChange={set('backgroundThemeOverlay')}
+          />
+        )}
       </ToggleRow>
     </Group>
     <Group title="DuelingBook’s background art">
@@ -358,7 +377,12 @@ const BackgroundView = ({ s }) => (
           onChange={set('themeBackdrop')}
         />
       ) : (
-        <p className="note">Turn on the Full theme (Style) to dim or hide DuelingBook’s own background art.</p>
+        <>
+          <p className="note">A theme can dim or hide DuelingBook’s circuit-board art.</p>
+          <button type="button" className="btn" onClick={() => updateSettings({ themeEnabled: true })}>
+            Turn on a theme
+          </button>
+        </>
       )}
     </Group>
   </>
@@ -452,13 +476,10 @@ const MoreView = ({ s, onBeforeApply }) => {
           checked={s.smallerMenu}
           onChange={set('smallerMenu')}
         />
+        {!(s.themeEnabled && s.themeAreas.menu) && (
         <ToggleRow
           label="Button colours"
-          description={
-            s.themeEnabled && s.themeAreas.menu
-              ? 'The full theme styles these buttons now. To use your own colours, switch off Main menu under What to restyle.'
-              : 'Pick the fill, border and glow of the main menu buttons.'
-          }
+          description="Pick the fill, border and glow of the main menu buttons."
           checked={s.menuColorsEnabled}
           onChange={set('menuColorsEnabled')}
         >
@@ -469,19 +490,18 @@ const MoreView = ({ s, onBeforeApply }) => {
           <ColorRow label="Edge glow" value={s.menuColors.edge} onChange={setMenu('edge')} />
           <SliderRow label="Glow opacity" value={s.menuColors.edgeAlpha} min={0} max={1} step={0.05} format={pct} onChange={setMenu('edgeAlpha')} />
         </ToggleRow>
+        )}
       </Group>
-      <Group title="Without the full theme">
-        <ToggleRow
-          label="Simple dark mode"
-          description={
-            s.themeEnabled
-              ? 'The full theme already covers this. It applies again if you turn the theme off.'
-              : 'Darkens only the lobby, chat, search and deck panels.'
-          }
-          checked={s.darkMode}
-          onChange={set('darkMode')}
-        />
-      </Group>
+      {!s.themeEnabled && (
+        <Group title="Without the full theme">
+          <ToggleRow
+            label="Simple dark mode"
+            description="Darkens only the lobby, chat, search and deck panels."
+            checked={s.darkMode}
+            onChange={set('darkMode')}
+          />
+        </Group>
+      )}
     </>
   );
 };

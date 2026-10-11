@@ -9,14 +9,14 @@ import AliasEditor from './AliasEditor';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
 import { SupportNudge, SupportTab, WhatsNew } from './Support';
-import { CardsIcon, ChatIcon, CloseIcon, HeartIcon, PaletteIcon, SwordsIcon } from './icons';
+import { CardsIcon, ChatIcon, CloseIcon, GearIcon, PaletteIcon, SwordsIcon } from './icons';
 
 const TABS = [
   { id: 'look', label: 'Theme', Icon: PaletteIcon },
   { id: 'duel', label: 'Duel', Icon: SwordsIcon },
   { id: 'chat', label: 'Chat', Icon: ChatIcon },
   { id: 'deck', label: 'Deck', Icon: CardsIcon },
-  { id: 'more', label: 'Support', Icon: HeartIcon },
+  { id: 'more', label: 'Settings', Icon: GearIcon },
 ];
 
 const set = (key) => (value) => updateSettings({ [key]: value });

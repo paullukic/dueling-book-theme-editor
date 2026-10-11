@@ -238,6 +238,10 @@ export const SupportTab = () => {
   };
   return (
     <>
+      <SettingsTransfer />
+      <Group title="Privacy">
+        <p className="note">Your settings stay in your browser. Nothing is collected or sent anywhere.</p>
+      </Group>
       <div className="card-callout gold">
         <h3>Keep Theme Editor free</h3>
         <p>No ads, no tracking, no paid features. If it makes your duels nicer, a coffee pays for the next update.</p>
@@ -264,10 +268,6 @@ export const SupportTab = () => {
             Watch PsyYGO on YouTube
           </a>
         </div>
-      </Group>
-      <SettingsTransfer />
-      <Group title="Privacy">
-        <p className="note">Your settings stay in your browser. Nothing is collected or sent anywhere.</p>
       </Group>
     </>
   );

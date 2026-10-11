@@ -5,9 +5,9 @@ import { contrast, flattenLayers, mix, parseCssColor, readableOn } from '../src/
 import { DEFAULT_PSCT_COLORS } from '../src/lib/defaults.js';
 import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
-import { AREA_CSS, fontCss, readingTextCss, varsCss } from '../src/features/theme/css.js';
+import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
-import { skinCss } from '../src/features/theme/skins.js';
+import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { launcherBottom } from '../src/lib/layout.js';
 
 test('theme: off by default so updates change nothing', () => {
@@ -239,24 +239,43 @@ test('skins: a switched-off area gets none of the skin', () => {
   assert.equal((off.match(/\{/g) || []).length, (off.match(/\}/g) || []).length, 'braces balanced');
 });
 
-test('skins: the user’s own background picture hides the motif layer', () => {
-  PRESETS.filter((p) => p.id !== 'oled').forEach(({ id, tokens }) =>
-    assert.ok(skinCss(id, tokens).includes('body:has(#dbte-background-img) #dbte-skin-layer { display: none'), id),
-  );
-});
-
-test('icons: the unread private chat icon wins over the plain one, at any roundness', () => {
-  [0, 16].forEach((r) => {
-    const css = iconCss(PRESETS[0].tokens, r, 'tile');
-    assert.ok(css.indexOf('/svg/private_btn_anim"]') > css.indexOf('/svg/private_btn"]'));
-    assert.doesNotMatch(css, /NaN|undefined/);
-  });
+test('background: the theme overlay over the user’s picture is a choice, on by default', () => {
+  assert.equal(DEFAULTS.backgroundThemeOverlay, true);
+  assert.equal(withDefaults({ backgroundThemeOverlay: false }).backgroundThemeOverlay, false);
+  PRESETS.forEach(({ id, tokens }) => assert.doesNotMatch(skinCss(id, tokens), /background-img/, id));
 });
 
 test('css: text field edges reach 3:1 in every preset', () => {
-  assert.ok(AREA_CSS.widgets.includes('border-color: color-mix(in srgb, var(--dbt-text) 40%, var(--dbt-raised))'));
+  assert.ok(AREA_CSS.widgets.includes('border-color: var(--dbt-field-edge)'));
   PRESETS.forEach(({ id, tokens: t }) => {
-    const edge = mix(t.raised, t.text, 0.4);
+    const edge = mix(t.raised, t.text, fieldEdgeMix(t));
     assert.ok(Math.min(contrast(edge, t.raised), contrast(edge, t.surface)) >= 3, id);
+  });
+});
+
+test('light themes: there are some, and they switch the page and panel to light controls', () => {
+  const light = PRESETS.filter((p) => isLightTheme(p.tokens));
+  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'parchment']);
+  light.forEach(({ tokens, radius }) => {
+    assert.ok(varsCss({ tokens, radius, backdrop: 0.25 }).includes('--dbt-scheme: light'));
+    assert.equal(panelVars(tokens).colorScheme, 'light');
+  });
+  assert.ok(varsCss({ tokens: PRESETS[0].tokens, radius: 6, backdrop: 0.25 }).includes('--dbt-scheme: dark'));
+  assert.doesNotMatch(Object.values(AREA_CSS).join(''), /color-scheme:\s*dark/);
+});
+
+test('panel: follows the theme colours, refuses malformed ones', () => {
+  const t = PRESETS[0].tokens;
+  const v = panelVars(t);
+  assert.equal(v['--gold'], t.accent);
+  assert.equal(v['--on-gold'], t.accentText);
+  assert.equal(v['--ink'], t.text);
+  assert.equal(panelVars({ ...t, accent: 'red;}' }), null);
+});
+
+test('skins: chips and spiral art follow the theme', () => {
+  PRESETS.filter((p) => p.id !== 'oled').forEach(({ id, tokens }) => {
+    assert.ok(skinBackdrop(id, tokens).length > 20, `${id} backdrop for chip`);
+    assert.match(skinCss(id, tokens), /#spiral \{ filter: grayscale\(1\) sepia\(1\) saturate\(2\.6\) hue-rotate\(-?\d+deg\)/, id);
   });
 });

@@ -9,11 +9,15 @@
 // - Selectors start with "html" to outrank the site's equal-specificity
 //   !important rules.
 
-import { contrast, isHex, toRgb } from '../../lib/color.js';
+import { contrast, isHex, luminance, mix, toRgb } from '../../lib/color.js';
 
 // Black or white, whichever reads better on the given colour.
 const textOn = (hex) => (contrast(hex, '#ffffff') >= contrast(hex, '#111111') ? '#ffffff' : '#111111');
 
+
+// Light themes need a stronger mix to keep field edges at 3:1.
+export const isLightTheme = (tokens) => luminance(tokens.surface) > 0.4;
+export const fieldEdgeMix = (tokens) => (isLightTheme(tokens) ? 0.55 : 0.4);
 
 export const varsCss = ({ tokens, radius, backdrop }) => {
   const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
@@ -25,6 +29,8 @@ ${lines.join('\n')}
   --dbt-opp-text: ${textOn(tokens.opp)};
   --dbt-radius: ${radius}px;
   --dbt-backdrop: ${backdrop};
+  --dbt-scheme: ${isLightTheme(tokens) ? 'light' : 'dark'};
+  --dbt-field-edge: color-mix(in srgb, var(--dbt-text) ${fieldEdgeMix(tokens) * 100}%, var(--dbt-raised));
   --dbt-glass: color-mix(in srgb, var(--dbt-surface) 93%, transparent);
   --dbt-glass-soft: color-mix(in srgb, var(--dbt-surface) 78%, transparent);
   --dbt-hover: color-mix(in srgb, var(--dbt-accent) 16%, var(--dbt-raised));
@@ -34,6 +40,26 @@ ${lines.join('\n')}
   --dbt-scrim: rgba(var(--dbt-bg-rgb), 0.72);
   --dbt-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.75);
 }`;
+};
+
+// The settings panel's own colours, taken from the active theme so the panel
+// matches the page. Keys are the panel's CSS variables (src/ui/styles.css).
+export const panelVars = (t) => {
+  if (!Object.values(t || {}).every(isHex)) return null;
+  return {
+    '--plate': t.surface,
+    '--plate-raised': t.raised,
+    '--plate-sunk': mix(t.surface, t.bg, 0.6),
+    '--line': t.border,
+    '--line-soft': mix(t.border, t.surface, 0.5),
+    '--ink': t.text,
+    '--ink-muted': t.muted,
+    '--gold': t.accent,
+    '--gold-deep': mix(t.accent, t.bg, 0.3),
+    '--on-gold': t.accentText,
+    '--cyan': t.accent2,
+    colorScheme: isLightTheme(t) ? 'light' : 'dark',
+  };
 };
 
 // Page backdrop: theme background with the circuit-board art faded by the
@@ -149,7 +175,7 @@ html #content .combobox_background, html #content .checkbox_background,
 html #content .radiobutton_background { background-color: transparent !important; box-shadow: none !important; }
 html #content .combobox .combobox_arrow img { filter: invert(1) brightness(0.8); }
 html #content select, html #content option, html #content optgroup {
-  color-scheme: dark;
+  color-scheme: var(--dbt-scheme);
   background-color: var(--dbt-raised) !important;
   color: var(--dbt-text) !important;
 }
@@ -165,9 +191,9 @@ html #content textarea, html #content .textarea, html #content .textinput {
   background-color: var(--dbt-raised) !important;
   color: var(--dbt-text) !important;
   /* Field edges need 3:1 against the page to be found at all. */
-  border-color: color-mix(in srgb, var(--dbt-text) 40%, var(--dbt-raised)) !important;
+  border-color: var(--dbt-field-edge) !important;
   caret-color: var(--dbt-accent);
-  color-scheme: dark;
+  color-scheme: var(--dbt-scheme);
   border-radius: calc(var(--dbt-radius) / 2) !important;
 }
 html #content input:focus, html #content textarea:focus { outline: 1px solid var(--dbt-accent) !important; outline-offset: 0; }
@@ -191,7 +217,7 @@ html #content .checkbox:hover, html #content .radiobutton:hover { box-shadow: in
 html #content .checkbox.checkbox_down, html #content .radiobutton.radiobutton_down { background-color: var(--dbt-press) !important; }
 html #content .checkbox.red { background-color: var(--dbt-danger) !important; }
 html #content .checkbox .check, html #content .radiobutton .check { filter: invert(1); }
-html #content input[type=checkbox], html #content input[type=radio] { accent-color: var(--dbt-accent); color-scheme: dark; }
+html #content input[type=checkbox], html #content input[type=radio] { accent-color: var(--dbt-accent); color-scheme: var(--dbt-scheme); }
 
 /* List rows */
 html #content .cell1 {

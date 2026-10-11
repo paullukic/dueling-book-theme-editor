@@ -111,7 +111,9 @@ const motifs = {
 
 // ---------- building blocks ----------
 
-const layer = (backgrounds) => `#${LAYER_ID} { background: ${backgrounds} !important; }`;
+// The motif is painted twice (the layer and its ::before), which roughly
+// doubles its strength without retuning every motif's colours.
+const layer = (backgrounds) => `#${LAYER_ID}, #${LAYER_ID}::before { background: ${backgrounds} !important; }`;
 const tileHoverGlow = (color) => `${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${color}, 0 0 18px -6px ${color} !important; }`;
 const fieldGlow = (t, strength = 3) => `${FIELD} { filter: drop-shadow(0 0 ${strength}px ${alpha(t.self, 0.55)}) drop-shadow(0 0 ${strength}px ${alpha(t.opp, 0.45)}); }`;
 const dialogCorners = (color) => `${dialogSel('::before')}, ${dialogSel('::after')} {
@@ -177,6 +179,18 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
     fieldGlow(t, 3),
 
   // Divine Beasts: Ra gold, Obelisk blue, Slifer red; glyph walls and a sunlit sky.
+  // Light: aged paper grain with a warm vignette and inked corners on pop-ups.
+  parchment: (t) =>
+    layer(`${url(motifs.grain(t))}, ${url(motifs.grain(t))}, radial-gradient(ellipse at 50% 40%, transparent 55%, ${alpha(t.border, 0.45)} 100%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent),
+
+  // Light: brushed silver plates with a diagonal blade sheen.
+  'duel-disk': (t) =>
+    layer(`repeating-linear-gradient(90deg, ${alpha(t.text, 0.025)} 0 1px, transparent 1px 3px), linear-gradient(115deg, transparent 35%, ${alpha('#ffffff', 0.5)} 48%, transparent 60%), ${url(motifs.hexArrows(t))}`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
   divine: (t) =>
     layer(`${url(motifs.glyphs(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
     `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.16)}, transparent 50%) !important; box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.7)}, 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important; }
@@ -187,6 +201,26 @@ ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 
 };
 
 export const SKIN_IDS = Object.keys(SKINS);
+
+// A CSS filter that turns grey-ish art into shades of `hex`: sepia gives a
+// known orange hue (about 38deg), which is then rotated onto the accent's.
+const hueOf = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const max = Math.max(r, g, b);
+  const d = max - Math.min(r, g, b);
+  if (!d) return 0;
+  const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return (h * 60 + 360) % 360;
+};
+const tintFilter = (hex) => `grayscale(1) sepia(1) saturate(2.6) hue-rotate(${Math.round(hueOf(hex) - 38)}deg)`;
+
+// Just the backdrop of a preset's skin as a CSS background list, for previews.
+export const skinBackdrop = (presetId, tokens) => {
+  const make = SKINS[presetId];
+  if (!make || !Object.values(tokens || {}).every(isHex)) return '';
+  const m = new RegExp(`#${LAYER_ID}, #${LAYER_ID}::before \{ background: ([^}]*) !important; \}`).exec(make(tokens));
+  return m ? m[1] : '';
+};
 
 // Which "What to restyle" area each detail belongs to: a switched-off area
 // gets none of the skin either.
@@ -215,9 +249,9 @@ export const skinCss = (presetId, tokens, areas = {}) => {
   if (!own) return '';
   // The skin layer sits behind the game; DuelingBook's own cover over its
   // stage turns see-through so the motif shows.
-  // The user's own background picture replaces the motif, never mixes with it.
   return `#${LAYER_ID} { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-repeat: repeat; }
-body:has(#dbte-background-img) #${LAYER_ID} { display: none !important; }
+#${LAYER_ID}::before { content: ""; position: absolute; inset: 0; }
+html #spiral { filter: ${tintFilter(tokens.accent)} brightness(0.8) !important; }
 html #circuit_cover { background-color: transparent !important; }
 html #circuit_board { opacity: calc(var(--dbt-backdrop) * 0.18) !important; }
 html #greenlines { opacity: calc(var(--dbt-backdrop) * 0.25) !important; }

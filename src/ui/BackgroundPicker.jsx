@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocal } from '../lib/localStore';
+import { updateSettings } from '../lib/settings';
 
 const MAX_DIM = 1920;
 
@@ -48,6 +49,7 @@ const BackgroundPicker = () => {
       }
       setError('');
       setImage(data);
+      updateSettings({ backgroundEnabled: true });
     } catch (e) {
       setError('Could not read that image. Try another file.');
     }
@@ -94,6 +96,7 @@ const BackgroundPicker = () => {
             onClick={(e) => {
               const file = e.currentTarget.parentElement.querySelector('input[type=file]');
               setImage('');
+              updateSettings({ backgroundEnabled: false });
               if (file) file.focus();
             }}
           >

@@ -163,12 +163,19 @@ ${MENU_HOVER_CSS}`
 };
 
 export const BackgroundEffect = () => {
-  const { backgroundEnabled, backgroundOpacity } = useSettings();
+  const { backgroundEnabled, backgroundOpacity, backgroundThemeOverlay } = useSettings();
   const [image] = useLocal('background', '');
   const active = backgroundEnabled && !!image;
+  // The picture sits under the theme's motif layer (z-index -1 vs 0), or the
+  // motif is hidden so the picture shows clean.
   useStyle(
     'dbte-background',
-    active ? '#greenlines, #circuit_board, #circuit_cover { display: none !important; }' : null,
+    active
+      ? `#greenlines, #circuit_board, #circuit_cover { display: none !important; }
+html body { background-color: transparent !important; }
+#dbte-background-img { z-index: -1 !important; }
+${backgroundThemeOverlay ? '#dbte-skin-layer { opacity: 0.55; }' : '#dbte-skin-layer { display: none !important; }'}`
+      : null,
   );
 
   useEffect(() => {

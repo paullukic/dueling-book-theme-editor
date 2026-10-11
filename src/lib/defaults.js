@@ -61,6 +61,7 @@ export const DEFAULTS = {
     edgeAlpha: 0.65,
   },
   backgroundEnabled: false,
+  backgroundThemeOverlay: true, // the theme's motif drawn over the user's own picture
   backgroundOpacity: 0.5,
 
   // Theme (full reskin). Off by default: DuelingBook looks as before.

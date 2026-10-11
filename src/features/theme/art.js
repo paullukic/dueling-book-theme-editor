@@ -120,6 +120,10 @@ const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">${frame(style, w, h, t, radius)}<g transform="translate(${gx.toFixed(2)} ${gy.toFixed(2)}) scale(${s.toFixed(4)})">${glyph(ink, hi)}</g>${dot}</svg>`;
 };
 
+// One framed sample icon as an image URL, for the preset chips.
+export const iconPreview = (t, radius, style = 'tile') =>
+  `data:image/svg+xml,${encodeURIComponent(framedIcon(GLYPHS.chat, 40, 34.14, t, radius, style))}`;
+
 // Banlist badges keep their meaning (1 / 2 / forbidden) in the theme's danger colour.
 const banBadge = (label, t, size) => {
   const c = size / 2;

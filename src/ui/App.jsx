@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { isTypingEvent } from '../lib/dom';
@@ -16,6 +16,7 @@ import {
 import { AlertsEffect, AnimationSpeedEffect, ShortcutsEffect, SkipIntroEffect } from '../features/duel';
 import { ChatEffect } from '../features/chat';
 import ThemeEffect from '../features/theme/ThemeEffect';
+import { panelVars } from '../features/theme/css';
 import ReconnectNotice from '../features/reconnect';
 import ChatCommandsEffect from '../features/chatCommands';
 import { NotesWindow, TrackerWindow } from '../features/windows';
@@ -54,7 +55,11 @@ const useLauncherBottom = (active) => {
 };
 
 const App = ({ shadowRoot }) => {
-  const { showLauncher } = useSettings();
+  const { showLauncher, themeEnabled, themeTokens } = useSettings();
+  const tokenKey = JSON.stringify(themeTokens);
+  // The panel wears the active theme too; DuelingBook's own look keeps the panel's default colours.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const panelStyle = useMemo(() => (themeEnabled ? panelVars(themeTokens) : null), [themeEnabled, tokenKey]);
   const [open, setOpen] = useState(false);
   const [meta, setMeta, metaLoaded] = useLocal('meta', {});
   const launcherRef = useRef(null);
@@ -117,7 +122,7 @@ const App = ({ shadowRoot }) => {
   const hasNews = metaLoaded && meta && meta.seenVersion !== chrome.runtime.getManifest().version;
 
   return (
-    <div className="dbte">
+    <div className="dbte" style={panelStyle || undefined}>
       <ThemeEffect />
       <DarkModeEffect />
       <PsctEffect />
