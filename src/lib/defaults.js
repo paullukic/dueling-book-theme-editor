@@ -41,6 +41,7 @@ export const DEFAULTS = {
   readingTextScale: 1, // chat, logs and bulletin; 1 = DuelingBook default
   psctEnabled: false,
   psctColors: DEFAULT_PSCT_COLORS,
+  psctLineBreaks: false, // OCG style: new line after each sentence and condition
   smallerMenu: false,
   menuColorsEnabled: false,
   menuColors: {

@@ -117,14 +117,13 @@ test('field: recolours the four zone gradients only', () => {
 });
 
 test('css: lettering sheets only change fonts', () => {
-  ['system', 'card'].forEach((id) => {
+  ['system'].forEach((id) => {
     const css = fontCss(id);
     assert.ok(css && css.includes('font-family'), id);
     assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|font-size|line-height|letter-spacing|left|top|border)\s*:/i, id);
   });
   assert.equal(fontCss('original'), null);
-  assert.ok(fontCss('card').includes('MatrixRegularSmallCaps'));
-  assert.doesNotMatch(fontCss('card'), /\.button|\.combobox|input|textarea/, 'card font stays off small controls');
+  assert.equal(fontCss('card'), null);
 });
 
 test('css: reading text size touches only wrapping text boxes', () => {

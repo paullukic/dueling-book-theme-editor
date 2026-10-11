@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { classify } from '../src/features/psct.js';
+import { breakPoints, classify } from '../src/features/psct.js';
 
 // Coloured runs as [role, text], in order; uncoloured text is skipped.
 const runs = (text, options) => {
@@ -157,4 +157,22 @@ test('summoning conditions are limits', () => {
 test('spacing: no coloured run starts or ends a line with a space', () => {
   const text = ODD_EYES;
   runs(text, { lore: false }).forEach(([, chunk]) => assert.doesNotMatch(chunk, /^\s/));
+});
+
+test('OCG layout: a new line after each sentence and each activation colon', () => {
+  const text = 'If this card is Normal Summoned: You can discard 1 card; add 1 "Mr. Volcano: X" from your Deck to your hand. You can only use this effect of "X" once per turn.';
+  const at = [...breakPoints(text, { lore: false })].sort((a, b) => a - b);
+  assert.deepEqual(at.map((i) => text.slice(i, i + 8).trim().slice(0, 6)), ['You ca', 'You ca']);
+  assert.equal(text[at[0] - 1], ':');
+  assert.equal(text[at[1] - 1], '.');
+});
+
+test('OCG layout: no break at the end of a line, inside quotes or for lore', () => {
+  assert.equal(breakPoints('Draw 1 card.').size, 0);
+  assert.equal(breakPoints('Add 1 "Ars Magna: Test" to your hand.').size, 0);
+  assert.equal(breakPoints('Which came first: The cosmos or the egg? It is the creator.', { lore: true }).size, 0);
+  const pend = 'Pendulum Effect:\nOnce per turn: You can draw 1 card.\n\nMonster Effect:\nA wandering performer. Loves the stage.';
+  const at = [...breakPoints(pend, { lore: true })];
+  assert.equal(at.length, 1);
+  assert.ok(pend.slice(at[0]).startsWith(' You can draw'));
 });

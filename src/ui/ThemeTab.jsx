@@ -377,6 +377,12 @@ const CardTextView = ({ s }) => {
           Reset colours
         </button>
       </ToggleRow>
+      <ToggleRow
+        label="New line per sentence (OCG style)"
+        description="Starts a new line after every full stop and after each activation condition’s colon, like OCG cards."
+        checked={s.psctLineBreaks}
+        onChange={set('psctLineBreaks')}
+      />
       <SliderRow
         label="Card text size"
         value={s.cardTextSize}

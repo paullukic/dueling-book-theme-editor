@@ -14,7 +14,6 @@ import { contrast, isHex, toRgb } from '../../lib/color.js';
 // Black or white, whichever reads better on the given colour.
 const textOn = (hex) => (contrast(hex, '#ffffff') >= contrast(hex, '#111111') ? '#ffffff' : '#111111');
 
-const SYSTEM_FONT = 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
 export const varsCss = ({ tokens, radius, backdrop }) => {
   const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
@@ -46,29 +45,55 @@ html #greenlines { opacity: calc(var(--dbt-backdrop) * 0.7) !important; }
 html #circuit_cover { background-color: rgba(var(--dbt-bg-rgb), calc(1 - var(--dbt-backdrop) * 0.7)) !important; }
 `;
 
-// Text DuelingBook shows in its UI fonts (never card faces).
-const BODY_TEXT = [
-  '.button', '.combobox', '.cell', 'select', 'option', 'input', 'textarea', '.textarea', '.textinput',
+// Text DuelingBook shows in its UI fonts (never card faces), grouped by the
+// font DuelingBook uses there, because each group's text is positioned for
+// that font's metrics.
+const ARIAL_TEXT = ['.button', '.combobox', '.cell', 'select', 'option', 'input', 'textarea', '.textarea', '.textinput'];
+const ROUNDED_TEXT = [
   '.body_txt', '.chat_top span', '.arial_rounded18', '.arial_rounded20', '.arial_rounded25', '.bisque',
   '.kristenitc', '.connection_status', '.connection_status2',
 ];
 const TITLE_TEXT = ['.menu_btn .content span', '.title1', '.title2', '.subtitle', '.title_txt', '.arial_black', '.arial_black2'];
-const sel = (list) => [...list.map((x) => `html #content ${x}`), ...(list === BODY_TEXT ? ['html #tooltips > *'] : [])].join(', ');
+const sel = (list, extra = []) => [...list.map((x) => `html #content ${x}`), ...extra].join(', ');
 
-// DuelingBook already loads the real card fonts for card faces.
-const CARD_TITLE = '"MatrixRegularSmallCaps", "Stone Serif", Georgia, serif';
+// Vertical metrics of the fonts DuelingBook positions its text for (OS/2
+// ascender, descender, line gap as a share of the em). A replacement font
+// declared with the same metrics sits on the same baseline, so button and
+// title text does not drift up or down.
+const METRICS = {
+  arial: 'ascent-override: 90.5%; descent-override: 21.2%; line-gap-override: 3.3%;',
+  rounded: 'ascent-override: 94.6%; descent-override: 21.2%; line-gap-override: 0%;',
+  black: 'ascent-override: 110.1%; descent-override: 31.1%; line-gap-override: 0%;',
+};
 
-// 'original' -> null (DuelingBook's own fonts), 'system' -> clean UI font,
-// 'card' -> card-name small caps for titles and buttons, card-text serif elsewhere.
+const SYSTEM_LOCAL = (w) =>
+  w >= 800
+    ? 'local("Segoe UI Black"), local("SegoeUI-Black"), local("Segoe UI Bold"), local("Roboto Black"), local("Helvetica Neue Bold")'
+    : w >= 700
+      ? 'local("Segoe UI Bold"), local("SegoeUI-Bold"), local("Roboto Bold"), local("Helvetica Neue Bold")'
+      : 'local("Segoe UI"), local("SegoeUI"), local("Roboto"), local("Helvetica Neue")';
+
+const face = (family, src, metrics, weight) =>
+  `@font-face { font-family: "${family}"; src: ${src}; font-weight: ${weight}; ${metrics} }`;
+
+// "Clean": the system UI font, re-declared three times with the metrics of
+// the font it replaces.
+const cleanFaces = [
+  face('DBTE Clean', SYSTEM_LOCAL(400), METRICS.arial, 400),
+  face('DBTE Clean', SYSTEM_LOCAL(700), METRICS.arial, 700),
+  face('DBTE Clean Rounded', SYSTEM_LOCAL(600), METRICS.rounded, 400),
+  face('DBTE Clean Rounded', SYSTEM_LOCAL(700), METRICS.rounded, 700),
+  face('DBTE Clean Title', SYSTEM_LOCAL(800), METRICS.black, 400),
+  face('DBTE Clean Title', SYSTEM_LOCAL(800), METRICS.black, 700),
+].join('\n');
+
+// 'original' -> null (DuelingBook's own fonts), 'system' -> clean UI font.
 export const fontCss = (id) => {
   if (id === 'system') {
-    return `${sel(BODY_TEXT)}, ${sel(TITLE_TEXT)} { font-family: ${SYSTEM_FONT} !important; }
-${sel(TITLE_TEXT)} { font-weight: 800 !important; }`;
-  }
-  if (id === 'card') {
-    // Card fonts read badly at button and field sizes: titles, headings and
-    // menu tiles only; everything small keeps DuelingBook's font.
-    return `${sel(TITLE_TEXT)} { font-family: ${CARD_TITLE} !important; font-weight: normal !important; }`;
+    return `${cleanFaces}
+${sel(ARIAL_TEXT)} { font-family: "DBTE Clean", Arial, sans-serif !important; }
+${sel(ROUNDED_TEXT, ['html #tooltips > *'])} { font-family: "DBTE Clean Rounded", "Arial Rounded MT Bold", Arial, sans-serif !important; }
+${sel(TITLE_TEXT)} { font-family: "DBTE Clean Title", "Arial Black2", Arial, sans-serif !important; }`;
   }
   return null;
 };

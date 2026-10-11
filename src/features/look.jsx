@@ -44,11 +44,11 @@ export const ReadingTextEffect = () => {
 };
 
 export const PsctEffect = () => {
-  const { psctEnabled, psctColors } = useSettings();
+  const { psctEnabled, psctColors, psctLineBreaks } = useSettings();
   useStyle('dbte-psct', psctEnabled ? psctCss(psctColors) : null);
 
   useEffect(() => {
-    if (!psctEnabled) return undefined;
+    if (!psctEnabled && !psctLineBreaks) return undefined;
     let preview = null;
     let observer = null;
     // The previewed card's frame tells Normal Monsters (lore) apart; it may
@@ -58,7 +58,7 @@ export const PsctEffect = () => {
       observer.disconnect();
       lastLore = isLoreCard(preview);
       unwrap(preview);
-      wrap(preview, { lore: lastLore });
+      wrap(preview, { lore: lastLore, breaks: psctLineBreaks });
       observer.observe(preview, { childList: true, subtree: true, characterData: true });
       if (preview.parentElement) observer.observe(preview.parentElement, { attributes: true, attributeFilter: ['src'], subtree: true });
     };
@@ -76,7 +76,7 @@ export const PsctEffect = () => {
       if (observer) observer.disconnect();
       if (preview) unwrap(preview);
     };
-  }, [psctEnabled]);
+  }, [psctEnabled, psctLineBreaks]);
   return null;
 };
 

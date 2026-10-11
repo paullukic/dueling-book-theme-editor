@@ -156,6 +156,27 @@ export const classify = (text, { lore } = {}) => {
   return roles;
 };
 
+// OCG-style layout: where to start a new line. Returns the set of text
+// positions that begin a new line: after each full stop that ends a
+// sentence mid-line, and after an activation condition's colon.
+export const breakPoints = (text, { lore } = {}) => {
+  const out = new Set();
+  parts(text).forEach(({ pendulum, lines }) => {
+    if (lore && !pendulum) return;
+    lines.forEach(({ from, to }) => {
+      sentences(text, from, to).forEach(([a, b]) => {
+        if (!text.slice(a, b).trim()) return;
+        const colon = firstOutside(text, a, b, ':');
+        if (colon >= 0 && text.slice(colon + 1, b).trim()) out.add(colon + 1);
+        if (/[.!?)]\s*$/.test(text.slice(a, b)) && text.slice(b, to).trim()) out.add(b);
+      });
+    });
+  });
+  return out;
+};
+
+const BREAK_CLASS = `${SPAN_CLASS}-br`;
+
 // Text nodes in order, with each <br> standing for a line break.
 const textParts = (root) => {
   const out = [];
@@ -177,17 +198,19 @@ export const isLoreCard = (preview) => {
 };
 
 export const unwrap = (root) => {
-  const spans = root.querySelectorAll(`span.${SPAN_CLASS}`);
-  if (!spans.length) return;
-  spans.forEach((span) => span.replaceWith(document.createTextNode(span.textContent)));
+  const added = root.querySelectorAll(`span.${SPAN_CLASS}, br.${BREAK_CLASS}`);
+  if (!added.length) return;
+  added.forEach((el) => (el.tagName === 'BR' ? el.remove() : el.replaceWith(document.createTextNode(el.textContent))));
   root.normalize();
 };
 
-export const wrap = (root, options) => {
+// options: { lore, breaks } - breaks adds OCG-style line breaks.
+export const wrap = (root, options = {}) => {
   const nodes = textParts(root);
   const full = nodes.map((n) => (n ? n.data : '\n')).join('');
   if (!full.trim()) return;
   const roles = classify(full, options);
+  const breaks = options.breaks ? breakPoints(full, options) : new Set();
   let offset = 0;
   for (const node of nodes) {
     if (!node) {
@@ -201,7 +224,8 @@ export const wrap = (root, options) => {
     for (let i = 1; i <= text.length; i++) {
       const prev = roles[offset + i - 1];
       const cur = i < text.length ? roles[offset + i] : Symbol('end');
-      if (cur === prev) continue;
+      const breakHere = i < text.length && breaks.has(offset + i);
+      if (cur === prev && !breakHere) continue;
       const chunk = text.slice(runStart, i);
       if (prev) {
         const span = document.createElement('span');
@@ -211,6 +235,12 @@ export const wrap = (root, options) => {
         changed = true;
       } else {
         frag.appendChild(document.createTextNode(chunk));
+      }
+      if (breakHere) {
+        const br = document.createElement('br');
+        br.className = BREAK_CLASS;
+        frag.appendChild(br);
+        changed = true;
       }
       runStart = i;
     }

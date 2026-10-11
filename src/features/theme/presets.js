@@ -486,5 +486,4 @@ export const DEFAULT_AREAS = Object.fromEntries(AREAS.map((a) => [a.id, true]));
 export const FONTS = [
   { id: 'original', label: 'DuelingBook' },
   { id: 'system', label: 'Clean' },
-  { id: 'card', label: 'Card style' },
 ];
