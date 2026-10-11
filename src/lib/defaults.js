@@ -63,6 +63,7 @@ export const DEFAULTS = {
   themeBackdrop: 0.25,
   themeFont: 'original',
   themeAreas: DEFAULT_AREAS,
+  themeEffects: true, // the preset's signature skin (backdrop motif, glows, ornaments)
   customCssEnabled: false,
 
   // Duel

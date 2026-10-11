@@ -6,6 +6,7 @@ import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
 import { AREA_CSS, fontCss, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { iconCss, recolorField } from '../src/features/theme/art.js';
+import { skinCss } from '../src/features/theme/skins.js';
 import { launcherBottom } from '../src/lib/layout.js';
 
 test('theme: off by default so updates change nothing', () => {
@@ -165,4 +166,28 @@ test('launcher: stays in the corner unless it would cover a DuelingBook button',
   assert.equal(b, 800 - 752 + 8);
   const hidden = { ...mute, width: 0, height: 0 };
   assert.equal(launcherBottom(vp, [hidden]), 14);
+});
+
+test('skins: every preset has a signature skin (OLED stays bare on purpose)', () => {
+  PRESETS.forEach(({ id, tokens }) => {
+    const css = skinCss(id, tokens);
+    if (id === 'oled') assert.equal(css, '');
+    else assert.ok(css.includes('#dbte-skin-layer') && css.length > 200, id);
+  });
+});
+
+test('skins: no layout changes on DuelingBook elements', () => {
+  PRESETS.forEach(({ id, tokens }) => {
+    // Our own layer and pseudo-element ornaments may be positioned; nothing else.
+    const css = skinCss(id, tokens)
+      .replace(/#dbte-skin-layer\s*\{[^}]*\}/g, '')
+      .replace(/[^{}]*::(before|after)[^{}]*\{[^}]*\}/g, '');
+    assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|margin|font-size|line-height|left|top|right|bottom|border-width)\s*:/i, id);
+    assert.doesNotMatch(css, /\.card\b|cardfront/, id);
+  });
+});
+
+test('skins: malformed colours never reach the page', () => {
+  assert.equal(skinCss('branded', { ...PRESETS[0].tokens, accent: '"/><script>' }), '');
+  assert.equal(skinCss('nope', PRESETS[0].tokens), '');
 });

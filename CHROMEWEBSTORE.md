@@ -17,7 +17,7 @@ Make DuelingBook look and play the way you want. Theme Editor restyles every scr
 
 THEME
 • A full, modern theme for every screen: main menu, duel room, deck constructor, duels, chat windows, pop-ups, profiles, settings, rankings and tournaments
-• 18 presets: two archetype themes, six clean looks (Obsidian, Midnight, Crimson, Verdant, Sakura, OLED) and ten duel themes (Spell Card, Trap Card, Fusion, Synchro, Xyz, Link, White Dragon, Dark Magic, Black Dragon, Millennium Gold)
+• 21 themes, each with its own signature look (backgrounds, glows, ornaments): three archetype themes (Branded, Artmage, Elemental HERO), six clean looks (Obsidian, Midnight, Crimson, Verdant, Sakura, OLED) and twelve duel themes (Spell Card, Trap Card, Fusion, Synchro, Xyz, Link, Pendulum, Divine Beasts, White Dragon, Dark Magic, Black Dragon, Millennium Gold)
 • Make it yours: pick every colour, corner roundness, background art and lettering, with a warning if text gets hard to read
 • The playmat, life points, phase buttons and pop-up buttons follow your colours
 • Keep DuelingBook's own look in any area you like, with one switch per area
@@ -125,7 +125,7 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 
 | Version | Date | Summary |
 |---------|------|---------|
-| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with 16 presets (incl. ten duel themes), your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes; card text colouring rebuilt (Pendulum, Rush Duel, materials); reconnect automatically; chat commands. All off until switched on; existing settings unchanged. |
+| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with 21 themes with signature skins, your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes; card text colouring rebuilt (Pendulum, Rush Duel, materials); reconnect automatically; chat commands; OCG-style line breaks; chat text size. All off until switched on; existing settings unchanged. |
 | 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; fewer permissions (tabs and activeTab removed). Existing settings carry over. |
 | 1.0.7 | 2026-08-20 | Dark theme, feature tooltips, five custom chat shortcuts. |
 

@@ -4,6 +4,7 @@ import { useLocal } from '../../lib/localStore';
 import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { fieldCss, iconCss } from './art';
+import { LAYER_ID, skinCss } from './skins';
 
 const AREA_IDS = Object.keys(AREA_CSS);
 const CUSTOM_ID = 'dbte-theme-custom';
@@ -75,6 +76,22 @@ const ThemeEffect = () => {
 
   const icons = useMemo(() => (on && areas.icons ? iconCss(artTokens, artRadius) : null), [on, areas.icons, artTokens, artRadius]);
   useStyle('dbte-theme-icons', icons);
+
+  // Signature skin: CSS plus a fixed layer behind the game for its backdrop.
+  const skin = useMemo(
+    () => (on && s.themeEffects ? skinCss(s.themePreset, artTokens) || null : null),
+    [on, s.themeEffects, s.themePreset, artTokens],
+  );
+  useStyle('dbte-theme-skin', skin);
+  const hasSkin = !!skin;
+  useEffect(() => {
+    if (!hasSkin) return undefined;
+    const el = document.createElement('div');
+    el.id = LAYER_ID;
+    el.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(el, document.body.firstChild);
+    return () => el.remove();
+  }, [hasSkin]);
 
   const [field, setField] = useState(null);
   const [fieldRetry, setFieldRetry] = useState(0);

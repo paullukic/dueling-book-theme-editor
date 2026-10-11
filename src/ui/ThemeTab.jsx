@@ -291,6 +291,12 @@ const StyleView = ({ s, onPick }) => {
       </Group>
       {s.themeEnabled && (
         <Group title="Shape and lettering">
+          <ToggleRow
+            label="Theme effects"
+            description="Each theme’s signature look: background motif, glows and ornaments. Switch off for plain colours."
+            checked={s.themeEffects}
+            onChange={set('themeEffects')}
+          />
           <SliderRow
             label="Corner roundness"
             value={s.themeRadius}
