@@ -106,7 +106,8 @@ ${SEL.chat} { background: ${flat()} !important; box-shadow: inset 3px 0 0 ${ink}
 /* Duel: segmented LCD life bars with an LP chip; square phase buttons, the active one inverted. */
 ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${pale}, 0 0 0 4px ${ink}, 4px 4px 0 4px ${alpha(ink, 0.3)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { background: ${segs(ink)} !important; }
+${SEL.lifeSelf} { background: ${segs(ink)} !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, ${ink} 0 3px, ${pale} 3px 6px) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${dark} 0 5px, ${mix(dark, ink, 0.5)} 5px 6px) !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -36px; top: 2px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }

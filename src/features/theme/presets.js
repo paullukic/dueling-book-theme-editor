@@ -138,8 +138,8 @@ export const PRESETS = [
       success: '#7be0a8',
       warning: '#ffcf70',
       danger: '#ff6b7f',
-      self: '#c77dff',
-      opp: '#7aa8ff',
+      self: '#7be0a8',
+      opp: '#b48cff',
     },
   },
   {
@@ -283,7 +283,7 @@ export const PRESETS = [
       warning: '#f5c451',
       danger: '#ff6b6b',
       self: '#7fe08a',
-      opp: '#8fa3b5',
+      opp: '#7fb2ff',
     },
   },
   {
@@ -331,7 +331,7 @@ export const PRESETS = [
       warning: '#ffd166',
       danger: '#ff6b6b',
       self: '#4de3ff',
-      opp: '#ff5aa8',
+      opp: '#ffd166',
     },
   },
   {
@@ -378,8 +378,8 @@ export const PRESETS = [
       success: '#3fe0a0',
       warning: '#ffd36b',
       danger: '#ff6b81',
-      self: '#ff6fb1',
-      opp: '#3fe0c5',
+      self: '#3fe0c5',
+      opp: '#c06bff',
     },
   },
   {
@@ -930,7 +930,7 @@ export const PRESETS = [
       success: '#7bd88f',
       warning: '#ffcf5c',
       danger: '#ff6b5e',
-      self: '#d94a3a',
+      self: '#9ad070',
       opp: '#c08640',
     },
   },
@@ -978,8 +978,8 @@ export const PRESETS = [
       success: '#2ef2d0',
       warning: '#ffb627',
       danger: '#ff5470',
-      self: '#ff3ea5',
-      opp: '#2ef2d0',
+      self: '#2ef2d0',
+      opp: '#9d7bff',
     },
   },
   {
@@ -1075,7 +1075,7 @@ export const PRESETS = [
       warning: '#ffd27a',
       danger: '#ff5d6c',
       self: '#36d0e4',
-      opp: '#ff7a86',
+      opp: '#e6bd5c',
     },
   },
   {
@@ -1098,8 +1098,8 @@ export const PRESETS = [
       success: '#6fdc9a',
       warning: '#f2c35a',
       danger: '#ff5a6e',
-      self: '#e8b54f',
-      opp: '#5cd0a6',
+      self: '#5cd0a6',
+      opp: '#e8b54f',
     },
   },
   {
@@ -1122,8 +1122,8 @@ export const PRESETS = [
       success: '#6dff5c',
       warning: '#ffcf5a',
       danger: '#ff3d6e',
-      self: '#4fc6e0',
-      opp: '#a3a9c6',
+      self: '#5fd8f0',
+      opp: '#f2c75a',
     },
   },
   {
@@ -1194,8 +1194,8 @@ export const PRESETS = [
       success: '#9fe3bf',
       warning: '#f7c873',
       danger: '#ff6f7d',
-      self: '#f6a6c6',
-      opp: '#8fe2c4',
+      self: '#8fe2c4',
+      opp: '#f2c27a',
     },
   },
   {
@@ -1266,8 +1266,8 @@ export const PRESETS = [
       success: '#6fe0a0',
       warning: '#f0c35a',
       danger: '#ff4a5a',
-      self: '#f0568c',
-      opp: '#3fd6c4',
+      self: '#3fd6c4',
+      opp: '#f0c35a',
     },
   },
   {
@@ -1314,8 +1314,8 @@ export const PRESETS = [
       success: '#6fe0a0',
       warning: '#ffd36b',
       danger: '#ff5a6a',
-      self: '#8cecd9',
-      opp: '#a9b6f0',
+      self: '#5fe0c8',
+      opp: '#8b8dff',
     },
   },
   {
@@ -1387,7 +1387,7 @@ export const PRESETS = [
       warning: '#ffc43f',
       danger: '#ff5068',
       self: '#3ff0c0',
-      opp: '#ff62b6',
+      opp: '#ff9a2e',
     },
   },
   {
@@ -1410,8 +1410,8 @@ export const PRESETS = [
       success: '#7fbf6a',
       warning: '#e8a23a',
       danger: '#e2583e',
-      self: '#d6a447',
-      opp: '#6aa88c',
+      self: '#74b897',
+      opp: '#d6a447',
     },
   },
   {
@@ -1531,7 +1531,7 @@ export const PRESETS = [
       warning: '#e0b04c',
       danger: '#d9473a',
       self: '#8ab57c',
-      opp: '#e2763a',
+      opp: '#e0b04c',
     },
   },
   {
@@ -1651,7 +1651,7 @@ export const PRESETS = [
       warning: '#ffcb4f',
       danger: '#ff3d5e',
       self: '#3db6ff',
-      opp: '#ff3d5e',
+      opp: '#9a6bff',
     },
   },
   {
@@ -1675,7 +1675,7 @@ export const PRESETS = [
       warning: '#ffb12e',
       danger: '#ff4b3e',
       self: '#3d8dff',
-      opp: '#ff4f4f',
+      opp: '#a98bff',
     },
   },
   {
@@ -1699,7 +1699,7 @@ export const PRESETS = [
       warning: '#ffcc00',
       danger: '#ff2f4b',
       self: '#38b8ff',
-      opp: '#ff4f6e',
+      opp: '#ffcc00',
     },
   },
   {
@@ -1723,7 +1723,7 @@ export const PRESETS = [
       warning: '#ffc53d',
       danger: '#ff4b5c',
       self: '#3a9dff',
-      opp: '#ff3d52',
+      opp: '#9d6bff',
     },
   },
   {
@@ -1819,7 +1819,7 @@ export const PRESETS = [
       warning: '#ffa63a',
       danger: '#ff4d5e',
       self: '#3b7cf0',
-      opp: '#e8459c',
+      opp: '#ffa63a',
     },
   },
   {
@@ -1891,7 +1891,7 @@ export const PRESETS = [
       warning: '#ffd43a',
       danger: '#ff4f4f',
       self: '#3fb0ff',
-      opp: '#ff6a3a',
+      opp: '#ffd43a',
     },
   },
 ];

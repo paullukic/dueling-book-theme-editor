@@ -102,8 +102,8 @@ ${SEL.chat} { background: linear-gradient(180deg, ${mix(t.surface, lacquerDeep, 
 /* Duel: teal (player) and crimson (enemy) LP panels in gold; gold-ringed phase discs. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 14px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${goldLo}, 0 0 0 4px ${ink}, 0 0 10px -2px ${alpha(gold, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp}, ${sel(['#duel .lifepoints .black_bar'])} { border-radius: 12px !important; }
-${SEL.lifeSelf} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.8)}, ${mix(t.self, t.bg, 0.55)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${lacquerDeep}, ${mix(t.opp, t.bg, 0.6)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${mix(t.self, t.bg, 0.25)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${mix(gold, t.bg, 0.62)}, ${mix(gold, t.bg, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.08)}, transparent 50%), ${ink} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -50px; top: -6px; width: 46px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }

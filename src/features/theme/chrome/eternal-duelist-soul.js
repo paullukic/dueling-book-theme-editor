@@ -89,7 +89,7 @@ ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)} 0 3px, transparent 3px), ${mintLo} !important; }
 ${SEL.lifeSelf} { background: linear-gradient(0deg, ${t.self} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mintHi} 0 3px, transparent 3px), ${mint} !important; }
-${SEL.lifeOpp} { background: linear-gradient(0deg, ${t.opp} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mintHi} 0 3px, transparent 3px), ${mint} !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${orange} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.6)} 0 3px, transparent 3px), ${mix(t.opp, '#ffffff', 0.3)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 1px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; image-rendering: pixelated; }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${navy} !important; -webkit-text-fill-color: currentColor !important; text-shadow: none !important; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */

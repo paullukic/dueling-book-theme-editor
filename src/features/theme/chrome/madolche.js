@@ -100,8 +100,8 @@ ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.sur
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${caramel}, 0 0 0 4px ${chocDeep}, 0 0 0 6px ${alpha(pink, 0.6)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${caramelHi}, ${caramelDim}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${choc}, ${chocDeep}) !important; }
-${sel(['#duel #turn .red'])} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.3)}, ${mix(t.opp, t.bg, 0.35)}) !important; }
-${sel(['#duel #turn .blue'])} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.3)}, ${mix(t.self, t.bg, 0.35)}) !important; }
+${sel(['#duel #turn .red'])} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.3)}, ${mix(t.self, t.bg, 0.35)}) !important; }
+${sel(['#duel #turn .blue'])} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.3)}, ${mix(t.opp, t.bg, 0.35)}) !important; }
 ${sel(['#duel #turn span'])} { color: ${t.accentText} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
 
 /* Duel room: caramel rims piped with cream around chocolate panels. */

@@ -19,8 +19,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const rivet = (x, y) => `radial-gradient(circle at ${x} ${y}, ${mix(metal, '#ffffff', 0.6)} 0 1.4px, ${deep} 2.2px, transparent 2.8px)`;
   const rivets = (o = 7) => [rivet(`${o}px`, `${o}px`), rivet(`calc(100% - ${o}px)`, `${o}px`), rivet(`${o}px`, `calc(100% - ${o}px)`), rivet(`calc(100% - ${o}px)`, `calc(100% - ${o}px)`)].join(', ');
   // LED meter: lit segments green-to-pink, 'on' share lit.
-  const leds = (on, a = 1) =>
-    `repeating-linear-gradient(90deg, transparent 0 5px, ${deep} 5px 7px), linear-gradient(90deg, ${alpha(teal, a)} 0 ${Math.min(on, 55)}%, ${alpha(amber, a)} ${Math.min(on, 55)}% ${Math.min(on, 78)}%, ${alpha(pink, a)} ${Math.min(on, 78)}% ${on}%, ${alpha(t.text, 0.08)} ${on}%)`;
+  const leds = (on, a = 1, base = teal) =>
+    `repeating-linear-gradient(90deg, transparent 0 5px, ${deep} 5px 7px), linear-gradient(90deg, ${alpha(base, a)} 0 ${Math.min(on, 55)}%, ${alpha(amber, a)} ${Math.min(on, 55)}% ${Math.min(on, 78)}%, ${alpha(pink, a)} ${Math.min(on, 78)}% ${on}%, ${alpha(t.text, 0.08)} ${on}%)`;
   const neon = (c, r = 12) => `0 0 0 1px ${alpha(c, 0.9)}, 0 0 ${r}px -2px ${alpha(c, 0.9)}, inset 0 0 ${r}px -4px ${alpha(c, 0.7)}`;
   // Analog VU dial: cream face, scale, red zone, needle.
   const dial = (() => {
@@ -143,7 +143,9 @@ ${SEL.chat} {
 ${sel(['#chats .chat .black_line'])} { background: linear-gradient(90deg, transparent 30%, ${metal} 30% 38%, transparent 38%), linear-gradient(0deg, transparent 40%, ${deep} 40% 60%, transparent 60%) !important; }
 
 ${SEL.life} { border-color: ${deep} !important; border-radius: 5px !important; box-shadow: inset 0 0 0 1px ${alpha(metal, 0.6)}, 0 0 0 1px ${alpha(metal, 0.5)}, 0 0 14px -4px ${alpha(teal, 0.6)} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), ${leds(100, 1)} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), ${leds(100, 1, t.self)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), ${leds(100, 1, t.opp)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${alpha(t.text, 0.07)} 0 5px, ${deep} 5px 7px), ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: -2px -2px 0 ${deep}, 2px -2px 0 ${deep}, -2px 2px 0 ${deep}, 2px 2px 0 ${deep}, 0 2px 0 ${deep}, 2px 0 0 ${deep}, 0 -2px 0 ${deep}, -2px 0 0 ${deep}, 0 0 10px ${alpha(teal, 0.6)} !important; }
 

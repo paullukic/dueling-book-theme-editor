@@ -94,7 +94,9 @@ ${sel(['#chats .chat .title_txt', '#chats .chat .chat_title'])} { color: ${t.tex
 
 /* Duel: LP gauge coloured by life left (--dbte-lp), cyan-rimmed plate, red LP cap; teal phase chips. */
 ${SEL.life} { border-color: ${cyan} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${alpha(navyDeep, 0.95)}, 0 0 0 4px ${alpha(cyan, 0.55)}, 0 4px 10px -3px ${ink} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, ${t.success} clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 42%, ${alpha(ink, 0.25)}), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 45%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 75%, ${ink})) !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, var(--dbtc-lpok) clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 42%, ${alpha(ink, 0.25)}), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 45%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 75%, ${ink})) !important; }
+${SEL.lifeSelf} { --dbtc-lpok: ${t.success}; }
+${SEL.lifeOpp} { --dbtc-lpok: ${t.opp}; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${navyDeep}, ${ink}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -46px; top: calc(50% - 15px); width: 44px; height: 30px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${ink}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${gold} !important; text-shadow: ${outline}, 0 0 6px ${ink} !important; }

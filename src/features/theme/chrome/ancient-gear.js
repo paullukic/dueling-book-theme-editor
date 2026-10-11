@@ -110,7 +110,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(bronzeDe
 /* Duel: brass gauge life bars led by a gear; phases are gear rings. */
 ${SEL.life} { border-color: ${brass} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 2px ${ink}, inset 0 0 0 3px ${alpha(brassLit, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 45%, ${alpha('#000000', 0.16)}), linear-gradient(90deg, ${mix(t.self, t.danger, 0.15)}, ${t.self} 40%, ${mix(t.self, '#ffffff', 0.12)} 60%, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 45%, ${alpha('#000000', 0.16)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.3)}, ${t.self} 40%, ${mix(t.self, '#ffffff', 0.12)} 60%, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp} 50%, ${mix(t.opp, t.bg, 0.35)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
