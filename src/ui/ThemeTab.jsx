@@ -312,6 +312,14 @@ const StyleView = ({ s, onPick }) => {
             checked={s.themeEffects}
             onChange={set('themeEffects')}
           />
+          {s.themeEffects && (
+            <ToggleRow
+              label="Background pattern"
+              description="The theme’s artwork behind the game. Its glows and frames stay when this is off."
+              checked={s.themeMotif}
+              onChange={set('themeMotif')}
+            />
+          )}
           <SliderRow
             label="Corner roundness"
             value={s.themeRadius}
@@ -355,10 +363,10 @@ const BackgroundView = ({ s }) => (
           format={(v) => `${Math.round(v * 100)}%`}
           onChange={set('backgroundOpacity')}
         />
-        {s.themeEnabled && s.themeEffects && (
+        {s.themeEnabled && s.themeEffects && s.themeMotif && (
           <ToggleRow
-            label="Theme overlay on my image"
-            description="Draws the theme’s pattern and glow over your picture. Switch off to show the picture clean."
+            label="Theme pattern on my image"
+            description="Draws the theme’s artwork over your picture. Off: only the theme’s glow tints it."
             checked={s.backgroundThemeOverlay}
             onChange={set('backgroundThemeOverlay')}
           />

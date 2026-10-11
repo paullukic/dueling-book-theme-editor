@@ -174,7 +174,8 @@ export const BackgroundEffect = () => {
       ? `#greenlines, #circuit_board, #circuit_cover { display: none !important; }
 html body { background-color: transparent !important; }
 #dbte-background-img { z-index: -1 !important; }
-${backgroundThemeOverlay ? '#dbte-skin-layer { opacity: 0.55; }' : '#dbte-skin-layer { display: none !important; }'}`
+#dbte-skin-layer, #dbte-skin-motif { opacity: 0.55; }
+${backgroundThemeOverlay ? '' : '#dbte-skin-motif { display: none !important; }'}`
       : null,
   );
 

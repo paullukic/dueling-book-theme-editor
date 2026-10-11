@@ -212,7 +212,7 @@ test('skins: no layout changes on DuelingBook elements', () => {
   PRESETS.forEach(({ id, tokens }) => {
     // Our own layer and pseudo-element ornaments may be positioned; nothing else.
     const css = skinCss(id, tokens)
-      .replace(/#dbte-skin-layer\s*\{[^}]*\}/g, '')
+      .replace(/#dbte-skin-(layer|motif)[^{]*\{[^}]*\}/g, '')
       .replace(/[^{}]*::(before|after)[^{}]*\{[^}]*\}/g, '');
     assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|margin|font-size|line-height|left|top|right|bottom|border-width)\s*:/i, id);
     assert.doesNotMatch(css, /\.card\b|cardfront/, id);
@@ -236,7 +236,7 @@ test('skins: a switched-off area gets none of the skin', () => {
   ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(all.includes(s), s));
   const off = skinCss('branded', t, { menu: false, dialogs: false, field: false });
   ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(!off.includes(s), `${s} still styled`));
-  assert.ok(off.includes('#dbte-skin-layer {'), 'backdrop stays');
+  assert.ok(off.includes('#dbte-skin-layer, #dbte-skin-motif {'), 'backdrop stays');
   assert.equal((off.match(/\{/g) || []).length, (off.match(/\}/g) || []).length, 'braces balanced');
 });
 
@@ -289,4 +289,27 @@ test('ink guard: re-inks only unreadable text, preferring the theme colour', () 
   assert.equal(inkFor('rgb(1,2,3)', '#ffffff', '#000000'), null, 'only hex input');
   assert.ok(inkCss.includes('html body #content [data-dbte-ink="theme"][data-dbte-ink][data-dbte-ink]'));
   assert.ok(inkCss.includes('{ color: var(--dbt-text) !important; }'));
+});
+
+test('skins: the pattern switch removes only the artwork, glows stay', () => {
+  ['branded', 'artmage', 'hero', 'sky-striker', 'snake-eye', 'labrynth'].forEach((id) => {
+    const t = PRESETS.find((p) => p.id === id).tokens;
+    const on = skinCss(id, t);
+    const off = skinCss(id, t, {}, { motif: false });
+    assert.ok(on.includes('#dbte-skin-motif, #dbte-skin-motif::before { background:'), `${id} has artwork`);
+    assert.ok(!off.includes('#dbte-skin-motif, #dbte-skin-motif::before { background:'), `${id} artwork gone`);
+    assert.ok(off.includes('#dbte-skin-layer, #dbte-skin-layer::before { background:'), `${id} glow stays`);
+    assert.doesNotMatch(on.split('#dbte-skin-layer, #dbte-skin-layer::before')[1].split('}')[0], /url\(/, `${id} glow layer has no artwork`);
+  });
+  assert.equal(DEFAULTS.themeMotif, true);
+});
+
+test('skins: archetype art renders the same every time and stays compact', () => {
+  ['branded', 'artmage', 'sky-striker', 'snake-eye', 'labrynth'].forEach((id) => {
+    const t = PRESETS.find((p) => p.id === id).tokens;
+    const a = skinCss(id, t);
+    assert.equal(a, skinCss(id, t), id);
+    assert.doesNotMatch(a, /NaN|undefined/, id);
+    assert.ok(a.length < 60000, `${id} is ${a.length} bytes`);
+  });
 });

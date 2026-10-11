@@ -4,7 +4,7 @@ import { useLocal } from '../../lib/localStore';
 import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
-import { LAYER_ID, skinCss } from './skins';
+import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
 const AREA_IDS = Object.keys(AREA_CSS);
@@ -87,19 +87,23 @@ const ThemeEffect = () => {
   const skin = useMemo(
     () =>
       on && s.themeEffects
-        ? skinCss(s.themePreset, artTokens, { menu: areas.menu, dialogs: areas.dialogs, field: areas.field }) || null
+        ? skinCss(s.themePreset, artTokens, { menu: areas.menu, dialogs: areas.dialogs, field: areas.field }, { motif: s.themeMotif }) || null
         : null,
-    [on, s.themeEffects, s.themePreset, artTokens, areas.menu, areas.dialogs, areas.field],
+    [on, s.themeEffects, s.themeMotif, s.themePreset, artTokens, areas.menu, areas.dialogs, areas.field],
   );
   useStyle('dbte-theme-skin', skin);
   const hasSkin = !!skin;
   useEffect(() => {
     if (!hasSkin) return undefined;
-    const el = document.createElement('div');
-    el.id = LAYER_ID;
-    el.setAttribute('aria-hidden', 'true');
-    document.body.insertBefore(el, document.body.firstChild);
-    return () => el.remove();
+    // Glow first, artwork over it, both behind the game.
+    const els = [MOTIF_ID, LAYER_ID].map((id) => {
+      const el = document.createElement('div');
+      el.id = id;
+      el.setAttribute('aria-hidden', 'true');
+      document.body.insertBefore(el, document.body.firstChild);
+      return el;
+    });
+    return () => els.forEach((el) => el.remove());
   }, [hasSkin]);
 
   const [field, setField] = useState(null);
