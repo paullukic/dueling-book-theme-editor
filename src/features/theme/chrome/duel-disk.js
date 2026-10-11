@@ -55,7 +55,6 @@ ${screws ? [[s / 2, s / 2], [48 - s / 2, s / 2], [s / 2, 48 - s / 2], [48 - s / 
     return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="${primary ? t.surface : t.raised}"/><stop offset="1" stop-color="${primary ? mix(t.surface, t.border, 0.6) : steel}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="6" fill="url(#k)" stroke="${groove}" stroke-width="2"/><path d="M12 12.5H${w - 12}" stroke="#ffffff" stroke-width="2"/><path d="M12 ${h - 12.5}H${w - 12}" stroke="${t.border}" stroke-width="2"/>${primary ? `<rect x="9" y="15" width="6" height="${h - 30}" rx="1" fill="${red}"/>` : ''}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${ink}">${label}</text>`);
   };
   const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
-  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
   const screwsAt = (s) => ['left top', 'right top', 'left bottom', 'right bottom'].map((p) => `${U(svg(12, 12, defs + screw(6, 6, 4.6)))} ${p} / ${s}px no-repeat`).join(', ');
 
   const css = `
@@ -155,7 +154,7 @@ ${lobby()} { background-color: ${alpha(t.surface, 0.9)} !important; background-i
 ${lobby('::before')} { filter: none !important; background: linear-gradient(160deg, #ffffff, ${t.raised} 25%, ${t.border} 55%, ${t.surface} 80%, ${t.border}) !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(160deg, #ffffff, ${blade} 50%, ${t.border}) !important; }
 ${lobby('::after')} { content: ""; position: absolute; inset: 7px; pointer-events: none; background: ${screwsAt(10)}; }
-${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: ${ink} !important; text-shadow: 0 2px 0 #ffffff !important; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: var(--dbt-title) !important; text-shadow: 0 1px 0 #ffffff !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, #ffffff, ${t.raised}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, #ffffff, ${mix(t.raised, blade, 0.14)}) !important; }
 ${T(['#duel_room .duelbutton'])} { border-color: ${t.border} !important; }
@@ -163,21 +162,19 @@ ${T(['#duel_room .duelbutton'])} { border-color: ${t.border} !important; }
 /* ---- Deck constructor: milled bays in the disk ---- */
 ${T(DECK)} { background-image: ${brushed} !important; box-shadow: inset 0 0 0 1px ${groove}, inset 0 2px 4px ${alpha(ink, 0.18)}, inset 0 -1px 0 1px ${alpha('#ffffff', 0.7)} !important; }
 ${T(['#deck_constructor #search .search_bg::after'])} { content: ""; position: absolute; inset: 5px; pointer-events: none; background: ${screwsAt(10)}; }
-${T(['#deck_constructor #search .title_txt'])} { color: ${ink} !important; text-shadow: 0 2px 0 #ffffff !important; }
+${T(['#deck_constructor #search .title_txt'])} { color: var(--dbt-title) !important; text-shadow: 0 1px 0 #ffffff !important; }
 ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${ink} !important; text-shadow: 0 1px 0 #ffffff !important; }
 
 /* ---- Settings: screwed plates ---- */
 ${settings} { border-color: transparent !important; border-image: ${tileFrame} 12 / 11px / 0 stretch !important; border-radius: 2px !important; background-image: ${brushed} !important; }
-${T(['#settings .admin_lbl', '#settings .title1'])} { color: ${ink} !important; text-shadow: 0 2px 0 #ffffff !important; }
+${T(['#settings .admin_lbl', '#settings .title1'])} { color: var(--dbt-title) !important; text-shadow: 0 1px 0 #ffffff !important; }
 
-/* ---- Pop-up buttons, panel title plates, the duel-room watermark ---- */
+/* ---- Pop-up buttons (title plates and the watermark come from css.js's light-theme sheet) ---- */
 ${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
 ${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
 ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 3px ${alpha(blade, 0.7)}) !important; }
-${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .2em; }
-${T(['#duel_room .duelbutton .tcg_title'])} { opacity: .12 !important; }
 
 /* ---- Backdrop: brushed metal in place of the hex-caret wallpaper ---- */
 html body #dbte-skin-motif { background: ${brushed} !important; }
