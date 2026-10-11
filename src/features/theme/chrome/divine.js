@@ -1,16 +1,34 @@
 // Divine Beasts: Egyptian God cards. Gold cartouche frames (rounded double
 // gold line, the shen bar closing the right end), hieroglyph bands, the
-// winged sun disc of Ra, and Slifer red / Obelisk blue for the two sides.
+// winged sun disc of Ra; Ra gold is your side, Obelisk lapis the opponent's,
+// Slifer red only joins the three-god ornaments.
 import { mix } from '../../../lib/color.js';
 
 export default (t, kit) => {
-  const { SEL, sel, svgUrl, svg, alpha } = kit;
+  const { SEL, sel, svgUrl, svg, alpha, n1 } = kit;
+  // DuelingBook's pop-up buttons (OK/Yes primary, No/Cancel secondary) are
+  // <img> SVGs: redrawn here in the theme's material. Palettes are
+  // [top, middle, bottom, edge, inner line, label].
+  const btnFace = (P, S, rx, extra = () => '') => (l, w, h, p) => {
+    const c = p ? P : S;
+    const bw = n1(w - 12);
+    const bh = n1(h - 20);
+    return svg(w, h, `<defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".5" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="${bh}" rx="${rx}" fill="url(#b)" stroke="${c[3]}" stroke-width="3"/><rect x="10.5" y="14.5" width="${n1(bw - 9)}" height="${n1(bh - 9)}" rx="${Math.max(0, rx - 4)}" fill="none" stroke="${c[4]}" stroke-width="1.5"/>${extra(w, h, p)}<text x="${n1(w / 2)}" y="${n1(h / 2 + 1)}" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="26" fill="${c[5]}">${l}</text>`);
+  };
+  const popButtons = (face) =>
+    [['ok_btn', 'OK', 0, 1], ['yes_btn', 'Yes', 0, 1], ['no_btn', 'No', 0, 0], ['cancel_btn', 'Cancel', 1, 0]]
+      .map(([n, l, wide, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(face(l, wide ? 234.85 : 153.4, wide ? 78.5 : 78.47, p))} !important; }`)
+      .join('\n');
+  // Panel titles straddle the frame line: copies of the glyphs in the panel
+  // colour, shifted sideways, close the word gaps so the line never shows.
+  const titleHalo = (c) => `${[3, 7, 11].map((x) => `-${x}px 0 2px ${c}, ${x}px 0 2px ${c}`).join(', ')}, 0 -3px 2px ${c}, 0 3px 3px ${c}`;
   const gold = t.accent;
   const hi = mix(gold, '#ffffff', 0.45);
   const lo = mix(gold, t.bg, 0.5);
   const deep = mix(t.surface, t.bg, 0.5);
   const ra = t.accent;
-  const slifer = t.self;
+  const slifer = t.danger;
+  const self = t.self;
   const obelisk = t.opp;
   const grad = `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${gold}"/><stop offset="1" stop-color="${lo}"/></linearGradient></defs>`;
 
@@ -29,28 +47,26 @@ export default (t, kit) => {
   const sun = (w, h) =>
     svgUrl(svg(60, 16, `${grad}<path d="${wing}" fill="url(#g)"/><path d="${wing}" fill="url(#g)" transform="translate(60 0) scale(-1 1)"/><g stroke="${t.bg}" stroke-opacity=".55" stroke-width=".7"><path d="M24 7.2Q14 4 4 5M24 9Q15 7.6 6 9.4M57.5 0"/><path d="M36 7.2Q46 4 56 5M36 9Q45 7.6 54 9.4"/></g><circle cx="30" cy="8.4" r="5.6" fill="${ra}" stroke="${hi}" stroke-width="1"/><circle cx="28.6" cy="7" r="1.6" fill="${hi}" fill-opacity=".8"/>`).replace('width="60" height="16"', `width="${w}" height="${h}"`));
 
-  // The three gods: Slifer, Ra, Obelisk.
-  const trio = svgUrl(svg(44, 12, `<g stroke="${hi}" stroke-width=".8"><path d="M7 1l5 5-5 5-5-5z" fill="${slifer}"/><path d="M22 0l6 6-6 6-6-6z" fill="${ra}"/><path d="M37 1l5 5-5 5-5-5z" fill="${obelisk}"/></g>`));
 
   const ankh = svgUrl(svg(14, 22, `${grad}<g fill="none" stroke="url(#g)" stroke-linecap="round"><path d="M7 9C2.6 6.6 3.4 1.2 7 1.2s4.4 5.4 0 7.8z" stroke-width="2"/><path d="M7 9v12M2.2 11.4h9.6" stroke-width="2.4"/></g>`));
 
-  const goldText = `color: ${hi} !important; text-shadow: 0 1px 0 ${lo}, -2px 0 2px ${t.bg}, 2px 0 2px ${t.bg}, 0 -2px 2px ${t.bg}, 0 3px 3px ${t.bg}, 0 0 16px ${alpha(gold, 0.4)} !important;`;
+  const goldText = `color: ${hi} !important; text-shadow: var(--dv-title) !important;`;
   const papyrus = `repeating-linear-gradient(90deg, ${alpha(gold, 0.035)} 0 1px, transparent 1px 5px)`;
 
-  const SETTINGS = sel(['.about_me', '.preferences', '.social_media', '.animation', '.profile_song', '.account', '.messages', '.duel_stats', '.profile_comments'].map((s) => `#settings ${s}`));
+  const SETTINGS = SEL.settingsPanel;
 
   return `
 html body {
-  --dv-glyph: ${svgUrl(glyphs(gold, 0.42))};
+  --dv-title: 0 1px 0 ${lo}, ${titleHalo(deep)}, 0 0 16px ${alpha(gold, 0.4)};
+  --dv-glyph: ${svgUrl(glyphs(gold, 0.27))};
   --dv-glyph-soft: ${svgUrl(glyphs(gold, 0.24))};
   --dv-col: ${svgUrl(glyphCol(gold, 0.26))};
   --dv-frame: ${frame(10)};
-  --dv-trio: ${trio};
   --dv-sun: ${sun(120, 32)};
 }
 /* ---------- Menu tiles: cartouches under the winged sun ---------- */
 ${SEL.tile} {
-  background: var(--dv-glyph) 50% calc(100% - 3px) / 70px 12px repeat-x, linear-gradient(180deg, ${t.raised}, ${deep} 70%, ${mix(deep, gold, 0.12)}) !important;
+  background: var(--dv-glyph) 50% calc(100% - 1px) / 54px 9px repeat-x, linear-gradient(180deg, ${t.raised}, ${deep} 70%, ${mix(deep, gold, 0.12)}) !important;
   border-image: var(--dv-frame) 16 / 16px / 0 stretch !important;
   box-shadow: 0 10px 22px -12px ${alpha('#000000', 0.9)}, 0 0 0 1px ${alpha('#000000', 0.5)} !important;
 }
@@ -60,7 +76,7 @@ ${sel(['#main_menu .menu_btn .content::before'])} {
   filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.8)}); opacity: 0.9; transition: filter 0.2s, opacity 0.2s;
 }
 ${SEL.tileHover} {
-  background: var(--dv-glyph) 50% calc(100% - 3px) / 70px 12px repeat-x, radial-gradient(ellipse 70% 120% at 50% 110%, ${alpha(gold, 0.32)}, transparent 70%), linear-gradient(180deg, ${mix(t.raised, gold, 0.1)}, ${deep}) !important;
+  background: var(--dv-glyph) 50% calc(100% - 1px) / 54px 9px repeat-x, radial-gradient(ellipse 70% 120% at 50% 110%, ${alpha(gold, 0.32)}, transparent 70%), linear-gradient(180deg, ${mix(t.raised, gold, 0.1)}, ${deep}) !important;
   box-shadow: 0 0 22px -6px ${alpha(gold, 0.7)}, 0 12px 24px -12px ${alpha('#000000', 0.9)} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 6px ${alpha(gold, 0.9)}); }
@@ -68,7 +84,7 @@ ${sel(['#main_menu .menu_btn:active .content'])} {
   background: radial-gradient(ellipse at 50% 50%, ${alpha(gold, 0.18)}, transparent 70%), ${deep} !important;
   box-shadow: inset 0 3px 10px ${alpha('#000000', 0.8)} !important;
 }
-${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.7)}, 0 0 10px ${alpha(gold, 0.25)} !important; }
+${SEL.tileLabel} { transform: scale(0.86); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.7)}, 0 0 10px ${alpha(gold, 0.25)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${hi} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; box-shadow: inset 0 -1px 0 ${alpha(gold, 0.35)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }
@@ -109,13 +125,13 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* ---------- Pop-ups: a temple wall with a cartouche frame ---------- */
 ${SEL.dialog} {
-  background: var(--dv-trio) 50% calc(100% - 5px) / 44px 12px no-repeat, var(--dv-col) 20px 50% / 14px 84px repeat-y, var(--dv-col) calc(100% - 20px) 50% / 14px 84px repeat-y, radial-gradient(ellipse 80% 55% at 50% -5%, ${alpha(gold, 0.22)}, transparent 70%), ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important;
+  background: var(--dv-col) 20px 50% / 14px 84px repeat-y, var(--dv-col) calc(100% - 20px) 50% / 14px 84px repeat-y, radial-gradient(ellipse 80% 55% at 50% -5%, ${alpha(gold, 0.22)}, transparent 70%), ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important;
   border-radius: 14px !important;
   box-shadow: 0 0 0 1px ${lo}, 0 0 0 4px ${t.bg}, 0 0 0 5px ${alpha(slifer, 0.7)}, 0 0 0 7px ${t.bg}, 0 0 0 8px ${alpha(obelisk, 0.7)}, 0 30px 70px -20px ${alpha('#000000', 0.95)} !important;
 }
 ${sel(['#content #msg::before', '#content #link::before', '#content #confirm::before', '#content #confirm2::before', '#content #input::before', '#content #input2::before', '#content #combo::before'])} {
   content: ""; position: absolute; inset: 6px; width: auto; height: auto; transform: none;
-  border: 22px solid transparent; border-image: ${frame(14)} 18 / 22px / 0 stretch; background: none; pointer-events: none; z-index: 0;
+  border: 22px solid transparent; border-image: var(--dv-frame) 16 / 22px / 0 stretch; background: none; pointer-events: none; z-index: 0;
 }
 ${sel(['#content #msg::after', '#content #link::after', '#content #confirm::after', '#content #confirm2::after', '#content #input::after', '#content #input2::after', '#content #combo::after'])} {
   content: ""; position: absolute; left: 50%; top: -15px; right: auto; bottom: auto; width: 120px; height: 32px; margin-left: -60px; transform: none;
@@ -153,7 +169,7 @@ ${sel(['#duel .lifepoints .life_border::after'])} {
   content: ""; position: absolute; right: -9px; top: -5px; width: 4px; height: 29px; border-radius: 2px;
   background: linear-gradient(180deg, ${hi}, ${gold} 50%, ${lo}); box-shadow: 0 0 0 1px ${alpha('#000000', 0.6)};
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(slifer, '#000000', 0.55)}, ${slifer} 70%, ${mix(slifer, '#ffffff', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(self, '#000000', 0.55)}, ${self} 70%, ${mix(self, '#ffffff', 0.3)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(obelisk, '#000000', 0.55)}, ${obelisk} 70%, ${mix(obelisk, '#ffffff', 0.3)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
@@ -162,7 +178,7 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${hi}, ${gold}, ${lo}, ${
 ${sel(['#duel .phase .background .background_top'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 60%) !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 35%, ${t.raised}, ${t.bg}) !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 35%, ${t.raised} 20%, ${deep} 75%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 35%, ${mix(slifer, '#ffffff', 0.25)}, ${slifer} 45%, ${mix(slifer, '#000000', 0.5)} 80%) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 35%, ${mix(self, '#ffffff', 0.25)}, ${self} 45%, ${mix(self, '#000000', 0.5)} 80%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 35%, ${mix(obelisk, '#ffffff', 0.25)}, ${obelisk} 45%, ${mix(obelisk, '#000000', 0.5)} 80%) !important; }
 ${sel(['#duel .phase.active .background::before'])} {
   content: ""; position: absolute; inset: -8px; border-radius: 50%;
@@ -187,9 +203,6 @@ ${sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border'
   background: var(--dv-glyph-soft) 50% calc(100% - 7px) / 84px 14px repeat-x, ${papyrus}, linear-gradient(180deg, ${alpha(t.surface, 0.92)}, ${alpha(deep, 0.95)}) !important;
   box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.9)};
 }
-${sel(['#duel_room #formats .format > .border::after', '#duel_room #decklist > .border::after', '#duel_room #mode > .border::after', '#duel_room #filter > .border::after', '#duel_room #host_bg > .border::after'])} {
-  content: ""; position: absolute; left: 50%; bottom: -6px; width: 44px; height: 12px; margin-left: -22px; background: var(--dv-trio) center / contain no-repeat;
-}
 ${sel(['#duel_room .format_txt', '#duel_room span.arial_black2', '#duel_room .title_txt.arial_black2'])} { ${goldText} }
 ${sel(['#duel_room .duelbutton'])} { border-color: transparent !important; box-shadow: inset 0 -1px 0 ${alpha(gold, 0.28)}; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.22)}, ${alpha(gold, 0.06)}) !important; }
@@ -208,6 +221,9 @@ ${sel(['#deck_constructor #search .search_bg'])} {
 ${sel(['#deck_constructor #search .title_txt'])} { ${goldText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${gold} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${hi} !important; }
+
+/* ---------- Pop-up buttons ---------- */
+${popButtons(btnFace([hi, gold, lo, mix(gold, t.bg, 0.78), alpha('#ffffff', 0.55), t.accentText], [mix(t.raised, gold, 0.18), t.surface, deep, lo, alpha(gold, 0.55), hi], 29, (w, h, p) => `<rect x="${n1(w - 24)}" y="15" width="3.5" height="${n1(h - 30)}" rx="1.5" fill="${p ? mix(gold, t.bg, 0.78) : gold}"/>`))}
 
 /* ---------- Settings panels ---------- */
 ${SETTINGS} { background: ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important; border-image: var(--dv-frame) 16 / 16px / 0 stretch !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.9)} !important; }

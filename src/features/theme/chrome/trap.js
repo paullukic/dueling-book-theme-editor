@@ -4,7 +4,23 @@
 import { mix } from '../../../lib/color.js';
 
 export default (t, kit) => {
-  const { SEL, sel, svgUrl, svg, alpha } = kit;
+  const { SEL, sel, svgUrl, svg, alpha, n1 } = kit;
+  // DuelingBook's pop-up buttons (OK/Yes primary, No/Cancel secondary) are
+  // <img> SVGs: redrawn here in the theme's material. Palettes are
+  // [top, middle, bottom, edge, inner line, label].
+  const btnFace = (P, S, rx, extra = () => '') => (l, w, h, p) => {
+    const c = p ? P : S;
+    const bw = n1(w - 12);
+    const bh = n1(h - 20);
+    return svg(w, h, `<defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".5" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="${bh}" rx="${rx}" fill="url(#b)" stroke="${c[3]}" stroke-width="3"/><rect x="10.5" y="14.5" width="${n1(bw - 9)}" height="${n1(bh - 9)}" rx="${Math.max(0, rx - 4)}" fill="none" stroke="${c[4]}" stroke-width="1.5"/>${extra(w, h, p)}<text x="${n1(w / 2)}" y="${n1(h / 2 + 1)}" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="26" fill="${c[5]}">${l}</text>`);
+  };
+  const popButtons = (face) =>
+    [['ok_btn', 'OK', 0, 1], ['yes_btn', 'Yes', 0, 1], ['no_btn', 'No', 0, 0], ['cancel_btn', 'Cancel', 1, 0]]
+      .map(([n, l, wide, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(face(l, wide ? 234.85 : 153.4, wide ? 78.5 : 78.47, p))} !important; }`)
+      .join('\n');
+  // Panel titles straddle the frame line: copies of the glyphs in the panel
+  // colour, shifted sideways, close the word gaps so the line never shows.
+  const titleHalo = (c) => `${[3, 7, 11].map((x) => `-${x}px 0 2px ${c}, ${x}px 0 2px ${c}`).join(', ')}, 0 -3px 2px ${c}, 0 3px 3px ${c}`;
   const mag = t.accent;
   const amber = t.accent2;
   const magHi = mix(mag, '#ffffff', 0.35);
@@ -27,44 +43,50 @@ export default (t, kit) => {
   // TRAP medallion: magenta disc, white rim, a sprung jaw.
   const medal = svgUrl(svg(32, 32, `<defs><radialGradient id="m" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="${magHi}"/><stop offset=".6" stop-color="${mag}"/><stop offset="1" stop-color="${magLo}"/></radialGradient></defs><circle cx="16" cy="16" r="14.5" fill="url(#m)" stroke="${t.text}" stroke-width="2"/><g fill="none" stroke="${t.text}" stroke-width="1.8" stroke-linejoin="round"><path d="M7 13.5l3 3.2 3-3.2 3 3.2 3-3.2 3 3.2 3-3.2"/><path d="M7 19l3-3 3 3 3-3 3 3 3-3 3 3"/><path d="M6.5 11.5Q16 4 25.5 11.5M6.5 21Q16 28.5 25.5 21"/></g>`));
 
-  const typeLine = svgUrl(svg(130, 18, `<text x="0" y="13.5" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="13" letter-spacing="1.5" fill="${mix(t.text, mag, 0.25)}">[TRAP CARD]</text>`));
 
   const bevel = `inset 1px 1px 0 ${alpha(magHi, 0.35)}, inset -1px -1px 0 ${alpha('#000000', 0.7)}`;
   const brushed = `repeating-linear-gradient(90deg, ${alpha(t.text, 0.025)} 0 1px, transparent 1px 3px)`;
   const plateBg = `${brushed}, linear-gradient(180deg, ${plate}, ${plateDark})`;
-  const warnText = `color: ${mix(mag, '#ffffff', 0.62)} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, -2px 0 2px ${t.bg}, 2px 0 2px ${t.bg}, 0 -2px 2px ${t.bg}, 0 0 14px ${alpha(mag, 0.6)} !important;`;
+  const warnText = `color: ${mix(mag, '#ffffff', 0.62)} !important; text-shadow: var(--tr-title) !important;`;
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
 
-  const SETTINGS = sel(['.about_me', '.preferences', '.social_media', '.animation', '.profile_song', '.account', '.messages', '.duel_stats', '.profile_comments'].map((s) => `#settings ${s}`));
+  const SETTINGS = SEL.settingsPanel;
 
   return `
 html body {
+  --tr-rv-s: ${rivets(3)};
+  --tr-rv-m: ${rivets(7)};
+  --tr-rv-l: ${rivets(10)};
+  --tr-title: 0 1px 0 ${alpha('#000000', 0.9)}, ${titleHalo(plateDark)}, 0 0 14px ${alpha(mag, 0.6)};
   --tr-chain: ${chainRow};
   --tr-corner: ${cornerChain};
   --tr-medal: ${medal};
-  --tr-type: ${typeLine};
 }
+/* The skin's chain wallpaper: larger links, much fainter, so the feed reads. */
+html body #dbte-skin-motif { opacity: 0.38 !important; }
+html body #dbte-skin-motif, html body #dbte-skin-motif::before { background-size: 120px 120px !important; }
+
 /* ---------- Menu tiles: riveted plates, a hazard strip, chains bound at the corner ---------- */
 ${SEL.tile} {
-  background: ${rivets(7)}, ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateBg} !important;
+  background: var(--tr-rv-m), ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateBg} !important;
   border-color: ${magLo} !important;
   border-radius: 2px !important;
   box-shadow: ${bevel}, inset 0 0 0 1px ${alpha(mag, 0.35)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: -15px; top: -15px; width: 40px; height: 40px; pointer-events: none;
+  content: ""; position: absolute; right: -17px; top: -17px; width: 40px; height: 40px; pointer-events: none; transform: scaleX(-1);
   background: var(--tr-corner) center / contain no-repeat; transition: filter 0.2s;
 }
 ${SEL.tileHover} {
-  background: ${rivets(7)}, ${hazard(5)} 0 100% / 100% 5px no-repeat, radial-gradient(ellipse 70% 120% at 50% 100%, ${alpha(mag, 0.35)}, transparent 70%), ${plateBg} !important;
+  background: var(--tr-rv-m), ${hazard(5)} 0 100% / 100% 5px no-repeat, radial-gradient(ellipse 70% 120% at 50% 100%, ${alpha(mag, 0.35)}, transparent 70%), ${plateBg} !important;
   border-color: ${mag} !important;
   box-shadow: ${bevel}, inset 0 0 0 1px ${mag}, 0 0 20px -6px ${alpha(mag, 0.9)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: drop-shadow(0 0 4px ${amber}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateDark} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
-${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)} !important; }
+${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(amber, '#ffffff', 0.4)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { background: ${plateBg} !important; box-shadow: inset 4px 0 0 ${mag}, inset 0 -1px 0 ${alpha(mag, 0.3)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }
@@ -75,14 +97,14 @@ ${sel(['#content .title1', '#content .title2', '#content .subtitle', '#content .
 
 /* ---------- Buttons: riveted switch plates; hover arms them ---------- */
 ${SEL.button} {
-  background: ${rivets(3)}, ${plateBg} !important;
+  background: var(--tr-rv-s), ${plateBg} !important;
   border-color: ${magLo} !important;
   border-radius: 1px !important;
   color: ${t.text} !important;
   box-shadow: ${bevel}, 0 2px 3px ${alpha('#000000', 0.75)} !important;
 }
 ${SEL.buttonHover} {
-  background: ${rivets(3)}, linear-gradient(180deg, ${mix(mag, plate, 0.55)}, ${mix(mag, plateDark, 0.75)}) !important;
+  background: var(--tr-rv-s), linear-gradient(180deg, ${mix(mag, plate, 0.55)}, ${mix(mag, plateDark, 0.75)}) !important;
   border-color: ${amber} !important;
   color: ${t.text} !important;
   box-shadow: ${bevel}, 0 0 9px -1px ${alpha(mag, 0.9)} !important;
@@ -105,7 +127,7 @@ ${SEL.dialog} {
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   content: ""; position: absolute; inset: 0; width: auto; height: auto; transform: none; border: none;
-  background: var(--tr-type) calc(100% - 30px) 50px / 130px 18px no-repeat, var(--tr-corner) -14px -14px / 60px 60px no-repeat;
+  background: var(--tr-corner) -24px -24px / 60px 60px no-repeat;
   pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
@@ -166,7 +188,7 @@ ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 1px ${magLo}, inset 0 3
 /* ---------- Duel room: plates in a Trap frame, chained at the corner ---------- */
 ${panel('::before')} { background: linear-gradient(135deg, ${magHi}, ${mag} 35%, ${magLo} 70%, ${mag}) !important; filter: none !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${hazard(6)} !important; }
-${panel()} { background: ${rivets(10)}, ${plateBg} !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.95)}; }
+${panel()} { background: var(--tr-rv-l), ${plateBg} !important; box-shadow: 0 12px 26px -12px ${alpha('#000000', 0.95)}; }
 ${panel('::after')} {
   content: ""; position: absolute; left: -12px; bottom: -12px; width: 34px; height: 34px; background: var(--tr-corner) center / contain no-repeat; transform: scaleY(-1);
 }
@@ -179,20 +201,23 @@ ${sel(['#duel_room .duelbutton .game_type'])} { color: ${amber} !important; }
 
 /* ---------- Deck constructor ---------- */
 ${sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg'])} {
-  background: ${rivets(8)}, ${plateBg} !important;
+  background: var(--tr-rv-l), ${plateBg} !important;
   box-shadow: inset 0 0 0 2px ${magLo}, inset 0 0 0 3px ${alpha(mag, 0.5)}, ${bevel} !important;
 }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { ${warnText} opacity: 1 !important; }
 ${sel(['#deck_constructor #search .search_bg'])} {
-  background: ${hazard(6)} 0 0 / 100% 6px no-repeat, ${rivets(10)}, ${plateBg} !important;
+  background: ${hazard(6)} 0 0 / 100% 6px no-repeat, var(--tr-rv-l), ${plateBg} !important;
   box-shadow: inset 0 0 0 2px ${magLo} !important;
 }
 ${sel(['#deck_constructor #search .title_txt'])} { ${warnText} }
 ${sel(['#deck_constructor #search .search_prev_btn', '#deck_constructor #search .search_next_btn'])} { background-color: ${mag} !important; }
 ${sel(['#deck_constructor #search .search_prev_btn:hover', '#deck_constructor #search .search_next_btn:hover'])} { background-color: ${amber} !important; }
 
+/* ---------- Pop-up buttons ---------- */
+${popButtons(btnFace([magHi, mag, mix(mag, t.bg, 0.4), mix(mag, t.bg, 0.75), alpha('#ffffff', 0.4), t.accentText], [plate, plateDark, mix(plateDark, t.bg, 0.4), mag, alpha(magHi, 0.3), t.text], 3, (w, h) => `<g fill="${steelHi}" stroke="${alpha('#000000', 0.6)}" stroke-width=".8">${[[13, 17], [w - 13, 17], [13, h - 17], [w - 13, h - 17]].map(([x, y]) => `<circle cx="${n1(x)}" cy="${n1(y)}" r="2.6"/>`).join('')}</g>`))}
+
 /* ---------- Settings panels ---------- */
-${SETTINGS} { background: ${rivets(10)}, ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateBg} !important; border-color: ${mag} !important; border-radius: 3px !important; box-shadow: ${bevel}, 0 12px 26px -12px ${alpha('#000000', 0.95)} !important; }
+${SETTINGS} { background: var(--tr-rv-l), ${hazard(5)} 0 100% / 100% 5px no-repeat, ${plateBg} !important; border-color: ${mag} !important; border-radius: 3px !important; box-shadow: ${bevel}, 0 12px 26px -12px ${alpha('#000000', 0.95)} !important; }
 
 /* ---------- Scrollbars ---------- */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${magLo}, ${mag}, ${magLo}) !important; }
