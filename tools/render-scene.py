@@ -5,7 +5,9 @@
 Writes <out_dir>/<theme>.png (and <theme>_ui.png with --ui: the scene under a
 mock of DuelingBook's main menu). --frames N also writes N frames one second
 apart (<theme>_f1.png ...) to judge motion. The pointer is parked off-centre
-so the 3D tilt shows.
+so the 3D tilt shows. Card artwork in a scene loads live from DuelingBook's
+image server (network needed); the shot waits for it. --offline blocks those
+images to check the scene's fallback.
 """
 import functools
 import http.server
@@ -39,6 +41,7 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     out, themes = args[0], args[1:]
     ui = '--ui' in sys.argv
+    offline = '--offline' in sys.argv
     frames = int(sys.argv[sys.argv.index('--frames') + 1]) if '--frames' in sys.argv else 0
     if frames:
         themes = [t for t in themes if not t.isdigit()]
@@ -49,11 +52,21 @@ def main():
         browser = p.chromium.launch()
         page = browser.new_page(viewport={'width': 1280, 'height': 800})
         errors = []
+        if offline:
+            page.route('**/images.duelingbook.com/**', lambda route: route.abort())
         page.on('pageerror', lambda e: errors.append(str(e)))
         for theme in themes:
             for with_ui in ([False, True] if ui else [False]):
                 page.goto(f'http://127.0.0.1:{port}/tools/scene-preview.html?theme={theme}&ui={1 if with_ui else 0}')
                 page.wait_for_function('window.__ready === true')
+                # Remote card art: wait until every scene picture has loaded or failed.
+                page.evaluate('''() => Promise.all([...new Set(document.getElementById('dbte-skin-fx').innerHTML.match(/https:[^ "')]+card-pics[^ "')]+/g) || [])].map((src) => new Promise((done) => {
+                  const img = new Image();
+                  img.onload = img.onerror = done;
+                  img.src = src;
+                  setTimeout(done, 10000);
+                })))''')
+                page.wait_for_timeout(300)
                 page.mouse.move(900, 300)
                 page.wait_for_timeout(2500)
                 name = f'{theme}_ui' if with_ui else theme

@@ -360,6 +360,17 @@ test('scenes: every archetype has one, it can hold still, and bad colours draw n
   assert.equal(DEFAULTS.themeMotion, true);
 });
 
+test('scenes: card artwork loads only from DuelingBook, never as a broken-icon <image>', () => {
+  SCENE_IDS.forEach((id) => {
+    const m = sceneMarkup(id, PRESETS.find((p) => p.id === id).tokens);
+    (m.match(/(?:https?:)?\/\/[^\s"')]+/g) || []).filter((u) => !u.includes('www.w3.org/')).forEach((u) => {
+      assert.match(u, /^https:\/\/images\.duelingbook\.com\/card-pics\/\d+\.jpg$/, `${id}: ${u}`);
+    });
+    assert.doesNotMatch(m, /<image[\s>]/, `${id}: a failed <image> paints a broken-image icon`);
+  });
+  ['divine', 'branded'].forEach((id) => assert.match(sceneMarkup(id, PRESETS.find((p) => p.id === id).tokens), /card-pics\/\d+\.jpg/, `${id} shows card art`));
+});
+
 test('scenes: only transform and opacity move (cheap to animate)', () => {
   const css = sceneMarkup('frog', PRESETS.find((p) => p.id === 'frog').tokens).match(/@keyframes[^}]*\{([^@]*?)\}\s*\}/g).join('');
   assert.doesNotMatch(css.replace(/@keyframes [\w-]+/g, ''), /(?<![-\w])(width|height|left|top|r|cx|cy|fill|stroke|filter)\s*:/);

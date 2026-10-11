@@ -1,44 +1,66 @@
 import { mix } from '../../../lib/color.js';
-import { anim, H, polar, W } from './kit.js';
+import { anim, H, n1, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
-// Branded: Dogmatika cathedral, the brand, rising embers
+// Branded: Albion the Branded Dragon, the real card artwork, rising out of
+// the burning Despia wasteland behind a black rock ridge, backlit by a
+// white-gold Dogmatika halo, the Branded Fusion cross-brand smouldering on
+// the rock at its feet and Mirrorjade's ice shards drifting through the
+// embers. The art loads live from DuelingBook (cardart.js); without it the
+// halo, brand, ridge and shards still stand.
 const branded = (t) => {
-  const ice = mix(t.text, '#9fd8ff', 0.55);
-  // Mirrorjade's ice blades fanned in a crown above the fusion vortex.
-  let blades = '';
-  for (let i = 0; i < 9; i++) {
-    const ang = -90 + (i - 4) * 17;
-    const len = 300 - Math.abs(i - 4) * 26;
-    const [tx, ty] = polar(1120, 330, len, ang);
-    const [lx, ly] = polar(1120, 330, len * 0.42, ang - 5);
-    const [rx, ry] = polar(1120, 330, len * 0.42, ang + 5);
-    blades += `<path d="M1120 330L${lx} ${ly}L${tx} ${ty}L${rx} ${ry}Z" fill="url(#dbtefx-bd-ice)" stroke="${ice}" stroke-opacity="0.7" stroke-width="2"/>`;
-  }
-  // Jagged crags of the burning wasteland.
+  const ice = mix(t.text, t.opp, 0.35);
+  const gold = mix(t.opp, '#ffffff', 0.25);
+  const brand = t.accent;
+
+  // Despia spires: far silhouettes on the left horizon.
+  const spire = (x, w, h) => {
+    const b = 760;
+    return `M${x} ${b}V${b - h * 0.62}L${n1(x + w * 0.18)} ${b - h * 0.7}L${n1(x + w / 2)} ${b - h}L${n1(x + w * 0.82)} ${b - h * 0.7}L${x + w} ${b - h * 0.62}V${b}Z`;
+  };
+  const spires = [[150, 46, 330], [210, 30, 230], [92, 34, 250], [260, 52, 380], [330, 28, 210], [40, 40, 190], [1500, 40, 240], [1556, 30, 170]].map(([x, w, h]) => spire(x, w, h)).join('');
+  const windows = [[173, 560], [286, 520], [286, 600], [109, 640]].map(([x, y]) => `M${x - 5} ${y + 34}V${y + 8}Q${x} ${y} ${x + 5} ${y + 8}V${y + 34}Z`).join('');
+
+  // The cross-brand: a long vertical bar, a short crossbar, a diamond heart.
+  const crossBrand = (cx, cy, s) => {
+    const p = (pts) => pts.map(([x, y]) => `${n1(cx + x * s)} ${n1(cy + y * s)}`).join('L');
+    return `M${p([[0, -40], [5, -12], [26, -6], [30, 0], [26, 6], [5, 12], [0, 52], [-5, 12], [-26, 6], [-30, 0], [-26, -6], [-5, -12]])}Z`;
+  };
+
+  // Mirrorjade's floating crystal shards, each scored with a brand.
+  const shard = (x, y, s, d) => `<g ${anim('bob', 5 + d, d, 'ease-in-out')}><path d="M${x} ${n1(y - 40 * s)}L${n1(x + 16 * s)} ${n1(y - 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}L${n1(x - 12 * s)} ${n1(y + 8 * s)}Z" fill="url(#dbtefx-bd-ice)" stroke="${ice}" stroke-opacity="0.8" stroke-width="1.5"/><path d="M${x} ${n1(y - 40 * s)}L${n1(x - 2 * s)} ${n1(y + 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}" fill="none" stroke="#ffffff" stroke-opacity="0.4"/><path d="${crossBrand(x + 1 * s, y, 0.28 * s)}" fill="${brand}" fill-opacity="0.85"/></g>`;
+
+  // Burning crags of the wasteland.
   let crags = `M0 ${H}`;
-  [[0, 700], [90, 640], [160, 690], [260, 600], [330, 660], [420, 620], [520, 700], [640, 650], [760, 710], [900, 660], [1010, 700], [1120, 610], [1220, 670], [1330, 590], [1440, 660], [1600, 620]].forEach(([x, y]) => {
+  [[0, 770], [120, 740], [240, 780], [420, 760], [620, 800], [820, 770], [1020, 800], [1140, 760], [1210, 724], [1300, 700], [1400, 704], [1500, 690], [1600, 700]].forEach(([x, y]) => {
     crags += `L${x} ${y}`;
   });
   crags += `L${W} ${H}Z`;
-  // Albaz's chains hanging from the top-left corner.
-  let chain = '';
-  for (let i = 0; i < 9; i++) chain += `<ellipse cx="${150 + i * 26}" cy="${40 + i * 30}" rx="14" ry="22" transform="rotate(${i % 2 ? 60 : -30} ${150 + i * 26} ${40 + i * 30})"/>`;
-  return `<defs>
-<linearGradient id="dbtefx-bd-ice" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${ice}" stop-opacity="0.15"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.55"/></linearGradient>
-<radialGradient id="dbtefx-bd-fire" cx="0.3" cy="1" r="0.75"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.6"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.18"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-bd-core"><stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="0.35" stop-color="${t.accent2}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+
+  const ridge = 'M1150 760L1196 700L1240 690L1270 650L1318 662L1350 640L1400 668L1446 650L1500 672L1560 640L1600 650';
+
+  return `<style>${CARD_ART_KEYFRAMES} @keyframes dbtefx-bd-brand { 0%, 100% { opacity: 0.6; transform: scale(0.96); } 50% { opacity: 1; transform: scale(1.06); } }</style>
+<defs>
+<linearGradient id="dbtefx-bd-ice" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="0.5" stop-color="${ice}" stop-opacity="0.32"/><stop offset="1" stop-color="${ice}" stop-opacity="0.08"/></linearGradient>
+<radialGradient id="dbtefx-bd-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${gold}" stop-opacity="0.6"/><stop offset="0.4" stop-color="${gold}" stop-opacity="0.2"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-bd-fire" cx="0.5" cy="1" r="0.8"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.5"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.12"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-bd-core"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.3" stop-color="${t.accent}" stop-opacity="0.7"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
-<rect width="${W}" height="${H}" fill="url(#dbtefx-bd-fire)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
-<path d="${crags}" fill="${mix(t.bg, t.accent, 0.1)}"/>
+<rect width="${W}" height="${H}" fill="url(#dbtefx-bd-fire)" ${anim('pulse', 7, 0, 'ease-in-out')}/>
+<g fill="${mix(t.bg, t.accent, 0.06)}"><path d="${spires}"/></g>
+<path d="${windows}" fill="${t.accent}" fill-opacity="0.5"/>
+<path d="${crags}" fill="${mix(t.bg, t.accent, 0.08)}"/>
 <!--mid-->
-<g ${anim('bloom', 7, 0, 'ease-in-out')}>${blades}</g>
-<g style="transform-origin: 1120px 330px; animation: dbtefx-spin 24s linear infinite;" fill="none" stroke-width="5" stroke-linecap="round"><path d="M1120 230A100 100 0 0 1 1220 330" stroke="${t.accent}" stroke-opacity="0.7"/><path d="M1120 430A100 100 0 0 1 1020 330" stroke="${ice}" stroke-opacity="0.7"/><path d="M1190 260A100 100 0 0 1 1190 400" stroke="${t.accent2}" stroke-opacity="0.4" stroke-dasharray="4 10"/></g>
-<circle cx="1120" cy="330" r="120" fill="url(#dbtefx-bd-core)" ${anim('pulse', 3.5, 0, 'ease-in-out')}/>
+<circle cx="1310" cy="300" r="330" fill="url(#dbtefx-bd-halo)" ${anim('bloom', 9, 0, 'ease-in-out')}/>
+${cardArt(t, { id: 'dbtefx-bd-hero', card: CARDS.albion, x: 1100, y: -40, w: 420, h: 760, focus: [0.75, 0.4], zoom: 0.8, blend: 'screen', feather: 0.6, fade: 0.7, backdrop: mix(t.bg, t.accent, 0.12), backdropAmt: 0.85, glow: t.accent, breathe: 14 })}
 <!--near-->
-<g fill="none" stroke="${mix(t.bg, t.text, 0.35)}" stroke-width="7" opacity="0.8" style="transform-origin: 150px 0px; animation: dbtefx-reed 7s ease-in-out infinite;">${chain}</g>`;
+<path d="M1130 900L${ridge.slice(1)}L1600 900Z" fill="${mix(t.bg, '#000000', 0.4)}"/>
+<path d="${ridge}" fill="none" stroke="${t.accent}" stroke-opacity="0.55" stroke-width="2"/>
+<g style="transform-origin: 1340px 760px; animation: dbtefx-bd-brand 4s ease-in-out infinite;"><circle cx="1340" cy="760" r="56" fill="url(#dbtefx-bd-core)"/><path d="${crossBrand(1340, 756, 0.8)}" fill="${brand}" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2"/><path d="M1340 749L1345 756L1340 763L1335 756Z" fill="#ffffff"/></g>
+${shard(1150, 70, 0.7, 0)}${shard(1490, 520, 0.8, 1.6)}${shard(1120, 560, 0.65, 3)}`;
 };
 
 export default branded;
 
 // Particle systems for this theme (kinds and options: particles.js).
-export const particles = [{ kind: 'ember', count: 130, colors: ['accent2', 'accent', 'warning'] }, { kind: 'burst', count: 1, colors: ['accent2'] }];
+export const particles = [{ kind: 'ember', count: 110, colors: ['accent', 'opp'] }, { kind: 'ash', count: 30, colors: ['muted'] }, { kind: 'burst', count: 1, colors: ['accent'] }];
