@@ -101,9 +101,6 @@ const motifs = {
   },
   brush: (t, color) =>
     svg(240, 20, `<path d="M4 12q30-9 70-4t82 0q40-5 80 2q-38 7-80 4t-82 2q-40 3-70-4z" fill="${color}"/>`),
-  // Hexagonal deck plating.
-  hexGrid: (t) =>
-    svg(56, 97, `<path d="M28 0L56 16V48L28 64L0 48V16ZM28 64V97" fill="none" stroke="${t.accent2}" stroke-opacity="0.07" stroke-width="1"/>`),
   feathers: (t) =>
     svg(120, 120, `<path d="M30 20q8 20 0 40q-8-20 0-40zM90 70q8 20 0 40q-8-20 0-40z" fill="${t.accent}" fill-opacity="0.05"/>`),
   corner: (color) =>
@@ -167,7 +164,7 @@ const SKINS = {
   fusion: (t) => layer(`${url(motifs.swirl(t))} center / min(110vh, 1100px) no-repeat, radial-gradient(circle, ${alpha(t.accent2, 0.08)}, transparent 65%)`) + tileHoverGlow(t.accent),
   synchro: (t) => layer(`${url(motifs.rings(t))}, linear-gradient(180deg, ${alpha(t.accent2, 0.06)}, transparent 40%)`) + tileHoverGlow(t.accent2),
   xyz: (t) => layer(`${url(motifs.rankStars(t))}, radial-gradient(ellipse at 50% 50%, ${alpha(t.accent, 0.06)}, transparent 60%)`) + tileHoverGlow(t.accent) + fieldGlow(t, 2),
-  link: (t) => layer(`${url(motifs.hexArrows(t))}, radial-gradient(ellipse at 50% 0%, ${alpha(t.accent2, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent2) + fieldGlow(t, 2),
+  link: (t) => layer(`radial-gradient(ellipse at 50% 0%, ${alpha(t.accent2, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent2) + fieldGlow(t, 2),
   'white-dragon': (t) => layer(`${url(motifs.facets(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent2, 0.14)}, transparent 55%)`) + tileHoverGlow(t.accent),
   'dark-magic': (t) => layer(`${url(motifs.magicCircle(t))} center / min(90vh, 900px) no-repeat, ${url(motifs.stars(t, t.accent2, 18))}`) + tileHoverGlow(t.accent),
   'black-dragon': (t) => layer(`${url(motifs.scales(t))}, radial-gradient(ellipse at 50% 110%, ${alpha(t.accent, 0.16)}, transparent 55%)`) + tileHoverGlow(t.accent) + fieldGlow(t, 2),
@@ -242,7 +239,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
 
   // Sky Striker: launch-bay HUD grid, red and cyan sweep lines.
   'sky-striker': (t) =>
-    layer(`${url(motifs.hexGrid(t))}, radial-gradient(ellipse at 70% 100%, ${alpha(t.accent2, 0.1)}, transparent 60%)`) +
+    layer(`radial-gradient(ellipse at 70% 100%, ${alpha(t.accent2, 0.1)}, transparent 60%)`) +
     `${TILE} { background-image: linear-gradient(90deg, ${alpha(t.accent, 0.22)}, transparent 40%) !important; }
 ${TILE_HOVER} { box-shadow: inset 3px 0 0 ${t.accent}, inset 0 0 0 1px ${t.accent2}, 0 0 18px -6px ${t.accent2} !important; }` +
     dialogCorners(t.accent2) +

@@ -297,7 +297,7 @@ test('ink guard: re-inks only unreadable text, preferring the theme colour', () 
 });
 
 test('skins: the pattern switch removes only the artwork, glows stay', () => {
-  ['branded', 'artmage', 'hero', 'sky-striker', 'labrynth'].forEach((id) => {
+  ['branded', 'artmage', 'hero', 'labrynth'].forEach((id) => {
     const t = PRESETS.find((p) => p.id === id).tokens;
     const on = skinCss(id, t);
     const off = skinCss(id, t, {}, { motif: false });
