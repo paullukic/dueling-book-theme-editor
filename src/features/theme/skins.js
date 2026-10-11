@@ -208,7 +208,7 @@ ${dialogSel()} { box-shadow: 0 0 0 3px ${t.text}, 8px 8px 0 ${t.accent2}, 0 24px
 
   // Pendulum: the split frame (monster colour above, spell green below) and two scale pillars.
   pendulum: (t) =>
-    layer(`linear-gradient(90deg, transparent calc(50% - 540px), ${alpha(t.self, 0.45)} calc(50% - 518px), transparent calc(50% - 500px), transparent calc(50% + 500px), ${alpha(t.opp, 0.45)} calc(50% + 518px), transparent calc(50% + 540px)), linear-gradient(180deg, ${alpha(t.self, 0.3)} 0%, ${alpha(t.self, 0.08)} 40%, ${alpha(t.accent, 0.08)} 60%, ${alpha(t.accent, 0.3)} 100%), linear-gradient(180deg, transparent 49.6%, ${alpha(t.text, 0.08)} 50%, transparent 50.4%)`) +
+    layer(`linear-gradient(180deg, ${alpha(t.self, 0.3)} 0%, ${alpha(t.self, 0.08)} 40%, ${alpha(t.accent, 0.08)} 60%, ${alpha(t.accent, 0.3)} 100%), linear-gradient(180deg, transparent 49.6%, ${alpha(t.text, 0.08)} 50%, transparent 50.4%)`) +
     `${TILE} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.14)} 0%, transparent 50%, ${alpha(t.accent, 0.14)} 100%) !important; }
 ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 18px -6px ${t.accent} !important; }
 ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)} 0%, transparent 45%, transparent 55%, ${alpha(t.accent, 0.16)} 100%) !important; }` +
@@ -248,7 +248,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
 
   // Sky Striker: launch-bay HUD grid, red and cyan sweep lines.
   'sky-striker': (t) =>
-    layer(`${url(motifs.hexGrid(t))}, linear-gradient(120deg, transparent 40%, ${alpha(t.accent, 0.18)} 41%, transparent 43%, transparent 57%, ${alpha(t.accent2, 0.16)} 58%, transparent 60%)`) +
+    layer(`${url(motifs.hexGrid(t))}, radial-gradient(ellipse at 70% 100%, ${alpha(t.accent2, 0.1)}, transparent 60%)`) +
     `${TILE} { background-image: linear-gradient(90deg, ${alpha(t.accent, 0.22)}, transparent 40%) !important; }
 ${TILE_HOVER} { box-shadow: inset 3px 0 0 ${t.accent}, inset 0 0 0 1px ${t.accent2}, 0 0 18px -6px ${t.accent2} !important; }` +
     dialogCorners(t.accent2) +
