@@ -407,7 +407,7 @@ export const skinCss = (presetId, tokens, areas = {}, { motif = true } = {}) => 
 #${FX_ID} .dbtefx-canvas { transform: translateZ(120px) scale(0.914); }
 #${FX_ID} .dbtefx-near { transform: translateZ(220px) scale(0.843); }
 html #spiral { filter: ${tintFilter(tokens.accent)} brightness(0.8) !important; }
-html #circuit_cover { background-color: transparent !important; }
+html #circuit_cover { background-color: rgba(var(--dbt-bg-rgb), var(--dbt-skin-cover, 0)) !important; }
 html #circuit_board { opacity: calc(var(--dbt-backdrop) * 0.18) !important; }
 html #greenlines { opacity: calc(var(--dbt-backdrop) * 0.25) !important; }
 ${own}`;

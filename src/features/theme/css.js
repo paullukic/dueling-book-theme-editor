@@ -37,6 +37,7 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
   --dbt-line: var(--dbt-border);
   --dbt-rest-cue: inset 3px 0 0 var(--dbt-accent);
   --dbt-link-hover: color-mix(in srgb, var(--dbt-accent) 55%, var(--dbt-text));
+  --dbt-skin-cover: 0.9;
   --dbt-shadow: 0 1px 2px rgba(${ink}, 0.1), 0 14px 32px -14px rgba(${ink}, 0.28);`
     : `  --dbt-shade: rgba(0, 0, 0, 0.28);
   --dbt-shade-strong: rgba(0, 0, 0, 0.7);
@@ -47,6 +48,7 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
   --dbt-line: color-mix(in srgb, var(--dbt-border) 75%, transparent);
   --dbt-rest-cue: 0 0 0 0 transparent;
   --dbt-link-hover: var(--dbt-accent);
+  --dbt-skin-cover: 0;
   --dbt-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.75);`;
   return `:root {
 ${lines.join('\n')}
@@ -307,6 +309,12 @@ html #content .ui-slider-handle { background: var(--dbt-text) !important; border
 `;
 
 const menu = `
+/* Status feed and page title: DuelingBook writes white/cream text here, which
+   vanishes on light themes; take the theme's ink instead. */
+html #content #statuses .username_txt { color: var(--dbt-accent) !important; text-shadow: none !important; }
+html #content #statuses .status_txt, html #content #statuses .status_txt span { color: var(--dbt-text) !important; text-shadow: none !important; }
+html #content #statuses .date_txt { color: var(--dbt-muted) !important; }
+html #content .title1 { color: var(--dbt-text) !important; }
 /* Solid tiles: DuelingBook's 4px border stays (layout) but turns invisible;
    a thin inner edge and an accent bar on hover replace it. */
 html #main_menu .menu_btn .content {
@@ -531,6 +539,8 @@ html #content #recaptcha_bg, html #content #recaptcha_bg2, html #content #turnst
 `;
 
 const pages = `
+/* Settings sections: DuelingBook paints each its own olive/maroon/teal; the theme takes over. */
+html #content #settings_content > div:not(.title_txt) { background: var(--dbt-glass) !important; border-color: var(--dbt-border) !important; }
 ${tint('html #settings .about_me, html #settings .preferences, html #unmute_user, html #unban_user, html #admin_status, html #change_username', 'success')}
 ${tint('html #settings .social_media, html #settings .animation, html #change_password .change_password, html #mute_user, html #ban_status, html #ip_check, html #alerts', 'accent')}
 ${tint('html #settings .profile_song, html #settings .account, html #hide_messages, html #cancel_duel, html #terminate_account, html #add_adjudicator', 'accent2')}

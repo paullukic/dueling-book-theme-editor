@@ -32,6 +32,15 @@ export const SEL = {
   // Panels in the duel room and deck constructor.
   lobbyPanel: sel(['#duel_room .background', '#duel_room .users']),
   deckPanel: sel(['#deck_constructor .deck_bg', '#deck_constructor #search']),
+  // Pop-up buttons: DuelingBook draws OK/Yes/No/Cancel as <img> SVGs; a theme
+  // can replace them with its own art via `content: url(...)`.
+  okButton: sel(['#content img[src*="/svg/ok_btn"]', '#content img[src*="/svg/yes_btn"]']),
+  noButton: sel(['#content img[src*="/svg/no_btn"]', '#content img[src*="/svg/cancel_btn"]']),
+  // Settings sections, page titles, the duel log and native submit buttons.
+  settingsPanel: sel(['#content #settings_content > div:not(.title_txt)']),
+  title: sel(['#content .title1', '#content .title_txt.arial_black2']),
+  duelLog: sel(['#duel .cout_txt']),
+  submit: sel(['#content input[type=submit]']),
   // Text fields.
   field: sel(['#content input[type=text]', '#content input[type=password]', '#content .textinput', '#content textarea']),
 };
