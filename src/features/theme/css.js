@@ -164,7 +164,8 @@ html #content input[type=date], html #content input[type=tel], html #content inp
 html #content textarea, html #content .textarea, html #content .textinput {
   background-color: var(--dbt-raised) !important;
   color: var(--dbt-text) !important;
-  border-color: var(--dbt-border) !important;
+  /* Field edges need 3:1 against the page to be found at all. */
+  border-color: color-mix(in srgb, var(--dbt-text) 40%, var(--dbt-raised)) !important;
   caret-color: var(--dbt-accent);
   color-scheme: dark;
   border-radius: calc(var(--dbt-radius) / 2) !important;

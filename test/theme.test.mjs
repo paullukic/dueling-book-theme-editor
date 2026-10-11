@@ -252,3 +252,11 @@ test('icons: the unread private chat icon wins over the plain one, at any roundn
     assert.doesNotMatch(css, /NaN|undefined/);
   });
 });
+
+test('css: text field edges reach 3:1 in every preset', () => {
+  assert.ok(AREA_CSS.widgets.includes('border-color: color-mix(in srgb, var(--dbt-text) 40%, var(--dbt-raised))'));
+  PRESETS.forEach(({ id, tokens: t }) => {
+    const edge = mix(t.raised, t.text, 0.4);
+    assert.ok(Math.min(contrast(edge, t.raised), contrast(edge, t.surface)) >= 3, id);
+  });
+});

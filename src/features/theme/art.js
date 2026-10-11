@@ -22,15 +22,15 @@ const wideButton = (label, fill, stroke, text, radius) =>
 // glyph stays the same so icons are always recognisable.
 export const ICON_STYLES = {
   branded: 'ember',
-  'black-dragon': 'ember',
+  'black-dragon': 'claw',
   artmage: 'paint',
   hero: 'comic',
   pendulum: 'split',
   divine: 'gilded',
-  xyz: 'gilded',
-  millennium: 'gilded',
+  xyz: 'rank',
+  millennium: 'eye',
   link: 'hex',
-  spell: 'circle',
+  spell: 'rune',
   'dark-magic': 'circle',
 };
 
@@ -50,13 +50,32 @@ const frame = (style, w, h, t, radius) => {
     case 'ember':
       return `<defs><linearGradient id="e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.raised}"/><stop offset="1" stop-color="${mix(t.raised, t.accent, 0.45)}"/></linearGradient></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="url(#e)" stroke="${t.accent2}" stroke-width="${sw}"/><rect x="${x + sw * 1.6}" y="${y + sw * 1.6}" width="${fw - sw * 3.2}" height="${fh - sw * 3.2}" rx="1" fill="none" stroke="${t.accent2}" stroke-opacity="0.4" stroke-width="${sw * 0.5}"/>`;
     case 'paint':
-      return `<path d="M${cx} ${y + fh * 0.04}C${x + fw * 0.95} ${y - fh * 0.02} ${x + fw * 1.02} ${y + fh * 0.62} ${x + fw * 0.82} ${y + fh * 0.9}S${x + fw * 0.1} ${y + fh * 1.02} ${x + fw * 0.05} ${y + fh * 0.62}S${x + fw * 0.2} ${y + fh * 0.06} ${cx} ${y + fh * 0.04}Z" fill="${mix(t.raised, t.accent, 0.28)}" stroke="${t.accent2}" stroke-width="${sw}"/>`;
+      // A canvas tile with a brush stroke of paint along its foot.
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${r}" fill="${mix(t.raised, t.accent, 0.18)}" stroke="${t.accent2}" stroke-width="${sw}"/><path d="M${x + fw * 0.1} ${y + fh * 0.9}Q${x + fw * 0.35} ${y + fh * 0.8} ${x + fw * 0.6} ${y + fh * 0.88}T${x + fw * 0.92} ${y + fh * 0.84}" fill="none" stroke="${t.accent}" stroke-opacity="0.85" stroke-width="${sw * 1.6}" stroke-linecap="round"/>`;
     case 'comic':
       return `<rect x="${x + sw * 1.4}" y="${y + sw * 1.4}" width="${fw - sw * 1.4}" height="${fh - sw * 1.4}" rx="${Math.min(r, 4)}" fill="${t.accent2}"/><rect x="${x}" y="${y}" width="${fw - sw * 1.4}" height="${fh - sw * 1.4}" rx="${Math.min(r, 4)}" fill="${t.raised}" stroke="${t.text}" stroke-width="${sw * 1.1}"/>`;
     case 'split':
-      return `<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.self, 0.4)}"/><stop offset="0.5" stop-color="${t.raised}"/><stop offset="1" stop-color="${mix(t.raised, t.accent, 0.4)}"/></linearGradient></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${r}" fill="url(#s)" stroke="${t.border}" stroke-width="${sw}"/>`;
+      return `<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0.5" stop-color="${mix(t.raised, t.self, 0.35)}"/><stop offset="0.5" stop-color="${mix(t.raised, t.accent, 0.35)}"/></linearGradient></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${r}" fill="url(#s)" stroke="${t.border}" stroke-width="${sw}"/>`;
     case 'gilded':
       return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><rect x="${x + sw * 2}" y="${y + sw * 2}" width="${fw - sw * 4}" height="${fh - sw * 4}" rx="1" fill="none" stroke="${t.accent}" stroke-opacity="0.45" stroke-width="${sw * 0.6}"/>`;
+    case 'claw': {
+      // Sharp plate with two corners clipped like scales.
+      const c = Math.min(fw, fh) * 0.22;
+      return `<path d="M${x + c} ${y}H${x + fw}V${y + fh - c}L${x + fw - c} ${y + fh}H${x}V${y + c}Z" fill="${mix(t.raised, t.accent, 0.3)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="miter"/>`;
+    }
+    case 'rank': {
+      // Black overlay-unit plate with a gold rank star in each corner.
+      const d = Math.min(fw, fh) * 0.11;
+      const star = (sx, sy) => `<circle cx="${sx}" cy="${sy}" r="${d * 0.55}" fill="${t.accent}"/>`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}"/>${star(x + d * 1.4, y + d * 1.4)}${star(x + fw - d * 1.4, y + d * 1.4)}${star(x + d * 1.4, y + fh - d * 1.4)}${star(x + fw - d * 1.4, y + fh - d * 1.4)}`;
+    }
+    case 'eye': {
+      // Gold plate with a pyramid notch rising from its top edge.
+      const p = Math.min(fw, fh) * 0.16;
+      return `<path d="M${x} ${y + p}H${cx - p}L${cx} ${y}L${cx + p} ${y + p}H${x + fw}V${y + fh}H${x}Z" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${x + sw * 2} ${y + fh - sw * 2}H${x + fw - sw * 2}" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="${sw * 0.6}"/>`;
+    }
+    case 'rune':
+      return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${rr - sw * 2}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${sw * 0.6}"/>`;
     case 'hex': {
       const pts = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = (Math.PI / 3) * i;
@@ -93,7 +112,8 @@ const GLYPHS = {
 
 // A framed glyph in a w x h viewBox (the size DuelingBook gives the <img>).
 const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent, badge = false } = {}) => {
-  const s = (Math.min(w, h) * 0.78) / 40;
+  // Round and hexagonal frames have less room inside than a tile.
+  const s = (Math.min(w, h) * (['hex', 'circle', 'rune'].includes(style) ? 0.6 : 0.78)) / 40;
   const gx = (w - 40 * s) / 2;
   const gy = (h - 40 * s) / 2;
   const dot = badge ? `<circle cx="${w * 0.8}" cy="${h * 0.2}" r="${Math.min(w, h) * 0.13}" fill="${t.danger}" stroke="${t.raised}" stroke-width="${Math.min(w, h) * 0.04}"/>` : '';

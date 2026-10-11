@@ -30,8 +30,8 @@ export const CARD_TEXT_SIZES = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22];
 // The card preview's font. 'card' is the effect-text face printed on real
 // cards, which DuelingBook already loads for its card images.
 export const CARD_TEXT_FONTS = [
-  { id: 'original', label: 'DuelingBook' },
-  { id: 'card', label: 'Card' },
+  { id: 'original', label: 'Original' },
+  { id: 'card', label: 'Card style' },
 ];
 
 export const DEFAULT_PSCT_COLORS = {

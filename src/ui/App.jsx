@@ -28,7 +28,7 @@ const logoUrl = (() => {
   }
 })();
 
-const AVOID_IDS = ['mute_btn', 'screenshot_btn'];
+const AVOID_IDS = ['mute_btn', 'screenshot_btn', 'twitter_btn', 'facebook_btn', 'discord_btn'];
 
 // Lifts the corner button above DuelingBook's own corner buttons when the
 // game stage reaches the window corner (narrow or short windows).
