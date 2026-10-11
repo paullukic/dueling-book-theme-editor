@@ -1,5 +1,5 @@
 // frog: a moonlit frog pond. Organic rounded frames in leaf green over still
-// water with moonlight shimmer; lily pads (notched, veined) as tile badges and
+// water; lily pads (notched, veined) as tile badges and
 // phase buttons; ripple rings around pop-ups and on hover; reeds and cattails
 // rising from panel corners; pebble buttons; firefly glow on focus.
 
@@ -10,15 +10,14 @@ const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] *
 const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
-  const lime = t.accent;
+  // Leaf green, pulled toward gold so it reads apart from the success green.
+  const lime = mix(t.accent, t.warning, 0.72);
   const lotus = t.accent2;
   const pad = mix(lime, t.bg, 0.55);
   const padHi = mix(lime, t.bg, 0.8);
   const deep = mix(t.bg, '#000000', 0.6);
   const moon = mix(t.text, '#ffffff', 0.6);
   const water = `radial-gradient(ellipse at 70% 0%, ${alpha(moon, 0.08)}, transparent 55%), linear-gradient(180deg, ${mix(t.surface, t.opp, 0.9)}, ${t.bg})`;
-  // Moonlight shimmer: short wavy lines on the water.
-  const shimmer = svgUrl(svg(120, 60, `<g fill="none" stroke="${moon}" stroke-linecap="round" stroke-opacity="0.09" stroke-width="1.2"><path d="M8 14q6-3 12 0t12 0"/><path d="M70 30q5-2.5 10 0t10 0"/><path d="M30 48q7-3 14 0t14 0"/><path d="M96 8q4-2 8 0t8 0"/></g>`));
   // A notched lily pad with veins.
   const lily = (fill, vein, flower) => {
     const a = (deg, r) => [(32 + Math.cos((deg * Math.PI) / 180) * r).toFixed(1), (32 + Math.sin((deg * Math.PI) / 180) * r).toFixed(1)];
@@ -68,7 +67,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
 
   return `
-html body { --dbte-frog-shimmer: ${shimmer}; --dbte-frog-pad: ${lily(pad, padHi, false)}; --dbte-frog-bloom: ${lily(mix(lime, t.bg, 0.7), moon, true)}; --dbte-frog-reeds: ${reeds}; }
+html body { --dbte-frog-pad: ${lily(pad, padHi, false)}; --dbte-frog-bloom: ${lily(mix(lime, t.bg, 0.7), moon, true)}; --dbte-frog-reeds: ${reeds}; }
 @keyframes dbte-frog-ripple { from { transform: scale(0.6); opacity: 0.9 } to { transform: scale(1.5); opacity: 0 } }
 @keyframes dbte-frog-bob { 0%, 100% { transform: translateY(0) rotate(-3deg) } 50% { transform: translateY(-2px) rotate(3deg) } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-frog-anim: none } }
@@ -76,18 +75,18 @@ html body { --dbte-frog-shimmer: ${shimmer}; --dbte-frog-pad: ${lily(pad, padHi,
 ${titles} { color: ${moon} !important; text-shadow: ${outline(deep, 2)}, 0 0 16px ${alpha(lime, 0.45)} !important; }
 
 ${SEL.tile} {
-  background: var(--dbte-frog-shimmer), ${water} !important;
+  background: ${water} !important;
   border-color: ${pad} !important;
   border-radius: 34px !important;
   box-shadow: inset 0 1px 0 ${alpha(moon, 0.15)}, inset 0 -10px 18px -10px ${alpha(lime, 0.25)}, 0 0 0 1px ${deep}, 0 12px 24px -14px #000000 !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; left: -11px; bottom: -13px; width: 28px; height: 28px; pointer-events: none;
+  content: ""; position: absolute; right: 10px; top: 6px; width: 24px; height: 24px; pointer-events: none;
   background: var(--dbte-frog-pad) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${deep});
   animation: var(--dbte-frog-anim, dbte-frog-bob 5s ease-in-out infinite);
 }
 ${SEL.tileHover} {
-  background: radial-gradient(circle at 90% 85%, transparent 18px, ${alpha(lime, 0.16)} 20px, transparent 23px, transparent 34px, ${alpha(lime, 0.1)} 36px, transparent 39px), var(--dbte-frog-shimmer), ${water} !important;
+  background: radial-gradient(circle at 90% 85%, transparent 18px, ${alpha(lime, 0.16)} 20px, transparent 23px, transparent 34px, ${alpha(lime, 0.1)} 36px, transparent 39px), ${water} !important;
   border-color: ${lime} !important;
   box-shadow: inset 0 1px 0 ${alpha(moon, 0.2)}, 0 0 0 1px ${deep}, 0 0 20px -4px ${alpha(lime, 0.6)} !important;
 }
@@ -119,7 +118,7 @@ ${SEL.buttonDown} {
 }
 
 ${SEL.dialog} {
-  background: var(--dbte-frog-shimmer), radial-gradient(ellipse at 80% 0%, ${alpha(moon, 0.14)}, transparent 45%), ${water} !important;
+  background: radial-gradient(ellipse at 80% 0%, ${alpha(moon, 0.14)}, transparent 45%), ${water} !important;
   border-radius: 44px !important;
   box-shadow: inset 0 0 0 2px ${pad}, inset 0 0 0 3px ${alpha(lime, 0.5)}, ${ripple(lime)}, 0 30px 60px -20px #000000 !important;
 }
@@ -147,7 +146,7 @@ ${SEL.chatTop} {
 ${sel(['#chats #private_chat .chat_top_bg', '#chats #watch_chat .chat_top_bg'])} { background: ${veins.replace('50% 50%', '12% 160%')}, linear-gradient(180deg, ${mix(t.opp, t.raised, 0.45)}, ${mix(t.opp, deep, 0.3)}) !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 1.2)} !important; }
 ${SEL.chat} {
-  background: var(--dbte-frog-shimmer), ${water} !important;
+  background: ${water} !important;
   border-radius: 0 0 18px 18px !important;
   box-shadow: inset 0 0 0 1px ${alpha(lime, 0.35)}, 0 0 0 1px ${deep} !important;
 }
@@ -159,15 +158,16 @@ ${sel(['#chats .chat .black_line'])} { background: linear-gradient(90deg, transp
 
 ${SEL.life} { border-color: ${pad} !important; border-radius: 99px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 14px -4px ${alpha(lime, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 99px !important; }
-${SEL.lifeSelf} { background: var(--dbte-frog-shimmer), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
-${SEL.lifeOpp} { background: var(--dbte-frog-shimmer), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-frog-shimmer), ${deep} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)} !important; }
 
-${SEL.phase} { background: ${alpha(t.bg, 0.6)} !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${alpha(lime, 0.6)}, 0 0 0 5px ${alpha(t.bg, 0.3)}, 0 0 0 6px ${alpha(lime, 0.22)} !important; }
-${sel(['#duel .phase .background .background_inner', '#duel .phase .background .background_top'])} { background: transparent !important; }
+${SEL.phase} { background: ${deep} !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${alpha(lime, 0.6)}, 0 0 0 5px ${alpha(t.bg, 0.3)}, 0 0 0 6px ${alpha(lime, 0.22)} !important; }
+${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; border-radius: 50% !important; }
+${sel(['#duel .phase .background .background_top'])} { background: transparent !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} {
-  background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(pad, t.raised, 0.6)}, ${mix(pad, deep, 0.6)}) !important; border-radius: 50% !important;
+  background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(pad, deep, 0.7)}, ${mix(pad, deep, 0.35)}) !important; border-radius: 50% !important;
   -webkit-mask: ${notch}; mask: ${notch};
 }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(t.self, '#ffffff', 0.6)}, ${mix(t.self, pad, 0.6)} 70%) !important; }
@@ -177,31 +177,27 @@ ${sel(['#duel .phase.active::before'])} {
   box-shadow: 0 0 0 2px ${lime}, 0 0 18px ${alpha(lime, 0.8)};
   animation: var(--dbte-frog-anim, dbte-frog-ripple 2.4s ease-out infinite);
 }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: ${outline(deep, 1.5)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)} !important; }
+${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)}, 2px 3px 0 ${deep} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)}, 2px 3px 0 ${deep} !important; }
 ${turnBg} { background: ${pad} !important; border-radius: 99px !important; }
 ${turnInner} { background: radial-gradient(ellipse at 50% 120%, ${alpha(lime, 0.4)}, transparent 70%), ${mix(t.surface, deep, 0.6)} !important; border-radius: 99px !important; }
 ${turnTxt} { color: ${mix(t.text, lime, 0.5)} !important; text-shadow: ${outline(deep, 1.5)} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${pad}, ${lime} 50%, ${pad}) !important; border-radius: 26px !important; filter: none; }
-${ring('')} { background: var(--dbte-frog-shimmer), ${water} !important; border-radius: 26px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 24px -8px ${alpha(lime, 0.5)} !important; }
-${ring('::after')} {
-  content: ""; position: absolute; left: 6px; bottom: 4px; width: 30px; height: 58px; pointer-events: none;
-  background: var(--dbte-frog-reeds) 0 100% / contain no-repeat;
-}
+${ring('')} { background: ${water} !important; border-radius: 26px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 24px -8px ${alpha(lime, 0.5)} !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${lime} !important; }
 ${sel(['#duel_room #formats .format .format_inner'])} { background-color: ${alpha(t.bg, 0.55)} !important; border-radius: 16px 16px 0 0 !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(lime, 0.2)} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: radial-gradient(ellipse at 0% 50%, ${alpha(lime, 0.25)}, transparent 60%), ${t.raised} !important; }
 
 ${deckPanels} { border-radius: 22px !important; box-shadow: inset 0 0 0 1px ${alpha(lime, 0.35)}, 0 0 0 1px ${deep} !important; }
-${sel(['#deck_constructor .deck_bg'])} { background: var(--dbte-frog-shimmer), ${water} !important; }
-${sel(['#deck_constructor .side_bg'])} { background: var(--dbte-frog-shimmer), ${mix(t.surface, t.opp, 0.86)} !important; }
-${sel(['#deck_constructor .extra_bg'])} { background: var(--dbte-frog-shimmer), ${mix(t.surface, t.warning, 0.86)} !important; }
-${sel(['#deck_constructor #search .search_bg'])} { background: var(--dbte-frog-shimmer), ${water} !important; border-radius: 22px 22px 0 0 !important; box-shadow: inset 0 0 0 1px ${alpha(lime, 0.35)} !important; }
+${sel(['#deck_constructor .deck_bg'])} { background: ${water} !important; }
+${sel(['#deck_constructor .side_bg'])} { background: ${mix(t.surface, t.opp, 0.86)} !important; }
+${sel(['#deck_constructor .extra_bg'])} { background: ${mix(t.surface, t.warning, 0.86)} !important; }
+${sel(['#deck_constructor #search .search_bg'])} { background: ${water} !important; border-radius: 22px 22px 0 0 !important; box-shadow: inset 0 0 0 1px ${alpha(lime, 0.35)} !important; }
 ${deckLabels} { color: ${moon} !important; opacity: 1 !important; text-shadow: ${outline(deep, 1.5)}, 0 0 12px ${alpha(lime, 0.4)} !important; }
 ${sel(['#deck_constructor .total_bg', '#deck_constructor .total_effect_bg', '#deck_constructor .total_spell_bg', '#deck_constructor .total_trap_bg'])} {
-  background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(pad, t.raised, 0.6)}, ${mix(pad, deep, 0.6)}) !important; border-radius: 50% !important;
+  background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(pad, deep, 0.7)}, ${mix(pad, deep, 0.35)}) !important; border-radius: 50% !important;
   box-shadow: inset 0 0 0 2px var(--dbt-stripe, ${lime}), 0 2px 4px #000000 !important;
 }
 ${sel(['#deck_constructor .total_txt', '#deck_constructor .total_effect_txt', '#deck_constructor .total_spell_txt', '#deck_constructor .total_trap_txt'])} { text-shadow: ${outline(deep, 1.5)} !important; }
@@ -216,7 +212,7 @@ ${SEL.field} {
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { outline: 1px solid ${lime} !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.55)}, 0 0 12px -2px ${alpha(t.warning, 0.8)} !important; }
 
 ${duelPanels} { border-color: ${pad} !important; border-radius: 14px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 16px -6px ${alpha(lime, 0.5)} !important; }
-${sel(['#duel .cout_txt'])} { background: var(--dbte-frog-shimmer), ${water} !important; }
+${sel(['#duel .cout_txt'])} { background: ${water} !important; }
 ${SEL.settingsPanel} { border-radius: 28px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 22px -8px ${alpha(lime, 0.5)} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${pad}, ${lime}) !important; border-radius: 99px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${lime} !important; }

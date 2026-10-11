@@ -41,6 +41,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   // Pop-up buttons: a mixer key in brushed metal with an LED strip; pink lit for primary.
   const key = (label, w, primary) =>
     svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} 78.5"><defs><linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(metal, '#ffffff', 0.6)}"/><stop offset="0.5" stop-color="${metal}"/><stop offset="1" stop-color="${mix(metal, deep, 0.5)}"/></linearGradient></defs><rect x="5" y="9" width="${w - 10}" height="60" rx="7" fill="${deep}"/><rect x="8" y="12" width="${w - 16}" height="54" rx="5" fill="url(#m)" stroke="${deep}" stroke-width="1.5"/><rect x="16" y="56" width="${w - 32}" height="5" rx="2" fill="${primary ? pink : teal}"/><rect x="16" y="56" width="${w - 32}" height="5" rx="2" fill="none" stroke="${primary ? pink : teal}" stroke-opacity="0.5" stroke-width="4"/><text x="${w / 2}" y="34" dominant-baseline="central" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="25" letter-spacing="1" fill="${deep}">${label}</text></svg>`);
+  // A cassette tape for the lobby panel corners: shell, label, two reels, window.
+  const cassette = svgUrl(svg(60, 38, `<rect x="1" y="1" width="58" height="36" rx="4" fill="${deep}" stroke="${metal}" stroke-width="1.5"/><rect x="6" y="5" width="48" height="16" rx="2" fill="${pink}"/><path d="M8 9h30M8 13h22" stroke="${deep}" stroke-opacity="0.6"/><rect x="14" y="19" width="32" height="10" rx="5" fill="${mix(deep, t.text, 0.85)}" stroke="${metal}"/><circle cx="20" cy="24" r="3.5" fill="none" stroke="${teal}" stroke-width="1.5"/><circle cx="40" cy="24" r="3.5" fill="none" stroke="${teal}" stroke-width="1.5"/><path d="M10 37l4-5h32l4 5" fill="${mix(metal, deep, 0.5)}"/><circle cx="4.5" cy="4.5" r="1.2" fill="${metal}"/><circle cx="55.5" cy="4.5" r="1.2" fill="${metal}"/>`));
   const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const neonText = (c) => `0 0 2px ${t.text}, 0 0 8px ${alpha(c, 0.95)}, 0 0 18px ${alpha(c, 0.6)}, 2px 2px 0 ${deep}`;
 
@@ -128,9 +130,9 @@ ${[38, 62, 46, 74, 54, 30, 66, 42].map((v, i) => `${sel([`#main_menu .menu_btn:n
 ${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 ${SEL.chatTop} {
-  background: repeating-linear-gradient(0deg, ${alpha('#000000', 0.25)} 0 1px, transparent 1px 3px), linear-gradient(180deg, ${mix(deep, teal, 0.85)}, ${deep}) !important;
+  background: ${rivets(6)}, repeating-linear-gradient(90deg, transparent 0 5px, ${deep} 5px 7px) 96% 82% / 30% 4px no-repeat, linear-gradient(90deg, ${teal}, ${amber}, ${pink}) 96% 82% / 30% 4px no-repeat, ${plate} !important;
   border-radius: 6px 6px 0 0 !important;
-  box-shadow: inset 0 0 0 1px ${alpha(teal, 0.6)}, inset 0 -2px 0 ${teal}, 0 0 12px -4px ${alpha(teal, 0.8)} !important;
+  box-shadow: inset 0 1px 0 ${alpha(t.text, 0.18)}, inset 0 0 0 1px ${alpha(metal, 0.6)}, inset 0 -2px 0 ${teal}, 0 0 12px -4px ${alpha(teal, 0.8)} !important;
 }
 ${sel(['#chats #private_chat .chat_top_bg', '#chats #calls .chat_top_bg', '#chats #duel_log .chat_top_bg'])} { box-shadow: inset 0 0 0 1px ${alpha(pink, 0.6)}, inset 0 -2px 0 ${pink}, 0 0 12px -4px ${alpha(pink, 0.8)} !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${mix(t.text, teal, 0.55)} !important; text-shadow: 0 0 6px ${alpha(teal, 0.9)} !important; }
@@ -163,6 +165,10 @@ ${turnInner} { background: radial-gradient(ellipse at 50% 100%, ${alpha(pink, 0.
 ${turnTxt} { color: ${mix(t.text, pink, 0.6)} !important; text-shadow: ${neonText(pink)} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${pink}, ${mix(pink, teal, 0.5)} 50%, ${teal}) !important; filter: drop-shadow(0 0 6px ${alpha(pink, 0.7)}); }
+${ring('::after')} {
+  content: ""; position: absolute; right: 12px; top: -15px; width: 46px; height: 29px; pointer-events: none;
+  background: ${cassette} center / contain no-repeat; filter: drop-shadow(0 2px 3px #000000);
+}
 ${ring('')} { background: ${vinyl}, ${alpha(t.surface, 0.92)} !important; box-shadow: 0 0 22px -6px ${alpha(teal, 0.5)} !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: ${pink} !important; }
 ${sel(['#duel_room #formats .format .format_inner'])} { background-color: ${alpha(t.bg, 0.6)} !important; }

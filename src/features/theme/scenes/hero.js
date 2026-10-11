@@ -2,7 +2,7 @@ import { mix } from '../../../lib/color.js';
 import { anim, glow, H, n1, rng } from './kit.js';
 
 // Elemental HERO: the Skyscraper city at night. Searchlights sweep, a rooftop
-// lamp throws the HERO H onto the clouds, a finned hero keeps watch, and
+// lamp throws a fusion vortex onto the clouds, Neos keeps watch, and
 // apartment lights switch on and off across the skyline.
 const hero = (t) => {
   const rand = rng(5);
@@ -98,29 +98,34 @@ const hero = (t) => {
     .join('');
   const lamp = `<path d="M${lx - 16} 500L${lx - 6} ${ly + 10}H${lx + 6}L${lx + 16} 500z" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><g transform="translate(${lx} ${ly}) rotate(${aim})"><rect x="-21" y="-14" width="8" height="28" rx="2" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><rect x="-14" y="-22" width="30" height="44" rx="4" fill="${facade}" stroke="${t.border}" stroke-width="1.5"/><ellipse cx="17" cy="0" rx="5" ry="20" fill="${mix(t.accent, '#ffffff', 0.75)}"/></g>`;
 
-  // The hero: Neos-style swept head fin and pointed shoulder guards, cape in
-  // the wind, rim-lit by the lamp.
+  // The hero: Elemental HERO Neos in silhouette, the swept head fin and
+  // pointed shoulder guards rim-lit by the lamp (no cape).
   const ink = mix(t.bg, '#000000', 0.55);
   const figure = `<g transform="translate(1362 500)">
-<g style="transform-origin: -18px -117px; animation: dbtefx-hr-cape 4.5s ease-in-out infinite;"><path d="M-20 -117C-36 -100 -52 -70 -70 -30L-58 -34L-62 -18L-46 -26L-44 -12C-28 -50 -6 -90 20 -117Z" fill="${mix(t.accent2, t.bg, 0.3)}"/><path d="M-22 -108C-34 -88 -44 -62 -56 -36L-50 -38C-40 -64 -28 -90 -16 -112Z" fill="#000000" fill-opacity="0.3"/></g>
 <path fill-rule="evenodd" fill="${ink}" d="M-4 -127L4 -127L6 -123L22 -117Q28 -115 29 -108L37 -88Q37 -84 33 -82L20 -73L15 -68L18 -36L20 -4L25 0L11 0L9 -32L2 -58L-2 -58L-9 -32L-11 0L-25 0L-20 -4L-18 -36L-15 -68L-20 -73L-33 -82Q-37 -84 -37 -88L-29 -108Q-28 -115 -22 -117L-6 -123ZM20 -101L28 -89L18 -80L14 -88ZM-20 -101L-28 -89L-18 -80L-14 -88Z"/>
 <path d="M18 -118L34 -126L30 -110ZM-18 -118L-34 -126L-30 -110Z" fill="${ink}"/>
 <ellipse cx="0" cy="-136" rx="7.5" ry="9.5" fill="${ink}"/><path d="M-5 -140C-2 -152 8 -162 22 -167C13 -157 9 -146 7 -132Z" fill="${ink}"/>
 <path d="M6 -123L22 -117L34 -126M29 -108L37 -88M8 -140C10 -150 14 -160 22 -167" fill="none" stroke="${t.accent}" stroke-opacity="0.8" stroke-width="1.6" stroke-linejoin="round"/>
 </g>`;
 
-  // The H, cast onto the cloud: two horned blades with barbs and a rising bar,
-  // squashed and tilted to lie on the cloud base.
-  const glyph = `<g transform="translate(${cx} ${cy}) rotate(${tilt}) scale(0.6 0.46) skewX(-10)" fill="${mix(t.bg, '#000000', 0.3)}" fill-opacity="0.72">
-<path d="M-78 -70C-52 -70 -32 -60 -28 -42L-26 44L-42 84L-54 44L-54 -2L-66 -12L-54 -18L-54 -34C-56 -52 -64 -62 -78 -70Z"/>
-<path d="M80 -78C54 -76 34 -64 30 -46L28 40L44 82L56 40L56 -4L68 -14L56 -20L56 -36C58 -56 66 -68 80 -78Z"/>
-<path d="M-28 6C0 -4 16 -10 30 -14L30 8C14 10 0 14 -28 26Z"/>
-</g>`;
+  // A fusion vortex cast onto the cloud: the HERO Polymerization swirl, four
+  // spiral arms turning slowly in the pool of light.
+  let arms = '';
+  for (let k = 0; k < 4; k++) {
+    let d = '';
+    for (let i = 0; i <= 24; i++) {
+      const a = (k * Math.PI) / 2 + i * 0.16;
+      const r = 6 + i * 4.4;
+      d += `${i ? 'L' : 'M'}${n1(Math.cos(a) * r)} ${n1(Math.sin(a) * r)}`;
+    }
+    arms += `<path d="${d}"/>`;
+  }
+  const glyph = `<g transform="translate(${cx} ${cy}) rotate(${tilt}) scale(0.9 0.52)"><g style="animation: dbtefx-spin 24s linear infinite;" fill="none" stroke="${mix(t.bg, '#000000', 0.3)}" stroke-opacity="0.7" stroke-width="9" stroke-linecap="round">${arms}</g><circle r="10" fill="${mix(t.bg, '#000000', 0.3)}" fill-opacity="0.7"/></g>`;
+
 
   return `<style>@keyframes dbtefx-hr-sw { 0%, 46% { opacity: 0; } 48%, 96% { opacity: 1; } 98%, 100% { opacity: 0; } }
 @keyframes dbtefx-hr-tv { 0%, 30% { opacity: 0; } 32% { opacity: 0.55; } 40% { opacity: 0.9; } 48% { opacity: 0.4; } 56% { opacity: 0.8; } 64% { opacity: 0.5; } 72% { opacity: 1; } 80% { opacity: 0.45; } 88% { opacity: 0.75; } 90%, 100% { opacity: 0; } }
 @keyframes dbtefx-hr-air { 0%, 100% { opacity: 0.15; } 6% { opacity: 1; } 18% { opacity: 0.15; } }
-@keyframes dbtefx-hr-cape { 0%, 100% { transform: skewY(0deg) scaleX(1); } 50% { transform: skewY(-10deg) scaleX(1.14); } }
 @keyframes dbtefx-hr-wisp { 0% { transform: translateX(-160px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { transform: translateX(220px); opacity: 0; } }</style>
 <defs><linearGradient id="dbtefx-hr-beam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.32"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-hr-sig" gradientUnits="userSpaceOnUse" x1="${sx}" y1="${sy}" x2="${cx}" y2="${cy}"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.6)}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.2"/></linearGradient>

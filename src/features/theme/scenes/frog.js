@@ -1,8 +1,8 @@
 import { mix } from '../../../lib/color.js';
 import { anim, H, n1, rng, W } from './kit.js';
 
-// Frog: a moonlit pond. Notched lily pads in perspective, lotus blooms, a
-// croaking frog on the moonlit pad and a haloed little one (Treeborn) behind.
+// Frog: a moonlit pond. Notched lily pads in perspective, lotus blooms, and
+// one large frog in moonlit silhouette on the big pad at the right edge.
 const frog = (t) => {
   const rand = rng(53);
   const horizon = 372;
@@ -64,13 +64,15 @@ ${back}<ellipse cx="${x}" cy="${n1(y - h * 0.42)}" rx="${n1(wd * 0.8)}" ry="${n1
   const rim = mix(moon, t.accent, 0.3);
   // Hero frog wears Swap Frog's colours: warm yellow, red bands, a target
   // ring on the thigh. The haloed Treeborn floats, ghostly, over its pad.
-  const frogShape = (x, y, s, swap, halo) => {
-    const skin = swap ? 'url(#dbtefx-fr-swap)' : 'url(#dbtefx-fr-skin)';
+  const frogShape = (x, y, s, swap, halo, sil = false) => {
+    const skin = sil ? 'url(#dbtefx-fr-sil)' : swap ? 'url(#dbtefx-fr-swap)' : 'url(#dbtefx-fr-skin)';
     const low = swap ? mix(mix(t.warning, t.danger, 0.6), t.bg, 0.45) : skinLow;
     const top = swap ? mix(t.warning, '#ffffff', 0.12) : skinTop;
     const band = mix(t.danger, mix(t.accent2, t.danger, 0.3), 0.3);
     const rimC = swap ? mix(moon, t.warning, 0.3) : rim;
-    const marks = swap
+    const marks = sil
+      ? ''
+      : swap
       ? `<g fill="${band}"><path d="M-16 -51C-11 -42 -9 -30 -12 -12H-5C-3 -30 -6 -42 -9 -52ZM6 -52C11 -40 13 -26 10 -10H17C19 -26 17 -40 13 -51ZM26 -46C30 -38 33 -30 33 -22L38 -26C37 -34 34 -40 30 -45Z"/></g>`
       : `<g fill="${skinLow}" fill-opacity="0.8"><ellipse cx="2" cy="-46" rx="7" ry="3.5"/><ellipse cx="20" cy="-44" rx="5" ry="3"/><ellipse cx="-12" cy="-47" rx="4" ry="2.5"/></g>`;
     const body = `${halo ? `<g ${anim('bob', 4, 1, 'ease-in-out')}><path d="M2 -44C4 -68 22 -88 50 -92C44 -84 48 -80 40 -74C44 -70 38 -64 32 -62C34 -56 26 -50 16 -48Z" fill="${mix(t.text, t.opp, 0.15)}" fill-opacity="0.85"/><path d="M8 -50C18 -66 30 -76 44 -80" fill="none" stroke="${mix(t.opp, t.bg, 0.3)}" stroke-opacity="0.5"/><ellipse cx="-36" cy="-74" rx="15" ry="4.5" fill="none" stroke="${t.warning}" stroke-width="3"/><ellipse cx="-36" cy="-74" rx="26" ry="11" fill="url(#dbtefx-fr-halo)"/></g>` : ''}
@@ -85,7 +87,7 @@ ${swap ? `<circle cx="30" cy="-20" r="10" fill="none" stroke="${band}" stroke-wi
 ${swap ? `<ellipse cx="-46" cy="-19" rx="17" ry="13" fill="${mix(t.warning, t.text, 0.5)}" fill-opacity="0.85" style="transform-box: fill-box; transform-origin: 75% 10%; animation: dbtefx-fr-croak 7s ease-in-out infinite;"/>` : ''}
 <path d="M-59 -35C-56 -41 -52 -42 -48 -44M-24 -51C-4 -55 24 -52 38 -42M8 -34C18 -44 38 -45 48 -34" fill="none" stroke="${rimC}" stroke-opacity="0.85" stroke-width="2" stroke-linecap="round"/>
 <path d="M-45 -55A10.5 10.5 0 0 1 -27 -54" fill="none" stroke="${rimC}" stroke-width="2" stroke-linecap="round"/>
-<circle cx="-36" cy="-50" r="6.2" fill="${swap ? mix(t.success, t.warning, 0.3) : t.warning}"/><ellipse cx="-36" cy="-50" rx="4.4" ry="1.8" fill="#000000"/><circle cx="-38.5" cy="-52.5" r="1.8" fill="#ffffff"/>`;
+${sil ? `<path d="M-42 -50Q-36 -55 -30 -50Q-36 -46 -42 -50Z" fill="${t.warning}"/>` : `<circle cx="-36" cy="-50" r="6.2" fill="${swap ? mix(t.success, t.warning, 0.3) : t.warning}"/><ellipse cx="-36" cy="-50" rx="4.4" ry="1.8" fill="#000000"/><circle cx="-38.5" cy="-52.5" r="1.8" fill="#ffffff"/>`}`;
     return `<g transform="translate(${x} ${y}) scale(${s})">
 <ellipse cx="0" cy="1" rx="64" ry="7" fill="#000000" fill-opacity="0.4"/>
 ${halo ? `<g style="animation: dbtefx-fr-hover 5s ease-in-out infinite;">${body}</g>` : body}
@@ -132,19 +134,6 @@ ${halo ? `<g style="animation: dbtefx-fr-hover 5s ease-in-out infinite;">${body}
     surface += `M${n1(x)} ${n1(y)}h${n1(40 + rand() * 160 * (1 + i / 10))}`;
   }
 
-  // A willow bough hanging into the top-left corner, strands swaying.
-  let willow = '';
-  for (let g = 0; g < 3; g++) {
-    let d = '';
-    for (let i = g; i < 21; i += 3) {
-      const x = -10 + i * 26 + rand() * 12;
-      const y0 = 14 + i * 2.2 - (i * i) / 14 + rand() * 6;
-      const len = 70 + rand() * 260 * (1 - i / 24);
-      d += `M${n1(x)} ${n1(y0)}q${n1(-6 - rand() * 14)} ${n1(len * 0.55)} ${n1(6 - rand() * 18)} ${n1(len)}`;
-    }
-    willow += `<g style="transform-origin: 240px 0px; animation: dbtefx-reed ${n1(7 + g * 1.7)}s ease-in-out ${-g * 2}s infinite;"><path d="${d}" stroke="url(#dbtefx-fr-wil)" stroke-width="1.2"/><path d="${d}" stroke="url(#dbtefx-fr-wil)" stroke-width="4" stroke-dasharray="${g + 4} ${6 - g}" stroke-linecap="round"/></g>`;
-  }
-
   const cattail = (x, h, lean, delay) =>
     `<g style="transform-origin: ${x}px ${H}px; animation: dbtefx-reed ${n1(6 + rand() * 3)}s ease-in-out ${-delay}s infinite;"><path d="M${x} ${H}Q${x + lean * 0.4} ${H - h / 2} ${x + lean} ${H - h}" fill="none" stroke="${reedC}" stroke-width="5" stroke-linecap="round"/><rect x="${x + lean - 7}" y="${H - h + 10}" width="14" height="${n1(h * 0.16)}" rx="7" fill="${mix(t.bg, t.warning, 0.22)}" stroke="${moon}" stroke-opacity="0.25" transform="rotate(${n1(lean / 9)} ${x + lean} ${H - h})"/><path d="M${x + lean} ${H - h + 10}l${n1(lean / 30)} -26" stroke="${reedC}" stroke-width="2"/></g>`;
   const blade = (x, h, lean, wd) => `<path d="M${x - wd} ${H}Q${x + lean * 0.3} ${H - h * 0.6} ${x + lean} ${H - h}Q${x + lean * 0.2 + wd} ${H - h * 0.5} ${x + wd} ${H}Z"/>`;
@@ -165,6 +154,7 @@ ${halo ? `<g style="animation: dbtefx-fr-hover 5s ease-in-out infinite;">${body}
 <radialGradient id="dbtefx-fr-lglow"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.35"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-fr-halo"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-fr-swap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.warning, '#ffffff', 0.15)}"/><stop offset="0.6" stop-color="${t.warning}"/><stop offset="1" stop-color="${mix(mix(t.warning, t.danger, 0.4), t.bg, 0.3)}"/></linearGradient>
+<linearGradient id="dbtefx-fr-sil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent, 0.3)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.4)}"/></linearGradient>
 <linearGradient id="dbtefx-fr-skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent, 0.55)}"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.12)}"/></linearGradient>
 </defs>
 <rect width="${W}" height="${horizon}" fill="url(#dbtefx-fr-sky)"/>
@@ -181,24 +171,18 @@ ${halo ? `<g style="animation: dbtefx-fr-hover 5s ease-in-out infinite;">${body}
 ${shimmer}
 <ellipse cx="420" cy="${horizon + 6}" rx="560" ry="30" fill="url(#dbtefx-fr-mist)" ${anim('drift', 30, 0, 'ease-in-out')}/>
 <ellipse cx="1150" cy="${horizon + 12}" rx="480" ry="26" fill="url(#dbtefx-fr-mist)" ${anim('drift', 36, 12, 'ease-in-out')}/>
-${pad(300, 392, 40, 200, 0.22, 0.22)}${pad(352, 401, 26, 340, 0.22, 0.2)}${pad(640, 391, 30, 60, 0.22, 0.2)}${pad(960, 398, 42, 300, 0.24, 0.22)}${pad(1012, 408, 26, 160, 0.24, 0.2)}${pad(1490, 396, 36, 250, 0.22, 0.22)}
+${pad(640, 391, 30, 60, 0.22, 0.2)}${pad(960, 398, 42, 300, 0.24, 0.22)}${pad(1012, 408, 26, 160, 0.24, 0.2)}${pad(1490, 396, 36, 250, 0.22, 0.22)}
 ${lotus(990, 398, 0.38, 2)}
 <!--mid-->
-${ripple(1330, 742, 230, 0, 9)}${ripple(1330, 742, 230, 4.5, 9)}${ripple(1220, 506, 170, 2, 8)}${ripple(760, 476, 80, 5, 10)}
-${pad(760, 474, 62, 140, 0.28, 0.24)}${pad(180, 520, 120, 300, 0.3, 0.26)}${pad(345, 566, 90, 20, 0.31, 0.27)}
-${pad(1220, 506, 128, 200, 0.3, 0.27)}${frogShape(1214, 500, 1.3, false, true)}
-${lotus(430, 560, 0.85, 1)}${bud(392, 575, 66, -12)}
-${pad(240, 660, 170, 250, 0.33, 0.3)}${pad(1510, 680, 112, 110, 0.33, 0.3)}
-${lotus(1150, 712, 1.1, 3)}${bud(1205, 728, 92, 16)}
-${pad(1330, 742, 210, 215, 0.35, 0.34)}${pad(1150, 836, 130, 300, 0.36, 0.3)}${pad(820, 880, 150, 250, 0.38, 0.28)}
-${frogShape(1340, 735, 1.55, true, false)}
+${ripple(1400, 776, 320, 0, 9)}${ripple(1400, 776, 320, 4.5, 9)}${ripple(1140, 504, 120, 2, 8)}
+${pad(1140, 500, 90, 200, 0.3, 0.27)}
+${pad(1500, 640, 112, 110, 0.33, 0.3)}
+${lotus(1130, 712, 1.1, 3)}
+${pad(1150, 836, 130, 300, 0.36, 0.3)}
+${pad(1400, 770, 290, 215, 0.33, 0.34)}
+${frogShape(1420, 760, 3.1, false, false, true)}
 <!--near-->
-<defs><linearGradient id="dbtefx-fr-wil" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="360"><stop offset="0" stop-color="${mix(t.bg, t.accent, 0.3)}"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.3)}" stop-opacity="0.1"/></linearGradient></defs>
-<path d="M-30 4C120 34 300 56 560 28" stroke="${deep}" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M-30 -2C120 28 300 50 560 22" stroke="${moon}" stroke-opacity="0.2" stroke-width="2" fill="none"/>
-<g fill="none">${willow}</g>
-${pad(250, 905, 250, 320, 0.4, 0.1, true)}
-<g fill="${reedC}" stroke="${moon}" stroke-opacity="0.18">${blade(110, 380, 30, 9)}${blade(150, 300, -20, 8)}${blade(250, 260, 40, 7)}${blade(1490, 400, -40, 9)}${blade(1450, 300, 18, 8)}${blade(1530, 250, -30, 7)}</g>${cattail(130, 470, 24, 0)}${cattail(190, 390, -16, 1.5)}${cattail(220, 320, 10, 3)}
-${cattail(1470, 500, -28, 2)}${cattail(1420, 410, -8, 0.7)}`;
+<g fill="${reedC}" stroke="${moon}" stroke-opacity="0.18">${blade(1490, 400, -40, 9)}${blade(1450, 300, 18, 8)}${blade(1530, 250, -30, 7)}</g>${cattail(1470, 500, -28, 2)}${cattail(1420, 410, -8, 0.7)}`;
 };
 
 export default frog;

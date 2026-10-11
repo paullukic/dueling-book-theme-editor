@@ -38,9 +38,9 @@ const toon = (t) => {
   // Rays behind the castle, turning slowly: the comic splash-panel backdrop.
   let rays = '';
   for (let i = 0; i < 16; i++) {
-    const [x1, y1] = polar(1250, 560, 1100, i * 22.5);
-    const [x2, y2] = polar(1250, 560, 1100, i * 22.5 + 11);
-    rays += `M1250 560L${x1} ${y1}L${x2} ${y2}Z`;
+    const [x1, y1] = polar(1340, 560, 1100, i * 22.5);
+    const [x2, y2] = polar(1340, 560, 1100, i * 22.5 + 11);
+    rays += `M1340 560L${x1} ${y1}L${x2} ${y2}Z`;
   }
 
   // One crooked tower: a banana-bent wall, a witch-hat roof whose tip curls over,
@@ -121,14 +121,14 @@ const toon = (t) => {
 <pattern id="dbtefx-tn-dots" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="4.5" cy="4.5" r="2.1" fill="${ink}" fill-opacity="0.45"/></pattern>
 <pattern id="dbtefx-tn-ben" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="8" cy="8" r="3.2" fill="${t.accent2}" fill-opacity="0.38"/></pattern>
 <radialGradient id="dbtefx-tn-ray" cx="1250" cy="560" r="640" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${rayTone}" stop-opacity="0.9"/><stop offset="0.5" stop-color="${rayTone}" stop-opacity="0.35"/><stop offset="1" stop-color="${rayTone}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-tn-spot" cx="1250" cy="540" r="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-tn-spot" cx="1340" cy="540" r="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <mask id="dbtefx-tn-fade"><rect width="${W}" height="${H}" fill="url(#dbtefx-tn-spot)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="${t.bg}"/>
-<g style="transform-origin: 1250px 560px; animation: dbtefx-tn-turnrays 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-tn-ray)"/></g>
+<g style="transform-origin: 1340px 560px; animation: dbtefx-tn-turnrays 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-tn-ray)"/></g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tn-ben)" mask="url(#dbtefx-tn-fade)"/>
 <!--mid-->
-<g transform="translate(-24 0) translate(1250 850) scale(0.92) translate(-1250 -850)">
+<g transform="translate(100 0) translate(1250 850) scale(0.84) translate(-1250 -850)">
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="none" stroke="${off}" stroke-width="5" transform="translate(6 4)"/>
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="${cover}" stroke="${ink}" stroke-width="5" stroke-linejoin="round"/>
 <path d="M1050 784Q1150 772 1250 806Q1350 772 1450 784L1456 798Q1350 788 1250 824Q1150 788 1044 798Z" fill="${mix(page, t.muted, 0.4)}" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>

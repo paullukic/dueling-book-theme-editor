@@ -126,9 +126,27 @@ const artmage = (t) => {
   const drip = (x, len, d, c) =>
     `<path d="M${x - 7} ${PY + PH}C${x - 4} ${PY + PH + 4} ${x - 3} ${PY + PH + len * 0.6} ${x - 3} ${PY + PH + len}a3 3 0 0 0 6 0C${x + 3} ${PY + PH + len * 0.6} ${x + 4} ${PY + PH + 4} ${x + 7} ${PY + PH}Z" fill="${c}" style="transform-origin: ${x}px ${PY + PH}px; animation: dbtefx-am-grow 6s ease-in ${n1(-d)}s infinite;"/><circle cx="${x}" cy="${PY + PH + len + 4}" r="4" fill="${c}" style="animation: dbtefx-am-drop 6s ease-in ${n1(-d)}s infinite;"/>`;
 
-  // Lesser canvases, hung salon-style from the same rail.
-  const study = (x, y, w, h, c1, c2, id) =>
-    `<path d="M${n1(x + w / 2)} ${RAIL}L${x + 4} ${y - 14}M${n1(x + w / 2)} ${RAIL}L${x + w - 4} ${y - 14}" stroke="${gold}" stroke-opacity="0.3"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/><path d="M${x} ${n1(y + h * 0.7)}Q${n1(x + w * 0.4)} ${n1(y + h * 0.45)} ${x + w} ${n1(y + h * 0.62)}V${y + h}H${x}Z" fill="${c2}" fill-opacity="0.5"/><circle cx="${n1(x + w * 0.7)}" cy="${n1(y + h * 0.3)}" r="${n1(Math.min(w, h) * 0.12)}" fill="${c1}" fill-opacity="0.6"/>${frame(x, y, w, h, 14, 'dbtefx-am-giltd', false)}`;
+  // Lesser canvases, hung salon-style: miniature Artmage works, a rainbow
+  // paint ribbon (their magic) and the gold four-point star of their books.
+  const study = (x, y, w, h, kind, id) => {
+    const cx = n1(x + w / 2);
+    const cy = n1(y + h / 2);
+    let art = '';
+    if (kind === 'ribbon') {
+      [t.accent, gold, t.success, t.opp].forEach((c, i) => {
+        art += `<path d="M${x + 8} ${n1(y + h * 0.72 - i * 7)}C${n1(x + w * 0.3)} ${n1(y + h * 0.2 - i * 6)} ${n1(x + w * 0.6)} ${n1(y + h * 0.95 - i * 6)} ${x + w - 8} ${n1(y + h * 0.32 - i * 7)}" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round"/>`;
+      });
+      art += `<circle cx="${n1(x + w * 0.78)}" cy="${n1(y + h * 0.24)}" r="8" fill="${mix(gold, '#ffffff', 0.4)}"/>`;
+    } else {
+      const r = Math.min(w, h) * 0.34;
+      const q = n1(r * 0.12);
+      [[0.2, 0.25, t.accent], [0.8, 0.2, t.opp], [0.25, 0.8, t.success], [0.78, 0.78, gold]].forEach(([fx, fy, c]) => {
+        art += `<circle cx="${n1(x + w * fx)}" cy="${n1(y + h * fy)}" r="${n1(6 + rand() * 6)}" fill="${c}" fill-opacity="0.75"/>`;
+      });
+      art += `<path d="M${cx} ${n1(cy - r)}Q${n1(cx + q)} ${n1(cy - q)} ${n1(cx + r)} ${cy}Q${n1(cx + q)} ${n1(cy + q)} ${cx} ${n1(cy + r)}Q${n1(cx - q)} ${n1(cy + q)} ${n1(cx - r)} ${cy}Q${n1(cx - q)} ${n1(cy - q)} ${cx} ${n1(cy - r)}Z" fill="${gold}" stroke="${mix(gold, '#000000', 0.45)}" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="${n1(r * 0.2)}" fill="${mix(gold, '#ffffff', 0.55)}"/>`;
+    }
+    return `<path d="M${cx} ${RAIL}L${x + 4} ${y - 14}M${cx} ${RAIL}L${x + w - 4} ${y - 14}" stroke="${gold}" stroke-opacity="0.3"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>${art}${frame(x, y, w, h, 14, 'dbtefx-am-giltd', false)}`;
+  };
 
   let panels = '';
   for (let x = 40; x < W; x += 260) panels += `<rect x="${x}" y="800" width="220" height="80" rx="4"/>`;
@@ -149,16 +167,14 @@ const artmage = (t) => {
 <g fill="none" stroke="${mix(t.bg, gold, 0.18)}" stroke-width="2">${panels}<path d="M0 780H${W}" stroke-width="4"/><path d="M0 790H${W}" stroke-opacity="0.6"/></g>
 <path d="M0 ${RAIL}H${W}" stroke="${mix(t.bg, gold, 0.5)}" stroke-width="4"/><path d="M0 ${RAIL + 4}H${W}" stroke="#000000" stroke-opacity="0.4" stroke-width="2"/>
 <path d="M${PX + 30} ${RAIL}H${PX + PW - 30}L${PX + PW + 130} ${H}H${PX - 130}Z" fill="url(#dbtefx-am-beam)"/>
-<g opacity="0.75">
-${study(1090, 650, 130, 96, gold, t.opp, 'dbtefx-am-s1')}
-${study(1262, 628, 120, 150, t.accent, gold, 'dbtefx-am-s2')}
-</g>
+${study(1090, 650, 130, 96, 'ribbon', 'dbtefx-am-s1')}
+${study(1262, 628, 120, 150, 'star', 'dbtefx-am-s2')}
 <!--mid-->
 <defs>
 <linearGradient id="dbtefx-am-gilt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.45)}"/><stop offset="0.25" stop-color="${gold}"/><stop offset="0.5" stop-color="${mix(gold, '#000000', 0.35)}"/><stop offset="0.7" stop-color="${mix(gold, '#ffffff', 0.25)}"/><stop offset="1" stop-color="${mix(gold, '#000000', 0.45)}"/></linearGradient>
 <linearGradient id="dbtefx-am-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.opp, 0.35)}"/><stop offset="0.6" stop-color="${mix(t.raised, t.accent, 0.5)}"/><stop offset="1" stop-color="${mix(t.accent, gold, 0.6)}"/></linearGradient>
 <linearGradient id="dbtefx-am-lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent, gold, 0.5)}" stop-opacity="0.85"/><stop offset="0.5" stop-color="${mix(t.raised, t.accent, 0.35)}"/><stop offset="1" stop-color="${mix(t.bg, t.opp, 0.35)}"/></linearGradient>
-<linearGradient id="dbtefx-am-paint" gradientUnits="userSpaceOnUse" x1="${S0[0]}" y1="0" x2="440" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.35" stop-color="${gold}"/><stop offset="0.7" stop-color="${t.opp}"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0"/></linearGradient>
+<linearGradient id="dbtefx-am-paint" gradientUnits="userSpaceOnUse" x1="${S0[0]}" y1="0" x2="440" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.25" stop-color="${gold}"/><stop offset="0.5" stop-color="${t.success}"/><stop offset="0.75" stop-color="${t.opp}"/><stop offset="1" stop-color="${mix(t.accent, t.opp, 0.5)}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-am-paint2" gradientUnits="userSpaceOnUse" x1="${S0[0]}" y1="0" x2="440" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="0.4" stop-color="${mix(gold, '#ffffff', 0.4)}"/><stop offset="0.75" stop-color="${mix(t.opp, '#ffffff', 0.3)}"/><stop offset="1" stop-color="${t.opp}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-am-handle" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.bg, t.danger, 0.35)}"/><stop offset="0.5" stop-color="${mix(t.danger, '#ffffff', 0.15)}"/><stop offset="1" stop-color="${mix(t.bg, t.danger, 0.3)}"/></linearGradient>
 <radialGradient id="dbtefx-am-glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.28"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
@@ -182,7 +198,7 @@ ${orbs}
 </g>
 ${frame(PX, PY, PW, PH, 30, 'dbtefx-am-gilt', true)}
 <g mask="url(#dbtefx-am-reveal)">
-<path d="${ribbon}" fill="url(#dbtefx-am-paint)" opacity="0.6"/>
+<path d="${ribbon}" fill="url(#dbtefx-am-paint)" opacity="0.85"/>
 <g fill="none" stroke="url(#dbtefx-am-paint2)" stroke-linecap="round">${bristles}</g>
 </g>
 <g ${anim('bob', 6, 0, 'ease-in-out')}>${brush}<g fill="#ffffff" style="animation: dbtefx-am-shine 2s ease-in-out infinite;">${sparkle(S0[0], S0[1], 9)}</g></g>

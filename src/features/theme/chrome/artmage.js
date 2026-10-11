@@ -27,7 +27,6 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const bevel = (b) => svgUrl(svg(60, 60, `<defs><linearGradient id="l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset="1" stop-color="${gold}"/></linearGradient><linearGradient id="d" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${gold}"/><stop offset="1" stop-color="${brown}"/></linearGradient></defs><path d="M0 0H60L${60 - b} ${b}H${b}V${60 - b}L0 60Z" fill="url(#l)"/><path d="M60 60H0L${b} ${60 - b}H${60 - b}V${b}L60 0Z" fill="url(#d)"/><path d="M${b * 0.45} ${b * 0.45}H${60 - b * 0.45}V${60 - b * 0.45}H${b * 0.45}Z" fill="none" stroke="${brown}" stroke-opacity="0.55" stroke-width="0.8"/><rect x="${b - 0.6}" y="${b - 0.6}" width="${61.2 - b * 2}" height="${61.2 - b * 2}" fill="none" stroke="${deep}" stroke-width="1.2"/><rect x="0.4" y="0.4" width="59.2" height="59.2" fill="none" stroke="${deep}" stroke-width="0.8"/>`));
   // The gold four-point star of the Artmage books and brooches.
   const star = (r, c = gold) => `<path d="M0 ${-r}Q${r * 0.12} ${-r * 0.12} ${r} 0Q${r * 0.12} ${r * 0.12} 0 ${r}Q${-r * 0.12} ${r * 0.12} ${-r} 0Q${-r * 0.12} ${-r * 0.12} 0 ${-r}Z" fill="${c}"/>`;
-  const starArt = svgUrl(svg(48, 48, `<g transform="translate(24 24)"><circle r="9" fill="${alpha(hi, 0.25)}"/>${star(22, brown)}${star(19, gold)}${star(9, hi)}<g transform="rotate(45) scale(0.45)">${star(19, hi)}</g></g>`));
   // The academy crest: a rose window with gold tracery and jewel glass.
   const rose = (() => {
     let glass = '';
@@ -41,18 +40,12 @@ export default (t, { SEL, sel, svg, alpha }) => {
     }
     return svgUrl(svg(64, 64, `<circle cx="32" cy="32" r="30" fill="${robeDark}" stroke="${brown}" stroke-width="2"/><circle cx="32" cy="32" r="27.5" fill="none" stroke="${hi}" stroke-width="3"/>${glass}<g fill="none" stroke="${gold}" stroke-width="1.6">${spokes}<circle cx="32" cy="32" r="10"/><circle cx="32" cy="32" r="25"/></g><g transform="translate(32 32)">${star(8, hi)}</g>`));
   })();
+  // The Artmage swash: their rainbow paint-ribbon magic, five bands swept as one brush stroke.
+  const swash = (o) => svgUrl(svg(240, 40, `<g fill="none" stroke-linecap="round" stroke-opacity="${o}">${rainbow.map((c, i) => `<path d="M${8 + i * 3} ${30 - i * 4}C60 ${8 - i * 3} 110 ${44 - i * 4} 160 ${22 - i * 4}S220 ${8 - i * 2} 234 ${16 - i * 3}" stroke="${c}" stroke-width="${9 - i * 0.8}"/>`).join('')}</g><g fill-opacity="${o}"><circle cx="230" cy="26" r="2.5" fill="${pink}"/><circle cx="222" cy="33" r="1.6" fill="${cyan}"/></g>`));
+  // A painter's palette: kidney board, thumb hole, four paint dabs.
+  const palette = svgUrl(svg(48, 40, `<path d="M24 3C38 3 46 11 46 20C46 28 40 30 34 29C29 28 27 31 29 34C31 38 26 39 22 39C9 39 2 31 2 21C2 10 11 3 24 3Z" fill="${hi}" stroke="${brown}" stroke-width="2"/><ellipse cx="33" cy="22" rx="3.5" ry="3" fill="${deep}"/><circle cx="13" cy="15" r="4.5" fill="${pink}"/><circle cx="24" cy="10" r="4.2" fill="${cyan}"/><circle cx="35" cy="11" r="3.8" fill="${t.success}"/><circle cx="12" cy="27" r="4.2" fill="${gold}" stroke="${brown}" stroke-width="0.8"/>`));
   // The Artmage paint ribbon: a rainbow brush sweep.
   const ribbon = (o) => svgUrl(svg(240, 24, `<defs><linearGradient id="r">${rainbowStops}</linearGradient></defs><path d="M2 14q34-11 76-5t82 0q40-6 78 1q-34 9-78 6t-82 2q-44 4-76-4z" fill="url(#r)" fill-opacity="${o}"/><path d="M14 12q66-6 128-1t84 1" fill="none" stroke="#ffffff" stroke-opacity="${o * 0.6}" stroke-width="0.8"/>`));
-  // The academy skyline: white walls, blue domes and paint-drop spires in jewel colours.
-  const palace = (() => {
-    const towers = [[8, 26, 0], [30, 40, 1], [52, 22, 2], [74, 50, 3], [100, 30, 4], [122, 44, 0], [146, 24, 2], [168, 36, 1]];
-    let s = `<rect x="0" y="44" width="190" height="20" fill="${alpha(t.text, 0.1)}"/>`;
-    towers.forEach(([x, h, c]) => {
-      const top = 64 - h;
-      s += `<rect x="${x}" y="${top}" width="12" height="${h}" fill="${alpha(t.text, 0.12)}"/><path d="M${x - 1} ${top}q7-12 14 0z" fill="${alpha(cyan, 0.3)}"/><path d="M${x + 6} ${top - 16}q4 6 3 9q-3 3-6 0q-1-3 3-9z" fill="${rainbow[c]}" fill-opacity="0.55"/>`;
-    });
-    return svgUrl(svg(190, 64, s));
-  })();
   const tracery = `repeating-conic-gradient(from 22.5deg, ${alpha(hi, 0.55)} 0 2deg, transparent 2deg 45deg)`;
   const metal = `linear-gradient(135deg, ${hi}, ${gold} 45%, ${brown})`;
   const titleInk = (fill = t.text) => `color: ${fill} !important; -webkit-text-stroke: 4px ${deep}; paint-order: stroke fill; text-shadow: 0 3px 0 ${brown}, 0 0 8px ${t.surface}, 0 0 8px ${t.surface} !important;`;
@@ -82,26 +75,27 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
 
   return `
-html body { --dbte-am-bevel: ${bevel(16)}; --dbte-am-star: ${starArt}; --dbte-am-rose: ${rose}; --dbte-am-ribbon: ${ribbon(0.38)}; --dbte-am-ribbon-on: ${ribbon(0.62)}; --dbte-am-palace: ${palace}; }
+html body { --dbte-am-bevel: ${bevel(16)}; --dbte-am-palette: ${palette}; --dbte-am-swash: ${swash(0.85)}; --dbte-am-swash-on: ${swash(1)}; --dbte-am-rose: ${rose}; --dbte-am-ribbon: ${ribbon(0.38)}; --dbte-am-ribbon-on: ${ribbon(0.62)}; }
 @keyframes dbte-am-sweep { from { transform: scaleX(0.2); opacity: 0.2 } to { transform: scaleX(1); opacity: 1 } }
 @keyframes dbte-am-glint { 0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85 } 50% { transform: scale(1.12) rotate(12deg); opacity: 1 } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-am-anim: none } }
 
+html body #dbte-skin-layer, html body #dbte-skin-layer::before { background: radial-gradient(ellipse 38% 34% at 90% 84%, ${alpha(cyan, 0.22)}, transparent 70%), radial-gradient(ellipse 30% 26% at 50% 110%, ${alpha(pink, 0.12)}, transparent 70%) !important; }
 ${titles} { ${titleInk()} }
 ${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: 0 3px 0 ${brown}, ${[-10, -7, -4, 4, 7, 10].map((x) => `${x}px 0 0 ${robeDark}`).join(', ')} !important; }
 
 ${SEL.tile} {
-  background: var(--dbte-am-ribbon) 50% 94% / 94% 32% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.1)}, transparent 60%), ${robeFill} !important;
+  background: var(--dbte-am-swash) 50% 104% / 100% 56% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.1)}, transparent 60%), ${robeFill} !important;
   ${gilt(4)}
   border-radius: 0 !important;
   box-shadow: inset 0 0 0 2px ${robe}, inset 0 0 0 3px ${piping}, inset 0 -14px 24px -12px ${alpha('#000000', 0.5)}, 0 12px 22px -12px #000000 !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; left: 7px; bottom: 5px; width: 24px; height: 24px; pointer-events: none;
-  background: var(--dbte-am-star) center / contain no-repeat; filter: drop-shadow(0 1px 2px ${deep});
+  content: ""; position: absolute; left: 6px; bottom: 5px; width: 28px; height: 23px; pointer-events: none;
+  background: var(--dbte-am-palette) center / contain no-repeat; filter: drop-shadow(0 1px 2px ${deep});
 }
 ${SEL.tileHover} {
-  background: var(--dbte-am-ribbon-on) 50% 94% / 98% 36% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.16)}, transparent 60%), ${robeFill} !important;
+  background: var(--dbte-am-swash-on) 50% 104% / 100% 60% no-repeat, radial-gradient(ellipse at 50% 0%, ${alpha(t.text, 0.16)}, transparent 60%), ${robeFill} !important;
   ${gilt(4)}
   box-shadow: inset 0 0 0 2px ${robe}, inset 0 0 0 3px ${t.text}, 0 0 22px -6px ${alpha(gold, 0.8)} !important;
 }
@@ -133,7 +127,7 @@ ${imgSel('no_btn')} { content: ${plaque('No', 153.4, false)} !important; }
 ${imgSel('cancel_btn')} { content: ${plaque('Cancel', 234.85, false)} !important; }
 
 ${SEL.dialog} {
-  background: var(--dbte-am-palace) 0 100% / auto 22% repeat-x, radial-gradient(ellipse at 50% -10%, ${alpha(cyan, 0.16)}, transparent 55%), ${robeFill} !important;
+  background: var(--dbte-am-swash) 4% 96% / 34% 18% no-repeat, radial-gradient(ellipse at 50% -10%, ${alpha(cyan, 0.16)}, transparent 55%), ${robeFill} !important;
   border-radius: 0 !important;
   box-shadow: 0 30px 60px -20px #000000 !important;
 }
@@ -152,7 +146,7 @@ ${SEL.chatTop} {
 }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${deep}; paint-order: stroke fill; text-shadow: none !important; }
 ${SEL.chat} {
-  background: var(--dbte-am-palace) 0 100% / auto 44px repeat-x, linear-gradient(180deg, ${robeDark}, ${t.bg}) !important;
+  background: linear-gradient(180deg, ${robeDark}, ${t.bg}) !important;
   box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 3px ${brown}, inset 0 0 0 5px ${robeDark}, inset 0 0 0 6px ${alpha(t.text, 0.3)} !important;
 }
 ${sel(['#chats .chat .black_line'])} { background: ${metal} !important; }
@@ -183,7 +177,7 @@ ${turnTxt} { color: ${hi} !important; -webkit-text-stroke: 3px ${deep}; paint-or
 
 ${ring('::before')} { background: ${metal} !important; filter: none; }
 ${ring('::after')} { ${framePseudo(7, -3)} }
-${ring('')} { background: linear-gradient(180deg, ${alpha(robeDark, 0.94)}, ${alpha(t.bg, 0.94)}) !important; }
+${ring('')} { background: var(--dbte-am-swash) 100% 100% / 150px 26px no-repeat, linear-gradient(180deg, ${alpha(robeDark, 0.94)}, ${alpha(t.bg, 0.94)}) !important; }
 ${sel(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(90deg, ${rainbow.join(', ')}) !important; }
 ${sel(['#duel_room #formats .format .format_inner'])} { background-color: ${alpha(t.bg, 0.5)} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(gold, 0.3)} !important; }
@@ -191,7 +185,7 @@ ${sel(['#duel_room .duelbutton:hover .background'])} { background: var(--dbte-am
 
 ${T(deckList)} { border-radius: 0 !important; box-shadow: inset 0 0 30px ${alpha('#000000', 0.4)} !important; }
 ${T(deckList.map((s) => `${s}::after`))} { ${framePseudo(8, -4)} }
-${sel(['#deck_constructor .deck_bg'])} { background: var(--dbte-am-palace) 0 100% / auto 70px repeat-x, linear-gradient(180deg, ${robe}, ${robeDark} 40%, ${t.bg}) !important; }
+${sel(['#deck_constructor .deck_bg'])} { background: linear-gradient(180deg, ${robe}, ${robeDark} 40%, ${t.bg}) !important; }
 ${sel(['#deck_constructor .side_bg'])} { background: ${mix(robeDark, pink, 0.84)} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: ${mix(robeDark, gold, 0.86)} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: linear-gradient(180deg, ${robe}, ${robeDark} 30%) !important; }
@@ -212,7 +206,7 @@ ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus',
 
 ${duelPanels} { border-image: var(--dbte-am-bevel) 16 / 3px stretch !important; border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${piping} !important; }
 ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${robeDark}, ${t.bg}) !important; }
-${SEL.settingsPanel} { background: linear-gradient(180deg, ${alpha(robe, 0.95)}, ${alpha(robeDark, 0.95)}) !important; ${gilt(6)} border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${piping}, 0 12px 26px -12px #000000 !important; }
+${SEL.settingsPanel} { background: var(--dbte-am-swash) 100% 100% / 130px 22px no-repeat, linear-gradient(180deg, ${alpha(robe, 0.95)}, ${alpha(robeDark, 0.95)}) !important; ${gilt(6)} border-radius: 0 !important; box-shadow: inset 0 0 0 1px ${piping}, 0 12px 26px -12px #000000 !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: ${metal} !important; border-radius: 1px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, inset 0 0 0 2.5px ${brown} !important; }
 `;

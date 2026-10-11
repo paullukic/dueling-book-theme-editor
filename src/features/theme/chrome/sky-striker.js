@@ -79,14 +79,14 @@ ${SEL.tile} {
 }
 ${SEL.tile}::before {
   content: ""; position: absolute; right: 18px; top: 8px; width: 48px; height: 6px; pointer-events: none;
-  background: repeating-linear-gradient(90deg, var(--dbte-ss-ace) 0 6px, transparent 0 9px); opacity: 0.85;
+  background: repeating-linear-gradient(90deg, var(--dbte-ss-ace) 0 6px, transparent 0 9px); opacity: 0;
 }
 ${SEL.tileHover} {
   background: ${brackets(t.text, 20, 2)}, ${chamferLines(t.text, 14)}, ${ticks(cyan, 8, 2)}, linear-gradient(90deg, var(--dbte-ss-ace) 0 8px, transparent 8px), linear-gradient(90deg, color-mix(in srgb, var(--dbte-ss-ace) 38%, transparent), transparent 70%), var(--dbte-ss-fill) !important;
   border-color: ${alpha(cyan, 0.6)} !important;
   box-shadow: inset 0 0 0 1px ${alpha(cyan, 0.6)}, inset 0 0 30px ${alpha(cyan, 0.18)} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { animation: var(--dbte-ss-anim, dbte-ss-blink 0.6s steps(2) infinite); }
+${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 0.9; animation: var(--dbte-ss-anim, dbte-ss-blink 0.6s steps(2) infinite); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 0 0 2px var(--dbte-ss-ace), inset 0 0 30px color-mix(in srgb, var(--dbte-ss-ace) 35%, transparent) !important; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: ${hudText(cyan)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { text-shadow: 0 0 10px ${cyan}, 2px 2px 0 ${deep}, -2px 0 0 ${alpha(red, 0.7)} !important; }

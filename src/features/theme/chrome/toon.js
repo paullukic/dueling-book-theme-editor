@@ -1,5 +1,5 @@
 // toon: Toon World comic book. Ink-outlined panels with hard offset shadows and
-// a cyan misprint, Ben-Day dots, cream speech-balloon pop-ups with comic plate
+// Ben-Day dots, cream speech-balloon pop-ups with comic plate
 // buttons, ink-stroked lettering with a solid ink drop, paper-white phase discs
 // and POW bursts on hover and on the active phase.
 
@@ -35,8 +35,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const pow = svgUrl(svg(84, 84, `<path d="${burstPath(42, 42, 10, 40, 26)}" fill="${red}" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/><path d="M38 22h9l-2 26h-5z" fill="${paper}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle cx="42.5" cy="57" r="4.5" fill="${paper}" stroke="${ink}" stroke-width="2"/>`));
   // Speech-balloon tail: fill, with an ink edge on the two open sides.
   const tail = (fill) => svgUrl(svg(48, 34, `<path d="M2 0 L10 32 L40 0" fill="${fill}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/><path d="M0 0H44" stroke="${fill}" stroke-width="5"/>`));
-  // Panel frame: ink line, cream inner keyline, hard ink drop and a cyan misprint.
-  const panel = (drop = 6) => `0 0 0 3px ${ink}, ${drop}px ${drop}px 0 3px ${ink}, -3px -3px 0 3px ${alpha(cyan, 0.5)}`;
+  // Panel frame: ink line, cream inner keyline and a hard ink drop.
+  const panel = (drop = 6) => `0 0 0 3px ${ink}, ${drop}px ${drop}px 0 3px ${ink}`;
   const keyline = `inset 0 0 0 2px ${alpha(paper, 0.85)}`;
   // Lettering: thick ink stroke under the fill and a solid ink drop; panel
   // titles also smear the panel colour sideways so no border line shows in word gaps.
@@ -69,9 +69,9 @@ ${titles} { color: ${paper} !important; ${stroke(5)} text-shadow: 3px 3px 0 ${in
 ${T(['#duel_room .arial_black2', '#content .admin_lbl', '#content .subtitle'])} { text-shadow: 3px 3px 0 ${ink}, ${smear(t.surface)} !important; }
 
 ${SEL.tile} {
-  background: ${dots(pop, 0.08)}, linear-gradient(${t.raised}, ${mix(t.raised, t.bg, 0.6)}) !important;
+  background: ${dots(pop, 0.22)}, linear-gradient(${t.raised}, ${mix(t.raised, t.bg, 0.6)}) !important;
   border-color: ${ink} !important;
-  border-radius: 6px !important;
+  border-radius: 18px 22px 16px 20px / 20px 16px 22px 18px !important;
   box-shadow: ${keyline}, ${panel(7)} !important;
 }
 ${SEL.tile}::before {
@@ -80,9 +80,9 @@ ${SEL.tile}::before {
   transition: opacity 0.15s, transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 ${SEL.tileHover} {
-  background: ${dots(red, 0.16)}, ${pop} !important;
+  background: ${dots(red, 0.24)}, ${pop} !important;
   border-color: ${ink} !important;
-  box-shadow: inset 0 0 0 2px ${paper}, 0 0 0 3px ${ink}, 9px 9px 0 3px ${ink}, -3px -3px 0 3px ${alpha(red, 0.7)} !important;
+  box-shadow: inset 0 0 0 2px ${paper}, 0 0 0 3px ${ink}, 9px 9px 0 3px ${ink} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; transform: none; animation: var(--dbte-toon-anim, dbte-toon-pop 0.32s cubic-bezier(0.3, 1.6, 0.5, 1)); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 0 0 2px ${paper}, 0 0 0 3px ${ink}, 2px 2px 0 3px ${ink} !important; }
@@ -103,7 +103,7 @@ ${SEL.buttonHover}, ${comboHover} {
   background: ${dots(red, 0.35, 6, 1.2)}, ${pop} !important;
   border-color: ${ink} !important;
   color: ${t.accentText} !important;
-  box-shadow: inset 0 0 0 1px ${paper}, 0 0 0 2px ${ink}, 4px 4px 0 2px ${ink}, -2px -2px 0 2px ${alpha(cyan, 0.6)} !important;
+  box-shadow: inset 0 0 0 1px ${paper}, 0 0 0 2px ${ink}, 4px 4px 0 2px ${ink} !important;
 }
 ${SEL.buttonDown} {
   background: ${red} !important;
@@ -115,11 +115,11 @@ ${SEL.buttonDown} {
 ${SEL.dialog} {
   background: ${dots(red, 0.1, 9, 1.6)}, ${paper} !important;
   border-radius: 46px !important;
-  box-shadow: inset 0 0 0 3px ${alpha(ink, 0.25)}, 0 0 0 5px ${ink}, 10px 12px 0 5px ${ink}, -4px -4px 0 5px ${alpha(cyan, 0.55)}, 0 30px 60px -20px #000000 !important;
+  box-shadow: inset 0 0 0 3px ${alpha(ink, 0.25)}, 0 0 0 5px ${ink}, 10px 12px 0 5px ${ink}, 0 30px 60px -20px #000000 !important;
 }
 ${sel(['#content #msg::after', '#content #link::after', '#content #confirm::after', '#content #confirm2::after', '#content #input::after', '#content #input2::after', '#content #combo::after'])} {
   content: ""; position: absolute; left: 84px; bottom: -36px; width: 52px; height: 38px; pointer-events: none;
-  background: ${tail(paper)} 0 0 / 100% 100% no-repeat; filter: drop-shadow(8px 8px 0 ${ink});
+  background: ${tail(paper)} 0 0 / 100% 100% no-repeat; filter: drop-shadow(10px 12px 0 ${ink});
 }
 ${sel(['#content #msg::before', '#content #link::before', '#content #confirm::before', '#content #confirm2::before', '#content #input::before', '#content #input2::before', '#content #combo::before'])} {
   content: ""; position: absolute; right: -26px; top: -30px; width: 76px; height: 76px; pointer-events: none;
@@ -162,21 +162,21 @@ ${SEL.lifeOpp} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, 
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(-45deg, ${ink} 0 5px, ${t.bg} 5px 9px) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 
-${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 4px 4px 0 ${ink}, -2px -2px 0 ${alpha(cyan, 0.45)} !important; }
+${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 4px 4px 0 ${ink} !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${paper} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(ink, 0.1, 6, 1.2)}, radial-gradient(circle at 35% 30%, #ffffff, ${paper} 70%) !important; border-radius: 50% !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(paper, 0.08, 6, 1.2)}, radial-gradient(circle at 35% 30%, ${t.raised}, ${mix(t.surface, ink, 0.5)} 75%) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 60%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 60%) !important; }
 ${sel(['#duel .phase.active::before'])} {
-  content: ""; position: absolute; left: -14px; top: -14px; width: 84px; height: 84px; pointer-events: none;
+  content: ""; position: absolute; left: -25%; top: -25%; width: 150%; height: 150%; pointer-events: none;
   background: ${burst(pop, 14)} center / contain no-repeat;
-  animation: var(--dbte-toon-anim, dbte-toon-wobble 2.4s ease-in-out infinite);
+  animation: var(--dbte-toon-anim, dbte-toon-pop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 1 both);
 }
-${sel(['#duel .phase span'])} { color: ${ink} !important; -webkit-text-stroke: 0; text-shadow: none !important; }
+${sel(['#duel .phase span'])} { color: ${paper} !important; ${stroke(3)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
-${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: brightness(0.85) saturate(0.8) !important; }
+${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: saturate(0.85) drop-shadow(0 0 0.6px ${ink}) !important; }
 ${turnBg} { background: ${ink} !important; box-shadow: 4px 4px 0 ${ink}; }
 ${turnInner} { background: ${dots(red, 0.4, 6, 1.2)}, ${pop} !important; }
 ${turnTxt} { color: ${ink} !important; text-shadow: 2px 2px 0 ${paper} !important; }
@@ -216,8 +216,12 @@ ${SEL.field} {
 }
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { border-color: ${pop} !important; outline: 2px solid ${ink} !important; box-shadow: 4px 4px 0 ${red} !important; }
 
-${duelPanels} { border-color: ${ink} !important; border-radius: 10px !important; box-shadow: inset 0 0 0 2px ${alpha(paper, 0.5)}, 0 0 0 2px ${ink}, 6px 6px 0 2px ${ink}, -3px -3px 0 2px ${alpha(cyan, 0.45)} !important; }
-${sel(['#duel .cout_txt'])} { background: ${dots(paper, 0.05, 9, 1.4)}, ${t.surface} !important; }
+${duelPanels} { border-color: ${ink} !important; border-radius: 10px !important; box-shadow: inset 0 0 0 2px ${alpha(paper, 0.5)}, 0 0 0 2px ${ink}, 6px 6px 0 2px ${ink} !important; }
+${duelPanels} { background: ${dots(red, 0.08, 9, 1.4)}, ${paper} !important; border-radius: 18px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
+${T(['#duel .cout_txt', '#duel .cout_txt *', '#duel #watchers .cell', '#duel .watchers_txt'])} { color: ${ink} !important; }
+${T(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]', '#duel .cout_txt [style*="color: rgb(187, 0, 0)"]'])} { color: ${mix(red, ink, 0.6)} !important; }
+${T(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${mix(t.opp, ink, 0.45)} !important; }
+${T(['#duel #watchers .cell1', '#duel #watchers .users'])} { background: transparent !important; box-shadow: inset 0 -1px 0 ${alpha(ink, 0.2)} !important; }
 ${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${ink}, 8px 8px 0 3px ${ink} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }

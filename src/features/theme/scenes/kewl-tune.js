@@ -68,9 +68,10 @@ const kewlTune = (t) => {
 <radialGradient id="dbtefx-kt-sheen"><stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-kt-wall)"/>
-${beam(1190, 12, 'a', 9, 0)}${beam(1350, -10, 'b', 11, 3)}
-<ellipse cx="1260" cy="330" rx="300" ry="300" fill="url(#dbtefx-kt-pool)" style="animation: dbtefx-kt-beat 0.5s ease-out infinite;"/>
+${beam(1270, 12, 'a', 9, 0)}${beam(1430, -10, 'b', 11, 3)}
+<ellipse cx="1340" cy="330" rx="300" ry="300" fill="url(#dbtefx-kt-pool)" style="animation: dbtefx-kt-beat 0.5s ease-out infinite;"/>
 <!--mid-->
+<g transform="translate(80 0)">
 <g transform="translate(1258 520) scale(0.86) translate(-1260 -520)">
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="30" stroke-opacity="0.16"/>
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="12" stroke-opacity="0.45" style="animation: dbtefx-kt-beat 0.5s ease-out infinite;"/>
@@ -108,6 +109,7 @@ ${grooves}
 <rect x="1448" y="580" width="8" height="96" rx="4" fill="${night}"/><rect x="1442" y="612" width="20" height="12" rx="2" fill="${chrome}"/>
 <g transform="translate(1094 724) scale(0.9)"><rect x="-6" y="-26" width="64" height="34" rx="4" fill="${night}" stroke="${t.border}" stroke-width="1.5"/><path d="M4 0A22 22 0 0 1 48 0" fill="none" stroke="${t.muted}" stroke-opacity="0.6" stroke-width="1.5"/><path d="M38 -16A22 22 0 0 1 48 0" fill="none" stroke="${t.danger}" stroke-width="2.5"/>
 <path d="M26 4L26 -20" stroke="${t.warning}" stroke-width="2" stroke-linecap="round" style="transform-origin: 26px 4px; animation: dbtefx-kt-vu 0.5s ease-out infinite;"/></g>
+</g>
 </g>
 </g>
 <!--near-->`;
