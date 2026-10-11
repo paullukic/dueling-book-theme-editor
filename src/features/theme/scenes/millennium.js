@@ -12,15 +12,20 @@ const scene = (t) => {
   const hi = mix(t.accent, '#ffffff', 0.55);
   const deep = mix(t.accent, '#000000', 0.55);
   const stone = mix(t.bg, t.muted, 0.16);
-  const night = mix(t.bg, t.accent2, 0.2);
-  const cx = 1290;
+  const bronze = mix(t.accent, '#000000', 0.72);
+  const night = mix(t.bg, t.accent2, 0.3);
+  const cx = 1232;
   const ry = 560;
 
-  // Tomb ceiling: lapis band with gold stars and a khekeru frieze under it.
+  // Tomb ceiling: lapis band with gold stars and a khekher frieze under it.
   let stars = '';
   for (let i = 0; i < 22; i++) stars += `<path d="${star(n1(150 + i * 62 + (i % 2) * 20), i % 2 ? 98 : 76, 6)}"/>`;
   let frieze = '';
-  for (let x = 0; x < W; x += 40) frieze += `<path d="M${x + 10} 156V136Q${x + 20} 126 ${x + 30} 136V156M${x + 20} 142V156"/>`;
+  let ties = '';
+  for (let x = 0; x < W; x += 26) {
+    frieze += `M${x + 7} 158V138Q${x + 7} 128 ${x + 13} 120Q${x + 19} 128 ${x + 19} 138V158Z`;
+    ties += `M${x + 6} 142H${x + 20}M${x + 6} 147H${x + 20}M${x + 11} 131h4`;
+  }
 
   // Distant pyramids on the dune line, lit on one face by the aura.
   const pyramid = (x, b, w, h) => `<path d="M${x - w} ${b}L${x} ${b - h}L${x + w} ${b}Z" fill="${mix(t.bg, '#000000', 0.25)}"/><path d="M${x} ${b - h}L${x + w} ${b}L${x + w * 0.35} ${b}Z" fill="${t.accent}" fill-opacity="0.09"/>`;
@@ -81,7 +86,7 @@ const scene = (t) => {
   for (let i = 0; i < 6; i++) fog += `<ellipse cx="${n1(120 + i * 280 + rand() * 80)}" cy="${n1(850 + rand() * 30)}" rx="${n1(260 + rand() * 120)}" ry="${n1(60 + rand() * 30)}" fill="url(#dbtefx-mi-fog)" ${anim('drift', n1(14 + rand() * 8), rand() * 10, 'ease-in-out')}/>`;
 
   return `<defs>
-<linearGradient id="dbtefx-mi-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night}" stop-opacity="0.96"/><stop offset="0.55" stop-color="${t.bg}" stop-opacity="0.9"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.1)}" stop-opacity="0.95"/></linearGradient>
+<linearGradient id="dbtefx-mi-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night}" stop-opacity="0.97"/><stop offset="0.5" stop-color="${mix(t.bg, t.accent2, 0.14)}" stop-opacity="0.94"/><stop offset="0.8" stop-color="${t.bg}" stop-opacity="0.9"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.1)}" stop-opacity="0.95"/></linearGradient>
 <radialGradient id="dbtefx-mi-aura" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${ry}" r="720"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.5"/><stop offset="0.3" stop-color="${t.accent}" stop-opacity="0.12"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-mi-halo"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.5"/><stop offset="0.4" stop-color="${t.accent}" stop-opacity="0.18"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-mi-shade" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.7"/></radialGradient>
@@ -92,18 +97,18 @@ const scene = (t) => {
 <linearGradient id="dbtefx-mi-stone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(stone, t.accent, 0.22)}"/><stop offset="0.3" stop-color="${stone}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.3)}"/></linearGradient>
 <linearGradient id="dbtefx-mi-glint" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.75"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <radialGradient id="dbtefx-mi-slot"><stop offset="0.6" stop-color="${t.accent}" stop-opacity="0"/><stop offset="0.8" stop-color="${t.accent}" stop-opacity="0.5"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-mi-ray" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${ry}" r="1100"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.24"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-mi-ray" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${ry}" r="1100"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <clipPath id="dbtefx-mi-clip"><path d="${front}"/></clipPath>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-mi-sky)"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-mi-aura)" ${anim('pulse', 7, 0, 'ease-in-out')}/>
-<g fill="url(#dbtefx-mi-ray)" style="transform-origin: ${cx}px ${ry}px; animation: dbtefx-spin 240s linear infinite;">${rays}</g>
+<g fill="url(#dbtefx-mi-ray)" style="transform-origin: ${cx}px ${ry}px; animation: dbtefx-spin 420s linear infinite;">${rays}</g>
 <path d="M0 780Q240 740 520 772T1040 760T1600 770V900H0Z" fill="${mix(t.bg, '#000000', 0.15)}"/>
 ${pyramid(300, 784, 190, 150)}${pyramid(600, 778, 120, 96)}${pyramid(960, 772, 90, 70)}
 <rect width="${W}" height="126" fill="${mix(t.bg, t.accent2, 0.3)}" fill-opacity="0.9"/>
 <g fill="${t.accent}" fill-opacity="0.75">${stars}</g>
 <rect y="120" width="${W}" height="6" fill="${t.accent}" fill-opacity="0.6"/><rect y="126" width="${W}" height="30" fill="${t.bg}" fill-opacity="0.6"/><rect y="156" width="${W}" height="3" fill="${t.accent}" fill-opacity="0.4"/>
-<g fill="none" stroke="${t.accent}" stroke-opacity="0.45" stroke-width="3">${frieze}</g>
+<path d="${frieze}" fill="${t.accent}" fill-opacity="0.55"/><path d="${ties}" stroke="${t.bg}" stroke-width="2.5"/>
 <!--mid-->
 <path d="M${cx - 128} 900V300Q${cx - 128} 196 ${cx} 186Q${cx + 128} 196 ${cx + 128} 300V900Z" fill="url(#dbtefx-mi-stone)" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="2"/>
 <path d="M${cx - 88} 900V310Q${cx - 88} 222 ${cx} 214Q${cx + 88} 222 ${cx + 88} 310V900M${cx - 120} 900V304M${cx + 120} 900V304" fill="none" stroke="${deep}" stroke-width="2.5"/>
@@ -122,8 +127,7 @@ ${ring}
 <path d="M${P('f')}L${P('r')}L${P('v')}Z" fill="url(#dbtefx-mi-dark)"/>
 <path d="M${P('l')}L${P('b')}L${P('r')}L${P('f')}Z" fill="${mix(t.accent, '#ffffff', 0.3)}"/>
 <path d="${seams}" fill="none" stroke="${deep}" stroke-opacity="0.6" stroke-width="1.5"/>
-<g transform="translate(${n1(cx - 26)} ${n1(ry - 12)}) scale(0.38) rotate(4)" fill="none" stroke="${deep}" stroke-width="9" stroke-linecap="round"><path d="${wdjat}"/><circle r="15" fill="${deep}"/></g>
-<g transform="translate(${n1(cx - 26)} ${n1(ry - 12)}) scale(0.38) rotate(4)" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" ${anim('pulse', 6, 1, 'ease-in-out')}><path d="${wdjat}"/></g>
+<g transform="translate(${n1(cx - 26)} ${n1(ry - 12)}) scale(0.4) rotate(4)" fill="none" stroke="${bronze}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="${wdjat}"/><circle r="16" fill="${bronze}"/></g>
 <g clip-path="url(#dbtefx-mi-clip)"><rect x="${cx - 260}" y="${ry - 120}" width="80" height="260" fill="url(#dbtefx-mi-glint)" style="animation: dbtefx-mi-glint 9s ease-in-out infinite;"/></g>
 <path d="M${P('l')}L${P('f')}L${P('r')}M${P('f')}L${P('v')}" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
 </g>

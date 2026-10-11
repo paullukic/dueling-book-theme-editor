@@ -45,28 +45,30 @@ const scene = (t) => {
     floor += `M0 ${n1(vy + 470 * s)}H${W}`;
   });
 
-  // The turning seal: runes on rings, two triangles at the heart.
-  const tri = (r) => `M${polar(0, 0, r, -90).join(' ')}L${polar(0, 0, r, 30).join(' ')}L${polar(0, 0, r, 150).join(' ')}Z`;
+  // The turning seal: concentric rings of runes and ticks.
   let runes = '';
   for (let i = 0; i < 24; i++) {
     const [x, y] = polar(0, 0, 255, i * 15);
     runes += `<path transform="translate(${x} ${y}) rotate(${i * 15 + 90})" d="${['M-8 -8V8M-8 0L6 -8M-8 0L6 8', 'M-8 8L0 -8L8 8M-4 2H4', 'M-6 -8V8H6M-6 0H4', 'M0 -8V8M-8 -2L0 -8L8 -2'][i % 4]}"/>`;
   }
-  const seal = `<circle r="300" stroke-width="4"/><circle r="280" stroke-width="1.5"/><circle r="230" stroke-width="3"/><path d="${tri(228)}" stroke-width="2.5"/><path d="${tri(228)}" stroke-width="2.5" transform="rotate(180)"/><rect x="-150" y="-150" width="300" height="300" stroke-width="1.5" transform="rotate(45)"/><circle r="110" stroke-width="2"/>${runes}`;
+  let ticks = '';
+  for (let i = 0; i < 72; i++) {
+    const [a, b] = polar(0, 0, 200, i * 5);
+    const [c, d] = polar(0, 0, i % 3 ? 188 : 176, i * 5);
+    ticks += `M${a} ${b}L${c} ${d}`;
+  }
+  const seal = `<circle r="300" stroke-width="4"/><circle r="280" stroke-width="1.5"/><circle r="230" stroke-width="3"/><circle r="200" stroke-width="1.5"/><path d="${ticks}" stroke-width="2"/><circle r="150" stroke-width="2" stroke-dasharray="18 8"/><circle r="110" stroke-width="3"/><circle r="60" stroke-width="1.5"/>${runes}`;
 
-  // Offerings: two monster cards drifting up into the light.
-  const card = (x, delay) => `<g style="animation: dbtefx-ri-offer 9s ease-in ${-delay}s infinite;"><g transform="translate(${x} 520) rotate(${x > vx ? 8 : -8})"><rect x="-26" y="-38" width="52" height="76" rx="4" fill="${mix(t.bg, gold, 0.25)}" stroke="${gold}" stroke-width="2"/><rect x="-19" y="-28" width="38" height="34" fill="${mix(t.bg, blue, 0.35)}"/><path d="M-19 14H19M-19 22H12" stroke="${gold}" stroke-opacity="0.7" stroke-width="2"/></g></g>`;
+  // Ritual Spell sigils (rings around a downward triangle) orbiting the beam.
+  const sigil = (d) => `<g style="animation: dbtefx-ri-orbit 18s linear ${n1(-d)}s infinite;"><g transform="translate(${vx} 380)" fill="none" stroke="${gold}" stroke-width="2.5"><circle r="26" fill="${mix(t.bg, gold, 0.2)}" fill-opacity="0.8"/><circle r="19"/><path d="M-13 -7H13L0 15Z" fill="${gold}" fill-opacity="0.6"/></g></g>`;
 
   // Braziers: bowl on legs with a layered flame.
   const brazier = (x, y, s, d) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 0L-40 90M30 0L40 90M0 4V90" stroke="${dark}" stroke-width="6"/><path d="M-44 -10H44Q40 22 0 26Q-40 22 -44 -10Z" fill="${stone}" stroke="${gold}" stroke-opacity="0.5" stroke-width="2"/><ellipse cy="-80" rx="90" ry="110" fill="url(#dbtefx-ri-fire)" ${anim('pulse', 2.4, d, 'ease-in-out')}/><path d="M-30 -8Q-40 -50 -12 -86Q-14 -56 0 -48Q-4 -96 18 -130Q22 -80 34 -60Q40 -30 30 -8Z" fill="${gold}" ${anim('flicker', 1.6, d, 'ease-in-out')}/><path d="M-14 -8Q-18 -34 0 -60Q6 -34 14 -24Q18 -14 14 -8Z" fill="#ffffff" fill-opacity="0.85" ${anim('flicker', 1.2, d + 0.4, 'ease-in-out')}/></g>`;
 
   // The Ritual knight forming in the beam: horned helm, shield and blade.
-  const knight = 'M-30 0L-22 -70L-30 -120L-40 -150L-34 -175L-60 -195L-70 -215L-92 -222L-74 -236L-40 -238L-18 -244L-20 -262L-46 -326L-8 -276L0 -290L8 -276L44 -330L20 -262L18 -244L40 -238L74 -236L92 -222L70 -215L62 -190L72 -140L64 -120L52 -126L56 -170L36 -175L40 -150L30 -120L24 -70L32 0L8 0L4 -100L-4 -100L-8 0Z';
-  const cape = 'M-40 -236Q-130 -150 -116 0H116Q130 -150 40 -236Z';
-
-  // Rising rings of light up the beam.
-  let rings = '';
-  for (let i = 0; i < 4; i++) rings += `<g style="animation: dbtefx-ri-rise 6s ease-out ${n1(-i * 1.5)}s infinite;"><ellipse cx="${vx}" cy="540" rx="80" ry="16" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2"/></g>`;
+  const knight = 'M-30 0L-22 -70L-30 -120L-40 -150L-34 -175L-60 -195L-70 -215L-92 -222L-74 -236L-40 -238L-18 -244L-20 -262L-46 -326L-8 -276L0 -290L8 -276L44 -330L20 -262L18 -244L40 -238L74 -236L92 -222L70 -215L94 -248L108 -282L96 -292L80 -262L56 -230L50 -200L36 -175L40 -150L30 -120L24 -70L32 0L6 0L0 -46L-6 0Z';
+  const sword = 'M98 -286L170 -416L180 -410L110 -280ZM84 -298L124 -276L120 -268L80 -290ZM102 -286L94 -270L100 -266L108 -282Z';
+  const cape = 'M-40 -236Q-104 -160 -112 0H-30L0 -50L30 0H112Q104 -160 40 -236Z';
 
   // Moonlight shafts slanting in from high windows.
   let shafts = '';
@@ -95,7 +97,7 @@ const scene = (t) => {
 <path d="${floor}" stroke="${blue}" stroke-opacity="0.08" stroke-width="1.5"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-glow)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <g fill="url(#dbtefx-ri-shaft)">${shafts}</g>
-${left}${right}
+<g opacity="0.5">${left}</g>${right}
 <!--mid-->
 <g transform="translate(${vx} 760) scale(1 0.2)"><g fill="none" stroke="${blue}" stroke-opacity="0.55" style="animation: dbtefx-spin 60s linear infinite;">${seal}</g></g>
 <g transform="translate(${vx} 760) scale(1 0.2)"><circle r="300" fill="${blue}" fill-opacity="0.1" ${anim('pulse', 3, 0, 'ease-in-out')}/></g>
@@ -103,15 +105,13 @@ ${left}${right}
 <path d="M${vx - 120} 560H${vx + 120}L${vx + 104} 548H${vx - 104}Z" fill="${stoneLit}"/>
 <g transform="translate(${vx} 600) scale(1 0.9)" fill="none" stroke="#ffffff" stroke-width="2" ${anim('pulse', 3, 0, 'ease-in-out')}><circle r="30"/><circle r="20"/><path d="M0 -30L30 0L0 30L-30 0Z"/><circle r="5" fill="#ffffff"/></g>
 <g mask="url(#dbtefx-ri-bm)"><rect x="${vx - 110}" y="0" width="220" height="556" fill="url(#dbtefx-ri-beam)" style="animation: dbtefx-ri-beam 4s ease-in-out infinite; transform-box: fill-box; transform-origin: center;"/></g>
-${rings}
-<g fill="${mix(t.bg, blue, 0.22)}" stroke="${mix(blue, '#ffffff', 0.6)}" stroke-opacity="0.8" stroke-width="2" stroke-linejoin="round"><g transform="translate(${vx} 548)"><path d="${cape}" fill-opacity="0.55" stroke="none"/><path d="${knight}"/><ellipse cx="-76" cy="-162" rx="30" ry="40"/><ellipse cx="-76" cy="-162" rx="18" ry="26" fill="none" stroke-opacity="0.5"/><path d="M-12 -258H12" stroke="#ffffff" stroke-width="3"/></g></g>
+<g fill="${mix(t.bg, blue, 0.22)}" stroke="${mix(blue, '#ffffff', 0.6)}" stroke-opacity="0.8" stroke-width="2" stroke-linejoin="round"><g transform="translate(${vx} 548)"><path d="${cape}" fill="${mix(t.bg, blue, 0.15)}" fill-opacity="0.55" stroke="none"/><path d="${knight}"/><ellipse cx="-76" cy="-162" rx="30" ry="40"/><ellipse cx="-76" cy="-162" rx="18" ry="26" fill="none" stroke-opacity="0.5"/><path d="M-12 -258H12" stroke="#ffffff" stroke-width="3"/></g></g>
+<g transform="translate(${vx} 548)"><path d="${sword}" fill="${mix(blue, '#ffffff', 0.75)}" stroke="#ffffff" stroke-width="1"/></g>
 <g transform="translate(${vx} 548)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" ${anim('pulse', 4, 0, 'ease-in-out')}><path d="${knight}"/></g>
 <g fill="#ffffff" fill-opacity="0.8">${dust}</g>
-${card(vx - 70, 0)}${card(vx + 70, 4.5)}
+${sigil(0)}${sigil(6)}${sigil(12)}
 ${brazier(vx - 150, 616, 0.72, 0)}${brazier(vx + 150, 616, 0.72, 0.7)}
-<g transform="translate(${vx - 70} 704)" fill="${mix(t.bg, '#000000', 0.5)}"><path d="M0 0H-52Q-62 -30 -48 -52Q-40 -70 -26 -76Q-24 -94 -10 -96Q4 -96 4 -82Q6 -70 -4 -64L8 -50Q10 -30 4 -20Z"/></g>
-<style>@keyframes dbtefx-ri-offer { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-420px); opacity: 0; } }
-@keyframes dbtefx-ri-rise { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-520px); opacity: 0; } }
+<style>@keyframes dbtefx-ri-orbit { 0% { transform: translate(150px, 0) scale(1); opacity: 1; } 25% { transform: translate(0, 46px) scale(1.15); opacity: 1; } 50% { transform: translate(-150px, 0) scale(1); opacity: 1; } 75% { transform: translate(0, -46px) scale(0.8); opacity: 0.35; } 100% { transform: translate(150px, 0) scale(1); opacity: 1; } }
 @keyframes dbtefx-ri-beam { 0%, 100% { transform: scaleX(0.85); opacity: 0.8; } 50% { transform: scaleX(1.1); opacity: 1; } }</style>
 <!--near-->
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-shade)"/>`;
