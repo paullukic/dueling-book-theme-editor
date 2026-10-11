@@ -19,6 +19,16 @@ test('theme: every preset defines every token as #rrggbb', () => {
   });
 });
 
+test('theme: active phase labels are readable on both side colours', () => {
+  PRESETS.forEach(({ id, tokens: t, radius }) => {
+    const vars = varsCss({ tokens: t, radius, backdrop: 0.25 });
+    const self = /--dbt-self-text: (#[0-9a-f]{6})/.exec(vars)[1];
+    const opp = /--dbt-opp-text: (#[0-9a-f]{6})/.exec(vars)[1];
+    assert.ok(contrast(self, t.self) >= 3, `${id} self label`);
+    assert.ok(contrast(opp, t.opp) >= 3, `${id} opp label`);
+  });
+});
+
 test('theme: every preset is readable', () => {
   PRESETS.forEach(({ id, tokens: t }) => {
     assert.ok(contrast(t.text, t.surface) >= 4.5, `${id} text/surface`);
@@ -82,7 +92,9 @@ test('css: variables cover every token and areas use only variables', () => {
   ['--dbt-bg:', '--dbt-accent-text:', '--dbt-accent2:', '--dbt-radius: 6px', '--dbt-bg-rgb: 13, 15, 19'].forEach((v) => assert.ok(vars.includes(v), v));
   Object.entries(AREA_CSS).forEach(([id, css]) => {
     // Attribute selectors such as font[color="#FF0000"] name the site's colours; values must not.
-    assert.doesNotMatch(css.replace(/\[[^\]]*\]/g, ''), /#[0-9a-f]{6}\b/i, `${id} has a hard-coded colour`);
+    // Shadows may use plain black or white for depth; every other colour comes from a token.
+    const values = css.replace(/\[[^\]]*\]/g, '').replace(/(text|box)-shadow\s*:[^;]*;/g, '');
+    assert.doesNotMatch(values, /#[0-9a-f]{3,8}\b|rgba?\(\s*\d/i, `${id} has a hard-coded colour`);
     assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|font-size|line-height|left|top)\s*:/i, `${id} changes layout`);
   });
 });
@@ -99,6 +111,7 @@ test('field: recolours the four zone gradients only', () => {
   assert.ok(out.includes(`stop-color="${t.self}"`));
   assert.ok(out.includes(`stop-color="${t.opp}"`));
   assert.ok(out.includes(`stop-color="${mix(t.self, t.accent2, 0.55)}"`));
+  assert.ok(out.includes(`stop-color="${mix(t.opp, t.accent2, 0.55)}"`));
   assert.ok(out.includes('fill="#fff"'));
   assert.doesNotMatch(out, /stop-color="(red|#90f|#00b400|#ff8f00)"/);
 });

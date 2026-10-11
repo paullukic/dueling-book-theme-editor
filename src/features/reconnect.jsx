@@ -48,7 +48,13 @@ const currentMessage = () => {
   return isVisible(msg) ? msg.textContent.replace(/\s+/g, ' ').trim() : '';
 };
 
+// Set once a reload has started: the old page keeps running (and ticking)
+// until the new one commits, and must not count or start further attempts.
+let reloading = false;
+
 const reconnectNow = (state) => {
+  if (reloading) return;
+  reloading = true;
   writeState({ attempts: state.attempts + 1, lastAt: Date.now() });
   try {
     sessionStorage.setItem(CONNECT_ONCE_KEY, '1');
@@ -72,7 +78,9 @@ const ReconnectNotice = () => {
       return undefined;
     }
     let countdown = null; // seconds left, while counting
+    cancelled.current = false;
     const tick = () => {
+      if (reloading) return;
       const frame = currentFrame();
       let status = connectionStatus({ frame, message: currentMessage(), inDuel: frame === 'duel' });
       const now = Date.now();
@@ -83,6 +91,8 @@ const ReconnectNotice = () => {
 
       if (status !== 'lost') {
         countdown = null;
+        // Cancel applies to one outage only.
+        cancelled.current = false;
         setNotice(null);
         if (status === 'stop') {
           writeState({ attempts: 0, lastAt: 0 });

@@ -17,7 +17,12 @@ const AliasEditor = () => {
     if (chatAliases.some((a) => a.name === n)) return setError(`You already have /${n}.`);
     if (!text.trim()) return setError('Type the message it should send.');
     if (chatAliases.length >= MAX_ALIASES) return setError(`You can keep up to ${MAX_ALIASES} shortcuts.`);
-    updateSettings({ chatAliases: [...chatAliases, { name: n, text: text.trim() }] });
+    const next = [...chatAliases, { name: n, text: text.trim() }];
+    // Browser sync stores at most 8 KB per setting.
+    if (new TextEncoder().encode(JSON.stringify(next)).length > 7500) {
+      return setError('Your shortcuts are too long to sync. Shorten or remove one first.');
+    }
+    updateSettings({ chatAliases: next });
     setName('');
     setText('');
     setError('');

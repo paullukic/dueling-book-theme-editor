@@ -52,8 +52,13 @@ const ChatCommandsEffect = () => {
       swallowNext = true;
       input.value = '';
       if (result.kind === 'note') {
-        mutateLocal('notes', (cur) => `${typeof cur === 'string' && cur ? `${cur}\n` : ''}${result.text}`);
-        showLocal(input, [`Added to your notes${getSettings().notesEnabled ? '' : ' (turn on Notes in the Duel tab to see them)'}.`]);
+        mutateLocal('notes', (cur) => `${typeof cur === 'string' && cur ? `${cur}\n` : ''}${result.text}`).then((ok) =>
+          showLocal(input, [
+            ok
+              ? `Added to your notes${getSettings().notesEnabled ? '' : ' (turn on Notes in the Duel tab to see them)'}.`
+              : 'Could not read your notes just now, so nothing was changed. Try again.',
+          ]),
+        );
       } else showLocal(input, result.lines);
     };
     // DuelingBook may send on keypress or keyup as well: drop those for a handled line.

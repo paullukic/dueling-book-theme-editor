@@ -8,6 +8,7 @@ import { fieldCss, iconCss } from './art';
 const AREA_IDS = Object.keys(AREA_CSS);
 const CUSTOM_ID = 'dbte-theme-custom';
 const ART_DELAY_MS = 150;
+const FIELD_RETRY_MS = [5000, 15000, 45000];
 
 // One <style> per area so each can be switched off on its own. Area sheets
 // are static; colour edits rewrite the variables block in place, and the
@@ -76,6 +77,7 @@ const ThemeEffect = () => {
   useStyle('dbte-theme-icons', icons);
 
   const [field, setField] = useState(null);
+  const [fieldRetry, setFieldRetry] = useState(0);
   const fieldOn = on && areas.field;
   useEffect(() => {
     if (!fieldOn) {
@@ -83,13 +85,20 @@ const ThemeEffect = () => {
       return undefined;
     }
     let live = true;
-    fieldCss(artTokens).then((css) => {
-      if (live) setField(css || null);
+    let timer = null;
+    fieldCss(artTokens).then(({ css, missing }) => {
+      if (!live) return;
+      setField(css || null);
+      // A playmat file failed to download: fetch it again a few times.
+      if (missing && fieldRetry < FIELD_RETRY_MS.length) {
+        timer = setTimeout(() => setFieldRetry((n) => n + 1), FIELD_RETRY_MS[fieldRetry]);
+      }
     });
     return () => {
       live = false;
+      clearTimeout(timer);
     };
-  }, [fieldOn, artTokens]);
+  }, [fieldOn, artTokens, fieldRetry]);
   useStyle('dbte-theme-field', fieldOn ? field : null);
 
   const custom = s.customCssEnabled && customCss ? customCss : null;

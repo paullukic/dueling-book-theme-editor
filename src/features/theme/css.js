@@ -9,7 +9,10 @@
 // - Selectors start with "html" to outrank the site's equal-specificity
 //   !important rules.
 
-import { isHex, toRgb } from '../../lib/color.js';
+import { contrast, isHex, toRgb } from '../../lib/color.js';
+
+// Black or white, whichever reads better on the given colour.
+const textOn = (hex) => (contrast(hex, '#ffffff') >= contrast(hex, '#111111') ? '#ffffff' : '#111111');
 
 const SYSTEM_FONT = 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
@@ -19,6 +22,8 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
   return `:root {
 ${lines.join('\n')}
   --dbt-bg-rgb: ${r}, ${g}, ${b};
+  --dbt-self-text: ${textOn(tokens.self)};
+  --dbt-opp-text: ${textOn(tokens.opp)};
   --dbt-radius: ${radius}px;
   --dbt-backdrop: ${backdrop};
   --dbt-glass: color-mix(in srgb, var(--dbt-surface) 93%, transparent);
@@ -283,7 +288,7 @@ html #deck_constructor .extra_bg, html #siding .extra_bg { background-color: col
 html #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent2)) !important; }
 html #content .deck_slot, html #content .side_slot, html #content .extra_slot { border-color: var(--dbt-line) !important; }
 html #content .deck_slot .content, html #content .side_slot, html #content .extra_slot, html #content .search_slot {
-  background-color: rgba(var(--dbt-bg-rgb), 0.35) !important;
+  background-color: color-mix(in srgb, var(--dbt-bg) 35%, transparent) !important;
   border-color: var(--dbt-line) !important;
 }
 html #content .deck_lbl, html #content .side_lbl, html #content .extra_lbl { color: var(--dbt-text) !important; opacity: 0.85; }
@@ -315,7 +320,7 @@ html #duel .lifepoints .life_txt { color: var(--dbt-text) !important; text-shado
 
 /* Phase buttons: dim ring, side colour when active */
 html #duel .phase .background { background: var(--dbt-border) !important; }
-html #duel .phase .background .background_top { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), transparent) !important; }
+html #duel .phase .background .background_top { background: linear-gradient(to bottom, color-mix(in srgb, var(--dbt-text) 12%, transparent), transparent) !important; }
 html #duel .phase .background .background_inner { background: var(--dbt-raised) !important; }
 html #duel .phase .phase_inner.red, html #duel .phase .phase_inner.blue {
   background: radial-gradient(circle, var(--dbt-raised) 30%, var(--dbt-surface)) !important;
@@ -323,7 +328,8 @@ html #duel .phase .phase_inner.red, html #duel .phase .phase_inner.blue {
 html #duel .phase.active .phase_inner.red { background: radial-gradient(circle, var(--dbt-self) 25%, color-mix(in srgb, var(--dbt-self) 45%, black)) !important; }
 html #duel .phase.active .phase_inner.blue { background: radial-gradient(circle, var(--dbt-opp) 25%, color-mix(in srgb, var(--dbt-opp) 45%, black)) !important; }
 html #duel .phase span { color: var(--dbt-muted) !important; text-shadow: none !important; }
-html #duel .phase.active span, html #duel .phase.active .phase_txt { color: #fff !important; }
+html #duel .phase.active:has(.phase_inner.red) span { color: var(--dbt-self-text) !important; }
+html #duel .phase.active:has(.phase_inner.blue) span { color: var(--dbt-opp-text) !important; }
 
 /* Turn buttons */
 html #duel #turn .background, html #duel #start_turn .background, html #duel #end_turn .background { background: var(--dbt-border) !important; }

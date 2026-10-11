@@ -91,11 +91,13 @@ export const recolorField = (svg, t) => {
   return map.reduce((out, [re, color]) => out.replace(re, `stop-color="${color}"`), svg);
 };
 
+// { css, missing }: missing counts files that could not be fetched this time.
 export const fieldCss = async (t) => {
   const files = await Promise.all(FIELD_FILES.map(fetchField));
-  return FIELD_FILES.map((name, i) => {
+  const css = FIELD_FILES.map((name, i) => {
     if (!files[i]) return '';
     const sel = `html #content img[src*="/svg/${name}.svg"], html #content img[data-src*="/svg/${name}.svg"]`;
     return `${sel} { content: ${svgUrl(recolorField(files[i], t))} !important; }`;
   }).join('\n');
+  return { css, missing: files.filter((f) => !f).length };
 };

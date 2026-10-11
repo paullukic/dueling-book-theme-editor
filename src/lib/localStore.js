@@ -95,13 +95,36 @@ window.addEventListener('pagehide', () => {
 // Read-modify-write against what is stored (or about to be stored), one at a
 // time per tab, so several components editing the same key never undo each
 // other's changes.
+// Like getLocal, but tells "nothing stored" ({ ok: true, value: undefined })
+// apart from "could not read" ({ ok: false }).
+const readLocal = (key) =>
+  new Promise((resolve) => {
+    try {
+      chrome.storage.local.get(PREFIX + key, (res) => {
+        resolve(chrome.runtime.lastError ? { ok: false } : { ok: true, value: res[PREFIX + key] });
+      });
+    } catch (e) {
+      resolve({ ok: false });
+    }
+  });
+
+// Resolves true once written, false when the stored value could not be read
+// (then nothing is written, so a failed read never wipes what is stored).
 let chain = Promise.resolve();
 export const mutateLocal = (key, fn) => {
-  chain = chain.then(async () => {
-    const current = pending.has(key) ? pending.get(key) : await getLocal(key);
+  const run = chain.then(async () => {
+    let current;
+    if (pending.has(key)) current = pending.get(key);
+    else {
+      const read = await readLocal(key);
+      if (!read.ok) return false;
+      current = read.value;
+    }
     setLocal(key, fn(current), { immediate: true });
+    return true;
   });
-  return chain;
+  chain = run.catch(() => false);
+  return run;
 };
 
 // [value, setValue, loaded]. Function updates are applied to the stored value
