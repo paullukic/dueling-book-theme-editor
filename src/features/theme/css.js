@@ -19,6 +19,43 @@ const textOn = (hex) => (contrast(hex, '#ffffff') >= contrast(hex, '#111111') ? 
 export const isLightTheme = (tokens) => luminance(tokens.surface) > 0.4;
 export const fieldEdgeMix = (tokens) => (isLightTheme(tokens) ? 0.55 : 0.4);
 
+// Light themes only (dark themes never see it): DuelingBook's own art assumes
+// a dark page, so its veils, white labels and grey watermarks turn to mush on
+// paper. Same "html body" weight as the chrome sheets, which come later and win.
+const lightCss = `
+:root { --dbt-glass-soft: color-mix(in srgb, var(--dbt-surface) 94%, transparent); --dbt-title: color-mix(in srgb, var(--dbt-text) 88%, var(--dbt-accent)); }
+/* The black veil DuelingBook lays over its stage greys the whole page. */
+html body #dark { background-color: transparent !important; }
+html body #main_menu .menu_btn > span { color: var(--dbt-text) !important; text-shadow: none !important; }
+/* Long labels ("Deck Constructor") touch the tile edges: shrink the label only, around its centre. */
+html body #main_menu .menu_btn > .content:not(.dbte-small-menu) + span { transform: scale(0.88); }
+/* Panel titles: tinted ink on a plate of the panel colour, so no border line runs through the words. */
+html body #duel_room .format_txt, html body #duel_room span.arial_black2, html body #settings .admin_lbl {
+  color: var(--dbt-title) !important; text-shadow: none !important;
+  background: var(--dbt-surface) !important; box-shadow: 0 0 0 0.3em var(--dbt-surface) !important; border-radius: 0.3em;
+}
+/* Format titles span the whole panel: a plate fading out at both ends, so the ring's corners still show. */
+html body #duel_room .format .format_txt {
+  background: linear-gradient(90deg, transparent 4%, var(--dbt-surface) 12% 88%, transparent 96%) !important; box-shadow: none !important;
+}
+html body #duel_room #formats .format > .border::before { filter: none !important; }
+/* The TCG/OCG watermark: a pale accent tint instead of 40% grey. */
+html body #duel_room .duelbutton .tcg_title, html body #duel_room .duelbutton .ocg_title {
+  color: color-mix(in srgb, var(--dbt-accent) 15%, var(--dbt-raised)) !important; opacity: 1 !important;
+}
+html body #welcome_buttons > span { color: var(--dbt-link) !important; }
+html body #welcome_buttons > span:hover { color: var(--dbt-link-hover) !important; }
+html body #deck_constructor .deck_bg, html body #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 92%, var(--dbt-accent2)) !important; }
+html body #deck_constructor .side_bg, html body #siding .side_bg { background-color: color-mix(in srgb, var(--dbt-surface) 92%, var(--dbt-accent)) !important; }
+html body #deck_constructor .extra_bg, html body #siding .extra_bg { background-color: color-mix(in srgb, var(--dbt-surface) 90%, var(--dbt-warning)) !important; }
+/* Duel: side colours deepen into the ink, never into black. */
+html body #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 70%, var(--dbt-text)), var(--dbt-self)) !important; }
+html body #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-text)), var(--dbt-opp)) !important; }
+/* An ink trough under the bar, so white numerals read whatever the life left. */
+html body #duel .lifepoints .black_bar { background-color: color-mix(in srgb, var(--dbt-text) 82%, var(--dbt-surface)) !important; }
+html body #duel .lifepoints .life_txt { color: var(--dbt-raised) !important; text-shadow: 0 1px 2px var(--dbt-text) !important; }
+`;
+
 export const varsCss = ({ tokens, radius, backdrop }) => {
   const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
   const [r, g, b] = toRgb(tokens.bg);
@@ -65,7 +102,7 @@ ${depth}
   --dbt-press: color-mix(in srgb, var(--dbt-accent) 32%, var(--dbt-raised));
   --dbt-accent-soft: color-mix(in srgb, var(--dbt-accent) 24%, transparent);
   --dbt-scrim: rgba(var(--dbt-bg-rgb), 0.72);
-}`;
+}${light ? lightCss : ''}`;
 };
 
 // The settings panel's own colours, taken from the active theme so the panel
