@@ -91,7 +91,9 @@ ${sel(['#main_menu .menu_btn:active .content'])} {
   background: radial-gradient(ellipse at 50% 50%, ${alpha(gold, 0.18)}, transparent 70%), ${deep} !important;
   box-shadow: inset 0 3px 10px ${alpha('#000000', 0.8)} !important;
 }
-${SEL.tileLabel} { transform: scale(0.86); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.7)}, 0 0 10px ${alpha(gold, 0.25)} !important; }
+${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.7)}, 0 0 10px ${alpha(gold, 0.25)} !important; }
+${sel(['#main_menu .menu_btn > .content:not(.dbte-small-menu) + span', '#main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span'])} { transform: scale(0.86) !important; }
+${sel(['#main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span'])} { transform: translateY(-3px) scale(0.86) !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${hi} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; box-shadow: inset 0 -1px 0 ${alpha(gold, 0.35)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }

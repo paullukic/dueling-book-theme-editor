@@ -89,7 +89,9 @@ ${SEL.tileHover} {
   box-shadow: ${bevel}, inset 0 0 0 2px ${alpha(candle, 0.35)}, 0 0 20px -6px ${alpha(candle, 0.7)}, 0 12px 22px -12px ${alpha('#000000', 0.95)} !important;
 }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${stoneDark} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
-${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
+${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.85)}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
+${sel(['#main_menu .menu_btn > .content:not(.dbte-small-menu) + span', '#main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span'])} { transform: scale(0.9) !important; }
+${sel(['#main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span'])} { transform: translateY(-3px) scale(0.9) !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(candle, '#ffffff', 0.55)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { background: ${slab} !important; box-shadow: inset 0 -1px 0 ${alpha(blue, 0.3)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }

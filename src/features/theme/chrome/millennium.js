@@ -111,7 +111,9 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; transform: none; }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: var(--mi-grain), linear-gradient(180deg, ${sandLow}, ${sandMid}) !important; box-shadow: inset 0 3px 8px ${alpha(ink, 0.6)} !important; }
-${SEL.tileLabel} { transform: scale(0.9); ${inkText} }
+${SEL.tileLabel} { ${inkText} }
+${sel(['#main_menu .menu_btn > .content:not(.dbte-small-menu) + span', '#main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span'])} { transform: scale(0.9) !important; }
+${sel(['#main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span'])} { transform: translateY(-3px) scale(0.9) !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${lapisDeep} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; box-shadow: inset 0 -2px 0 ${gold} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }

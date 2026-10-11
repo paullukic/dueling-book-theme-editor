@@ -87,7 +87,9 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: drop-shadow(0 0 6px ${frameHi}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${artBg} !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.9)} !important; }
-${SEL.tileLabel} { transform: scale(0.9); color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.8)} !important; }
+${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${alpha('#000000', 0.8)} !important; }
+${sel(['#main_menu .menu_btn > .content:not(.dbte-small-menu) + span', '#main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span'])} { transform: scale(0.9) !important; }
+${sel(['#main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span'])} { transform: translateY(-3px) scale(0.9) !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(green, '#ffffff', 0.75)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; box-shadow: inset 3px 0 0 ${green}, inset 0 -1px 0 ${alpha(green, 0.3)} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }
