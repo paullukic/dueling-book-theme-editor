@@ -8,8 +8,8 @@ import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
-import { SCENE_IDS, sceneMarkup } from '../src/features/theme/scenes.js';
-import { PARTICLES, PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
+import { PARTICLES, SCENE_IDS, sceneMarkup } from '../src/features/theme/scenes.js';
+import { PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
 import { launcherBottom } from '../src/lib/layout.js';
 import { sameShape } from '../src/lib/shape.js';
 import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
@@ -361,7 +361,7 @@ test('particles: every config is valid and the simulation keeps particles alive 
       assert.ok(PARTICLE_KINDS.includes(sys.kind), `${id} ${sys.kind}`);
       sys.colors.forEach((c) => assert.ok(/^#[0-9a-f]{6}$/i.test(preset.tokens[c]), `${id} colour ${c}`));
     });
-    const live = createSystems(id, 1280, 800);
+    const live = createSystems(PARTICLES[id], 1280, 800);
     const before = live.reduce((n, s) => n + s.particles.length, 0);
     for (let i = 0; i < 600; i++) stepSystems(live, 1 / 30, i / 30, 1280, 800);
     live.forEach((s) => s.particles.forEach((p) => {
@@ -391,7 +391,7 @@ test('local values: a stored value only counts when it has the default shape', (
 
 test('particles: events (shooting stars, flashes, bursts) fire and finish', () => {
   ['midnight', 'white-dragon', 'branded'].forEach((id) => {
-    const live = createSystems(id, 1280, 800);
+    const live = createSystems(PARTICLES[id], 1280, 800);
     let fired = 0;
     for (let i = 0; i < 900; i++) {
       stepSystems(live, 1 / 30, i / 30, 1280, 800);

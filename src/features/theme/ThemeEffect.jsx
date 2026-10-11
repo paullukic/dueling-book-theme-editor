@@ -5,8 +5,8 @@ import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
-import { FX_ID, sceneMarkup } from './scenes';
-import { PARTICLES, startFx } from './particles';
+import { FX_ID, PARTICLES, sceneMarkup } from './scenes';
+import { startFx } from './particles';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
 const AREA_IDS = Object.keys(AREA_CSS);
@@ -125,7 +125,7 @@ const ThemeEffect = () => {
     if (!el) return undefined;
     el.innerHTML = scene;
     if (!scene) return undefined;
-    const stop = startFx(el, s.themePreset, artTokens, { still: !s.themeMotion });
+    const stop = startFx(el, PARTICLES[s.themePreset], artTokens, { still: !s.themeMotion });
     return () => {
       stop();
       el.innerHTML = '';

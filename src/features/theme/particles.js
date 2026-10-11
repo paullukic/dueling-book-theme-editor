@@ -6,47 +6,6 @@
 
 import { isHex, luminance } from '../../lib/color.js';
 
-// Per-theme particle systems. Colours are token names.
-export const PARTICLES = {
-  // Clean
-  obsidian: [{ kind: 'mote', count: 40, colors: ['accent', 'text'] }],
-  midnight: [{ kind: 'star', count: 140, colors: ['text', 'accent2'] }, { kind: 'meteor', count: 1, colors: ['accent'] }],
-  crimson: [{ kind: 'ember', count: 50, colors: ['accent', 'danger'], speed: 0.7 }],
-  verdant: [{ kind: 'leaf', count: 26, colors: ['accent', 'success'] }, { kind: 'firefly', count: 24, colors: ['warning'] }],
-  sakura: [{ kind: 'petal', count: 70, colors: ['accent', 'text'] }],
-  parchment: [{ kind: 'mote', count: 60, colors: ['warning', 'accent'], light: true }],
-  graphite: [{ kind: 'mote', count: 50, colors: ['muted', 'accent'] }],
-  snow: [{ kind: 'flake', count: 150, colors: ['accent', 'muted'] }],
-  // Duel themes
-  spell: [{ kind: 'spark', count: 60, colors: ['accent', 'accent2'] }],
-  trap: [{ kind: 'ember', count: 40, colors: ['accent', 'accent2'], speed: 0.6 }],
-  fusion: [{ kind: 'mote', count: 70, colors: ['accent', 'accent2'], swirl: true }],
-  synchro: [{ kind: 'spark', count: 50, colors: ['text', 'accent2'], column: true }],
-  xyz: [{ kind: 'star', count: 120, colors: ['accent', 'text'] }],
-  link: [{ kind: 'mote', count: 50, colors: ['accent2', 'accent'] }],
-  'white-dragon': [{ kind: 'flake', count: 70, colors: ['accent2', 'text'] }, { kind: 'flash', count: 1, colors: ['text'] }],
-  'dark-magic': [{ kind: 'spark', count: 70, colors: ['accent2', 'accent'] }],
-  'black-dragon': [{ kind: 'ember', count: 110, colors: ['accent', 'warning'] }, { kind: 'ash', count: 40, colors: ['muted'] }],
-  millennium: [{ kind: 'mote', count: 90, colors: ['accent', 'warning'] }],
-  pendulum: [{ kind: 'mote', count: 50, colors: ['self', 'accent'] }],
-  divine: [{ kind: 'ember', count: 80, colors: ['accent', 'warning', 'opp'] }],
-  'duel-disk': [{ kind: 'mote', count: 40, colors: ['accent', 'accent2'], light: true }],
-  ritual: [{ kind: 'ember', count: 50, colors: ['accent2', 'accent'], speed: 0.5 }],
-  'shadow-realm': [{ kind: 'firefly', count: 40, colors: ['accent', 'accent2'] }, { kind: 'ash', count: 30, colors: ['accent2'] }],
-  // Archetypes
-  branded: [{ kind: 'ember', count: 130, colors: ['accent2', 'accent', 'warning'] }, { kind: 'burst', count: 1, colors: ['accent2'] }],
-  artmage: [{ kind: 'mote', count: 60, colors: ['accent', 'opp', 'accent2'] }],
-  hero: [{ kind: 'star', count: 90, colors: ['text'] }, { kind: 'meteor', count: 1, colors: ['accent'] }],
-  'sky-striker': [{ kind: 'spark', count: 40, colors: ['accent2', 'accent'], speed: 2 }],
-  'snake-eye': [{ kind: 'ember', count: 120, colors: ['accent', 'accent2'] }, { kind: 'burst', count: 1, colors: ['accent'] }],
-  labrynth: [{ kind: 'mote', count: 60, colors: ['accent2', 'warning'] }],
-  blackwing: [{ kind: 'feather', count: 26, colors: ['accent'] }, { kind: 'star', count: 80, colors: ['text'] }, { kind: 'meteor', count: 1, colors: ['accent'] }],
-  lightsworn: [{ kind: 'mote', count: 90, colors: ['warning', 'accent'], light: true, rise: true }],
-  frog: [{ kind: 'firefly', count: 50, colors: ['warning', 'accent'] }],
-  angelechy: [{ kind: 'feather', count: 22, colors: ['text', 'accent'] }, { kind: 'mote', count: 40, colors: ['accent', 'accent2'] }],
-  mitsurugi: [{ kind: 'leaf', count: 26, colors: ['accent', 'accent2'] }, { kind: 'mote', count: 30, colors: ['accent2'] }],
-  gladiator: [{ kind: 'mote', count: 80, colors: ['warning', 'accent'] }, { kind: 'ash', count: 30, colors: ['muted'] }],
-};
 
 // How each kind moves. speed in px/s at depth 1; size in px.
 const KINDS = {
@@ -95,10 +54,11 @@ const spawn = (p, sys, w, h, r, anywhere) => {
   p.vy = (r() - 0.5) * p.speed;
 };
 
-// Builds the particle systems for a theme at the given size.
-export const createSystems = (presetId, w, h, seed = 7) => {
+// Builds particle systems from a theme's config (see each scenes/<id>.js
+// `particles` export: kind, count, colour token names, options).
+export const createSystems = (config, w, h, seed = 7) => {
   const r = rng(seed);
-  return (PARTICLES[presetId] || []).map((cfg) => {
+  return (config || []).map((cfg) => {
     const k = KINDS[cfg.kind];
     const sys = { ...cfg, r, particles: [], next: k.event ? between(r, [1.5, 4]) : 0, active: null };
     if (!k.event) {
@@ -269,13 +229,21 @@ const drawSystems = (ctx, systems, tokens, t, w, h, px, py, light) => {
         ctx.restore();
         return;
       }
+      if (sys.outline) {
+        // A thin dark edge so pale particles read on a light page.
+        ctx.globalAlpha = alpha * 0.7;
+        ctx.fillStyle = tokens[sys.outline];
+        ctx.beginPath();
+        ctx.arc(x, y, p.size * 0.6 + 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
       if (sys.kind === 'flake' && p.size > 3) {
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(p.rot);
         ctx.globalAlpha = alpha;
-        ctx.strokeStyle = col;
-        ctx.lineWidth = 0.9;
+        ctx.strokeStyle = sys.outline ? tokens[sys.outline] : col;
+        ctx.lineWidth = sys.outline ? 1.6 : 0.9;
         ctx.beginPath();
         for (let i = 0; i < 6; i++) {
           const a = (i * Math.PI) / 3;
@@ -320,7 +288,7 @@ const RESIZE_MS = 200;
 // function. Still (Motion off, or the system asks for reduced motion, even
 // later on) draws one frame and redraws it only when the window resizes.
 // Without particles the loop runs only while the camera is moving.
-export const startFx = (root, presetId, tokens, { still = false } = {}) => {
+export const startFx = (root, config, tokens, { still = false } = {}) => {
   const stage = root && root.querySelector('.dbtefx-stage');
   const canvas = root && root.querySelector('.dbtefx-canvas');
   if (!stage || !Object.values(tokens || {}).every(isHex)) return () => {};
@@ -354,7 +322,7 @@ export const startFx = (root, presetId, tokens, { still = false } = {}) => {
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      systems = createSystems(presetId, w, h);
+      systems = createSystems(config, w, h);
     }
     if (isStill()) drawStill();
   };

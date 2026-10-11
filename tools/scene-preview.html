@@ -1,0 +1,80 @@
+<!doctype html>
+<!-- Dev tool: renders one theme's full background (glow, artwork, 3D scene,
+     particles) without the extension or DuelingBook. Serve the repo root
+     and open /tools/scene-preview.html?theme=<id>[&ui=1][&still=1][&x=..&y=..].
+     ui=1 lays a mock of DuelingBook's main menu on top to judge what stays visible. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Scene preview</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  #mock { position: fixed; inset: 0; pointer-events: none; display: none; z-index: 5; }
+  #mock .stage { position: absolute; left: 50%; top: 50%; width: 1024px; height: 640px; transform: translate(-50%, -50%) scale(var(--s)); }
+  #mock .panel { position: absolute; border-radius: 8px; background: var(--surface); opacity: 0.86; box-shadow: 0 0 0 1px var(--border); }
+  #mock .label { position: absolute; color: var(--text); font: 600 20px Arial, sans-serif; }
+</style>
+</head>
+<body>
+<div id="mock"><div class="stage"></div></div>
+<script type="module">
+import { PRESETS } from '../src/features/theme/presets.js';
+import { skinCss } from '../src/features/theme/skins.js';
+import { sceneMarkup, FX_ID, PARTICLES } from '../src/features/theme/scenes.js';
+import { startFx } from '../src/features/theme/particles.js';
+
+const q = new URLSearchParams(location.search);
+const preset = PRESETS.find((p) => p.id === q.get('theme')) || PRESETS[0];
+const t = preset.tokens;
+const still = q.get('still') === '1';
+document.body.style.background = t.bg;
+document.documentElement.style.setProperty('--dbt-backdrop', '0.25');
+
+const style = document.createElement('style');
+style.textContent = skinCss(preset.id, t);
+document.head.appendChild(style);
+['dbte-skin-layer', 'dbte-skin-motif', FX_ID].forEach((id) => {
+  const el = document.createElement('div');
+  el.id = id;
+  document.body.appendChild(el);
+});
+const fx = document.getElementById(FX_ID);
+fx.innerHTML = sceneMarkup(preset.id, t, { still, particles: !!PARTICLES[preset.id] });
+startFx(fx, PARTICLES[preset.id], t, { still });
+
+// A rough mock of DuelingBook's main menu: tile column left, bulletin centre.
+if (q.get('ui') === '1') {
+  const mock = document.getElementById('mock');
+  mock.style.display = 'block';
+  mock.style.setProperty('--s', Math.min(innerWidth / 1024, innerHeight / 640));
+  ['surface', 'border', 'text'].forEach((k) => mock.style.setProperty(`--${k}`, t[k]));
+  const stage = mock.querySelector('.stage');
+  const box = (x, y, w, h, label) => {
+    const d = document.createElement('div');
+    d.className = 'panel';
+    Object.assign(d.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+    stage.appendChild(d);
+    if (label) {
+      const l = document.createElement('div');
+      l.className = 'label';
+      l.textContent = label;
+      Object.assign(l.style, { left: `${x + 18}px`, top: `${y + h / 2 - 12}px` });
+      stage.appendChild(l);
+    }
+  };
+  ['Duel Room', 'Deck Constructor', 'Profile Viewer', 'My Profile', 'Rankings', 'Settings'].forEach((label, i) => box(40, 70 + i * 92, 250, 78, label));
+  // The centre is a post feed: avatars and text straight on the background.
+  for (let i = 0; i < 6; i++) {
+    const y = 70 + i * 92;
+    box(340, y, 36, 36);
+    [[390, y + 2, 260], [390, y + 30, 420], [390, y + 52, 300]].forEach(([x, ly, w]) => {
+      const line = document.createElement('div');
+      Object.assign(line.style, { position: 'absolute', left: `${x}px`, top: `${ly}px`, width: `${w}px`, height: '12px', borderRadius: '6px', background: t.text, opacity: 0.55 });
+      stage.appendChild(line);
+    });
+  }
+}
+window.__ready = true;
+</script>
+</body>
+</html>
