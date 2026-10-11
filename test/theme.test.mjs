@@ -318,6 +318,17 @@ test('ink guard: reads what is painted under the text, layer by layer', () => {
   // Of several sample points the worst-reading one wins; unreadable samples are ignored.
   assert.equal(worstBackground('#0a1220', ['#d9ecfc', '#0a1220', null]), '#0a1220');
   assert.equal(worstBackground('#0a1220', [null]), null);
+  // Decoration is not a fill: the base under it decides.
+  const darkFill = 'linear-gradient(180deg, rgb(30, 20, 40), rgb(10, 8, 16))';
+  const underline = { backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: `linear-gradient(0deg, rgb(200, 120, 255) 0px, rgb(200, 120, 255) 1px, rgba(0, 0, 0, 0) 1px), ${darkFill}`, backgroundSize: '50% 100%, auto', backgroundRepeat: 'no-repeat, repeat', width: 200, height: 30 };
+  assert.equal(paintedColor([underline]), '#1e1428', '1px underline over a dark fill reads dark');
+  const brackets = { backgroundColor: 'rgb(12, 14, 30)', backgroundImage: 'linear-gradient(rgb(240, 200, 90), rgb(240, 200, 90)), linear-gradient(rgb(240, 200, 90), rgb(240, 200, 90))', backgroundSize: '5px 1px, 1px 5px', backgroundRepeat: 'no-repeat, no-repeat', width: 120, height: 24 };
+  assert.equal(paintedColor([brackets]), '#0c0e1e', 'corner brackets over a dark fill read dark');
+  const rivets = { backgroundColor: 'rgb(20, 20, 20)', backgroundImage: 'radial-gradient(circle, rgb(220, 220, 220) 2px, rgba(0, 0, 0, 0) 3px)', backgroundSize: '14px 14px', backgroundRepeat: 'repeat', width: 252, height: 60 };
+  assert.equal(paintedColor([rivets]), '#141414', 'rivet dots over a dark fill read dark');
+  const sheen = { backgroundColor: 'rgb(16, 24, 48)', backgroundImage: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent 50%)', backgroundSize: 'auto', backgroundRepeat: 'repeat', width: 100, height: 30 };
+  assert.equal(paintedColor([sheen]), '#101830', 'a highlight fading to transparent is decoration');
+  assert.equal(elementLayers({ backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'url("a.png"), linear-gradient(rgb(1, 1, 1) 1px, transparent 1px)' }), 'unknown', 'image with only decoration stays unreadable');
   // Navy text on the pale plate stays; on the dark page it turns light.
   assert.equal(inkFor('#0a1220', paintedColor([clear, plate, page]), '#eef6ff'), null);
   assert.equal(inkFor('#0a1220', paintedColor([clear, page]), '#eef6ff'), 'theme');

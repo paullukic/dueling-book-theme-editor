@@ -43,21 +43,47 @@ const splitTop = (list) => {
 
 const COLOR_RE = /(rgba?\([^)]*\)|color\(srgb[^)]*\))/i;
 
+// True when one background-size entry spans at least half the element both
+// ways (or the layer repeats to fill it).
+const covers = (size, repeat, width, height) => {
+  if (repeat && !/no-repeat/.test(repeat) && !/^(repeat-x|repeat-y)$/.test(repeat.trim())) return true;
+  const parts = String(size || 'auto').trim().split(/\s+/);
+  if (parts[0] === 'cover' || parts[0] === 'contain') return true;
+  const dims = [parts[0], parts[1] || 'auto'];
+  return dims.every((v, i) => {
+    if (v === 'auto') return true;
+    const box = i ? height : width;
+    if (v.endsWith('%')) return parseFloat(v) >= 50;
+    if (v.endsWith('px')) return !(box > 0) || parseFloat(v) >= box * 0.5;
+    return true;
+  });
+};
+
 // The paint layers of one element, top first, as [r, g, b, a] colours.
-// Gradients count as their first colour stop. Image layers (url()) are
-// decoration when the element also paints a colour; an element painted only
-// by an image cannot be read and yields 'unknown'. The element's own opacity
-// thins every layer (a 35% black veil is not black).
-export const elementLayers = ({ backgroundColor, backgroundImage, tag, opacity = 1 }) => {
+// A gradient counts (as its first colour stop) only when it is a fill: every
+// stop paints something and the layer spans most of the box. Highlights that
+// fade to transparent, underlines, rivets and corner brackets are decoration;
+// the base fill under them decides. Image layers (url()) are decoration too
+// when the element also paints a colour; an element painted only by an image
+// cannot be read and yields 'unknown'. The element's own opacity thins every
+// layer (a 35% black veil is not black).
+export const elementLayers = ({ backgroundColor, backgroundImage, backgroundSize, backgroundRepeat, width, height, tag, opacity = 1 }) => {
   if (tag && OPAQUE_TAGS.has(tag.toUpperCase())) return 'unknown';
   const layers = [];
   let image = false;
+
   if (backgroundImage && backgroundImage !== 'none') {
-    splitTop(backgroundImage).forEach((part) => {
+    const sizes = splitTop(backgroundSize || 'auto');
+    const repeats = splitTop(backgroundRepeat || 'repeat');
+    splitTop(backgroundImage).forEach((part, i) => {
       if (/gradient\(/i.test(part)) {
-        const m = COLOR_RE.exec(part);
-        const c = m && parseCssColor(m[1]);
-        if (c && c[3] > 0) layers.push(c);
+        const stops = [...part.matchAll(new RegExp(COLOR_RE.source, 'gi'))].map((m) => parseCssColor(m[1]));
+        const clear = /\btransparent\b/i.test(part) || stops.some((c) => !c || c[3] === 0);
+        if (clear || !stops.length || !covers(sizes[i % sizes.length], repeats[i % repeats.length], width, height)) {
+
+          return;
+        }
+        layers.push(stops[0]);
       } else if (/url\(/i.test(part)) image = true;
     });
   }
@@ -101,7 +127,8 @@ const ownsText = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.te
 
 const describe = (node) => {
   const s = getComputedStyle(node);
-  return { backgroundColor: s.backgroundColor, backgroundImage: s.backgroundImage, tag: node.tagName, opacity: s.opacity };
+  const r = node.getBoundingClientRect();
+  return { backgroundColor: s.backgroundColor, backgroundImage: s.backgroundImage, backgroundSize: s.backgroundSize, backgroundRepeat: s.backgroundRepeat, width: r.width, height: r.height, tag: node.tagName, opacity: s.opacity };
 };
 
 // The page colour at the very bottom (html, then body), used as the base
