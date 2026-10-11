@@ -1,11 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { DEFAULTS, withDefaults } from '../src/lib/defaults.js';
-import { contrast, mix } from '../src/lib/color.js';
+import { contrast, flattenLayers, mix, parseCssColor, readableOn } from '../src/lib/color.js';
+import { DEFAULT_PSCT_COLORS } from '../src/lib/defaults.js';
 import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
 import { AREA_CSS, fontCss, readingTextCss, varsCss } from '../src/features/theme/css.js';
-import { iconCss, recolorField } from '../src/features/theme/art.js';
+import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinCss } from '../src/features/theme/skins.js';
 import { launcherBottom } from '../src/lib/layout.js';
 
@@ -139,14 +140,44 @@ test('css: a non-hex token never reaches the page', () => {
   assert.doesNotMatch(vars, /--dbt-accent:/);
 });
 
-test('icons: every icon is a data URI with no raw quotes', () => {
-  const css = iconCss(PRESETS[1].tokens, 8);
-  ['ok_btn', 'yes_btn', 'no_btn', 'cancel_btn', 'exit_btn', 'minimize_btn', 'expand_btn', 'close_btn', 'card_menu_btn_up', 'over.svg'].forEach((n) =>
-    assert.ok(css.includes(`/svg/${n}`), n),
-  );
-  const urls = css.match(/url\("data:image\/svg\+xml,[^"]*"\)/g);
-  assert.ok(urls.length >= 14);
-  urls.forEach((u) => assert.doesNotMatch(u.slice(5, -2), /["<>\s]/));
+const ICON_NAMES = ['ok_btn', 'yes_btn', 'no_btn', 'cancel_btn', 'exit_btn', 'minimize_btn', 'expand_btn', 'close_btn', 'card_menu_btn_up', 'over.svg',
+  'online_btn', 'chat_btn', 'private_btn', 'private_btn_anim', 'tools_btn', 'sort_btn', 'info_btn', 'locked_btn', 'unlocked_btn', 'points.svg',
+  'limited.svg', 'semi_limited.svg', 'forbidden.svg'];
+
+test('icons: every icon in every frame style is a data URI with no raw quotes', () => {
+  ['tile', ...new Set(Object.values(ICON_STYLES))].forEach((style) => {
+    const css = iconCss(PRESETS[1].tokens, 8, style);
+    ICON_NAMES.forEach((n) => assert.ok(css.includes(`/svg/${n}`), `${style} ${n}`));
+    const urls = css.match(/url\("data:image\/svg\+xml,[^"]*"\)/g);
+    assert.ok(urls.length >= ICON_NAMES.length + 3, style);
+    urls.forEach((u) => assert.doesNotMatch(u.slice(5, -2), /["<>\s]|NaN|undefined/, style));
+  });
+});
+
+test('icons: frames follow the theme, so themed presets look different from the plain tile', () => {
+  const t = PRESETS[1].tokens;
+  const tile = iconCss(t, 8, 'tile');
+  new Set(Object.values(ICON_STYLES)).forEach((style) => assert.notEqual(iconCss(t, 8, style), tile, style));
+  Object.keys(ICON_STYLES).forEach((id) => assert.ok(PRESETS.some((p) => p.id === id), `${id} is a preset`));
+});
+
+test('card text: colours made for dark boxes stay readable on a light one', () => {
+  Object.values(DEFAULT_PSCT_COLORS).forEach((c) => {
+    assert.ok(contrast(readableOn(c, '#ffffff'), '#ffffff') >= 4.5, c);
+    assert.ok(contrast(readableOn(c, '#f2ead8'), '#f2ead8') >= 4.5, c);
+    assert.equal(readableOn(c, '#101418'), c, 'already readable on dark stays as chosen');
+  });
+  assert.ok(contrast(readableOn('#222222', '#0a0a0a'), '#0a0a0a') >= 4.5, 'dark ink on a dark box lightens');
+});
+
+test('card text: reads the computed background behind the text', () => {
+  assert.deepEqual(parseCssColor('rgb(1, 2, 3)'), [1, 2, 3, 1]);
+  assert.deepEqual(parseCssColor('rgba(10, 20, 30, 0.5)'), [10, 20, 30, 0.5]);
+  assert.deepEqual(parseCssColor('color(srgb 1 0 0 / 0.25)'), [255, 0, 0, 0.25]);
+  assert.equal(parseCssColor('transparent'), null);
+  assert.equal(flattenLayers([], '#ffffff'), '#ffffff');
+  assert.equal(flattenLayers([[0, 0, 0, 0.5]], '#ffffff'), '#808080');
+  assert.equal(flattenLayers([[0, 0, 0, 0.5], [255, 255, 255, 1]]), '#808080');
 });
 
 test('share: oversized custom CSS gives a code longer than the paste limit', () => {
@@ -190,4 +221,10 @@ test('skins: no layout changes on DuelingBook elements', () => {
 test('skins: malformed colours never reach the page', () => {
   assert.equal(skinCss('branded', { ...PRESETS[0].tokens, accent: '"/><script>' }), '');
   assert.equal(skinCss('nope', PRESETS[0].tokens), '');
+});
+
+test('card text font: off by default, unknown values fall back', () => {
+  assert.equal(DEFAULTS.cardTextFont, 'original');
+  assert.equal(withDefaults({ cardTextFont: 'card' }).cardTextFont, 'card');
+  assert.equal(withDefaults({ cardTextFont: 'comic' }).cardTextFont, 'original');
 });

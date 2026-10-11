@@ -27,6 +27,13 @@ export const DEFAULT_SHORTCUT_KEYS = {
 
 export const CARD_TEXT_SIZES = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22];
 
+// The card preview's font. 'card' is the effect-text face printed on real
+// cards, which DuelingBook already loads for its card images.
+export const CARD_TEXT_FONTS = [
+  { id: 'original', label: 'DuelingBook' },
+  { id: 'card', label: 'Card' },
+];
+
 export const DEFAULT_PSCT_COLORS = {
   condition: '#f0c29f',
   cost: '#f09f9f',
@@ -38,6 +45,7 @@ export const DEFAULTS = {
   // Look
   darkMode: false,
   cardTextSize: 0, // 0 = DuelingBook default
+  cardTextFont: 'original',
   readingTextScale: 1, // chat, logs and bulletin; 1 = DuelingBook default
   psctEnabled: false,
   psctColors: DEFAULT_PSCT_COLORS,
@@ -179,6 +187,7 @@ const RANGES = {
 
 const ONE_OF = {
   themeFont: FONTS.map((f) => f.id),
+  cardTextFont: CARD_TEXT_FONTS.map((f) => f.id),
   themePreset: PRESETS.map((p) => p.id),
 };
 

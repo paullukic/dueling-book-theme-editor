@@ -3,7 +3,7 @@ import { useSettings } from '../../lib/settings';
 import { useLocal } from '../../lib/localStore';
 import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
-import { fieldCss, iconCss } from './art';
+import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, skinCss } from './skins';
 
 const AREA_IDS = Object.keys(AREA_CSS);
@@ -74,7 +74,11 @@ const ThemeEffect = () => {
   useStyle('dbte-theme-vars', vars);
   useStyle('dbte-theme-font', on ? fontCss(s.themeFont) : null);
 
-  const icons = useMemo(() => (on && areas.icons ? iconCss(artTokens, artRadius) : null), [on, areas.icons, artTokens, artRadius]);
+  const iconStyle = (s.themeEffects && ICON_STYLES[s.themePreset]) || 'tile';
+  const icons = useMemo(
+    () => (on && areas.icons ? iconCss(artTokens, artRadius, iconStyle) : null),
+    [on, areas.icons, artTokens, artRadius, iconStyle],
+  );
   useStyle('dbte-theme-icons', icons);
 
   // Signature skin: CSS plus a fixed layer behind the game for its backdrop.

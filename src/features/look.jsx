@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
-import { removePageStyle, rgba, setPageStyle, whenElement } from '../lib/dom';
+import { backgroundBehind, removePageStyle, rgba, setPageStyle, whenElement } from '../lib/dom';
+import { readableOn } from '../lib/color';
 import { darkModeCSS } from './darkModeCss';
 import { readingTextCss } from './theme/css';
 import { isLoreCard, psctCss, unwrap, wrap } from './psct';
@@ -26,14 +27,13 @@ export const DarkModeEffect = () => {
   return null;
 };
 
+const CARD_FONT = '"MatrixBook", "Stone Serif", Georgia, serif';
+
 export const CardTextSizeEffect = () => {
-  const { cardTextSize } = useSettings();
-  useStyle(
-    'dbte-cardtext',
-    cardTextSize > 0
-      ? `#preview_txt, #preview_txt * { font-size: ${cardTextSize}px !important; line-height: 1.35 !important; }`
-      : null,
-  );
+  const { cardTextSize, cardTextFont } = useSettings();
+  const size = cardTextSize > 0 ? `font-size: ${cardTextSize}px !important; line-height: 1.35 !important;` : '';
+  const font = cardTextFont === 'card' ? `font-family: ${CARD_FONT} !important;` : '';
+  useStyle('dbte-cardtext', size || font ? `#preview_txt, #preview_txt * { ${size} ${font} }` : null);
   return null;
 };
 
@@ -44,8 +44,25 @@ export const ReadingTextEffect = () => {
 };
 
 export const PsctEffect = () => {
-  const { psctEnabled, psctColors, psctLineBreaks } = useSettings();
-  useStyle('dbte-psct', psctEnabled ? psctCss(psctColors) : null);
+  const { psctEnabled, psctColors, psctLineBreaks, darkMode, themeEnabled, themeTokens, themeAreas } = useSettings();
+  // The colours are picked for a dark box; on DuelingBook's light one (no dark
+  // mode, no theme) they are darkened just enough to stay readable.
+  const [textBg, setTextBg] = useState(null);
+  const colors = useMemo(() => {
+    if (!textBg) return psctColors;
+    return Object.fromEntries(Object.entries(psctColors).map(([k, c]) => [k, readableOn(c, textBg)]));
+  }, [psctColors, textBg]);
+  useStyle('dbte-psct', psctEnabled ? psctCss(colors) : null);
+
+  // Look settings repaint the box; measure again once their styles apply.
+  useEffect(() => {
+    if (!psctEnabled) return undefined;
+    const id = requestAnimationFrame(() => {
+      const el = document.querySelector('#preview_txt');
+      if (el) setTextBg(backgroundBehind(el));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [psctEnabled, darkMode, themeEnabled, themeTokens, themeAreas]);
 
   useEffect(() => {
     if (!psctEnabled && !psctLineBreaks) return undefined;
@@ -57,6 +74,7 @@ export const PsctEffect = () => {
     const rewrap = () => {
       observer.disconnect();
       lastLore = isLoreCard(preview);
+      setTextBg(backgroundBehind(preview));
       unwrap(preview);
       wrap(preview, { lore: lastLore, breaks: psctLineBreaks });
       observer.observe(preview, { childList: true, subtree: true, characterData: true });

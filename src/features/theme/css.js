@@ -350,8 +350,15 @@ html #deck_constructor .bypass_background, html #deck_constructor .bypass_backgr
   background: linear-gradient(90deg, var(--dbt-accent-soft), transparent) !important;
 }
 html #deck_constructor #limit_reached { color: var(--dbt-danger) !important; }
-html #content .deck_bg .total_bg { background: var(--dbt-raised) !important; box-shadow: inset 0 0 0 1px var(--dbt-border); }
-html #content .deck_bg .total_txt { color: var(--dbt-text) !important; }
+/* Deck count tiles: one themed tile, a stripe in the card type's colour. */
+html #content .total_bg, html #content .total_effect_bg, html #content .total_spell_bg, html #content .total_trap_bg {
+  background: var(--dbt-raised) !important; border-radius: calc(var(--dbt-radius) / 2) !important;
+  box-shadow: inset 0 0 0 1px var(--dbt-border), inset 0 -3px 0 var(--dbt-stripe, var(--dbt-accent)) !important;
+}
+html #content .total_effect_bg { --dbt-stripe: var(--dbt-warning); }
+html #content .total_spell_bg { --dbt-stripe: var(--dbt-success); }
+html #content .total_trap_bg { --dbt-stripe: var(--dbt-danger); }
+html #content .total_txt, html #content .total_effect_txt, html #content .total_spell_txt, html #content .total_trap_txt { color: var(--dbt-text) !important; }
 `;
 
 const duel = `

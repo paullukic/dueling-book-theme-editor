@@ -1,5 +1,7 @@
 // Helpers for touching DuelingBook's page safely.
 
+import { flattenLayers, parseCssColor } from './color.js';
+
 // True when a key event comes from somewhere the user is typing, including
 // inputs inside the extension's own shadow root (document.activeElement only
 // shows the shadow host there, so look at the event's real target).
@@ -81,3 +83,17 @@ export const sendDuelChat = (message) => {
 };
 
 export const isVisible = (el) => !!el && el.offsetParent !== null;
+
+// The colour actually behind `el`: its own and its ancestors' background
+// colours painted over each other, down to the first opaque one.
+export const backgroundBehind = (el) => {
+  const layers = [];
+  for (let node = el; node && node.nodeType === 1; node = node.parentElement) {
+    const c = parseCssColor(getComputedStyle(node).backgroundColor);
+    if (c && c[3] > 0) {
+      layers.push(c);
+      if (c[3] >= 1) break;
+    }
+  }
+  return flattenLayers(layers);
+};

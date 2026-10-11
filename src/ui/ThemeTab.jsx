@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { updateSettings, useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { contrast } from '../lib/color';
-import { CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
+import { CARD_TEXT_FONTS, CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
 import { AREAS, FONTS, PRESETS, PRESET_GROUPS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
 import { MAX_CODE_LENGTH, MAX_CUSTOM_CSS, THEME_KEYS, decodeTheme, encodeTheme } from '../features/theme/share';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
@@ -396,6 +396,16 @@ const CardTextView = ({ s }) => {
         format={(v) => (v === 0 ? 'Default' : `${v}px`)}
         onChange={set('cardTextSize')}
       />
+      <div className="segmented-row">
+        <span id="dbte-card-font-label">Card text font</span>
+        <div className="segmented" role="group" aria-labelledby="dbte-card-font-label">
+          {CARD_TEXT_FONTS.map((f) => (
+            <button key={f.id} type="button" aria-pressed={s.cardTextFont === f.id} onClick={() => updateSettings({ cardTextFont: f.id })}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </Group>
     <Group title="Chat and log text">
       <SliderRow
