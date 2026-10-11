@@ -247,6 +247,8 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
     tileHoverGlow(t.accent) +
     restRule(t.accent) +
     bands(t.accent, t.warning) +
+    `html body #duel #watchers { background: ${t.surface} !important; box-shadow: inset 0 0 0 1px ${t.border}, inset 0 2px 0 ${alpha(t.accent, 0.5)}; border-radius: 4px; }
+` +
     quietBoard,
 
   // Snow (light): frost. Frosted-glass tiles and ice crystals in the pop-up corners; the scene holds the great crystal.

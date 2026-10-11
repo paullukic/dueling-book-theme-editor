@@ -3,6 +3,7 @@
 // src the site's own script swaps in on hover.
 
 import { mix } from '../../lib/color.js';
+import { isLightTheme } from './css.js';
 
 const svgUrl = (svg) => `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
@@ -576,7 +577,10 @@ export const recolorField = (svg, t) => {
     [/stop-color="(#00b400)"/gi, t.opp],
     [/stop-color="(#ff8f00|#ff8b00)"/gi, oppAlt],
   ];
-  return map.reduce((out, [re, color]) => out.replace(re, `stop-color="${color}"`), svg);
+  const out = map.reduce((acc, [re, color]) => acc.replace(re, `stop-color="${color}"`), svg);
+  // Zone wells are unfilled shapes at 20-30% (black): fine on dark pages, a grey slab on paper.
+  // Light themes tint them with the theme's border colour instead.
+  return isLightTheme(t) ? out.replace(/(\.cls-[\w.,-]*)\{fill-opacity:([\d.]+);\}/g, (m, cls, o) => `${cls}{fill:${t.border};fill-opacity:${o};}`) : out;
 };
 
 // { css, missing }: missing counts files that could not be fetched this time.

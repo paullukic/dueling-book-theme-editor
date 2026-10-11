@@ -8,6 +8,7 @@ import * as kit from './chrome/kit.js';
 import { keepAreas } from './skins.js';
 import spell from './chrome/spell.js';
 import oled from './chrome/oled.js';
+import midnight from './chrome/midnight.js';
 import trap from './chrome/trap.js';
 import fusion from './chrome/fusion.js';
 import synchro from './chrome/synchro.js';
@@ -79,6 +80,7 @@ import eternalDuelistSoul from './chrome/eternal-duelist-soul.js';
 
 const CHROME = {
   oled,
+  midnight,
   'burning-abyss': burningAbyss,
   yubel,
   ddd,
