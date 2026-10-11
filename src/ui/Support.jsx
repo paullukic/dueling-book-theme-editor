@@ -17,11 +17,11 @@ const version = () => chrome.runtime.getManifest().version;
 
 // Shown once after an update, until dismissed.
 const NEWS = [
+  'Full theme: a sleek look for every DuelingBook screen, with six presets and your own colours',
+  'Share your theme as a code, or add your own CSS',
   'Turn and duel-found alerts, so you can wait in another tab',
   'Test hands and opening odds for the deck you are building',
   'Mute players in chat and get pinged when someone says your name',
-  'Your own colours for card text, faster animations, bigger card text',
-  'A cleaner panel with tabs, Esc to close, and a corner button to open it',
 ];
 
 const askAllowed = (meta) =>
@@ -40,7 +40,7 @@ export const WhatsNew = ({ meta, setMeta }) => {
       <h3>{fresh ? 'Welcome to Theme Editor' : `What’s new in ${version()}`}</h3>
       {fresh ? (
         <p>
-          Everything starts switched off. Try Dark mode below, or set up alerts in the Duel tab.
+          Everything starts switched off. Try the Full theme below, or set up alerts in the Duel tab.
           <br />
           Open this panel any time from the corner button or with{' '}
           <span className="nowrap">

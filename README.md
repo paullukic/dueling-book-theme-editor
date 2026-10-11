@@ -1,12 +1,12 @@
 # DuelingBook Theme Editor
 
-A Chrome extension that makes [duelingbook.com](https://www.duelingbook.com) look and play the way you want: dark mode, colour-coded card text, keyboard shortcuts, turn alerts, test hands, chat mute and more. It never changes game rules and collects no data.
+A Chrome extension that makes [duelingbook.com](https://www.duelingbook.com) look and play the way you want: a full theme for every screen, colour-coded card text, keyboard shortcuts, turn alerts, test hands, chat mute and more. It never changes game rules and collects no data.
 
 ## Features
 
 | Tab | What you get |
 |-----|--------------|
-| Look | Dark mode · colour-coded card text with your own colours · card text size · compact main menu · main menu button colours · your own background image |
+| Theme | Full theme for every screen (menus, duel room, deck builder, duels, chat, pop-ups, profiles) · six presets · your own colours, corner roundness, lettering · switch any area back to DuelingBook's look · custom CSS · shareable theme codes · colour-coded card text · card text size · compact main menu · your own background image |
 | Duel | Duel-found and your-turn alerts (sound, tab flash, desktop notification) · animation speed · skip intro · one-key shortcuts and five custom chat messages · notes window · action log with opponent's revealed hand |
 | Chat | Mute players · highlight and alert on mentions of your name |
 | Deck | Test hands (going first or second) from the deck open in the Deck Constructor · opening odds for the cards you tick |
@@ -35,6 +35,7 @@ Load it in Chrome: `chrome://extensions` → Developer mode → **Load unpacked*
 | `src/background.js` | Toolbar icon and keyboard command; records install/update for "What's new" |
 | `src/lib/` | Settings store (with v1.0 migration), local storage hook, bridge client, alerts, DOM helpers |
 | `src/features/` | Page effects (each one undoes itself when switched off), floating windows, deck tools |
+| `src/features/theme/` | Full theme: tokens and presets, per-area stylesheets, generated icons and playmat, theme codes |
 | `src/ui/` | Panel, controls, styles (shadow-DOM only) |
 
 Root `contentScript.js`, `bridge.js` and `background.js` are build output. Edit `src/`.

@@ -1,6 +1,6 @@
 {
   "name": "dueling-book-theme-editor-extension",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "DuelingBook Theme Editor: dark mode, hotkeys, alerts and duel tools for duelingbook.com.",
   "scripts": {
     "start": "webpack --mode development --watch",

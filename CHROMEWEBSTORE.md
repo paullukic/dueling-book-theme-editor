@@ -1,25 +1,30 @@
 # Chrome Web Store Listing — DuelingBook Theme Editor
 
-> Last Updated: 2026-10-10 (v1.1.0)
+> Last Updated: 2026-10-11 (v1.2.0)
 
 ## Store Listing
 
 **Extension Name**
-DuelingBook Theme Editor - Dark Mode, Hotkeys & Duel Tools
+DuelingBook Theme Editor - Dark Themes, Hotkeys & Duel Tools
 
-**Short Description** (126/132)
-Dark mode, hotkeys, turn alerts, test hands, chat mute and more for duelingbook.com. Lightweight, no data collected.
+**Short Description** (122/132)
+Sleek dark themes for every screen, hotkeys, turn alerts, test hands and chat mute for duelingbook.com. No data collected.
 
 **Detailed Description** (paste as plain text; the store strips Markdown)
 
 ```
-Make DuelingBook look and play the way you want. Theme Editor adds a dark theme, keyboard shortcuts, turn alerts, deck tools and chat controls to duelingbook.com, without changing any game rules.
+Make DuelingBook look and play the way you want. Theme Editor restyles every screen of duelingbook.com and adds keyboard shortcuts, turn alerts, deck tools and chat controls, without changing any game rules.
 
-LOOK
-• Dark mode for the lobby, chat, search and deck panels
+THEME
+• A full, modern theme for every screen: main menu, duel room, deck constructor, duels, chat windows, pop-ups, profiles, settings, rankings and tournaments
+• Six presets: Obsidian, Midnight, Crimson, Verdant, Sakura and OLED
+• Make it yours: pick every colour, corner roundness, background art and lettering, with a warning if text gets hard to read
+• The playmat, life points, phase buttons and pop-up buttons follow your colours
+• Keep DuelingBook's own look in any area you like, with one switch per area
+• Share your theme as a code, or add your own CSS
 • Colour-coded card text: activation condition, cost or target, effect and once-per-turn limits each get their own colour, and you pick the colours
 • Bigger card text for easier reading
-• Compact main menu and your own main menu button colours
+• Compact main menu
 • Your own background image
 
 DUEL
@@ -59,68 +64,32 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Asset | Dimensions | Status | Filename |
 |-------|-----------|--------|----------|
 | Store Icon | 128×128 PNG | ✅ Ready | `icon128.png` |
-| Screenshot 1 | 1280×800 | ✅ Ready (panel, Look tab) | `screenshots/v1.1/1-look.png` |
-| Screenshot 2 | 1280×800 | ✅ Ready (alerts + notes) | `screenshots/v1.1/2-duel.png` |
-| Screenshot 3 | 1280×800 | ✅ Ready (chat mute) | `screenshots/v1.1/3-chat.png` |
+| Screenshot 1 | 1280×800 | 🟡 Take logged in: themed duel (Obsidian) with the Theme tab open | |
+| Screenshot 2 | 1280×800 | 🟡 Take logged in: themed duel room and deck constructor (Midnight) | |
+| Screenshot 3 | 1280×800 | 🟡 Take logged in: preset gallery and colour pickers over the main menu | |
 | Screenshot 4 | 1280×800 | 🟡 Take logged in: Deck tab with a test hand | |
-| Screenshot 5 | 1280×800 | 🟡 Take logged in: dark mode lobby + coloured card text in a duel | |
-| Small Promo Tile | 440×280 | 🟡 Exists (`screenshots/promo-small.jpg`), refresh with new panel | |
+| Screenshot 5 | 1280×800 | 🟡 Take logged in: alerts + notes + action log in a duel | |
+| Older shots | 1280×800 | v1.1 panel shots in `screenshots/v1.1/` (still valid for Duel and Chat tabs) | |
+| Small Promo Tile | 440×280 | 🟡 Exists (`screenshots/promo-small.jpg`), refresh with a themed duel | |
 | Marquee Promo Tile | 1400×560 | 🟡 Exists (`screenshots/promo-big.jpg`) | |
 
 ### Screenshot plan (one feature each, short caption)
-1. Dark mode on the main menu with the panel open on the Look tab: "Dark mode for all of DuelingBook".
-2. Card preview with coloured card text and the colour pickers: "See costs, conditions and limits at a glance".
-3. Duel in progress with the "Your turn!" desktop notification and flashing tab: "Never miss your turn".
+1. Duel with the Obsidian theme and the Theme tab open: "A sleek theme for every screen".
+2. Duel room and deck constructor in Midnight: "Lobby and deck builder, restyled".
+3. Preset gallery and colour pickers: "Six presets, or pick every colour".
 4. Deck Constructor with the Deck tab: test hand with card art and opening odds: "Test hands and opening odds".
-5. Duel with notes and action log windows plus the shortcut list: "Hotkeys, notes and an action log".
-
-## Permissions Justification
-
-| Permission | Type | Justification |
-|------------|------|---------------|
-| storage | permissions | Saves the user's choices (theme, colours, shortcuts, muted players), their notes and their background image so they are still there the next time they open DuelingBook. |
-| unlimitedStorage | permissions | Lets a user's own background image and notes be saved on their device without hitting the default 5 MB limit. Nothing is uploaded. |
-| host_permissions: duelingbook.com (4 URL patterns) | host_permissions | Needed so the extension can re-attach to DuelingBook tabs that were already open (see scripting). Same sites the content scripts already run on; no other sites. |
-| scripting | permissions | After an update (or right after install), re-attaches the extension to DuelingBook tabs that were already open, so users do not have to reload the page to get their theme and panel back. It only injects the extension's own bundled files, only into duelingbook.com tabs. |
-| duelingbook.com content scripts (4 URL patterns, with and without www, http and https) | content_scripts matches | The extension only runs on duelingbook.com, where it applies the user's theme and shows its settings panel and tools. |
-
-Host access is limited to duelingbook.com. No `tabs`, no remote code.
-
-## Privacy & Data Use
-
-**Does the extension collect user data?** No.
-
-All data (settings, notes, background image, action log) is stored with the browser's extension storage on the user's device (settings also sync through the user's own Chrome sync). Nothing is transmitted to the developer or any third party. Card art in test hands is loaded from DuelingBook's own image server, the same images the site shows.
-
-### Data Use Certification
-- [x] Data is NOT sold to third parties
-- [x] Data is NOT used for purposes unrelated to the extension's core functionality
-- [x] Data is NOT used for creditworthiness or lending purposes
-
-## Privacy Policy
-
-**Privacy Policy URL**: host `PRIVACY.md` (for example via GitHub Pages) and paste the URL here. TODO (owner).
-
-## Distribution
-
-**Visibility**: Public
-**Regions**: All regions
-
-## Developer Info
-
-**Publisher Name**: TODO (owner)
-**Contact Email**: TODO (owner)
-**Support URL**: TODO (owner; a GitHub Issues page or Discord invite works)
+5. Duel with the "Your turn!" notification, notes and action log: "Never miss your turn".
 
 ## Version History
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with six presets, your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes. Off until you switch it on; existing settings unchanged. |
 | 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; fewer permissions (tabs and activeTab removed). Existing settings carry over. |
 | 1.0.7 | 2026-08-20 | Dark theme, feature tooltips, five custom chat shortcuts. |
 
-## Pre-publish checklist (1.1.0)
-- [ ] `npm run package` and upload `dueling-book-theme-editor-1.1.0.zip`
+## Pre-publish checklist (1.2.0)
+- [ ] `npm run package` and upload `dueling-book-theme-editor-1.2.0.zip`
 - [ ] Load the zip unpacked once and click through every tab on duelingbook.com
 - [ ] Refresh screenshots (plan above)
 - [ ] Privacy policy URL live
