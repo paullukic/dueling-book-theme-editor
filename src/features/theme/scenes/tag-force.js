@@ -60,11 +60,11 @@ const tagForce = (t) => {
   }
 
   // The beam: a cone from the lantern, swept slowly back and forth.
-  const LX = 196;
+  const LX = 104;
   const LY = 548;
 
   return `<style>@keyframes dbtefx-tf-wave { 0%, 100% { transform: translateX(0) scaleY(1); } 50% { transform: translateX(-60px) scaleY(1.35); } }
-@keyframes dbtefx-tf-beam { 0%, 100% { transform: rotate(-150deg); opacity: 0.5; } 50% { transform: rotate(-30deg); opacity: 0.9; } }
+@keyframes dbtefx-tf-beam { 0%, 100% { transform: rotate(-160deg); opacity: 0.5; } 50% { transform: rotate(-70deg); opacity: 0.9; } }
 @keyframes dbtefx-tf-smoke { 0% { transform: translate(0, 0) scale(0.7); opacity: 0; } 20% { opacity: 0.5; } 100% { transform: translate(-90px, -150px) scale(1.6); opacity: 0; } }</style>
 <defs>
 <linearGradient id="dbtefx-tf-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night}"/><stop offset="0.45" stop-color="${mix(t.bg, t.accent2, 0.18)}"/><stop offset="0.66" stop-color="${mix(t.accent2, t.bg, 0.8)}"/><stop offset="0.72" stop-color="${mix(t.accent2, t.bg, 0.78)}"/><stop offset="1" stop-color="${mix(t.bg, t.accent2, 0.1)}"/></linearGradient>
@@ -112,9 +112,9 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 ${windows}
 
 </g>
-<path d="M${LX - 70} 660Q${LX - 40} 626 ${LX - 6} 636L${LX + 30} 642Q${LX + 60} 650 ${LX + 80} 664V700H${LX - 80}Z" fill="${rock}"/><path d="M${LX - 70} 660Q${LX - 40} 626 ${LX - 6} 636L${LX + 30} 642Q${LX + 60} 650 ${LX + 80} 664" fill="none" stroke="${rockLit}" stroke-width="2"/>
+<path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664V700H${LX - 66}Z" fill="${rock}"/><path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664" fill="none" stroke="${rockLit}" stroke-width="2"/>
 <g transform="translate(${LX} ${LY})"><path d="M-9 92L-6 6H6L9 92Z" fill="${mix(t.text, rock, 0.35)}"/><path d="M-8 30H8M-8 58H8" stroke="${t.self}" stroke-width="7"/><rect x="-9" y="-6" width="18" height="13" fill="${lamp}"/><path d="M-12 -6L0 -20L12 -6Z" fill="${mix(rock, t.text, 0.2)}"/></g>
-<g transform="translate(${LX} ${LY})"><g style="animation: dbtefx-tf-beam 14s ease-in-out infinite; transform-origin: 0 0;"><path d="M0 0L190 -26L190 26Z" fill="url(#dbtefx-tf-cone)"/></g><circle r="16" fill="${lamp}" fill-opacity="0.45"/></g>
+<g transform="translate(${LX} ${LY})"><g style="animation: dbtefx-tf-beam 14s ease-in-out infinite; transform-origin: 0 0;"><path d="M0 0L120 -18L120 18Z" fill="url(#dbtefx-tf-cone)"/></g><circle r="16" fill="${lamp}" fill-opacity="0.45"/></g>
 <!--near-->
 <rect y="660" width="${W}" height="${H - 660}" fill="url(#dbtefx-tf-sea)"/>
 <path d="M1110 668H1340" stroke="${lamp}" stroke-opacity="0.3" stroke-width="3"/>

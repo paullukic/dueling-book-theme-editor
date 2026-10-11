@@ -27,9 +27,11 @@ const worldChampionship = (t) => {
       })
       .join('');
 
-  // A stylus tap: an expanding ring and the four blinking pixel brackets.
+  // A stylus tap as the DS draws it: stepped pixel squares spreading from the
+  // touch point (one DS pixel = 4 units), the blinking orange pixel cursor, the stylus tip.
+  const ring = (r, delay) => `<rect x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}" fill="none" stroke="#ffffff" stroke-width="4" stroke-dasharray="8 4" shape-rendering="crispEdges" style="animation: dbtefx-ripple 4.5s steps(6) ${n1(-delay)}s infinite; transform-box: fill-box; transform-origin: center;"/>`;
   const tap = (x, y, delay) =>
-    `<g transform="translate(${x} ${y})"><circle r="26" fill="none" stroke="#ffffff" stroke-width="3" style="animation: dbtefx-ripple 4.5s ease-out ${n1(-delay)}s infinite; transform-box: fill-box; transform-origin: center;"/><g fill="${orange}" shape-rendering="crispEdges" style="animation: dbtefx-wc-cursor 4.5s steps(1) ${n1(-delay)}s infinite;"><path d="M-22 -22h12v4h-8v8h-4z"/><path d="M22 -22h-12v4h8v8h4z"/><path d="M-22 22h12v-4h-8v-8h-4z"/><path d="M22 22h-12v-4h8v-8h4z"/></g></g>`;
+    `<g transform="translate(${x} ${y})">${ring(28, delay)}<g fill="${orange}" shape-rendering="crispEdges" style="animation: dbtefx-wc-cursor 4.5s steps(1) ${n1(-delay)}s infinite;"><path d="M-4 -16h8v8h-8zM-4 8h8v8h-8zM-16 -4h8v8h-8zM8 -4h8v8h-8z"/></g><path d="M2 2L40 56" stroke="${mix(t.text, t.muted, 0.4)}" stroke-width="7" stroke-linecap="round"/><path d="M2 2L9 12" stroke="${t.bg}" stroke-width="4" stroke-linecap="round"/></g>`;
 
   return `<style>@keyframes dbtefx-wc-streak { 0% { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(760px); opacity: 0; } }
 @keyframes dbtefx-wc-streak-l { 0% { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(-760px); opacity: 0; } }

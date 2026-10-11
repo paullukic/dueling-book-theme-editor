@@ -89,10 +89,9 @@ ${SEL.chat} { background: ${panel} !important; outline: 3px solid ${sand} !impor
 
 /* Duel: the heart-and-gold-LP plaque on a stone bar, a sky-blue gauge that turns red when low; blue capsule phase pills on stone. */
 ${SEL.life} { border-color: ${sandLit} !important; border-radius: 5px !important; box-shadow: 0 0 0 3px ${sand}, 0 0 0 5px ${mix(sandDeep, '#000000', 0.3)}, inset 0 0 0 1px ${ink}, 0 5px 10px -2px #000000 !important; }
-${SEL.lifeSelf}, 
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(blue, t.bg, 0.15)}, ${mix(blue, t.bg, 0.45)}) !important; box-shadow: inset 0 3px 3px -1px ${alpha('#ffffff', 0.4)} !important; }
-${sel(['#duel .lifepoints[data-dbte-lp~="low"] .life_bar', '#duel .lifepoints[data-dbte-lp~="zero"] .life_bar'])} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.1)}, ${mix(t.self, t.bg, 0.45)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, '#ffffff', 0.15)}) !important; }
+${sel(['#duel #lifepoints1[data-dbte-lp~="low"] .life_bar', '#duel #lifepoints2[data-dbte-lp~="low"] .life_bar', '#duel #lifepoints1[data-dbte-lp~="zero"] .life_bar', '#duel #lifepoints2[data-dbte-lp~="zero"] .life_bar'])} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.1)}, ${mix(t.self, t.bg, 0.45)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -64px; top: 2px; width: 60px; height: 26px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${mix(gold, '#ffffff', 0.45)} !important; text-shadow: 0 2px 0 ${ink}, 0 0 3px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: linear-gradient(180deg, ${sand}, ${sandDeep}) !important; border-radius: 14px !important; box-shadow: inset 0 1px 0 ${alpha(sandLit, 0.8)}, 0 0 0 1px ${mix(sandDeep, '#000000', 0.45)}, 0 3px 6px -2px #000000 !important; }
