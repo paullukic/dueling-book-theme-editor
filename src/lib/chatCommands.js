@@ -29,12 +29,27 @@ const RESERVED = ['help', 'calc', 'note', ...NATIVE_COMMANDS.map(([c]) => c.slic
 export const MAX_ALIASES = 15;
 export const ALIAS_NAME = /^[a-z0-9]{1,12}$/;
 
+// chrome.storage.sync allows 8 KB per item, counted in UTF-8 bytes: keep the
+// list well under it whatever script the text is in.
+export const SYNC_ITEM_BUDGET = 7000;
+export const byteSize = (v) => new TextEncoder().encode(JSON.stringify(v)).length;
+export const fitBytes = (list, budget = SYNC_ITEM_BUDGET) => {
+  const out = [];
+  for (const item of list) {
+    if (byteSize([...out, item]) > budget) break;
+    out.push(item);
+  }
+  return out;
+};
+
 export const cleanAliases = (list) =>
-  (Array.isArray(list) ? list : [])
-    .filter((a) => a && typeof a === 'object' && typeof a.name === 'string' && typeof a.text === 'string')
-    .map((a) => ({ name: a.name.toLowerCase().trim(), text: a.text.slice(0, 200) }))
-    .filter((a, i, all) => ALIAS_NAME.test(a.name) && !RESERVED.includes(a.name) && a.text.trim() && all.findIndex((b) => b.name === a.name) === i)
-    .slice(0, MAX_ALIASES);
+  fitBytes(
+    (Array.isArray(list) ? list : [])
+      .filter((a) => a && typeof a === 'object' && typeof a.name === 'string' && typeof a.text === 'string')
+      .map((a) => ({ name: a.name.toLowerCase().trim(), text: a.text.slice(0, 200) }))
+      .filter((a, i, all) => ALIAS_NAME.test(a.name) && !RESERVED.includes(a.name) && a.text.trim() && all.findIndex((b) => b.name === a.name) === i)
+      .slice(0, MAX_ALIASES),
+  );
 
 export const isReservedAlias = (name) => RESERVED.includes(name.toLowerCase());
 

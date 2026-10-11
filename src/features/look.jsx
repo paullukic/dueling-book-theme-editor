@@ -53,7 +53,7 @@ export const PsctEffect = () => {
     if (!textBg) return psctColors;
     return Object.fromEntries(Object.entries(psctColors).map(([k, c]) => [k, readableOn(c, textBg)]));
   }, [psctColors, textBg]);
-  useStyle('dbte-psct', psctEnabled ? psctCss(colors) : null);
+  useStyle('dbte-psct', psctEnabled || psctLineBreaks ? psctCss(psctEnabled ? colors : null) : null);
 
   // Look settings repaint the box; measure again once their styles apply.
   useEffect(() => {

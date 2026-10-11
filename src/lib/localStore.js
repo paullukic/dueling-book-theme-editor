@@ -129,6 +129,11 @@ export const mutateLocal = (key, fn) => {
 
 // [value, setValue, loaded]. Function updates are applied to the stored value
 // (see mutateLocal); plain values replace it.
+// A stored value only counts when it has the same shape as the default, so a
+// damaged entry (say a number where text belongs) cannot crash the panel.
+const sameShape = (v, initial) =>
+  initial === undefined || (Array.isArray(initial) ? Array.isArray(v) : typeof v === typeof initial && (v === null) === (initial === null));
+
 export const useLocal = (key, initial) => {
   const [value, setValue] = useState(initial);
   const [loaded, setLoaded] = useState(false);
@@ -141,7 +146,7 @@ export const useLocal = (key, initial) => {
     getLocal(key).then((stored) => {
       if (!alive) return;
       if (!touched.current) {
-        const v = stored !== undefined ? stored : initial;
+        const v = stored !== undefined && sameShape(stored, initial) ? stored : initial;
         valueRef.current = v;
         setValue(v);
       }
@@ -153,7 +158,7 @@ export const useLocal = (key, initial) => {
       // A newer local edit is still waiting to be written: keep it.
       if (pending.has(key) && JSON.stringify(pending.get(key)) !== JSON.stringify(v)) return;
       if (JSON.stringify(v) !== JSON.stringify(valueRef.current)) {
-        valueRef.current = v === undefined ? initial : v;
+        valueRef.current = v === undefined || !sameShape(v, initial) ? initial : v;
         setValue(valueRef.current);
       }
     };

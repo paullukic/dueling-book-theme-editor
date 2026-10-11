@@ -40,7 +40,8 @@ const sentences = (text, from, to) => {
         out.push([start, i + 1]);
         start = i + 1;
       }
-    } else if ((ch === '.' || ch === '!' || ch === '?') && depth === 0) {
+    } else if ((ch === '.' || ch === '!' || ch === '?') && depth === 0 && !/[\d.]/.test(text[i + 1] || '')) {
+      // "1.5 times" and "..." carry on; only the last dot of an ellipsis ends it.
       out.push([start, i + 1]);
       start = i + 1;
     }
@@ -249,11 +250,12 @@ export const wrap = (root, options = {}) => {
   }
 };
 
+// colors null: line breaks only, the text keeps DuelingBook's colour.
 export const psctCss = (colors) => `
 /* DuelingBook makes spans inline-block, which drops leading spaces and breaks lines oddly. */
 .${SPAN_CLASS} { display: inline !important; }
-.${SPAN_CLASS}-condition { color: ${colors.condition} !important; }
+${colors ? `.${SPAN_CLASS}-condition { color: ${colors.condition} !important; }
 .${SPAN_CLASS}-cost { color: ${colors.cost} !important; }
 .${SPAN_CLASS}-effect { color: ${colors.effect} !important; }
-.${SPAN_CLASS}-restriction { color: ${colors.restriction} !important; font-weight: 600; }
+.${SPAN_CLASS}-restriction { color: ${colors.restriction} !important; font-weight: 600; }` : ''}
 `;

@@ -3,7 +3,7 @@
 // (see lib/localStore.js).
 
 import { DEFAULT_AREAS, DEFAULT_PRESET, FONTS, PRESETS } from '../features/theme/presets.js';
-import { cleanAliases } from './chatCommands.js';
+import { cleanAliases, fitBytes } from './chatCommands.js';
 
 export const CUSTOM_SLOTS = 5;
 
@@ -147,7 +147,7 @@ export const migrateLegacy = (old) => {
     s.shortcutKeys = keys;
   }
   if (Array.isArray(old.customChatMessages)) {
-    const msgs = old.customChatMessages.slice(0, CUSTOM_SLOTS).map((m) => String(m || ''));
+    const msgs = old.customChatMessages.slice(0, CUSTOM_SLOTS).map((m) => (typeof m === 'string' ? m.slice(0, 200) : ''));
     while (msgs.length < CUSTOM_SLOTS) msgs.push('');
     s.customChatMessages = msgs;
   } else if (typeof old.customChatMessage === 'string') {
@@ -217,7 +217,7 @@ const cleanValue = (k, v, d) => {
       return msgs;
     }
     if (k === 'chatAliases') return cleanAliases(v);
-    if (k === 'chatMuted') return v.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.slice(0, 40)).slice(0, 100);
+    if (k === 'chatMuted') return fitBytes(v.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.slice(0, 40)).slice(0, 100));
     return v;
   }
   if (isPlainObject(d)) {

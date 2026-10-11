@@ -66,6 +66,9 @@ export const runAction = (id, settings) => {
     sendDuelChat(action.chat);
     return;
   }
+  // Only the listed buttons: an imported settings file cannot bind a key to
+  // any other element on the page (log out, surrender, ...).
+  if (!action) return;
   const btn = document.getElementById(id);
   if (btn) btn.click();
 };

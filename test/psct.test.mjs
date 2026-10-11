@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { breakPoints, classify } from '../src/features/psct.js';
+import { breakPoints, classify, psctCss } from '../src/features/psct.js';
 
 // Coloured runs as [role, text], in order; uncoloured text is skipped.
 const runs = (text, options) => {
@@ -175,4 +175,17 @@ test('OCG layout: no break at the end of a line, inside quotes or for lore', () 
   const at = [...breakPoints(pend, { lore: true })];
   assert.equal(at.length, 1);
   assert.ok(pend.slice(at[0]).startsWith(' You can draw'));
+});
+
+test('psct: decimals and ellipses are not sentence ends', () => {
+  const text = 'Gains 1.5 times its ATK... Then destroy it.';
+  const pts = [...breakPoints(text)];
+  assert.ok(!pts.some((p) => p > 6 && p < 10), 'no break inside 1.5');
+  assert.equal(pts.filter((p) => text[p - 1] === '.' && text[p] === '.').length, 0, 'no break between dots');
+});
+
+test('psct: line breaks alone keep DuelingBook colours', () => {
+  const css = psctCss(null);
+  assert.ok(css.includes('display: inline'));
+  assert.doesNotMatch(css, /color:/);
 });

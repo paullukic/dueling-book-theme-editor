@@ -139,7 +139,7 @@ const SettingsTransfer = () => {
     try {
       const parsed = JSON.parse(await file.text());
       const settings = parsed && parsed.app === 'dbte' ? parsed.settings : null;
-      if (!settings || typeof settings !== 'object') throw new Error('shape');
+      if (!settings || typeof settings !== 'object' || Array.isArray(settings) || !Object.keys(settings).length) throw new Error('shape');
       replaceSettings(settings);
       setStatus({ ok: true, text: 'Settings imported.' });
     } catch (e) {

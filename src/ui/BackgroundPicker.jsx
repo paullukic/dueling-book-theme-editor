@@ -3,6 +3,7 @@ import { useLocal } from '../lib/localStore';
 import { updateSettings } from '../lib/settings';
 
 const MAX_DIM = 1920;
+const MAX_BYTES = 4.5 * 1024 * 1024;
 
 // Shrinks big photos so they fit comfortably in local storage.
 const toDataUrl = (file) =>
@@ -21,9 +22,15 @@ const toDataUrl = (file) =>
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
+        if (canvas.width < 16 || canvas.height < 16) {
+          reject(new Error('size'));
+          return;
+        }
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        const png = file.type === 'image/png';
-        resolve(canvas.toDataURL(png ? 'image/png' : 'image/jpeg', png ? undefined : 0.85));
+        // PNG keeps transparency, but a detailed photo saved as PNG can stay
+        // huge: fall back to JPEG when it would not fit.
+        const png = file.type === 'image/png' ? canvas.toDataURL('image/png') : null;
+        resolve(png && png.length <= MAX_BYTES ? png : canvas.toDataURL('image/jpeg', 0.85));
       };
       img.src = reader.result;
     };
@@ -43,7 +50,7 @@ const BackgroundPicker = () => {
     }
     try {
       const data = await toDataUrl(file);
-      if (data.length > 4.5 * 1024 * 1024) {
+      if (data.length > MAX_BYTES) {
         setError('That image is too large even after shrinking. Try a smaller one.');
         return;
       }
@@ -51,7 +58,7 @@ const BackgroundPicker = () => {
       setImage(data);
       updateSettings({ backgroundEnabled: true });
     } catch (e) {
-      setError('Could not read that image. Try another file.');
+      setError(e.message === 'size' ? 'That image is too thin or too small. Pick one at least 16 pixels on each side.' : 'Could not read that image. Try another file.');
     }
   };
 
