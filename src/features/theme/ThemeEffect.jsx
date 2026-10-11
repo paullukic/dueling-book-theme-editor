@@ -5,7 +5,7 @@ import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
-import { FX_ID, PARTICLES, sceneMarkup } from './scenes';
+import { FX_ID, PARTICLES, SHADERS, sceneMarkup } from './scenes';
 import { startFx } from './particles';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
@@ -115,17 +115,27 @@ const ThemeEffect = () => {
   const scene = useMemo(
     () =>
       // Hidden under the user's own picture (pattern overlay off): don't run it at all.
-      on && s.themeEffects && s.themeMotif && !(s.backgroundEnabled && (bgImage || s.backgroundMode === 'color') && !s.backgroundThemeOverlay)
-        ? sceneMarkup(s.themePreset, artTokens, { still: !s.themeMotion, particles: !!PARTICLES[s.themePreset] })
+      // Motion off removes the animated scene entirely (art, particles, shader);
+      // colours, playmat, icons, glows and the static pattern stay.
+      on && s.themeEffects && s.themeMotif && s.themeMotion && !(s.backgroundEnabled && (bgImage || s.backgroundMode === 'color') && !s.backgroundThemeOverlay)
+        ? sceneMarkup(s.themePreset, artTokens, {
+            still: !s.themeMotion,
+            particles: !!PARTICLES[s.themePreset],
+            shader: !!SHADERS[s.themePreset] && s.themeQuality !== 'off',
+          })
         : '',
-    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens, s.backgroundEnabled, bgImage, s.backgroundMode, s.backgroundThemeOverlay],
+    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themeQuality, s.themePreset, artTokens, s.backgroundEnabled, bgImage, s.backgroundMode, s.backgroundThemeOverlay],
   );
   useEffect(() => {
     const el = document.getElementById(FX_ID);
     if (!el) return undefined;
     el.innerHTML = scene;
     if (!scene) return undefined;
-    const stop = startFx(el, PARTICLES[s.themePreset], artTokens, { still: !s.themeMotion });
+    const stop = startFx(el, PARTICLES[s.themePreset], artTokens, {
+      still: !s.themeMotion,
+      shader: SHADERS[s.themePreset],
+      quality: s.themeQuality,
+    });
     return () => {
       stop();
       el.innerHTML = '';

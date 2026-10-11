@@ -94,6 +94,11 @@ const MODULES = {
 };
 
 export const SCENE_IDS = Object.keys(MODULES).filter((id) => MODULES[id].default);
+export const SHADERS = Object.fromEntries(
+  Object.entries(MODULES)
+    .filter(([, m]) => m.shader)
+    .map(([id, m]) => [id, m.shader]),
+);
 export const PARTICLES = Object.fromEntries(
   Object.entries(MODULES)
     .filter(([, m]) => m.particles)
@@ -107,9 +112,9 @@ const plane = (cls, body) =>
 // The 3D stage for the fx layer: far, middle and near SVG planes with the
 // particle canvas between middle and near; '' when the theme has neither a
 // scene nor particles. Colours go straight into markup: only hex values.
-export const sceneMarkup = (presetId, tokens, { still = false, particles = false } = {}) => {
+export const sceneMarkup = (presetId, tokens, { still = false, particles = false, shader = false } = {}) => {
   const draw = MODULES[presetId] && MODULES[presetId].default;
-  if ((!draw && !particles) || !Object.values(tokens || {}).every(isHex)) return '';
+  if ((!draw && !particles && !shader) || !Object.values(tokens || {}).every(isHex)) return '';
   // Text before <!--mid--> is the far plane, after <!--near--> the near one;
   // a scene without markers is all middle plane.
   const body = draw ? draw(tokens) : '';
@@ -123,5 +128,5 @@ export const sceneMarkup = (presetId, tokens, { still = false, particles = false
   const parts = [planes.far.trim(), planes.mid.trim(), planes.near.trim()];
   return `<style>${KEYFRAMES}
 #${FX_ID}.dbtefx-still *, #${FX_ID} .dbtefx-still * { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { #${FX_ID} * { animation: none !important; } }</style><div class="dbtefx-stage${still ? ' dbtefx-still' : ''}">${parts[0] ? plane('dbtefx-far', parts[0]) : ''}${parts[1] ? plane('dbtefx-mid', parts[1]) : ''}${particles ? '<canvas class="dbtefx-canvas"></canvas>' : ''}${parts[2] ? plane('dbtefx-near', parts[2]) : ''}</div>`;
+@media (prefers-reduced-motion: reduce) { #${FX_ID} * { animation: none !important; } }</style><div class="dbtefx-stage${still ? ' dbtefx-still' : ''}">${shader ? '<canvas class="dbtefx-gl"></canvas>' : ''}${parts[0] ? plane('dbtefx-far', parts[0]) : ''}${parts[1] ? plane('dbtefx-mid', parts[1]) : ''}${particles ? '<canvas class="dbtefx-canvas"></canvas>' : ''}${parts[2] ? plane('dbtefx-near', parts[2]) : ''}</div>`;
 };

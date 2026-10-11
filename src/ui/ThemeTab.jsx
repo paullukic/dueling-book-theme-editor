@@ -323,10 +323,26 @@ const StyleView = ({ s, onPick }) => {
           {s.themeEffects && s.themeMotif && (
             <ToggleRow
               label="Motion"
-              description="Archetype scenes move slowly: embers, feathers, a radar sweep. Always still if your system asks for reduced motion."
+              description="The animated scene: illustration, particles and effects. Off removes it; colours, playmat, icons and the background pattern stay. Held still if your system asks for reduced motion."
               checked={s.themeMotion}
               onChange={set('themeMotion')}
             />
+          )}
+          {s.themeEffects && s.themeMotif && s.themeMotion && (
+            <div className="segmented-row">
+              <span id="dbte-quality-label">Visual quality</span>
+              <div className="segmented" role="group" aria-labelledby="dbte-quality-label">
+                {[
+                  ['off', 'Off'],
+                  ['low', 'Low'],
+                  ['high', 'High'],
+                ].map(([id, label]) => (
+                  <button key={id} type="button" aria-pressed={s.themeQuality === id} onClick={() => updateSettings({ themeQuality: id })}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
           <SliderRow
             label="Corner roundness"

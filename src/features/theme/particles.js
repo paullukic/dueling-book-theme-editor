@@ -5,6 +5,7 @@
 // pure (createSystems / stepSystems) so it can be tested without a canvas.
 
 import { isHex, luminance } from '../../lib/color.js';
+import { createShaderLayer } from './shader.js';
 
 
 // How each kind moves. speed in px/s at depth 1; size in px.
@@ -288,11 +289,21 @@ const RESIZE_MS = 200;
 // function. Still (Motion off, or the system asks for reduced motion, even
 // later on) draws one frame and redraws it only when the window resizes.
 // Without particles the loop runs only while the camera is moving.
-export const startFx = (root, config, tokens, { still = false } = {}) => {
+export const startFx = (root, config, tokens, { still = false, shader = null, quality = 'off' } = {}) => {
   const stage = root && root.querySelector('.dbtefx-stage');
   const canvas = root && root.querySelector('.dbtefx-canvas');
   if (!stage || !Object.values(tokens || {}).every(isHex)) return () => {};
   const ctx = canvas ? canvas.getContext('2d') : null;
+  // The shader layer, if the scene has one and it can run here; otherwise its
+  // canvas goes and the scene shows without it.
+  const glCanvas = root.querySelector('.dbtefx-gl');
+  let layer = glCanvas ? createShaderLayer(glCanvas, shader, tokens, quality, { onLost: () => dropLayer() }) : null;
+  const dropLayer = () => {
+    if (layer) layer.dispose();
+    layer = null;
+    if (glCanvas) glCanvas.remove();
+  };
+  if (glCanvas && !layer) glCanvas.remove();
   const light = luminance(tokens.surface) > 0.4;
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   const mql = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -309,6 +320,7 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
   const drawStill = () => {
     stage.style.transform = '';
     if (ctx) drawSystems(ctx, systems, tokens, 0, w, h, 0, 0, light);
+    if (layer) layer.drawStill(12);
   };
   // The canvas fills the (slightly oversized) stage: size its bitmap to its
   // own layout box so particles stay sharp.
@@ -321,6 +333,7 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       systems = createSystems(config, w, h);
     }
+    if (layer) layer.resize();
     if (isStill()) drawStill();
   };
   let resizeTimer = 0;
@@ -336,14 +349,15 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
     last = now;
     t += dt;
     // The drift only runs alongside particles; a scene without them holds still.
-    px = ctx ? 0.22 * Math.sin(t * 0.07) : 0;
-    py = ctx ? 0.14 * Math.cos(t * 0.05) : 0;
+    px = ctx || layer ? 0.22 * Math.sin(t * 0.07) : 0;
+    py = ctx || layer ? 0.14 * Math.cos(t * 0.05) : 0;
     stage.style.transform = `rotateX(${(-py * TILT_X).toFixed(3)}deg) rotateY(${(px * TILT_Y).toFixed(3)}deg)`;
     if (ctx) {
       stepSystems(systems, dt, t, w, h);
       drawSystems(ctx, systems, tokens, t, w, h, px, py, light);
     }
-    if (ctx) raf = requestAnimationFrame(frame);
+    if (layer) layer.draw(t, now);
+    if (ctx || layer) raf = requestAnimationFrame(frame);
   };
   const wake = () => {
     if (raf || isStill() || document.hidden) return;
@@ -373,5 +387,6 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
     if (mql && mql.removeEventListener) mql.removeEventListener('change', onMotionPref);
     stage.style.transform = '';
     if (ctx) ctx.clearRect(0, 0, w, h);
+    if (layer) layer.dispose();
   };
 };

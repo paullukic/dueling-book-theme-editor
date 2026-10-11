@@ -372,7 +372,7 @@ export const skinCss = (presetId, tokens, areas = {}, { motif = true } = {}) => 
    Planes sit at depth; each is scaled back to fill the window at rest. */
 #${FX_ID} .dbtefx-stage { position: absolute; inset: -6%; transform-style: preserve-3d; will-change: transform; }
 #${FX_ID} .dbtefx-stage > * { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-#${FX_ID} .dbtefx-far { transform: translateZ(-420px) scale(1.3); }
+#${FX_ID} .dbtefx-far, #${FX_ID} .dbtefx-gl { transform: translateZ(-420px) scale(1.3); }
 #${FX_ID} .dbtefx-canvas { transform: translateZ(120px) scale(0.914); }
 #${FX_ID} .dbtefx-near { transform: translateZ(220px) scale(0.843); }
 html #spiral { filter: ${tintFilter(tokens.accent)} brightness(0.8) !important; }

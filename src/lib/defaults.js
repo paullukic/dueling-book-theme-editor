@@ -78,6 +78,7 @@ export const DEFAULTS = {
   themeEffects: true, // the preset's signature skin (backdrop motif, glows, ornaments)
   themeMotif: true, // the skin's artwork; its glows stay when this is off
   themeMotion: true, // scenes move (always still with reduced motion)
+  themeQuality: 'low', // WebGL scene effects: 'off' | 'low' (half resolution, 30 fps) | 'high'
   customCssEnabled: false,
 
   // Duel
@@ -192,6 +193,7 @@ const RANGES = {
 };
 
 const ONE_OF = {
+  themeQuality: ['off', 'low', 'high'],
   backgroundMode: ['image', 'color'],
   themeFont: FONTS.map((f) => f.id),
   cardTextFont: CARD_TEXT_FONTS.map((f) => f.id),

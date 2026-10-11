@@ -8,7 +8,8 @@ import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
-import { PARTICLES, SCENE_IDS, sceneMarkup } from '../src/features/theme/scenes.js';
+import { PARTICLES, SCENE_IDS, SHADERS, sceneMarkup } from '../src/features/theme/scenes.js';
+import { QUALITY, fragmentSource, uniformName } from '../src/features/theme/shader.js';
 import { PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
 import { launcherBottom } from '../src/lib/layout.js';
 import { sameShape } from '../src/lib/shape.js';
@@ -407,4 +408,21 @@ test('background: solid colour mode is validated like every colour', () => {
   assert.equal(withDefaults({ backgroundMode: 'color', backgroundColor: '#123abc' }).backgroundColor, '#123abc');
   assert.equal(withDefaults({ backgroundColor: 'red;}body{display:none' }).backgroundColor, DEFAULTS.backgroundColor);
   assert.equal(withDefaults({ backgroundMode: 'video' }).backgroundMode, 'image');
+});
+
+test('shaders: registered shaders are well-formed and sit behind the scene', () => {
+  assert.ok(Object.keys(SHADERS).length >= 1);
+  Object.entries(SHADERS).forEach(([id, def]) => {
+    assert.match(def.frag, /void main\(\)/, id);
+    const src = fragmentSource(def);
+    (def.uniforms || []).forEach((tk) => assert.ok(src.includes(`uniform vec3 ${uniformName(tk)};`), `${id} ${tk}`));
+    assert.match(src, /^precision mediump float;/, id);
+    const preset = PRESETS.find((p) => p.id === id);
+    const m = sceneMarkup(id, preset.tokens, { particles: true, shader: true });
+    assert.ok(m.indexOf('dbtefx-gl') < m.indexOf('dbtefx-far') || !m.includes('dbtefx-far'), `${id} gl canvas is the farthest plane`);
+  });
+  assert.equal(uniformName('accentText'), 'u_accent_text');
+  assert.equal(DEFAULTS.themeQuality, 'low');
+  assert.equal(withDefaults({ themeQuality: 'ultra' }).themeQuality, 'low');
+  assert.equal(QUALITY.off, null);
 });

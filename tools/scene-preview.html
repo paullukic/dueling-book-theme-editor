@@ -20,7 +20,7 @@
 <script type="module">
 import { PRESETS } from '../src/features/theme/presets.js';
 import { skinCss } from '../src/features/theme/skins.js';
-import { sceneMarkup, FX_ID, PARTICLES } from '../src/features/theme/scenes.js';
+import { sceneMarkup, FX_ID, PARTICLES, SHADERS } from '../src/features/theme/scenes.js';
 import { startFx } from '../src/features/theme/particles.js';
 
 const q = new URLSearchParams(location.search);
@@ -39,8 +39,9 @@ document.head.appendChild(style);
   document.body.appendChild(el);
 });
 const fx = document.getElementById(FX_ID);
-fx.innerHTML = sceneMarkup(preset.id, t, { still, particles: !!PARTICLES[preset.id] });
-startFx(fx, PARTICLES[preset.id], t, { still });
+const quality = q.get('quality') || 'low';
+fx.innerHTML = sceneMarkup(preset.id, t, { still, particles: !!PARTICLES[preset.id], shader: !!SHADERS[preset.id] && quality !== 'off' });
+startFx(fx, PARTICLES[preset.id], t, { still, shader: SHADERS[preset.id], quality });
 
 // A rough mock of DuelingBook's main menu: tile column left, bulletin centre.
 if (q.get('ui') === '1') {
