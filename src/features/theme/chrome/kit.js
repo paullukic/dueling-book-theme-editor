@@ -37,7 +37,7 @@ export const SEL = {
   okButton: sel(['#content img[src*="/svg/ok_btn"]', '#content img[src*="/svg/yes_btn"]']),
   noButton: sel(['#content img[src*="/svg/no_btn"]', '#content img[src*="/svg/cancel_btn"]']),
   // Settings sections, page titles, the duel log and native submit buttons.
-  settingsPanel: sel(['#content #settings_content > div:not(.title_txt)']),
+  settingsPanel: sel(['#content #settings_content > div:not(.title_txt):not(.button)']),
   title: sel(['#content .title1', '#content .title_txt.arial_black2']),
   duelLog: sel(['#duel .cout_txt']),
   submit: sel(['#content input[type=submit]']),
