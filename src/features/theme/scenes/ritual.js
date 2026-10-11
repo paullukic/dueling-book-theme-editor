@@ -1,11 +1,11 @@
 import { mix } from '../../../lib/color.js';
 import { anim, H, n1, polar, W } from './kit.js';
 
-// Ritual: one engraved summoning seal hangs over a stone altar. Its rings
+// Ritual: one engraved summoning seal hangs in a stone shrine over the altar. Its rings
 // turn slowly against each other, a pulse of light leaves the centre on a
 // long loop, and candle smoke climbs from the altar into the dark.
 
-const cx = 1292;
+const cx = 1252;
 const cy = 392;
 
 // Tiny engraved runes for the seal's rune band.
@@ -46,15 +46,29 @@ const scene = (t) => {
     seed += `<circle cx="${x}" cy="${y}" r="20"/>`;
   }
 
-  // Crescent horns framing the seal, gold, after the Nekroz mirror frames.
-  const horn = (dir) => {
-    const a = polar(0, 0, 156, dir > 0 ? -74 : -106).join(' ');
-    const b = polar(0, 0, 156, dir > 0 ? 62 : 118).join(' ');
-    return `M${a}A156 156 0 0 ${dir > 0 ? 1 : 0} ${b}A176 176 0 0 ${dir > 0 ? 0 : 1} ${a}Z`;
+  // The shrine: a stone arch of wedge blocks over the seal, keystone carved
+  // with the Ritual triangle, carried by two pillars standing on the altar.
+  const block = (r1, r2, a0, a1) => {
+    const [p, q, u, v] = [polar(0, 0, r1, a0), polar(0, 0, r1, a1), polar(0, 0, r2, a1), polar(0, 0, r2, a0)];
+    return `M${p.join(' ')}A${r1} ${r1} 0 0 1 ${q.join(' ')}L${u.join(' ')}A${r2} ${r2} 0 0 0 ${v.join(' ')}Z`;
   };
+  let arch = '';
+  for (let k = 0; k < 9; k++) {
+    const a0 = 180 + k * 20;
+    arch += k === 4 ? `<path d="${block(136, 184, a0 + 0.8, a0 + 19.2)}"/>` : `<path d="${block(140, 172, a0 + 0.8, a0 + 19.2)}"/>`;
+  }
+  const pillar = `<g fill="url(#dbtefx-ri-pillar)" stroke="#000000" stroke-opacity="0.5" stroke-width="1">
+<rect x="142" y="10" width="26" height="336"/><rect x="134" y="0" width="42" height="12"/><rect x="136" y="344" width="38" height="12"/></g>
+<path d="M134 0H176M142 12V346" stroke="${pale}" stroke-opacity="0.35" stroke-width="1"/>
+<rect x="142" y="118" width="26" height="5" fill="${gold}" fill-opacity="0.55"/>
+<path d="M149 40H161L155 52Z" fill="none" stroke="#000000" stroke-opacity="0.6" stroke-width="2.2"/><path d="M149 40H161L155 52Z" transform="translate(0.6 0.8)" fill="none" stroke="${gold}" stroke-opacity="0.5" stroke-width="0.9"/>`;
+  const shrine = `${pillar}<g transform="scale(-1 1)">${pillar}</g>
+<g fill="url(#dbtefx-ri-slab)" stroke="#000000" stroke-opacity="0.55" stroke-width="1.2">${arch}</g>
+<path d="M${polar(0, 0, 141, 181).join(' ')}A141 141 0 0 1 ${polar(0, 0, 141, 359).join(' ')}" fill="none" stroke="${pale}" stroke-opacity="0.35" stroke-width="1.2"/>
+<path d="M-11 -166H11L0 -148Z" fill="none" stroke="#000000" stroke-opacity="0.7" stroke-width="2.6"/><path d="M-11 -166H11L0 -148Z" transform="translate(0.6 0.8)" fill="none" stroke="${gold}" stroke-opacity="0.75" stroke-width="1.1"/>`;
 
   // Candles on the altar, each trailing a ribbon of smoke.
-  const candles = [[1206, 46], [1244, 64], [1376, 64], [1414, 46]];
+  const candles = [[cx - 104, 46], [cx - 66, 64], [cx + 66, 64], [cx + 104, 46]];
   let wax = '';
   let dishes = '';
   let flames = '';
@@ -76,6 +90,10 @@ const scene = (t) => {
 <radialGradient id="dbtefx-ri-core"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="0.3" stop-color="${pale}" stop-opacity="0.5"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-ri-beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${blue}" stop-opacity="0"/><stop offset="0.5" stop-color="${pale}" stop-opacity="0.3"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-ri-stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${stoneHi}"/><stop offset="0.12" stop-color="${stone}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
+<linearGradient id="dbtefx-ri-pillar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(stoneHi, pale, 0.15)}"/><stop offset="0.4" stop-color="${stone}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
+<linearGradient id="dbtefx-ri-side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${pale}" stop-opacity="0.08"/><stop offset="0.3" stop-color="#000000" stop-opacity="0"/><stop offset="0.75" stop-color="#000000" stop-opacity="0.15"/><stop offset="1" stop-color="#000000" stop-opacity="0.5"/></linearGradient>
+<linearGradient id="dbtefx-ri-slab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(stoneHi, pale, 0.2)}"/><stop offset="1" stop-color="${mix(stone, '#000000', 0.2)}"/></linearGradient>
+<linearGradient id="dbtefx-ri-panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.35"/><stop offset="0.35" stop-color="${stone}" stop-opacity="0.6"/><stop offset="1" stop-color="${mix(stone, blue, 0.15)}" stop-opacity="0.7"/></linearGradient>
 <linearGradient id="dbtefx-ri-wax" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.text, t.bg, 0.55)}"/><stop offset="0.4" stop-color="${mix(t.text, t.bg, 0.25)}"/><stop offset="1" stop-color="${mix(t.text, t.bg, 0.7)}"/></linearGradient>
 <radialGradient id="dbtefx-ri-flame" cx="0.5" cy="0.65" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="0.45" stop-color="${gold}"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ri-candle" gradientUnits="userSpaceOnUse" cx="${cx}" cy="660" r="190"><stop offset="0" stop-color="${gold}" stop-opacity="0.22"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
@@ -89,9 +107,7 @@ const scene = (t) => {
 <path d="M${cx - 14} ${cy + 96}H${cx + 14}L${cx + 70} 690H${cx - 70}Z" fill="url(#dbtefx-ri-beam)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
 <g transform="translate(${cx} ${cy}) scale(0.9)">
 <circle r="160" fill="url(#dbtefx-ri-core)" opacity="0.35"/>
-<g fill="${mix(t.bg, gold, 0.35)}" stroke="${gold}" stroke-width="1.2" stroke-linejoin="round"><path d="${horn(1)}"/><path d="${horn(-1)}"/></g>
-<g fill="none" stroke="${mix(gold, '#ffffff', 0.45)}" stroke-opacity="0.55" stroke-width="0.8"><path d="M${polar(0, 0, 163, -66).join(' ')}A163 163 0 0 1 ${polar(0, 0, 163, 54).join(' ')}"/><path d="M${polar(0, 0, 163, -114).join(' ')}A163 163 0 0 0 ${polar(0, 0, 163, 126).join(' ')}"/></g>
-${[-74, -106].map((a) => `<circle cx="${polar(0, 0, 156, a)[0]}" cy="${polar(0, 0, 156, a)[1]}" r="4" fill="${gold}"/>`).join('')}
+${shrine}
 <circle r="128" fill="none" stroke="${blue}" stroke-opacity="0.14" stroke-width="10"/>
 <g fill="none" stroke="${pale}" style="animation: dbtefx-spin 120s linear infinite;">
 <circle r="128" stroke-width="2"/><circle r="122" stroke-width="0.8"/><circle r="104" stroke-width="0.8"/>
@@ -110,10 +126,26 @@ ${tri.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="11" fill="${mix(t.bg, gold
 <g style="animation: dbtefx-ri-pulse 8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;"><circle r="100" fill="none" stroke="${pale}" stroke-width="2"/></g>
 </g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-candle)"/>
-<path d="M${cx - 150} 852V720H${cx + 150}V852Z" fill="url(#dbtefx-ri-stone)"/>
-<path d="M${cx - 134} 720V700H${cx + 134}V720ZM${cx - 120} 700V690H${cx + 120}V700Z" fill="${stoneHi}"/>
-<path d="M${cx - 150} 720H${cx + 150}M${cx - 134} 700H${cx + 134}" stroke="${pale}" stroke-opacity="0.45" stroke-width="1"/>
-<g fill="none" stroke="${blue}" stroke-opacity="0.45" stroke-width="1.2"><rect x="${cx - 110}" y="738" width="220" height="92"/><rect x="${cx - 102}" y="746" width="204" height="76"/><path d="M${cx - 30} 762H${cx + 30}L${cx} 812Z"/><circle cx="${cx}" cy="779" r="9"/></g>
+<path d="M${cx - 146} 852V724H${cx + 146}V852Z" fill="url(#dbtefx-ri-stone)"/>
+<path d="M${cx - 146} 852V724H${cx + 146}V852Z" fill="url(#dbtefx-ri-side)"/>
+<path d="M${cx - 146} 852V724" stroke="${pale}" stroke-opacity="0.22" stroke-width="1.5"/>
+<path d="M${cx - 156} 724V712H${cx + 156}V724Z" fill="url(#dbtefx-ri-slab)"/>
+<path d="M${cx - 156} 712H${cx + 156}" stroke="${pale}" stroke-opacity="0.6" stroke-width="1.2"/>
+<path d="M${cx - 156} 724H${cx + 156}" stroke="#000000" stroke-opacity="0.55" stroke-width="2"/>
+<path d="M${cx - 146} 727H${cx + 146}" stroke="#000000" stroke-opacity="0.25" stroke-width="5"/>
+<path d="M${cx - 134} 712V700H${cx + 134}V712Z" fill="url(#dbtefx-ri-slab)"/>
+<path d="M${cx - 134} 700H${cx + 134}" stroke="${pale}" stroke-opacity="0.5" stroke-width="1"/>
+<path d="M${cx - 120} 700V690H${cx + 120}V700Z" fill="url(#dbtefx-ri-slab)"/>
+<path d="M${cx - 120} 690H${cx + 120}" stroke="${mix(pale, gold, 0.4)}" stroke-opacity="0.65" stroke-width="1"/>
+<rect x="${cx - 112}" y="742" width="224" height="92" fill="${dark}" fill-opacity="0.75"/>
+<path d="M${cx - 112} 834V742H${cx + 112}" fill="none" stroke="#000000" stroke-opacity="0.7" stroke-width="3"/>
+<path d="M${cx - 112} 834H${cx + 112}V742" fill="none" stroke="${pale}" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="${cx - 100}" y="752" width="200" height="72" fill="url(#dbtefx-ri-panel)"/>
+<path d="M${cx - 100} 824V752H${cx + 100}" fill="none" stroke="${pale}" stroke-opacity="0.22" stroke-width="1"/>
+<path d="M${cx - 100} 824H${cx + 100}V752" fill="none" stroke="#000000" stroke-opacity="0.5" stroke-width="1.5"/>
+<g fill="none" stroke-linejoin="round"><g stroke="#000000" stroke-opacity="0.7" stroke-width="3"><path d="M${cx - 34} 764H${cx + 34}L${cx} 816Z"/><circle cx="${cx}" cy="781" r="10"/><path d="M${cx - 84} 788H${cx - 50}M${cx + 50} 788H${cx + 84}"/></g>
+<g stroke="${mix(blue, gold, 0.3)}" stroke-opacity="0.6" stroke-width="1.2" transform="translate(0.8 1.2)"><path d="M${cx - 34} 764H${cx + 34}L${cx} 816Z"/><circle cx="${cx}" cy="781" r="10"/><path d="M${cx - 84} 788H${cx - 50}M${cx + 50} 788H${cx + 84}"/></g></g>
+${[-1, 1].map((d) => `<circle cx="${cx + d * 67}" cy="788" r="4" fill="${dark}" stroke="${gold}" stroke-opacity="0.55"/>`).join('')}
 <g fill="url(#dbtefx-ri-wax)">${wax}</g>
 <g fill="${gold}" fill-opacity="0.8">${dishes}</g>
 ${flames}
