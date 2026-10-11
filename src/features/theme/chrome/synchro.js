@@ -4,8 +4,8 @@
 
 import { mix } from '../../../lib/color.js';
 
-// Compact data URI: only the characters CSS and URLs need are escaped (braces too).
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
+const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().
@@ -31,10 +31,12 @@ export default (t, { SEL, sel, svg, alpha }) => {
 ${[[s * 0.4, s * 0.4], [48 - s * 0.4, s * 0.4], [s * 0.4, 48 - s * 0.4], [48 - s * 0.4, 48 - s * 0.4]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${s * 0.22}" fill="${glow}" opacity=".35"/>${star(x, y, s * 0.38)}`).join('')}`);
 
   // Tuner rings in perspective with a streak of starlight through them.
+  // Three tuner rings at the left edge; one stream of light runs out of them behind the label.
   const rings = (on) =>
-    svg(220, 60, `<g fill="none" stroke="${on ? '#ffffff' : pearl}" stroke-opacity="${on ? 0.75 : 0.1}" stroke-width="${on ? 1.4 : 1}">${[16, 28, 40, 180, 192, 204].map((x) => `<ellipse cx="${x}" cy="30" rx="5" ry="22"/>`).join('')}</g>
-<rect x="0" y="29" width="220" height="2" fill="url(#l)"/><defs><linearGradient id="l"><stop offset="0" stop-color="${glow}" stop-opacity="0"/><stop offset=".5" stop-color="${on ? '#ffffff' : glow}" stop-opacity="${on ? 0.9 : 0.3}"/><stop offset="1" stop-color="${glow}" stop-opacity="0"/></linearGradient></defs>
-${on ? [22, 34, 186, 198].map((x, i) => star(x, 30, i % 2 ? 3.5 : 5)).join('') : ''}`);
+    svg(220, 60, `<defs><linearGradient id="l"><stop offset="0" stop-color="#ffffff" stop-opacity="${on ? 0.95 : 0.6}"/><stop offset=".25" stop-color="${glow}" stop-opacity="${on ? 0.6 : 0.3}"/><stop offset="1" stop-color="${glow}" stop-opacity="0"/></linearGradient><linearGradient id="v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient><mask id="m"><rect y="22" width="220" height="16" fill="url(#v)"/></mask></defs>
+<rect y="22" width="220" height="16" fill="url(#l)" mask="url(#m)"/><rect y="29.4" width="200" height="1.2" fill="url(#l)"/>
+<g fill="none" stroke="${on ? '#ffffff' : pearl}" stroke-opacity="${on ? 0.9 : 0.32}" stroke-width="${on ? 1.4 : 1}">${[7, 14, 21].map((x) => `<ellipse cx="${x}" cy="30" rx="2.8" ry="23"/>`).join('')}</g>
+${on ? [48, 96, 150].map((x, i) => star(x, 30, 4 - i)).join('') : ''}`);
   const dust = U(svg(120, 120, [[8, 14, 0.9], [44, 6, 0.6], [90, 22, 1.1], [70, 58, 0.7], [20, 80, 1], [104, 96, 0.6], [56, 104, 0.9], [34, 40, 0.5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#ffffff" opacity="${0.18 + r * 0.25}"/>`).join('')));
   const face = `linear-gradient(180deg, ${alpha('#ffffff', 0.07)}, transparent 40%, ${alpha(t.bg, 0.3)})`;
 
@@ -47,6 +49,18 @@ ${on ? [22, 34, 186, 198].map((x, i) => star(x, 30, i % 2 ? 3.5 : 5)).join('') :
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
   const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  // Pop-up buttons (DuelingBook draws them as images): the primary one is the
+  // white Synchro frame with a dark label, the secondary graphite in a pearl rim.
+  const FONT = 'Segoe UI,Arial,sans-serif';
+  const popBtn = (label, wide, primary) => {
+    const w = wide ? 234.85 : 153.4;
+    const h = wide ? 78.5 : 78.47;
+    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? '#ffffff' : t.raised}"/><stop offset=".55" stop-color="${primary ? pearl : t.surface}"/><stop offset="1" stop-color="${primary ? silver : deep}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="4" fill="url(#k)" stroke="${primary ? '#ffffff' : silver}" stroke-width="2.5"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="2" fill="none" stroke="${primary ? silver : alpha(pearl, 0.35)}" stroke-width="1"/>${star(w - 14, 14, 9)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
+  };
+  const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
+  // Backdrop: one off-centre cluster of tuner rings with a stream through it.
+  const cluster = svg(800, 800, `<g fill="none" stroke="${pearl}" stroke-opacity=".07" stroke-width="3">${[300, 400, 500].map((x) => `<ellipse cx="${x}" cy="400" rx="60" ry="320"/>`).join('')}</g><rect y="397" width="800" height="6" fill="${glow}" fill-opacity=".06"/>`);
   const corners = (s) => ['left top', 'right top', 'left bottom', 'right bottom'].map((p) => `${U(sparkle())} ${p} / ${s}px no-repeat`).join(', ');
 
   const css = `
@@ -100,13 +114,13 @@ ${T(['#content input[type=text]:focus', '#content input[type=password]:focus', '
 
 /* ---- Pop-ups: white frame, star corners, rings behind the title ---- */
 ${dlg()} {
-  background: ${U(rings(false))} center top 4px / 100% 70px no-repeat, ${face}, ${dust} 0 0 / 120px, linear-gradient(180deg, ${t.raised}, ${t.surface} 40%, ${deep}) !important;
+  background: ${face}, ${dust} 0 0 / 120px, linear-gradient(180deg, ${t.raised}, ${t.surface} 40%, ${deep}) !important;
   border-radius: 0 !important;
   box-shadow: 0 0 0 1px ${t.bg}, 0 0 30px -8px ${alpha(glow, 0.6)}, 0 24px 50px -14px ${alpha('#000000', 0.9)} !important;
 }
 ${dlg('::after')} { content: ""; position: absolute; inset: -4px; pointer-events: none; z-index: 1; border: 14px solid transparent; border-image: ${tileFrame} 16 / 16px / 0 stretch; }
 ${SEL.dialogTitle} { color: #ffffff !important; text-shadow: 0 0 14px ${alpha(glow, 0.8)}, 0 2px 1px ${t.bg} !important; }
-${dlg(' .body_txt')} { color: ${t.muted} !important; }
+${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 /* ---- Chat: a pearl title bar ---- */
 ${SEL.chatTop} {
@@ -144,10 +158,10 @@ ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${silver} !important; }
 
 /* ---- Duel room: white-framed bays with star corners ---- */
 ${lobby()} { background-color: ${alpha(t.surface, 0.85)} !important; background-image: ${dust} !important; background-size: 120px !important; }
-${lobby('::before')} { background: linear-gradient(135deg, #ffffff, ${pearl} 30%, ${silver} 55%, ${pearl} 80%, #ffffff) !important; }
+${lobby('::before')} { filter: none !important; background: linear-gradient(135deg, #ffffff, ${pearl} 30%, ${silver} 55%, ${pearl} 80%, #ffffff) !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(135deg, #ffffff, ${glow} 50%, #ffffff) !important; }
 ${lobby('::after')} { content: ""; position: absolute; inset: -8px; pointer-events: none; background: ${corners(20)}; }
-${T(['#duel_room .format_txt', '#duel_room #host_lbl', '#duel_room .arial_black2'])} { color: #ffffff !important; text-shadow: 0 0 12px ${alpha(glow, 0.6)}, 0 2px 1px ${t.bg} !important; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: #ffffff !important; text-shadow: 0 0 12px ${alpha(glow, 0.6)}, 0 2px 1px ${t.bg} !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, ${t.raised}, ${deep}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, ${mix(t.raised, glow, 0.18)}, ${deep}) !important; }
 
@@ -160,6 +174,18 @@ ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constr
 /* ---- Settings: white frames ---- */
 ${settings} { border-color: transparent !important; border-image: ${tileFrame} 16 / 12px / 3px stretch !important; border-radius: 0 !important; background-image: ${dust}, ${face} !important; }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: #ffffff !important; text-shadow: 0 0 12px ${alpha(glow, 0.6)}, 0 2px 1px ${t.bg} !important; }
+
+/* ---- Pop-up buttons, panel title plates ---- */
+${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
+${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
+${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
+${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
+${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(glow, 0.9)}) !important; }
+${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .2em; }
+
+/* ---- Backdrop: one tuner-ring cluster, off centre, no repeat ---- */
+html body #dbte-skin-motif { background: ${U(cluster)} 78% 50% / min(110vh, 1100px) no-repeat !important; }
+html body #dbte-skin-motif::before { background: none !important; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${silver}, #ffffff, ${silver}) !important; border-radius: 1px !important; }

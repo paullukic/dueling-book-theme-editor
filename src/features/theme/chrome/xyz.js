@@ -4,8 +4,8 @@
 
 import { mix } from '../../../lib/color.js';
 
-// Compact data URI: only the characters CSS and URLs need are escaped (braces too).
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
+const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().
@@ -25,14 +25,14 @@ export default (t, { SEL, sel, svg, alpha }) => {
     for (let i = 0; i < 10; i++) {
       const a = -Math.PI / 2 + (i * Math.PI) / 5;
       const rr = i % 2 ? r * 0.45 : r;
-      pts.push(`${(x + Math.cos(a) * rr).toFixed(1)},${(y + Math.sin(a) * rr).toFixed(1)}`);
+      pts.push(`${(x + Math.cos(a) * rr).toFixed(2)},${(y + Math.sin(a) * rr).toFixed(2)}`);
     }
     return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
   };
   // A Rank star: black orb, gold rim, gold star.
-  const rankStar = (x, y, r) =>
-    `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#o)" stroke="${gold}" stroke-width="${r * 0.14}"/>${star5(x, y + r * 0.04, r * 0.62, 'url(#g)')}<ellipse cx="${x - r * 0.3}" cy="${y - r * 0.45}" rx="${r * 0.35}" ry="${r * 0.18}" fill="#ffffff" opacity=".25"/>`;
-  const defs = `<defs><radialGradient id="o" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="${t.raised}"/><stop offset="1" stop-color="${t.bg}"/></radialGradient><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${goldLight}"/><stop offset=".6" stop-color="${gold}"/><stop offset="1" stop-color="${goldDeep}"/></linearGradient></defs>`;
+  // Drawn once at unit size in the defs, placed with <use>.
+  const rankStar = (x, y, r) => `<use href="#R" transform="translate(${+x.toFixed(1)} ${+y.toFixed(1)}) scale(${+r.toFixed(2)})"/>`;
+  const defs = `<defs><radialGradient id="o" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="${t.raised}"/><stop offset="1" stop-color="${t.bg}"/></radialGradient><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${goldLight}"/><stop offset=".6" stop-color="${gold}"/><stop offset="1" stop-color="${goldDeep}"/></linearGradient><g id="R"><circle r="1" fill="url(#o)" stroke="${gold}" stroke-width=".14"/>${star5(0, 0.04, 0.62, 'url(#g)')}<ellipse cx="-.3" cy="-.45" rx=".35" ry=".18" fill="#ffffff" opacity=".25"/></g></defs>`;
   const unitDefs = `<defs><radialGradient id="u"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="${goldLight}"/><stop offset=".7" stop-color="${gold}" stop-opacity=".55"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient></defs>`;
   const rankRow = (n, r = 6) => svg(n * r * 2.5, r * 2.4, defs + Array.from({ length: n }, (_, i) => rankStar(r * 1.2 + i * r * 2.5, r * 1.2, r)).join(''));
   const rankOne = (r = 10) => svg(r * 2.4, r * 2.4, defs + rankStar(r * 1.2, r * 1.2, r));
@@ -64,12 +64,36 @@ ${stars ? [[b / 2 + 1, b / 2 + 1], [47 - b / 2, b / 2 + 1], [b / 2 + 1, 47 - b /
     return [h('left 1px top 1px'), v('left 1px top 1px'), h('right 1px bottom 1px'), v('right 1px bottom 1px'), h('right 1px top 1px'), v('right 1px top 1px'), h('left 1px bottom 1px'), v('left 1px bottom 1px')].join(', ');
   };
 
+  // Pop-up buttons (DuelingBook draws them as images): the primary is a gold
+  // plate with a dark label, the secondary black lacquer in the gold double rule.
+  const FONT = 'Segoe UI,Arial,sans-serif';
+  const popBtn = (label, wide, primary) => {
+    const w = wide ? 234.85 : 153.4;
+    const h = wide ? 78.5 : 78.47;
+    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? goldLight : t.raised}"/><stop offset=".55" stop-color="${primary ? gold : ink}"/><stop offset="1" stop-color="${primary ? mix(gold, goldDeep, 0.5) : t.bg}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="3" fill="url(#k)" stroke="${primary ? goldDeep : gold}" stroke-width="2"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="1" fill="none" stroke="${primary ? alpha(t.bg, 0.45) : goldDeep}" stroke-width="1.2"/><text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : goldLight}">${label}</text>`);
+  };
+  const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
+  // Backdrop: sparkles scattered at random, 40-70% of the old size.
+  const sparkleField = (() => {
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+    let out = '';
+    for (let i = 0; i < 14; i++) {
+      const x = 20 + rnd() * 560;
+      const y = 20 + rnd() * 560;
+      const r = 3 + rnd() * 4;
+      out += `<use href="#s" transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) scale(${r.toFixed(1)})" opacity="${(0.14 + rnd() * 0.16).toFixed(2)}"/>`;
+    }
+    return svg(600, 600, `<defs><path id="s" d="M0-1L.28-.28L1 0L.28.28L0 1L-.28.28L-1 0L-.28-.28Z" fill="${gold}"/></defs>${out}`);
+  })();
+
   const css = `
 /* ---- Menu tiles: black plate, gold double rule, Rank stars at the corners, overlay units on hover ---- */
 ${SEL.tile} {
   background: ${face}, ${field} 0 0 / 140px, linear-gradient(180deg, ${t.raised}, ${t.bg}) !important;
   border-color: transparent !important;
-  border-image: ${tileFrame} 12 / 12px / 3px stretch !important;
+  border-image: ${tileFrame} 12 / 12px / 0 stretch !important;
   border-radius: 0 !important;
   box-shadow: 0 10px 24px -12px ${alpha('#000000', 0.95)} !important;
 }
@@ -126,7 +150,7 @@ ${dlg()} {
 }
 ${dlg('::after')} { content: ""; position: absolute; inset: -6px; pointer-events: none; z-index: 1; border: 16px solid transparent; border-image: ${tileFrame} 12 / 16px / 0 stretch; }
 ${SEL.dialogTitle} { color: ${goldLight} !important; text-shadow: 0 2px 2px #000000, 0 0 14px ${alpha(gold, 0.55)} !important; }
-${dlg(' .body_txt')} { color: ${t.muted} !important; }
+${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 /* ---- Chat: black title bar on a gold rule, a Rank-star row ---- */
 ${SEL.chatTop} {
@@ -163,10 +187,10 @@ ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${goldDeep} !important; 
 
 /* ---- Duel room: black bays, gold rule, Rank-star corners ---- */
 ${lobby()} { background-color: ${alpha(t.surface, 0.88)} !important; background-image: ${field} !important; background-size: 140px !important; }
-${lobby('::before')} { background: linear-gradient(135deg, ${goldLight}, ${gold} 25%, ${goldDeep} 50%, ${gold} 75%, ${goldLight}) !important; padding: 2px !important; }
+${lobby('::before')} { filter: none !important; background: linear-gradient(135deg, ${goldLight}, ${gold} 25%, ${goldDeep} 50%, ${gold} 75%, ${goldLight}) !important; padding: 2px !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(135deg, #ffffff, ${goldLight} 40%, ${gold}) !important; }
 ${lobby('::after')} { content: ""; position: absolute; inset: -9px; pointer-events: none; background: ${['left top', 'right top', 'left bottom', 'right bottom'].map((p) => `${U(rankOne())} ${p} / 20px no-repeat`).join(', ')}; }
-${T(['#duel_room .format_txt', '#duel_room #host_lbl', '#duel_room .arial_black2'])} { color: ${goldLight} !important; text-shadow: 0 2px 2px #000000, 0 0 12px ${alpha(gold, 0.45)} !important; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: ${goldLight} !important; text-shadow: 0 2px 2px #000000, 0 0 12px ${alpha(gold, 0.45)} !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, ${t.raised}, ${t.bg}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, ${mix(t.raised, gold, 0.14)}, ${t.bg}) !important; }
 ${T(['#duel_room .duelbutton'])} { border-color: ${alpha(gold, 0.22)} !important; }
@@ -180,6 +204,18 @@ ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constr
 /* ---- Settings: black plates in the gold Xyz frame ---- */
 ${settings()} { border-color: transparent !important; border-image: ${tileFrame} 12 / 12px / 0 stretch !important; border-radius: 0 !important; background-image: ${field}, ${face} !important; }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: ${goldLight} !important; text-shadow: 0 2px 2px #000000, 0 0 12px ${alpha(gold, 0.45)} !important; }
+
+/* ---- Pop-up buttons, panel title plates ---- */
+${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
+${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
+${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
+${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
+${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(gold, 0.9)}) !important; }
+${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .1em; }
+
+/* ---- Backdrop: a random scatter of small sparkles instead of the even grid ---- */
+html body #dbte-skin-motif { background: ${U(sparkleField)} 0 0 / 600px 600px repeat !important; }
+html body #dbte-skin-motif::before { background: none !important; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${goldDeep}, ${gold}, ${goldDeep}) !important; border-radius: 1px !important; }

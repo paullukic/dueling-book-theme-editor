@@ -4,8 +4,8 @@
 
 import { mix } from '../../../lib/color.js';
 
-// Compact data URI: only the characters CSS and URLs need are escaped (braces too).
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
+const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().
@@ -43,6 +43,10 @@ ${lit ? `<ellipse cx="20" cy="10" rx="19" ry="9" fill="${color}" opacity=".28"/>
   // Hull plating: vertical seams every `w` px plus a fine brushed grain.
   const plating = (w, a = 0.5) =>
     `repeating-linear-gradient(90deg, transparent 0 ${w - 2}px, ${alpha(t.bg, a)} ${w - 2}px ${w - 1}px, ${alpha('#ffffff', a * 0.12)} ${w - 1}px ${w}px), repeating-linear-gradient(0deg, ${alpha('#ffffff', 0.018)} 0 1px, transparent 1px 3px)`;
+  // Segmented hull plates: each plate lit on its left edge, shadowed on its right.
+  const plates = (w) => `repeating-linear-gradient(90deg, ${alpha('#ffffff', 0.1)} 0 1px, transparent 1px ${w - 6}px, ${alpha(t.bg, 0.25)} ${w - 6}px ${w - 2}px, ${alpha(t.bg, 0.85)} ${w - 2}px ${w}px), repeating-linear-gradient(0deg, ${alpha('#ffffff', 0.018)} 0 1px, transparent 1px 3px)`;
+  // The top rail: three chrome segments with cut ends (stretched to the tile width).
+  const rail = svg(300, 10, `<defs>${chromeGrad('r')}</defs>${[[2, 96], [102, 196], [202, 296]].map(([x0, x1]) => `<path d="M${x0 + 4} 0H${x1 - 4}L${x1} 5L${x1 - 4} 10H${x0 + 4}L${x0} 5Z" fill="url(#r)" stroke="${t.bg}" stroke-width=".8"/>`).join('')}`).replace('<svg ', '<svg preserveAspectRatio="none" ');
   const sheen = `linear-gradient(180deg, ${alpha('#ffffff', 0.09)}, transparent 38%, ${alpha(t.bg, 0.35)})`;
 
   const tileFrame = U(bezel(13, 6, 4));
@@ -60,10 +64,22 @@ ${lit ? `<ellipse cx="20" cy="10" rx="19" ry="9" fill="${color}" opacity=".28"/>
   const dialogAfter = T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}::after`));
   const dialogBody = T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`));
 
+  // Pop-up buttons (DuelingBook draws them as images): the primary is a polished
+  // chrome slab with a lit core line, the secondary dark steel in a chrome rim.
+  const FONT = 'Segoe UI,Arial,sans-serif';
+  const popBtn = (label, wide, primary) => {
+    const w = wide ? 234.85 : 153.4;
+    const h = wide ? 78.5 : 78.47;
+    const body = primary ? 'url(#m)' : 'url(#d)';
+    return svg(w, h, `<defs><linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="${t.text}"/><stop offset="1" stop-color="${t.muted}"/></linearGradient><linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.12)}"/><stop offset="1" stop-color="${steel}"/></linearGradient></defs><path d="M14 10H${w - 14}L${w - 6} 18V${h - 18}L${w - 14} ${h - 10}H14L6 ${h - 18}V18Z" fill="${body}" stroke="${primary ? t.bg : t.muted}" stroke-width="2"/><path d="M20 ${h - 15}H${w - 20}" stroke="${t.accent}" stroke-width="3" stroke-opacity="${primary ? 1 : 0.5}"/><text x="${w / 2}" y="38.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.bg : t.text}">${label}</text>`);
+  };
+  const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
+
   const css = `
 /* ---- Menu tiles: riveted chrome bezel, hull plating, photon core in the top rail ---- */
 ${SEL.tile} {
-  background: ${sheen}, ${plating(36)}, linear-gradient(180deg, ${t.raised}, ${steel}) !important;
+  background: ${sheen}, ${plates(34)}, linear-gradient(180deg, ${t.raised}, ${steel}) !important;
   border-color: transparent !important;
   border-image: ${tileFrame} 13 / 13px / 0 stretch !important;
   border-radius: 0 !important;
@@ -72,23 +88,27 @@ ${SEL.tile} {
   transition: background-color .15s, box-shadow .2s;
 }
 ${tileBefore} {
-  content: ""; position: absolute; left: 50%; top: -1px; width: 30px; height: 15px; margin-left: -15px;
-  background: ${U(core(t.accent, false))} center / 100% 100% no-repeat; pointer-events: none;
-  transition: opacity .2s;
+  content: ""; position: absolute; left: 50%; top: 0; width: 34px; height: 17px; margin-left: -17px; pointer-events: none;
+  background: ${U(core(t.accent, true))} center / 100% 100% no-repeat; z-index: 1; opacity: .8; animation: dbte-cd-core 2.8s ease-in-out infinite;
+}
+${T(['#main_menu .menu_btn .content::after', '#main_menu .menu_btn:hover .content::after'])} {
+  content: ""; position: absolute; left: 7px; right: 7px; top: 0; bottom: auto; height: 6px; pointer-events: none;
+  background: ${U(rail)} 0 0 / 100% 100% no-repeat;
 }
 ${SEL.tileHover} {
-  background: ${sheen}, ${plating(36)}, linear-gradient(180deg, ${mix(t.raised, t.accent, 0.12)}, ${steel}) !important;
+  background: ${sheen}, ${plates(34)}, linear-gradient(180deg, ${mix(t.raised, t.accent, 0.12)}, ${steel}) !important;
   transform: none;
   box-shadow: inset 0 0 18px ${alpha(t.bg, 0.5)}, inset 0 -3px 0 ${alpha(t.accent, 0.55)}, inset 0 -14px 18px -12px ${alpha(t.accent, 0.5)} !important;
 }
-${tileHoverBefore} { background-image: ${U(core(t.accent, true))}; }
+${tileHoverBefore} { opacity: 1; animation-duration: 1.1s; }
+@keyframes dbte-cd-core { 0%, 100% { opacity: .62; } 50% { opacity: 1; } }
 ${T(['#main_menu .menu_btn:active .content'])} {
-  background: ${plating(36)}, linear-gradient(180deg, ${steel}, ${t.raised}) !important;
+  background: ${plates(34)}, linear-gradient(180deg, ${steel}, ${t.raised}) !important;
   box-shadow: inset 0 3px 8px ${alpha('#000000', 0.6)}, inset 0 -2px 0 ${t.accent} !important;
 }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 -1px 0 ${alpha('#ffffff', 0.12)} !important; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content'])} { border-image: ${slimFrame} 10 / 6px / 0 stretch !important; clip-path: none; }
-${T(['#main_menu .menu_btn.dbte-small-menu .content::before'])} { content: none; }
+${T(['#main_menu .menu_btn.dbte-small-menu .content::before', '#main_menu .menu_btn.dbte-small-menu .content::after'])} { content: none; }
 ${T(['#main_menu .main_menu_circle'])} { border-color: ${t.muted} !important; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: radial-gradient(circle at 40% 35%, #ffffff, ${t.accent} 45%, ${mix(t.accent, t.bg, 0.5)}) !important; }
 
@@ -145,7 +165,7 @@ ${dialogBefore} {
   background: ${U(core(t.accent, true))} center / 100% 100% no-repeat; pointer-events: none; z-index: 2;
 }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.accent, 0.45)} !important; }
-${dialogBody} { color: ${t.muted} !important; }
+${dialogBody} { color: ${t.text} !important; }
 
 /* ---- Chat: chrome header rail with a core, plated window ---- */
 ${SEL.chatTop} {
@@ -200,6 +220,7 @@ ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${t.border}, inset 0 2px
 /* ---- Duel room: chrome-ringed bays with riveted corner gussets ---- */
 ${lobby()} { background-color: ${alpha(t.surface, 0.82)} !important; background-image: ${plating(48, 0.25)} !important; }
 ${lobby('::before')} {
+  filter: none !important;
   background: linear-gradient(180deg, #ffffff, ${t.text} 8%, ${t.muted} 40%, ${t.border} 52%, ${t.muted} 75%, ${t.text}) !important;
 }
 ${T(['#duel_room #formats .format:hover > .border::before'])} {
@@ -209,7 +230,7 @@ ${lobby('::after')} {
   content: ""; position: absolute; inset: -3px; pointer-events: none;
   border: 16px solid transparent; border-image: ${U(bezel(14, 7, 0.01))} 14 / 16px / 0 stretch;
 }
-${T(['#duel_room .format_txt', '#duel_room #host_lbl', '#duel_room .arial_black2'])} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 12px ${alpha(t.accent, 0.35)} !important; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 12px ${alpha(t.accent, 0.35)} !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, ${t.raised}, ${steel}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, ${mix(t.raised, t.accent, 0.18)}, ${steel}) !important; }
 ${T(['#duel_room .duelbutton'])} { border-color: ${plateDark} !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.08)}; }
@@ -234,6 +255,16 @@ ${settings} {
   background-image: ${sheen}, ${plating(48, 0.25)} !important;
 }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 12px ${alpha(t.accent, 0.35)} !important; }
+
+/* ---- Pop-up buttons, panel title plates ---- */
+${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
+${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
+${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
+${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
+${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.9)}) !important; }
+${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .15em; }
+
+@media (prefers-reduced-motion: reduce) { html body .menu_btn .content::before { animation: none !important; } }
 
 /* ---- Scrollbars: chrome rods ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.border}, ${t.text} 40%, ${t.muted} 70%, ${t.border}) !important; border-radius: 2px !important; }

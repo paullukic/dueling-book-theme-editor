@@ -4,8 +4,8 @@
 
 import { mix } from '../../../lib/color.js';
 
-// Compact data URI: only the characters CSS and URLs need are escaped (braces too).
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
+const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().
@@ -15,7 +15,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
     return `var(${ids.get(s)})`;
   };
   const lit = mix(t.danger, t.warning, 0.28);
-  const off = mix(t.accent, t.border, 0.5);
+  const off = t.accent;
   const frame = mix(t.accent, t.border, 0.45);
   const deep = mix(t.surface, t.bg, 0.4);
   const T = (list) => sel(list);
@@ -45,7 +45,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   // Cyberse hex plating (pointy-top cells).
   const hex = (a) =>
     U(svg(24, 41.6, `<path d="M12 0L24 6.9V20.8L12 27.7L0 20.8V6.9ZM12 27.7V41.6" fill="none" stroke="${t.accent2}" stroke-opacity="${a}" stroke-width=".8"/>`));
-  // Circuit traces leaving a bottom-right corner.
+  // Circuit traces leaving a bottom-left corner (kept to the bottom-left 30% of a panel).
   const traces = U(svg(150, 56, `<g fill="none" stroke="${t.accent2}" stroke-width="1.2" stroke-opacity=".55"><path d="M0 50H58L72 36H150"/><path d="M30 56L42 44H96L106 34"/><path d="M120 56V46L130 36H150"/></g><g fill="${t.accent2}"><circle cx="0" cy="50" r="2.4"/><circle cx="106" cy="34" r="2.4"/><circle cx="58" cy="50" r="1.4"/></g><circle cx="30" cy="56" r="2.4" fill="none" stroke="${t.accent2}" stroke-opacity=".7"/>`));
   const tracesTop = U(svg(150, 56, `<g fill="none" stroke="${t.accent2}" stroke-width="1.2" stroke-opacity=".45" transform="translate(150 0) scale(-1 1)"><path d="M0 6H58L72 20H150"/><path d="M30 0L42 12H96L106 22"/></g><g fill="${t.accent2}" fill-opacity=".8"><circle cx="150" cy="6" r="2.2"/><circle cx="44" cy="22" r="2.2"/></g>`));
 
@@ -63,6 +63,19 @@ export default (t, { SEL, sel, svg, alpha }) => {
   // Button: a data plate with a Link Arrow notch at each end.
   const btnArrows = (on) => `${U(arrow('side', 270, on))} 1px center / 9px no-repeat, ${U(arrow('side', 90, on))} right 1px center / 9px no-repeat`;
 
+  // Pop-up buttons (DuelingBook draws them as images): bevelled data plates cut
+  // to a hex point at each end; the primary one is lit cyan with a dark label.
+  const FONT = 'Segoe UI,Arial,sans-serif';
+  const popBtn = (label, wide, primary) => {
+    const w = wide ? 234.85 : 153.4;
+    const h = wide ? 78.5 : 78.47;
+    const top = primary ? mix(t.accent2, '#ffffff', 0.35) : mix(t.raised, t.accent, 0.3);
+    const bot = primary ? mix(t.accent2, t.accent, 0.35) : deep;
+    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><path d="M24 10H${w - 24}L${w - 6} 39.2L${w - 24} ${h - 10}H24L6 39.2Z" fill="url(#k)" stroke="${primary ? '#ffffff' : t.accent2}" stroke-opacity="${primary ? 0.8 : 0.7}" stroke-width="2"/><path d="M26 14.5H${w - 26}" stroke="#ffffff" stroke-opacity=".5" stroke-width="2"/><path d="M26 ${h - 14.5}H${w - 26}" stroke="${t.bg}" stroke-opacity=".45" stroke-width="2"/><text x="${w / 2}" y="39.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
+  };
+  const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
+
   const css = `
 /* ---- Menu tiles: Link art box, eight arrows that light on hover ---- */
 ${SEL.tile} {
@@ -72,18 +85,18 @@ ${SEL.tile} {
   box-shadow: ${frameLines()}, 0 10px 22px -12px ${alpha('#000000', 0.9)} !important;
 }
 ${T(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; inset: -5px; pointer-events: none;
-  background: ${ring(false, 11)}; transition: opacity .2s;
+  content: ""; position: absolute; inset: -1px; pointer-events: none;
+  background: ${ring(false, 12)}; transition: opacity .2s;
 }
 ${T(['#main_menu .menu_btn .content::after'])} {
-  content: ""; position: absolute; inset: -5px; pointer-events: none; height: auto;
-  background: ${ring(true, 11)}; opacity: 0; transition: opacity .18s;
+  content: ""; position: absolute; inset: -1px; pointer-events: none; height: auto;
+  background: ${ring(true, 12)}; opacity: 0; transition: opacity .18s;
 }
 ${SEL.tileHover} {
   background: ${face}, ${hex(0.16)} center / 18px auto, linear-gradient(160deg, ${mix(t.raised, t.accent, 0.3)}, ${deep}) !important;
   box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 0 0 3px ${alpha(t.bg, 0.85)}, inset 0 0 0 4px ${alpha(t.accent2, 0.6)}, inset 0 0 22px ${alpha(t.accent2, 0.22)}, 0 0 16px -4px ${alpha(t.accent2, 0.7)} !important;
 }
-${T(['#main_menu .menu_btn:hover .content::after'])} { opacity: 1; inset: -5px; height: auto; }
+${T(['#main_menu .menu_btn:hover .content::after'])} { opacity: 1; inset: -1px; height: auto; }
 ${T(['#main_menu .menu_btn:active .content'])} {
   background: ${hex(0.16)} center / 18px auto, linear-gradient(160deg, ${deep}, ${mix(t.raised, t.accent, 0.25)}) !important;
   box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 3px 10px ${alpha('#000000', 0.7)} !important;
@@ -131,13 +144,13 @@ ${T(['#content input[type=text]:focus', '#content input[type=password]:focus', '
 
 /* ---- Pop-ups: a Link art box with all eight arrows lit, traces out of the corners ---- */
 ${dlg()} {
-  background: ${tracesTop} left 6px top 6px / 150px 56px no-repeat, ${traces} right 6px bottom 6px / 150px 56px no-repeat, ${face}, ${hex(0.08)} center / 22px auto, linear-gradient(170deg, ${mix(t.surface, t.accent, 0.12)}, ${deep}) !important;
+  background: ${traces} left 6px bottom 6px / 30% auto no-repeat, ${face}, ${hex(0.08)} center / 22px auto, linear-gradient(170deg, ${mix(t.surface, t.accent, 0.12)}, ${deep}) !important;
   border-radius: 2px !important;
   box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 0 0 4px ${alpha(t.bg, 0.8)}, inset 0 0 0 5px ${alpha(t.accent, 0.6)}, 0 0 0 1px ${t.bg}, 0 0 30px -6px ${alpha(t.accent, 0.55)}, 0 24px 50px -14px ${alpha('#000000', 0.9)} !important;
 }
-${dlg('::before')} { content: ""; position: absolute; inset: -9px; pointer-events: none; z-index: 1; background: ${ring(true, 18)}; }
+${dlg('::before')} { content: ""; position: absolute; inset: -3px; pointer-events: none; z-index: 1; background: ${ring(false, 16)}; }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 0 12px ${alpha(t.accent2, 0.7)}, 0 2px 0 ${t.bg} !important; }
-${dlg(' .body_txt')} { color: ${t.muted} !important; }
+${dlg(' .body_txt')} { color: ${t.text} !important; }
 
 /* ---- Chat: Cyberse header with a running trace ---- */
 ${SEL.chatTop} {
@@ -180,12 +193,12 @@ ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#d
 ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${frame} !important; }
 
 /* ---- Duel room: Link art boxes with corner arrows and traces ---- */
-${lobby()} { background-color: ${alpha(t.surface, 0.85)} !important; background-image: ${traces}, ${hex(0.06)} !important; background-size: 150px 56px, 22px auto !important; background-position: right 8px bottom 6px, center !important; background-repeat: no-repeat, repeat !important; }
-${lobby('::before')} { background: linear-gradient(135deg, ${t.accent2}, ${t.accent} 40%, ${frame} 70%, ${t.accent2}) !important; }
+${lobby()} { background-color: ${alpha(t.surface, 0.85)} !important; background-image: ${traces}, ${hex(0.06)} !important; background-size: 30% auto, 22px auto !important; background-position: left 6px bottom 4px, center !important; background-repeat: no-repeat, repeat !important; }
+${lobby('::before')} { filter: none !important; background: linear-gradient(135deg, ${t.accent2}, ${t.accent} 40%, ${frame} 70%, ${t.accent2}) !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(135deg, ${lit}, ${t.accent2} 40%, ${t.accent}) !important; }
-${lobby('::after')} { content: ""; position: absolute; inset: -6px; pointer-events: none; background: ${ring(false, 14).split(', ').slice(0, 4).join(', ')}; }
-${T(['#duel_room #formats .format:hover > .border::after'])} { background: ${ring(true, 14).split(', ').slice(0, 4).join(', ')}; }
-${T(['#duel_room .format_txt', '#duel_room #host_lbl', '#duel_room .arial_black2'])} { color: ${t.text} !important; text-shadow: 0 0 12px ${alpha(t.accent2, 0.6)}, 0 2px 0 ${t.bg} !important; }
+${lobby('::after')} { content: ""; position: absolute; inset: -2px; pointer-events: none; background: ${ring(false, 12).split(', ').slice(0, 4).join(', ')}; }
+${T(['#duel_room #formats .format:hover > .border::after'])} { background: ${ring(true, 12).split(', ').slice(0, 4).join(', ')}; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: ${t.text} !important; text-shadow: 0 0 12px ${alpha(t.accent2, 0.6)}, 0 2px 0 ${t.bg} !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, ${mix(t.raised, t.accent, 0.1)}, ${deep}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, ${mix(t.raised, t.accent, 0.35)}, ${deep}) !important; }
 ${T(['#duel_room .duelbutton'])} { border-color: ${alpha(t.accent2, 0.25)} !important; }
@@ -195,18 +208,26 @@ ${T(DECK)} {
   background-image: ${hex(0.07)}, ${face} !important; background-size: 22px auto, auto !important;
   box-shadow: ${frameLines()} !important;
 }
-${T(DECK.map((d) => `${d}::after`))} { content: ""; position: absolute; inset: -4px; pointer-events: none; background: ${ring(false, 14).split(', ').slice(0, 4).join(', ')}; }
+${T(DECK.map((d) => `${d}::after`))} { content: ""; position: absolute; inset: -1px; pointer-events: none; background: ${ring(false, 14).split(', ').slice(0, 4).join(', ')}; }
 ${T(['#deck_constructor #search .title_txt'])} { color: ${t.text} !important; text-shadow: 0 0 14px ${alpha(t.accent2, 0.7)}, 0 2px 0 ${t.bg} !important; }
 ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; text-shadow: 0 0 10px ${alpha(t.accent2, 0.6)} !important; }
 
 /* ---- Settings: Link art boxes ---- */
 ${settings()} {
   border-color: ${frame} !important; border-radius: 2px !important;
-  background-image: ${traces}, ${hex(0.07)} !important; background-size: 150px 56px, 22px auto !important; background-position: right 4px bottom 2px, center !important; background-repeat: no-repeat, repeat !important;
+  background-image: ${traces}, ${hex(0.07)} !important; background-size: 30% auto, 22px auto !important; background-position: left 4px bottom 2px, center !important; background-repeat: no-repeat, repeat !important;
   box-shadow: inset 0 0 0 2px ${alpha(t.bg, 0.7)}, inset 0 0 0 3px ${alpha(t.accent2, 0.4)} !important;
 }
-${settings('::after')} { content: ""; position: absolute; inset: -9px; pointer-events: none; background: ${ring(false, 14).split(', ').slice(0, 4).join(', ')}; }
+${settings('::after')} { content: ""; position: absolute; inset: -6px; pointer-events: none; background: ${ring(false, 14).split(', ').slice(0, 4).join(', ')}; }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: ${t.text} !important; text-shadow: 0 0 12px ${alpha(t.accent2, 0.6)}, 0 2px 0 ${t.bg} !important; }
+
+/* ---- Pop-up buttons, panel title plates ---- */
+${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
+${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
+${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
+${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
+${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(t.accent2, 0.9)}) !important; }
+${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .15em; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${frame}, ${t.accent}) !important; border-radius: 1px !important; }

@@ -4,8 +4,8 @@
 
 import { mix } from '../../../lib/color.js';
 
-// Compact data URI: only the characters CSS and URLs need are escaped (braces too).
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
+const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().
@@ -37,7 +37,6 @@ export default (t, { SEL, sel, svg, alpha }) => {
     svg(size, size, `<g fill="none" stroke-linecap="round" opacity="${o}"><path d="${arm(size / 2, size / 2, 1.35, size * 0.46, 0)}" stroke="${vi}" stroke-width="${w}"/><path d="${arm(size / 2, size / 2, 1.35, size * 0.46, Math.PI)}" stroke="${pk}" stroke-width="${w}"/></g><circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.07}" fill="#ffffff" opacity="${o * 0.85}"/>`);
   // Big faint vortex for panel backgrounds.
   const vortex = (o) => `radial-gradient(circle at 50% 50%, ${alpha('#ffffff', o * 0.35)} 0 2%, transparent 30%), conic-gradient(from 0deg at 50% 50%, ${alpha(vi, o)}, transparent 22%, ${alpha(pk, o)} 50%, transparent 72%, ${alpha(vi, o)})`;
-  const corner = (s) => ['left top', 'right bottom'].map((p) => `${U(swirl(48, 1, 3.5))} ${p} / ${s}px no-repeat`).join(', ');
   // Merging edge: violet from the left, pink from the right, white where they meet.
   const edge = `linear-gradient(90deg, ${vi}, ${merge} 42%, ${mix(merge, '#ffffff', 0.5)} 50%, ${merge} 58%, ${pk})`;
   const face = `linear-gradient(180deg, ${alpha('#ffffff', 0.06)}, transparent 35%, ${alpha(t.bg, 0.35)})`;
@@ -53,11 +52,21 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
   const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  // Pop-up buttons (DuelingBook draws them as images): the primary one is the
+  // merge itself (violet into pink) under a glassy highlight; the secondary is violet glass.
+  const FONT = 'Segoe UI,Arial,sans-serif';
+  const popBtn = (label, wide, primary) => {
+    const w = wide ? 234.85 : 153.4;
+    const h = wide ? 78.5 : 78.47;
+    return svg(w, h, `<defs><linearGradient id="k"><stop offset="0" stop-color="${primary ? vi : mix(t.raised, vi, 0.25)}"/><stop offset=".5" stop-color="${primary ? merge : t.raised}"/><stop offset="1" stop-color="${primary ? pk : mix(t.raised, pk, 0.2)}"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="18" fill="url(#k)" stroke="${primary ? mix(merge, '#ffffff', 0.45) : mix(t.border, vi, 0.5)}" stroke-width="2"/><rect x="12" y="14" width="${w - 24}" height="${(h - 28) / 2}" rx="12" fill="url(#g)" opacity="${primary ? 0.8 : 0.35}"/><text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
+  };
+  const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
 
   const css = `
 /* ---- Menu tiles: merging Fusion frame over a slow two-colour vortex ---- */
 ${SEL.tile} {
-  background: ${face}, ${vortex(0.16)}, linear-gradient(180deg, ${mix(t.raised, vi, 0.1)}, ${deep}) !important;
+  background: ${face}, linear-gradient(100deg, ${mix(t.raised, vi, 0.14)}, ${deep} 55%, ${mix(deep, pk, 0.1)}) !important;
   border-color: transparent !important;
   border-image: ${tileFrame} 12 / 10px / 0 stretch !important;
   border-radius: 9px !important;
@@ -65,16 +74,16 @@ ${SEL.tile} {
   box-shadow: 0 10px 24px -12px ${alpha('#000000', 0.9)} !important;
 }
 ${T(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; pointer-events: none;
-  background: ${U(swirl(120, 0.22, 2))} center / 100% no-repeat; transition: transform 1.4s cubic-bezier(.2,.7,.2,1), opacity .3s;
+  content: ""; position: absolute; left: 74%; top: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px; pointer-events: none;
+  background: ${U(swirl(150, 1, 13))} center / 100% no-repeat; opacity: .1; transition: transform 1.4s cubic-bezier(.2,.7,.2,1), opacity .3s;
 }
-${T(['#main_menu .menu_btn:hover .content::before'])} { transform: rotate(160deg); opacity: 1; background-image: ${U(swirl(120, 0.5, 2.4))}; }
+${T(['#main_menu .menu_btn:hover .content::before'])} { transform: rotate(140deg); opacity: .3; }
 ${SEL.tileHover} {
-  background: ${face}, ${vortex(0.3)}, linear-gradient(180deg, ${mix(t.raised, vi, 0.22)}, ${deep}) !important;
+  background: ${face}, linear-gradient(100deg, ${mix(t.raised, vi, 0.26)}, ${deep} 55%, ${mix(deep, pk, 0.18)}) !important;
   transform: none;
   box-shadow: 0 0 22px -6px ${alpha(merge, 0.9)} !important;
 }
-${T(['#main_menu .menu_btn:active .content'])} { background: ${vortex(0.4)}, linear-gradient(180deg, ${deep}, ${mix(t.raised, vi, 0.2)}) !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.7)} !important; }
+${T(['#main_menu .menu_btn:active .content'])} { background: linear-gradient(180deg, ${deep}, ${mix(t.raised, vi, 0.2)}) !important; box-shadow: inset 0 3px 10px ${alpha('#000000', 0.7)} !important; }
 ${SEL.tileLabel} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 12px ${alpha(merge, 0.5)} !important; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content::before'])} { content: none; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: ${edge} !important; }
@@ -112,14 +121,13 @@ ${T(['#content input[type=text]:focus', '#content input[type=password]:focus', '
 
 /* ---- Pop-ups: the Polymerization vortex behind a merging frame, swirl corners ---- */
 ${dlg()} {
-  background: ${face}, ${vortex(0.14)}, linear-gradient(180deg, ${mix(t.surface, vi, 0.12)}, ${deep}) !important;
+  background: ${U(swirl(300, 0.13, 26))} center / min(80%, 300px) no-repeat, ${face}, linear-gradient(180deg, ${mix(t.surface, vi, 0.12)}, ${deep}) !important;
   border-radius: 14px !important;
   box-shadow: 0 0 0 2px ${t.bg}, 0 0 34px -6px ${alpha(merge, 0.6)}, 0 24px 50px -14px ${alpha('#000000', 0.9)} !important;
 }
 ${dlg('::after')} { content: ""; position: absolute; inset: -3px; pointer-events: none; z-index: 1; border: 12px solid transparent; border-image: ${U(frame(3.5, 12))} 14 / 14px / 0 stretch; }
-${dlg('::before')} { content: ""; position: absolute; inset: -12px; pointer-events: none; z-index: 2; background: ${corner(30)}; }
 ${SEL.dialogTitle} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 14px ${alpha(merge, 0.75)} !important; }
-${dlg(' .body_txt')} { color: ${t.muted} !important; }
+${dlg(' .body_txt')} { color: ${t.text} !important; text-shadow: 0 1px 2px ${t.bg} !important; }
 
 /* ---- Chat: the title bar is the merge ---- */
 ${SEL.chatTop} {
@@ -155,10 +163,9 @@ ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${mix(t.border, vi, 0.4)
 
 /* ---- Duel room: merging rings with swirl corners ---- */
 ${lobby()} { background-color: ${alpha(t.surface, 0.86)} !important; background-image: radial-gradient(ellipse at 100% 100%, ${alpha(pk, 0.12)}, transparent 50%), radial-gradient(ellipse at 0% 0%, ${alpha(vi, 0.14)}, transparent 50%) !important; }
-${lobby('::before')} { background: ${edge} !important; }
+${lobby('::before')} { filter: none !important; background: ${edge} !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(90deg, ${mix(vi, '#ffffff', 0.3)}, #ffffff 50%, ${mix(pk, '#ffffff', 0.3)}) !important; }
-${lobby('::after')} { content: ""; position: absolute; inset: -9px; pointer-events: none; background: ${corner(22)}; }
-${T(['#duel_room .format_txt', '#duel_room #host_lbl', '#duel_room .arial_black2'])} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 12px ${alpha(merge, 0.6)} !important; }
+${T(['#duel_room .format_txt', '#duel_room span.arial_black2'])} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 12px ${alpha(merge, 0.6)} !important; }
 ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180deg, ${mix(t.raised, vi, 0.1)}, ${deep}) !important; }
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${mix(t.raised, vi, 0.3)}, ${mix(t.raised, pk, 0.25)}) !important; }
 
@@ -171,6 +178,14 @@ ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constr
 /* ---- Settings: merging frames ---- */
 ${settings} { border-color: transparent !important; border-image: ${tileFrame} 12 / 10px / 0 stretch !important; border-radius: 10px !important; background-image: ${face}, radial-gradient(ellipse at 100% 0%, ${alpha(pk, 0.12)}, transparent 55%) !important; }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 12px ${alpha(merge, 0.6)} !important; }
+
+/* ---- Pop-up buttons, panel title plates ---- */
+${pop('ok_btn')} { content: ${U(popBtn('OK', false, true))} !important; }
+${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
+${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
+${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
+${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 6px ${alpha(merge, 0.9)}) !important; }
+${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .3em; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${vi}, ${pk}) !important; border-radius: 99px !important; }
