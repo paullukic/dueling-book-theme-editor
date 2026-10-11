@@ -8,6 +8,8 @@ duelingbook.com so DuelingBook's own CSS and images load). For each theme and
 screen it injects the theme's full page CSS (tools/theme-css.mjs) and the skin
 layers, and writes <out_dir>/<theme>/<screen>.png at the snapshot's viewport.
 Snapshots contain account data: keep them out of the repo.
+tools/render-duel.py builds on theme_css() and snapshot_html() to add the
+theme's scene, life point styles and states, and the ink guard.
 """
 import os
 import re
@@ -22,6 +24,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def theme_css(theme):
     return subprocess.run(['node', os.path.join(ROOT, 'tools', 'theme-css.mjs'), theme],
                           cwd=ROOT, capture_output=True, text=True, check=True).stdout
+
+
+def snapshot_html(path, css, layers=True):
+    """The snapshot at `path` with `css` injected, plus the empty skin layers
+    unless layers=False. Returns (html, width, height)."""
+    html = open(path, encoding='utf-8').read()
+    m = re.search(r'<!-- snapshot \S+ (\d+)x(\d+) -->', html)
+    w, h = (int(m.group(1)), int(m.group(2))) if m else (1280, 800)
+    html = html.replace('</head>', f'<style id="dbte-theme-preview">{css}</style></head>', 1)
+    if layers:
+        html = re.sub(r'(<body[^>]*>)', r'\1<div id="dbte-skin-layer"></div><div id="dbte-skin-motif"></div>', html, count=1)
+    return html, w, h
 
 
 def main():
@@ -40,12 +54,7 @@ def main():
             css = theme_css(theme)
             os.makedirs(os.path.join(out, theme), exist_ok=True)
             for screen in screens:
-                html = open(os.path.join(snaps, screen + '.html'), encoding='utf-8').read()
-                m = re.search(r'<!-- snapshot \S+ (\d+)x(\d+) -->', html)
-                w, h = (int(m.group(1)), int(m.group(2))) if m else (1280, 800)
-                layers = '<div id="dbte-skin-layer"></div><div id="dbte-skin-motif"></div>'
-                html = html.replace('</head>', f'<style id="dbte-theme-preview">{css}</style></head>', 1)
-                html = re.sub(r'(<body[^>]*>)', r'\1' + layers, html, count=1)
+                html, w, h = snapshot_html(os.path.join(snaps, screen + '.html'), css)
                 page = browser.new_page(viewport={'width': w, 'height': h})
                 page.set_content(html, wait_until='load')
                 page.wait_for_timeout(1500)
