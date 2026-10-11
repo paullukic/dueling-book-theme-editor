@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { updateSettings, useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { contrast } from '../lib/color';
-import { AREAS, FONTS, PRESETS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
+import { AREAS, FONTS, PRESETS, PRESET_GROUPS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
 import { MAX_CODE_LENGTH, MAX_CUSTOM_CSS, decodeTheme, encodeTheme } from '../features/theme/share';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
 
@@ -16,29 +16,33 @@ const PresetGallery = ({ s }) => {
   const pick = (p) => updateSettings({ themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius });
   return (
     <>
-      <div className="preset-grid" role="group" aria-label="Theme presets">
-        {PRESETS.map((p) => {
-          const active = s.themePreset === p.id && !edited;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              className="preset"
-              aria-pressed={active}
-              onClick={() => pick(p)}
-              style={{ '--p-bg': p.tokens.bg, '--p-surface': p.tokens.surface, '--p-text': p.tokens.text, '--p-accent': p.tokens.accent }}
-            >
-              <span className="preset-swatches" aria-hidden="true">
-                {SWATCH_KEYS.map((k) => (
-                  <i key={k} style={{ background: p.tokens[k] }} />
-                ))}
-              </span>
-              <span className="preset-name">{p.name}</span>
-              <span className="preset-blurb">{p.blurb}</span>
-            </button>
-          );
-        })}
-      </div>
+      {PRESET_GROUPS.map((g) => (
+        <div key={g.id} className="preset-group">
+          <h3 className="preset-group-title" id={`dbte-presets-${g.id}`}>
+            {g.label}
+          </h3>
+          <div className="preset-grid" role="group" aria-labelledby={`dbte-presets-${g.id}`}>
+            {PRESETS.filter((p) => p.group === g.id).map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className="preset"
+                aria-pressed={s.themePreset === p.id && !edited}
+                onClick={() => pick(p)}
+                style={{ '--p-bg': p.tokens.bg, '--p-surface': p.tokens.surface, '--p-text': p.tokens.text, '--p-accent': p.tokens.accent }}
+              >
+                <span className="preset-swatches" aria-hidden="true">
+                  {SWATCH_KEYS.map((k) => (
+                    <i key={k} style={{ background: p.tokens[k] }} />
+                  ))}
+                </span>
+                <span className="preset-name">{p.name}</span>
+                <span className="preset-blurb">{p.blurb}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
       <p className="note">
         <span aria-live="polite">{edited ? `Custom colours, based on ${base.name}.` : `Using ${base.name}.`}</span>
         {edited && (

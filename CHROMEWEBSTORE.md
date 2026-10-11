@@ -17,7 +17,7 @@ Make DuelingBook look and play the way you want. Theme Editor restyles every scr
 
 THEME
 • A full, modern theme for every screen: main menu, duel room, deck constructor, duels, chat windows, pop-ups, profiles, settings, rankings and tournaments
-• Six presets: Obsidian, Midnight, Crimson, Verdant, Sakura and OLED
+• 16 presets: six clean looks (Obsidian, Midnight, Crimson, Verdant, Sakura, OLED) and ten duel themes (Spell Card, Trap Card, Fusion, Synchro, Xyz, Link, White Dragon, Dark Magic, Black Dragon, Millennium Gold)
 • Make it yours: pick every colour, corner roundness, background art and lettering, with a warning if text gets hard to read
 • The playmat, life points, phase buttons and pop-up buttons follow your colours
 • Keep DuelingBook's own look in any area you like, with one switch per area

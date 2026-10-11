@@ -1078,3 +1078,14 @@ textarea.field {
   font: 11.5px ui-monospace, Consolas, monospace;
   color: var(--ink);
 }
+
+.preset-group + .preset-group {
+  margin-top: 8px;
+}
+
+.preset-group-title {
+  margin: 6px 0 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}

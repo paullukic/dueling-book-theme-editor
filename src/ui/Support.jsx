@@ -17,7 +17,7 @@ const version = () => chrome.runtime.getManifest().version;
 
 // Shown once after an update, until dismissed.
 const NEWS = [
-  'Full theme: a sleek look for every DuelingBook screen, with six presets and your own colours',
+  'Full theme: a sleek look for every DuelingBook screen, with 16 presets (Spell, Trap, Xyz, Link…) and your own colours',
   'Share your theme as a code, or add your own CSS',
   'Turn and duel-found alerts, so you can wait in another tab',
   'Test hands and opening odds for the deck you are building',

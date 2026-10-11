@@ -6,7 +6,7 @@ A Chrome extension that makes [duelingbook.com](https://www.duelingbook.com) loo
 
 | Tab | What you get |
 |-----|--------------|
-| Theme | Full theme for every screen (menus, duel room, deck builder, duels, chat, pop-ups, profiles) · six presets · your own colours, corner roundness, lettering · switch any area back to DuelingBook's look · custom CSS · shareable theme codes · colour-coded card text · card text size · compact main menu · your own background image |
+| Theme | Full theme for every screen (menus, duel room, deck builder, duels, chat, pop-ups, profiles) · 16 presets, including duel themes (Spell, Trap, Fusion, Synchro, Xyz, Link, White Dragon, Dark Magic, Black Dragon, Millennium Gold) · your own colours, corner roundness, lettering · switch any area back to DuelingBook's look · custom CSS · shareable theme codes · colour-coded card text · card text size · compact main menu · your own background image |
 | Duel | Duel-found and your-turn alerts (sound, tab flash, desktop notification) · animation speed · skip intro · one-key shortcuts and five custom chat messages · notes window · action log with opponent's revealed hand |
 | Chat | Mute players · highlight and alert on mentions of your name |
 | Deck | Test hands (going first or second) from the deck open in the Deck Constructor · opening odds for the cards you tick |
