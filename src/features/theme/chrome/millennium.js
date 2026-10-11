@@ -79,6 +79,11 @@ export default (t, kit) => {
   const halo = [3, 7, 11].map((x) => `-${x}px 0 2px ${lapisDeep}, ${x}px 0 2px ${lapisDeep}`).join(', ');
   const panelTitle = `color: ${hi} !important; text-shadow: var(--mi-halo) !important;`;
   const inkText = `color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important;`;
+  // Dark lettering on sandstone. The page's ink guard reads the dark page
+  // behind sibling labels and would re-ink them white, so these selectors
+  // outrank both the central label rule and the guard's attribute selectors.
+  const INK_ON = '[data-dbte-ink][data-dbte-ink][data-dbte-ink]';
+  const inked = (list) => sel(list.flatMap((x) => [x, `${x}${INK_ON}`]));
   const DIALOGS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
   const PANELS = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const panel = (suffix = '') => sel(PANELS.map((p) => `#duel_room ${p}${suffix}`));
@@ -111,10 +116,10 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; transform: none; }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: var(--mi-grain), linear-gradient(180deg, ${sandLow}, ${sandMid}) !important; box-shadow: inset 0 3px 8px ${alpha(ink, 0.6)} !important; }
-${SEL.tileLabel} { ${inkText} }
+${SEL.tileLabel}, ${inked(['#main_menu .menu_btn > span', '#main_menu .menu_btn:active > span'])} { ${inkText} }
 ${sel(['#main_menu .menu_btn > .content:not(.dbte-small-menu) + span', '#main_menu .menu_btn:active > .content:not(.dbte-small-menu) + span'])} { transform: scale(0.9) !important; }
 ${sel(['#main_menu .menu_btn:hover > .content:not(.dbte-small-menu) + span'])} { transform: translateY(-3px) scale(0.9) !important; }
-${sel(['#main_menu .menu_btn:hover span'])} { color: ${lapisDeep} !important; }
+${inked(['#main_menu .menu_btn:hover > span'])} { color: ${lapisDeep} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu'])} { border-image: none !important; box-shadow: inset 0 -2px 0 ${gold} !important; }
 ${sel(['#main_menu .menu_btn .content.dbte-small-menu::before'])} { content: none; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${gold} !important; }
@@ -162,8 +167,8 @@ ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
   content: ""; position: absolute; left: 50%; top: -34px; right: auto; bottom: auto; width: 64px; height: 64px; margin-left: -32px; transform: none;
   background: var(--mi-crest) center / contain no-repeat; pointer-events: none; z-index: 1; filter: drop-shadow(0 3px 4px ${alpha('#000000', 0.7)});
 }
-${SEL.dialogTitle} { ${inkText} }
-${sel(DIALOGS.map((d) => `#content ${d} .body_txt`))} { color: ${ink} !important; }
+${SEL.dialogTitle}, ${inked(DIALOGS.map((d) => `#content ${d} .title_txt`))} { ${inkText} }
+${inked(DIALOGS.map((d) => `#content ${d} .body_txt`))} { color: ${ink} !important; }
 ${sel(DIALOGS.map((d) => `#content ${d} .body_txt a`))} { color: ${mix(t.accent2, t.bg, 0.4)} !important; }
 
 /* ---------- Pop-up buttons ---------- */
@@ -174,7 +179,7 @@ ${SEL.chatTop} {
   background: ${sandstone} !important;
   box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.5)}, inset 0 -3px 0 ${gold}, inset 0 -4px 0 ${brown} !important;
 }
-${sel(['#chats .chat .chat_top span'])} { ${inkText} }
+${inked(['#chats .chat .chat_top span'])} { ${inkText} }
 ${SEL.chat} {
   background: ${ceiling} !important;
   box-shadow: inset 3px 0 0 ${gold}, inset -3px 0 0 ${gold}, inset 4px 0 0 ${brown}, inset -4px 0 0 ${brown} !important;
@@ -208,11 +213,11 @@ ${sel(['#duel .phase.active .background::before'])} {
   background: var(--mi-crest) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(gold, 0.8)});
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 2px ${alpha(t.bg, 0.8)}, 0 0 14px 2px ${alpha(gold, 0.6)}; }
-${sel(['#duel .phase span'])} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
-${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }
+${inked(['#duel .phase span'])} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
+${inked(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${goldBand} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${sand}, ${sandLow}) !important; }
-${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${ink} !important; }
+${inked(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${ink} !important; }
 ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 3px ${brown}; }
 ${SEL.duelLog} { background: ${ceiling} !important; box-shadow: inset 0 0 0 3px ${gold}, inset 0 0 0 4px ${brown}, inset 0 0 0 6px ${lapis} !important; }
 ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 3px ${brown}; }
