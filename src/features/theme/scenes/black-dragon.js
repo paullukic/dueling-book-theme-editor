@@ -3,7 +3,8 @@ import { anim, glow, H, n1, rng, W } from './kit.js';
 
 // Black Dragon: Red-Eyes perched on a volcanic crag at the right edge, wings
 // raised against a blood-red sky, one burning eye, an Inferno Fire Blast
-// gathering in its open jaws. Drawn as a silhouette rim-lit from the lava below.
+// gathering in its open jaws. Obsidian hide with a metallic sheen, red rim
+// light, glowing red veins and the swept-back Red-Eyes horn crest.
 
 const pt = (p) => `${n1(p[0])} ${n1(p[1])}`;
 
@@ -87,9 +88,22 @@ const blackDragon = (t) => {
     bone([1326, 182], [1418, 168], 14, 1, 0.08),
     bone([1300, 218], [1336, 246], 10, 1, 0),
     bone([1262, 162], [1278, 134], 8, 1, 0),
+    bone([1306, 158], [1398, 92], 16, 1, 0.12),
+    bone([1290, 160], [1356, 84], 13, 1, 0.14),
+    bone([1276, 164], [1318, 100], 10, 1, 0.12),
+    bone([1330, 196], [1430, 204], 12, 1, -0.06),
   ].map((d) => `<path d="${d}"/>`).join('');
   let teeth = '';
   for (let i = 0; i < 5; i++) teeth += `<path d="M${1204 + i * 18} ${205 - i * 0.6}l4 10l4 -10Z"/><path d="M${1214 + i * 17} ${240 - i * 3.4}l4 -9l4 9Z"/>`;
+
+  // Red veins under the obsidian hide: glowing seams along the muscle lines.
+  const veins = [
+    'M1330 214C1346 250 1330 296 1356 330C1372 352 1366 380 1386 396',
+    'M1296 404C1332 440 1388 452 1440 446C1470 470 1488 520 1478 566',
+    'M1316 452C1330 500 1314 540 1300 590',
+    'M1400 600C1430 620 1460 616 1486 600',
+    'M1240 186C1262 192 1290 194 1318 186',
+  ].map((d) => `<path d="${d}"/>`).join('');
 
   // Embers drawn into the charging fireball.
   const fx = 1196;
@@ -114,7 +128,7 @@ const blackDragon = (t) => {
 <defs>${glow('dbtefx-rb-sun', t.accent, 0.5, 0.5, 0.5, 0.6)}${glow('dbtefx-rb-crater', fire, 0.5, 0.5, 0.5, 0.6)}${glow('dbtefx-rb-eye', t.accent, 0.5, 0.5, 0.5, 0.95)}${glow('dbtefx-rb-haze', ink, 0.5, 0.5, 0.5, 0.8)}
 <radialGradient id="dbtefx-rb-ball"><stop offset="0" stop-color="${core}"/><stop offset="0.3" stop-color="${fire}" stop-opacity="0.95"/><stop offset="0.65" stop-color="${t.accent}" stop-opacity="0.35"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-rb-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${ink}"/><stop offset="0.5" stop-color="${mix(t.bg, t.accent, 0.12)}"/><stop offset="0.8" stop-color="${mix(t.bg, t.accent, 0.3)}"/><stop offset="1" stop-color="${mix(t.bg, t.accent2, 0.22)}"/></linearGradient>
-<path id="dbtefx-rb-wn" d="${near.d}"/><path id="dbtefx-rb-wf" d="${far.d}"/><g id="dbtefx-rb-body">${body}${spines}${talons}${head}</g></defs>
+<linearGradient id="dbtefx-rb-sheen" gradientUnits="userSpaceOnUse" x1="1200" y1="100" x2="1560" y2="700"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.38" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.46" stop-color="${mix(t.text, t.accent, 0.3)}" stop-opacity="0.22"/><stop offset="0.54" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.8" stop-color="${t.accent}" stop-opacity="0.12"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient><clipPath id="dbtefx-rb-clip">${body}${head}</clipPath><path id="dbtefx-rb-wn" d="${near.d}"/><path id="dbtefx-rb-wf" d="${far.d}"/><g id="dbtefx-rb-body">${body}${spines}${talons}${head}</g></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-rb-sky)"/>
 <circle cx="1380" cy="300" r="460" fill="url(#dbtefx-rb-sun)"/>
 <ellipse cx="358" cy="650" rx="150" ry="90" fill="url(#dbtefx-rb-crater)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
@@ -122,15 +136,17 @@ ${smoke}
 <path d="${ridge}" fill="${ink}"/>
 <!--mid-->
 <g transform="translate(1176 720) scale(0.76) translate(-1176 -720)">
-<g style="transform-origin: 1372px 404px; animation: dbtefx-rb-wl 4s ease-in-out infinite;"><use href="#dbtefx-rb-wf" fill="${t.accent}" fill-opacity="0.4" transform="translate(2 5)"/><use href="#dbtefx-rb-wf" fill="${membrane}"/><path d="${far.bones}" fill="${boneTone}"/></g>
+<g style="transform-origin: 1372px 404px; animation: dbtefx-rb-wl 4s ease-in-out infinite;"><use href="#dbtefx-rb-wf" fill="${t.accent}" fill-opacity="0.4" transform="translate(2 5)"/><use href="#dbtefx-rb-wf" fill="${t.accent}" fill-opacity="0.55" transform="translate(-2 -3)"/><use href="#dbtefx-rb-wf" fill="${membrane}"/><path d="${far.bones}" fill="${boneTone}" stroke="${t.accent}" stroke-opacity="0.45" stroke-width="1"/></g>
 <use href="#dbtefx-rb-body" fill="${t.accent}" fill-opacity="0.6" transform="translate(2 5)"/>
+<use href="#dbtefx-rb-body" fill="${mix(t.accent, '#ffffff', 0.15)}" fill-opacity="0.85" transform="translate(-3 -3)"/>
 <use href="#dbtefx-rb-body" fill="${ink}"/>
+<g clip-path="url(#dbtefx-rb-clip)"><rect x="1150" y="60" width="460" height="700" fill="url(#dbtefx-rb-sheen)"/><g fill="none" stroke="${t.accent}" stroke-width="3" stroke-linecap="round" ${anim('pulse', 4, 1, 'ease-in-out')}>${veins}</g><g fill="none" stroke="${mix(t.accent, '#ffffff', 0.4)}" stroke-width="0.8" stroke-linecap="round">${veins}</g></g>
 <g fill="${fire}" fill-opacity="0.85">${teeth}</g>
 <circle cx="1266" cy="178" r="34" fill="url(#dbtefx-rb-eye)" ${anim('pulse', 3, 0, 'ease-in-out')}/>
 <path d="M1254 180L1270 173L1281 177L1266 183Z" fill="${mix(t.accent, '#ffffff', 0.4)}"/>
 <circle cx="${fx}" cy="${fy}" r="64" fill="url(#dbtefx-rb-ball)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-rb-charge 2.4s ease-in-out infinite;"/>
 ${embers}
-<g style="transform-origin: 1414px 398px; animation: dbtefx-rb-wr 4s ease-in-out infinite;"><use href="#dbtefx-rb-wn" fill="${t.accent}" fill-opacity="0.5" transform="translate(2 5)"/><use href="#dbtefx-rb-wn" fill="${membrane}"/><path d="${near.bones}" fill="${boneTone}"/></g>
+<g style="transform-origin: 1414px 398px; animation: dbtefx-rb-wr 4s ease-in-out infinite;"><use href="#dbtefx-rb-wn" fill="${t.accent}" fill-opacity="0.5" transform="translate(2 5)"/><use href="#dbtefx-rb-wn" fill="${t.accent}" fill-opacity="0.7" transform="translate(-2 -3)"/><use href="#dbtefx-rb-wn" fill="${membrane}"/><path d="${near.bones}" fill="${boneTone}" stroke="${t.accent}" stroke-opacity="0.6" stroke-width="1.2"/></g>
 </g>
 <!--near-->
 <path d="${crag}" fill="${t.accent}" fill-opacity="0.5" transform="translate(0 -4)"/>

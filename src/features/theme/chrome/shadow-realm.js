@@ -38,7 +38,7 @@ const vortex = (t, kit) => {
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
 const popButton = (t, label, W, H, primary) => {
-  const c = primary ? t.accent : t.accent2;
+  const c = primary ? t.accent : mix(t.accent, t.muted, 0.55);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><filter id="g" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="3"/></filter></defs><rect x="9" y="11" width="${W - 18}" height="56" rx="3" fill="none" stroke="${c}" stroke-opacity="0.6" stroke-width="3" filter="url(#g)"/><rect x="9" y="11" width="${W - 18}" height="56" rx="3" fill="${mix(t.bg, t.surface, 0.6)}" stroke="${c}" stroke-width="1.4"/><path d="M14 62H${W - 14}" stroke="${t.accent2}" stroke-opacity="0.6" stroke-width="2"/><text x="${W / 2}" y="40" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${c}">${label}</text></svg>`;
 };
 
@@ -59,10 +59,10 @@ const eyeRing = (t, kit) => {
 export default (t, kit) => {
   const { sel, SEL, alpha } = kit;
   const pseudo = (list, p) => list.split(', ').map((s) => `${s}::${p}`).join(', ');
-  const slab = `linear-gradient(172deg, ${mix(t.raised, t.muted, 0.12)} 0%, ${t.raised} 30%, ${t.surface} 70%, ${mix(t.surface, t.bg, 0.5)} 100%)`;
+  const slab = `linear-gradient(180deg, ${mix(t.surface, t.accent, 0.04)} 0%, ${mix(t.bg, '#000000', 0.35)} 100%)`;
   const voidFog = (o) => `radial-gradient(ellipse 90% 70% at 50% 120%, ${alpha(t.accent2, o)}, transparent 70%)`;
   const seep = (o) => `radial-gradient(ellipse 60% 80% at 50% 50%, ${alpha(t.accent, o)}, transparent 70%)`;
-  const edge = mix(t.border, t.accent, 0.22);
+  const edge = mix(t.border, t.accent, 0.45);
   const plate = t.surface;
   const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
 
@@ -77,33 +77,34 @@ export default (t, kit) => {
   return `
 html body {
   --sr-cracks: ${svgUrl(cracks(t, kit))};
+  --sr-runes: ${svgUrl(kit.svg(64, 8, `<g fill="none" stroke="${t.accent}" stroke-width="1" stroke-linecap="round"><path d="M2 7V1l4 3-4 3M12 1v6M10 3h4M20 7l3-6 3 6M32 1h4v6M42 1l4 6M46 1l-4 6M52 7V1h4M52 4h3M60 1v6"/></g>`))};
   --sr-vortex: ${svgUrl(vortex(t, kit))};
   --sr-fracture: ${svgUrl(fracture(t, kit))};
 }
 
 /* Menu tiles: cracked arena slabs, the void below, the eye watching. */
 ${SEL.tile} {
-  background: ${voidFog(0.3)}, var(--sr-cracks), ${slab} !important;
+  background: ${slab} !important;
   border-color: transparent !important;
   border-radius: 1px !important;
-  box-shadow: inset 0 0 0 1px ${edge}, inset 0 1px 0 ${alpha(t.text, 0.1)}, inset 0 -3px 0 ${alpha(t.accent2, 0.55)}, 0 14px 28px -12px #000000 !important;
+  box-shadow: inset 0 0 0 1px ${edge}, 0 14px 28px -12px #000000 !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 45%; pointer-events: none;
-  background: radial-gradient(ellipse 40% 90% at 15% 100%, ${alpha(t.accent, 0.3)}, transparent 70%), radial-gradient(ellipse 50% 90% at 70% 100%, ${alpha(t.accent2, 0.42)}, transparent 70%), linear-gradient(0deg, ${alpha(t.accent2, 0.3)}, transparent); opacity: 0.8; transition: opacity 0.25s;
+  background: var(--sr-runes) left 6px bottom 4px / 64px 8px repeat-x, radial-gradient(ellipse 35% 90% at 20% 100%, ${alpha(t.accent2, 0.55)}, transparent 70%), radial-gradient(ellipse 45% 90% at 75% 100%, ${alpha(t.accent2, 0.6)}, transparent 70%), linear-gradient(0deg, ${alpha(t.accent2, 0.25)}, transparent); opacity: 0.85; transition: opacity 0.25s;
 }
 ${SEL.tileHover} {
-  background: ${seep(0.16)}, ${voidFog(0.45)}, var(--sr-cracks), ${slab} !important;
-  box-shadow: inset 0 0 0 1px ${t.accent}, inset 0 -3px 0 ${t.accent2}, 0 0 24px -6px ${alpha(t.accent, 0.75)} !important;
+  background: ${slab} !important;
+  box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 24px -6px ${alpha(t.accent, 0.75)} !important;
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; }
-${sel(['#main_menu .menu_btn:active .content'])} { background: ${voidFog(0.5)}, ${t.bg} !important; box-shadow: inset 0 3px 10px #000000, inset 0 0 0 1px ${t.accent2} !important; }
-${sel(['#main_menu .menu_btn .content span', '#main_menu .menu_btn span'])} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 14px ${alpha(t.accent2, 0.6)} !important; }
+${sel(['#main_menu .menu_btn:active .content'])} { background: ${voidFog(0.5)}, ${t.bg} !important; box-shadow: inset 0 3px 10px #000000, inset 0 0 0 1px ${t.accent} !important; }
+${sel(['#main_menu .menu_btn .content span', '#main_menu .menu_btn span'])} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 14px ${alpha(t.accent, 0.6)} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${edge} !important; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${t.accent} !important; box-shadow: 0 0 8px ${t.accent}; }
 
 /* Page titles: a glowing fracture beneath. */
-${sel(['#content .title1'])} { color: ${t.text} !important; text-shadow: 0 3px 0 #000000, 0 0 26px ${alpha(t.accent2, 0.7)} !important; }
+${sel(['#content .title1'])} { color: ${t.text} !important; text-shadow: 0 3px 0 #000000, 0 0 26px ${alpha(t.accent, 0.45)} !important; }
 ${sel(['#content .title1::after'])} {
   content: ""; position: absolute; left: calc(50% - 130px); width: 260px; bottom: 2px; height: 10px; pointer-events: none;
   background: var(--sr-fracture) center / 100% 100% no-repeat;
@@ -115,7 +116,7 @@ ${button} {
   border-color: ${edge} !important;
   border-radius: 1px !important;
   color: ${t.text} !important;
-  box-shadow: inset 0 1px 0 ${alpha(t.text, 0.1)}, inset 0 -2px 0 ${alpha(t.accent2, 0.45)} !important;
+  box-shadow: inset 0 1px 0 ${alpha(t.text, 0.1)}, inset 0 -2px 0 ${alpha(t.accent, 0.4)} !important;
 }
 ${buttonHover} {
   background: ${seep(0.28)}, var(--sr-cracks), ${slab} !important;
@@ -124,8 +125,8 @@ ${buttonHover} {
 }
 ${SEL.buttonDown} {
   background: ${voidFog(0.6)}, ${t.bg} !important;
-  border-color: ${t.accent2} !important;
-  box-shadow: inset 0 3px 8px #000000, inset 0 0 0 1px ${alpha(t.accent2, 0.6)} !important;
+  border-color: ${t.accent} !important;
+  box-shadow: inset 0 3px 8px #000000, inset 0 0 0 1px ${alpha(t.accent, 0.6)} !important;
 }
 
 /* Text fields: dark recesses cut into the stone. */
@@ -141,17 +142,17 @@ ${fieldFocus} { outline: 1px solid ${t.accent} !important; box-shadow: inset 0 2
 ${SEL.dialog} {
   background: ${voidFog(0.35)}, var(--sr-cracks), ${slab} !important;
   border-radius: 2px !important;
-  box-shadow: 0 0 0 1px ${edge}, inset 0 0 0 1px ${alpha(t.accent, 0.25)}, 0 0 60px -12px ${alpha(t.accent2, 0.7)}, 0 24px 60px -18px #000000 !important;
+  box-shadow: 0 0 0 1px ${edge}, inset 0 0 0 1px ${alpha(t.accent, 0.25)}, 0 0 60px -12px ${alpha(t.accent2, 0.5)}, 0 0 0 2px ${alpha(t.accent, 0.35)}, 0 24px 60px -18px #000000 !important;
 }
 ${pseudo(SEL.dialog, 'before')} {
   content: ""; position: absolute; left: calc(50% - 26px); top: -26px; right: auto; bottom: auto; width: 52px; height: 52px; transform: none; pointer-events: none; z-index: 2;
-  background: ${t.bg}; border-radius: 50%; box-shadow: 0 0 0 1px ${edge}, 0 0 18px ${alpha(t.accent2, 0.6)};
+  background: ${t.bg}; border-radius: 50%; box-shadow: 0 0 0 1.5px ${t.accent}, 0 0 18px ${alpha(t.accent, 0.5)};
 }
 ${pseudo(SEL.dialog, 'after')} {
   content: ""; position: absolute; left: calc(50% - 23px); top: -23px; right: auto; bottom: auto; width: 46px; height: 46px; transform: none; pointer-events: none; z-index: 3;
   background: var(--sr-vortex) center / contain no-repeat;
 }
-${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 18px ${alpha(t.accent2, 0.75)} !important; }
+${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 18px ${alpha(t.accent, 0.45)} !important; }
 ${pseudo(SEL.dialogTitle, 'after')} {
   content: ""; position: absolute; left: 8%; right: 8%; bottom: -8px; height: 9px; pointer-events: none;
   background: var(--sr-fracture) center / 100% 100% no-repeat;
@@ -165,10 +166,10 @@ ${SEL.chatTop} {
 }
 ${SEL.chat} { background: ${voidFog(0.22)}, ${t.surface} !important; box-shadow: inset 1px 0 0 ${edge}, inset -1px 0 0 ${edge}, inset 0 -1px 0 ${edge} !important; }
 ${sel(['#chats .chat .cout_txt'])} { background-color: ${mix(t.bg, t.surface, 0.4)} !important; border-color: ${alpha(t.accent, 0.2)} !important; }
-${sel(['#chats .chat .black_line'])} { background-color: ${t.accent2} !important; }
+${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important; }
 
 /* Duel: the eye guards the life bar; phases are cracked rings of green light. */
-${SEL.life} { border-color: ${edge} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px #000000, 0 0 18px -4px ${alpha(t.accent2, 0.9)} !important; }
+${SEL.life} { border-color: ${edge} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px #000000, 0 0 18px -4px ${alpha(t.accent, 0.7)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -30px; top: 50%; width: 40px; height: 40px; margin-top: -20px; pointer-events: none;
   background: var(--sr-vortex) center / contain no-repeat; filter: drop-shadow(0 0 3px ${t.accent});
@@ -192,15 +193,15 @@ ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow:
 ${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${edge} !important; border-radius: 1px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${slab} !important; border-radius: 0 !important; }
-${sel(['#duel #watchers'])} { background: ${voidFog(0.2)}, ${t.surface} !important; box-shadow: inset 0 0 0 1px ${edge}, inset 0 -2px 0 ${t.accent2} !important; }
+${sel(['#duel #watchers'])} { background: ${voidFog(0.2)}, ${t.surface} !important; box-shadow: inset 0 0 0 1px ${edge}, inset 0 -2px 0 ${t.accent} !important; }
 
 /* Pop-up buttons: dark stone, neon-green edge. */
 ${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#content img[data-src*="/svg/${n}"]`])} { content: ${svgUrl(popButton(t, label, w, h, p))} !important; }`).join(' ')}
 
 /* Duel room panels: slabs over the void, a green-to-violet rim. */
 ${panels} { background: ${voidFog(0.2)}, var(--sr-cracks), ${alpha(t.surface, 0.9)} !important; border-radius: 2px !important; }
-${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(170deg, ${mix(t.accent, t.border, 0.5)}, ${t.border} 35%, ${t.border} 65%, ${t.accent2}) !important; }
-${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 18px ${alpha(t.accent2, 0.7)} !important; }
+${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(170deg, ${mix(t.accent, t.border, 0.5)}, ${t.border} 35%, ${t.border} 65%, ${t.accent}) !important; }
+${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 18px ${alpha(t.accent, 0.45)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${slab} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${seep(0.14)}, ${slab} !important; }
 ${sel(['#duel_room .duelbutton'])} { border-color: ${alpha(t.accent, 0.18)} !important; }
@@ -211,8 +212,8 @@ ${sel(['#deck_constructor .deck_bg'])} { background: ${voidFog(0.25)}, var(--sr-
 ${sel(['#deck_constructor .side_bg'])} { background: var(--sr-cracks), ${mix(t.surface, t.accent, 0.1)} !important; box-shadow: inset 0 0 0 1px ${edge}, inset 3px 0 0 ${t.accent} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: var(--sr-cracks), ${mix(t.surface, t.accent2, 0.14)} !important; box-shadow: inset 0 0 0 1px ${edge}, inset 3px 0 0 ${t.accent2} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: ${voidFog(0.3)}, var(--sr-cracks), ${slab} !important; box-shadow: inset 0 0 0 1px ${edge} !important; border-radius: 2px 2px 0 0 !important; }
-${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; opacity: 1 !important; text-shadow: 0 0 14px ${alpha(t.accent2, 0.8)} !important; }
-${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000, 0 0 18px ${alpha(t.accent2, 0.7)} !important; }
+${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; opacity: 1 !important; text-shadow: 0 0 14px ${alpha(t.accent, 0.5)} !important; }
+${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000, 0 0 18px ${alpha(t.accent, 0.45)} !important; }
 
 /* Settings boxes: slabs, their colour family glowing through the bottom crack. */
 ${setPanels} { background-image: ${voidFog(0.2)}, var(--sr-cracks) !important; border-radius: 2px !important; }

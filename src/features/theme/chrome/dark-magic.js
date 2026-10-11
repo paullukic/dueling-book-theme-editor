@@ -34,9 +34,10 @@ const star = (cx, cy, r, color) => {
   return `<path d="M${p.join('L')}Z" fill="${color}"/>`;
 };
 
-// A quarter of a magic circle centred on the top-left corner.
+// A quarter of the Dark Magic Circle in the top-left corner: gold rims and
+// the black rune band with gold runes.
 const cornerCircle = (t, kit) =>
-  kit.svg(70, 70, `<g fill="none"><path d="M3 60A57 57 0 0 1 60 3" stroke="${t.accent2}" stroke-width="1.4"/><path d="M3 48A45 45 0 0 1 48 3" stroke="${t.accent}" stroke-width="1"/><path d="M3 24A21 21 0 0 1 24 3" stroke="${t.accent2}" stroke-opacity="0.7" stroke-width="1"/><path d="M3 3L44 44" stroke="${t.accent}" stroke-opacity="0.45" stroke-width="0.8"/></g>${glyphRing(3, 3, 51.5, 8, 82, 9.5, 0.62, t.accent2, 1)}${star(16, 16, 5, t.warning)}`);
+  kit.svg(48, 48, `<path d="M0 36A36 36 0 0 1 36 0" fill="none" stroke="${mix(t.warning, t.bg, 0.5)}" stroke-width="13"/><path d="M0 36A36 36 0 0 1 36 0" fill="none" stroke="${t.bg}" stroke-width="10"/><path d="M0 43A43 43 0 0 1 43 0M0 29A29 29 0 0 1 29 0" fill="none" stroke="${t.warning}" stroke-width="1.6"/>${glyphRing(0, 0, 36, 10, 80, 14, 0.75, t.warning, 1.1)}`);
 
 // The phase ring: two thin circles and a glyph band that sits just outside the button.
 const phaseRing = (t, kit) =>
@@ -76,7 +77,6 @@ export default (t, kit) => {
   const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
   const rot = (s, c) => s.replace(/(<svg[^>]*>)([\s\S]*)<\/svg>/, (m, open, body) => `${open}<g transform="rotate(180 ${c} ${c})">${body}</g></svg>`);
   const corner = cornerCircle(t, kit);
-  const corners = (px) => `var(--dm-corner) left top / ${px}px ${px}px no-repeat, var(--dm-corner-r) right bottom / ${px}px ${px}px no-repeat`;
   // Double trim: teal hairline outside, violet rule inside.
   const doubleTrim = (gap) => `0 0 0 1px ${t.accent2}, inset 0 0 0 ${gap}px ${t.surface}, inset 0 0 0 ${gap + 1}px ${alpha(t.accent, 0.55)}`;
 
@@ -91,29 +91,34 @@ export default (t, kit) => {
 
   return `
 html body {
-  --dm-corner: ${svgUrl(corner)};
-  --dm-corner-r: ${svgUrl(rot(corner, 35))};
+
+  --dm-corner-r: ${svgUrl(rot(corner, 24))};
+  --dm-corner-tr: ${svgUrl(corner.replace(/(<svg[^>]*>)([\s\S]*)<\/svg>/, (m, o, b) => `${o}<g transform="rotate(90 24 24)">${b}</g></svg>`))};
   --dm-gold: ${svgUrl(goldCircle(t, kit))};
+  --dm-orb: ${svgUrl(kit.svg(30, 30, `<path d="M15 29L9 20Q5 12 9 6Q6 14 12 18L15 22L18 18Q24 14 21 6Q25 12 21 20Z" fill="${t.warning}" stroke="${mix(t.warning, t.bg, 0.5)}" stroke-width="0.8"/><circle cx="15" cy="12" r="7" fill="${t.success}" stroke="${t.warning}" stroke-width="1.4"/><circle cx="13" cy="10" r="2.2" fill="#ffffff" fill-opacity="0.7"/>`))};
   --dm-staff: ${svgUrl(staffLine(t, kit))};
   --dm-runes: ${svgUrl(runeBand(t, kit))};
 }
 
+/* The page backdrop keeps its stars but loses the skin's pentagram. */
+html body #dbte-skin-motif, html body #dbte-skin-motif::before { background-image: none !important; }
+
 /* Menu tiles: vellum plates, quarter spell circles in two corners, a faint seal. */
 ${SEL.tile} {
-  background: var(--dm-gold) right -24px center / 60px 60px no-repeat, radial-gradient(ellipse at 85% 50%, ${alpha(t.accent, 0.18)}, transparent 55%), ${vellum} !important;
+  background: var(--dm-gold) left -18px center / 36px 36px no-repeat, radial-gradient(ellipse at 10% 50%, ${alpha(t.accent, 0.18)}, transparent 55%), ${vellum} !important;
   border-color: transparent !important;
   border-radius: 6px !important;
-  box-shadow: ${doubleTrim(3)}, 0 14px 28px -14px #000000 !important;
+  box-shadow: ${doubleTrim(3)}, inset 0 -3px 0 ${t.warning}, inset 0 -5px 0 ${t.success}, 0 14px 28px -14px #000000 !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; inset: -4px; pointer-events: none;
-  background: ${corners(46)}; opacity: 0.85; transition: opacity 0.2s, filter 0.2s;
+  content: ""; position: absolute; left: calc(50% - 15px); top: -15px; width: 30px; height: 30px; pointer-events: none; z-index: 2;
+  background: var(--dm-orb) center / contain no-repeat; opacity: 0; transition: opacity 0.2s;
 }
 ${SEL.tileHover} {
-  background: var(--dm-gold) right -24px center / 60px 60px no-repeat, radial-gradient(ellipse at 85% 50%, ${alpha(t.accent2, 0.22)}, transparent 60%), ${vellum} !important;
-  box-shadow: 0 0 0 1px ${t.accent2}, inset 0 0 0 3px ${t.surface}, inset 0 0 0 4px ${t.accent}, 0 0 24px -4px ${alpha(t.accent, 0.8)}, 0 0 12px -4px ${alpha(t.accent2, 0.7)} !important;
+  background: var(--dm-gold) left -18px center / 36px 36px no-repeat, radial-gradient(ellipse at 10% 50%, ${alpha(t.accent2, 0.22)}, transparent 60%), ${vellum} !important;
+  box-shadow: 0 0 0 1px ${t.accent2}, inset 0 0 0 3px ${t.surface}, inset 0 0 0 4px ${t.accent}, inset 0 -3px 0 ${t.warning}, inset 0 -5px 0 ${t.success}, 0 0 24px -4px ${alpha(t.accent, 0.8)}, 0 0 12px -4px ${alpha(t.accent2, 0.7)} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 3px ${alpha(t.accent2, 0.9)}); }
+${sel(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; filter: drop-shadow(0 0 4px ${t.success}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${vellum} !important; box-shadow: inset 0 3px 10px #000000, 0 0 0 1px ${t.accent2} !important; }
 ${sel(['#main_menu .menu_btn .content span', '#main_menu .menu_btn span'])} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 16px ${alpha(t.accent, 0.7)} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${t.accent2} !important; border-radius: 50% !important; }
@@ -162,7 +167,7 @@ ${SEL.dialog} {
 }
 ${pseudo(SEL.dialog, 'before')} {
   content: ""; position: absolute; inset: 0; width: auto; height: auto; transform: none; pointer-events: none; z-index: 1;
-  background: ${corners(64)};
+  background: var(--dm-corner-r) right bottom / 48px 48px no-repeat;
 }
 ${pseudo(SEL.dialog, 'after')} { content: none; }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 18px ${alpha(t.accent, 0.75)} !important; }
@@ -212,7 +217,7 @@ ${sel(['#duel #watchers'])} { background: ${t.surface} !important; box-shadow: i
 /* Duel room panels: grimoire pages with circle corners and a violet-teal trim. */
 ${panels} { background: radial-gradient(ellipse at 50% 0%, ${alpha(t.accent, 0.12)}, transparent 60%), ${alpha(t.surface, 0.88)} !important; border-radius: 10px !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(135deg, ${t.accent2}, ${t.accent} 30%, ${mix(t.accent, t.bg, 0.5)} 50%, ${t.accent} 70%, ${t.accent2}) !important; }
-${pseudo(panels, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-r) right bottom / 54px 54px no-repeat; }
+${pseudo(panels, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-tr) right top / 36px 36px no-repeat; }
 ${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 ${t.bg}, 0 0 18px ${alpha(t.accent, 0.75)} !important; }
 
 /* Pop-up buttons: violet spell plates with a gold rim. */
@@ -227,13 +232,13 @@ ${sel(['#deck_constructor .deck_bg'])} { background: radial-gradient(ellipse at 
 ${sel(['#deck_constructor .side_bg'])} { background: ${mix(t.surface, t.accent, 0.2)} !important; box-shadow: inset 0 0 0 1px ${trim}, inset 0 2px 0 ${t.accent} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: ${mix(t.surface, t.accent2, 0.12)} !important; box-shadow: inset 0 0 0 1px ${trim}, inset 0 2px 0 ${t.accent2} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: ${vellum} !important; box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 0 0 4px ${t.surface}, inset 0 0 0 5px ${alpha(t.accent, 0.4)} !important; border-radius: 10px 10px 0 0 !important; }
-${pseudo(deckFrames, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-r) right bottom / 64px 64px no-repeat; }
+${pseudo(deckFrames, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-r) right bottom / 48px 48px no-repeat; }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; opacity: 1 !important; text-shadow: 0 0 16px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 ${t.bg}, 0 0 20px ${alpha(t.accent, 0.75)} !important; }
 
 /* Settings boxes keep their colour family as an inner rule, on vellum. */
 ${setPanels} { background-image: linear-gradient(170deg, ${alpha(t.text, 0.05)}, transparent 50%) !important; border-radius: 10px !important; }
-${pseudo(setPanels, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-r) right bottom / 50px 50px no-repeat; }
+${pseudo(setPanels, 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--dm-corner-r) right bottom / 48px 48px no-repeat; }
 ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings .${c}`))} { background-color: color-mix(in srgb, ${t.surface} 88%, ${t.accent}) !important; border-color: ${trim} !important; box-shadow: inset 0 0 0 3px ${t.surface}, inset 0 0 0 4px ${alpha(t.accent, 0.6)}, 0 16px 30px -16px #000000 !important; }`).join(' ')}
 
 /* Scrollbars: a violet wand with a teal core. */

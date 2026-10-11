@@ -74,7 +74,6 @@ export default (tokens, kit) => {
   const panels = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const families = { success: ['about_me', 'preferences'], accent: ['social_media', 'animation'], accent2: ['profile_song', 'account', 'messages'], warning: ['duel_stats', 'profile_comments'] };
   const setPanels = sel(Object.values(families).flat().map((c) => `#settings .${c}`));
-  const deckFrames = sel(['#deck_constructor .deck_bg', '#deck_constructor #search .search_bg']);
   const button = sel(['#content .button', '#content .combobox']);
   const buttonHover = sel(['#content .button:hover', '#content .button.button_selected', '#content .combobox:hover', '#content .combobox.combobox_selected']);
   const field = sel(['#content input[type=text]', '#content input[type=password]', '#content input:not([type])', '#content .textinput', '#content textarea']);
@@ -209,7 +208,7 @@ ${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#c
 /* Duel room panels: obsidian plates with a steel-to-ember rim and claw marks. */
 ${panels} { background: ${heat(0.1)}, var(--bd-scales), ${alpha(t.surface, 0.9)} !important; border-radius: 0 !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(160deg, ${steel}, ${t.border} 40%, ${t.border} 60%, ${t.accent} 90%, ${t.accent2}) !important; }
-${pseudo(panels, 'after')} { content: ""; position: absolute; right: 8px; bottom: 6px; width: 50px; height: 38px; pointer-events: none; background: var(--bd-claws) center / contain no-repeat; transform: rotate(180deg); opacity: 0.85; }
+${pseudo(panels, 'after')} { content: ""; position: absolute; right: 6px; top: 6px; width: 28px; height: 22px; pointer-events: none; background: var(--bd-claws) center / contain no-repeat; opacity: 0.8; }
 ${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.55)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${metal} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${heat(0.35)}, ${metal} !important; }
@@ -221,7 +220,6 @@ ${sel(['#deck_constructor .deck_bg'])} { background: ${heat(0.14)}, var(--bd-sca
 ${sel(['#deck_constructor .side_bg'])} { background: var(--bd-scales), ${mix(t.surface, t.accent, 0.14)} !important; box-shadow: inset 0 0 0 1px ${steel}, inset 3px 0 0 ${t.accent2} !important; }
 ${sel(['#deck_constructor .extra_bg'])} { background: var(--bd-scales), ${mix(t.surface, t.accent2, 0.12)} !important; box-shadow: inset 0 0 0 1px ${steel}, inset 3px 0 0 ${steel} !important; }
 ${sel(['#deck_constructor #search .search_bg'])} { background: ${heat(0.12)}, var(--bd-scales), ${metal} !important; box-shadow: inset 0 0 0 1px ${steel}, inset 0 1px 0 ${alpha(t.text, 0.2)} !important; border-radius: 0 !important; }
-${pseudo(deckFrames, 'after')} { content: ""; position: absolute; right: 6px; bottom: 6px; width: 54px; height: 42px; pointer-events: none; background: var(--bd-claws) center / contain no-repeat; transform: rotate(180deg); }
 ${sel(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: ${t.text} !important; opacity: 1 !important; text-shadow: 0 0 14px ${alpha(t.accent, 0.7)} !important; }
 ${sel(['#deck_constructor #search .title_txt'])} { text-shadow: 0 2px 0 #000000, 0 0 18px ${alpha(t.accent, 0.55)} !important; }
 
