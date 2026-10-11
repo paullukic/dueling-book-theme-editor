@@ -73,7 +73,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const pageTitles = sel(['#content .title1', '#content #settings .title_txt', '#content #settings_content > .title_txt']);
-  const panelText = sel(['#duel_room #host_lbl', '#duel_room #host span', '#duel_room #host label', '#duel_room #filter span', '#duel_room #mode span', '#duel_room #mode label', '#duel_room #decklist span', '#duel_room .format .format_txt', '#deck_constructor #search span:not(#dbte-none)', '#deck_constructor #search .title_txt', '#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl', '#content #settings_content > div span', '#content #settings_content > div label', '#content .combobox span', '#content .combobox', '#content .combo_item span']);
+  const panelText = sel(['#duel_room #host_lbl', '#duel_room #host span', '#duel_room #host label', '#duel_room #filter span', '#duel_room #mode span', '#duel_room #mode label', '#duel_room #decklist span', '#deck_constructor #search span:not(#dbte-none)', '#deck_constructor #search .title_txt', '#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl', '#content #settings_content > div span', '#content #settings_content > div label', '#content .combobox span', '#content .combobox', '#content .combo_item span']);
 
   const u0 = svgUrl(facets);
   const u1 = svgUrl(frameSvg);
@@ -136,8 +136,6 @@ ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${paleIce} !important;
 ${lobbyBorders} { background: ${paleBg()} !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(150deg, ${deep}, ${silver} 30%, #ffffff 50%, ${silver} 70%, ${deep}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(16)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 12%, ${paleIce} 12% 92%, transparent 92%) center / 76% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${paleIce} !important; box-shadow: 0 0 0 0.35em ${paleIce}, 0 0 0 calc(0.35em + 1px) ${deep} !important; border-radius: 3px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.16)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.4)}, ${alpha(frost, 0.1)}) !important; }
 
@@ -154,6 +152,11 @@ ${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; 
 ${panelText} { ${navyText} }
 ${pageTitles} { color: #ffffff !important; text-shadow: 0 0 2px ${navy}, 0 0 4px ${navy}, 0 0 18px ${alpha(ice, 0.75)} !important; }
 
+/* Panel titles straddle the panel edge: white light with a navy halo, and a navy cut in the ring behind the word only. */
+${sel(['#duel_room .format .format_txt', '#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { color: #ffffff !important; text-shadow: 0 0 2px ${navy}, 0 0 4px ${navy}, 0 0 8px ${navy}, 0 0 16px ${alpha(ice, 0.6)} !important; box-shadow: none !important; border-radius: 0 !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent, ${navy} 8% 92%, transparent) center 72% / 70% 22% no-repeat !important; }
+${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${navy} 10% 90%, transparent) 0 72% / 100% 22% no-repeat !important; }
+${sel(['#content #settings_content .admin_lbl'])} { background: linear-gradient(90deg, transparent, ${navy} 10% 90%, transparent) 0 42% / 100% 22% no-repeat !important; }
 /* Text fields and dropdowns: white ice with a deep blue edge. */
 ${SEL.field} { background-color: #ffffff !important; color: ${navy} !important; border-color: ${deep} !important; caret-color: ${deep}; box-shadow: inset 0 1px 3px ${alpha(deep, 0.35)} !important; }
 ${sel(['#content .combobox', '#duel_room .decklist_decks', '#content .combo_item'])} { background: linear-gradient(180deg, #ffffff, ${paleIce}) !important; border-color: ${deep} !important; }

@@ -127,7 +127,8 @@ ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(t.
 ${on(lobbyBorders, 'before')} { background: linear-gradient(180deg, ${mix(sumi, steel, 0.35)}, ${sumi} 35%, ${sumi} 70%, ${mix(sumi, steel, 0.2)}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; left: -6px; top: -6px; right: -6px; bottom: 0; pointer-events: none; ${torii(22)} }
 ${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${sumi} !important; box-shadow: 0 0 0 0.35em ${sumi} !important; border-radius: 4px !important; }
+${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 72% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
+${sel(['#content #settings_content .admin_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 42% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(shu, 0.2)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(shu, 0.45)}, ${alpha(shu, 0.12)}) !important; }
 
