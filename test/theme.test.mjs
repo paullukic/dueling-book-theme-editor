@@ -123,7 +123,8 @@ test('css: lettering sheets only change fonts', () => {
     assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|font-size|line-height|letter-spacing|left|top|border)\s*:/i, id);
   });
   assert.equal(fontCss('original'), null);
-  assert.ok(fontCss('card').includes('MatrixRegularSmallCaps') && fontCss('card').includes('Stone Serif'));
+  assert.ok(fontCss('card').includes('MatrixRegularSmallCaps'));
+  assert.doesNotMatch(fontCss('card'), /\.button|\.combobox|input|textarea/, 'card font stays off small controls');
 });
 
 test('css: reading text size touches only wrapping text boxes', () => {

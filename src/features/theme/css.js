@@ -57,7 +57,6 @@ const sel = (list) => [...list.map((x) => `html #content ${x}`), ...(list === BO
 
 // DuelingBook already loads the real card fonts for card faces.
 const CARD_TITLE = '"MatrixRegularSmallCaps", "Stone Serif", Georgia, serif';
-const CARD_BODY = '"Stone Serif", Georgia, serif';
 
 // 'original' -> null (DuelingBook's own fonts), 'system' -> clean UI font,
 // 'card' -> card-name small caps for titles and buttons, card-text serif elsewhere.
@@ -67,8 +66,9 @@ export const fontCss = (id) => {
 ${sel(TITLE_TEXT)} { font-weight: 800 !important; }`;
   }
   if (id === 'card') {
-    return `${sel(BODY_TEXT)} { font-family: ${CARD_BODY} !important; }
-${sel(TITLE_TEXT)}, html #content .button, html #content .combobox { font-family: ${CARD_TITLE} !important; font-weight: normal !important; }`;
+    // Card fonts read badly at button and field sizes: titles, headings and
+    // menu tiles only; everything small keeps DuelingBook's font.
+    return `${sel(TITLE_TEXT)} { font-family: ${CARD_TITLE} !important; font-weight: normal !important; }`;
   }
   return null;
 };
