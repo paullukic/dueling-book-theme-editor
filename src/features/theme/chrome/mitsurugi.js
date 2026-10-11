@@ -30,9 +30,14 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Shimenawa: a twisted straw rope with zigzag shide paper, hung under a full
   // kasagi with upturned ends that overhangs the pop-up.
-  const shide = (x, y) => `<path d="M${x} ${y}h8l-4 6h7l-4 6h7l-4 6h-5l3-4h-7l4-6h-7l3-4Z" fill="#ffffff" fill-opacity="0.94" stroke="${steelDim}" stroke-width="0.5"/>`;
+  // Shide: a strip of white paper folded into a zigzag, each fold a slanted panel.
+  const shide = (x, y) => {
+    const cream = mix('#ffffff', straw, 0.22);
+    const folds = [[0, 12, 18, 6], [6, 18, 10, -2], [-2, 10, 16, 4], [4, 16, 8, -6]];
+    return folds.map(([a, b, c, d], i) => `<path d="M${x + a} ${y + i * 9}H${x + b}L${x + c} ${y + i * 9 + 9}H${x + d}Z" fill="${i % 2 ? cream : '#ffffff'}" stroke="${steelDim}" stroke-width="0.6" stroke-linejoin="round"/>`).join('');
+  };
   const twist = `<defs><pattern id="tw" width="9" height="46" patternUnits="userSpaceOnUse"><path d="M0 17q5 3.5 0 9" fill="none" stroke="${mix(straw, t.bg, 0.45)}" stroke-width="1.4"/></pattern></defs><path d="M30 16Q320 30 610 16V24Q320 38 30 24Z" fill="url(#tw)"/>`;
-  const lintel = svg(640, 46, `<path d="M0 1Q40 9 110 9H530Q600 9 640 1V9Q600 15 532 15H108Q40 15 0 9Z" fill="${sumi}"/><path d="M0 1Q40 9 110 9H530Q600 9 640 1" fill="none" stroke="${steel}" stroke-width="1.5"/><path d="M30 16Q320 30 610 16V24Q320 38 30 24Z" fill="${straw}"/>${twist}<path d="M30 16Q320 30 610 16" fill="none" stroke="#ffffff" stroke-opacity="0.3"/>${shide(118, 24)}${shide(514, 24)}${shide(190, 28)}${shide(442, 28)}`);
+  const lintel = svg(640, 64, `<path d="M0 1Q40 9 110 9H530Q600 9 640 1V9Q600 15 532 15H108Q40 15 0 9Z" fill="${sumi}"/><path d="M0 1Q40 9 110 9H530Q600 9 640 1" fill="none" stroke="${steel}" stroke-width="1.5"/><path d="M30 16Q320 30 610 16V24Q320 38 30 24Z" fill="${straw}"/>${twist}<path d="M30 16Q320 30 610 16" fill="none" stroke="#ffffff" stroke-opacity="0.3"/>${shide(84, 25)}${shide(150, 28)}${shide(478, 28)}${shide(544, 25)}`);
 
   // Tsuba: a sword guard ring with the tang opening and two side ports, over the phase discs.
   const tsuba = svg(45, 45, `<g fill="none" stroke="${gold}" stroke-opacity="0.45"><circle cx="22.5" cy="22.5" r="20.5" stroke-width="1.6"/><circle cx="22.5" cy="22.5" r="18" stroke-width="0.6"/></g><g fill="none" stroke="${steel}" stroke-opacity="0.35" stroke-width="0.9"><path d="M8 18q-3 4.5 0 9q3-4.5 0-9Z"/><path d="M37 18q3 4.5 0 9q-3-4.5 0-9Z"/></g>`);
@@ -48,9 +53,20 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const lacquerBg = (lift = 0) => `linear-gradient(180deg, ${alpha(shu, 0.08 + lift)}, transparent 50%), var(--dbtc-u2), linear-gradient(180deg, ${mix(t.raised, t.surface, 0.5)}, ${lacquer})`;
   const label = `color: ${t.text} !important; text-shadow: 0 2px 0 ${sumi}, 0 0 10px ${alpha(sumi, 0.9)} !important;`;
 
+  // Pop-up buttons (DuelingBook's OK/Yes/No/Cancel <img>s), redrawn in the theme's material.
+  const popBtn = (label, wide, c) => {
+    const w = wide ? 234.85 : 153.4;
+    const bw = w - 12;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="58.5" rx="${c.r}" fill="url(#g)" stroke="${c.edge}" stroke-width="2.5"/><rect x="11" y="15" width="${bw - 10}" height="48.5" rx="${Math.max(c.r - 4, 0)}" fill="none" stroke="${c.inner}" stroke-opacity="0.75" stroke-width="1"/>${c.deco(w)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="700" font-size="26" fill="${c.text}">${label}</text></svg>`;
+  };
+  const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const popCss = (primary, secondary) => [['ok_btn', 'OK', primary, false], ['yes_btn', 'Yes', primary, false], ['no_btn', 'No', secondary, false], ['cancel_btn', 'Cancel', secondary, true]]
+    .map(([n, label, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(label, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
+  const popPrimary = { top: shuLit, bot: shuDeep, edge: sumi, inner: gold, text: '#ffffff', r: 1, shadow: alpha('#000000', 0.6), deco: (w) => `<path d="M0 3Q16 9 30 9H${w - 30}Q${w - 16} 9 ${w} 3V12Q${w - 16} 15 ${w - 28} 15H28Q16 15 0 12Z" fill="${sumi}"/><path d="M0 3Q16 9 30 9H${w - 30}Q${w - 16} 9 ${w} 3" fill="none" stroke="${steel}" stroke-width="1"/>` };
+  const popSecondary = { ...popPrimary, top: mix(t.raised, t.border, 0.3), bot: sumi, edge: shu, inner: steelDim, text: t.text };
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
-  const settingsPanels = sel(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
+  const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
   const u0 = svgUrl(toriiSvg);
@@ -71,19 +87,20 @@ ${SEL.tileLabel} { ${label} }
 
 /* Buttons: black lacquer with a vermilion foot and a steel edge. */
 ${SEL.button} { background: linear-gradient(180deg, ${mix(t.raised, t.border, 0.3)}, ${sumi}) !important; border-color: ${steelDim} !important; color: ${t.text} !important; border-radius: 1px !important; box-shadow: inset 0 -2px 0 ${shu}, inset 0 1px 0 ${alpha(steel, 0.3)}, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: linear-gradient(180deg, ${mix(t.raised, t.border, 0.3)}, ${sumi}) !important; border-color: ${steelDim} !important; color: ${t.text} !important; border-radius: 1px !important; box-shadow: inset 0 -2px 0 ${shu}, inset 0 1px 0 ${alpha(steel, 0.3)}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(180deg, ${shuLit}, ${shuDeep}) !important; border-color: ${gold} !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.3)}, 0 0 10px -2px ${alpha(shu, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${shuDeep} !important; border-color: ${gold} !important; box-shadow: inset 0 2px 5px #000000 !important; }
 
 /* Pop-ups: a shrine gate with shimenawa and shide hung beneath the lintel. */
 ${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 100%, ${alpha(shu, 0.14)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${sumi}) !important; border-radius: 0 !important; box-shadow: 0 0 0 1px ${steelDim}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: -10px; top: -10px; right: -10px; bottom: 0; width: auto; height: auto; pointer-events: none; z-index: 0; ${torii(28)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: -20px; top: -18px; right: auto; bottom: auto; width: 640px; height: 46px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 2px #000000); transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: -20px; top: -18px; right: auto; bottom: auto; width: 640px; height: 64px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 2px #000000); transform: none; }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 ${sumi}, 0 0 12px ${alpha(shu, 0.55)} !important; }
 
 /* Chat: a vermilion lintel under a black cap; steel rails down the window. */
 ${SEL.chatTop} { background: linear-gradient(180deg, ${sumi} 0 4px, ${shuLit} 4px, ${shu} 40%, ${shuDeep}) !important; box-shadow: inset 0 -2px 0 ${sumi} !important; border-radius: 0 !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${sumi}, 0 0 4px ${sumi} !important; }
-${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 3px 0 0 ${shu}, inset -3px 0 0 ${shu}, inset 0 -1px 0 ${steel} !important; }
+${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 2px 0 0 ${shu}, inset -2px 0 0 ${shu}, inset 4px 0 0 ${sumi}, inset -4px 0 0 ${sumi}, inset 0 -1px 0 ${steel} !important; }
 
 /* Duel: life bars are blades with a wrapped hilt; phases are sword guards. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 2px 14px 14px 2px !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -3px #000000 !important; }
@@ -102,24 +119,24 @@ ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) c
 ${sel(['#duel .phase span'])} { color: ${steel} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${sumi} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${shuLit}, ${shuDeep}) !important; }
-${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 3px 0 ${sumi}, inset 0 9px 0 ${shu}, inset 3px 0 0 ${shu}, inset -3px 0 0 ${shu} !important; }
+${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 0 0 2px ${shu}, inset 0 0 0 5px ${sumi}, inset 0 0 0 6px ${alpha(steel, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${shu}, 0 0 0 3px ${sumi}, 0 6px 16px -6px #000000 !important; }
 
 /* Duel room: vermilion rings, gate frames. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(t.surface, 0.8)}, ${alpha(sumi, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }
-${on(lobbyBorders, 'before')} { background: linear-gradient(180deg, ${shuLit}, ${shu} 40%, ${shuDeep}) !important; filter: none !important; }
+${on(lobbyBorders, 'before')} { background: linear-gradient(180deg, ${mix(sumi, steel, 0.35)}, ${sumi} 35%, ${sumi} 70%, ${mix(sumi, steel, 0.2)}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; left: -6px; top: -6px; right: -6px; bottom: 0; pointer-events: none; ${torii(22)} }
 ${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 8% 92%, transparent) center 72% / 100% 20% no-repeat !important; }
+${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${sumi} !important; box-shadow: 0 0 0 0.35em ${sumi} !important; border-radius: 4px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(shu, 0.2)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(shu, 0.45)}, ${alpha(shu, 0.12)}) !important; }
 
 /* Deck constructor: lacquer panels with a vermilion lintel. */
-${deckPanels} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 3px 0 ${sumi}, inset 0 7px 0 ${shu}, inset 0 0 0 1px ${steelDim} !important; }
+${deckPanels} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 0 0 2px ${shu}, inset 0 0 0 5px ${sumi}, inset 0 0 0 6px ${alpha(steel, 0.3)} !important; }
 ${on(sel(['#deck_constructor #search .search_bg']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; ${torii(20)} }
 
 /* Settings panels. */
-${settingsPanels} { border-color: ${shu} !important; background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(t.surface, 0.85)}, ${alpha(sumi, 0.9)}) !important; }
+${settingsPanels} { border-color: ${sumi} !important; background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(t.surface, 0.85)}, ${alpha(sumi, 0.9)}) !important; }
 ${on(settingsPanels, 'before')} { content: ""; position: absolute; left: -8px; top: -6px; right: -8px; bottom: -2px; pointer-events: none; ${torii(20)} }
 
 /* Titles: white with a vermilion edge. */
@@ -131,5 +148,8 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: vermilion posts. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${shuDeep}, ${shu}, ${shuDeep}) !important; border-radius: 0 !important; }
+
+/* Pop-up buttons in the theme material. */
+${popCss(popPrimary, popSecondary)}
 `;
 };

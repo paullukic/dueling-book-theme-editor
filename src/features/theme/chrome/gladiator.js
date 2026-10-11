@@ -66,9 +66,20 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const stoneBg = (lift = 0) => `linear-gradient(180deg, ${alpha('#ffffff', 0.06 + lift)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u2), linear-gradient(180deg, ${stone}, ${stoneDeep})`;
   const bronzePlate = `linear-gradient(180deg, ${bronzeLit}, ${bronze} 45%, ${mix(bronze, t.bg, 0.3)})`;
 
+  // Pop-up buttons (DuelingBook's OK/Yes/No/Cancel <img>s), redrawn in the theme's material.
+  const popBtn = (label, wide, c) => {
+    const w = wide ? 234.85 : 153.4;
+    const bw = w - 12;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="58.5" rx="${c.r}" fill="url(#g)" stroke="${c.edge}" stroke-width="2.5"/><rect x="11" y="15" width="${bw - 10}" height="48.5" rx="${Math.max(c.r - 4, 0)}" fill="none" stroke="${c.inner}" stroke-opacity="0.75" stroke-width="1"/>${c.deco(w)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="700" font-size="26" fill="${c.text}">${label}</text></svg>`;
+  };
+  const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const popCss = (primary, secondary) => [['ok_btn', 'OK', primary, false], ['yes_btn', 'Yes', primary, false], ['no_btn', 'No', secondary, false], ['cancel_btn', 'Cancel', secondary, true]]
+    .map(([n, label, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(label, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
+  const popPrimary = { top: bronzeLit, bot: mix(bronze, t.bg, 0.25), edge: bronzeDeep, inner: '#ffffff', text: t.accentText, r: 3, shadow: alpha('#000000', 0.6), deco: (w) => [[14, 18], [w - 14, 18], [14, 60.5], [w - 14, 60.5]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.2" fill="${bronzeDeep}" stroke="${bronzeLit}"/>`).join('') };
+  const popSecondary = { ...popPrimary, top: stone, bot: stoneDeep, edge: bronze, inner: bronze, text: t.text, deco: (w) => [[14, 18], [w - 14, 18], [14, 60.5], [w - 14, 60.5]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.2" fill="${bronze}" stroke="${bronzeLit}"/>`).join('') };
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
-  const settingsPanels = sel(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
+  const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
   const u0 = svgUrl(frameSvg);
@@ -81,7 +92,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   return `
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5], ['u6', u6]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: sandstone blocks in a riveted bronze frieze, a laurel sprig on top. */
-${SEL.tile} { background: ${stoneBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 13px round !important; border-radius: 0 !important; box-shadow: 0 10px 22px -12px #000000 !important; }
+${SEL.tile} { background: ${stoneBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 9px 4px round !important; border-radius: 0 !important; box-shadow: 0 10px 22px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 17px); top: -5px; width: 34px; height: 12px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: linear-gradient(0deg, ${alpha(banner, 0.35)}, transparent 70%), ${stoneBg(0.06)} !important; box-shadow: 0 0 20px -5px ${alpha(bronze, 0.9)}, 0 12px 24px -12px #000000 !important; }
@@ -89,6 +100,7 @@ ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 
 
 /* Buttons: polished bronze plates. */
 ${SEL.button} { background: ${bronzePlate} !important; border-color: ${bronzeDeep} !important; color: ${t.accentText} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.45)}, inset 0 -2px 0 ${alpha('#000000', 0.25)}, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: ${bronzePlate} !important; border-color: ${bronzeDeep} !important; color: ${t.accentText} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.45)}, inset 0 -2px 0 ${alpha('#000000', 0.25)}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(180deg, #ffffff, ${bronzeLit} 30%, ${bronze}) !important; border-color: ${banner} !important; box-shadow: inset 0 -2px 0 ${banner}, 0 0 10px -2px ${alpha(bronze, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${mix(bronze, t.bg, 0.25)} !important; border-color: ${banner} !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.6)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(t.accentText, bronze, 0.45)} !important; }
@@ -129,7 +141,7 @@ ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(st
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${bronzeLit}, ${bronze} 30%, ${bronzeDeep} 55%, ${bronze} 80%, ${bronzeLit}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(14)} }
 ${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 8% 92%, transparent) center 72% / 100% 20% no-repeat !important; }
+${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${stoneDeep} !important; box-shadow: 0 0 0 0.35em ${stoneDeep} !important; border-radius: 4px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(banner, 0.22)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(banner, 0.45)}, ${alpha(bronze, 0.15)}) !important; }
 
@@ -150,5 +162,8 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: bronze rods. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${bronzeDeep}, ${bronzeLit}, ${bronzeDeep}) !important; border-radius: 2px !important; }
+
+/* Pop-up buttons in the theme material. */
+${popCss(popPrimary, popSecondary)}
 `;
 };

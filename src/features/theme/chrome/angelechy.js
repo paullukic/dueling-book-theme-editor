@@ -26,8 +26,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const sq1 = mix(t.surface, t.bg, 0.3);
   const sq2 = mix(t.raised, t.border, 0.25);
 
-  // The board: an 8x8 check, faint.
-  const board = (a = 0.5, s = 14) => svg(s * 2, s * 2, `<rect width="${s * 2}" height="${s * 2}" fill="${sq1}" fill-opacity="${a}"/><path d="M0 0h${s}v${s}H0zM${s} ${s}h${s}v${s}H${s}z" fill="${sq2}" fill-opacity="${a}"/>`);
+  // The board: an inlaid floor of gold lines, squares barely shaded.
+  const board = () => svg(48, 48, `<path d="M0 0h24v24H0zM24 24h24v24H24z" fill="${ivory}" fill-opacity="0.025"/><path d="M0 0.5H48M0.5 0V48M0 24.5H48M24.5 0V48" stroke="${gold}" stroke-opacity="0.09"/><path d="M24.5 21.5l3 3-3 3-3-3z" fill="${gold}" fill-opacity="0.22"/>`);
   const piece = (name, fill = ivory, stroke = goldDeep) => svg(20, 23, `<path d="${PIECES[name]}" fill="${fill}" stroke="${stroke}" stroke-width="1" stroke-linejoin="round"/><path d="M3.4 21.2h13.2v1.4H3.4z" fill="${gold}"/>`);
 
   // Nine-slice armour frame: an ivory plate edge with a gold band and corner rivets.
@@ -50,27 +50,37 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Phase discs: a 4x4 check inside a gold band.
   const checks = svg(45, 45, `<defs><pattern id="c" width="11.25" height="11.25" patternUnits="userSpaceOnUse"><rect width="5.625" height="5.625" fill="${ivory}" fill-opacity="0.11"/><rect x="5.625" y="5.625" width="5.625" height="5.625" fill="${ivory}" fill-opacity="0.11"/></pattern></defs><circle cx="22.5" cy="22.5" r="20" fill="url(#c)"/><circle cx="22.5" cy="22.5" r="20" fill="none" stroke="${gold}" stroke-opacity="0.75" stroke-width="1.2"/>`);
 
-  const armour = (lift = 0) => `linear-gradient(180deg, ${alpha('#ffffff', 0.08 + lift)}, transparent 45%), var(--dbtc-u11) 0 0 / 28px 28px, linear-gradient(180deg, ${t.raised}, ${t.bg})`;
+  const armour = (lift = 0) => `linear-gradient(180deg, ${alpha('#ffffff', 0.08 + lift)}, transparent 45%), var(--dbtc-u11) 0 0 / 48px 48px, linear-gradient(180deg, ${t.raised}, ${t.bg})`;
   const plate = `linear-gradient(180deg, #ffffff, ${ivory} 40%, ${pearl})`;
 
+  // Pop-up buttons (DuelingBook's OK/Yes/No/Cancel <img>s), redrawn in the theme's material.
+  const popBtn = (label, wide, c) => {
+    const w = wide ? 234.85 : 153.4;
+    const bw = w - 12;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><rect x="6" y="10" width="${bw}" height="58.5" rx="${c.r}" fill="url(#g)" stroke="${c.edge}" stroke-width="2.5"/><rect x="11" y="15" width="${bw - 10}" height="48.5" rx="${Math.max(c.r - 4, 0)}" fill="none" stroke="${c.inner}" stroke-opacity="0.75" stroke-width="1"/>${c.deco(w)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="700" font-size="26" fill="${c.text}">${label}</text></svg>`;
+  };
+  const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const popCss = (primary, secondary) => [['ok_btn', 'OK', primary, false], ['yes_btn', 'Yes', primary, false], ['no_btn', 'No', secondary, false], ['cancel_btn', 'Cancel', secondary, true]]
+    .map(([n, label, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(label, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
+  const popPrimary = { top: '#ffffff', bot: pearl, edge: goldDeep, inner: gold, text: t.bg, r: 2, shadow: alpha('#000000', 0.6), deco: (w) => `<rect x="6" y="57" width="${w - 12}" height="5" fill="${gold}"/>${[14, w - 14].map((x) => `<rect x="${x - 2}" y="16" width="4" height="4" fill="${goldDeep}"/>`).join('')}` };
+  const popSecondary = { ...popPrimary, top: t.raised, bot: t.bg, edge: ivory, inner: gold, text: ivory, deco: (w) => `<rect x="6" y="57" width="${w - 12}" height="2" fill="${gold}"/>` };
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
-  const settingsPanels = sel(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
+  const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   const tilePieces = TILE_PIECES.map((name, i) => `${on(sel([`#main_menu .menu_btn:nth-child(6n+${i + 1}) .content`]), 'before')} { background-image: ${svgUrl(piece(name))}; }`).join('\n');
 
   const u0 = svgUrl(frameSvg);
   const u2 = svgUrl(wings);
-  const u4 = svgUrl(board(0.25, 6));
-  const u5 = svgUrl(piece('king'));
+    const u5 = svgUrl(piece('king'));
   const u6 = svgUrl(piece('king', t.border, ivory));
   const u7 = svgUrl(checks);
-  const u11 = svgUrl(board(0.9, 16));
+  const u11 = svgUrl(board());
   return `
-html body { ${[['u0', u0], ['u2', u2], ['u4', u4], ['u5', u5], ['u6', u6], ['u7', u7], ['u11', u11]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
+html body { ${[['u0', u0], ['u2', u2], ['u5', u5], ['u6', u6], ['u7', u7], ['u11', u11]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: board squares in an ivory armour frame with a gold band; a chess piece stands on each. */
 ${SEL.tile} { background: ${armour()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 8px); top: -7px; width: 16px; height: 19px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 11px); top: -18px; width: 22px; height: 26px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000) drop-shadow(0 0 1px #000000); }
 ${tilePieces}
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${armour(0.1)} !important; box-shadow: 0 0 0 1px ${gold}, 0 0 20px -4px ${alpha(gold, 0.8)}, 0 12px 24px -12px #000000 !important; }
@@ -78,12 +88,13 @@ ${SEL.tileLabel} { color: ${ivory} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0
 
 /* Buttons: white armour plates with a gold band. */
 ${SEL.button} { background: ${plate} !important; border-color: ${goldDeep} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 1px 0 #ffffff, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: ${plate} !important; border-color: ${goldDeep} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 1px 0 #ffffff, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(180deg, #ffffff, ${mix(ivory, gold, 0.35)}) !important; border-color: ${gold} !important; box-shadow: inset 0 -2px 0 ${gold}, 0 0 10px -2px ${alpha(gold, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${plateShade} !important; border-color: ${gold} !important; box-shadow: inset 0 2px 4px ${alpha('#000000', 0.5)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(t.bg, t.muted, 0.5)} !important; }
 
 /* Pop-ups: the board under armour plating; winged king as the crest. */
-${SEL.dialog} { background: radial-gradient(ellipse 70% 60% at 50% 0%, ${alpha(gold, 0.16)}, transparent 70%), var(--dbtc-u11) 0 0 / 40px 40px, linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; border-radius: 3px !important; box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 24px 60px -12px #000000 !important; }
+${SEL.dialog} { background: radial-gradient(ellipse 70% 60% at 50% 0%, ${alpha(gold, 0.16)}, transparent 70%), var(--dbtc-u11) 0 0 / 48px 48px, linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; border-radius: 3px !important; box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(18)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 80px); top: -38px; right: auto; bottom: auto; width: 160px; height: 60px; pointer-events: none; z-index: 1; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 3px 3px #000000); transform: none; }
 ${SEL.dialogTitle} { color: ${ivory} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 14px ${alpha(gold, 0.45)} !important; }
@@ -91,13 +102,13 @@ ${SEL.dialogTitle} { color: ${ivory} !important; text-shadow: 0 2px 0 ${t.bg}, 0
 /* Chat: an ivory plate header with a gold band; the board below. */
 ${SEL.chatTop} { background: ${plate} !important; box-shadow: inset 0 -3px 0 ${gold}, inset 0 -4px 0 ${goldDeep} !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.bg} !important; text-shadow: none !important; }
-${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${alpha(t.bg, 0.95)}), var(--dbtc-u11) 0 0 / 24px 24px !important; box-shadow: inset 2px 0 0 ${ivory}, inset -2px 0 0 ${ivory}, inset 0 -2px 0 ${ivory} !important; }
+${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${alpha(t.bg, 0.95)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 2px 0 0 ${ivory}, inset -2px 0 0 ${ivory}, inset 0 -2px 0 ${ivory} !important; }
 
 /* Duel: plated life bars with a king at the end; checkered phase discs. */
 ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), var(--dbtc-u4), linear-gradient(90deg, ${mix(t.self, t.border, 0.75)}, ${mix(t.self, t.muted, 0.45)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), var(--dbtc-u4), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${pearl}, #ffffff) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -112,24 +123,24 @@ ${sel(['#duel .phase.active:has(.phase_inner.red) span'])} { color: ${t.bg} !imp
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDeep}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${plate} !important; }
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.bg} !important; text-shadow: none !important; }
-${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 24px 24px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
+${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 6px 16px -6px #000000 !important; }
 
 /* Duel room: ivory rings around board panels. */
-${lobbyBorders} { background: linear-gradient(180deg, ${alpha(t.surface, 0.7)}, ${alpha(t.bg, 0.85)}), var(--dbtc-u11) 0 0 / 36px 36px !important; box-shadow: 0 10px 26px -12px #000000; }
+${lobbyBorders} { background: linear-gradient(180deg, ${alpha(t.surface, 0.7)}, ${alpha(t.bg, 0.85)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, #ffffff, ${pearl} 35%, ${gold} 50%, ${pearl} 65%, #ffffff) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(16)} }
 ${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 8% 92%, transparent) center 72% / 100% 20% no-repeat !important; }
+${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${t.surface} !important; box-shadow: 0 0 0 0.35em ${t.surface} !important; border-radius: 4px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.14)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.35)}, ${alpha(ivory, 0.08)}) !important; }
 
 /* Deck constructor: the board itself. */
-${deckPanels} { background: linear-gradient(180deg, ${alpha(t.surface, 0.72)}, ${alpha(t.bg, 0.85)}), var(--dbtc-u11) 0 0 / 44px 44px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 3px ${gold} !important; }
+${deckPanels} { background: linear-gradient(180deg, ${alpha(t.surface, 0.72)}, ${alpha(t.bg, 0.85)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 3px ${gold} !important; }
 ${on(sel(['#deck_constructor #search .search_bg']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; ${frame(16)} }
 
 /* Settings panels. */
-${settingsPanels} { border-color: ${ivory} !important; background: linear-gradient(180deg, ${alpha(t.surface, 0.8)}, ${alpha(t.bg, 0.9)}), var(--dbtc-u11) !important; }
+${settingsPanels} { border-color: ${ivory} !important; background: linear-gradient(180deg, ${alpha(t.surface, 0.8)}, ${alpha(t.bg, 0.9)}), var(--dbtc-u11) 0 0 / 48px 48px !important; }
 ${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(16)} }
 
 /* Titles: ivory with a gold underglow. */
@@ -141,5 +152,12 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: ivory rods banded in gold. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${pearl}, #ffffff, ${pearl}) !important; box-shadow: inset 0 -3px 0 ${gold}, inset 0 3px 0 ${gold}; border-radius: 1px !important; }
+
+/* Pop-up buttons in the theme material. */
+${popCss(popPrimary, popSecondary)}
+/* Player name strips: dark plate, ivory name. */
+${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { background: linear-gradient(160deg, ${t.raised}, ${t.bg}) !important; }
+${sel(['#duel .duel_avatar .username_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel #lifepoints1 .life_txt'])} { color: ${t.bg} !important; text-shadow: 0 0 2px ${ivory}, 0 0 4px ${ivory}, 0 0 8px ${ivory} !important; }
 `;
 };

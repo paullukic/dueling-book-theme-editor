@@ -1,143 +1,169 @@
-// white-dragon: the white dragon of light. Ice-crystal facets in white silver,
-// chamfered frost frames with crystal studs, shard crests, pale blue lightning
-// cracking along edges, faceted phase gems. (t, kit) -> CSS string; see chrome/kit.js.
+// white-dragon: the white dragon of light. Silver-white and pale-ice panels
+// with dark navy lettering, a dragon's spread wings across every menu tile,
+// chamfered silver frames with crystal studs, deep blue for what is active,
+// pale blue lightning on hover and over the pop-ups. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
 export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const ice = t.accent;
-  const iceDeep = mix(t.accent, t.bg, 0.55);
   const frost = t.accent2;
-  const silver = mix(t.accent2, t.muted, 0.35);
-  const glass = mix(t.raised, t.surface, 0.4);
+  const navy = t.bg;
+  const ink2 = mix(t.bg, t.border, 0.4);
+  const deep = mix(t.border, t.accent, 0.3);
+  const deepDark = mix(deep, t.bg, 0.35);
+  const paleIce = mix(frost, ice, 0.18);
+  const paleIce2 = mix(frost, ice, 0.4);
+  const silver = mix(frost, t.muted, 0.35);
 
-  // Faceted ice: a triangle lattice with uneven light on each face.
-  const shades = [0.02, 0.06, 0.035, 0.08, 0.015, 0.05];
+  // Faceted ice on pale panels: a triangle lattice, each face lit a little differently.
+  const shades = [0.025, 0.06, 0.035, 0.075, 0.015, 0.05];
   let tri = '';
   let k = 0;
   for (let row = 0; row < 2; row++) {
     for (let col = 0; col < 4; col++) {
       const x = col * 30 - (row % 2) * 15;
       const y = row * 26;
-      tri += `<path d="M${x} ${y + 26}L${x + 15} ${y}L${x + 30} ${y + 26}Z" fill="${frost}" fill-opacity="${shades[k++ % 6]}"/><path d="M${x + 15} ${y}L${x + 45} ${y}L${x + 30} ${y + 26}Z" fill="${ice}" fill-opacity="${shades[k++ % 6] * 0.8}"/>`;
+      tri += `<path d="M${x} ${y + 26}L${x + 15} ${y}L${x + 30} ${y + 26}Z" fill="${deep}" fill-opacity="${shades[k++ % 6]}"/><path d="M${x + 15} ${y}L${x + 45} ${y}L${x + 30} ${y + 26}Z" fill="#ffffff" fill-opacity="${shades[k++ % 6] * 4}"/>`;
     }
   }
-  const facets = svg(120, 52, `${tri}<g fill="none" stroke="${frost}" stroke-opacity="0.07" stroke-width="0.7"><path d="M0 26H120M0 52L30 0L60 52L90 0L120 52M-30 52L0 0M0 52L-30 0"/></g>`);
+  const facets = svg(120, 52, `${tri}<g fill="none" stroke="${deep}" stroke-opacity="0.08" stroke-width="0.7"><path d="M0 26H120M0 52L30 0L60 52L90 0L120 52"/></g>`);
 
-  // Nine-slice frost frame with chamfered corners and a crystal stud.
-  const corner = `<path d="M1 14L14 1H20V3.4H15L3.4 15V20H1Z" fill="${frost}"/><path d="M6 15.5L15.5 6" stroke="${ice}" stroke-width="1"/><path d="M8.5 4.5L11 8.5 8.5 12.5 6 8.5Z" fill="${ice}" stroke="#ffffff" stroke-width="0.6" transform="rotate(45 8.5 8.5)"/>`;
-  const frameSvg = svg(60, 60, `<g fill="none"><path d="M20 2.2H40M20 57.8H40M2.2 20V40M57.8 20V40" stroke="${frost}" stroke-width="2.4"/><path d="M14 6H46L54 14V46L46 54H14L6 46V14Z" stroke="${ice}" stroke-opacity="0.55" stroke-width="0.8"/></g>${corner}<g transform="matrix(-1 0 0 1 60 0)">${corner}</g><g transform="matrix(1 0 0 -1 0 60)">${corner}</g><g transform="matrix(-1 0 0 -1 60 60)">${corner}</g>`);
+  // Nine-slice silver frame: chamfered corners, a crystal stud, a deep blue inner line.
+  const corner = `<path d="M1 14L14 1H20V3.6H15.2L3.6 15.2V20H1Z" fill="${deep}"/><path d="M6 15.5L15.5 6" stroke="${silver}" stroke-width="1.2"/><path d="M8.5 4.8L11 8.5 8.5 12.2 6 8.5Z" fill="${ice}" stroke="${deep}" stroke-width="0.7" transform="rotate(45 8.5 8.5)"/>`;
+  const frameSvg = svg(60, 60, `<g fill="none"><path d="M20 2.3H40M20 57.7H40M2.3 20V40M57.7 20V40" stroke="${deep}" stroke-width="2.6"/><path d="M14 6H46L54 14V46L46 54H14L6 46V14Z" stroke="${deep}" stroke-opacity="0.45" stroke-width="0.8"/></g>${corner}<g transform="matrix(-1 0 0 1 60 0)">${corner}</g><g transform="matrix(1 0 0 -1 0 60)">${corner}</g><g transform="matrix(-1 0 0 -1 60 60)">${corner}</g>`);
   const frame = (px) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u1) 20 / ${px}px stretch; box-sizing: border-box;`;
 
-  // Crystal shard cluster.
-  const prism = (x, y, w, h, rot, fill) => `<g transform="rotate(${rot} ${x} ${y + h})"><path d="M${x} ${y}L${x + w / 2} ${y + w * 0.7}V${y + h}H${x - w / 2}V${y + w * 0.7}Z" fill="${fill}" stroke="#ffffff" stroke-opacity="0.8" stroke-width="0.6"/><path d="M${x} ${y}V${y + h}" stroke="#ffffff" stroke-opacity="0.5" stroke-width="0.6"/></g>`;
-  const shards = svg(36, 22, `${prism(11, 7, 6, 15, -28, iceDeep)}${prism(25, 7, 6, 15, 28, iceDeep)}${prism(18, 1, 8, 21, 0, ice)}`);
+  // The dragon's wings, spread from a crystal at the centre: finger bones and scalloped membranes.
+  const wingHalf = `<path d="M84 22C70 8 46 1 4 3L13 9C20 10 24 13 27 18C33 13 39 14 44 19C50 15 56 16 61 21C67 18 73 19 78 24Z" fill="#ffffff" stroke="${deep}" stroke-width="1.3" stroke-linejoin="round"/><path d="M84 22L27 18M84 22L44 19M84 22L61 21M84 22C66 10 42 5 13 9" fill="none" stroke="${deep}" stroke-opacity="0.55" stroke-width="0.9"/><path d="M84 22C70 8 46 1 4 3" fill="none" stroke="${ice}" stroke-width="1"/>`;
+  const wings = svg(168, 30, `${wingHalf}<g transform="matrix(-1 0 0 1 168 0)">${wingHalf}</g><path d="M84 6L89 16 84 29 79 16Z" fill="${ice}" stroke="${deep}" stroke-width="1.2"/><path d="M84 6L89 16H84Z" fill="#ffffff" fill-opacity="0.8"/>`);
 
-  // Lightning: a pale blue bolt with a white core.
-  const bolt = (d, w = 1) => `<path d="${d}" fill="none" stroke="${ice}" stroke-width="${3 * w}" stroke-opacity="0.35" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-width="${1.1 * w}" stroke-linejoin="round"/>`;
+  // Lightning: a deep blue bolt with an ice core.
+  const bolt = (d, w = 1) => `<path d="${d}" fill="none" stroke="${deep}" stroke-width="${3.2 * w}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${ice}" stroke-width="${1.3 * w}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-width="${0.5 * w}" stroke-linejoin="round"/>`;
   const crackle = svg(240, 14, bolt('M0 8L22 5L30 10L52 4L66 9L80 6L96 11L118 4L130 8L150 5L166 10L186 4L200 9L222 6L240 8', 0.8));
-  const crown = svg(170, 60, `${bolt('M85 30L58 22L64 30L28 18L36 28L4 22', 1)}${bolt('M85 30L112 22L106 30L142 18L134 28L166 22', 1)}<g transform="translate(55 4) scale(1.65)">${prism(11, 7, 6, 15, -28, iceDeep)}${prism(25, 7, 6, 15, 28, iceDeep)}${prism(18, 1, 8, 21, 0, ice)}</g>`);
+  const crown = svg(200, 64, `${bolt('M100 40L74 30L80 40L44 26L52 38L8 30', 1)}${bolt('M100 40L126 30L120 40L156 26L148 38L192 30', 1)}<g transform="translate(16 10) scale(1)">${wingHalf}<g transform="matrix(-1 0 0 1 168 0)">${wingHalf}</g></g><path d="M100 4L108 22 100 48 92 22Z" fill="${ice}" stroke="${deep}" stroke-width="1.4"/><path d="M100 4L108 22H100Z" fill="#ffffff" fill-opacity="0.85"/>`);
 
   // Phase gems: a six-faceted crystal cut.
-  let cut = '';
-  for (let i = 0; i < 6; i++) {
+  const hex = [...Array(6)].map((_, i) => {
     const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-    cut += `<line x1="22.5" y1="22.5" x2="${(22.5 + Math.cos(a) * 20).toFixed(1)}" y2="${(22.5 + Math.sin(a) * 20).toFixed(1)}"/>`;
-  }
-  const hexPts = [...Array(6)].map((_, i) => {
-    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-    return `${(22.5 + Math.cos(a) * 20).toFixed(1)} ${(22.5 + Math.sin(a) * 20).toFixed(1)}`;
-  }).join(' ');
-  const gem = svg(45, 45, `<polygon points="${hexPts}" fill="${frost}" fill-opacity="0.06" stroke="${frost}" stroke-opacity="0.4" stroke-width="1"/><g stroke="${frost}" stroke-opacity="0.18" stroke-width="0.8">${cut}</g><path d="M22.5 2.5L39.8 12.5L22.5 22.5Z" fill="#ffffff" fill-opacity="0.08"/>`);
+    return [(22.5 + Math.cos(a) * 20).toFixed(1), (22.5 + Math.sin(a) * 20).toFixed(1)];
+  });
+  const gem = svg(45, 45, `<polygon points="${hex.map((p) => p.join(' ')).join(' ')}" fill="none" stroke="${deep}" stroke-opacity="0.5" stroke-width="1"/><g stroke="${deep}" stroke-opacity="0.18" stroke-width="0.8">${hex.map(([x, y]) => `<line x1="22.5" y1="22.5" x2="${x}" y2="${y}"/>`).join('')}</g><path d="M22.5 2.5L39.8 12.5L22.5 22.5Z" fill="#ffffff" fill-opacity="0.35"/>`);
 
   // Life bar cap: a single long shard.
-  const capShard = svg(18, 34, `${prism(9, 1, 9, 32, 0, ice)}<path d="M9 1L13.5 7.3V33H9Z" fill="#ffffff" fill-opacity="0.35"/>`);
+  const capShard = svg(20, 36, `<path d="M10 1L15 8V35H5V8Z" fill="${paleIce}" stroke="${deep}" stroke-width="1.2"/><path d="M10 1L15 8V35H10Z" fill="#ffffff" fill-opacity="0.7"/>`);
 
-  const iceBg = (lift = 0) => `linear-gradient(160deg, ${alpha('#ffffff', 0.1 + lift)}, transparent 45%), var(--dbtc-u0), linear-gradient(180deg, ${mix(t.raised, ice, 0.12 + lift / 2)}, ${t.surface})`;
+  const paleBg = (lift = 0) => `linear-gradient(160deg, ${alpha('#ffffff', 0.7 + lift)}, transparent 55%), var(--dbtc-u0), linear-gradient(180deg, ${paleIce}, ${mix(paleIce2, deep, 0.06 + lift / 3)})`;
+  const navyText = `color: ${navy} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.7)} !important;`;
+
+  // Pop-up buttons (DuelingBook's OK/Yes/No/Cancel <img>s), redrawn in the theme's material.
+  const popBtn = (label, wide, c) => {
+    const w = wide ? 234.85 : 153.4;
+    const bw = w - 12;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${wide ? 78.5 : 78.47}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.top}"/><stop offset="1" stop-color="${c.bot}"/></linearGradient></defs><path d="M14 10H${w - 14}L${w - 6} 18V60.5L${w - 14} 68.5H14L6 60.5V18Z" fill="url(#g)" stroke="${c.edge}" stroke-width="2.5"/><path d="M17 15H${w - 17}L${w - 11} 21V57.5L${w - 17} 63.5H17L11 57.5V21Z" fill="none" stroke="${c.inner}" stroke-opacity="0.75" stroke-width="1"/>${c.deco(w)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="Segoe UI, system-ui, Roboto, Arial, sans-serif" font-weight="700" font-size="26" fill="${c.text}">${label}</text></svg>`;
+  };
+  const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
+  const popCss = (primary, secondary) => [['ok_btn', 'OK', primary, false], ['yes_btn', 'Yes', primary, false], ['no_btn', 'No', secondary, false], ['cancel_btn', 'Cancel', secondary, true]]
+    .map(([n, label, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(label, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
+  const popPrimary = { top: mix(deep, ice, 0.2), bot: deepDark, edge: navy, inner: ice, text: '#ffffff', shadow: alpha('#000000', 0.55), deco: (w) => `<path d="M14 11H${w * 0.42}L8 46V19Z" fill="#ffffff" fill-opacity="0.16"/>` };
+  const popSecondary = { ...popPrimary, top: '#ffffff', bot: paleIce2, edge: deep, inner: deep, text: navy, deco: (w) => `<path d="M14 11H${w * 0.42}L8 46V19Z" fill="#ffffff" fill-opacity="0.6"/>` };
 
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
-  const settingsPanels = sel(['#settings .about_me', '#settings .preferences', '#settings .social_media', '#settings .animation', '#settings .profile_song', '#settings .account', '#settings .messages', '#settings .duel_stats', '#settings .profile_comments']);
-  const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
+  const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
+  const pageTitles = sel(['#content .title1', '#content #settings .title_txt', '#content #settings_content > .title_txt']);
+  const panelText = sel(['#duel_room #host_lbl', '#duel_room #host span', '#duel_room #host label', '#duel_room #filter span', '#duel_room #mode span', '#duel_room #mode label', '#duel_room #decklist span', '#duel_room .format .format_txt', '#deck_constructor #search span:not(#dbte-none)', '#deck_constructor #search .title_txt', '#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl', '#content #settings_content > div span', '#content #settings_content > div label', '#content .combobox span', '#content .combobox', '#content .combo_item span']);
 
   const u0 = svgUrl(facets);
   const u1 = svgUrl(frameSvg);
-  const u2 = svgUrl(shards);
+  const u2 = svgUrl(wings);
   const u3 = svgUrl(crackle);
   const u4 = svgUrl(crown);
   const u5 = svgUrl(capShard);
   const u6 = svgUrl(gem);
   return `
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5], ['u6', u6]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
-/* Menu tiles: faceted ice in a chamfered frost frame, a crystal cluster on top; lightning runs the foot on hover. */
-${SEL.tile} { background: ${iceBg()} !important; border-style: solid !important; border-image: var(--dbtc-u1) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 13px); top: -6px; width: 26px; height: 16px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 0 3px ${alpha(ice, 0.8)}); }
+/* Menu tiles: pale ice plates in a chamfered silver frame, the dragon's wings spread across the top. */
+${SEL.tile} { background: ${paleBg()} !important; border-style: solid !important; border-image: var(--dbtc-u1) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 76px); top: -15px; width: 152px; height: 27px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.5)}); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
-${SEL.tileHover} { background: var(--dbtc-u3) 50% 100% / 100% 12px no-repeat, ${iceBg(0.08)} !important; box-shadow: 0 0 22px -4px ${alpha(ice, 0.85)}, 0 12px 24px -12px #000000 !important; }
-${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 12px ${alpha(ice, 0.55)} !important; }
+${SEL.tileHover} { background: var(--dbtc-u3) 50% 100% / 100% 12px no-repeat, ${paleBg(0.2)} !important; box-shadow: 0 0 0 1px ${deep}, 0 0 22px -4px ${alpha(ice, 0.9)}, 0 12px 24px -12px #000000 !important; }
+${SEL.tileLabel} { ${navyText} }
 
-/* Buttons: frosted glass with a white edge, ice glow on hover. */
-${SEL.button} { background: linear-gradient(180deg, ${mix(glass, frost, 0.18)}, ${t.surface}) !important; border-color: ${silver} !important; color: ${t.text} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.4)}, inset 0 -1px 0 ${alpha(ice, 0.35)}, 0 2px 5px -2px #000000 !important; }
-${SEL.buttonHover} { background: linear-gradient(180deg, ${mix(ice, t.raised, 0.45)}, ${mix(ice, t.surface, 0.75)}) !important; border-color: ${frost} !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.5)}, 0 0 12px -2px ${alpha(ice, 0.9)} !important; }
-${SEL.buttonDown} { background: ${iceDeep} !important; border-color: ${frost} !important; box-shadow: inset 0 2px 5px #000000 !important; }
+/* Buttons: pale ice with a deep blue edge; deep blue when hovered or pressed. */
+${SEL.button} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
+${SEL.buttonHover} { background: linear-gradient(180deg, ${mix(deep, ice, 0.25)}, ${deepDark}) !important; border-color: ${navy} !important; color: #ffffff !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.35)}, 0 0 12px -2px ${alpha(ice, 0.9)} !important; }
+${SEL.buttonDown} { background: ${deepDark} !important; border-color: ${navy} !important; color: #ffffff !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.6)} !important; }
+${sel(['#content .button.disabled'])} { color: ${mix(navy, paleIce, 0.45)} !important; }
 
-/* Pop-ups: a sheet of ice in a frost frame, crowned with crystal and lightning. */
-${SEL.dialog} { background: radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(ice, 0.2)}, transparent 70%), var(--dbtc-u0), linear-gradient(180deg, ${t.raised}, ${t.bg}) !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${frost}, 0 0 24px -4px ${alpha(ice, 0.6)}, 0 24px 60px -12px #000000 !important; }
+/* Pop-ups: a sheet of white ice in a silver frame, crowned by wings, crystal and lightning. */
+${SEL.dialog} { background: ${paleBg()} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 0 4px ${frost}, 0 0 0 5px ${deep}, 0 0 30px -4px ${alpha(ice, 0.7)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(20)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 85px); top: -40px; right: auto; bottom: auto; width: 170px; height: 60px; pointer-events: none; z-index: 1; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 0 6px ${alpha(ice, 0.7)}); transform: none; }
-${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 16px ${alpha(ice, 0.65)} !important; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 110px); top: -48px; right: auto; bottom: auto; width: 220px; height: 70px; pointer-events: none; z-index: 1; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${alpha('#000000', 0.5)}); transform: none; }
+${SEL.dialogTitle} { ${navyText} }
+${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${ink2} !important; }
 
-/* Chat: a frosted header over a lightning seam; frost rails. */
-${SEL.chatTop} { background: linear-gradient(160deg, ${alpha('#ffffff', 0.16)}, transparent 50%), var(--dbtc-u0), linear-gradient(180deg, ${mix(t.raised, ice, 0.25)}, ${t.raised}) !important; box-shadow: inset 0 -1px 0 ${frost} !important; }
+/* Chat: a pale ice header over a lightning seam; silver rails around the night glass. */
+${SEL.chatTop} { background: ${paleBg()} !important; box-shadow: inset 0 -2px 0 ${deep} !important; }
+${sel(['#chats .chat .chat_top span'])} { ${navyText} }
 ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 10px; pointer-events: none; background: var(--dbtc-u3) center / 100% 100% no-repeat; }
-${SEL.chat} { background: var(--dbtc-u0), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${silver}, inset -1px 0 0 ${silver}, inset 0 -1px 0 ${silver} !important; }
+${SEL.chat} { background: linear-gradient(180deg, ${t.surface}, ${navy}) !important; box-shadow: inset 3px 0 0 ${paleIce}, inset -3px 0 0 ${paleIce}, inset 0 -3px 0 ${paleIce} !important; }
 
-/* Duel: frost-framed life bars led by a shard; phases are cut crystal. */
-${SEL.life} { border-color: ${frost} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${iceDeep}, 0 0 10px -2px ${alpha(ice, 0.6)}, 0 4px 10px -3px #000000 !important; }
+/* Duel: silver life bars led by a shard; phases are pale crystal, deep blue when active. */
+${SEL.life} { border-color: ${frost} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 10px -2px ${alpha(ice, 0.6)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), var(--dbtc-u0) 0 0 / 60px 26px, linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), var(--dbtc-u0) 0 0 / 60px 26px, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -12px; top: -2px; width: 18px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(ice, 0.8)}); }
-${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px ${t.bg} !important; }
-${SEL.phase} { background: conic-gradient(from 200deg, #ffffff, ${silver}, ${frost}, ${iceDeep}, ${frost}, #ffffff) !important; box-shadow: 0 0 0 1px ${iceDeep}, 0 0 10px -2px ${alpha(ice, 0.6)}, 0 4px 10px -2px #000000 !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, navy, 0.5)}, ${t.self}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, navy, 0.5)}, ${t.opp}) !important; }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: -3px; width: 20px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(ice, 0.8)}); }
+${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px ${navy} !important; }
+${SEL.phase} { background: conic-gradient(from 200deg, #ffffff, ${silver}, ${frost}, ${deep}, ${frost}, #ffffff) !important; box-shadow: 0 0 0 1px ${deep}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: ${t.bg} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${t.raised} 35%, ${t.bg}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.2)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.25)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 16px ${alpha(ice, 0.9)}; }
-${sel(['#duel .phase span'])} { color: ${frost} !important; text-shadow: 0 1px 2px #000000 !important; }
-${sel(['#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: none !important; }
-${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, #ffffff, ${silver}) !important; }
-${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: var(--dbtc-u0), linear-gradient(180deg, ${mix(t.raised, ice, 0.2)}, ${t.surface}) !important; }
-${sel(['#duel .cout_txt'])} { background: var(--dbtc-u0), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 0 0 0 1px ${frost}, inset 0 0 0 4px ${alpha(t.bg, 0.8)}, inset 0 0 0 5px ${alpha(ice, 0.4)} !important; }
-${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${frost}, 0 0 14px -2px ${alpha(ice, 0.7)}, 0 6px 16px -6px #000000 !important; }
+${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, #ffffff 30%, ${paleIce2}) !important; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(deep, ice, 0.3)} 25%, ${deepDark}) !important; box-shadow: 0 0 16px ${alpha(ice, 0.9)}; }
+${sel(['#duel .phase span'])} { color: ${navy} !important; text-shadow: 0 1px 0 #ffffff !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${navy} !important; }
+${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${deep} !important; }
+${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { ${navyText} }
+${SEL.duelLog} { background: linear-gradient(180deg, ${t.surface}, ${navy}) !important; box-shadow: inset 0 0 0 3px ${paleIce}, inset 0 0 0 4px ${deep} !important; }
+${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${paleIce}, 0 0 0 3px ${deep}, 0 0 14px -2px ${alpha(ice, 0.7)} !important; }
+${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${paleIce} !important; }
 
-/* Duel room: frost rings around faceted panels. */
-${lobbyBorders} { background: var(--dbtc-u0), linear-gradient(180deg, ${alpha(t.raised, 0.65)}, ${alpha(t.bg, 0.8)}) !important; box-shadow: 0 10px 26px -12px #000000; }
-${on(lobbyBorders, 'before')} { background: linear-gradient(150deg, #ffffff, ${silver} 25%, ${ice} 50%, ${silver} 75%, #ffffff) !important; filter: none !important; }
+/* Duel room: pale ice mats in silver rings around the lists; nameplates in navy. */
+${lobbyBorders} { background: ${paleBg()} !important; box-shadow: 0 10px 26px -12px #000000; }
+${on(lobbyBorders, 'before')} { background: linear-gradient(150deg, ${deep}, ${silver} 30%, #ffffff 50%, ${silver} 70%, ${deep}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(16)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 8% 92%, transparent) center 72% / 100% 20% no-repeat !important; }
-${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.14)}, transparent 40%), ${t.raised} !important; }
-${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.35)}, ${alpha(frost, 0.08)}) !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 12%, ${paleIce} 12% 92%, transparent 92%) center / 76% 100% no-repeat !important; }
+${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${paleIce} !important; box-shadow: 0 0 0 0.35em ${paleIce}, 0 0 0 calc(0.35em + 1px) ${deep} !important; border-radius: 3px !important; }
+${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.16)}, transparent 40%), ${t.raised} !important; }
+${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(ice, 0.4)}, ${alpha(frost, 0.1)}) !important; }
 
-/* Deck constructor: ice panels with a frost edge. */
-${deckPanels} { background: var(--dbtc-u0), linear-gradient(180deg, ${mix(t.raised, t.surface, 0.5)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${frost}, inset 0 0 0 3px ${alpha(t.bg, 0.8)}, inset 0 0 0 4px ${alpha(ice, 0.4)} !important; }
+/* Deck constructor: the deck laid out on white ice. */
+${deckPanels} { background: ${paleBg()} !important; box-shadow: inset 0 0 0 1px ${deep}, inset 0 0 0 3px ${frost}, inset 0 0 0 4px ${alpha(deep, 0.5)} !important; }
 ${on(sel(['#deck_constructor #search .search_bg']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; ${frame(16)} }
+${sel(['#content .deck_slot .content', '#content .side_slot', '#content .extra_slot'])} { background-color: ${alpha(deep, 0.08)} !important; border-color: ${alpha(deep, 0.3)} !important; }
 
-/* Settings panels. */
-${settingsPanels} { border-color: ${silver} !important; background: var(--dbtc-u0), linear-gradient(180deg, ${alpha(t.raised, 0.8)}, ${alpha(t.bg, 0.85)}) !important; }
+/* Settings panels: pale ice in the silver frame. */
+${settingsPanels} { border-color: ${deep} !important; background: ${paleBg()} !important; }
 ${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(16)} }
 
-/* Titles: white light with an ice glow. */
-${titles} { color: #ffffff !important; text-shadow: 0 0 2px ${t.bg}, 0 0 4px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 3px ${t.bg}, 0 0 16px ${alpha(ice, 0.7)} !important; }
+/* Lettering: navy on the pale panels, white light on the night page. */
+${panelText} { ${navyText} }
+${pageTitles} { color: #ffffff !important; text-shadow: 0 0 2px ${navy}, 0 0 4px ${navy}, 0 0 18px ${alpha(ice, 0.75)} !important; }
 
-/* Text fields: deep ice wells with a frost edge. */
-${SEL.field} { background-color: ${t.bg} !important; border-color: ${silver} !important; box-shadow: inset 0 2px 4px #000000, 0 1px 0 ${alpha(ice, 0.25)} !important; }
-${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid ${ice} !important; box-shadow: inset 0 2px 4px #000000, 0 0 10px ${alpha(ice, 0.7)} !important; }
+/* Text fields and dropdowns: white ice with a deep blue edge. */
+${SEL.field} { background-color: #ffffff !important; color: ${navy} !important; border-color: ${deep} !important; caret-color: ${deep}; box-shadow: inset 0 1px 3px ${alpha(deep, 0.35)} !important; }
+${sel(['#content .combobox', '#duel_room .decklist_decks', '#content .combo_item'])} { background: linear-gradient(180deg, #ffffff, ${paleIce}) !important; border-color: ${deep} !important; }
+${sel(['#content .combobox:hover', '#content .combobox.combobox_selected'])} { background: ${paleIce2} !important; }
+${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid ${deep} !important; box-shadow: inset 0 1px 3px ${alpha(deep, 0.35)}, 0 0 10px ${alpha(ice, 0.8)} !important; }
 
 /* Scrollbars: icicles. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${silver}, #ffffff, ${ice}) !important; border-radius: 2px !important; }
+
+/* Pop-up buttons in the theme material. */
+${popCss(popPrimary, popSecondary)}
 `;
 };
