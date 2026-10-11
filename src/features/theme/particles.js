@@ -1,7 +1,7 @@
 // Particle engine for theme scenes: embers, petals, feathers, snow, sparks,
 // fireflies and stars on one <canvas> behind the game. Three depths give
-// parallax (near particles are bigger, faster, brighter and follow the
-// pointer more); a slow gusting wind sways everything. The simulation is
+// parallax (near particles are bigger, faster, brighter and shift more with
+// the slow camera drift); a slow gusting wind sways everything. The simulation is
 // pure (createSystems / stepSystems) so it can be tested without a canvas.
 
 import { isHex, luminance } from '../../lib/color.js';
@@ -205,7 +205,7 @@ const drawSystems = (ctx, systems, tokens, t, w, h, px, py, light) => {
     ctx.globalCompositeOperation = light || sys.light ? 'source-over' : 'lighter';
     sys.particles.forEach((p) => {
       const col = tokens[p.color];
-      // Depth parallax: far particles drift against the pointer, near ones with it.
+      // Depth parallax with the camera drift: far particles move against it, near ones with it.
       const x = p.x + px * 70 * (p.z - 0.45);
       const y = p.y + py * 44 * (p.z - 0.45);
       const tw = k.twinkle ? 0.6 + 0.4 * Math.sin(p.phase) : 1;
@@ -276,11 +276,10 @@ const drawSystems = (ctx, systems, tokens, t, w, h, px, py, light) => {
   });
 };
 
-// Camera: the stage tilts toward the pointer (degrees at the window edge);
-// with no pointer movement for a while it drifts slowly on its own.
+// Camera: the stage drifts very slowly on its own so the depth planes read;
+// it never follows the pointer (user decision: pointer-driven motion is out).
 const TILT_X = 4;
 const TILT_Y = 6;
-const IDLE_S = 4;
 const RESIZE_MS = 200;
 
 // Runs a theme's fx inside `root` (the stage from sceneMarkup): the camera
@@ -305,9 +304,6 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
   let last = 0;
   let px = 0;
   let py = 0;
-  let tx = 0;
-  let ty = 0;
-  let idle = IDLE_S;
 
   const drawStill = () => {
     stage.style.transform = '';
@@ -338,31 +334,20 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     t += dt;
-    idle += dt;
-    // The idle drift only runs alongside particles; a tilt-only scene settles and sleeps.
-    const drift = ctx && idle > IDLE_S;
-    const gx = drift ? 0.22 * Math.sin(t * 0.07) : tx;
-    const gy = drift ? 0.14 * Math.cos(t * 0.05) : ty;
-    px += (gx - px) * Math.min(1, dt * 2.5);
-    py += (gy - py) * Math.min(1, dt * 2.5);
+    // The drift only runs alongside particles; a scene without them holds still.
+    px = ctx ? 0.22 * Math.sin(t * 0.07) : 0;
+    py = ctx ? 0.14 * Math.cos(t * 0.05) : 0;
     stage.style.transform = `rotateX(${(-py * TILT_X).toFixed(3)}deg) rotateY(${(px * TILT_Y).toFixed(3)}deg)`;
     if (ctx) {
       stepSystems(systems, dt, t, w, h);
       drawSystems(ctx, systems, tokens, t, w, h, px, py, light);
     }
-    const settled = Math.abs(gx - px) < 0.001 && Math.abs(gy - py) < 0.001;
-    if (ctx || !settled) raf = requestAnimationFrame(frame);
+    if (ctx) raf = requestAnimationFrame(frame);
   };
   const wake = () => {
     if (raf || isStill() || document.hidden) return;
     last = performance.now();
     raf = requestAnimationFrame(frame);
-  };
-  const onPointer = (e) => {
-    tx = e.clientX / window.innerWidth - 0.5;
-    ty = e.clientY / window.innerHeight - 0.5;
-    idle = 0;
-    wake();
   };
   const onVisibility = () => (document.hidden ? (cancelAnimationFrame(raf), (raf = 0)) : wake());
   const onMotionPref = () => {
@@ -375,7 +360,6 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
 
   resize();
   window.addEventListener('resize', onResize);
-  window.addEventListener('pointermove', onPointer, { passive: true });
   document.addEventListener('visibilitychange', onVisibility);
   if (mql && mql.addEventListener) mql.addEventListener('change', onMotionPref);
   if (isStill()) drawStill();
@@ -384,7 +368,6 @@ export const startFx = (root, config, tokens, { still = false } = {}) => {
     cancelAnimationFrame(raf);
     clearTimeout(resizeTimer);
     window.removeEventListener('resize', onResize);
-    window.removeEventListener('pointermove', onPointer);
     document.removeEventListener('visibilitychange', onVisibility);
     if (mql && mql.removeEventListener) mql.removeEventListener('change', onMotionPref);
     stage.style.transform = '';

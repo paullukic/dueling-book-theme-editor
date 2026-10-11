@@ -2,7 +2,8 @@
 // the theme's colours on three planes of a CSS 3D stage (#dbte-skin-fx):
 // far (ambient: sky, silhouettes), middle (the centrepiece), near (foreground
 // props). The particle canvas sits between middle and near, and the stage
-// tilts toward the pointer, so nearer planes move more (real parallax).
+// drifts very slowly on its own, so nearer planes move more (real parallax).
+// Nothing follows the pointer.
 // Animations move only transform and opacity. `still` stops every animation;
 // so does the system's reduced-motion setting.
 
