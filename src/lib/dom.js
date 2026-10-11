@@ -85,11 +85,14 @@ export const sendDuelChat = (message) => {
 export const isVisible = (el) => !!el && el.offsetParent !== null;
 
 // The colour actually behind `el`: its own and its ancestors' background
-// colours painted over each other, down to the first opaque one.
+// colours painted over each other, down to the first opaque one. null when a
+// background image shows through first (its colour cannot be read).
 export const backgroundBehind = (el) => {
   const layers = [];
   for (let node = el; node && node.nodeType === 1; node = node.parentElement) {
-    const c = parseCssColor(getComputedStyle(node).backgroundColor);
+    const style = getComputedStyle(node);
+    if (style.backgroundImage !== 'none') return null;
+    const c = parseCssColor(style.backgroundColor);
     if (c && c[3] > 0) {
       layers.push(c);
       if (c[3] >= 1) break;

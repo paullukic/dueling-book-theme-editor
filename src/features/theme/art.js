@@ -160,7 +160,7 @@ export const iconCss = (t, radius, style = 'tile') => {
     ['html #content .radiobutton img.check', radio],
     ['html #content .combobox .combobox_arrow img', arrow],
   ];
-  const states = ['ok_btn', 'yes_btn', 'no_btn', 'cancel_btn', 'exit_btn', 'minimize_btn', 'minimize2_btn', 'expand_btn', 'close_btn', 'online_btn', 'chat_btn', 'private_btn', 'tools_btn', 'sort_btn', 'info_btn', 'locked_btn', 'unlocked_btn'];
+  const states = ['ok_btn', 'yes_btn', 'no_btn', 'cancel_btn', 'exit_btn', 'minimize_btn', 'minimize2_btn', 'expand_btn', 'close_btn', 'online_btn', 'chat_btn', 'private_btn', 'private_btn_anim', 'tools_btn', 'sort_btn', 'info_btn', 'locked_btn', 'unlocked_btn'];
   return `${rules.map(([sel, svg]) => `${sel} { content: ${svgUrl(svg)} !important; filter: none !important; }`).join('\n')}
 ${states.map((n) => `html #content img[src*="/svg/${n}_over"]`).join(', ')} { filter: brightness(1.18) !important; }
 ${states.map((n) => `html #content img[src*="/svg/${n}_down"]`).join(', ')} { filter: brightness(0.85) !important; }

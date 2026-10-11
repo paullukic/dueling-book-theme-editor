@@ -228,3 +228,27 @@ test('card text font: off by default, unknown values fall back', () => {
   assert.equal(withDefaults({ cardTextFont: 'card' }).cardTextFont, 'card');
   assert.equal(withDefaults({ cardTextFont: 'comic' }).cardTextFont, 'original');
 });
+
+test('skins: a switched-off area gets none of the skin', () => {
+  const t = PRESETS.find((p) => p.id === 'branded').tokens;
+  const all = skinCss('branded', t);
+  ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(all.includes(s), s));
+  const off = skinCss('branded', t, { menu: false, dialogs: false, field: false });
+  ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(!off.includes(s), `${s} still styled`));
+  assert.ok(off.includes('#dbte-skin-layer {'), 'backdrop stays');
+  assert.equal((off.match(/\{/g) || []).length, (off.match(/\}/g) || []).length, 'braces balanced');
+});
+
+test('skins: the user’s own background picture hides the motif layer', () => {
+  PRESETS.filter((p) => p.id !== 'oled').forEach(({ id, tokens }) =>
+    assert.ok(skinCss(id, tokens).includes('body:has(#dbte-background-img) #dbte-skin-layer { display: none'), id),
+  );
+});
+
+test('icons: the unread private chat icon wins over the plain one, at any roundness', () => {
+  [0, 16].forEach((r) => {
+    const css = iconCss(PRESETS[0].tokens, r, 'tile');
+    assert.ok(css.indexOf('/svg/private_btn_anim"]') > css.indexOf('/svg/private_btn"]'));
+    assert.doesNotMatch(css, /NaN|undefined/);
+  });
+});

@@ -83,8 +83,11 @@ const ThemeEffect = () => {
 
   // Signature skin: CSS plus a fixed layer behind the game for its backdrop.
   const skin = useMemo(
-    () => (on && s.themeEffects ? skinCss(s.themePreset, artTokens) || null : null),
-    [on, s.themeEffects, s.themePreset, artTokens],
+    () =>
+      on && s.themeEffects
+        ? skinCss(s.themePreset, artTokens, { menu: areas.menu, dialogs: areas.dialogs, field: areas.field }) || null
+        : null,
+    [on, s.themeEffects, s.themePreset, artTokens, areas.menu, areas.dialogs, areas.field],
   );
   useStyle('dbte-theme-skin', skin);
   const hasSkin = !!skin;

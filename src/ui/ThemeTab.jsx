@@ -330,7 +330,7 @@ const BackgroundView = ({ s }) => (
     <Group title="Your own background">
       <ToggleRow
         label="Use an image"
-        description="Any picture behind DuelingBook. It is shrunk and stored on this computer only."
+        description="Any picture behind DuelingBook, in place of the theme’s background motif. It is shrunk and stored on this computer only."
         checked={s.backgroundEnabled}
         onChange={set('backgroundEnabled')}
       >

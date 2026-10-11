@@ -188,16 +188,36 @@ ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 
 
 export const SKIN_IDS = Object.keys(SKINS);
 
+// Which "What to restyle" area each detail belongs to: a switched-off area
+// gets none of the skin either.
+const AREA_OF = [
+  ['menu', (sel) => sel.includes('#main_menu')],
+  ['dialogs', (sel) => DIALOGS.some((d) => sel.includes(`#content ${d}`))],
+  ['field', (sel) => sel.includes('img.field_')],
+];
+
+// Data URIs are percent-encoded, so every brace here is CSS structure.
+const keepAreas = (css, areas) =>
+  css
+    .split('}')
+    .filter((rule) => {
+      const sel = rule.split('{')[0];
+      return AREA_OF.every(([id, test]) => areas[id] !== false || !test(sel));
+    })
+    .join('}');
+
 // CSS for the preset's skin in the given colours, or '' when it has none.
-export const skinCss = (presetId, tokens) => {
+export const skinCss = (presetId, tokens, areas = {}) => {
   const make = SKINS[presetId];
   // Colours go straight into SVG and CSS: only well-formed hex values.
   if (!make || !Object.values(tokens || {}).every(isHex)) return '';
-  const own = make(tokens);
+  const own = keepAreas(make(tokens), areas).trim();
   if (!own) return '';
   // The skin layer sits behind the game; DuelingBook's own cover over its
   // stage turns see-through so the motif shows.
+  // The user's own background picture replaces the motif, never mixes with it.
   return `#${LAYER_ID} { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-repeat: repeat; }
+body:has(#dbte-background-img) #${LAYER_ID} { display: none !important; }
 html #circuit_cover { background-color: transparent !important; }
 html #circuit_board { opacity: calc(var(--dbt-backdrop) * 0.18) !important; }
 html #greenlines { opacity: calc(var(--dbt-backdrop) * 0.25) !important; }

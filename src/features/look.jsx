@@ -44,7 +44,8 @@ export const ReadingTextEffect = () => {
 };
 
 export const PsctEffect = () => {
-  const { psctEnabled, psctColors, psctLineBreaks, darkMode, themeEnabled, themeTokens, themeAreas } = useSettings();
+  const { psctEnabled, psctColors, psctLineBreaks, darkMode, themeEnabled, themeTokens, themeAreas, themeBackdrop, customCssEnabled } =
+    useSettings();
   // The colours are picked for a dark box; on DuelingBook's light one (no dark
   // mode, no theme) they are darkened just enough to stay readable.
   const [textBg, setTextBg] = useState(null);
@@ -62,7 +63,7 @@ export const PsctEffect = () => {
       if (el) setTextBg(backgroundBehind(el));
     });
     return () => cancelAnimationFrame(id);
-  }, [psctEnabled, darkMode, themeEnabled, themeTokens, themeAreas]);
+  }, [psctEnabled, darkMode, themeEnabled, themeTokens, themeAreas, themeBackdrop, customCssEnabled]);
 
   useEffect(() => {
     if (!psctEnabled && !psctLineBreaks) return undefined;
