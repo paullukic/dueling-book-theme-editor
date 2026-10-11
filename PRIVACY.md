@@ -24,4 +24,6 @@ Nothing about you. The extension only reads from DuelingBook's own image server 
 
 ## Contact
 
-Questions: TODO (owner contact).
+Questions: paul.lukic94@gmail.com, or open an issue at https://github.com/paullukic/dueling-book-theme-editor/issues.
+
+Publisher: Sudbina

@@ -66,21 +66,22 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Asset | Dimensions | Status | Filename |
 |-------|-----------|--------|----------|
 | Store Icon | 128×128 PNG | ✅ Ready | `icon128.png` |
-| Screenshot 1 | 1280×800 | 🟡 Take logged in: themed duel (Obsidian) with the Theme tab open | |
-| Screenshot 2 | 1280×800 | 🟡 Take logged in: themed duel room and deck constructor (Midnight) | |
-| Screenshot 3 | 1280×800 | 🟡 Take logged in: preset gallery and colour pickers over the main menu | |
-| Screenshot 4 | 1280×800 | 🟡 Take logged in: Deck tab with a test hand | |
-| Screenshot 5 | 1280×800 | 🟡 Take logged in: alerts + notes + action log in a duel | |
-| Older shots | 1280×800 | v1.1 panel shots in `screenshots/v1.1/` (still valid for Duel and Chat tabs) | |
-| Small Promo Tile | 440×280 | 🟡 Exists (`screenshots/promo-small.jpg`), refresh with a themed duel | |
-| Marquee Promo Tile | 1400×560 | 🟡 Exists (`screenshots/promo-big.jpg`) | |
+| Screenshot 1 | 1280×800 | ✅ Ready: themed duel (Obsidian) with the Theme tab | `screenshots/v1.2/1-duel-theme.png` |
+| Screenshot 2 | 1280×800 | ✅ Ready: deck constructor in Midnight with coloured card text | `screenshots/v1.2/2-deck-builder.png` |
+| Screenshot 3 | 1280×800 | ✅ Ready: preset gallery over Settings (Dark Magic) | `screenshots/v1.2/3-presets.png` |
+| Screenshot 4 | 1280×800 | ✅ Ready: test hand and opening odds (Spell Card) | `screenshots/v1.2/4-test-hand.png` |
+| Screenshot 5 | 1280×800 | ✅ Ready: duel with chat commands (Black Dragon) | `screenshots/v1.2/5-chat-commands.png` |
+| Small Promo Tile | 440×280 | ✅ Ready | `screenshots/v1.2/promo-small.png` |
+| Marquee Promo Tile | 1400×560 | ✅ Ready | `screenshots/v1.2/promo-marquee.png` |
+
+Screenshots show only the owner's own deck, duel and settings: other players' names and posts were hidden for the shots, and the owner's custom background was turned off so the theme's own backdrop shows.
 
 ### Screenshot plan (one feature each, short caption)
-1. Duel with the Obsidian theme and the Theme tab open: "A sleek theme for every screen".
-2. Duel room and deck constructor in Midnight: "Lobby and deck builder, restyled".
-3. Preset gallery and colour pickers: "Six presets, or pick every colour".
-4. Deck Constructor with the Deck tab: test hand with card art and opening odds: "Test hands and opening odds".
-5. Duel with the "Your turn!" notification, notes and action log: "Never miss your turn".
+1. Themed duel with the Theme tab: "A sleek theme for every screen".
+2. Deck constructor in Midnight: "Deck builder restyled, card text colour-coded".
+3. Preset gallery: "16 themes, or pick every colour".
+4. Test hand and opening odds: "Test hands and opening odds".
+5. Duel with chat commands: "Chat shortcuts and quick maths".
 
 ## Permissions Justification
 
@@ -107,7 +108,7 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 
 ## Privacy Policy
 
-**Privacy Policy URL**: host `PRIVACY.md` (for example via GitHub Pages) and paste the URL here. TODO (owner).
+**Privacy Policy URL**: https://github.com/paullukic/dueling-book-theme-editor/blob/main/PRIVACY.md
 
 ## Distribution
 
@@ -116,9 +117,9 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 
 ## Developer Info
 
-**Publisher Name**: TODO (owner)
-**Contact Email**: TODO (owner)
-**Support URL**: TODO (owner; a GitHub Issues page or Discord invite works)
+**Publisher Name**: Sudbina
+**Contact Email**: paul.lukic94@gmail.com
+**Support URL**: https://github.com/paullukic/dueling-book-theme-editor/issues
 
 ## Version History
 
@@ -131,6 +132,6 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 ## Pre-publish checklist (1.2.0)
 - [ ] `npm run package` and upload `dueling-book-theme-editor-1.2.0.zip`
 - [ ] Load the zip unpacked once and click through every tab on duelingbook.com
-- [ ] Refresh screenshots (plan above)
+- [x] Refresh screenshots (plan above)
 - [ ] Privacy policy URL live
 - [ ] Reply to every review
