@@ -17,7 +17,7 @@ if (!preset) {
 }
 const t = preset.tokens;
 const parts = [
-  varsCss({ tokens: t, radius: preset.radius, backdrop: 0.25 }) + backdropCss,
+  varsCss({ tokens: t, radius: preset.radius, backdrop: 0 }) + backdropCss,
   ...AREAS.map((a) => AREA_CSS[a.id]).filter(Boolean),
   iconCss(t, preset.radius, ICON_STYLES[id] || 'tile'),
   skinCss(id, t),

@@ -162,16 +162,6 @@ export const PLACES = [
     needs: 'shows once Show my background, a theme, Theme effects and Background pattern are on',
     ...background,
   },
-  { id: 'duelingbookArt', label: 'DuelingBook’s background art', keywords: 'circuit board backdrop', ...background },
-  {
-    id: 'themeBackdrop',
-    label: 'Circuit-board art',
-    desc: 'Dim or hide DuelingBook’s circuit-board art behind the theme.',
-    keywords: 'backdrop background dim hide',
-    parent: 'duelingbookArt',
-    needs: THEME_ON,
-    ...background,
-  },
 
   // Theme > Text
   { id: 'cardText', label: 'Card text', keywords: 'card effect text', ...cards },
@@ -311,6 +301,23 @@ export const PLACES = [
     needs: 'shows once Duel found or Your turn is on',
     ...duel,
   })),
+  { id: 'lifePoints', label: 'Life points', keywords: 'lp health bar hp counter', ...duel },
+  {
+    id: 'lpStyle',
+    label: 'Life points style',
+    desc: 'Draw both life point counters like a Yu-Gi-Oh anime duel disk: Duel Monsters, GX, 5D’s, ZEXAL, ARC-V, VRAINS or Rush Duel. Theme keeps the theme’s own look.',
+    keywords: 'lp health bar hp counter gauge duel disk anime gx 5ds zexal arc-v arcv vrains sevens go rush duel monsters battle city digital',
+    parent: 'lifePoints',
+    ...duel,
+  },
+  {
+    id: 'lpEffects',
+    label: 'Life point effects',
+    desc: 'A red pulse when a player takes damage, a green glow on a heal, a slow warning pulse under 25% and a red alert at 0. Still glows if your system asks for reduced motion.',
+    keywords: 'lp damage heal low warning glow pulse animation hp',
+    parent: 'lifePoints',
+    ...duel,
+  },
   { id: 'speed', label: 'Speed', keywords: 'faster quick', ...duel },
   {
     id: 'skipIntro',

@@ -328,26 +328,6 @@ const BackgroundView = ({ s }) => (
         )}
       </ToggleRow>
     </Group>
-    <Group place="duelingbookArt">
-      {s.themeEnabled ? (
-        <SliderRow
-          place="themeBackdrop"
-          value={s.themeBackdrop}
-          min={0}
-          max={1}
-          step={0.05}
-          format={(v) => (v === 0 ? 'Hidden' : `${Math.round(v * 100)}%`)}
-          onChange={set('themeBackdrop')}
-        />
-      ) : (
-        <>
-          <p className="note">A theme can dim or hide DuelingBook’s circuit-board art.</p>
-          <button type="button" className="btn" onClick={() => updateSettings({ themeEnabled: true })}>
-            Turn on a theme
-          </button>
-        </>
-      )}
-    </Group>
   </>
 );
 

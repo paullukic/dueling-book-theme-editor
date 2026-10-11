@@ -75,8 +75,8 @@ const ThemeEffect = () => {
   const artRadius = useSettled(s.themeRadius, ART_DELAY_MS);
 
   const vars = useMemo(
-    () => (on ? varsCss({ tokens, radius: s.themeRadius, backdrop: s.themeBackdrop }) + backdropCss : null),
-    [on, tokens, s.themeRadius, s.themeBackdrop],
+    () => (on ? varsCss({ tokens, radius: s.themeRadius, backdrop: 0 }) + backdropCss : null),
+    [on, tokens, s.themeRadius],
   );
   useStyle('dbte-theme-vars', vars);
   useStyle('dbte-theme-font', on ? fontCss(s.themeFont) : null);
