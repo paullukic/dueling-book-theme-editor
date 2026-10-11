@@ -168,7 +168,7 @@ const RANGES = {
 
 const ONE_OF = {
   themeFont: FONTS.map((f) => f.id),
-  themePreset: [...PRESETS.map((p) => p.id), 'custom'],
+  themePreset: PRESETS.map((p) => p.id),
 };
 
 const isPlainObject = (v) => !!v && typeof v === 'object' && !Array.isArray(v);

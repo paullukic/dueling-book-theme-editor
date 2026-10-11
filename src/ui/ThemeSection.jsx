@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { updateSettings, useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { contrast } from '../lib/color';
 import { AREAS, FONTS, PRESETS, TOKEN_GROUPS, TOKENS, presetById } from '../features/theme/presets';
-import { MAX_CUSTOM_CSS, decodeTheme, encodeTheme } from '../features/theme/share';
+import { MAX_CODE_LENGTH, MAX_CUSTOM_CSS, decodeTheme, encodeTheme } from '../features/theme/share';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
 
 const SWATCH_KEYS = ['bg', 'surface', 'raised', 'accent', 'accent2', 'self', 'opp'];
@@ -12,14 +12,13 @@ const sameTokens = (a, b) => TOKENS.every(({ key }) => (a[key] || '').toLowerCas
 
 const PresetGallery = ({ s }) => {
   const base = presetById(s.themePreset);
-  const edited = !base || !sameTokens(s.themeTokens, base.tokens) || s.themeRadius !== base.radius;
-  const pick = (p) =>
-    updateSettings({ themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius, themeEnabled: true });
+  const edited = !sameTokens(s.themeTokens, base.tokens) || s.themeRadius !== base.radius;
+  const pick = (p) => updateSettings({ themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius });
   return (
     <>
       <div className="preset-grid" role="group" aria-label="Theme presets">
         {PRESETS.map((p) => {
-          const active = s.themePreset === p.id;
+          const active = s.themePreset === p.id && !edited;
           return (
             <button
               key={p.id}
@@ -40,9 +39,9 @@ const PresetGallery = ({ s }) => {
           );
         })}
       </div>
-      <p className="note" aria-live="polite">
-        {edited ? `Custom colours, based on ${base ? base.name : 'a shared theme'}.` : `Using ${base.name}.`}
-        {edited && base && (
+      <p className="note">
+        <span aria-live="polite">{edited ? `Custom colours, based on ${base.name}.` : `Using ${base.name}.`}</span>
+        {edited && (
           <>
             {' '}
             <button type="button" className="link-btn" onClick={() => pick(base)}>
@@ -68,18 +67,20 @@ const TokenEditor = ({ s }) => {
   const failing = CHECKS.map((c) => ({ ...c, ratio: contrast(s.themeTokens[c.a], s.themeTokens[c.b]) })).filter((c) => c.ratio < c.min);
   return (
     <>
-      {failing.length > 0 && (
-        <div className="warn-list" role="status">
-          <strong>Hard to read:</strong>
-          <ul>
-            {failing.map((c) => (
-              <li key={c.label}>
-                {c.label} ({c.ratio.toFixed(1)}:1, aim for {c.min}:1)
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div role="status">
+        {failing.length > 0 && (
+          <div className="warn-list">
+            <strong>Hard to read:</strong>
+            <ul>
+              {failing.map((c) => (
+                <li key={c.label}>
+                  {c.label} ({c.ratio.toFixed(1)}:1, aim for {c.min}:1)
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
       {TOKEN_GROUPS.map((group) => (
         <div className="token-group" key={group}>
           <h3>{group}</h3>
@@ -92,26 +93,44 @@ const TokenEditor = ({ s }) => {
   );
 };
 
+// Custom CSS from a theme code waits here until the user chooses to use it;
+// it is never applied and never replaces their own CSS on its own.
+const ImportedCss = ({ setSaved }) => {
+  const [imported, setImported] = useLocal('customCssImported', '');
+  if (!imported) return null;
+  return (
+    <div className="card-callout">
+      <h3>A shared theme included custom CSS</h3>
+      <p>It is not applied. Read it first: CSS can hide or rearrange anything on the page.</p>
+      <label className="sr-only" htmlFor="dbte-imported-css">
+        Custom CSS from a theme code
+      </label>
+      <textarea id="dbte-imported-css" className="field code-box" rows={5} readOnly value={imported} />
+      <div className="btn-row">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            setSaved(imported);
+            setImported('');
+          }}
+        >
+          Use this CSS (replaces mine)
+        </button>
+        <button type="button" className="btn btn-quiet" onClick={() => setImported('')}>
+          Discard
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const CustomCss = ({ s }) => {
   const [saved, setSaved] = useLocal('customCss', '');
-  const [draft, setDraft] = useState(null);
-  const timer = useRef(null);
-  const value = draft === null ? saved || '' : draft;
-
-  useEffect(() => () => clearTimeout(timer.current), []);
-
-  const onChange = (e) => {
-    const next = e.target.value.slice(0, MAX_CUSTOM_CSS);
-    setDraft(next);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      setSaved(next);
-      setDraft(null);
-    }, 500);
-  };
-
+  const value = saved || '';
   return (
     <>
+      <ImportedCss setSaved={setSaved} />
       <ToggleRow
         label="Use my CSS"
         description="Applied on top of everything else, on this computer only. Turn it off if the page looks broken."
@@ -131,7 +150,7 @@ const CustomCss = ({ s }) => {
         maxLength={MAX_CUSTOM_CSS}
         placeholder={'#main_menu .menu_btn .content {\n  border-radius: 999px !important;\n}'}
         value={value}
-        onChange={onChange}
+        onChange={(e) => setSaved(e.target.value.slice(0, MAX_CUSTOM_CSS))}
       />
       <p className="note">
         {value.length.toLocaleString()} / {MAX_CUSTOM_CSS.toLocaleString()} characters. Theme colours are available as
@@ -142,7 +161,8 @@ const CustomCss = ({ s }) => {
 };
 
 const ShareTheme = ({ s }) => {
-  const [customCss, setCustomCss] = useLocal('customCss', '');
+  const [customCss] = useLocal('customCss', '');
+  const [, setImported] = useLocal('customCssImported', '');
   const [withCss, setWithCss] = useState(false);
   const [code, setCode] = useState('');
   const [copied, setCopied] = useState('');
@@ -151,6 +171,13 @@ const ShareTheme = ({ s }) => {
 
   const create = async () => {
     const next = encodeTheme(s, withCss ? customCss : '');
+    if (next.length > MAX_CODE_LENGTH) {
+      setCode('');
+      setCopied('');
+      setResult({ error: 'Your custom CSS makes the code too long to share. Untick “Include my custom CSS” or shorten it.' });
+      return;
+    }
+    setResult(null);
     setCode(next);
     try {
       await navigator.clipboard.writeText(next);
@@ -167,15 +194,10 @@ const ShareTheme = ({ s }) => {
       return;
     }
     updateSettings(patch);
-    if (css) {
-      setCustomCss(css);
-      updateSettings({ customCssEnabled: false });
-    }
+    if (css) setImported(css);
     setPaste('');
     setResult({
-      ok: css
-        ? 'Theme applied. It also contained custom CSS: review it under Custom CSS, then turn it on if you trust it.'
-        : 'Theme applied.',
+      ok: css ? 'Theme applied. It also included custom CSS: open Custom CSS to read it and choose whether to use it.' : 'Theme applied.',
     });
   };
 

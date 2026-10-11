@@ -8,12 +8,14 @@ import { psctCss, unwrap, wrap } from './psct';
 // Each effect applies its change while enabled and fully undoes it in cleanup,
 // so turning a feature off restores DuelingBook's own look.
 
+// Updates the <style> in place while css changes (no remove and re-insert per
+// colour-picker tick); removes it when css is empty or on unmount.
 export const useStyle = (id, css) => {
   useEffect(() => {
-    if (!css) return undefined;
-    setPageStyle(id, css);
-    return () => removePageStyle(id);
+    if (css) setPageStyle(id, css);
+    else removePageStyle(id);
   }, [id, css]);
+  useEffect(() => () => removePageStyle(id), [id]);
 };
 
 // The full theme covers everything the simple dark mode did.

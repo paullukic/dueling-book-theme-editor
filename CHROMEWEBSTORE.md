@@ -80,6 +80,44 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 4. Deck Constructor with the Deck tab: test hand with card art and opening odds: "Test hands and opening odds".
 5. Duel with the "Your turn!" notification, notes and action log: "Never miss your turn".
 
+## Permissions Justification
+
+| Permission | Type | Justification |
+|------------|------|---------------|
+| storage | permissions | Saves the user's choices (theme, colours, shortcuts, muted players), their notes and their background image so they are still there the next time they open DuelingBook. |
+| unlimitedStorage | permissions | Lets a user's own background image and notes be saved on their device without hitting the default 5 MB limit. Nothing is uploaded. |
+| host_permissions: duelingbook.com (4 URL patterns) | host_permissions | Needed so the extension can re-attach to DuelingBook tabs that were already open (see scripting). Same sites the content scripts already run on; no other sites. |
+| scripting | permissions | After an update (or right after install), re-attaches the extension to DuelingBook tabs that were already open, so users do not have to reload the page to get their theme and panel back. It only injects the extension's own bundled files, only into duelingbook.com tabs. |
+| duelingbook.com content scripts (4 URL patterns, with and without www, http and https) | content_scripts matches | The extension only runs on duelingbook.com, where it applies the user's theme and shows its settings panel and tools. |
+
+Host access is limited to duelingbook.com. No `tabs`, no remote code.
+
+## Privacy & Data Use
+
+**Does the extension collect user data?** No.
+
+All data (settings, notes, background image, action log, custom CSS) is stored with the browser's extension storage on the user's device (settings also sync through the user's own Chrome sync). Nothing is transmitted to the developer or any third party. The extension only reads public files from DuelingBook's own image server (images.duelingbook.com): card art for test hands and the playmat artwork it recolours for the full theme, the same files the site itself loads.
+
+### Data Use Certification
+- [x] Data is NOT sold to third parties
+- [x] Data is NOT used for purposes unrelated to the extension's core functionality
+- [x] Data is NOT used for creditworthiness or lending purposes
+
+## Privacy Policy
+
+**Privacy Policy URL**: host `PRIVACY.md` (for example via GitHub Pages) and paste the URL here. TODO (owner).
+
+## Distribution
+
+**Visibility**: Public
+**Regions**: All regions
+
+## Developer Info
+
+**Publisher Name**: TODO (owner)
+**Contact Email**: TODO (owner)
+**Support URL**: TODO (owner; a GitHub Issues page or Discord invite works)
+
 ## Version History
 
 | Version | Date | Summary |

@@ -9,12 +9,12 @@
 // - Selectors start with "html" to outrank the site's equal-specificity
 //   !important rules.
 
-import { toRgb } from '../../lib/color.js';
+import { isHex, toRgb } from '../../lib/color.js';
 
 const SYSTEM_FONT = 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
 export const varsCss = ({ tokens, radius, backdrop }) => {
-  const lines = Object.keys(tokens).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
+  const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
   const [r, g, b] = toRgb(tokens.bg);
   return `:root {
 ${lines.join('\n')}
@@ -55,7 +55,6 @@ html #content .connection_status2, html #tooltips > * {
 html #content .title1, html #content .title2, html #content .subtitle,
 html #content .arial_black, html #content .arial_black2, html #content .menu_btn .content span {
   font-weight: 800 !important;
-  letter-spacing: -0.01em;
 }
 `;
 
@@ -143,7 +142,7 @@ html #content .cell1 {
   background-image: none !important;
   background-color: var(--dbt-surface) !important;
   color: var(--dbt-text) !important;
-  border: none !important;
+  border-color: transparent !important;
   box-shadow: inset 0 -1px 0 var(--dbt-line);
 }
 html #content .cell1:hover { background-color: var(--dbt-hover) !important; }
@@ -201,22 +200,25 @@ html #content .ui-slider-handle { background: var(--dbt-text) !important; border
 `;
 
 const menu = `
+/* Solid tiles: DuelingBook's 4px border stays (layout) but turns invisible;
+   a thin inner edge and an accent bar on hover replace it. */
 html #main_menu .menu_btn .content {
   background: var(--dbt-glass) !important;
-  border-color: var(--dbt-line) !important;
-  border-left-color: var(--dbt-border) !important;
+  border-color: transparent !important;
   border-radius: var(--dbt-radius) !important;
-  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 0 0 1px var(--dbt-line), 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important;
   transition: background-color 0.15s, border-color 0.15s;
 }
 html #main_menu .menu_btn .content span { color: var(--dbt-text) !important; text-shadow: none !important; }
+/* Long labels ("Deck Constructor") are wider than the full-size tile; shrink
+   the label only, around its own centre, so nothing else moves. */
+html #main_menu .menu_btn .content:not(.dbte-small-menu) span { transform: scale(0.86); }
 html #main_menu .menu_btn:hover .content {
   background: var(--dbt-hover) !important;
-  border-color: var(--dbt-line) !important;
   border-left-color: var(--dbt-accent) !important;
 }
 html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; }
-html #main_menu .menu_btn.administrator_btn .content { border-left-color: var(--dbt-warning) !important; }
+html #main_menu .menu_btn.administrator_btn:hover .content { border-left-color: var(--dbt-warning) !important; }
 html #main_menu .main_menu_circle { border-color: var(--dbt-muted) !important; }
 html #main_menu .main_menu_circle .background { background-color: var(--dbt-accent) !important; }
 html #main_menu #tourney_sidebar, html #main_menu #streams { background-color: var(--dbt-glass-soft) !important; border-radius: var(--dbt-radius); }
@@ -283,7 +285,7 @@ html #deck_constructor #search .search_bg {
   background: var(--dbt-glass) !important;
   box-shadow: inset 0 0 0 1px var(--dbt-line);
 }
-html #deck_constructor #search .title_txt, html #deck_constructor #search span { color: var(--dbt-text) !important; }
+html #deck_constructor #search .title_txt, html #deck_constructor #search span:not(.cardfront *) { color: var(--dbt-text) !important; }
 html #deck_constructor #search .more_options_btn, html #deck_constructor #search .prev_options_btn { color: var(--dbt-link) !important; }
 /* The pager arrows are shaped divs filled with one colour. */
 html #deck_constructor #search .search_prev_btn, html #deck_constructor #search .search_next_btn { background-color: var(--dbt-muted) !important; }

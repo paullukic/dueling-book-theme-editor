@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "DuelingBook Theme Editor - Dark Mode, Hotkeys & Duel Tools",
+  "name": "DuelingBook Theme Editor - Dark Themes, Hotkeys & Duel Tools",
   "short_name": "DB Theme Editor",
   "version": "1.2.0",
-  "description": "Dark mode, hotkeys, turn alerts, test hands, chat mute and more for duelingbook.com. Lightweight, no data collected.",
+  "description": "Sleek dark themes for every screen, hotkeys, turn alerts, test hands and chat mute for duelingbook.com. No data collected.",
   "minimum_chrome_version": "111",
   "permissions": [
     "storage",

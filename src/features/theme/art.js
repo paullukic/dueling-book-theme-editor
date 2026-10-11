@@ -67,12 +67,14 @@ const fieldCache = new Map();
 
 const fetchField = (name) => {
   if (!fieldCache.has(name)) {
-    fieldCache.set(
-      name,
-      fetch(`https://images.duelingbook.com/svg/${name}.svg`)
-        .then((r) => (r.ok ? r.text() : null))
-        .catch(() => null),
-    );
+    const req = fetch(`https://images.duelingbook.com/svg/${name}.svg`)
+      .then((r) => (r.ok ? r.text() : null))
+      .catch(() => null)
+      .then((text) => {
+        if (text === null) fieldCache.delete(name); // try again next time
+        return text;
+      });
+    fieldCache.set(name, req);
   }
   return fieldCache.get(name);
 };

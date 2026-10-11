@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { isTypingEvent } from '../lib/dom';
+import { LAUNCHER_MARGIN, launcherBottom } from '../lib/layout';
 import Panel from './Panel';
 import {
   BackgroundEffect,
@@ -23,6 +24,31 @@ const logoUrl = (() => {
     return '';
   }
 })();
+
+const AVOID_IDS = ['mute_btn', 'screenshot_btn'];
+
+// Lifts the corner button above DuelingBook's own corner buttons when the
+// game stage reaches the window corner (narrow or short windows).
+const useLauncherBottom = (active) => {
+  const [bottom, setBottom] = useState(LAUNCHER_MARGIN);
+  useEffect(() => {
+    if (!active) return undefined;
+    const check = () => {
+      const rects = AVOID_IDS.map((id) => document.getElementById(id))
+        .filter((el) => el && el.offsetParent)
+        .map((el) => el.getBoundingClientRect());
+      setBottom(launcherBottom({ width: window.innerWidth, height: window.innerHeight }, rects));
+    };
+    check();
+    const timer = setInterval(check, 1500);
+    window.addEventListener('resize', check);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('resize', check);
+    };
+  }, [active]);
+  return bottom;
+};
 
 const App = ({ shadowRoot }) => {
   const { showLauncher } = useSettings();
@@ -84,6 +110,7 @@ const App = ({ shadowRoot }) => {
     }
   }, [open, shadowRoot]);
 
+  const launcherBottomPx = useLauncherBottom(!open && showLauncher);
   const hasNews = metaLoaded && meta && meta.seenVersion !== chrome.runtime.getManifest().version;
 
   return (
@@ -110,6 +137,7 @@ const App = ({ shadowRoot }) => {
           ref={launcherRef}
           type="button"
           className="launcher"
+          style={{ bottom: launcherBottomPx }}
           onClick={() => setOpen(true)}
           aria-label="Open DuelingBook Theme Editor"
           title="Theme Editor (Alt+Shift+D)"

@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { DEFAULTS, withDefaults } from '../src/lib/defaults.js';
 import { contrast, mix } from '../src/lib/color.js';
 import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
-import { decodeTheme, encodeTheme } from '../src/features/theme/share.js';
-import { AREA_CSS, varsCss } from '../src/features/theme/css.js';
-import { recolorField } from '../src/features/theme/art.js';
+import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
+import { AREA_CSS, fontCss, varsCss } from '../src/features/theme/css.js';
+import { iconCss, recolorField } from '../src/features/theme/art.js';
+import { launcherBottom } from '../src/lib/layout.js';
 
 test('theme: off by default so updates change nothing', () => {
   assert.equal(DEFAULTS.themeEnabled, false);
@@ -100,4 +101,43 @@ test('field: recolours the four zone gradients only', () => {
   assert.ok(out.includes(`stop-color="${mix(t.self, t.accent2, 0.55)}"`));
   assert.ok(out.includes('fill="#fff"'));
   assert.doesNotMatch(out, /stop-color="(red|#90f|#00b400|#ff8f00)"/);
+});
+
+test('css: lettering sheet only changes fonts', () => {
+  assert.doesNotMatch(fontCss, /(?<![-\w])(width|height|padding|font-size|line-height|letter-spacing|left|top|border)\s*:/i);
+});
+
+test('css: a non-hex token never reaches the page', () => {
+  const vars = varsCss({ tokens: { ...PRESETS[0].tokens, accent: 'red;}body{display:none' }, radius: 6, backdrop: 0.25 });
+  assert.doesNotMatch(vars, /display:none/);
+  assert.doesNotMatch(vars, /--dbt-accent:/);
+});
+
+test('icons: every icon is a data URI with no raw quotes', () => {
+  const css = iconCss(PRESETS[1].tokens, 8);
+  ['ok_btn', 'yes_btn', 'no_btn', 'cancel_btn', 'exit_btn', 'minimize_btn', 'expand_btn', 'close_btn', 'card_menu_btn_up', 'over.svg'].forEach((n) =>
+    assert.ok(css.includes(`/svg/${n}`), n),
+  );
+  const urls = css.match(/url\("data:image\/svg\+xml,[^"]*"\)/g);
+  assert.ok(urls.length >= 14);
+  urls.forEach((u) => assert.doesNotMatch(u.slice(5, -2), /["<>\s]/));
+});
+
+test('share: oversized custom CSS gives a code longer than the paste limit', () => {
+  const huge = '/* 漢字🃏 */'.repeat(6000).slice(0, 50000);
+  const code = encodeTheme(withDefaults({}), huge);
+  assert.ok(code.length > MAX_CODE_LENGTH, 'the panel must refuse to offer this code');
+  assert.ok(decodeTheme(code).error);
+});
+
+test('launcher: stays in the corner unless it would cover a DuelingBook button', () => {
+  const vp = { width: 1280, height: 800 };
+  assert.equal(launcherBottom(vp, []), 14);
+  const far = { left: 900, right: 925, top: 760, bottom: 785, width: 25, height: 25 };
+  assert.equal(launcherBottom(vp, [far]), 14);
+  const mute = { left: 1230, right: 1262, top: 752, bottom: 784, width: 32, height: 32 };
+  const b = launcherBottom(vp, [mute]);
+  assert.equal(b, 800 - 752 + 8);
+  const hidden = { ...mute, width: 0, height: 0 };
+  assert.equal(launcherBottom(vp, [hidden]), 14);
 });

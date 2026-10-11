@@ -7,12 +7,53 @@ import { fieldCss, iconCss } from './art';
 
 const AREA_IDS = Object.keys(AREA_CSS);
 const CUSTOM_ID = 'dbte-theme-custom';
+const ART_DELAY_MS = 150;
 
-// One <style> per area so each can be switched off on its own. The variables
-// block is the only node that changes while the user edits colours.
+// One <style> per area so each can be switched off on its own. Area sheets
+// are static; colour edits rewrite the variables block in place, and the
+// generated icons and playmat follow once the picker settles.
 const AreaStyle = ({ id, on }) => {
   useStyle(`dbte-theme-${id}`, on ? AREA_CSS[id] : null);
   return null;
+};
+
+// The same tokens object while its values stay the same, so unrelated
+// setting changes do not rebuild the generated artwork.
+const useStableTokens = (tokens) => {
+  const key = JSON.stringify(tokens);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => tokens, [key]);
+};
+
+const useSettled = (value, delay) => {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setSettled(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return settled;
+};
+
+// Keeps the user's own CSS after every other stylesheet in <head>, whichever
+// effect (or DuelingBook itself) adds one later.
+const useCustomLast = (active) => {
+  useEffect(() => {
+    if (!active) return undefined;
+    const head = document.head;
+    const keepLast = () => {
+      const el = document.getElementById(CUSTOM_ID);
+      if (!el) return;
+      let next = el.nextElementSibling;
+      while (next && !(next.tagName === 'STYLE' || (next.tagName === 'LINK' && /stylesheet/i.test(next.rel)))) {
+        next = next.nextElementSibling;
+      }
+      if (next) head.appendChild(el);
+    };
+    keepLast();
+    const obs = new MutationObserver(keepLast);
+    obs.observe(head, { childList: true });
+    return () => obs.disconnect();
+  }, [active]);
 };
 
 const ThemeEffect = () => {
@@ -20,7 +61,9 @@ const ThemeEffect = () => {
   const [customCss] = useLocal('customCss', '');
   const on = s.themeEnabled;
   const areas = s.themeAreas;
-  const tokens = s.themeTokens;
+  const tokens = useStableTokens(s.themeTokens);
+  const artTokens = useSettled(tokens, ART_DELAY_MS);
+  const artRadius = useSettled(s.themeRadius, ART_DELAY_MS);
 
   const vars = useMemo(
     () => (on ? varsCss({ tokens, radius: s.themeRadius, backdrop: s.themeBackdrop }) + backdropCss : null),
@@ -29,7 +72,7 @@ const ThemeEffect = () => {
   useStyle('dbte-theme-vars', vars);
   useStyle('dbte-theme-font', on && s.themeFont === 'system' ? fontCss : null);
 
-  const icons = useMemo(() => (on && areas.icons ? iconCss(tokens, s.themeRadius) : null), [on, areas.icons, tokens, s.themeRadius]);
+  const icons = useMemo(() => (on && areas.icons ? iconCss(artTokens, artRadius) : null), [on, areas.icons, artTokens, artRadius]);
   useStyle('dbte-theme-icons', icons);
 
   const [field, setField] = useState(null);
@@ -40,22 +83,18 @@ const ThemeEffect = () => {
       return undefined;
     }
     let live = true;
-    fieldCss(tokens).then((css) => {
+    fieldCss(artTokens).then((css) => {
       if (live) setField(css || null);
     });
     return () => {
       live = false;
     };
-  }, [fieldOn, tokens]);
+  }, [fieldOn, artTokens]);
   useStyle('dbte-theme-field', fieldOn ? field : null);
 
-  useStyle(CUSTOM_ID, s.customCssEnabled && customCss ? customCss : null);
-
-  // The user's own CSS always comes last, whatever was switched on after it.
-  useEffect(() => {
-    const el = document.getElementById(CUSTOM_ID);
-    if (el && el.nextElementSibling) el.parentNode.appendChild(el);
-  });
+  const custom = s.customCssEnabled && customCss ? customCss : null;
+  useStyle(CUSTOM_ID, custom);
+  useCustomLast(!!custom);
 
   return AREA_IDS.map((id) => <AreaStyle key={id} id={id} on={on && areas[id]} />);
 };

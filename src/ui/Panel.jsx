@@ -5,7 +5,7 @@ import { useLocal, useLocalProblem } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
 import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
-import ThemeSection from './ThemeTab';
+import ThemeSection from './ThemeSection';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
 import BackgroundPicker from './BackgroundPicker';
