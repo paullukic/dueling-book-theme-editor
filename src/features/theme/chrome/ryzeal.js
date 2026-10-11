@@ -27,7 +27,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
 
   // Nine-slice frame: a chamfered steel lip with a hex bolt in each corner
   // and an amber tick on each side.
-  const frameSvg = svg(60, 60, `<path d="M9 1H51L59 9V51L51 59H9L1 51V9Z" fill="none" stroke="${steelHi}" stroke-width="1.4"/><path d="M10 4H50L56 10V50L50 56H10L4 50V10Z" fill="none" stroke="${steelDark}" stroke-width="1.2"/>${hex(11, 11, 4.6)}${hex(49, 11, 4.6)}${hex(11, 49, 4.6)}${hex(49, 49, 4.6)}<path d="M1.2 26V34M58.8 26V34" stroke="${amber}" stroke-width="2"/>`);
+  const frameSvg = svg(60, 60, `<path d="M9 1H51L59 9V51L51 59H9L1 51V9Z" fill="none" stroke="${steelHi}" stroke-width="1.4"/><path d="M10 4H50L56 10V50L50 56H10L4 50V10Z" fill="none" stroke="${steelDark}" stroke-width="1.2"/>${hex(11, 11, 4.6)}${hex(49, 11, 4.6)}${hex(11, 49, 4.6)}${hex(49, 49, 4.6)}<path d="M4 26V34M56 26V34" stroke="${amber}" stroke-width="2.4"/>`);
   const frame = (px = 18) => `border-style: solid; border-color: transparent; border-width: ${px}px; border-image: var(--dbtc-u0) 20 / ${px}px stretch; box-sizing: border-box;`;
 
   // Ignition coil drum, end-on: steel barrel, amber ring, dark core.
@@ -73,6 +73,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const popCss = [['ok_btn', 'OK', popPrimary, false], ['yes_btn', 'Yes', popPrimary, false], ['no_btn', 'No', popSecondary, false], ['cancel_btn', 'Cancel', popSecondary, true]]
     .map(([n, text, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(text, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
 
+  const titlePlate = mix(plate, t.bg, 0.45);
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
@@ -100,9 +101,8 @@ ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 80px); top: -46px; right: auto; bottom: auto; width: 160px; height: 60px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 3px #000000); }
 ${SEL.dialogTitle} { ${label} }
 
-/* Chat: a steel header with an amber rail and a coil drum. */
+/* Chat: a steel header with an amber rail. */
 ${SEL.chatTop} { background: var(--dbtc-u2), linear-gradient(180deg, ${steel}, ${steelDark}) !important; box-shadow: inset 0 -2px 0 ${amber}, inset 0 1px 0 ${alpha(steelHi, 0.5)} !important; }
-${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 3px; width: 44px; height: 22px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${steel}, inset -1px 0 0 ${steel}, inset 0 -1px 0 ${steel} !important; }
 
@@ -129,7 +129,8 @@ ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(plate, 0.65)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${steelHi}, ${steelDark} 30%, ${steel} 55%, ${steelDark} 80%, ${steelHi}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(18)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 4%, ${titlePlate} 12% 88%, transparent 96%) !important; box-shadow: none !important; }
+${sel(['#deck_constructor #search .title_txt'])} { background: ${titlePlate} !important; box-shadow: 0 0 0 0.3em ${titlePlate} !important; border-radius: 3px !important; }
 ${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${steelDark} !important; box-shadow: 0 0 0 0.35em ${steelDark} !important; border-radius: 2px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(amber, 0.16)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(amber, 0.38)}, ${alpha(ice, 0.1)}) !important; }

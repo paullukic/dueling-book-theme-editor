@@ -8,7 +8,7 @@ import { n1, polar, rng } from './kit.js';
 // with amber rings frame the corners like the card art.
 const ryzeal = (t) => {
   const rand = rng(44);
-  const [cx, cy] = [1215, 420];
+  const [cx, cy] = [1365, 430];
   const amber = t.accent;
   const ice = t.accent2;
   const steel = mix(t.raised, t.text, 0.18);
@@ -37,7 +37,7 @@ const ryzeal = (t) => {
     const r1 = r0 + 120 + rand() * 520;
     const [x1, y1] = polar(cx, cy, r0, a);
     const [x2, y2] = polar(cx, cy, r1, a);
-    if (x2 < 1000 && x1 < 1000) continue;
+    if (Math.min(x1, x2) < 1090) continue;
     streaks += `M${x1} ${y1}L${x2} ${y2}`;
   }
 
@@ -119,6 +119,21 @@ ${fire ? `<circle cx="${x}" cy="${y}" r="${n1(r * 0.62)}" fill="none" stroke="${
     };
   });
 
+
+  // Ryzeal Sword: the Detonator's great blade, crossing behind the engine.
+  const [b0x, b0y] = [cx + 60, cy + 500];
+  const [b1x, b1y] = [cx - 40, cy - 500];
+  const bl = Math.hypot(b1x - b0x, b1y - b0y);
+  const [ux, uy] = [(b1x - b0x) / bl, (b1y - b0y) / bl];
+  const [vx, vy] = [-uy, ux];
+  const bp = (a, b) => `${n1(b0x + ux * a + vx * b)} ${n1(b0y + uy * a + vy * b)}`;
+  const blade = `<path d="M${bp(0, 40)}L${bp(bl - 120, 40)}L${bp(bl, 0)}L${bp(bl - 120, -40)}L${bp(0, -40)}Z" fill="url(#dbtefx-rz-blade)" stroke="${steelDark}" stroke-width="3"/>
+<path d="M${bp(30, -40)}L${bp(bl - 120, -40)}L${bp(bl, 0)}" fill="none" stroke="${amber}" stroke-opacity="0.85" stroke-width="3"/>
+<path d="M${bp(40, 0)}L${bp(bl - 150, 0)}" stroke="${steelDark}" stroke-width="10" stroke-linecap="round"/>
+<path d="M${bp(40, 0)}L${bp(bl - 150, 0)}" stroke="${ice}" stroke-opacity="0.6" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M${bp(-14, 92)}L${bp(14, 92)}L${bp(14, -92)}L${bp(-14, -92)}Z" fill="${mix(steel, t.bg, 0.2)}" stroke="${amber}" stroke-width="3"/>
+<path d="M${bp(-14, 22)}L${bp(-120, 22)}L${bp(-120, -22)}L${bp(-14, -22)}Z" fill="${steelDark}" stroke="${mix(steel, '#ffffff', 0.2)}" stroke-width="2"/>`;
+
   // Arcs crawling over the stator ring itself.
   let crawl = '';
   for (let i = 0; i < 4; i++) {
@@ -130,6 +145,11 @@ ${fire ? `<circle cx="${x}" cy="${y}" r="${n1(r * 0.62)}" fill="none" stroke="${
     }
     crawl += `<path d="${d}" stroke="${mix(ice, '#ffffff', 0.5)}" stroke-width="2" fill="none" style="animation: dbtefx-rz-crawl 1.7s steps(1) ${n1(-i * 0.43)}s infinite;"/>`;
   }
+
+
+  // The rank 4 Xyz emblem over the core: a black overlay ring with four rank stars.
+  const rstar = (x, y, r) => `M${x} ${n1(y - r)}L${n1(x + r * 0.3)} ${n1(y - r * 0.3)}L${n1(x + r)} ${y}L${n1(x + r * 0.3)} ${n1(y + r * 0.3)}L${x} ${n1(y + r)}L${n1(x - r * 0.3)} ${n1(y + r * 0.3)}L${n1(x - r)} ${y}L${n1(x - r * 0.3)} ${n1(y - r * 0.3)}Z`;
+  const rank = [-144, -108, -72, -36].map((a) => { const [x, y] = polar(cx, cy, 54, a); return rstar(x, y, 15); }).join('');
 
   return `<style>
 @keyframes dbtefx-rz-fire { 0% { opacity: 1; } 22% { opacity: 0.85; } 30%, 100% { opacity: 0; } }
@@ -150,6 +170,8 @@ ${fire ? `<circle cx="${x}" cy="${y}" r="${n1(r * 0.62)}" fill="none" stroke="${
 <path d="${streaks}" stroke="${mix(amber, '#ffffff', 0.3)}" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
 <g fill="none" stroke="${amber}" stroke-opacity="0.1"><circle cx="${cx}" cy="${cy}" r="380" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="470" stroke-dasharray="3 14" stroke-width="3"/></g>
 <!--mid-->
+<g transform="translate(${cx} ${cy}) scale(0.82) translate(${-cx} ${-cy})">
+${blade}
 <path d="${units.map((u) => u.cable).join('')}" fill="none" stroke="${steelDark}" stroke-width="14" stroke-linecap="round"/>
 <path d="${units.map((u) => u.cable).join('')}" fill="none" stroke="${mix(amber, t.bg, 0.55)}" stroke-width="3" stroke-dasharray="6 9" stroke-linecap="round"/>
 <circle cx="${cx}" cy="${cy}" r="262" fill="${steelDark}"/>
@@ -170,10 +192,12 @@ ${crawl}
 <g fill="${steelDark}" stroke="${mix(steel, '#ffffff', 0.2)}" stroke-width="1.5">${bolts}</g>
 <circle cx="${cx}" cy="${cy}" r="110" fill="url(#dbtefx-rz-core)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-rz-core 1.2s ease-in-out infinite;"/>
 <circle cx="${cx}" cy="${cy}" r="18" fill="#ffffff"/>
+<circle cx="${cx}" cy="${cy}" r="52" fill="none" stroke="${mix(t.bg, '#000000', 0.5)}" stroke-width="9" stroke-opacity="0.85"/>
+<path d="${rank}" fill="${t.warning}" stroke="${mix(t.bg, '#000000', 0.5)}" stroke-width="2"/>
 ${units.map((u) => u.drum).join('')}
 ${units.map((u) => u.arc).join('')}
+</g>
 <!--near-->
-${drum(-10, 905, 190, '')}
 ${drum(1655, -30, 170, '')}
 <g fill="none" stroke="${amber}" stroke-opacity="0.5" stroke-width="3"><path d="M1420 860l40-40h120M1440 880l40-40h100"/></g>`;
 };

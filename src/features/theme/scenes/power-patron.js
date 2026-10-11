@@ -8,7 +8,7 @@ import { anim, n1, polar, rng } from './kit.js';
 // from it. The eye blinks, the gems circle, light runs down the road.
 const powerPatron = (t) => {
   const rand = rng(83);
-  const [ex, ey] = [1210, 300];
+  const [ex, ey] = [1310, 300];
   const ice = t.accent;
   const iceHi = mix(ice, '#ffffff', 0.5);
   const obsidian = mix(t.bg, '#000000', 0.6);
@@ -18,28 +18,42 @@ const powerPatron = (t) => {
   let blades = '';
   let rims = '';
   let holes = '';
-  for (let i = 0; i < 34; i++) {
-    const a = i * (360 / 34) + rand() * 4;
+  let veins = '';
+  for (let i = 0; i < 24; i++) {
+    const a = i * 15 + rand() * 5;
     const left = Math.cos((a * Math.PI) / 180);
-    let len = 170 + rand() * 230 + (i % 2 ? 0 : 90);
-    if (left < -0.1) len = Math.min(len, (ex - 990) / -left - 80);
+    let len = 180 + rand() * 200 + (i % 2 ? 0 : 100);
+    if (left < -0.1) len = Math.min(len, (ex - 1160) / -left - 92);
     if (len < 70) continue;
     const r0 = 92;
-    const w = (i % 2 ? 7 : 12) + rand() * 6;
-    const bend = (rand() * 2 - 1) * 0.12 + 0.08;
-    const [ax, ay] = polar(ex, ey, r0, a - (w / r0) * 28);
-    const [bx, by] = polar(ex, ey, r0, a + (w / r0) * 28);
-    const [tx, ty] = polar(ex, ey, r0 + len, a + bend * 40);
-    const [m1x, m1y] = polar(ex, ey, r0 + len * 0.55, a - 3 + bend * 22);
-    const [m2x, m2y] = polar(ex, ey, r0 + len * 0.5, a + 5 + bend * 22);
+    const w = (i % 2 ? 14 : 22) + rand() * 6;
+    const bend = (rand() * 2 - 1) * 0.1 + 0.06;
+    const [ax, ay] = polar(ex, ey, r0, a - (w / r0) * 30);
+    const [bx, by] = polar(ex, ey, r0, a + (w / r0) * 30);
+    const [tx, ty] = polar(ex, ey, r0 + len, a + bend * 30);
+    const [m1x, m1y] = polar(ex, ey, r0 + len * 0.55, a - (w / (r0 + len * 0.55)) * 40 + bend * 18);
+    const [m2x, m2y] = polar(ex, ey, r0 + len * 0.5, a + (w / (r0 + len * 0.5)) * 40 + bend * 18);
     blades += `M${ax} ${ay}Q${m1x} ${m1y} ${tx} ${ty}Q${m2x} ${m2y} ${bx} ${by}Z`;
     rims += `M${ax} ${ay}Q${m1x} ${m1y} ${tx} ${ty}`;
-    if (len > 200) {
-      for (let k = 0; k < 4; k++) {
-        const [hx, hy] = polar(ex, ey, r0 + len * (0.18 + k * 0.11), a + bend * (8 + k * 6));
-        holes += `<ellipse cx="${hx}" cy="${hy}" rx="${n1(w * 0.18)}" ry="${n1(w * 0.42)}" transform="rotate(${n1(a)} ${hx} ${hy})"/>`;
-      }
+    const [vx, vy] = polar(ex, ey, r0 + len * 0.82, a + bend * 24);
+    veins += `M${polar(ex, ey, r0 + 8, a).join(' ')}L${vx} ${vy}`;
+    // Lace cut-outs down the blade: diamonds and rings, shrinking toward the tip.
+    const n = Math.max(2, Math.floor(len / 70));
+    for (let k = 0; k < n; k++) {
+      const f = 0.14 + (k / n) * 0.62;
+      const [hx, hy] = polar(ex, ey, r0 + len * f, a + bend * 30 * f);
+      const s = w * (0.5 - f * 0.4);
+      holes += k % 2
+        ? `<circle cx="${hx}" cy="${hy}" r="${n1(s * 0.5)}"/>`
+        : `<path d="M${n1(hx)} ${n1(hy - s)}L${n1(hx + s * 0.55)} ${hy}L${n1(hx)} ${n1(hy + s)}L${n1(hx - s * 0.55)} ${hy}Z" transform="rotate(${n1(a + 90)} ${hx} ${hy})"/>`;
     }
+  }
+  // Scalloped lace collar around the eye's disc.
+  let scallop = '';
+  for (let i = 0; i < 28; i++) {
+    const [x1, y1] = polar(ex, ey, 100, i * (360 / 28));
+    const [x2, y2] = polar(ex, ey, 100, (i + 1) * (360 / 28));
+    scallop += `${i ? '' : `M${x1} ${y1}`}A11.5 11.5 0 0 1 ${x2} ${y2}`;
   }
 
   // Ring of Theorealize script turning slowly around the eye.
@@ -65,14 +79,15 @@ const powerPatron = (t) => {
 
   // The three Patrons as faceted gems on a tilted orbit (behind the eye at the top).
   const gem = (color, delay, k) => `<g style="animation: dbtefx-pp-orbit 18s linear ${delay}s infinite; transform-box: fill-box; transform-origin: center;">
-<circle cx="${ex}" cy="${ey}" r="30" fill="url(#dbtefx-pp-gem${k})"/>
-<path d="M${ex} ${ey - 22}L${ex + 12} ${ey - 4}L${ex} ${ey + 24}L${ex - 12} ${ey - 4}Z" fill="${color}" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="1.5"/>
-<path d="M${ex - 12} ${ey - 4}H${ex + 12}M${ex} ${ey - 22}L${ex - 4} ${ey - 4}L${ex} ${ey + 24}L${ex + 4} ${ey - 4}Z" fill="#ffffff" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+<circle cx="${ex}" cy="${ey}" r="80" fill="url(#dbtefx-pp-gem${k})"/>
+<path d="M${ex} ${ey - 64}L${ex + 32} ${ey - 14}L${ex} ${ey + 68}L${ex - 32} ${ey - 14}Z" fill="${color}" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="2"/>
+<path d="M${ex - 32} ${ey - 14}H${ex + 32}M${ex} ${ey - 64}L${ex - 11} ${ey - 14}L${ex} ${ey + 68}L${ex + 11} ${ey - 14}Z" fill="#ffffff" fill-opacity="0.22" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.2"/>
+<path d="M${ex - 6} ${ey - 50}L${ex - 20} ${ey - 20}" stroke="#ffffff" stroke-opacity="0.8" stroke-width="3" stroke-linecap="round"/>
 </g>`;
   const orbitKeys = [];
   for (let i = 0; i <= 12; i++) {
     const a = (i / 12) * Math.PI * 2;
-    const x = n1(Math.cos(a) * 215);
+    const x = n1(Math.cos(a) * 150);
     const y = n1(Math.sin(a) * 64 + 150);
     const back = Math.sin(a) < -0.2;
     orbitKeys.push(`${n1((i / 12) * 100)}% { transform: translate(${x}px, ${y}px) scale(${n1(0.85 + Math.sin(a) * 0.2)}); opacity: ${back ? 0.35 : 1}; }`);
@@ -80,14 +95,14 @@ const powerPatron = (t) => {
 
   // Vilaea's prismatic road: six spectral lanes from under the eye to the bottom edge.
   const lanes = [t.accent2, t.warning, t.success, ice, t.link, mix(t.accent2, t.link, 0.5)];
-  const [r0, r1, b0, b1] = [ex - 20, ex + 20, 1010, 1600];
+  const [r0, r1, b0, b1] = [ex - 20, ex + 20, 1130, 1620];
   const road = `M${r0} ${ey + 230}L${r1} ${ey + 230}L${b1} 900H${b0}Z`;
   const lane = (k) => `M${n1(r0 + ((r1 - r0) * k) / 6)} ${ey + 230}L${n1(r0 + ((r1 - r0) * (k + 1)) / 6)} ${ey + 230}L${n1(b0 + ((b1 - b0) * (k + 1)) / 6)} 900L${n1(b0 + ((b1 - b0) * k) / 6)} 900Z`;
   const roadArt = lanes.map((c, k) => `<path d="${lane(k)}" fill="${c}" fill-opacity="0.42"/>`).join('');
 
   // Black glass shards falling at the edges.
   let shards = '';
-  [1080, 1180, 1330, 1450, 1560, 60, 220, 340].forEach((x, i) => {
+  [1200, 1290, 1380, 1460, 1560, 60, 220, 340].forEach((x, i) => {
     const s = 0.8 + rand() * 0.9;
     shards += `<g transform="translate(${x} 0)"><g ${anim('fall', n1(14 + rand() * 9), n1(rand() * 22), 'ease-in-out')}><path d="M0 ${n1(-26 * s)}L${n1(7 * s)} ${n1(6 * s)}L${n1(-2 * s)} ${n1(22 * s)}L${n1(-8 * s)} ${n1(-4 * s)}Z" fill="${obsidian}" stroke="${i % 3 === 0 ? t.success : ice}" stroke-opacity="0.75" stroke-width="1.2"/></g></g>`;
   });
@@ -115,7 +130,9 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <!--mid-->
 <ellipse cx="${ex}" cy="${ey}" rx="230" ry="200" fill="url(#dbtefx-pp-glow)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <path d="${blades}" fill="url(#dbtefx-pp-blade)" stroke="${obsidian}" stroke-width="1.5"/>
-<g fill="${t.warning}" fill-opacity="0.55">${holes}</g>
+<g fill="${mix(ice, t.bg, 0.55)}" fill-opacity="0.85" stroke="${t.warning}" stroke-opacity="0.75" stroke-width="1.1">${holes}</g>
+<path d="${veins}" stroke="${t.warning}" stroke-opacity="0.4" stroke-width="1.2" stroke-dasharray="10 4 2 4"/>
+<path d="${scallop}" fill="none" stroke="${t.warning}" stroke-opacity="0.7" stroke-width="1.6"/>
 <path d="${rims}" fill="none" stroke="${ice}" stroke-opacity="0.45" stroke-width="1.2"/>
 <circle cx="${ex}" cy="${ey}" r="96" fill="${obsidian}" stroke="${ice}" stroke-opacity="0.5" stroke-width="2"/>
 <g style="transform-origin: ${ex}px ${ey}px; animation: dbtefx-spin 200s linear infinite;" fill="none" stroke="${iceHi}" stroke-opacity="0.55" stroke-width="1.4" stroke-linecap="round">${script}<circle cx="${ex}" cy="${ey}" r="134" stroke-opacity="0.3"/><circle cx="${ex}" cy="${ey}" r="166" stroke-opacity="0.3" stroke-dasharray="2 6"/></g>

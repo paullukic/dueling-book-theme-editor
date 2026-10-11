@@ -1,13 +1,14 @@
 import { mix } from '../../../lib/color.js';
 import { n1, polar, rng } from './kit.js';
 
-// Dracotail: the eclipse of the dragon's nodes. Rahu swallows the sun inside
-// a golden zodiac astrolabe (the magic circle behind every Dracotail caster)
-// while Ketu, a vast jade dragon tail banded with gold cuffs, coils through
-// the plum night under Draco's stars. Rings counter-rotate, the tail sways, the corona breathes.
+// Dracotail: the eclipse of the dragon's nodes. Rahu, a jade dragon with
+// swept black horns banded in gold, rises out of the plum night with jaws
+// parted toward the eclipsed sun; its body coils down into Ketu, the tail,
+// ending in a gold-ribbed fan fin. The head breathes, the barbel drifts,
+// the corona swells.
 const dracotail = (t) => {
   const rand = rng(57);
-  const [cx, cy] = [1195, 385];
+  const [cx, cy] = [1090, 178];
   const gold = t.accent;
   const goldHi = mix(gold, '#ffffff', 0.45);
   const goldDim = mix(gold, t.bg, 0.45);
@@ -19,70 +20,27 @@ const dracotail = (t) => {
   const stars = ['', '', ''];
   for (let i = 0; i < 120; i++) stars[i % 3] += `M${Math.round(rand() * 1600)} ${Math.round(rand() * 900)}h0`;
   const sparkle = (x, y, s) => `M${x} ${n1(y - s)}L${n1(x + s * 0.16)} ${n1(y - s * 0.16)}L${n1(x + s)} ${y}L${n1(x + s * 0.16)} ${n1(y + s * 0.16)}L${x} ${n1(y + s)}L${n1(x - s * 0.16)} ${n1(y + s * 0.16)}L${n1(x - s)} ${y}L${n1(x - s * 0.16)} ${n1(y - s * 0.16)}Z`;
-  const twinkles = [[1490, 120, 22], [960, 250, 14], [1530, 700, 18], [1060, 760, 12], [700, 70, 13], [1380, 830, 10], [180, 120, 15]]
+  const twinkles = [[1500, 110, 22], [1560, 330, 14], [1540, 780, 18], [1250, 860, 12], [700, 60, 13], [1240, 60, 10], [180, 120, 15]]
     .map(([x, y, s], i) => `<path d="${sparkle(x, y, s)}" fill="${i % 3 ? t.text : goldHi}" style="animation: dbtefx-bloom ${n1(3 + i * 0.7)}s ease-in-out ${n1(-i * 1.3)}s infinite; transform-box: fill-box; transform-origin: center;"/>`).join('');
 
-  // Draco, the dragon whose tail winds between the Dippers (faint, upper band).
-  const draco = [[520, 150], [575, 118], [640, 128], [700, 96], [770, 104], [818, 70], [880, 86], [905, 132], [870, 160], [830, 140]];
-  const dracoLine = draco.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join('');
-  const dracoStars = draco.map(([x, y], i) => `<circle cx="${x}" cy="${y}" r="${i > 6 ? 3 : 2.2}"/>`).join('');
 
-  // Zodiac glyphs, drawn on a 14px box.
-  const glyphs = [
-    'M-7 6C-7-8 0-8 0 0C0-8 7-8 7 6',
-    'M-7-7Q0 0 7-7M4 3A4 4 0 1 1-4 3A4 4 0 1 1 4 3',
-    'M-6-7H6M-6 7H6M-3-7V7M3-7V7',
-    'M-7-1A6 6 0 0 1 6-4M7 1A6 6 0 0 1-6 4',
-    'M-5 6A3 3 0 1 1-3 0C-6-8 6-9 4 0C3 4 6 7 7 5',
-    'M-7-6V6M-7-4Q-4-8-2-4V6M-2-4Q1-8 3-4V6Q6 8 7 2',
-    'M-7 6H7M-7 2H-3A3.5 3.5 0 1 1 3 2H7',
-    'M-7-6V6M-7-4Q-4-8-2-4V6M-2-4Q1-8 3-4V5L6 7L7 4',
-    'M-6 7L7-6M1-6H7V0M-4-1L1 4',
-    'M-7-6L-4 6L-1-6V4A3 3 0 1 0 5 4',
-    'M-7-2L-3.5-5L0-2L3.5-5L7-2M-7 4L-3.5 1L0 4L3.5 1L7 4',
-    'M-6-7Q-2 0-6 7M6-7Q2 0 6 7M-4 0H4',
-  ];
-  const zodiac = glyphs.map((d, i) => {
-    const a = i * 30 - 75;
-    const [x, y] = polar(cx, cy, 262, a);
-    return `<path d="${d}" transform="translate(${x} ${y}) rotate(${a + 90}) scale(1.25)"/>`;
-  }).join('');
-  let ticks = '';
-  for (let i = 0; i < 120; i++) {
-    const a = i * 3;
-    const [x1, y1] = polar(cx, cy, 236, a);
-    const [x2, y2] = polar(cx, cy, i % 10 === 0 ? 248 : i % 5 === 0 ? 244 : 240, a);
-    ticks += `M${x1} ${y1}L${x2} ${y2}`;
-  }
-  let dividers = '';
-  for (let i = 0; i < 12; i++) {
-    const [x1, y1] = polar(cx, cy, 250, i * 30 - 60);
-    const [x2, y2] = polar(cx, cy, 276, i * 30 - 60);
-    dividers += `M${x1} ${y1}L${x2} ${y2}`;
-  }
-  let hours = '';
-  for (let i = 0; i < 24; i++) {
-    const [x, y] = polar(cx, cy, 208, i * 15);
-    hours += `<circle cx="${x}" cy="${y}" r="${i % 6 ? 2.2 : 4.5}"/>`;
-  }
-
-  // The eclipse: corona rays around the dark disc, a diamond-ring flare.
+  // The eclipse Rahu reaches for: corona rays around the dark disc, a diamond-ring flare.
   let rays = '';
   for (let i = 0; i < 36; i++) {
     const a = i * 10 + rand() * 4;
-    const len = 70 + rand() * (i % 3 ? 50 : 110);
-    const [x1, y1] = polar(cx, cy, 64, a - 2.2);
-    const [x2, y2] = polar(cx, cy, 64, a + 2.2);
-    const [tx, ty] = polar(cx, cy, 64 + len, a);
+    const len = 34 + rand() * (i % 3 ? 34 : 80);
+    const [x1, y1] = polar(cx, cy, 44, a - 3);
+    const [x2, y2] = polar(cx, cy, 44, a + 3);
+    const [tx, ty] = polar(cx, cy, 44 + len, a);
     rays += `M${x1} ${y1}L${tx} ${ty}L${x2} ${y2}Z`;
   }
-  const [fx, fy] = polar(cx, cy, 66, -52);
+  const [fx, fy] = polar(cx, cy, 46, -40);
 
   // Near: a few large gold sparkles drifting at the edges.
   const nearSparks = [[90, 300, 26], [1560, 860, 30], [300, 860, 18]].map(([x, y, k], i) => `<path d="${sparkle(x, y, k)}" fill="${goldHi}" fill-opacity="0.7" style="animation: dbtefx-bloom ${5 + i}s ease-in-out ${-i * 2}s infinite; transform-box: fill-box; transform-origin: center;"/>`).join('');
 
-  // Ketu: the dragon tail. A centreline through control points, sampled.
-  const pts = [[1460, -80], [1385, 60], [1362, 230], [1385, 410], [1350, 580], [1236, 670], [1092, 648], [1022, 552], [1030, 462], [1068, 405]];
+  // The dragon's body: a centreline through control points, sampled.
+  const pts = [[1340, 404], [1430, 490], [1422, 650], [1290, 738], [1140, 716], [1060, 630], [1066, 540], [1112, 496]];
   const cr = (p0, p1, p2, p3, u) => {
     const u2 = u * u;
     const u3 = u2 * u;
@@ -96,7 +54,7 @@ const dracotail = (t) => {
   }
   line.push(pts[pts.length - 1]);
   const N = line.length - 1;
-  const half = (i) => 44 * (1 - i / N) ** 0.8 + 4;
+  const half = (i) => 50 * (1 - i / N) ** 0.75 + 4;
   const frame = line.map((p, i) => {
     const q = line[Math.min(N, i + 1)];
     const o = line[Math.max(0, i - 1)];
@@ -154,9 +112,50 @@ const dracotail = (t) => {
   fin += `L${tip(0, 8).join(' ')}Z`;
   const rib = fan.map((y) => `M${tip(2, 0).join(' ')}L${ray(y).join(' ')}`).join('');
 
+  // Rahu, the dragon's head (profile, facing left; origin at the back of the
+  // skull): long jaws parted toward the sun, a heavy brow over a lit eye,
+  // two swept black horns banded in gold, a fin frill and a long barbel.
+  let upperTeeth = '';
+  for (let x = -236; x <= -100; x += 17) {
+    const y = 7 + ((x + 250) / 200) * 7;
+    const l = x < -220 ? 17 : 9;
+    upperTeeth += `M${x - 4} ${n1(y)}L${x} ${n1(y + l)}L${x + 4} ${n1(y)}Z`;
+  }
+  let lowerTeeth = '';
+  for (let x = -204; x <= -96; x += 18) {
+    const y = 60 - ((x + 210) / 150) * 20;
+    const l = x < -190 ? 15 : 8;
+    lowerTeeth += `M${x - 4} ${n1(y)}L${x} ${n1(y - l)}L${x + 4} ${n1(y)}Z`;
+  }
+  const skull = 'M0 -22C-18 -52 -58 -66 -96 -58C-112 -56 -124 -50 -134 -44C-160 -42 -200 -36 -236 -24C-252 -19 -262 -12 -264 -4C-264 2 -258 6 -250 7L-150 12C-110 14 -76 18 -52 24C-30 30 -6 22 0 10Z';
+  const jaw = 'M-52 26C-96 34 -150 44 -214 60C-222 62 -226 68 -220 72C-170 70 -110 64 -64 56C-46 52 -34 42 -52 26Z';
+  const hornA = 'M-80 -58C-80 -120 -50 -170 -6 -200C-30 -160 -40 -110 -38 -50Z';
+  const hornB = 'M-44 -50C-30 -104 6 -140 50 -160C20 -124 4 -84 -14 -32Z';
+  const frill = 'M-34 38L18 66L-6 30ZM-14 26L46 44L4 14ZM-4 6L58 14L6 -8ZM-10 -22L52 -24L0 -38ZM-20 -44L40 -70L-4 -30ZM-70 30L-40 76L-46 32Z';
+  const ink = mix(jade, '#000000', 0.55);
+  const head = `<g transform="translate(1335 402) rotate(30) scale(0.95 1.08)"><g style="animation: dbtefx-dt-head 9s ease-in-out infinite; transform-origin: 0px 0px;">
+<path d="${frill}" fill="${jadeDark}" stroke="${mix(jade, '#ffffff', 0.2)}" stroke-opacity="0.6" stroke-width="1.2"/>
+<path d="${hornB}" fill="${mix(t.bg, '#000000', 0.5)}" stroke="${goldDim}" stroke-width="1.4"/>
+<path d="M-246 8L-52 24L-58 50L-214 64Z" fill="${mix(silk, '#000000', 0.72)}"/>
+<path d="${upperTeeth}${lowerTeeth}" fill="${mix(t.text, gold, 0.25)}"/>
+<path d="${jaw}" fill="url(#dbtefx-dt-jaw)" stroke="${ink}" stroke-width="2"/>
+<path d="${skull}" fill="url(#dbtefx-dt-head)" stroke="${ink}" stroke-width="2"/>
+<path d="M-140 -42C-170 -38 -206 -30 -232 -20M-60 4C-80 -6 -96 -24 -100 -46M-36 10C-50 -2 -58 -20 -58 -40M-170 6C-176 -6 -186 -14 -200 -16" fill="none" stroke="${ink}" stroke-opacity="0.7" stroke-width="1.5"/>
+<path d="M-96 -58C-112 -56 -124 -50 -134 -44C-160 -42 -200 -36 -236 -24" fill="none" stroke="${mix(jade, '#ffffff', 0.5)}" stroke-opacity="0.6" stroke-width="2"/>
+<path d="M-102 -42C-116 -50 -138 -44 -148 -32C-134 -26 -114 -28 -102 -36Z" fill="${mix(t.bg, '#000000', 0.6)}"/>
+<ellipse cx="-126" cy="-36" rx="10" ry="3.6" transform="rotate(-10 -126 -36)" fill="${goldHi}" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
+<path d="M-126 -39.5V-32.5" stroke="${mix(t.bg, '#000000', 0.6)}" stroke-width="2"/>
+<path d="M-250 -12Q-244 -16 -238 -12" fill="none" stroke="${mix(t.bg, '#000000', 0.5)}" stroke-width="2.4" stroke-linecap="round"/>
+<path d="${hornA}" fill="${mix(t.bg, '#000000', 0.35)}" stroke="${gold}" stroke-width="1.6"/>
+<path d="M-79 -96L-49 -92M-62 -146L-38 -136" stroke="${goldHi}" stroke-width="4" stroke-linecap="round"/>
+<path d="M-238 2C-210 40 -150 96 -40 104C40 110 100 96 150 128" fill="none" stroke="${goldHi}" stroke-opacity="0.85" stroke-width="2.6" stroke-linecap="round" style="animation: dbtefx-dt-whisk 7s ease-in-out infinite; transform-origin: -238px 2px;"/>
+
+</g></g>`;
+
   return `<style>
-@keyframes dbtefx-dt-sway { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.6deg); } }
-@keyframes dbtefx-dt-corona { 0%, 100% { transform: scale(0.95) rotate(0deg); opacity: 0.75; } 50% { transform: scale(1.05) rotate(4deg); opacity: 1; } }
+@keyframes dbtefx-dt-head { 0%, 100% { transform: rotate(1.5deg); } 50% { transform: rotate(-2.5deg); } }
+@keyframes dbtefx-dt-whisk { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-4deg); } }
+@keyframes dbtefx-dt-corona { 0%, 100% { transform: scale(0.95) rotate(0deg); opacity: 0.75; } 50% { transform: scale(1.06) rotate(4deg); opacity: 1; } }
 </style>
 <defs>
 <radialGradient id="dbtefx-dt-neb1" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(t.border, gold, 0.25)}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient>
@@ -164,45 +163,25 @@ const dracotail = (t) => {
 <radialGradient id="dbtefx-dt-neb3" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${silk}" stop-opacity="0.13"/><stop offset="1" stop-color="${silk}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dt-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0.3" stop-color="${goldHi}" stop-opacity="0.9"/><stop offset="0.5" stop-color="${gold}" stop-opacity="0.45"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dt-moon" cx="0.42" cy="0.4" r="0.6"><stop offset="0" stop-color="${mix(t.surface, t.bg, 0.4)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.5)}"/></radialGradient>
-<linearGradient id="dbtefx-dt-ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${goldHi}"/><stop offset="0.45" stop-color="${gold}"/><stop offset="1" stop-color="${goldDim}"/></linearGradient>
 <linearGradient id="dbtefx-dt-scale" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${jade}"/><stop offset="0.5" stop-color="${mix(jade, t.bg, 0.4)}"/><stop offset="1" stop-color="${jadeDark}"/></linearGradient>
+<linearGradient id="dbtefx-dt-head" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(jade, '#ffffff', 0.15)}"/><stop offset="0.6" stop-color="${mix(jade, t.bg, 0.35)}"/><stop offset="1" stop-color="${jadeDark}"/></linearGradient>
+<linearGradient id="dbtefx-dt-jaw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(jade, t.bg, 0.45)}"/><stop offset="1" stop-color="${mix(jade, t.text, 0.4)}"/></linearGradient>
 <radialGradient id="dbtefx-dt-fin" cx="${end.p[0]}" cy="${end.p[1]}" r="95" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${jade}"/><stop offset="1" stop-color="${mix(jade, '#ffffff', 0.5)}" stop-opacity="0.75"/></radialGradient>
 <path id="dbtefx-dt-body" d="${body}"/><path id="dbtefx-dt-scales" d="${scales}"/>
 <linearGradient id="dbtefx-dt-cuff" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${goldHi}"/><stop offset="1" stop-color="${goldDim}"/></linearGradient>
 </defs>
-<ellipse cx="${cx}" cy="${cy}" rx="620" ry="470" fill="url(#dbtefx-dt-neb1)"/>
+<ellipse cx="1340" cy="430" rx="460" ry="420" fill="url(#dbtefx-dt-neb1)"/>
 <ellipse cx="260" cy="760" rx="520" ry="300" fill="url(#dbtefx-dt-neb2)"/>
 <ellipse cx="760" cy="90" rx="520" ry="200" fill="url(#dbtefx-dt-neb3)"/>
 <g stroke="${t.text}" stroke-linecap="round">${stars.map((d, i) => `<path d="${d}" stroke-width="${1.4 + i}" stroke-opacity="${0.75 - i * 0.2}"/>`).join('')}</g>
-<path d="${dracoLine}" fill="none" stroke="${goldHi}" stroke-opacity="0.22" stroke-width="1.2"/>
-<g fill="${goldHi}" fill-opacity="0.75">${dracoStars}</g>
 <!--mid-->
-<g transform="translate(${cx} ${cy}) scale(0.86) translate(${-cx} ${-cy})">
-<g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 160s linear infinite;" fill="none">
-<circle cx="${cx}" cy="${cy}" r="282" stroke="url(#dbtefx-dt-ring)" stroke-width="4"/>
-<circle cx="${cx}" cy="${cy}" r="250" stroke="url(#dbtefx-dt-ring)" stroke-width="2.5"/>
-<circle cx="${cx}" cy="${cy}" r="234" stroke="${gold}" stroke-opacity="0.6" stroke-width="1.2"/>
-<path d="${ticks}" stroke="${gold}" stroke-opacity="0.8" stroke-width="1.3"/>
-<path d="${dividers}" stroke="${gold}" stroke-width="1.8"/>
-<g stroke="${goldHi}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${zodiac}</g>
-</g>
-<g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-spin 110s linear infinite reverse;">
-<circle cx="${cx}" cy="${cy}" r="208" fill="none" stroke="${gold}" stroke-opacity="0.45" stroke-width="1.2" stroke-dasharray="2 7"/>
-<g fill="${gold}">${hours}</g>
-<path d="M${cx} ${cy - 190}L${cx + 9} ${cy - 170}H${cx - 9}Z" fill="${goldHi}"/>
-</g>
-<g fill="none" stroke="${gold}" stroke-opacity="0.55" stroke-width="2">
-<ellipse cx="${cx}" cy="${cy}" rx="228" ry="74" transform="rotate(-24 ${cx} ${cy})"/>
-<ellipse cx="${cx}" cy="${cy}" rx="228" ry="96" transform="rotate(52 ${cx} ${cy})" stroke-opacity="0.35"/>
-</g>
-<circle cx="${cx}" cy="${cy}" r="200" fill="url(#dbtefx-dt-sun)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out infinite;"/>
+<g transform="translate(1480 440) scale(0.74) translate(-1480 -440)">
+<circle cx="${cx}" cy="${cy}" r="140" fill="url(#dbtefx-dt-sun)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out infinite;"/>
 <path d="${rays}" fill="${goldHi}" fill-opacity="0.5" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out -1.5s infinite;"/>
-<circle cx="${cx}" cy="${cy}" r="68" fill="url(#dbtefx-dt-moon)"/>
-<circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="${goldHi}" stroke-width="2.4" stroke-opacity="0.9"/>
-<path d="${sparkle(fx, fy, 30)}" fill="#ffffff" style="animation: dbtefx-pulse 3.5s ease-in-out infinite;"/>
-<circle cx="${fx}" cy="${fy}" r="9" fill="#ffffff"/>
-</g>
-<g style="transform-origin: 1460px -80px; animation: dbtefx-dt-sway 11s ease-in-out infinite;">
+<circle cx="${cx}" cy="${cy}" r="46" fill="url(#dbtefx-dt-moon)"/>
+<circle cx="${cx}" cy="${cy}" r="46" fill="none" stroke="${goldHi}" stroke-width="2" stroke-opacity="0.9"/>
+<path d="${sparkle(fx, fy, 24)}" fill="#ffffff" style="animation: dbtefx-pulse 3.5s ease-in-out infinite;"/>
+<circle cx="${fx}" cy="${fy}" r="7" fill="#ffffff"/>
 <use href="#dbtefx-dt-body" fill="${mix(t.bg, '#000000', 0.4)}" transform="translate(10 16)" fill-opacity="0.55"/>
 <path d="${spines}" fill="${jadeDark}" stroke="${mix(jade, '#ffffff', 0.2)}" stroke-opacity="0.55" stroke-width="1.2"/>
 <use href="#dbtefx-dt-body" fill="url(#dbtefx-dt-scale)" stroke="${mix(jade, '#000000', 0.55)}" stroke-width="2"/>
@@ -212,9 +191,10 @@ const dracotail = (t) => {
 <path d="${plates}" stroke="${mix(jade, t.bg, 0.4)}" stroke-width="1.6"/>
 <use href="#dbtefx-dt-scales" fill="none" stroke="${mix(jade, '#000000', 0.5)}" stroke-opacity="0.75" stroke-width="1.6"/>
 <use href="#dbtefx-dt-scales" fill="none" stroke="${mix(jade, '#ffffff', 0.45)}" stroke-opacity="0.35" stroke-width="0.8" transform="translate(-1.5 -1.5)"/>
-${cuff(26)}${cuff(46)}
+${cuff(30)}${cuff(52)}
 <path d="${fin}" fill="url(#dbtefx-dt-fin)" stroke="${goldHi}" stroke-width="1.6" stroke-linejoin="round"/>
 <path d="${rib}" fill="none" stroke="${gold}" stroke-width="2.2" stroke-linecap="round"/>
+${head}
 </g>
 ${twinkles}
 <!--near-->

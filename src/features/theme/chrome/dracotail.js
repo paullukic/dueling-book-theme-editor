@@ -91,6 +91,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const popCss = [['ok_btn', 'OK', popPrimary, false], ['yes_btn', 'Yes', popPrimary, false], ['no_btn', 'No', popSecondary, false], ['cancel_btn', 'Cancel', popSecondary, true]]
     .map(([n, text, c, wide]) => `${popImg(n)} { content: ${svgUrl(popBtn(text, wide, c))} !important; filter: drop-shadow(0 3px 4px ${c.shadow}) !important; }`).join('\n');
 
+  const titlePlate = mix(plum, t.bg, 0.45);
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
@@ -117,9 +118,8 @@ ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 80px); top: -50px; right: auto; bottom: auto; width: 160px; height: 64px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 3px #000000); }
 ${SEL.dialogTitle} { ${label} }
 
-/* Chat: a lacquer header with a gold rule and an eclipse seal. */
+/* Chat: a lacquer header with a gold rule. */
 ${SEL.chatTop} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(plum, gold, 0.12)}, ${plumDeep}) !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 -4px 0 ${plumDeep}, inset 0 -5px 0 ${alpha(jade, 0.5)}, inset 0 1px 0 ${alpha(goldHi, 0.35)} !important; }
-${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 3px; width: 38px; height: 22px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${goldDim}, inset -1px 0 0 ${goldDim}, inset 0 -1px 0 ${goldDim} !important; }
 
@@ -146,7 +146,8 @@ ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(plum, 0.6)}, ${alpha(t.bg, 0.8)}) !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${goldHi}, ${goldDim} 30%, ${gold} 55%, ${goldDim} 80%, ${goldHi}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(18)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 4%, ${titlePlate} 12% 88%, transparent 96%) !important; box-shadow: none !important; }
+${sel(['#deck_constructor #search .title_txt'])} { background: ${titlePlate} !important; box-shadow: 0 0 0 0.3em ${titlePlate} !important; border-radius: 3px !important; }
 ${sel(['#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: ${plumDeep} !important; box-shadow: 0 0 0 0.35em ${plumDeep} !important; border-radius: 4px !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.16)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.36)}, ${alpha(jade, 0.12)}) !important; }
