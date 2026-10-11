@@ -139,6 +139,9 @@ const ThemeEffect = () => {
     const el = document.getElementById(FX_ID);
     if (!el) return undefined;
     el.innerHTML = scene;
+    // Scenes with a clock (Destiny HERO) read the local time once; CSS keeps it running.
+    const now = new Date();
+    el.style.setProperty('--dbte-now', String(now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()));
     if (!scene) return undefined;
     const stop = startFx(el, PARTICLES[s.themePreset], artTokens, {
       still: !s.themeMotion,

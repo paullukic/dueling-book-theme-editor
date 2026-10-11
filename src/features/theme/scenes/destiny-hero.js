@@ -3,7 +3,7 @@ import { n1, polar, rng } from './kit.js';
 import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Destiny HERO: midnight over Dark City. The Clock Tower Prison stands black
-// against a blood moon, its second hand ticking toward midnight (fate, D-Time).
+// against a blood moon, its clock showing the player's real local time (fate, D-Time).
 // Before it Destiny HERO - Dogma rises, the real card artwork (loaded live
 // from DuelingBook, cardart.js) graded into the moon's blood light; offline
 // the tower, moon and back-glow still stand.
@@ -37,16 +37,18 @@ const destinyHero = (t) => {
     })
     .join('');
   const hand = (len, w, tail) => `M${kx - w} ${ky + tail}L${kx - w * 0.6} ${ky - len * 0.7}L${kx} ${ky - len}L${kx + w * 0.6} ${ky - len * 0.7}L${kx + w} ${ky + tail}Z`;
-  const rot = (deg, dur, timing, body) =>
-    `<g transform="rotate(${deg} ${kx} ${ky})"><g style="transform-origin: ${kx}px ${ky}px; animation: dbtefx-spin ${dur}s ${timing} infinite;">${body}</g></g>`;
+  // Real local time: the outer group turns each hand to "now" (--dbte-now, seconds
+  // since local midnight, set when the scene mounts), the inner one keeps it running.
+  const rot = (perSecond, dur, timing, body) =>
+    `<g style="transform-origin: ${kx}px ${ky}px; transform: rotate(calc(var(--dbte-now, 0) * ${perSecond}deg));"><g style="transform-origin: ${kx}px ${ky}px; animation: dbtefx-spin ${dur}s ${timing} infinite;">${body}</g></g>`;
   const clock = `<circle cx="${kx}" cy="${ky}" r="${kr + 16}" fill="${ink}" stroke="${stoneLit}" stroke-width="4"/>
 <circle cx="${kx}" cy="${ky}" r="${kr}" fill="url(#dbtefx-dh-face)"/>
 <path d="${ticks}" stroke="${ink}" stroke-width="2.5"/>
 <g fill="${ink}" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="700" text-anchor="middle" dominant-baseline="central">${numerals}</g>
 <circle cx="${kx}" cy="${ky}" r="${kr - 44}" fill="none" stroke="${ink}" stroke-opacity="0.35" stroke-width="1.5"/>
-<path d="${hand(52, 6, 10)}" fill="${ink}" transform="rotate(355 ${kx} ${ky})"/>
-${rot(300, 900, 'linear', `<path d="${hand(80, 5, 14)}" fill="${ink}"/>`)}
-${rot(0, 60, 'steps(60, end)', `<path d="M${kx - 1.5} ${ky + 22}V${ky - 88}H${kx + 1.5}V${ky + 22}Z" fill="${blood}"/><circle cx="${kx}" cy="${ky - 70}" r="5" fill="none" stroke="${blood}" stroke-width="2"/>`)}
+${rot(1 / 120, 43200, 'linear', `<path d="${hand(52, 6, 10)}" fill="${ink}"/>`)}
+${rot(0.1, 3600, 'linear', `<path d="${hand(80, 5, 14)}" fill="${ink}"/>`)}
+${rot(6, 60, 'steps(60, end)', `<path d="M${kx - 1.5} ${ky + 22}V${ky - 88}H${kx + 1.5}V${ky + 22}Z" fill="${blood}"/><circle cx="${kx}" cy="${ky - 70}" r="5" fill="none" stroke="${blood}" stroke-width="2"/>`)}
 <circle cx="${kx}" cy="${ky}" r="7" fill="${ink}" stroke="${blood}" stroke-width="2"/>`;
 
   // Dark City: gothic roofs and spires on the horizon, a few lancet windows lit.
