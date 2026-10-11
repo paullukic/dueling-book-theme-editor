@@ -1,7 +1,11 @@
 import { mix } from '../../../lib/color.js';
 import { H, n1, rng, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
-// Mermail: drowned Atlantis. Light falls in shafts from a rippling surface far
+// Mermail: drowned Atlantis. Mermail Abyssmegalo, the real card artwork
+// (loaded live from DuelingBook, cardart.js), looms out of the deep above the
+// throne temple, god-rays falling across him (offline only his glow stays).
+// Light falls in shafts from a rippling surface far
 // above (the shader layer) onto the throne temple of the Atlantean king: a
 // coral-crusted colonnade under a ribbed dome, and between its central
 // columns the Abyss-sphere, a crown of light breathing over an empty throne
@@ -23,8 +27,8 @@ const mermail = (t) => {
 
   // The temple, all in user units: centre 1240, stylobate at 742.
   const cx = 1240;
-  const k = 0.9;
-  const ox = 1214 - cx * k;
+  const k = 0.62;
+  const ox = 1268 - cx * k;
   const oy = 800 * (1 - k);
   const sty = 742;
   const colTop = 494;
@@ -166,7 +170,11 @@ const mermail = (t) => {
     rays += `<path d="M${x0} -20h${n1(26 + rand() * 24)}L${n1(x1 + 80 + rand() * 50)} ${H}H${n1(x1)}Z" style="animation: dbtefx-pulse ${n1(6 + i * 1.4)}s ease-in-out ${n1(-i * 1.9)}s infinite;"/>`;
   }
 
-  return `<style>@keyframes dbtefx-mm-rise { 0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(20px, -700px); opacity: 0; } }
+  // Mermail Abyssmegalo: the real card artwork, the temple's guardian.
+  const megalo = cardArt(t, { id: 'dbtefx-mm-hero', card: CARDS.abyssmegalo, x: 1040, y: 20, w: 500, h: 620, focus: [0.44, 0.4], zoom: 0.92, blend: 'normal', feather: 0.6, fade: 0.75, grade: 'contrast(1.12) brightness(0.8) saturate(0.85)', tint: t.accent, tintAmt: 0.3, backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.7, glow: glow, breathe: 14 });
+
+  return `<style>${CARD_ART_KEYFRAMES}
+@keyframes dbtefx-mm-rise { 0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(20px, -700px); opacity: 0; } }
 @keyframes dbtefx-mm-breathe { 0%, 100% { transform: scale(0.9); opacity: 0.65; } 50% { transform: scale(1.08); opacity: 1; } }
 @keyframes dbtefx-mm-pulse { 0%, 55% { transform: scale(1); opacity: 0; } 60% { opacity: 0.7; } 100% { transform: scale(3.2); opacity: 0; } }
 @keyframes dbtefx-mm-school { 0%, 100% { transform: translate(0, 0) scaleX(1); } 45% { transform: translate(120px, 18px) scaleX(1); } 50% { transform: translate(126px, 20px) scaleX(-1); } 95% { transform: translate(6px, 2px) scaleX(-1); } }
@@ -195,6 +203,7 @@ const mermail = (t) => {
 <g transform="translate(860 120)"><path d="${manta}" fill="${deep}" fill-opacity="0.25" style="animation: dbtefx-mm-manta 46s linear infinite;"/></g>
 <!--mid-->
 <path d="M-40 ${H + 40}V790C200 770 420 800 700 784S1200 770 1640 780V${H + 40}Z" fill="${mix(stone, t.bg, 0.55)}"/><path d="M-40 790C200 770 420 800 700 784S1200 770 1640 780" fill="none" stroke="${stoneLit}" stroke-opacity="0.18" stroke-width="2"/>
+${megalo}
 <g fill="url(#dbtefx-mm-ray)">${rays}</g>
 <g transform="translate(${n1(ox)} ${n1(oy)}) scale(${k})">
 <ellipse cx="${cx}" cy="${sty + 20}" rx="360" ry="60" fill="url(#dbtefx-mm-pool)"/>
