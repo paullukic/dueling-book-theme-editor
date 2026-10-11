@@ -242,7 +242,7 @@ ${shapes}
 <ellipse cx="${sx}" cy="${at(0, Z0 + 5)[1]}" rx="70" ry="150" fill="url(#dbtefx-ae-sheen)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
 <path d="${e4}" fill="url(#dbtefx-ae-e4)" ${anim('pulse', 4, 0, 'ease-in-out')}/>
 <path d="${quad(BOFF - 4.25, Z0 + 3, BOFF + 4.25, Z0 + 8.25)}" fill="url(#dbtefx-ae-fog)"/>
-${rook}${king}${pawn}${knight}`;
+${rook}<g class="dbtefx-ae-hero">${king}</g>${pawn}<g class="dbtefx-ae-hero">${knight}</g>`;
 };
 
 export default angelechy;

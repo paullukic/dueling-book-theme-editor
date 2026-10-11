@@ -85,13 +85,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const bar = (c) => `var(--dbtc-u7) left center / 40px 10px repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(c, t.bg, 0.55)}, ${c} 80%, ${mix(c, '#ffffff', 0.45)})`;
+  const bar = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, transparent 46%, ${mix(c, t.bg, 0.12)} 56%, ${mix(c, t.bg, 0.12)}), var(--dbtc-u7) left center / 40px 10px repeat-x, linear-gradient(90deg, ${mix(c, t.bg, 0.55)}, ${mix(c, t.bg, 0.12)} 56%)`;
 
   return `
 html body { ${vars} }
 /* Menu tiles: jacket leather in a stitched, snapped frame, a ribbed knit waistband, the crew badge sewn on the corner. */
 ${SEL.tile} { background: ${hide()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 16px round !important; border-radius: 6px !important; box-shadow: inset 0 1px 0 ${alpha(leatherHi, 0.5)}, inset 0 -14px 18px -12px #000000, 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -1px; top: -3px; width: 28px; height: 28px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: 2px; top: 1px; width: 20px; height: 20px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${hide(0.12)} !important; box-shadow: inset 0 0 0 1px ${alpha(mint, 0.7)}, inset 0 0 22px ${alpha(mint, 0.16)}, 0 0 18px -4px ${alpha(mint, 0.75)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { ${label} }

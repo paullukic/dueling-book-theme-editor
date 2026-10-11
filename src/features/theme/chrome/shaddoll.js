@@ -83,7 +83,7 @@ ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top:
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${goldDim}, inset -1px 0 0 ${goldDim}, inset 0 -1px 0 ${goldDim} !important; }
 
 /* Duel: gold-framed life bars hung from a lens; phases are core lenses. */
-${SEL.life} { border-color: ${gold} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${navyDeep}, 0 0 0 2px ${alpha(gold, 0.45)}, 0 4px 10px -3px #000000 !important; }
+${SEL.life} { border-color: ${mix(violet, t.bg, 0.55)} !important; border-radius: 2px !important; outline: 1px dashed ${alpha(thread, 0.85)} !important; outline-offset: 2px !important; box-shadow: inset 0 0 0 1px ${alpha(thread, 0.35)}, 0 0 0 4px ${ink}, 0 0 10px 3px ${alpha(violet, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }

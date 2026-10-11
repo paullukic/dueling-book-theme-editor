@@ -70,8 +70,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   // Turbo Duel speed gauge: slanted speed ticks over the side colour.
-  const gauge = (c) => `repeating-linear-gradient(115deg, transparent 0 8px, ${alpha(night, 0.7)} 8px 10px), linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), linear-gradient(90deg, ${mix(c, t.bg, 0.65)}, ${c} 82%, ${mix(c, '#ffffff', 0.5)})`;
-  const vars = [frameSvg, crest, stars, gable, finial, swirl, trail].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
+  const dust = svg(64, 20, `${spark(9, 6, 2.6, '#ffffff', 0.75)}${spark(30, 14, 1.8, '#ffffff', 0.55)}${spark(50, 5, 1.5, '#ffffff', 0.6)}<circle cx="20" cy="9" r="0.6" fill="#ffffff" fill-opacity="0.6"/><circle cx="41" cy="16" r="0.5" fill="#ffffff" fill-opacity="0.5"/><circle cx="58" cy="12" r="0.6" fill="#ffffff" fill-opacity="0.55"/>`);
+  const gauge = (c) => `var(--dbtc-u7) 0 0 / 64px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 48%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(c, t.bg, 0.45)}, ${c} 55%, ${mix(c, t.bg, 0.15)})`;
+  const vars = [frameSvg, crest, stars, gable, finial, swirl, trail, dust].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
 html body { ${vars} }

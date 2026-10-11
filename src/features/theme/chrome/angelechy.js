@@ -23,6 +23,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const plateShade = mix(t.text, t.border, 0.55);
   const gold = t.accent;
   const goldDeep = mix(t.accent, t.bg, 0.4);
+  // The opponent is the gold army (the periwinkle opp token stays for the scene's sky).
+  const army = mix(t.accent, '#000000', 0.08);
   const sq1 = mix(t.surface, t.bg, 0.3);
   const sq2 = mix(t.raised, t.border, 0.25);
 
@@ -108,22 +110,30 @@ ${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${al
 /* Duel: plated life bars with a king at the end; checkered phase discs. */
 ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${pearl}, #ffffff) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, transparent 50%), linear-gradient(90deg, ${mix(ivory, gold, 0.45)}, ${mix(ivory, gold, 0.15)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(army, t.bg, 0.3)}, ${army}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 225deg, ${mix(gold, '#ffffff', 0.35)}, ${gold}, ${goldDeep}, ${gold}, ${mix(gold, '#ffffff', 0.35)}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: ${t.bg} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle, ${t.surface} 40%, ${t.bg}) !important; }
+${sel(['#duel .phase .background .background_inner'])} { background: repeating-conic-gradient(${t.bg} 0deg 15deg, ${mix(ivory, t.bg, 0.5)} 15deg 30deg) !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${t.surface} 40%, ${t.bg}) !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 40% 35%, ${mix(gold, '#ffffff', 0.45)}, ${gold} 55%, ${goldDeep}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 35%, ${mix(gold, '#ffffff', 0.45)}, ${gold} 55%, ${goldDeep}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
 ${sel(['#duel .phase span'])} { color: ${pearl} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDeep}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${plate} !important; }
-${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.bg} !important; text-shadow: none !important; }
+${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: ${plate} !important; }
+${sel(['#duel #turn .red'])} { box-shadow: inset 0 -3px 0 ${mix(ivory, gold, 0.5)} !important; }
+${sel(['#duel #turn .blue'])} { box-shadow: inset 0 -3px 0 ${army} !important; }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: #000000 !important; text-shadow: none !important; }
+/* Chat speakers and name strips in their army's colour: ivory for you, gold for the opponent. */
+${sel(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]'])} { color: ${ivory} !important; }
+${sel(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${army} !important; }
+/* The winged king stands behind the chat column in a duel: only a lone wing showed, so he waits for the menu. */
+html body:has(#duel:not([style*="none"])) .dbtefx-ae-hero { opacity: 0; }
 ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 6px 16px -6px #000000 !important; }
 
@@ -159,7 +169,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss(popPrimary, popSecondary)}
 /* Player name strips: dark plate, ivory name. */
-${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { background: linear-gradient(160deg, ${t.raised}, ${t.bg}) !important; }
-${sel(['#duel .duel_avatar .username_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel #avatar1', '#duel #avatar3'])} { background: ${plate} !important; }
+${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(army, '#ffffff', 0.25)}, ${army} 55%, ${mix(army, t.bg, 0.3)}) !important; }
+${sel(['#duel .duel_avatar .username_txt'])} { color: #000000 !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 `;
 };

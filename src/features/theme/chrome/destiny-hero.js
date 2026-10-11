@@ -103,8 +103,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${iron}, ${iro
 /* Duel: steel-bound life bars led by the D lozenge; phases are spiked steel rings. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(steelLit, 0.4)}, 0 0 12px -3px ${alpha(blood, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(blood, 0.55)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.24)}, transparent 46%, ${alpha('#000000', 0.2)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.15)} 40%, ${mix(t.opp, t.bg, 0.4)} 70%, ${mix(t.opp, t.bg, 0.62)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: radial-gradient(circle, ${ironDeep} 62%, ${steelLit} 64%, ${steelDeep} 72%) !important; box-shadow: 0 0 0 1px ${ink}, 0 0 10px -2px ${alpha(blood, 0.6)} !important; }

@@ -49,7 +49,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const gable = svg(160, 60, `<path d="M36 50L44 14H116L124 50Z" fill="${plate}" stroke="${steelHi}" stroke-width="1.4"/><path d="${fins}" stroke="${steelDark}" stroke-width="3.5" stroke-linecap="round"/><path d="${fins}" stroke="${steelHi}" stroke-opacity="0.4" stroke-width="1" transform="translate(-1.2 0)"/><path d="M40 50H120" stroke="${amber}" stroke-width="3"/>${hex(50, 18, 2.6)}${hex(110, 18, 2.6)}${drum(24, 36, 18)}${drum(136, 36, 18)}<path d="M38 22L54 6L70 14L84 2L98 12L112 4L122 22" fill="none" stroke="${ice}" stroke-opacity="0.45" stroke-width="5" stroke-linejoin="round"/><path d="M38 22L54 6L70 14L84 2L98 12L112 4L122 22" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round"/>`);
 
   // Spark plug finial for the life bar: terminal, ceramic insulator, hex nut, electrode.
-  const plug = svg(16, 42, `<rect x="6" y="0.5" width="4" height="4" rx="1" fill="${steelHi}"/><path d="M5 5H11L11.6 19H4.4Z" fill="${mix(t.text, '#ffffff', 0.5)}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5.2 9H10.8M5 13H11" stroke="${steelDark}" stroke-opacity="0.4" stroke-width="0.8"/><path d="M2 19H14V25H2Z" fill="${steel}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5 25H11V34H5Z" fill="${steelHi}" stroke="${steelDark}" stroke-width="0.6"/><path d="M8 34V38H11V36" fill="none" stroke="${steelHi}" stroke-width="1.2"/><path d="M9 38.5L12 41" stroke="${ice}" stroke-width="1.4"/>`);
+  const plug = svg(16, 42, `<rect x="6" y="0.5" width="4" height="4" rx="1" fill="${steelHi}"/><path d="M5 5H11L11.6 19H4.4Z" fill="${mix(amber, steelDark, 0.25)}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5.2 9H10.8M5 13H11" stroke="${steelDark}" stroke-opacity="0.4" stroke-width="0.8"/><path d="M2 19H14V25H2Z" fill="${steel}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5 25H11V34H5Z" fill="${steelHi}" stroke="${steelDark}" stroke-width="0.6"/><path d="M8 34V38H11V36" fill="none" stroke="${steelHi}" stroke-width="1.2"/><path d="M9 38.5L12 41" stroke="${ice}" stroke-width="1.4"/>`);
 
   // Phase overlay: a flywheel ring gear.
   let teeth = '';
@@ -77,7 +77,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const rev = (c) => `repeating-linear-gradient(90deg, transparent 0 9px, ${alpha(steelDark, 0.85)} 9px 11px), linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(90deg, ${mix(c, t.bg, 0.6)}, ${c} 80%, ${mix(c, '#ffffff', 0.4)})`;
+  const rev = (c) => `repeating-linear-gradient(90deg, transparent 0 9px, ${alpha(steelDark, 0.85)} 9px 11px), linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(90deg, ${mix(c, t.bg, 0.6)}, ${c} 50%, ${mix(c, t.bg, 0.42)})`;
   const vars = [frameSvg, crest, brushed, gable, plug, gear, arcStrip].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `

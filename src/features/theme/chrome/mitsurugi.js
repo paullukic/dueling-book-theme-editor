@@ -48,7 +48,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const hilt = svg(30, 30, `<rect x="1" y="9" width="21" height="12" rx="2" fill="${sumi}" stroke="${gold}" stroke-width="0.8"/><g transform="translate(0 5)">${wrap}</g><rect x="0" y="10" width="2" height="10" fill="${gold}"/><ellipse cx="25" cy="15" rx="3.6" ry="13" fill="${sumi}" stroke="${gold}" stroke-width="1.2"/><rect x="28" y="10.5" width="2" height="9" fill="${gold}"/>`);
 
   // The tempered line (hamon) along the blade.
-  const hamon = svg(40, 26, `<path d="M0 17q5-4 10 0t10 0t10 0t10 0" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.4"/>`);
+  const hamon = svg(40, 26, `<path d="M0 17q5-4 10 0t10 0t10 0t10 0" fill="none" stroke="${mix(gold, '#ffffff', 0.35)}" stroke-opacity="0.4" stroke-width="1.4"/>`);
 
   const lacquerBg = (lift = 0) => `linear-gradient(180deg, ${alpha(shu, 0.08 + lift)}, transparent 50%), var(--dbtc-u2), linear-gradient(180deg, ${mix(t.raised, t.surface, 0.5)}, ${lacquer})`;
   const label = `color: ${t.text} !important; text-shadow: 0 2px 0 ${sumi}, 0 0 10px ${alpha(sumi, 0.9)} !important;`;
@@ -107,7 +107,7 @@ ${SEL.life} { border-color: ${steel} !important; border-radius: 2px 14px 14px 2p
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px 14px 14px 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
-${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${steelDim}, ${sumi}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbtc-u2) 0 0 / 40px 20px, ${sumi} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -34px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${gold}, ${mix(gold, sumi, 0.5)}, ${gold}, ${mix(gold, sumi, 0.6)}, ${gold}) !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -2px #000000 !important; }

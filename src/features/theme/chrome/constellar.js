@@ -48,14 +48,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const crestTile = svg(40, 40, crest(20, 20, 19.5));
   const crown = svg(150, 76, `<ellipse cx="75" cy="40" rx="70" ry="13" fill="none" stroke="${gold}" stroke-width="2" transform="rotate(-8 75 40)"/><ellipse cx="75" cy="40" rx="58" ry="22" fill="none" stroke="${silver}" stroke-width="1.2" stroke-opacity="0.75" transform="rotate(14 75 40)"/><circle cx="75" cy="40" r="22" fill="${glassDeep}" stroke="url(#s)" stroke-width="5"/><defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="${silver}"/><stop offset="1" stop-color="${silverDeep}"/></linearGradient></defs>${crest(75, 40, 34)}<circle cx="139" cy="31" r="4.5" fill="#ffffff"/><circle cx="139" cy="31" r="8" fill="${silver}" fill-opacity="0.3"/>${xstar(12, 50, 6, silverLit)}`);
 
-  // Phase discs: a compass ring with eight ticks.
-  let ticks = '';
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2;
-    const r0 = i % 2 ? 17 : 14.5;
-    ticks += `M${f1(22.5 + Math.cos(a) * r0)} ${f1(22.5 + Math.sin(a) * r0)}L${f1(22.5 + Math.cos(a) * 20)} ${f1(22.5 + Math.sin(a) * 20)}`;
-  }
-  const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20" fill="none" stroke="${silver}" stroke-opacity="0.75" stroke-width="1.4"/><path d="${ticks}" stroke="${gold}" stroke-width="1.4"/>`);
   const lifeCrest = svg(40, 40, `<circle cx="20" cy="20" r="17" fill="${glassDeep}" stroke="${silverLit}" stroke-width="2"/>${crest(20, 20, 18)}`);
 
   const plate = `linear-gradient(180deg, ${silverLit}, ${silver} 45%, ${mix(silver, t.bg, 0.25)})`;
@@ -82,7 +74,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
   const rivet = svg(12, 12, crest(6, 6, 5.8));
-  const vars = [frameSvg, crestTile, chart, crown, phaseRing, lifeCrest, rivet].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [frameSvg, crestTile, chart, crown, null, lifeCrest, rivet].map((v, i) => (v ? `--dbtc-u${i}: ${svgUrl(v)};` : '')).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: violet glass in a silver armour frame, the crest above. */
@@ -118,10 +110,11 @@ ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; l
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${silverLit}, ${silver}, ${silverDeep}, ${silver}, ${silverLit}, ${silverDeep}, ${silverLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: ${silverDeep} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase .background .background_inner'])} { background: repeating-conic-gradient(from -2deg, ${silverLit} 0deg 4deg, ${silverDeep} 4deg 45deg) !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.self, '#ffffff', 0.3)} 25%, ${mix(t.self, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${gold}, 0 0 18px ${alpha(gold, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.3)} 25%, ${mix(t.opp, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 18px ${alpha(gold, 0.85)}; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, ${goldLit}, ${gold}, ${goldDeep}, ${gold}, ${goldLit}) !important; }
 ${sel(['#duel .phase span'])} { color: ${silverLit} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }

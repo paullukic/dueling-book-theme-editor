@@ -126,18 +126,18 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, $
 /* Duel: gold-bound life bars led by the wax seal; phases are clock dials. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${goldDeep}, inset 0 0 0 1px ${alpha(goldLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.15)}, ${t.self} 50%, ${mix(t.self, t.bg, 0.22)}) !important; box-shadow: inset 0 -2px 0 ${alpha(violet, 0.85)}, inset 0 1px 0 ${alpha(violet, 0.5)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.1)}, ${t.opp} 50%, ${mix(t.opp, t.bg, 0.3)}) !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: radial-gradient(circle, ${obsidianDeep} 62%, ${goldLit} 64%, ${goldDeep} 72%) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${goldDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${obsidian} 30%, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, violet, 0.35)} 70%, ${mix(violet, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${alpha(violet, 0.9)}, 0 0 18px 2px ${alpha(violet, 0.85)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${goldLit} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
-${sel(['#duel .phase.active span'])} { color: #ffffff !important; }
+${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 0 2px #000000, 0 1px 3px #000000, 0 0 8px ${alpha(violet, 0.9)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${goldDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(crimson, '#ffffff', 0.12)}, ${mix(crimson, t.bg, 0.5)}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, ${obsidianDeep}) !important; box-shadow: inset 0 0 0 1px ${gold}, inset 0 0 0 3px ${obsidianDeep}, inset 0 0 0 4px ${goldDeep} !important; }

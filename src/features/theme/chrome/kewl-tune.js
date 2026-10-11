@@ -85,7 +85,7 @@ ${SEL.tileHover} {
 }
 ${sel(['#main_menu .menu_btn:hover .content::before'])} { background: ${leds(96, 1)} !important; box-shadow: 0 0 10px ${alpha(pink, 0.7)}; animation: var(--dbte-kt-anim, dbte-kt-meter 0.9s ease-in-out infinite); }
 ${sel(['#main_menu .menu_btn:active .content'])} { box-shadow: inset 0 3px 8px #000000, ${neon(teal, 10)} !important; }
-${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${deep}, 0 0 10px ${alpha(teal, 0.35)} !important; }
+${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${deep}, 0 0 2px ${deep}, 0 0 10px ${alpha(pink, 0.6)}, 0 0 18px ${alpha(teal, 0.35)} !important; }
 ${sel(['#main_menu .menu_btn:hover span'])} { color: ${mix(t.text, pink, 0.6)} !important; text-shadow: ${neonText(pink)} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${metal} !important; background: ${deep} !important; }
 ${sel(['#main_menu .main_menu_circle .background'])} { background-color: ${teal} !important; box-shadow: 0 0 8px ${teal}; }
@@ -143,7 +143,7 @@ ${SEL.chat} {
 ${sel(['#chats .chat .black_line'])} { background: linear-gradient(90deg, transparent 30%, ${metal} 30% 38%, transparent 38%), linear-gradient(0deg, transparent 40%, ${deep} 40% 60%, transparent 60%) !important; }
 
 ${SEL.life} { border-color: ${deep} !important; border-radius: 5px !important; box-shadow: inset 0 0 0 1px ${alpha(metal, 0.6)}, 0 0 0 1px ${alpha(metal, 0.5)}, 0 0 14px -4px ${alpha(teal, 0.6)} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; background: ${leds(100, 1)} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), ${leds(100, 1)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${alpha(t.text, 0.07)} 0 5px, ${deep} 5px 7px), ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: -2px -2px 0 ${deep}, 2px -2px 0 ${deep}, -2px 2px 0 ${deep}, 2px 2px 0 ${deep}, 0 2px 0 ${deep}, 2px 0 0 ${deep}, 0 -2px 0 ${deep}, -2px 0 0 ${deep}, 0 0 10px ${alpha(teal, 0.6)} !important; }
 
@@ -158,7 +158,7 @@ ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { ba
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 40% 30%, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 45%, ${mix(t.self, deep, 0.4)} 80%) !important; box-shadow: 0 0 16px ${alpha(t.self, 0.9)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 30%, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 45%, ${mix(t.opp, deep, 0.4)} 80%) !important; box-shadow: 0 0 16px ${alpha(t.opp, 0.9)}; }
 ${sel(['#duel .phase.active::before'])} { background: conic-gradient(${pink}, ${teal}, ${pink}); animation: var(--dbte-kt-anim, dbte-kt-pulse 1.2s ease-in-out infinite); }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 2px ${deep} !important; }
+${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${deep}, 0 0 3px ${deep} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${deep} !important; text-shadow: 0 0 6px ${alpha('#ffffff', 0.7)} !important; }
 ${turnBg} { background: ${metal} !important; box-shadow: 0 0 12px -2px ${alpha(pink, 0.8)}; }
 ${turnInner} { background: radial-gradient(ellipse at 50% 100%, ${alpha(pink, 0.5)}, transparent 70%), ${deep} !important; }

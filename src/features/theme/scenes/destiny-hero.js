@@ -88,7 +88,7 @@ ${rot(6, 60, 'steps(60, end)', `<path d="M${kx - 1.5} ${ky + 22}V${ky - 88}H${kx
 <rect y="620" width="1600" height="280" fill="url(#dbtefx-dh-mist)"/>
 <!--mid-->
 ${tower}
-${clock}
+<g opacity="0.5">${clock}</g>
 <ellipse cx="${fx}" cy="600" rx="300" ry="230" fill="url(#dbtefx-dh-back)"/>
 ${dogma}
 <!--near-->

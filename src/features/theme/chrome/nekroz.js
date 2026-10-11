@@ -52,6 +52,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   // Faceted crystal for phases: hard-stopped conic facets.
   const facets = (c) => `conic-gradient(from 22deg, ${mix(c, '#ffffff', 0.45)} 0 45deg, ${c} 45deg 90deg, ${mix(c, t.bg, 0.3)} 90deg 135deg, ${mix(c, t.bg, 0.55)} 135deg 180deg, ${mix(c, t.bg, 0.4)} 180deg 225deg, ${mix(c, '#ffffff', 0.15)} 225deg 270deg, ${mix(c, '#ffffff', 0.3)} 270deg 315deg, ${mix(c, t.bg, 0.15)} 315deg 360deg)`;
 
+  const facetsDim = (c) => `conic-gradient(from 22deg, ${mix(c, '#ffffff', 0.1)} 0 45deg, ${c} 45deg 90deg, ${mix(c, t.bg, 0.3)} 90deg 135deg, ${mix(c, t.bg, 0.5)} 135deg 180deg, ${mix(c, t.bg, 0.4)} 180deg 225deg, ${mix(c, '#ffffff', 0.05)} 225deg 270deg, ${mix(c, '#ffffff', 0.08)} 270deg 315deg, ${mix(c, t.bg, 0.15)} 315deg 360deg)`;
+  // Frost sprigs that grow from two corners of the life frame.
+  const sprig = (flip) => svg(44, 16, `<g transform="${flip ? 'translate(44 16) scale(-1 -1)' : ''}" fill="none" stroke="${iceHi}" stroke-linecap="round"><path d="M1 1L20 7M1 1L7 14M6 3L9 0M6 3L5 7M12 4L15 1M12 4L13 8M3 7L0 9M3 7L7 8" stroke-width="1.1" stroke-opacity="0.9"/><path d="M20 7L32 9M26 8L28 5M26 8L27 11" stroke-width="0.8" stroke-opacity="0.55"/></g><path d="${flip ? 'M43 15' : 'M1 1'}l0 0" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>`);
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${ink}, 0 0 10px ${alpha(ice, 0.45)} !important;`;
   const glassBg = (lift = 0) => `linear-gradient(115deg, transparent 20%, ${alpha(iceHi, 0.08 + lift / 2)} 32%, transparent 44%), radial-gradient(ellipse 70% 90% at 50% 0%, ${alpha(ice, 0.14 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${glassDeep})`;
 
@@ -104,17 +107,19 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: ice-framed life bars with a hanging shard; faceted crystal phases. */
 ${SEL.life} { border-color: ${iceHi} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${glassDeep}, 0 0 0 2px ${alpha(ice, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(115deg, transparent 40%, ${alpha('#ffffff', 0.18)} 50%, transparent 60%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(115deg, transparent 40%, ${alpha('#ffffff', 0.18)} 50%, transparent 60%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(115deg, transparent 40%, ${alpha('#ffffff', 0.18)} 50%, transparent 60%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 38%, ${mix(mix(t.self, violet, 0.25), t.bg, 0.5)} 66%) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(115deg, transparent 40%, ${alpha('#ffffff', 0.18)} 50%, transparent 60%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 38%, ${mix(mix(t.opp, violet, 0.25), t.bg, 0.5)} 66%) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -4px; width: 14px; height: 34px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
+${sel(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; inset: -6px; pointer-events: none; background: ${svgUrl(sprig(false))} left top / 44px 16px no-repeat, ${svgUrl(sprig(true))} right bottom / 44px 16px no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: ${facets(iceDim)} !important; box-shadow: 0 0 0 1px ${glassDeep}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${glassDeep} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${facets(mix(glass, ice, 0.25))} !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${facetsDim(mix(glass, ice, 0.2))} !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: ${facets(t.self)} !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${facets(t.opp)} !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
-${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 5px #000000 !important; }
+${sel(['#duel .phase span'])} { color: ${iceHi} !important; text-shadow: 1px 1px 0 ${ink}, -1px 1px 0 ${ink}, 1px -1px 0 ${ink}, -1px -1px 0 ${ink}, 0 0 6px #000000 !important; }
+${sel(['#duel .phase.active span'])} { color: #ffffff !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, glass, 0.4)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${iceDim}, inset 0 0 0 4px ${alpha(glassDeep, 0.9)}, inset 0 0 0 5px ${alpha(iceHi, 0.25)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${iceHi}, 0 0 0 4px ${glassDeep}, 0 0 0 5px ${alpha(violet, 0.6)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${iceHi}, ${iceDim}) !important; }

@@ -95,6 +95,8 @@ ${SEL.tileLabel} { color: ${bone} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 
 ${SEL.button} { background: ${ends}, ${plate} !important; border-color: ${sulphurDeep} !important; color: ${t.accentText} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.5)}, inset 0 -2px 0 ${ember}, 0 2px 6px -2px #000000 !important; }
 ${SEL.buttonHover} { background: ${ends}, linear-gradient(180deg, #ffffff, ${sulphurLit} 40%, ${sulphur}) !important; border-color: ${ember} !important; box-shadow: inset 0 -2px 0 ${ember}, 0 0 12px -2px ${alpha(sulphur, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${mix(sulphur, t.bg, 0.3)} !important; border-color: ${sulphur} !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.5)} !important; }
+${sel(['#content #duel .button'])} { background: ${ends}, linear-gradient(180deg, ${mix(stoneDeep, bone, 0.1)}, ${ink}) !important; border-color: ${mix(ember, t.bg, 0.35)} !important; color: ${mix(ember, '#ffffff', 0.3)} !important; text-shadow: 0 1px 2px #000000 !important; box-shadow: inset 0 1px 0 ${alpha(bone, 0.18)}, inset 0 -2px 0 ${alpha(ember, 0.75)}, 0 0 8px -3px ${alpha(ember, 0.7)} !important; }
+${sel(['#content #duel .button:hover', '#content #duel .button.button_selected'])} { background: ${ends}, linear-gradient(180deg, ${mix(stoneDeep, ember, 0.22)}, ${ink}) !important; border-color: ${ember} !important; color: ${mix(ember, '#ffffff', 0.55)} !important; box-shadow: inset 0 -2px 0 ${ember}, 0 0 12px -2px ${alpha(ember, 0.9)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(t.accentText, sulphur, 0.5)} !important; }
 
 /* Pop-ups: stone in the mortared frame, crowned by the Gate of Hell. */
@@ -109,7 +111,7 @@ ${sel(['#chats .chat .chat_top span'])} { color: ${bone} !important; text-shadow
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${stone}, ${stoneDeep}) !important; box-shadow: inset 1px 0 0 ${sulphurDeep}, inset -1px 0 0 ${sulphurDeep}, inset 0 -1px 0 ${sulphurDeep}, inset 0 0 30px -10px ${alpha(ember, 0.5)} !important; }
 
 /* Duel: stone-bound life bars led by the laurel; phases are the nine circles. */
-${SEL.life} { border-color: ${sulphurDeep} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(bone, 0.35)}, 0 0 12px -2px ${alpha(ember, 0.6)} !important; }
+${SEL.life} { border-color: ${mix(stoneDeep, '#000000', 0.35)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${alpha(bone, 0.22)}, inset 0 0 0 1px ${ember}, inset 0 0 6px ${alpha(ember, 0.55)}, 0 0 12px -2px ${alpha(ember, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }

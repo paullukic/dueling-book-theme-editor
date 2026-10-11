@@ -8,7 +8,7 @@ import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 // (cardart.js); without it the eclipse, nebulae and stars remain.
 const dracotail = (t) => {
   const rand = rng(57);
-  const [cx, cy] = [1090, 178];
+  const [cx, cy] = [1468, 481];
   const gold = t.accent;
   const goldHi = mix(gold, '#ffffff', 0.45);
   const jade = t.accent2;
@@ -53,6 +53,7 @@ ${CARD_ART_KEYFRAMES}
 <ellipse cx="760" cy="90" rx="520" ry="200" fill="url(#dbtefx-dt-neb3)"/>
 <g stroke="${t.text}" stroke-linecap="round">${stars.map((d, i) => `<path d="${d}" stroke-width="${1.4 + i}" stroke-opacity="${0.75 - i * 0.2}"/>`).join('')}</g>
 <!--mid-->
+${cardArt(t, { id: 'dbtefx-dt-hero', card: CARDS.faimena, x: 1060, y: 150, w: 460, h: 720, focus: [0.6, 0.42], zoom: 0.9, blend: 'normal', feather: 0.75, fade: 0.75, backdrop: mix(t.bg, t.border, 0.4), backdropAmt: 0.6, breathe: 14 })}
 <g transform="translate(1480 440) scale(0.74) translate(-1480 -440)">
 <circle cx="${cx}" cy="${cy}" r="140" fill="url(#dbtefx-dt-sun)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out infinite;"/>
 <path d="${rays}" fill="${goldHi}" fill-opacity="0.5" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out -1.5s infinite;"/>
@@ -61,7 +62,6 @@ ${CARD_ART_KEYFRAMES}
 <path d="${sparkle(fx, fy, 24)}" fill="#ffffff" style="animation: dbtefx-pulse 3.5s ease-in-out infinite;"/>
 <circle cx="${fx}" cy="${fy}" r="7" fill="#ffffff"/>
 </g>
-${cardArt(t, { id: 'dbtefx-dt-hero', card: CARDS.faimena, x: 1060, y: 150, w: 460, h: 720, focus: [0.6, 0.42], zoom: 0.9, blend: 'normal', feather: 0.75, fade: 0.75, backdrop: mix(t.bg, t.border, 0.4), backdropAmt: 0.6, breathe: 14 })}
 ${twinkles}
 <!--near-->
 ${nearSparks}`;

@@ -143,7 +143,7 @@ ${glows}
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-cb-sky)"/>
 <path d="${stars}" stroke="${t.text}" stroke-opacity="0.55" stroke-width="1.8" stroke-linecap="round"/>
-<g mask="url(#dbtefx-cb-bowmask)"><g style="animation: dbtefx-cb-shimmer 9s ease-in-out infinite;">${rainbow}</g></g>
+<g class="dbtefx-cb-bow" mask="url(#dbtefx-cb-bowmask)"><g style="animation: dbtefx-cb-shimmer 9s ease-in-out infinite;">${rainbow}</g></g>
 <path d="${ridge}" fill="${mix(night, t.accent, 0.12)}"/>
 <path d="M180 900V600h30v300ZM228 900V640l12-10 14 14v256ZM300 900V690h24v210Z" fill="${mix(stoneDeep, night, 0.4)}"/>
 <!--mid-->

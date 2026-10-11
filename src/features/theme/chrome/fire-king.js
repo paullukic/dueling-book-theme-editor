@@ -61,7 +61,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const crown = svg(170, 96, `${grad}<circle cx="85" cy="72" r="21" fill="none" stroke="${gold}" stroke-width="3"/><circle cx="85" cy="72" r="18" fill="none" stroke="${ink}" stroke-width="3" stroke-dasharray="5 4"/>${crest(85, 72, 1.6)}`);
 
   // Phase discs: the gold ring of the Fire Kings with black dashes.
-  const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20" fill="none" stroke="${gold}" stroke-width="2"/><circle cx="22.5" cy="22.5" r="17" fill="none" stroke="${ink}" stroke-width="2.4" stroke-dasharray="4 3"/>`);
   const lifeCrest = svg(40, 40, `<circle cx="20" cy="20" r="17" fill="${ink}" stroke="${goldLit}" stroke-width="3"/><circle cx="20" cy="20" r="11" fill="none" stroke="${gold}" stroke-width="2" stroke-dasharray="4 3"/><path d="M20 13l7 7l-7 7l-7 -7Z" fill="${teal}" stroke="${goldLit}" stroke-width="1"/>`);
 
   const plate = `linear-gradient(180deg, ${goldLit}, ${gold} 45%, ${mix(gold, t.bg, 0.3)})`;
@@ -89,7 +88,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
-  const vars = [frameSvg, crestTile, chart, crown, phaseRing, lifeCrest].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [frameSvg, crestTile, chart, crown, null, lifeCrest].map((v, i) => (v ? `--dbtc-u${i}: ${svgUrl(v)};` : '')).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: crimson lacquer in a banded gold frame, the phoenix crest above. */
@@ -123,13 +122,14 @@ ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, 
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: repeating-conic-gradient(from 0deg, ${gold} 0 12deg, ${ink} 12deg 24deg) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
+${SEL.phase} { background: repeating-conic-gradient(from -3deg, ${flame} 0deg 6deg, ${goldDeep} 6deg 30deg) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: ${silverDeep} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${teal}, 0 0 14px ${alpha(teal, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${teal}, 0 0 14px ${alpha(teal, 0.8)}; }
-${sel(['#duel .phase span'])} { color: ${silverLit} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, ${goldLit}, ${gold}, ${goldDeep}, ${gold}, ${goldLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 16px ${alpha(flame, 0.85)} !important; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 40%, ${mix(crimson, flame, 0.25)}, ${crimson} 55%, ${mix(crimson, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${ink} !important; }
+${sel(['#duel .phase span'])} { color: ${goldLit} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${ink}, 0 0 4px ${ink} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${glassDeep}) !important; box-shadow: inset 0 0 0 1px ${silver}, inset 0 0 0 3px ${silverDeep} !important; }

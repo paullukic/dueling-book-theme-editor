@@ -72,7 +72,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const blade = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 48%, ${alpha(night, 0.3)} 52%, transparent), linear-gradient(90deg, ${mix(c, t.bg, 0.6)}, ${c} 80%, ${mix(c, '#ffffff', 0.5)})`;
+  const blade = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 48%, ${alpha(night, 0.3)} 52%, transparent), linear-gradient(90deg, ${mix(c, t.bg, 0.5)}, ${mix(c, '#ffffff', 0.18)} 45%, ${c} 62%, ${mix(c, t.bg, 0.35)})`;
   const vars = [frameSvg, crest, grain, gable, guard, chevron, sun].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
@@ -114,7 +114,7 @@ ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { ba
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.35)} 15%, ${t.self} 45%, ${mix(t.self, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.35)} 15%, ${t.opp} 45%, ${mix(t.opp, t.bg, 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
-${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${red}, inset 0 0 0 1px ${pearl} !important; }
+${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${gold}, inset 0 0 0 1px ${pearl} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${white}, 0 0 0 4px ${night}, 0 0 0 5px ${gold} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${goldHi}, ${goldDk}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${enamel}, ${night}) !important; }

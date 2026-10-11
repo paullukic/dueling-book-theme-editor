@@ -190,12 +190,12 @@ ${SEL.life} {
 }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
 ${SEL.lifeSelf} {
-  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.45)}, ${t.self}) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(180deg, ${alpha(t.accent, 0.55)} 0 2px, transparent 2px), linear-gradient(90deg, ${mix(t.border, t.bg, 0.35)}, ${mix(t.self, t.border, 0.5)}) !important;
 }
 ${SEL.lifeOpp} {
   background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp}) !important;
 }
-${T(['#duel .lifepoints .black_bar'])} { background: ${plating(15, 0.6)}, ${mix(t.bg, t.surface, 0.5)} !important; }
+${T(['#duel .lifepoints .black_bar'])} { background: ${plating(15, 0.35)}, ${mix(t.bg, '#000000', 0.3)} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 4px ${t.bg}, 0 0 8px ${alpha(t.bg, 0.9)} !important; }
 ${SEL.phase} {
   background: conic-gradient(from 20deg, ${t.text}, ${t.border} 18%, #ffffff 30%, ${t.muted} 45%, ${t.border} 60%, ${t.text} 75%, ${t.border} 88%, ${t.text}) !important;
@@ -207,10 +207,12 @@ ${T(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} {
   background: radial-gradient(circle at 50% 38%, ${t.raised}, ${steel} 60%, ${t.bg}) !important;
   box-shadow: inset 0 0 0 1px ${alpha('#ffffff', 0.12)} !important;
 }
-${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 42%, #ffffff 0 8%, ${t.self} 34%, ${mix(t.self, t.bg, 0.55)} 72%, ${t.bg}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)} !important; }
-${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 42%, #ffffff 0 8%, ${t.opp} 34%, ${mix(t.opp, t.bg, 0.55)} 72%, ${t.bg}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)} !important; }
-${T(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 0 ${t.bg} !important; }
-${T(['#duel .phase.active span'])} { color: ${t.bg} !important; text-shadow: 0 0 3px ${alpha('#ffffff', 0.8)} !important; }
+${T(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 42%, #ffffff 0 6%, ${t.accent} 30%, ${mix(t.accent, t.bg, 0.45)} 72%, ${t.bg}) !important; box-shadow: 0 0 0 2px ${t.accent}, 0 0 18px ${alpha(t.accent, 0.9)} !important; }
+${T(['#duel .phase span'])} { color: #ffffff !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 3px ${t.bg} !important; }
+${T(['#duel .phase.active span'])} { color: ${t.accentText} !important; text-shadow: 0 0 3px ${alpha('#ffffff', 0.8)} !important; }
+/* Chat speakers: your name in photon cyan, the opponent's in warning amber. */
+${T(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]'])} { color: ${t.accent} !important; }
+${T(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${t.accent2} !important; }
 ${T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} {
   background: linear-gradient(180deg, #ffffff, ${t.text} 20%, ${t.muted} 50%, ${t.border} 55%, ${t.muted}) !important;
 }

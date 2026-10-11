@@ -40,7 +40,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Phase discs: a bubble ring with a highlight.
   const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20" fill="none" stroke="${pearl}" stroke-opacity="0.8" stroke-width="1.4"/><path d="M8 17a16 16 0 0 1 10 -10" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round"/>`);
-  const lifeCrest = svg(40, 40, `<path d="M20 3C28 12 33 20 33 26a13 13 0 0 1 -26 0C7 20 12 12 20 3Z" fill="${goldDeep}" stroke="${goldLit}" stroke-width="2"/><path d="M20 10C25 16 28 21 28 25.5a8 8 0 0 1 -16 0C12 21 15 16 20 10Z" fill="${gem}"/><circle cx="17" cy="22" r="2.4" fill="#ffffff" fill-opacity="0.75"/>`);
+  const lifeCrest = svg(40, 40, `<path d="M20 3C28 12 33 20 33 26a13 13 0 0 1 -26 0C7 20 12 12 20 3Z" fill="${goldDeep}" stroke="${pearlLit}" stroke-width="2"/><path d="M20 10C25 16 28 21 28 25.5a8 8 0 0 1 -16 0C12 21 15 16 20 10Z" fill="${gem}" stroke="${pearl}" stroke-width="1.2"/><circle cx="17" cy="22" r="2.4" fill="#ffffff" fill-opacity="0.75"/>`);
 
   const plate = `linear-gradient(180deg, ${pearlLit}, ${pearl} 45%, ${mix(pearl, aqua, 0.4)})`;
   const glassBg = (lift = 0) => `linear-gradient(180deg, ${alpha(aqua, 0.18 + lift)}, transparent 45%), var(--dbtc-u2), linear-gradient(180deg, ${water}, ${waterDeep})`;
@@ -105,9 +105,9 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${silverLit}, ${aqua}, ${
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${silverDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 25%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 32%, ${goldLit}, ${gold} 50%, ${goldDeep}) !important; box-shadow: 0 0 0 2px ${pearlLit}, 0 0 18px ${alpha(gold, 0.9)}; }
 ${sel(['#duel .phase span'])} { color: ${silverLit} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${glassDeep}) !important; box-shadow: inset 0 0 0 1px ${silver}, inset 0 0 0 3px ${silverDeep} !important; }

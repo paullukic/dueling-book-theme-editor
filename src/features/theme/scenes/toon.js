@@ -108,7 +108,7 @@ const toon = (t) => {
     for (let i = 0; i < 22; i++) p.push(polar(cx, cy, i % 2 ? r * 0.62 : r * (0.9 + rand() * 0.25), i * (360 / 22) + rand() * 6).join(' '));
     return `M${p.join('L')}Z`;
   };
-  const pow = burst(1352, 178, 70);
+  const pow = burst(1424, 392, 60);
 
   return `<style>
 @keyframes dbtefx-tn-pop { 0%, 9% { transform: scale(1.04, 0.02); } 15% { transform: scale(0.9, 1.16); } 19% { transform: scale(1.08, 0.9); } 23% { transform: scale(0.98, 1.03); } 26%, 84% { transform: scale(1, 1); } 90%, 100% { transform: scale(1.04, 0.02); } }
@@ -128,7 +128,7 @@ const toon = (t) => {
 <g style="transform-origin: 1340px 560px; animation: dbtefx-tn-turnrays 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-tn-ray)"/></g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tn-ben)" mask="url(#dbtefx-tn-fade)"/>
 <!--mid-->
-<g transform="translate(100 0) translate(1250 850) scale(0.84) translate(-1250 -850)">
+<g class="dbtefx-tn-book"><g transform="translate(1398 830) scale(0.58) translate(-1250 -850)">
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="none" stroke="${off}" stroke-width="5" transform="translate(6 4)"/>
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="${cover}" stroke="${ink}" stroke-width="5" stroke-linejoin="round"/>
 <path d="M1050 784Q1150 772 1250 806Q1350 772 1450 784L1456 798Q1350 788 1250 824Q1150 788 1044 798Z" fill="${mix(page, t.muted, 0.4)}" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>
@@ -143,13 +143,12 @@ ${tower(1204, 690, 92, 300, -8, 140, [[0.16, 0.76, 22, 30], [0.58, 0.76, 22, 30]
 <path d="M1250 676V806" stroke="${ink}" stroke-width="4"/>
 ${front}
 <g style="transform-origin: 1250px 740px; animation: dbtefx-tn-turn 9s ease-in-out infinite;"><path d="${rightPage}" fill="${mix(page, t.muted, 0.15)}" stroke="${ink}" stroke-width="5" stroke-linejoin="round"/></g>
-</g>
-<!--near-->
-<g style="transform-box: fill-box; transform-origin: center; animation: dbtefx-tn-pow 9s cubic-bezier(.3,.7,.4,1) infinite;">
+</g></g>
+<g class="dbtefx-tn-pow"><g style="transform-box: fill-box; transform-origin: center; animation: dbtefx-tn-pow 9s cubic-bezier(.3,.7,.4,1) infinite;">
 <path d="${pow}" fill="none" stroke="${off}" stroke-width="6" transform="translate(7 5)"/>
 <path d="${pow}" fill="${lit}" stroke="${ink}" stroke-width="6" stroke-linejoin="round"/>
-<text x="1352" y="194" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="42" font-weight="900" fill="${t.accent2}" stroke="${ink}" stroke-width="4" paint-order="stroke" transform="rotate(-8 1352 178)">POW!</text>
-</g>`;
+<text x="1424" y="406" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="36" font-weight="900" fill="${t.accent2}" stroke="${ink}" stroke-width="4" paint-order="stroke" transform="rotate(-8 1424 392)">POW!</text>
+</g></g>`;
 };
 
 export default toon;

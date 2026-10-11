@@ -162,10 +162,10 @@ ${SEL.lifeOpp} { background: ${dots(ink, 0.3, 6, 1.3)}, linear-gradient(180deg, 
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(-45deg, ${ink} 0 5px, ${t.bg} 5px 9px) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 
-${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 4px 4px 0 ${ink} !important; }
+${SEL.phase} { background: ${ink} !important; border-radius: 50% !important; box-shadow: 0 0 0 2px #000000, 4px 4px 0 2px #000000 !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${paper} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(paper, 0.08, 6, 1.2)}, radial-gradient(circle at 35% 30%, ${t.raised}, ${mix(t.surface, ink, 0.5)} 75%) !important; border-radius: 50% !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dots(cyan, 0.42, 6, 1.5)}, radial-gradient(circle at 35% 30%, ${t.raised}, ${mix(t.surface, ink, 0.5)} 75%) !important; border-radius: 50% !important; box-shadow: inset 0 0 0 2px ${ink} !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 60%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${dots(ink, 0.25, 6, 1.3)}, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 60%) !important; }
 ${sel(['#duel .phase.active::before'])} {
@@ -176,7 +176,7 @@ ${sel(['#duel .phase.active::before'])} {
 ${sel(['#duel .phase span'])} { color: ${paper} !important; ${stroke(3)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
-${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: saturate(0.85) drop-shadow(0 0 0.6px ${ink}) !important; }
+${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: brightness(0) drop-shadow(0 0 0.5px #000000) drop-shadow(2px 2px 0 ${alpha(cyan, 0.6)}) !important; }
 ${turnBg} { background: ${ink} !important; box-shadow: 4px 4px 0 ${ink}; }
 ${turnInner} { background: ${dots(red, 0.4, 6, 1.2)}, ${pop} !important; }
 ${turnTxt} { color: ${ink} !important; text-shadow: 2px 2px 0 ${paper} !important; }
@@ -217,6 +217,10 @@ ${SEL.field} {
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { border-color: ${pop} !important; outline: 2px solid ${ink} !important; box-shadow: 4px 4px 0 ${red} !important; }
 
 ${duelPanels} { border-color: ${ink} !important; border-radius: 10px !important; box-shadow: inset 0 0 0 2px ${alpha(paper, 0.5)}, 0 0 0 2px ${ink}, 6px 6px 0 2px ${ink} !important; }
+${T(['#duel #preview_txt'])} { background: ${dots(red, 0.08, 9, 1.4)}, ${paper} !important; color: ${ink} !important; border-radius: 14px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
+${T(['#duel #preview_txt *'])} { color: ${ink} !important; text-shadow: none !important; }
+${T(['#duel .button'])} { background: ${dots(red, 0.1, 6, 1.1)}, ${paper} !important; color: ${ink} !important; text-shadow: none !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.3)}, 0 0 0 2px ${ink}, 3px 3px 0 2px ${ink} !important; }
+${T(['#duel .button:hover'])} { background: ${dots(red, 0.35, 6, 1.2)}, ${pop} !important; color: ${ink} !important; }
 ${duelPanels} { background: ${dots(red, 0.08, 9, 1.4)}, ${paper} !important; border-radius: 18px !important; box-shadow: inset 0 0 0 2px ${alpha(ink, 0.25)}, 0 0 0 3px ${ink}, 6px 7px 0 3px ${ink} !important; }
 ${T(['#duel .cout_txt', '#duel .cout_txt *', '#duel #watchers .cell', '#duel .watchers_txt'])} { color: ${ink} !important; }
 ${T(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="red" i]', '#duel .cout_txt [style*="color: rgb(187, 0, 0)"]'])} { color: ${mix(red, ink, 0.6)} !important; }
@@ -226,5 +230,7 @@ ${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${i
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-464px, 450px) scale(0.44); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-pow { display: none; }
 `;
 };

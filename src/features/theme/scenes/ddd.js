@@ -96,13 +96,14 @@ ${script}
 <linearGradient id="dbtefx-ddd-parch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${parchment}"/><stop offset="1" stop-color="${mix(parchment, t.bg, 0.35)}"/></linearGradient>
 <linearGradient id="dbtefx-ddd-roll" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${goldLit}"/><stop offset="0.5" stop-color="${mix(parchment, t.bg, 0.2)}"/><stop offset="1" stop-color="${mix(parchment, t.bg, 0.6)}"/></linearGradient>
 <radialGradient id="dbtefx-ddd-seal" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="${mix(crimson, '#ffffff', 0.25)}"/><stop offset="1" stop-color="${mix(crimson, t.bg, 0.35)}"/></radialGradient>
+<linearGradient id="dbtefx-ddd-hz" gradientUnits="userSpaceOnUse" x1="400" y1="0" x2="620" y2="0"><stop offset="0" stop-color="${goldDeep}" stop-opacity="0"/><stop offset="1" stop-color="${goldDeep}"/></linearGradient>
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-ddd-sky)"/>
 <rect width="1600" height="900" fill="url(#dbtefx-ddd-aura)"/>
 ${gate}
 ${pillars}
 <path d="M-20 900V780H1620V900Z" fill="${mix(obsidian, t.bg, 0.5)}"/>
-<path d="M-20 780H1620" stroke="${goldDeep}" stroke-width="2"/>
+<path d="M400 780H1620" stroke="url(#dbtefx-ddd-hz)" stroke-width="2"/>
 <!--mid-->
 ${king}
 <!--near-->
