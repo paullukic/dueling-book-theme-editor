@@ -8,6 +8,7 @@ import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
+import { SCENE_IDS, sceneSvg } from '../src/features/theme/scenes.js';
 import { launcherBottom } from '../src/lib/layout.js';
 import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
 
@@ -212,7 +213,7 @@ test('skins: no layout changes on DuelingBook elements', () => {
   PRESETS.forEach(({ id, tokens }) => {
     // Our own layer and pseudo-element ornaments may be positioned; nothing else.
     const css = skinCss(id, tokens)
-      .replace(/#dbte-skin-(layer|motif)[^{]*\{[^}]*\}/g, '')
+      .replace(/#dbte-skin-(layer|motif|fx)[^{]*\{[^}]*\}/g, '')
       .replace(/[^{}]*::(before|after)[^{}]*\{[^}]*\}/g, '');
     assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|margin|font-size|line-height|left|top|right|bottom|border-width)\s*:/i, id);
     assert.doesNotMatch(css, /\.card\b|cardfront/, id);
@@ -236,7 +237,7 @@ test('skins: a switched-off area gets none of the skin', () => {
   ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(all.includes(s), s));
   const off = skinCss('branded', t, { menu: false, dialogs: false, field: false });
   ['#main_menu', '#content #msg', 'img.field_zones'].forEach((s) => assert.ok(!off.includes(s), `${s} still styled`));
-  assert.ok(off.includes('#dbte-skin-layer, #dbte-skin-motif {'), 'backdrop stays');
+  assert.ok(off.includes('#dbte-skin-layer, #dbte-skin-motif, #dbte-skin-fx {'), 'backdrop stays');
   assert.equal((off.match(/\{/g) || []).length, (off.match(/\}/g) || []).length, 'braces balanced');
 });
 
@@ -256,7 +257,7 @@ test('css: text field edges reach 3:1 in every preset', () => {
 
 test('light themes: there are some, and they switch the page and panel to light controls', () => {
   const light = PRESETS.filter((p) => isLightTheme(p.tokens));
-  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'parchment', 'snow']);
+  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'lightsworn', 'parchment', 'snow']);
   light.forEach(({ tokens, radius }) => {
     assert.ok(varsCss({ tokens, radius, backdrop: 0.25 }).includes('--dbt-scheme: light'));
     assert.equal(panelVars(tokens).colorScheme, 'light');
@@ -305,11 +306,29 @@ test('skins: the pattern switch removes only the artwork, glows stay', () => {
 });
 
 test('skins: archetype art renders the same every time and stays compact', () => {
-  ['branded', 'artmage', 'sky-striker', 'snake-eye', 'labrynth'].forEach((id) => {
+  SCENE_IDS.forEach((id) => {
     const t = PRESETS.find((p) => p.id === id).tokens;
-    const a = skinCss(id, t);
-    assert.equal(a, skinCss(id, t), id);
+    const a = sceneSvg(id, t);
+    assert.equal(a, sceneSvg(id, t), id);
     assert.doesNotMatch(a, /NaN|undefined/, id);
-    assert.ok(a.length < 60000, `${id} is ${a.length} bytes`);
+    assert.ok(a.length > 1500 && a.length < 40000, `${id} is ${a.length} bytes`);
   });
+});
+
+test('scenes: every archetype has one, it can hold still, and bad colours draw nothing', () => {
+  PRESETS.filter((p) => p.group === 'archetype').forEach((p) => assert.ok(SCENE_IDS.includes(p.id), p.id));
+  const t = PRESETS.find((p) => p.id === 'blackwing').tokens;
+  const moving = sceneSvg('blackwing', t);
+  assert.match(moving, /animation: dbtefx-fall/);
+  assert.match(moving, /prefers-reduced-motion: reduce/);
+  assert.match(sceneSvg('blackwing', t, { still: true }), /class="dbtefx-still"/);
+  assert.equal(sceneSvg('blackwing', { ...t, accent: '"/><script>' }), '');
+  assert.equal(sceneSvg('obsidian', PRESETS[0].tokens), '');
+  assert.doesNotMatch(moving, /<script|on\w+=/i);
+  assert.equal(DEFAULTS.themeMotion, true);
+});
+
+test('scenes: only transform and opacity move (cheap to animate)', () => {
+  const css = sceneSvg('frog', PRESETS.find((p) => p.id === 'frog').tokens).match(/@keyframes[^}]*\{([^@]*?)\}\s*\}/g).join('');
+  assert.doesNotMatch(css.replace(/@keyframes [\w-]+/g, ''), /(?<![-\w])(width|height|left|top|r|cx|cy|fill|stroke|filter)\s*:/);
 });

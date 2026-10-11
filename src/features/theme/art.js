@@ -35,8 +35,13 @@ export const ICON_STYLES = {
   'sky-striker': 'hud',
   'snake-eye': 'fang',
   labrynth: 'arch',
+  blackwing: 'wing',
+  lightsworn: 'halo',
+  frog: 'pad',
   'dark-magic': 'circle',
 };
+
+const n2 = (v) => Math.round(v * 100) / 100;
 
 // The frame behind a glyph, filling a w x h box.
 const frame = (style, w, h, t, radius) => {
@@ -92,6 +97,26 @@ const frame = (style, w, h, t, radius) => {
     case 'arch':
       // A gothic pointed arch with a silver inner line.
       return `<path d="M${x} ${y + fh}V${y + fh * 0.4}Q${x} ${y + fh * 0.05} ${cx} ${y}Q${x + fw} ${y + fh * 0.05} ${x + fw} ${y + fh * 0.4}V${y + fh}Z" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${x + sw * 2.2} ${y + fh - sw}V${y + fh * 0.42}Q${x + sw * 2.2} ${y + fh * 0.12} ${cx} ${y + sw * 2.4}Q${x + fw - sw * 2.2} ${y + fh * 0.12} ${x + fw - sw * 2.2} ${y + fh * 0.42}V${y + fh - sw}" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${sw * 0.6}"/>`;
+    case 'wing': {
+      // A plate whose top edge is three overlapping feather scallops.
+      const q = fw / 3;
+      return `<path d="M${x} ${y + fh}V${y + fh * 0.3}Q${x + q * 0.5} ${y - fh * 0.05} ${x + q} ${y + fh * 0.22}Q${x + q * 1.5} ${y - fh * 0.08} ${x + q * 2} ${y + fh * 0.22}Q${x + q * 2.5} ${y - fh * 0.05} ${x + fw} ${y + fh * 0.3}V${y + fh}Z" fill="${mix(t.raised, t.accent, 0.12)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+    }
+    case 'halo': {
+      // A disc ringed by short rays of light.
+      let rays = '';
+      for (let i = 0; i < 12; i++) {
+        const a = (Math.PI / 6) * i;
+        rays += `<line x1="${n2(cx + Math.cos(a) * rr * 0.86)}" y1="${n2(cy + Math.sin(a) * rr * 0.86)}" x2="${n2(cx + Math.cos(a) * rr)}" y2="${n2(cy + Math.sin(a) * rr)}"/>`;
+      }
+      return `<circle cx="${cx}" cy="${cy}" r="${rr * 0.8}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><g stroke="${t.accent}" stroke-width="${sw * 0.8}" stroke-linecap="round">${rays}</g>`;
+    }
+    case 'pad': {
+      // A lily pad: a disc with a wedge cut out.
+      const [ax, ay] = [cx + rr * 0.95, cy - rr * 0.32];
+      const [bx, by] = [cx + rr * 0.95, cy + rr * 0.1];
+      return `<path d="M${cx} ${cy}L${n2(ax)} ${n2(ay)}A${rr} ${rr} 0 1 0 ${n2(bx)} ${n2(by)}Z" fill="${mix(t.raised, t.accent, 0.22)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+    }
     case 'hex': {
       const pts = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = (Math.PI / 3) * i;
@@ -129,7 +154,7 @@ const GLYPHS = {
 // A framed glyph in a w x h viewBox (the size DuelingBook gives the <img>).
 const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent, badge = false } = {}) => {
   // Round and hexagonal frames have less room inside than a tile.
-  const s = (Math.min(w, h) * (['hex', 'circle', 'rune'].includes(style) ? 0.6 : 0.78)) / 40;
+  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad'].includes(style) ? 0.6 : 0.78)) / 40;
   const gx = (w - 40 * s) / 2;
   const gy = (h - 40 * s) / 2;
   const dot = badge ? `<circle cx="${w * 0.8}" cy="${h * 0.2}" r="${Math.min(w, h) * 0.13}" fill="${t.danger}" stroke="${t.raised}" stroke-width="${Math.min(w, h) * 0.04}"/>` : '';

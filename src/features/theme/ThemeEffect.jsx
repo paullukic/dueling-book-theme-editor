@@ -5,6 +5,7 @@ import { useStyle } from '../look';
 import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
+import { FX_ID, sceneSvg } from './scenes';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
 const AREA_IDS = Object.keys(AREA_CSS);
@@ -95,8 +96,8 @@ const ThemeEffect = () => {
   const hasSkin = !!skin;
   useEffect(() => {
     if (!hasSkin) return undefined;
-    // Glow first, artwork over it, both behind the game.
-    const els = [MOTIF_ID, LAYER_ID].map((id) => {
+    // Glow first, artwork over it, the animated scene on top; all behind the game.
+    const els = [FX_ID, MOTIF_ID, LAYER_ID].map((id) => {
       const el = document.createElement('div');
       el.id = id;
       el.setAttribute('aria-hidden', 'true');
@@ -105,6 +106,16 @@ const ThemeEffect = () => {
     });
     return () => els.forEach((el) => el.remove());
   }, [hasSkin]);
+
+  // The archetype scene: inline SVG so its parts can move.
+  const scene = useMemo(
+    () => (on && s.themeEffects && s.themeMotif ? sceneSvg(s.themePreset, artTokens, { still: !s.themeMotion }) : ''),
+    [on, s.themeEffects, s.themeMotif, s.themeMotion, s.themePreset, artTokens],
+  );
+  useEffect(() => {
+    const el = document.getElementById(FX_ID);
+    if (el && el.innerHTML !== scene) el.innerHTML = scene;
+  }, [scene, hasSkin]);
 
   const [field, setField] = useState(null);
   const [fieldRetry, setFieldRetry] = useState(0);

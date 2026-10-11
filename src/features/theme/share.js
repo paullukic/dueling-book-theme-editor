@@ -22,7 +22,7 @@ const fromBase64 = (b64) => {
   return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
 };
 
-export const THEME_KEYS = ['themePreset', 'themeTokens', 'themeRadius', 'themeBackdrop', 'themeFont', 'themeAreas', 'themeEffects', 'themeMotif'];
+export const THEME_KEYS = ['themePreset', 'themeTokens', 'themeRadius', 'themeBackdrop', 'themeFont', 'themeAreas', 'themeEffects', 'themeMotif', 'themeMotion'];
 
 export const encodeTheme = (settings, customCss) => {
   const data = { v: 1 };

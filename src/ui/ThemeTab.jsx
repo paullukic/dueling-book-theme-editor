@@ -320,6 +320,14 @@ const StyleView = ({ s, onPick }) => {
               onChange={set('themeMotif')}
             />
           )}
+          {s.themeEffects && s.themeMotif && (
+            <ToggleRow
+              label="Motion"
+              description="Archetype scenes move slowly: embers, feathers, a radar sweep. Always still if your system asks for reduced motion."
+              checked={s.themeMotion}
+              onChange={set('themeMotion')}
+            />
+          )}
           <SliderRow
             label="Corner roundness"
             value={s.themeRadius}
