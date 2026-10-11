@@ -26,25 +26,15 @@ const lightCss = `
 :root { --dbt-glass-soft: color-mix(in srgb, var(--dbt-surface) 94%, transparent); --dbt-title: color-mix(in srgb, var(--dbt-text) 88%, var(--dbt-accent)); }
 /* The black veil DuelingBook lays over its stage greys the whole page. */
 html body #dark { background-color: transparent !important; }
-/* Panel titles: tinted ink on a plate of the panel colour, so no border line runs through the words. */
-html body #duel_room .format_txt, html body #duel_room span.arial_black2, html body #settings .admin_lbl {
-  color: var(--dbt-title) !important; text-shadow: none !important;
-  background: var(--dbt-surface) !important; box-shadow: 0 0 0 0.3em var(--dbt-surface) !important; border-radius: 0.3em;
-}
-/* Format titles span the whole panel: a plate fading out at both ends, so the ring's corners still show. */
-html body #duel_room .format .format_txt {
-  background: linear-gradient(90deg, transparent 4%, var(--dbt-surface) 12% 88%, transparent 96%) !important; box-shadow: none !important;
-}
-html body #duel_room #formats .format > .border::before { filter: none !important; }
 /* The TCG/OCG watermark: a pale accent tint instead of 40% grey. */
 html body #duel_room .duelbutton .tcg_title, html body #duel_room .duelbutton .ocg_title {
   color: color-mix(in srgb, var(--dbt-accent) 15%, var(--dbt-raised)) !important; opacity: 1 !important;
 }
-html body #welcome_buttons > span { color: var(--dbt-link) !important; }
-html body #welcome_buttons > span:hover { color: var(--dbt-link-hover) !important; }
-html body #deck_constructor .deck_bg, html body #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 92%, var(--dbt-accent2)) !important; }
-html body #deck_constructor .side_bg, html body #siding .side_bg { background-color: color-mix(in srgb, var(--dbt-surface) 92%, var(--dbt-accent)) !important; }
-html body #deck_constructor .extra_bg, html body #siding .extra_bg { background-color: color-mix(in srgb, var(--dbt-surface) 90%, var(--dbt-warning)) !important; }
+/* Light presets keep their side colours dark enough for white text, so the turn pill stays bright. */
+html body #duel #turn .red { background: radial-gradient(circle, var(--dbt-self), color-mix(in srgb, var(--dbt-self) 80%, var(--dbt-text))) !important; }
+html body #duel #turn .blue { background: radial-gradient(circle, var(--dbt-opp), color-mix(in srgb, var(--dbt-opp) 80%, var(--dbt-text))) !important; }
+/* DuelingBook's white-chrome logo needs an ink edge on paper. */
+html body #yugioh_logo img, html body #db_logo_bottom, html body #db_logo_top { filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--dbt-text) 55%, transparent)) drop-shadow(0 3px 6px color-mix(in srgb, var(--dbt-text) 30%, transparent)); }
 /* Duel: side colours deepen into the ink, never into black. */
 html body #duel #lifepoints1 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-self) 70%, var(--dbt-text)), var(--dbt-self)) !important; }
 html body #duel #lifepoints2 .life_bar { background: linear-gradient(90deg, color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-text)), var(--dbt-opp)) !important; }
@@ -83,7 +73,7 @@ export const varsCss = ({ tokens, radius, backdrop }) => {
   --dbt-rest-cue: 0 0 0 0 transparent;
   --dbt-link-hover: var(--dbt-accent);
   --dbt-skin-cover: 0;
-  --dbt-shadow: 0 18px 48px -16px rgba(0, 0, 0, 0.75);`;
+  --dbt-shadow: 0 16px 34px -18px rgba(0, 0, 0, 0.7);`;
   return `:root {
 ${lines.join('\n')}
   --dbt-bg-rgb: ${r}, ${g}, ${b};
@@ -313,10 +303,15 @@ html #content .textarea [style*="color: black"], html #content .textarea [style*
 html #content .cout_txt [style*="color: black"], html #content .cout_txt [style*="color: rgb(0, 0, 0)"] { color: var(--dbt-text) !important; }
 html #content font[color="#FF0000" i], html #content font[color="red" i],
 html #content [style*="color: rgb(187, 0, 0)"] { color: color-mix(in srgb, var(--dbt-self) 75%, var(--dbt-lift)) !important; }
-html #content font[color="#0000FF" i], html #content font[color="#0012ff" i], html #content font[color="blue" i] { color: color-mix(in srgb, var(--dbt-opp) 70%, var(--dbt-lift)) !important; }
+html #content font[color="#0000FF" i], html #content font[color="#0012ff" i], html #content font[color="blue" i] { color: var(--dbt-link) !important; }
 html #content font[color="#880088" i], html #content font[color="#9900FF" i] { color: color-mix(in srgb, var(--dbt-accent2) 75%, var(--dbt-lift)) !important; }
 html #content font[color="#009900" i], html #content font[color="#008000" i] { color: var(--dbt-success) !important; }
 html #content font[color="#CC9900" i] { color: var(--dbt-warning) !important; }
+/* The news box's own highlight colours (pink dates, lime, sky, orange). */
+html #content font[color="#f819b7" i] { color: var(--dbt-accent) !important; }
+html #content font[color="#99CC00" i] { color: var(--dbt-success) !important; }
+html #content font[color="#00CCFF" i] { color: var(--dbt-accent2) !important; }
+html #content font[color="#FF9900" i] { color: var(--dbt-warning) !important; }
 
 /* Tooltips, links, headings, pagers, sliders */
 html #tooltips > * {
@@ -423,6 +418,15 @@ html #duel_room #formats .format .format_inner, html #duel_room #formats .format
 }
 html #duel_room .format .background { background-color: transparent !important; }
 html #duel_room .format_txt, html #duel_room .desc_txt, html #duel_room .format span { color: var(--dbt-text) !important; }
+/* Panel titles sit on a plate of the panel colour, so the panel's border never runs through the words.
+   Format titles span the whole panel: their plate fades out at both ends so the ring's corners still show. */
+html #duel_room .format_txt, html #duel_room span.arial_black2 {
+  color: var(--dbt-title, var(--dbt-text)) !important; text-shadow: none !important;
+  background: var(--dbt-surface) !important; box-shadow: 0 0 0 0.3em var(--dbt-surface) !important; border-radius: 0.3em;
+}
+html #duel_room .format .format_txt { background: linear-gradient(90deg, transparent 4%, var(--dbt-surface) 12% 88%, transparent 96%) !important; box-shadow: none !important; }
+/* Genesys: DuelingBook hue-rotates its panel ring; ours is already in the theme. */
+html #duel_room #formats .format > .border, html #duel_room #formats .format > .border::before { filter: none !important; }
 html #duel_room .duelbutton { border-color: var(--dbt-line) !important; }
 html #duel_room .duelbutton .background { background-color: var(--dbt-raised) !important; opacity: 0.92 !important; }
 html #duel_room .duelbutton:hover .background { background-color: var(--dbt-hover) !important; }
@@ -435,14 +439,15 @@ html #duel_room label, html #duel_room .duel_lbl, html #duel_room .watch_lbl { c
 `;
 
 const deck = `
-html #deck_constructor .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent2)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
+/* Deck, side and extra: one hue family, deepening down the page. Skins may set --dbt-band / --dbt-band-extra. */
+html #deck_constructor .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 94%, var(--dbt-band, var(--dbt-accent))) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
 /* Genesys points: DuelingBook hue-rotates its badge; ours is already themed. Over the cap it sets an inline filter. */
 html #content .points { filter: none !important; }
 html #content .points .points_txt { color: var(--dbt-text) !important; text-shadow: 0 0 2px var(--dbt-surface), 0 0 2px var(--dbt-surface) !important; }
 html #content .points[style*="hue-rotate"] .points_txt { color: var(--dbt-danger) !important; }
-html #deck_constructor .side_bg, html #siding .side_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
-html #deck_constructor .extra_bg, html #siding .extra_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-warning)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
-html #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent2)) !important; }
+html #deck_constructor .side_bg, html #siding .side_bg { background-color: color-mix(in srgb, var(--dbt-surface) 90%, var(--dbt-band, var(--dbt-accent))) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
+html #deck_constructor .extra_bg, html #siding .extra_bg { background-color: color-mix(in srgb, var(--dbt-surface) 86%, var(--dbt-band-extra, var(--dbt-band, var(--dbt-accent)))) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
+html #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 94%, var(--dbt-band, var(--dbt-accent))) !important; }
 html #content .deck_slot, html #content .side_slot, html #content .extra_slot { border-color: var(--dbt-line) !important; }
 html #content .deck_slot .content, html #content .side_slot, html #content .extra_slot, html #content .search_slot {
   background-color: color-mix(in srgb, var(--dbt-bg) 35%, transparent) !important;
@@ -498,7 +503,11 @@ html #duel .phase.active:has(.phase_inner.blue) span { color: var(--dbt-opp-text
 /* Turn buttons */
 html #duel #turn .background, html #duel #start_turn .background, html #duel #end_turn .background { background: var(--dbt-border) !important; }
 html #duel #turn .background_inner, html #duel #start_turn .background_inner, html #duel #end_turn .background_inner { background: var(--dbt-raised) !important; }
-html #duel #turn span, html #duel #start_turn span, html #duel #end_turn span { color: var(--dbt-text) !important; }
+html #duel #start_turn span, html #duel #end_turn span { color: var(--dbt-text) !important; }
+/* Whose turn: the side colours, deepened so white lettering reads (4.5:1 or better). */
+html #duel #turn .red { background: radial-gradient(circle, color-mix(in srgb, var(--dbt-self) 47%, black), color-mix(in srgb, var(--dbt-self) 32%, black)) !important; }
+html #duel #turn .blue { background: radial-gradient(circle, color-mix(in srgb, var(--dbt-opp) 47%, black), color-mix(in srgb, var(--dbt-opp) 32%, black)) !important; }
+html #duel #turn span { color: white !important; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) !important; }
 
 /* Avatars, status, countdowns */
 html #duel #avatar1, html #duel #avatar3 { background: linear-gradient(160deg, var(--dbt-self), color-mix(in srgb, var(--dbt-self) 40%, black)) !important; }
@@ -582,7 +591,14 @@ html #content #recaptcha_bg, html #content #recaptcha_bg2, html #content #turnst
 
 const pages = `
 /* Settings sections: DuelingBook paints each its own olive/maroon/teal; the theme takes over. */
-html #content #settings_content > div:not(.title_txt) { background: var(--dbt-glass) !important; border-color: var(--dbt-border) !important; }
+html #content #settings_content > div:not(.title_txt):not(.button) { background: var(--dbt-glass) !important; border-color: var(--dbt-border) !important; }
+html #content #settings .admin_lbl {
+  color: var(--dbt-title, var(--dbt-text)) !important; text-shadow: none !important;
+  background: var(--dbt-surface) !important; box-shadow: 0 0 0 0.3em var(--dbt-surface) !important; border-radius: 0.3em;
+}
+/* Front page Welcome / Forum / Rules: DuelingBook's pastel pink, blue and green. */
+html #welcome_buttons > span { color: var(--dbt-link) !important; }
+html #welcome_buttons > span:hover { color: var(--dbt-link-hover) !important; }
 ${tint('html #settings .about_me, html #settings .preferences, html #unmute_user, html #unban_user, html #admin_status, html #change_username', 'success')}
 ${tint('html #settings .social_media, html #settings .animation, html #change_password .change_password, html #mute_user, html #ban_status, html #ip_check, html #alerts', 'accent')}
 ${tint('html #settings .profile_song, html #settings .account, html #hide_messages, html #cancel_duel, html #terminate_account, html #add_adjudicator', 'accent2')}
