@@ -38,11 +38,13 @@ const flameRing = (t, kit) => {
   return kit.svg(100, 100, `<g fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent2}" stroke-opacity="0.8" stroke-width="0.8" stroke-linejoin="round">${sc}</g><circle cx="50" cy="50" r="34.5" fill="none" stroke="${t.accent2}" stroke-width="1.6"/><circle cx="50" cy="9" r="5.5" fill="${t.danger}" stroke="${t.accent2}" stroke-width="1.2"/><path d="M50 5.2Q48.6 9 50 12.8Q51.4 9 50 5.2Z" fill="#000000"/>`);
 };
 
-// A snake coiled on itself: scaled body, head raised, one red slit eye.
-const coil = (t, kit) => {
-  const body = 'M8 30Q8 18 22 18Q36 18 36 26Q36 32 28 32Q20 32 20 26Q20 22 25 22';
-  return kit.svg(48, 36, `<defs><pattern id="s" width="4" height="5" patternUnits="userSpaceOnUse"><path d="M2 0L4 2.5L2 5L0 2.5Z" fill="none" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="0.5"/></pattern></defs><path d="${body}" fill="none" stroke="${mix(t.danger, t.bg, 0.35)}" stroke-width="6" stroke-linecap="round"/><path d="${body}" fill="none" stroke="url(#s)" stroke-width="6" stroke-linecap="round"/><path d="${body}" fill="none" stroke="${t.accent2}" stroke-opacity="0.7" stroke-width="0.6"/><path d="M8 30Q2 32 4 22Q6 12 14 10Q22 8 26 4L30 3Q32 5 30 8Q26 12 20 12Q12 14 10 22Z" fill="${mix(t.danger, t.bg, 0.3)}" stroke="${t.accent2}" stroke-width="0.8"/><path d="M27 4.5L32 1M28 6L33 6" stroke="${t.danger}" stroke-width="0.8"/><circle cx="26.5" cy="6" r="2" fill="${t.accent2}"/><path d="M26.5 4.6V7.4" stroke="#000000" stroke-width="0.6"/>`);
-};
+// A band of crimson serpent scales with gold edges, for the foot of a plate.
+const scaleBand = (t, kit) =>
+  kit.svg(12, 10, `<path d="M6 0L12 5L6 10L0 5Z" fill="${mix(t.danger, t.bg, 0.45)}" stroke="${t.accent2}" stroke-opacity="0.75" stroke-width="0.8"/><path d="M6 2L9 5L6 6.4Z" fill="${t.accent2}" fill-opacity="0.35"/><path d="M0 0L6 0L0 5ZM12 0L6 0L12 5Z" fill="${mix(t.danger, t.bg, 0.6)}" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="0.6"/>`);
+
+// The Snake-Eye orb: a red sphere in a gold setting, vertical slit.
+const orb = (t, kit) =>
+  kit.svg(20, 20, `<defs><radialGradient id="o" cx="0.4" cy="0.35"><stop offset="0" stop-color="${mix(t.danger, '#ffffff', 0.45)}"/><stop offset="0.5" stop-color="${t.danger}"/><stop offset="1" stop-color="${mix(t.danger, '#000000', 0.55)}"/></radialGradient></defs><circle cx="10" cy="10" r="9" fill="url(#o)" stroke="${t.accent2}" stroke-width="1.6"/><path d="M10 4Q8.6 10 10 16Q11.4 10 10 4Z" fill="#000000"/>`);
 
 // Pop-up buttons: an ember plate, dark label, gold inset.
 const POP = [['ok_btn', 'OK', 153.4, 78.47, true], ['yes_btn', 'Yes', 153.4, 78.47, true], ['no_btn', 'No', 153.4, 78.47, false], ['cancel_btn', 'Cancel', 234.85, 78.5, false]];
@@ -87,7 +89,8 @@ export default (t, kit) => {
 html body {
   --se-scales: ${svgUrl(scales(t, kit))};
   --se-flames: ${svgUrl(flameRow(t, kit))};
-  --se-coil: ${svgUrl(coil(t, kit))};
+  --se-band: ${svgUrl(scaleBand(t, kit))};
+  --se-orb: ${svgUrl(orb(t, kit))};
   --se-serpent: ${svgUrl(serpent(t, kit))};
 }
 
@@ -99,8 +102,8 @@ ${SEL.tile} {
   box-shadow: inset 0 0 0 1px ${goldRim}, inset 0 1px 0 ${alpha(t.accent2, 0.35)}, 0 14px 28px -14px #000000 !important;
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; right: 3px; bottom: 2px; width: 38px; height: 28px; pointer-events: none;
-  background: var(--se-coil) center / contain no-repeat; opacity: 0.85; transition: opacity 0.25s;
+  content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 14px; pointer-events: none;
+  background: var(--se-orb) center bottom / 14px 14px no-repeat, var(--se-band) left 0 bottom 0 / 10px 8px repeat-x; border-radius: 0 0 5px 5px; opacity: 0.9; transition: opacity 0.25s;
 }
 ${SEL.tileHover} {
   background: ${ember(0.55)}, var(--se-scales), ${charcoal} !important;
@@ -207,7 +210,6 @@ ${POP.map(([n, label, w, h, p]) => `${sel([`#content img[src*="/svg/${n}"]`, `#c
 /* Duel room panels: scaled plates, a gold-to-ember rim, flames at the foot. */
 ${panels} { background: ${ember(0.18)}, var(--se-scales), ${alpha(t.surface, 0.9)} !important; border-radius: 10px !important; }
 ${pseudo(panels, 'before')} { filter: none !important; background: linear-gradient(180deg, ${t.accent2}, ${goldRim} 30%, ${t.border} 60%, ${t.accent}) !important; }
-${pseudo(panels, 'after')} { content: ""; position: absolute; right: 8px; bottom: 6px; width: 48px; height: 36px; pointer-events: none; background: var(--se-coil) center / contain no-repeat; opacity: 0.7; }
 ${sel(['#duel_room .format_txt', '#duel_room #host_bg > span', '#duel_room #decklist > span', '#duel_room #mode > span', '#duel_room #filter > span', '#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${halo}, 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.65)} !important; }
 ${sel(['#duel_room .duelbutton .background'])} { background: ${charcoal} !important; opacity: 0.95 !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: ${ember(0.4)}, ${charcoal} !important; }

@@ -34,22 +34,19 @@ const quills = (t, kit) => {
   return kit.svg(92, 56, `${f(232, 44, 8)}${f(218, 60, 9)}${f(204, 76, 10)}${f(192, 88, 10.5)}`);
 };
 
-// The trailing edge of a spread wing: primaries laid along the bottom of a
-// plate, longest outermost, each a crisp black blade with a lit rim.
-const wingEdge = (t, kit) => {
-  const fill = mix(t.bg, t.accent, 0.13);
-  const rim = mix(t.bg, t.accent, 0.42);
+// A crow's wing tip fanned from the left edge of a plate: seven long tapered
+// primaries, black with an oil-slick sheen (teal along the leading edge,
+// violet along the trailing edge), each with a pale rachis.
+const wingEdge = (t, kit, teal) => {
+  const prim = (L, w) => `M0 ${-w * 0.3}C${r1(L * 0.35)} ${r1(-w * 0.55)} ${r1(L * 0.75)} ${r1(-w * 0.5)} ${L} 0C${r1(L * 0.78)} ${r1(w * 0.75)} ${r1(L * 0.35)} ${r1(w * 1.05)} 0 ${r1(w * 0.75)}Z`;
   let s = '';
-  for (let i = 11; i >= 0; i--) {
-    const u = i / 11;
-    const x = r1(4 + u * 222);
-    const y = r1(50 - 38 * Math.pow(u, 0.8));
-    const len = r1(30 + 52 * u);
-    const a = r1(70 - 50 * u);
-    s += `<g transform="translate(${x} ${y}) rotate(${a})"><path d="M0 0C${r1(len * 0.3)} -5 ${r1(len * 0.75)} -5 ${len} 0${trailing(len, 12)}Z" fill="${fill}" stroke="${rim}" stroke-width="0.8" stroke-linejoin="round"/></g>`;
+  for (let i = 5; i >= 0; i--) {
+    const L = 96 + i * 13;
+    const w = 17 + i * 0.8;
+    s += `<g transform="translate(-8 ${r1(74 - i * 3)}) rotate(${-46 + i * 7.6})"><path d="${prim(L, w)}" fill="url(#bk)" stroke="#000000" stroke-width="0.6"/><path d="M${r1(L * 0.08)} ${r1(-w * 0.42)}C${r1(L * 0.4)} ${r1(-w * 0.56)} ${r1(L * 0.75)} ${r1(-w * 0.5)} ${L} 0" fill="none" stroke="url(#lt)" stroke-width="1.3"/><path d="M${L} 0C${r1(L * 0.78)} ${r1(w * 0.75)} ${r1(L * 0.35)} ${r1(w * 1.05)} ${r1(L * 0.1)} ${r1(w * 0.85)}" fill="none" stroke="url(#tr)" stroke-width="0.9"/><path d="M0 0L${r1(L * 0.94)} 0" stroke="${mix(t.text, t.accent, 0.5)}" stroke-opacity="0.45" stroke-width="0.7"/></g>`;
   }
-  const bone = 'M0 54Q110 36 228 12';
-  return kit.svg(260, 68, `${s}<path d="${bone}" fill="none" stroke="${fill}" stroke-width="9" stroke-linecap="round"/><path d="${bone}" fill="none" stroke="${rim}" stroke-width="0.8"/>`);
+  const defs = `<linearGradient id="bk" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="${mix('#000000', teal, 0.55)}"/><stop offset="0.3" stop-color="#000000"/><stop offset="0.6" stop-color="#000000"/><stop offset="1" stop-color="${mix('#000000', t.accent, 0.5)}"/></linearGradient><linearGradient id="lt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${teal}" stop-opacity="0.2"/><stop offset="0.6" stop-color="${teal}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient><linearGradient id="tr" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.1"/></linearGradient>`;
+  return kit.svg(200, 68, `<defs>${defs}</defs>${s}`);
 };
 
 // A quill divider: long shaft, black vane with a violet rim, a red nib.
@@ -60,7 +57,7 @@ const quillLine = (t, kit) =>
 const wreath = (t, kit) => {
   let s = '';
   for (let i = 0; i < 10; i++) s += `<g transform="rotate(${i * 36 - 90} 50 50) translate(50 13) rotate(24)">${feather(22, 6.5, t)}</g>`;
-  return kit.svg(100, 100, `${s}<circle cx="50" cy="50" r="33.5" fill="none" stroke="${t.success}" stroke-opacity="0.7" stroke-width="0.8"/>`);
+  return kit.svg(100, 100, `${s}<circle cx="50" cy="50" r="33.5" fill="none" stroke="${mix(t.success, t.accent, 0.35)}" stroke-opacity="0.7" stroke-width="0.8"/>`);
 };
 
 // A folded wing at the start of the life bar.
@@ -79,13 +76,14 @@ const popButton = (t, label, W, H, primary) => {
   const h = 64;
   const n = 12;
   const d = `M${x + n} ${y}H${x + w}V${y + h}H${x}V${y + n}Z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t.success}"/><stop offset="0.5" stop-color="${t.accent}"/><stop offset="1" stop-color="${t.success}"/></linearGradient><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.raised, 0.7)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient></defs><path d="${d}" fill="url(#f)" stroke="${primary ? 'url(#o)' : mix(t.border, t.muted, 0.4)}" stroke-width="${primary ? 2.4 : 2}"/>${primary ? `<path d="M${x + 14} ${y + h - 4}H${x + w - 14}" stroke="${t.accent2}" stroke-width="2"/>` : ''}<text x="${W / 2}" y="${y + h / 2 + 1}" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? '#ffffff' : t.text}">${label}</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(t.success, t.accent, 0.35)}"/><stop offset="0.5" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.success, t.accent, 0.35)}"/></linearGradient><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.raised, 0.7)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient></defs><path d="${d}" fill="url(#f)" stroke="${primary ? 'url(#o)' : mix(t.border, t.muted, 0.4)}" stroke-width="${primary ? 2.4 : 2}"/>${primary ? `<path d="M${x + 14} ${y + h - 4}H${x + w - 14}" stroke="${t.accent2}" stroke-width="2"/>` : ''}<text x="${W / 2}" y="${y + h / 2 + 1}" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? '#ffffff' : t.text}">${label}</text></svg>`;
 };
 
 export default (t, kit) => {
   const { sel, SEL, alpha } = kit;
   const pseudo = (list, p) => list.split(', ').map((s) => `${s}::${p}`).join(', ');
-  const teal = t.success;
+  // Crow-feather teal: the success green pulled toward the violet.
+  const teal = mix(t.success, t.accent, 0.35);
   // Jet: near-black with a cold gloss band at the top.
   const jet = `linear-gradient(180deg, ${alpha(t.text, 0.08)} 0%, transparent 34%), linear-gradient(180deg, ${mix(t.bg, t.raised, 0.8)} 0%, ${mix(t.bg, t.raised, 0.25)} 80%)`;
   const oil = (o) => `linear-gradient(105deg, transparent 28%, ${alpha(teal, o * 0.7)} 42%, ${alpha(t.accent, o)} 55%, transparent 70%)`;
@@ -107,7 +105,7 @@ export default (t, kit) => {
   return `
 html body {
   --bw-quills: ${svgUrl(quills(t, kit))};
-  --bw-edge: ${svgUrl(wingEdge(t, kit))};
+  --bw-edge: ${svgUrl(wingEdge(t, kit, teal))};
   --bw-quill: ${svgUrl(quillLine(t, kit))};
 }
 
@@ -121,14 +119,15 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: var(--bw-edge) center / 100% 100% no-repeat; transition: filter 0.2s;
+  background: var(--bw-edge) left bottom / auto 100% no-repeat; transition: filter 0.2s;
+  -webkit-mask: linear-gradient(90deg, #000000 22%, transparent 66%); mask: linear-gradient(90deg, #000000 22%, transparent 66%);
 }
 ${SEL.tileHover} {
   background: ${oil(0.2)}, ${jet} !important;
   border-image: ${irisLit} 1 / 1px !important;
   box-shadow: 0 0 20px -6px ${alpha(t.accent, 0.9)}, 0 0 14px -8px ${teal} !important;
 }
-${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: brightness(1.6) drop-shadow(0 0 2px ${alpha(t.accent, 0.8)}); }
+${sel(['#main_menu .menu_btn:hover .content::before'])} { filter: brightness(1.35) drop-shadow(0 0 3px ${alpha(teal, 0.7)}); }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${t.bg} !important; box-shadow: inset 0 3px 8px #000000, inset 0 -2px 0 ${t.accent2} !important; }
 ${sel(['#main_menu .menu_btn .content span', '#main_menu .menu_btn span'])} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 12px ${alpha(t.accent, 0.4)} !important; }
 ${sel(['#main_menu .main_menu_circle'])} { border-color: ${teal} !important; border-radius: 1px !important; transform: rotate(45deg) scale(0.8); }
