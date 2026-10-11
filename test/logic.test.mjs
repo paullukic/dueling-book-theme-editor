@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { classify } from '../src/features/psct.js';
 import { atLeastOne } from '../src/lib/odds.js';
-import { migrateLegacy, withDefaults } from '../src/lib/defaults.js';
+import { DEFAULT_SHORTCUT_KEYS, migrateLegacy, withDefaults } from '../src/lib/defaults.js';
+import { hasModifier, isTypingEvent } from '../src/lib/dom.js';
 import { classifyStorageError } from '../src/lib/storageErrors.js';
 
 const runs = (text) => {
@@ -76,6 +77,48 @@ test('settings: card text size snaps to a slider stop', () => {
 test('settings: removed shortcut stays removed', () => {
   const s = withDefaults({ shortcutKeys: { a: 'good_btn' } });
   assert.deepEqual(s.shortcutKeys, { a: 'good_btn' });
+});
+
+const reload = (stored) => withDefaults(JSON.parse(JSON.stringify(stored)));
+
+test('settings: a deleted or fully cleared binding survives a reload', () => {
+  const without2 = { ...DEFAULT_SHORTCUT_KEYS };
+  delete without2['2'];
+  assert.equal('2' in reload({ shortcutKeys: without2 }).shortcutKeys, false);
+  assert.deepEqual(reload({ shortcutKeys: {} }).shortcutKeys, {});
+  assert.deepEqual(withDefaults(migrateLegacy({ shortcutKeys: {} })).shortcutKeys, {});
+});
+
+test('settings: shortcuts master switch defaults on and keeps off', () => {
+  assert.equal(withDefaults(null).shortcutsEnabled, true);
+  assert.equal(reload({ shortcutsEnabled: false }).shortcutsEnabled, false);
+});
+
+// e.target is a DIV, as for an input inside the panel's shadow root (retargeted
+// to the host): the guard must read the real target from composedPath().
+const keyFrom = (target) => ({ composedPath: () => [target, { nodeType: 1, tagName: 'DIV' }], target: { nodeType: 1, tagName: 'DIV' } });
+const el = (tagName, extra = {}) => ({ nodeType: 1, tagName, ...extra });
+
+test('shortcuts: ignored while typing in any field, including inside a shadow root', () => {
+  [
+    el('INPUT', { id: 'life_txt', type: 'text' }),
+    el('INPUT', { type: 'number' }),
+    el('INPUT', {}),
+    el('TEXTAREA'),
+    el('SELECT'),
+    el('DIV', { isContentEditable: true }),
+  ].forEach((t) => assert.equal(isTypingEvent(keyFrom(t)), true, `${t.tagName} ${t.type || ''}`));
+  assert.equal(isTypingEvent({ target: el('TEXTAREA') }), true);
+});
+
+test('shortcuts: still work off a field, and never with a modifier', () => {
+  assert.equal(isTypingEvent(keyFrom(el('BODY'))), false);
+  assert.equal(isTypingEvent(keyFrom(el('INPUT', { type: 'checkbox' }))), false);
+  assert.equal(isTypingEvent(keyFrom(el('BUTTON'))), false);
+  assert.equal(hasModifier({ ctrlKey: true }), true);
+  assert.equal(hasModifier({ altKey: true }), true);
+  assert.equal(hasModifier({ metaKey: true }), true);
+  assert.ok(!hasModifier({}));
 });
 
 test('migration: v1.0 keys carry over', () => {
