@@ -828,7 +828,7 @@ export const PRESETS = [
       text: '#251a05',
       muted: '#5d4b1e',
       link: '#764800',
-      accent: '#946000',
+      accent: '#8c5a00',
       accentText: '#ffffff',
       accent2: '#1f5fa3',
       success: '#2a6a2c',

@@ -57,8 +57,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const capShard = svg(20, 36, `<path d="M10 1L15 8V35H5V8Z" fill="${paleIce}" stroke="${deep}" stroke-width="1.2"/><path d="M10 1L15 8V35H10Z" fill="#ffffff" fill-opacity="0.7"/>`);
 
   const paleBg = (lift = 0) => `linear-gradient(160deg, ${alpha('#ffffff', 0.7 + lift)}, transparent 55%), var(--dbtc-u0), linear-gradient(180deg, ${paleIce}, ${mix(paleIce2, deep, 0.06 + lift / 3)})`;
-  // The ink guard re-inks text it judges unreadable against the page behind its parent; it
-  // cannot see the pale plates this theme paints, so navy lettering must also outrank it.
+  // Titles straddling a panel edge read by their navy halo, half over the dark page and half
+  // over the pale panel: the ink guard cannot judge that, so they outrank it.
   const boost = (list) => `${list}, ${list.split(', ').map((x) => `${x}[data-dbte-ink][data-dbte-ink][data-dbte-ink][data-dbte-ink]`).join(', ')}`;
   const navyText = `color: ${navy} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.7)} !important;`;
 
@@ -94,11 +94,11 @@ ${SEL.tile} { background: ${paleBg()} !important; border-style: solid !important
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 56px); top: 1px; width: 112px; height: 20px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.5)}); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: var(--dbtc-u3) 50% 100% / 100% 12px no-repeat, ${paleBg(0.2)} !important; box-shadow: 0 0 0 1px ${deep}, 0 0 22px -4px ${alpha(ice, 0.9)}, 0 12px 24px -12px #000000 !important; }
-${boost(SEL.tileLabel)} { ${navyText} }
+${SEL.tileLabel} { ${navyText} }
 
 /* Buttons: pale ice with a deep blue edge; deep blue when hovered or pressed. */
-${boost(SEL.button)} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
-${boost(sel(['#content #settings_content > div.button:not(.title_txt)']))} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
+${SEL.button} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; border-color: ${deep} !important; color: ${navy} !important; border-radius: 2px !important; box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(deep, 0.35)}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(180deg, ${mix(deep, ice, 0.25)}, ${deepDark}) !important; border-color: ${navy} !important; color: #ffffff !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.35)}, 0 0 12px -2px ${alpha(ice, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${deepDark} !important; border-color: ${navy} !important; color: #ffffff !important; box-shadow: inset 0 2px 5px ${alpha('#000000', 0.6)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(navy, paleIce, 0.45)} !important; }
@@ -107,12 +107,12 @@ ${sel(['#content .button.disabled'])} { color: ${mix(navy, paleIce, 0.45)} !impo
 ${SEL.dialog} { background: ${paleBg()} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${deep}, 0 0 0 4px ${frost}, 0 0 0 5px ${deep}, 0 0 30px -4px ${alpha(ice, 0.7)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(20)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 110px); top: -48px; right: auto; bottom: auto; width: 220px; height: 70px; pointer-events: none; z-index: 1; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${alpha('#000000', 0.5)}); transform: none; }
-${boost(SEL.dialogTitle)} { ${navyText} }
-${boost(sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt']))} { color: ${ink2} !important; }
+${SEL.dialogTitle} { ${navyText} }
+${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${ink2} !important; }
 
 /* Chat: a pale ice header over a lightning seam; silver rails around the night glass. */
 ${SEL.chatTop} { background: ${paleBg()} !important; box-shadow: inset 0 -2px 0 ${deep} !important; }
-${boost(sel(['#chats .chat .chat_top span']))} { ${navyText} }
+${sel(['#chats .chat .chat_top span'])} { ${navyText} }
 ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 10px; pointer-events: none; background: var(--dbtc-u3) center / 100% 100% no-repeat; }
 ${SEL.chat} { background: linear-gradient(180deg, ${t.surface}, ${navy}) !important; box-shadow: inset 3px 0 0 ${paleIce}, inset -3px 0 0 ${paleIce}, inset 0 -3px 0 ${paleIce} !important; }
 
@@ -128,11 +128,11 @@ ${sel(['#duel .phase .background .background_top'])} { background: none !importa
 ${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, #ffffff 30%, ${paleIce2}) !important; }
 ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(deep, ice, 0.3)} 25%, ${deepDark}) !important; box-shadow: 0 0 16px ${alpha(ice, 0.9)}; }
-${boost(sel(['#duel .phase span']))} { color: ${navy} !important; text-shadow: 0 1px 0 #ffffff !important; }
+${sel(['#duel .phase span'])} { color: ${navy} !important; text-shadow: 0 1px 0 #ffffff !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${navy} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${deep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, #ffffff, ${paleIce2}) !important; }
-${boost(sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span']))} { ${navyText} }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { ${navyText} }
 ${SEL.duelLog} { background: linear-gradient(180deg, ${t.surface}, ${navy}) !important; box-shadow: inset 0 0 0 3px ${paleIce}, inset 0 0 0 4px ${deep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${paleIce}, 0 0 0 3px ${deep}, 0 0 14px -2px ${alpha(ice, 0.7)} !important; }
 ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 2px ${paleIce} !important; }
@@ -154,7 +154,7 @@ ${settingsPanels} { border-color: ${deep} !important; background: ${paleBg()} !i
 ${on(settingsPanels, 'before')} { content: ""; position: absolute; inset: -2px; pointer-events: none; ${frame(16)} }
 
 /* Lettering: navy on the pale panels, white light on the night page. */
-${boost(panelText)} { ${navyText} }
+${panelText} { ${navyText} }
 ${boost(pageTitles)} { color: #ffffff !important; text-shadow: 0 0 2px ${navy}, 0 0 4px ${navy}, 0 0 18px ${alpha(ice, 0.75)} !important; }
 
 /* Panel titles straddle the panel edge: white light with a navy halo, and a navy cut in the ring behind the word only. */
