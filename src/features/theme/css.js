@@ -308,6 +308,11 @@ html #main_menu .menu_btn:hover .content::after { content: ""; position: absolut
    mouseup elsewhere and lose the click. */
 html #main_menu .menu_btn:active .content { background: var(--dbt-press) !important; transform: none; box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--dbt-line) !important; transition-duration: 0.05s; }
 html #main_menu .menu_btn.administrator_btn:hover .content { border-left-color: var(--dbt-warning) !important; }
+/* Compact menu: one joined list. Square rows with a divider, no lift and no
+   brightness filter on hover: the hover colour and accent bar do the work. */
+html #main_menu .menu_btn.dbte-small-menu .content { border-radius: 0 !important; box-shadow: inset 0 -1px 0 var(--dbt-line) !important; }
+html #main_menu .menu_btn.dbte-small-menu:hover .content, html #main_menu .menu_btn.dbte-small-menu .content:hover { transform: none; filter: none !important; }
+html #main_menu .menu_btn.dbte-small-menu:hover .content::after { content: none; }
 html #main_menu .main_menu_circle { border-color: var(--dbt-muted) !important; }
 html #main_menu .main_menu_circle .background { background-color: var(--dbt-accent) !important; }
 html #main_menu #tourney_sidebar, html #main_menu #streams { background-color: var(--dbt-glass-soft) !important; border-radius: var(--dbt-radius); }

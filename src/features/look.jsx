@@ -106,12 +106,14 @@ const MENU_HOVER_CSS = `
 `;
 
 const SMALL_MENU_CSS = `
-.dbte-small-menu { height: 30px !important; font-size: large !important; padding-bottom: 4px !important; }
-/* The tile's inner box (30px + 4px padding + 2x4px borders = 42px) must fit
-   its slot, or each tile covers the next: give the tile 40px + 6px padding.
-   The label stays centred on the box as DuelingBook positions it. */
-.menu_btn.dbte-small-menu { height: 40px !important; padding-bottom: 6px !important; }
-.dbte-small-menu span { top: -12px !important; }
+.dbte-small-menu { font-size: large !important; }
+/* Measured on DuelingBook: the label is a 26px line drawn 3px below the tile
+   top (span top -12px + 15px padding), independent of the box. So: a 40px box
+   (border-box, borders included) filling a 40px slot, so the tiles join into
+   one list, and the label moved down 4px to sit in the middle of the box. */
+.menu_btn.dbte-small-menu { height: 40px !important; padding-bottom: 0 !important; }
+.menu_btn.dbte-small-menu > .content { box-sizing: border-box !important; height: 40px !important; padding: 0 !important; }
+.menu_btn.dbte-small-menu > span { top: -8px !important; }
 `;
 
 export const SmallerMenuEffect = () => {
