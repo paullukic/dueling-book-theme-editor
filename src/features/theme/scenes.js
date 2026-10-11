@@ -55,6 +55,15 @@ import * as fireKing from './scenes/fire-king.js';
 import * as dracotail from './scenes/dracotail.js';
 import * as powerPatron from './scenes/power-patron.js';
 import * as ryzeal from './scenes/ryzeal.js';
+import * as shaddoll from './scenes/shaddoll.js';
+import * as madolche from './scenes/madolche.js';
+import * as nekroz from './scenes/nekroz.js';
+import * as stardust from './scenes/stardust.js';
+import * as utopia from './scenes/utopia.js';
+import * as crystalBeast from './scenes/crystal-beast.js';
+import * as blitzclique from './scenes/blitzclique.js';
+import * as ancientGear from './scenes/ancient-gear.js';
+import * as destinyHero from './scenes/destiny-hero.js';
 import * as attackOnTitan from './scenes/attack-on-titan.js';
 import * as demonSlayer from './scenes/demon-slayer.js';
 import * as jujutsuKaisen from './scenes/jujutsu-kaisen.js';
@@ -64,12 +73,28 @@ import * as dragonBall from './scenes/dragon-ball.js';
 import * as deathNote from './scenes/death-note.js';
 import * as fullmetalAlchemist from './scenes/fullmetal-alchemist.js';
 import * as soloLeveling from './scenes/solo-leveling.js';
+import * as legacyOfTheDuelist from './scenes/legacy-of-the-duelist.js';
+import * as duelLinks from './scenes/duel-links.js';
+import * as masterDuel from './scenes/master-duel.js';
+import * as duelMonstersGb from './scenes/duel-monsters-gb.js';
+import * as powerOfChaos from './scenes/power-of-chaos.js';
+import * as tagForce from './scenes/tag-force.js';
+import * as worldChampionship from './scenes/world-championship.js';
+import * as burningAbyss from './scenes/burning-abyss.js';
+import * as yubel from './scenes/yubel.js';
+import * as ddd from './scenes/ddd.js';
+import * as forbiddenMemories from './scenes/forbidden-memories.js';
+import * as duelistsOfTheRoses from './scenes/duelists-of-the-roses.js';
+import * as eternalDuelistSoul from './scenes/eternal-duelist-soul.js';
 
 export const FX_ID = 'dbte-skin-fx';
 
 // One module per theme in ./scenes/: the default export draws the scene from
 // the tokens (or is null), `particles` configures its particle systems.
 const MODULES = {
+  'burning-abyss': burningAbyss,
+  yubel,
+  ddd,
   branded,
   artmage,
   hero,
@@ -116,6 +141,15 @@ const MODULES = {
   dracotail,
   'power-patron': powerPatron,
   ryzeal,
+  shaddoll,
+  madolche,
+  nekroz,
+  stardust,
+  utopia,
+  'crystal-beast': crystalBeast,
+  blitzclique,
+  'ancient-gear': ancientGear,
+  'destiny-hero': destinyHero,
   'attack-on-titan': attackOnTitan,
   'demon-slayer': demonSlayer,
   'jujutsu-kaisen': jujutsuKaisen,
@@ -125,6 +159,16 @@ const MODULES = {
   'death-note': deathNote,
   'fullmetal-alchemist': fullmetalAlchemist,
   'solo-leveling': soloLeveling,
+  'legacy-of-the-duelist': legacyOfTheDuelist,
+  'duel-links': duelLinks,
+  'master-duel': masterDuel,
+  'duel-monsters-gb': duelMonstersGb,
+  'power-of-chaos': powerOfChaos,
+  'tag-force': tagForce,
+  'world-championship': worldChampionship,
+  'forbidden-memories': forbiddenMemories,
+  'duelists-of-the-roses': duelistsOfTheRoses,
+  'eternal-duelist-soul': eternalDuelistSoul,
 };
 
 export const SCENE_IDS = Object.keys(MODULES).filter((id) => MODULES[id].default);

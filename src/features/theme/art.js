@@ -21,6 +21,9 @@ const wideButton = (label, fill, stroke, text, radius) =>
 // Each preset's icons share its look: the frame changes with the skin, the
 // glyph stays the same so icons are always recognisable.
 export const ICON_STYLES = {
+  'burning-abyss': 'laurel',
+  yubel: 'talon',
+  ddd: 'seal',
   branded: 'ember',
   'black-dragon': 'claw',
   artmage: 'paint',
@@ -53,12 +56,34 @@ export const ICON_STYLES = {
   dracotail: 'astrolabe',
   'power-patron': 'sigil',
   ryzeal: 'coil',
+  shaddoll: 'marionette',
+  madolche: 'confection',
+  nekroz: 'mirror',
   'attack-on-titan': 'blade',
   'demon-slayer': 'haori',
   'jujutsu-kaisen': 'talisman',
   'one-piece': 'helm',
   naruto: 'scroll',
   'dragon-ball': 'orb',
+  'death-note': 'ledger',
+  'fullmetal-alchemist': 'array',
+  'solo-leveling': 'system',
+  stardust: 'starwing',
+  utopia: 'armour',
+  'crystal-beast': 'gemcut',
+  blitzclique: 'patch',
+  'legacy-of-the-duelist': 'capsule',
+  'duel-links': 'azure',
+  'master-duel': 'slab',
+  'duel-monsters-gb': 'lcd',
+  'power-of-chaos': 'plaque',
+  'tag-force': 'gloss',
+  'world-championship': 'touch',
+  'forbidden-memories': 'sandstone',
+  'duelists-of-the-roses': 'filigree',
+  'eternal-duelist-soul': 'gbakey',
+  'ancient-gear': 'cogplate',
+  'destiny-hero': 'gothic',
 };
 
 const n2 = (v) => Math.round(v * 100) / 100;
@@ -230,13 +255,40 @@ const frame = (style, w, h, t, radius) => {
       }
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><path d="${ticks}" stroke="${t.accent}" stroke-opacity="0.7" stroke-width="${n2(sw * 0.5)}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.74)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.6" stroke-width="${n2(sw * 0.5)}"/>`;
     }
-    case 'sigil':
-      // A black almond eye-plate with a pale sigil rim and a forked crest.
-      return `<path d="M${x} ${cy}Q${cx} ${n2(y - fh * 0.1)} ${x + fw} ${cy}Q${cx} ${n2(y + fh * 1.1)} ${x} ${cy}Z" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${cx} ${y}V${n2(y + fh * 0.16)}M${n2(cx - fw * 0.12)} ${y}V${n2(y + fh * 0.1)}M${n2(cx + fw * 0.12)} ${y}V${n2(y + fh * 0.1)}" stroke="${t.accent}" stroke-width="${n2(sw * 0.7)}"/>`;
+    case 'sigil': {
+      // A black plate with an ice rim and one small sigil diamond on its top edge.
+      const g = Math.min(fw, fh) * 0.1;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}"/><path d="M${cx} ${n2(y - g)}l${n2(g)} ${n2(g)}l${n2(-g)} ${n2(g)}l${n2(-g)} ${n2(-g)}Z" fill="${t.accent}"/>`;
+    }
+    case 'marionette': {
+      // Shaddoll: a navy lacquer plate in gold hairlines, hung by two violet threads from a core lens.
+      const k = Math.min(fw, fh) * 0.11;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.raised, t.accent, 0.12)}" stroke="${t.accent2}" stroke-width="${sw}"/><rect x="${n2(x + sw * 1.8)}" y="${n2(y + sw * 1.8)}" width="${n2(fw - sw * 3.6)}" height="${n2(fh - sw * 3.6)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.4" stroke-width="${n2(sw * 0.5)}"/><path d="M${cx} ${n2(y + k)}L${n2(x + fw * 0.2)} ${y}M${cx} ${n2(y + k)}L${n2(x + fw * 0.8)} ${y}" stroke="${t.accent}" stroke-width="${n2(sw * 0.5)}"/><circle cx="${cx}" cy="${n2(y + k)}" r="${n2(k)}" fill="${t.accent}" stroke="${t.accent2}" stroke-width="${n2(sw * 0.5)}"/>`;
+    }
+    case 'confection': {
+      // Madolche: a rounded chocolate tile with strawberry cream dripping over its top edge.
+      const d = fh * 0.22;
+      const q = fw / 4;
+      const rc = n2(Math.min(fw, fh) * 0.24);
+      let drip = `M${x} ${n2(y + d * 0.5)}`;
+      for (let i = 0; i < 4; i++) drip += `Q${n2(x + q * i + q * 0.25)} ${n2(y + d * (i % 2 ? 1.5 : 1.1))} ${n2(x + q * i + q * 0.5)} ${n2(y + d * 0.6)}T${n2(x + q * (i + 1))} ${n2(y + d * 0.5)}`;
+      return `<defs><clipPath id="m"><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${rc}"/></clipPath></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${rc}" fill="${mix(t.raised, t.accent2, 0.12)}"/><path d="${drip}V${y}H${x}Z" fill="${mix(t.accent, t.text, 0.3)}" clip-path="url(#m)"/><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${rc}" fill="none" stroke="${t.accent2}" stroke-width="${sw}"/>`;
+    }
+    case 'mirror': {
+      // Nekroz: a pointed ice mirror with a violet gem at the crown.
+      const g = Math.min(fw, fh) * 0.1;
+      return `<path d="M${cx} ${y}Q${x + fw} ${n2(y + fh * 0.12)} ${x + fw} ${cy}Q${x + fw} ${n2(y + fh * 0.88)} ${cx} ${y + fh}Q${x} ${n2(y + fh * 0.88)} ${x} ${cy}Q${x} ${n2(y + fh * 0.12)} ${cx} ${y}Z" fill="${mix(t.raised, t.accent, 0.1)}" stroke="${mix(t.accent, '#ffffff', 0.35)}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${cx} ${n2(y - g * 0.4)}l${n2(g * 0.7)} ${n2(g)}l${n2(-g * 0.7)} ${n2(g)}l${n2(-g * 0.7)} ${n2(-g)}Z" fill="${t.accent2}"/>`;
+    }
     case 'coil': {
       // A chamfered gunmetal plate with an amber ignition ring in one corner.
       const c = Math.min(fw, fh) * 0.2;
       return `<path d="M${n2(x + c)} ${y}H${x + fw}V${n2(y + fh - c)}L${n2(x + fw - c)} ${y + fh}H${x}V${n2(y + c)}Z" fill="${t.raised}" stroke="${mix(t.border, t.text, 0.3)}" stroke-width="${sw}" stroke-linejoin="round"/><circle cx="${n2(x + fw - c * 0.9)}" cy="${n2(y + c * 0.9)}" r="${n2(c * 0.45)}" fill="none" stroke="${t.accent}" stroke-width="${n2(sw * 0.9)}"/><path d="M${n2(x + c * 0.6)} ${n2(y + fh - sw * 1.6)}H${n2(x + fw * 0.55)}" stroke="${t.accent2}" stroke-width="${n2(sw * 0.7)}"/>`;
+    }
+    case 'patch': {
+      // Blitzclique: a sewn leather jacket patch with a notched crown top and a saddle stitch.
+      const k = Math.min(fw, fh) * 0.16;
+      const top = `M${x} ${n2(y + k)}L${n2(x + fw * 0.2)} ${y}L${n2(x + fw * 0.35)} ${n2(y + k * 0.8)}L${n2(cx)} ${n2(y - k * 0.2)}L${n2(x + fw * 0.65)} ${n2(y + k * 0.8)}L${n2(x + fw * 0.8)} ${y}L${x + fw} ${n2(y + k)}`;
+      return `<path d="${top}V${n2(y + fh - r)}Q${x + fw} ${y + fh} ${n2(x + fw - r)} ${y + fh}H${n2(x + r)}Q${x} ${y + fh} ${x} ${n2(y + fh - r)}Z" fill="${mix(t.raised, t.border, 0.35)}" stroke="${t.accent2}" stroke-width="${sw}" stroke-linejoin="round"/><rect x="${n2(x + sw * 2)}" y="${n2(y + k + sw)}" width="${n2(fw - sw * 4)}" height="${n2(fh - k - sw * 3)}" rx="${n2(Math.max(1, r * 0.6))}" fill="none" stroke="${mix(t.text, t.accent2, 0.25)}" stroke-opacity="0.75" stroke-width="${n2(sw * 0.55)}" stroke-dasharray="${n2(sw * 1.4)} ${n2(sw)}"/>`;
     }
     case 'helm': {
       // One Piece: a ship's wheel, timber rim and eight turned handles.
@@ -263,6 +315,131 @@ const frame = (style, w, h, t, radius) => {
         star += `${i ? 'L' : 'M'}${n2(sx + Math.cos(a) * rad)} ${n2(sy + Math.sin(a) * rad)}`;
       }
       return `<defs><radialGradient id="o" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="${mix(t.accent2, '#ffffff', 0.4)}"/><stop offset="0.6" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.5)}"/></radialGradient></defs><circle cx="${cx}" cy="${cy}" r="${rr}" fill="url(#o)"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.78)}" fill="${mix(t.raised, t.accent, 0.2)}"/><path d="${star}Z" fill="${t.danger}" stroke="${mix(t.danger, t.bg, 0.5)}" stroke-width="${n2(sw * 0.3)}"/>`;
+    }
+    case 'ledger': {
+      // Death Note: a black notebook cover, a bone page edge down the side and a red ribbon.
+      const pe = n2(sw * 1.2);
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.bg, '#000000', 0.3)}" stroke="${t.border}" stroke-width="${sw}"/><path d="M${n2(x + fw - pe)} ${n2(y + sw)}V${n2(y + fh - sw)}M${n2(x + fw - pe * 2.2)} ${n2(y + sw)}V${n2(y + fh - sw)}" stroke="${mix(t.text, t.muted, 0.3)}" stroke-width="${n2(sw * 0.5)}"/><path d="M${n2(x + fw * 0.2)} ${y}h${n2(fw * 0.1)}v${n2(fh * 0.34)}l${n2(-fw * 0.05)} ${n2(-fh * 0.06)}l${n2(-fw * 0.05)} ${n2(fh * 0.06)}Z" fill="${t.accent}"/>`;
+    }
+    case 'array': {
+      // Fullmetal Alchemist: a brass-rimmed steel plate with a chalk circle and triangle.
+      const tri = [-90, 30, 150].map((a) => `${n2(cx + Math.cos((a * Math.PI) / 180) * rr * 0.62)} ${n2(cy + Math.sin((a * Math.PI) / 180) * rr * 0.62)}`).join('L');
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="${mix(t.raised, t.muted, 0.15)}" stroke="${t.warning}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.8)}" fill="none" stroke="${t.text}" stroke-opacity="0.35" stroke-width="${n2(sw * 0.5)}"/><path d="M${tri}Z" fill="none" stroke="${t.accent2}" stroke-opacity="0.5" stroke-width="${n2(sw * 0.5)}"/>`;
+    }
+    case 'capsule': {
+      // Legacy of the Duelist: an elongated octagon in a double cyan bevel on navy.
+      const c = Math.min(fw, fh) * 0.24;
+      const oct = (i) => `M${n2(x + c + i)} ${n2(y + i)}H${n2(x + fw - c - i)}L${n2(x + fw - i)} ${n2(y + c + i)}V${n2(y + fh - c - i)}L${n2(x + fw - c - i)} ${n2(y + fh - i)}H${n2(x + c + i)}L${n2(x + i)} ${n2(y + fh - c - i)}V${n2(y + c + i)}Z`;
+      return `<path d="${oct(0)}" fill="${mix(t.surface, t.accent, 0.12)}" stroke="${t.accent}" stroke-width="${n2(sw * 1.2)}"/><path d="${oct(sw * 2)}" fill="none" stroke="${mix(t.accent, '#ffffff', 0.5)}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.5)}"/>`;
+    }
+    case 'azure': {
+      // Duel Links: a bright azure plate, white rim, one corner cut like its panel tabs.
+      const c = Math.min(fw, fh) * 0.26;
+      return `<defs><linearGradient id="z" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.15)}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.5)}"/></linearGradient></defs><path d="M${x} ${y}H${n2(x + fw - c)}L${x + fw} ${n2(y + c)}V${y + fh}H${x}Z" fill="url(#z)" stroke="#ffffff" stroke-opacity="0.85" stroke-width="${n2(sw * 0.8)}"/>`;
+    }
+    case 'slab': {
+      // Master Duel: a black-glass slab in gunmetal with a lime selection bar.
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${n2(Math.min(r, 3))}" fill="${mix(t.bg, t.surface, 0.5)}" stroke="${t.border}" stroke-width="${n2(sw * 0.9)}"/><rect x="${n2(x + sw * 1.4)}" y="${n2(y + fh * 0.22)}" width="${n2(sw * 1.3)}" height="${n2(fh * 0.56)}" fill="${t.accent}"/>`;
+    }
+    case 'laurel': {
+      // Burning Abyss: an ash-stone plate edged in bone, Dante's laurel wreath in sulphur around its foot.
+      const [ex, ey] = [fw * 0.4, fh * 0.4];
+      let leaves = '';
+      for (const side of [-1, 1]) {
+        for (let i = 0; i < 5; i++) {
+          const a = Math.PI / 2 + side * (0.32 + i * 0.3);
+          const px = cx + Math.cos(a) * ex;
+          const py = cy + Math.sin(a) * ey;
+          const deg = (a * 180) / Math.PI + side * 90 + side * 28;
+          leaves += `<ellipse cx="${n2(px)}" cy="${n2(py)}" rx="${n2(sw * 2.3)}" ry="${n2(sw * 0.95)}" transform="rotate(${n2(deg)} ${n2(px)} ${n2(py)})"/>`;
+        }
+      }
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="${mix(t.raised, t.muted, 0.12)}" stroke="${mix(t.text, t.muted, 0.5)}" stroke-width="${sw}"/><g fill="${t.accent}" fill-opacity="0.85">${leaves}</g><circle cx="${cx}" cy="${n2(cy + ey)}" r="${n2(sw * 0.9)}" fill="${t.accent2}"/>`;
+    }
+    case 'talon': {
+      // Yubel: a wine plate in rose, a gold wing claw hooking over each top corner, a teal gem at the foot.
+      const k = Math.min(fw, fh) * 0.3;
+      const claw = (px, d) => `<path d="M${n2(px)} ${n2(y + k * 0.9)}Q${n2(px - d * k * 0.1)} ${n2(y - k * 0.15)} ${n2(px + d * k * 0.95)} ${n2(y - k * 0.05)}Q${n2(px + d * k * 0.3)} ${n2(y + k * 0.2)} ${n2(px + d * k * 0.28)} ${n2(y + k * 0.9)}Z"/>`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 4)}" fill="${mix(t.raised, t.accent, 0.16)}" stroke="${t.accent}" stroke-width="${sw}"/><g fill="${t.warning}" stroke="${mix(t.warning, t.bg, 0.5)}" stroke-width="${n2(sw * 0.3)}">${claw(x + sw * 0.4, 1)}${claw(x + fw - sw * 0.4, -1)}</g><path d="M${cx} ${n2(y + fh - sw * 3.4)}l${n2(sw * 1.5)} ${n2(sw * 1.5)}l${n2(-sw * 1.5)} ${n2(sw * 1.5)}l${n2(-sw * 1.5)} ${n2(-sw * 1.5)}Z" fill="${t.accent2}"/>`;
+    }
+    case 'seal': {
+      // D/D/D: an obsidian plate in a double gold frame, gold clock ticks on the top edge and a violet gem at its foot.
+      const tk = [0.3, 0.4, 0.5, 0.6, 0.7].map((f) => `M${n2(x + fw * f)} ${n2(y + sw * 1.8)}v${n2(sw * (f === 0.5 ? 2.4 : 1.4))}`).join('');
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${mix(t.bg, t.raised, 0.6)}" stroke="${t.accent}" stroke-width="${sw}"/><rect x="${n2(x + sw * 1.8)}" y="${n2(y + sw * 1.8)}" width="${n2(fw - sw * 3.6)}" height="${n2(fh - sw * 3.6)}" rx="1" fill="none" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="${n2(sw * 0.5)}"/><path d="${tk}" stroke="${t.accent}" stroke-width="${n2(sw * 0.6)}"/><path d="M${cx} ${n2(y + fh - sw * 3.6)}l${n2(sw * 1.4)} ${n2(sw * 1.4)}l${n2(-sw * 1.4)} ${n2(sw * 1.4)}l${n2(-sw * 1.4)} ${n2(-sw * 1.4)}Z" fill="${t.accent2}"/>`;
+    }
+    case 'system': {
+      // Solo Leveling: a System window: black glass, a cyan hairline and corner brackets.
+      const b = Math.min(fw, fh) * 0.28;
+      const br = (bx, by, dx, dy) => `M${n2(bx)} ${n2(by + dy * b)}V${n2(by)}H${n2(bx + dx * b)}`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" fill="${mix(t.bg, t.accent, 0.12)}" stroke="${t.accent}" stroke-opacity="0.6" stroke-width="${n2(sw * 0.6)}"/><path d="${br(x, y, 1, 1)}${br(x + fw, y, -1, 1)}${br(x, y + fh, 1, -1)}${br(x + fw, y + fh, -1, -1)}" fill="none" stroke="${mix(t.accent, '#ffffff', 0.5)}" stroke-width="${n2(sw * 1.3)}"/>`;
+    }
+    case 'starwing': {
+      // Stardust Dragon: a night-glass plate in a silver rim, a stardust comet streak and the Crimson Dragon's red spark.
+      const c = Math.min(fw, fh) * 0.2;
+      return `<defs><linearGradient id="sw" x1="0" y1="1" x2="1" y2="0"><stop offset="0.2" stop-color="${t.accent}" stop-opacity="0"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.75"/></linearGradient></defs><path d="M${x} ${y}H${n2(x + fw - c)}L${x + fw} ${n2(y + c)}V${y + fh}H${n2(x + c)}L${x} ${n2(y + fh - c)}Z" fill="${mix(t.bg, t.raised, 0.6)}" stroke="${mix(t.text, t.accent, 0.35)}" stroke-width="${sw}" stroke-linejoin="miter"/><path d="M${n2(x + fw * 0.08)} ${n2(y + fh * 0.92)}L${n2(x + fw * 0.86)} ${n2(y + fh * 0.16)}" stroke="url(#sw)" stroke-width="${n2(sw * 1.1)}" stroke-linecap="round"/><circle cx="${n2(x + fw - c * 0.55)}" cy="${n2(y + fh - c * 0.55)}" r="${n2(sw * 0.9)}" fill="${t.accent2}"/>`;
+    }
+    case 'armour': {
+      // Utopia: a white armour plate edged in gold with a V-crest notch on top and a red Number stripe.
+      const v = Math.min(fw, fh) * 0.16;
+      return `<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.28)}"/><stop offset="1" stop-color="${t.raised}"/></linearGradient></defs><path d="M${x} ${y}H${n2(cx - v)}L${cx} ${n2(y + v)}L${n2(cx + v)} ${y}H${x + fw}V${n2(y + fh - v)}L${n2(x + fw - v)} ${y + fh}H${n2(x + v)}L${x} ${n2(y + fh - v)}Z" fill="url(#ar)" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="miter"/><path d="M${n2(x + sw * 1.8)} ${n2(y + fh - v * 1.25)}H${n2(x + fw * 0.34)}" stroke="${t.accent2}" stroke-width="${n2(sw * 1.1)}"/>`;
+    }
+    case 'gemcut': {
+      // Crystal Beast: a brilliant-cut octagonal gem in a gold setting with facet lines.
+      const c = Math.min(fw, fh) * 0.26;
+      const ix = fw * 0.22;
+      const iy = fh * 0.22;
+      return `<defs><linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.accent, 0.4)}"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.12)}"/></linearGradient></defs><path d="M${n2(x + c)} ${y}H${n2(x + fw - c)}L${x + fw} ${n2(y + c)}V${n2(y + fh - c)}L${n2(x + fw - c)} ${y + fh}H${n2(x + c)}L${x} ${n2(y + fh - c)}V${n2(y + c)}Z" fill="url(#gc)" stroke="${t.accent2}" stroke-width="${sw}"/><path d="M${n2(x + ix)} ${n2(y + iy)}H${n2(x + fw - ix)}V${n2(y + fh - iy)}H${n2(x + ix)}ZM${n2(x + c)} ${y}L${n2(x + ix)} ${n2(y + iy)}M${n2(x + fw - c)} ${y}L${n2(x + fw - ix)} ${n2(y + iy)}M${n2(x + c)} ${y + fh}L${n2(x + ix)} ${n2(y + fh - iy)}M${n2(x + fw - c)} ${y + fh}L${n2(x + fw - ix)} ${n2(y + fh - iy)}" fill="none" stroke="${t.text}" stroke-opacity="0.18" stroke-width="${n2(sw * 0.45)}"/>`;
+    }
+    case 'lcd': {
+      // Game Boy: an LCD window, ink outline with stepped corners and a thin dark rule inside.
+      const s = n2(Math.max(1, sw * 0.9));
+      const step = (a, b, w, h, c) => `M${n2(a + c)} ${n2(b)}H${n2(a + w - c)}V${n2(b + c)}H${n2(a + w)}V${n2(b + h - c)}H${n2(a + w - c)}V${n2(b + h)}H${n2(a + c)}V${n2(b + h - c)}H${n2(a)}V${n2(b + c)}H${n2(a + c)}Z`;
+      return `<g shape-rendering="crispEdges"><path d="${step(x, y, fw, fh, s)}" fill="${t.text}"/><path d="${step(x + 2 * s, y + 2 * s, fw - 4 * s, fh - 4 * s, s)}" fill="${t.surface}"/><path d="${step(x + 3 * s, y + 3 * s, fw - 6 * s, fh - 6 * s, 0)}" fill="none" stroke="${t.muted}" stroke-width="${n2(s * 0.6)}"/></g>`;
+    }
+    case 'plaque': {
+      // Power of Chaos: a carved sandstone rim with a bevel, dark umber face inside.
+      const sand = mix(t.muted, t.warning, 0.35);
+      const b = sw * 1.8;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${n2(Math.min(r, 4))}" fill="${sand}" stroke="${mix(sand, t.bg, 0.6)}" stroke-width="${n2(sw * 0.6)}"/><path d="M${n2(x + 1)} ${n2(y + fh - 1)}V${n2(y + 1)}H${n2(x + fw - 1)}" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="${n2(sw * 0.6)}"/><rect x="${n2(x + b)}" y="${n2(y + b)}" width="${n2(fw - 2 * b)}" height="${n2(fh - 2 * b)}" rx="2" fill="${mix(t.surface, t.border, 0.2)}"/>`;
+    }
+    case 'gloss': {
+      // Tag Force: a black gloss capsule, silver hairline, the dorm stripe at the foot.
+      const k = fh * 0.1;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${n2(Math.min(r, fh / 4))}" fill="${t.raised}" stroke="${mix(t.text, t.muted, 0.4)}" stroke-width="${n2(sw * 0.7)}"/><path d="M${n2(x + sw)} ${n2(y + fh * 0.48)}V${n2(y + sw * 2)}H${n2(x + fw - sw)}V${n2(y + fh * 0.48)}Z" fill="#ffffff" fill-opacity="0.12"/><rect x="${n2(x + fw * 0.2)}" y="${n2(y + fh - k * 1.6)}" width="${n2(fw * 0.2)}" height="${n2(k * 0.6)}" fill="${t.self}"/><rect x="${n2(x + fw * 0.4)}" y="${n2(y + fh - k * 1.6)}" width="${n2(fw * 0.2)}" height="${n2(k * 0.6)}" fill="${t.warning}"/><rect x="${n2(x + fw * 0.6)}" y="${n2(y + fh - k * 1.6)}" width="${n2(fw * 0.2)}" height="${n2(k * 0.6)}" fill="${t.opp}"/>`;
+    }
+    case 'touch': {
+      // World Championship: a DS touch button, rounded, light inner outline, hard pixel shadow.
+      const o = n2(sw * 1.2);
+      return `<rect x="${n2(x + o)}" y="${n2(y + o)}" width="${n2(fw - o)}" height="${n2(fh - o)}" rx="${n2(Math.min(r, 6))}" fill="#000000" fill-opacity="0.5"/><rect x="${x}" y="${y}" width="${n2(fw - o)}" height="${n2(fh - o)}" rx="${n2(Math.min(r, 6))}" fill="${mix(t.opp, t.bg, 0.35)}" stroke="${mix(t.bg, '#000000', 0.35)}" stroke-width="${n2(sw * 0.6)}"/><rect x="${n2(x + sw)}" y="${n2(y + sw)}" width="${n2(fw - o - 2 * sw)}" height="${n2(fh - o - 2 * sw)}" rx="${n2(Math.max(Math.min(r, 6) - sw, 1))}" fill="none" stroke="${mix(t.text, t.accent, 0.25)}" stroke-opacity="0.85" stroke-width="${n2(sw * 0.7)}"/>`;
+    }
+    case 'sandstone': {
+      // Forbidden Memories: a black plate in a carved sandstone band with gold corner studs.
+      const b = n2(Math.max(1.5, sw * 1.6));
+      const stud = (a, c) => `<rect x="${n2(a)}" y="${n2(c)}" width="${b}" height="${b}" fill="${t.accent}"/>`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" fill="${mix(t.border, t.bg, 0.35)}"/><rect x="${n2(x + b)}" y="${n2(y + b)}" width="${n2(fw - 2 * b)}" height="${n2(fh - 2 * b)}" fill="${mix(t.bg, t.surface, 0.5)}" stroke="${t.accent}" stroke-width="${n2(sw * 0.4)}"/>${stud(x, y)}${stud(x + fw - b, y)}${stud(x, y + fh - b)}${stud(x + fw - b, y + fh - b)}`;
+    }
+    case 'filigree': {
+      // Duelists of the Roses: crimson lacquer in a gold double rule with gold corner studs.
+      const d = n2(sw * 1.8);
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${n2(Math.min(r, 3))}" fill="${mix(t.opp, t.surface, 0.55)}" stroke="${t.accent}" stroke-width="${sw}"/><rect x="${n2(x + d)}" y="${n2(y + d)}" width="${n2(fw - 2 * d)}" height="${n2(fh - 2 * d)}" fill="none" stroke="${t.accent}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.5)}"/>${[[x, y], [x + fw, y], [x, y + fh], [x + fw, y + fh]].map(([a, b]) => `<circle cx="${n2(a)}" cy="${n2(b)}" r="${n2(sw * 1.3)}" fill="${mix(t.accent, '#ffffff', 0.4)}"/>`).join('')}`;
+    }
+    case 'gbakey': {
+      // Eternal Duelist Soul: a navy key with a hard pixel bevel and an ink outline.
+      const b = n2(Math.max(1, sw));
+      return `<g shape-rendering="crispEdges"><rect x="${x}" y="${y}" width="${fw}" height="${fh}" fill="${mix(t.bg, '#000000', 0.5)}"/><rect x="${n2(x + b)}" y="${n2(y + b)}" width="${n2(fw - 2 * b)}" height="${n2(fh - 2 * b)}" fill="${mix(t.surface, t.bg, 0.6)}"/><rect x="${n2(x + b)}" y="${n2(y + b)}" width="${n2(fw - 3 * b)}" height="${n2(fh - 3 * b)}" fill="${mix(t.border, '#ffffff', 0.35)}"/><rect x="${n2(x + 2 * b)}" y="${n2(y + 2 * b)}" width="${n2(fw - 4 * b)}" height="${n2(fh - 4 * b)}" fill="${t.raised}"/></g>`;
+    }
+    case 'cogplate': {
+      // Ancient Gear: a riveted bronze plate with a brass rim, a verdigris inner seam and a rivet in each corner.
+      const rv = n2(sw * 0.75);
+      const ins = sw * 2.1;
+      const rivet = (px, py) => `<circle cx="${n2(px)}" cy="${n2(py)}" r="${rv}" fill="${mix(t.accent, '#ffffff', 0.35)}" stroke="${mix(t.accent, t.bg, 0.55)}" stroke-width="${n2(sw * 0.25)}"/>`;
+      return `<defs><linearGradient id="cp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.accent, 0.3)}"/><stop offset="0.6" stop-color="${mix(t.raised, t.accent, 0.12)}"/><stop offset="1" stop-color="${t.raised}"/></linearGradient></defs><rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="url(#cp)" stroke="${t.accent}" stroke-width="${sw}"/><rect x="${n2(x + sw * 1.2)}" y="${n2(y + sw * 1.2)}" width="${n2(fw - sw * 2.4)}" height="${n2(fh - sw * 2.4)}" rx="1" fill="none" stroke="${t.accent2}" stroke-opacity="0.55" stroke-width="${n2(sw * 0.45)}"/>${rivet(x + ins, y + ins)}${rivet(x + fw - ins, y + ins)}${rivet(x + ins, y + fh - ins)}${rivet(x + fw - ins, y + fh - ins)}`;
+    }
+    case 'gothic': {
+      // Destiny HERO: a black-steel plate with a pointed gothic gable, a steel rim and a blood-red inner line.
+      const pk = Math.min(fw, fh) * 0.14;
+      const shape = (o) => `M${n2(x + o)} ${n2(y + pk + o)}L${cx} ${n2(y + o * 0.6)}L${n2(x + fw - o)} ${n2(y + pk + o)}V${n2(y + fh - o)}H${n2(x + o)}Z`;
+      return `<defs><linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.accent2, 0.16)}"/><stop offset="1" stop-color="${mix(t.raised, t.bg, 0.4)}"/></linearGradient></defs><path d="${shape(0)}" fill="url(#gt)" stroke="${t.accent2}" stroke-width="${sw}" stroke-linejoin="miter"/><path d="${shape(sw * 1.7)}" fill="none" stroke="${t.accent}" stroke-width="${n2(sw * 0.55)}" stroke-linejoin="miter"/>`;
     }
     default:
       return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${r}" fill="${t.raised}" stroke="${t.border}" stroke-width="${sw}"/>`;

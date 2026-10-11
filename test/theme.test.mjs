@@ -14,7 +14,7 @@ import { QUALITY, fragmentSource, uniformName } from '../src/features/theme/shad
 import { PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
 import { launcherBottom } from '../src/lib/layout.js';
 import { sameShape } from '../src/lib/shape.js';
-import { inkCss, inkFor } from '../src/features/theme/inkGuard.js';
+import { elementLayers, inkCss, inkFor, paintedColor, worstBackground } from '../src/features/theme/inkGuard.js';
 
 test('theme: off by default so updates change nothing', () => {
   assert.equal(DEFAULTS.themeEnabled, false);
@@ -263,7 +263,7 @@ test('css: text field edges reach 3:1 in every preset', () => {
 
 test('light themes: there are some, and they switch the page and panel to light controls', () => {
   const light = PRESETS.filter((p) => isLightTheme(p.tokens));
-  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'lightsworn', 'parchment', 'snow', 'starlight-light']);
+  assert.deepEqual(light.map((p) => p.id).sort(), ['duel-disk', 'duel-monsters-gb', 'lightsworn', 'parchment', 'snow', 'starlight-light']);
   light.forEach(({ tokens, radius }) => {
     assert.ok(varsCss({ tokens, radius, backdrop: 0.25 }).includes('--dbt-scheme: light'));
     assert.equal(panelVars(tokens).colorScheme, 'light');
@@ -296,6 +296,31 @@ test('ink guard: re-inks only unreadable text, preferring the theme colour', () 
   assert.equal(inkFor('rgb(1,2,3)', '#ffffff', '#000000'), null, 'only hex input');
   assert.ok(inkCss.includes('html body #content [data-dbte-ink="theme"][data-dbte-ink][data-dbte-ink]'));
   assert.ok(inkCss.includes('{ color: var(--dbt-text) !important; }'));
+});
+
+test('ink guard: reads what is painted under the text, layer by layer', () => {
+  const plate = { backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'linear-gradient(180deg, rgb(217, 236, 252), rgb(197, 230, 253))', tag: 'DIV' };
+  const page = { backgroundColor: 'rgb(10, 18, 32)', backgroundImage: 'none', tag: 'BODY' };
+  const clear = { backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'none', tag: 'SPAN' };
+  // A label beside a pale tile (a sibling layer) reads against the tile, not the dark page.
+  assert.equal(paintedColor([clear, plate, page]), '#d9ecfc');
+  assert.equal(paintedColor([clear, page]), '#0a1220');
+  // See-through layers blend down to the first opaque one.
+  assert.equal(paintedColor([{ backgroundColor: 'rgba(255, 255, 255, 0.5)', backgroundImage: 'none' }, page]), '#858990');
+  // Opacity thins the element's paint: a 35% black veil over white is grey.
+  assert.equal(paintedColor([{ backgroundColor: 'rgb(0, 0, 0)', backgroundImage: 'none', opacity: '0.35' }], '#ffffff'), '#a6a6a6');
+  // Decorative url() layers are skipped when a colour is painted too; image-only or <img> is unreadable.
+  assert.deepEqual(elementLayers({ backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'url("data:x"), linear-gradient(rgb(1, 2, 3), red)' }), [[1, 2, 3, 1]]);
+  assert.equal(elementLayers({ backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'url("a.png")' }), 'unknown');
+  assert.equal(paintedColor([clear, { tag: 'IMG', backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'none' }, page]), null);
+  // Gradients with commas inside their colours split at the top level only.
+  assert.deepEqual(elementLayers({ backgroundColor: 'rgb(9, 9, 9)', backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.5) 30%, rgb(0, 0, 0))' }), [[255, 255, 255, 0.5], [9, 9, 9, 1]]);
+  // Of several sample points the worst-reading one wins; unreadable samples are ignored.
+  assert.equal(worstBackground('#0a1220', ['#d9ecfc', '#0a1220', null]), '#0a1220');
+  assert.equal(worstBackground('#0a1220', [null]), null);
+  // Navy text on the pale plate stays; on the dark page it turns light.
+  assert.equal(inkFor('#0a1220', paintedColor([clear, plate, page]), '#eef6ff'), null);
+  assert.equal(inkFor('#0a1220', paintedColor([clear, page]), '#eef6ff'), 'theme');
 });
 
 test('skins: the pattern switch removes only the artwork, glows stay', () => {

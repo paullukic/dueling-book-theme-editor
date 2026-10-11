@@ -24,8 +24,8 @@ const FIELD = 'html body #content img.field_zones, html body #content img.field_
 // ---------- motifs (tileable SVG) ----------
 
 const motifs = {
-  grain: (t) =>
-    svg(160, 160, `<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 ${parseInt(t.text.slice(1, 3), 16) / 255} 0 0 0 0 ${parseInt(t.text.slice(3, 5), 16) / 255} 0 0 0 0 ${parseInt(t.text.slice(5, 7), 16) / 255} 0 0 0 0.07 0"/></filter><rect width="160" height="160" filter="url(#n)"/>`),
+  grain: (t, o = 0.07) =>
+    svg(160, 160, `<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 ${parseInt(t.text.slice(1, 3), 16) / 255} 0 0 0 0 ${parseInt(t.text.slice(3, 5), 16) / 255} 0 0 0 0 ${parseInt(t.text.slice(5, 7), 16) / 255} 0 0 0 ${o} 0"/></filter><rect width="160" height="160" filter="url(#n)"/>`),
   stars: (t, color = t.text, n = 26, size = 220) => {
     let s = '';
     for (let i = 0; i < n; i++) {
@@ -78,7 +78,17 @@ const motifs = {
     svg(40, 22, `<path d="M0 22a20 20 0 0 1 40 0M-20 11a20 20 0 0 1 40 0M20 11a20 20 0 0 1 40 0" fill="none" stroke="${t.accent}" stroke-opacity="0.12" stroke-width="1.2"/>`),
   petals: (t) =>
     svg(180, 180, `<g fill="${t.accent}"><path d="M30 40q10-14 20 0q-10 14-20 0z" fill-opacity="0.12" transform="rotate(25 40 40)"/><path d="M120 110q8-11 16 0q-8 11-16 0z" fill-opacity="0.09" transform="rotate(-30 128 110)"/><path d="M150 30q6-8 12 0q-6 8-12 0z" fill-opacity="0.08"/></g>`),
-  slashes: (t) => svg(80, 80, `<path d="M0 80L80 0" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="10"/>`),
+  // Cherry blossoms: five notched petals round a centre, and loose single petals,
+  // scattered at varied size and turn (fixed values, so every render matches).
+  blossoms: (t) => {
+    const petal = `M0 0C-7-4-8-15-3-19L0-16L3-19C8-15 7-4 0 0Z`;
+    const flower = (x, y, k, rot, o) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})" fill="${t.accent}" fill-opacity="${o}">${[0, 72, 144, 216, 288].map((a) => `<path d="${petal}" transform="rotate(${a}) translate(0 -2)"/>`).join('')}<circle r="2.4" fill="${t.accent2}" fill-opacity="${o * 1.4}"/></g>`;
+    const single = (x, y, k, rot, o) => `<path d="${petal}" transform="translate(${x} ${y}) rotate(${rot}) scale(${k})" fill="${t.accent}" fill-opacity="${o}"/>`;
+    return svg(420, 420, flower(70, 90, 1.1, 12, 0.1) + flower(300, 250, 0.75, 47, 0.08) + flower(160, 350, 0.55, -20, 0.07) +
+      single(240, 60, 0.9, 130, 0.09) + single(380, 140, 0.7, -60, 0.07) + single(40, 260, 0.6, 200, 0.08) + single(330, 380, 1, 75, 0.06) + single(190, 200, 0.5, 15, 0.07));
+  },
+  // Drawn across the tile corners too, so the stripes run on without seams.
+  slashes: (t) => svg(80, 80, `<path d="M-20 20L20 -20M0 80L80 0M60 100L100 60" stroke="${t.accent}" stroke-opacity="0.035" stroke-width="10"/>`),
   dots: (t, color = t.accent, o = 0.1) => svg(26, 26, `<circle cx="13" cy="13" r="1.6" fill="${color}" fill-opacity="${o}"/>`),
   diagonal: (t) => svg(12, 12, `<path d="M0 12L12 0" stroke="${t.text}" stroke-opacity="0.035"/>`),
   halftone: (t) => svg(8, 8, `<circle cx="4" cy="4" r="1.3" fill="${t.text}" fill-opacity="0.08"/>`),
@@ -124,6 +134,23 @@ const layer = (backgrounds) => {
     .filter(Boolean)
     .join('\n');
 };
+// A thin accent rule down the left of every menu tile at rest.
+const restRule = (color) => `
+html body #main_menu { --dbt-rest-cue: inset 2px 0 0 ${color}; }
+`;
+// Deck / side / extra bands in one hue (css.js mixes them into the surface).
+const bands = (band, extra = band) => `
+html body #deck_constructor, html body #siding { --dbt-band: ${band}; --dbt-band-extra: ${extra}; }
+`;
+// Clean themes draw their own pattern: DuelingBook's circuit board stays out from under it.
+// Light themes: no cover over the stage, so page, gutters and scene are one surface (no seam at the stage edge).
+const seamless = `
+html body #circuit_cover { background-color: transparent !important; }
+html body #circuit_board, html body #greenlines { opacity: 0 !important; }
+`;
+const quietBoard = `
+html body #circuit_board, html body #greenlines { opacity: 0 !important; }
+`;
 const tileHoverGlow = (color) => `${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${color}, 0 0 18px -6px ${color} !important; }`;
 const fieldGlow = (t, strength = 3) => `${FIELD} { filter: drop-shadow(0 0 ${strength}px ${alpha(t.self, 0.55)}) drop-shadow(0 0 ${strength}px ${alpha(t.opp, 0.45)}); }`;
 const dialogCorners = (color) => `${dialogSel('::before')}, ${dialogSel('::after')} {
@@ -136,11 +163,15 @@ ${dialogSel('::after')} { right: 8px; bottom: 8px; transform: rotate(180deg); }`
 // ---------- skins ----------
 
 const SKINS = {
-  obsidian: (t) => layer(`${url(motifs.diagonal(t))}, radial-gradient(ellipse at 70% 0%, ${alpha(t.accent, 0.08)}, transparent 60%)`) + tileHoverGlow(t.accent),
-  midnight: (t) => layer(`${url(motifs.stars(t, t.accent2))}, radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) + tileHoverGlow(t.accent),
+  obsidian: (t) => layer(`${url(motifs.diagonal(t))}, radial-gradient(ellipse at 70% 0%, ${alpha(t.accent, 0.08)}, transparent 60%)`) + tileHoverGlow(t.accent) + restRule(t.accent) + quietBoard,
+  midnight: (t) =>
+    layer(`${url(motifs.stars(t, t.accent2))}, radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.12)}, transparent 60%)`) +
+    tileHoverGlow(t.accent) +
+    bands(mix(t.border, t.text, 0.35), t.accent) +
+    quietBoard,
   crimson: (t) => layer(`${url(motifs.slashes(t))}, radial-gradient(ellipse at 0% 100%, ${alpha(t.accent, 0.14)}, transparent 55%)`) + tileHoverGlow(t.accent),
-  verdant: (t) => layer(`${url(motifs.dots(t))}, radial-gradient(ellipse at 100% 100%, ${alpha(t.accent2, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent),
-  sakura: (t) => layer(`${url(motifs.petals(t))}, radial-gradient(ellipse at 20% 10%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent),
+  verdant: (t) => layer(`${url(svg(24, 24, `<circle cx="12" cy="12" r="2.2" fill="${t.accent}" fill-opacity="0.06"/>`))}, radial-gradient(ellipse at 100% 100%, ${alpha(t.accent, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent) + quietBoard,
+  sakura: (t) => layer(`${url(motifs.blossoms(t))}, radial-gradient(ellipse at 20% 10%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent) + quietBoard,
   oled: () => '',
   spell: (t) => layer(`${url(motifs.arcane(t))} center / min(90vh, 900px) no-repeat, radial-gradient(circle at 50% 50%, ${alpha(t.accent, 0.1)}, transparent 60%)`) + tileHoverGlow(t.accent),
   trap: (t) => layer(`${url(motifs.chains(t))}, radial-gradient(ellipse at 50% 100%, ${alpha(t.accent, 0.12)}, transparent 60%)`) + tileHoverGlow(t.accent),
@@ -191,6 +222,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
   // Divine Beasts: Ra gold, Obelisk blue, Slifer red; glyph walls and a sunlit sky.
   // Light: aged paper grain with a warm vignette and inked corners on pop-ups.
   parchment: (t) =>
+    seamless +
     layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 50% 0%, ${alpha('#ffffff', 0.45)}, transparent 55%), radial-gradient(ellipse at 50% 40%, transparent 60%, ${alpha(t.border, 0.18)} 100%)`) +
     tileHoverGlow(t.accent) +
     dialogCorners(t.accent),
@@ -201,14 +233,20 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
     tileHoverGlow(t.accent) +
     fieldGlow(t, 2),
 
-  graphite: (t) => layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) + tileHoverGlow(t.accent),
+  // Graphite: honed stone. Visible grain, an amber rule on every tile, warm deck bands.
+  graphite: (t) =>
+    layer(`${url(motifs.grain(t, 0.1))}, radial-gradient(ellipse at 80% 0%, ${alpha(t.accent, 0.1)}, transparent 55%)`) +
+    tileHoverGlow(t.accent) +
+    restRule(t.accent) +
+    bands(t.accent, t.warning) +
+    quietBoard,
 
-  // Snow (light): frost. Fine ice crystals on the page, frosted-glass tiles and crystals in the pop-up corners.
+  // Snow (light): frost. Frosted-glass tiles and ice crystals in the pop-up corners; the scene holds the great crystal.
   snow: (t) => {
-    const frost = svg(560, 460, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="1.2" stroke-linecap="round">${crystal(90, 110, 18)}${crystal(400, 70, 9)}${crystal(300, 290, 13)}${crystal(500, 400, 7)}${crystal(150, 390, 6)}</g>`);
     const corner = svg(56, 56, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.4" stroke-width="1.6" stroke-linecap="round">${crystal(22, 22, 18)}</g>`);
     return (
-      layer(`${url(frost)}, linear-gradient(180deg, ${alpha('#ffffff', 0.65)}, transparent 45%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent2, 0.08)}, transparent 60%)`) +
+      layer(`linear-gradient(180deg, ${alpha('#ffffff', 0.65)}, transparent 45%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent2, 0.08)}, transparent 60%)`) +
+      seamless +
       `${TILE} { background-image: linear-gradient(180deg, ${alpha('#ffffff', 0.9)}, transparent 60%), radial-gradient(ellipse at 100% 0%, ${alpha(t.accent2, 0.1)}, transparent 55%) !important; }
 ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${alpha(t.accent, 0.55)}, inset 3px 0 0 ${t.accent}, 0 12px 24px -12px ${alpha(t.accent, 0.45)} !important; }
 ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.accent2, 0.06)}, transparent 35%) !important; }
@@ -363,6 +401,24 @@ ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 
     tileHoverGlow(t.accent) +
     fieldGlow(t, 3),
 
+  // Shaddoll: harlequin diamonds in the void and violet thread light from above; the scene draws the puppet.
+  shaddoll: (t) =>
+    layer(`${url(svg(64, 96, `<path d="M32 0L64 48L32 96L0 48Z" fill="none" stroke="${t.accent}" stroke-opacity="0.06"/><path d="M32 18L44 48L32 78L20 48Z" fill="${t.accent}" fill-opacity="0.025"/>`))}, radial-gradient(ellipse 40% 55% at 78% -5%, ${alpha(t.accent, 0.2)}, transparent 70%), radial-gradient(ellipse 60% 40% at 15% 110%, ${alpha(t.opp, 0.08)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+
+  // Madolche: warm candlelight on a chocolate night, a faint sprinkle print; the scene draws the chateau.
+  madolche: (t) =>
+    layer(`${url(svg(120, 120, `<g stroke-linecap="round" stroke-width="3"><path d="M20 24l6 4" stroke="${t.accent}" stroke-opacity="0.06"/><path d="M84 30l-5 6" stroke="${t.success}" stroke-opacity="0.05"/><path d="M52 82l7 1" stroke="${t.accent2}" stroke-opacity="0.06"/><path d="M98 96l3 6" stroke="${t.accent}" stroke-opacity="0.05"/></g>`))}, radial-gradient(ellipse 45% 50% at 78% 45%, ${alpha(t.accent2, 0.14)}, transparent 70%), radial-gradient(ellipse 60% 40% at 15% 105%, ${alpha(t.accent, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Nekroz: frost hairlines and glacier light; the scene draws the mirror hall.
+  nekroz: (t) =>
+    layer(`${url(svg(140, 140, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.06"><path d="M0 140L70 0M70 140L140 0M30 0L140 110"/></g>`))}, radial-gradient(ellipse 40% 60% at 80% 30%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 50% 40% at 70% 105%, ${alpha(t.accent2, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
   // Attack on Titan: coursed wall stone, steam heat behind the wall; the scene draws Wall Maria.
   'attack-on-titan': (t) =>
     layer(`${url(svg(120, 60, `<g fill="none" stroke="${t.text}" stroke-opacity="0.045" stroke-width="1.2"><path d="M0 0.6H120M0 30.6H120M40 0.6V30.6M100 0.6V30.6M10 30.6V60M70 30.6V60"/></g>`))}, radial-gradient(ellipse 60% 45% at 78% 40%, ${alpha(t.accent2, 0.16)}, transparent 70%), linear-gradient(180deg, ${alpha(t.muted, 0.06)}, transparent 45%), radial-gradient(ellipse at 10% 110%, ${alpha(t.accent, 0.1)}, transparent 55%)`) +
@@ -380,6 +436,42 @@ ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 
     layer(`${url(svg(180, 180, `<g fill="${t.text}" fill-opacity="0.05"><circle cx="30" cy="40" r="3"/><circle cx="38" cy="47" r="1.2"/><circle cx="140" cy="120" r="2.4"/><circle cx="131" cy="128" r="1"/><circle cx="96" cy="160" r="1.6"/></g>`))}, radial-gradient(ellipse 50% 50% at 78% 38%, ${alpha(t.accent, 0.18)}, transparent 70%), radial-gradient(ellipse at 0% 100%, ${alpha(t.opp, 0.1)}, transparent 50%), radial-gradient(ellipse at 100% 100%, ${alpha(t.accent2, 0.08)}, transparent 50%)`) +
     tileHoverGlow(t.accent) +
     fieldGlow(t, 3),
+  // Stardust Dragon: Satellite's night sky, a mint stardust glow behind the dragon, the Crimson Dragon's ember low.
+  stardust: (t) =>
+    layer(`${url(motifs.stars(t, t.accent, 22))}, radial-gradient(ellipse 50% 55% at 80% 34%, ${alpha(t.accent, 0.14)}, transparent 70%), radial-gradient(ellipse 50% 35% at 8% 105%, ${alpha(t.accent2, 0.08)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Utopia: Astral blue overhead, a golden dawn behind the knight; the scene draws Utopia and Heartland.
+  utopia: (t) =>
+    layer(`radial-gradient(ellipse 50% 60% at 78% 45%, ${alpha(t.accent, 0.16)}, transparent 70%), linear-gradient(180deg, ${alpha(t.opp, 0.06)}, transparent 45%), radial-gradient(ellipse 60% 35% at 15% 105%, ${alpha(t.accent2, 0.07)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Crystal Beast: faint brilliant-cut facets and a rainbow haze; the scene draws the ruins and the seven gems.
+  'crystal-beast': (t) =>
+    layer(`${url(svg(90, 90, `<path d="M45 8L72 26L72 64L45 82L18 64L18 26ZM45 8L45 82M18 26L72 64M72 26L18 64" fill="none" stroke="${t.text}" stroke-opacity="0.03"/>`))}, linear-gradient(160deg, transparent 30%, ${alpha(t.danger, 0.05)} 40%, ${alpha(t.warning, 0.05)} 46%, ${alpha(t.success, 0.05)} 52%, ${alpha(t.opp, 0.05)} 58%, ${alpha(t.accent, 0.05)} 64%, transparent 74%), radial-gradient(ellipse 50% 55% at 80% 40%, ${alpha(t.accent, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Blitzclique: dusk haze rising under the sky hideout, a faint tesla glow at the tower and a a chain-link fence hairline; the scene draws Coulomb.
+  blitzclique: (t) =>
+    layer(`${url(svg(28, 28, `<path d="M0 14L14 0L28 14L14 28Z" fill="none" stroke="${t.muted}" stroke-opacity="0.035" stroke-width="1.2"/>`))}, radial-gradient(ellipse 22% 30% at 82% 18%, ${alpha(t.accent, 0.08)}, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 100%, ${alpha(t.accent2, 0.16)}, transparent 70%), linear-gradient(180deg, transparent 50%, ${alpha(t.accent2, 0.06)})`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Ancient Gear: lamp-lit bronze, a faint riveted seam grid, forge glow behind the Golem and verdigris in the shadows.
+  'ancient-gear': (t) =>
+    layer(`${url(svg(96, 96, `<path d="M0 0.5H96M0.5 0V96" stroke="${t.accent}" stroke-opacity="0.05"/><g fill="${t.accent}" fill-opacity="0.08"><circle cx="8" cy="4" r="1.6"/><circle cx="32" cy="4" r="1.6"/><circle cx="56" cy="4" r="1.6"/><circle cx="80" cy="4" r="1.6"/><circle cx="4" cy="20" r="1.6"/><circle cx="4" cy="44" r="1.6"/><circle cx="4" cy="68" r="1.6"/><circle cx="4" cy="92" r="1.6"/></g>`))}, radial-gradient(ellipse 45% 55% at 82% 45%, ${alpha(t.warning, 0.12)}, transparent 70%), radial-gradient(ellipse 60% 40% at 12% 105%, ${alpha(t.accent2, 0.1)}, transparent 70%), radial-gradient(ellipse 70% 50% at 20% -10%, ${alpha(t.accent, 0.08)}, transparent 65%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
+  // Destiny HERO: midnight noir, a blood-red moon glow behind the clock tower and cold steel mist below; the scene draws Dogma.
+  'destiny-hero': (t) =>
+    layer(`${url(svg(40, 40, `<path d="M0 40L40 0" stroke="${t.accent2}" stroke-opacity="0.03"/>`))}, radial-gradient(ellipse 40% 50% at 82% 22%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 60% 35% at 50% 108%, ${alpha(t.accent2, 0.08)}, transparent 70%), linear-gradient(180deg, ${alpha(t.accent2, 0.04)}, transparent 40%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+
   // One Piece: dusk on the Grand Line, a faint sea-chart grid; the scene draws the ship and sea.
   'one-piece': (t) =>
     layer(`${url(svg(240, 240, `<g fill="none" stroke="${t.text}" stroke-opacity="0.045"><path d="M0 120H240M120 0V240"/></g><path d="M30 200Q90 150 130 170T220 60" fill="none" stroke="${t.accent}" stroke-opacity="0.09" stroke-width="1.4" stroke-dasharray="5 6"/><path d="M214 54l10 10M224 54l-10 10" stroke="${t.accent2}" stroke-opacity="0.08" stroke-width="2"/>`))}, radial-gradient(ellipse 60% 40% at 78% 62%, ${alpha(t.accent, 0.16)}, transparent 70%), linear-gradient(180deg, transparent 55%, ${alpha(t.opp, 0.08)})`) +
@@ -406,15 +498,78 @@ ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 
 
   // Fullmetal Alchemist: a faint chalk transmutation circle (hexagram and square), the Gate's pale glow and alchemy blue; the scene draws the Gate of Truth.
   'fullmetal-alchemist': (t) =>
-    layer(`${url(svg(600, 600, `<g fill="none" stroke="${t.text}" stroke-opacity="0.12"><circle cx="300" cy="300" r="290" stroke-width="2"/><circle cx="300" cy="300" r="250"/><circle cx="300" cy="300" r="90"/><path d="M300 60L508 420H92ZM300 540L92 180H508ZM172 172H428V428H172Z" stroke-width="1.5"/></g>`))} right -8% bottom -14% / min(80vh, 760px) no-repeat, radial-gradient(ellipse 40% 55% at 80% 42%, ${alpha(t.text, 0.08)}, transparent 70%), radial-gradient(ellipse 50% 40% at 78% 90%, ${alpha(t.accent2, 0.12)}, transparent 70%), radial-gradient(ellipse 60% 40% at 0% 100%, ${alpha(t.accent, 0.1)}, transparent 70%)`) +
+    layer(`${url(svg(600, 600, `<g fill="none" stroke="${t.text}" stroke-opacity="0.06"><circle cx="300" cy="300" r="290" stroke-width="2"/><circle cx="300" cy="300" r="250"/><circle cx="300" cy="300" r="90"/><path d="M300 60L508 420H92ZM300 540L92 180H508ZM172 172H428V428H172Z" stroke-width="1.5"/></g>`))} right -22% bottom -18% / min(80vh, 760px) no-repeat, radial-gradient(ellipse 40% 55% at 80% 42%, ${alpha(t.text, 0.08)}, transparent 70%), radial-gradient(ellipse 50% 40% at 78% 90%, ${alpha(t.accent2, 0.12)}, transparent 70%), radial-gradient(ellipse 60% 40% at 0% 100%, ${alpha(t.accent, 0.1)}, transparent 70%)`) +
     tileHoverGlow(t.accent2) +
     fieldGlow(t, 2),
 
   // Solo Leveling: System scanlines, the Gate's blue glare and shadow violet below; the scene draws the Gate and the shadow army.
+  // Legacy of the Duelist: indigo menu backdrop, diagonal light streaks, a faint navy grid.
+  'legacy-of-the-duelist': (t) =>
+    layer(`${url(svg(28, 28, `<path d="M0 .5H28M.5 0V28" stroke="${t.accent}" stroke-opacity="0.045"/>`))}, linear-gradient(118deg, transparent 30%, ${alpha(t.accent, 0.08)} 34%, transparent 38%, transparent 60%, ${alpha(t.accent2, 0.05)} 62%, transparent 64%), radial-gradient(ellipse 60% 55% at 72% 35%, ${alpha(mix(t.bg, t.accent, 0.5), 0.3)}, transparent 70%), radial-gradient(ellipse 65% 60% at 10% 0%, ${alpha(mix(t.self, t.opp, 0.5), 0.22)}, transparent 70%), radial-gradient(ellipse 70% 50% at 30% 100%, ${alpha(mix(t.self, t.opp, 0.4), 0.16)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+  // Duel Links: electric-azure circuit board with node dots.
+  'duel-links': (t) =>
+    layer(`${url(svg(120, 120, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.09" stroke-width="1.2"><path d="M0 30H40L52 42H120M20 120V80L34 66H70M90 0V24L100 34V70L120 90"/></g><g fill="${t.link}" fill-opacity="0.16"><circle cx="40" cy="30" r="2.2"/><circle cx="70" cy="66" r="2.2"/><circle cx="100" cy="70" r="2.2"/></g>`))}, radial-gradient(ellipse 70% 60% at 50% 110%, ${alpha(t.accent, 0.3)}, transparent 70%), radial-gradient(ellipse 50% 40% at 85% 10%, ${alpha(t.link, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent2) +
+    fieldGlow(t, 3),
+  // Master Duel: violet space under horizontal scanlines, one slash of light.
+  'master-duel': (t) =>
+    layer(`${url(svg(4, 4, `<path d="M0 .5H4" stroke="${t.text}" stroke-opacity="0.03"/>`))}, linear-gradient(152deg, transparent 52%, ${alpha(t.accent2, 0.1)} 52.2%, ${alpha(t.accent2, 0.03)} 64%, transparent 64.2%), radial-gradient(ellipse 60% 60% at 82% 40%, ${alpha(t.accent2, 0.2)}, transparent 70%), radial-gradient(ellipse 50% 40% at 10% 100%, ${alpha(t.self, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
   'solo-leveling': (t) =>
     layer(`${url(svg(6, 6, `<path d="M0 .5H6" stroke="${t.accent}" stroke-opacity="0.028"/>`))}, radial-gradient(ellipse 45% 50% at 80% 20%, ${alpha(t.accent, 0.18)}, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 105%, ${alpha(t.accent2, 0.16)}, transparent 70%)`) +
     tileHoverGlow(t.accent) +
     fieldGlow(t, 3),
+  // Burning Abyss: drifting ash, sulphur light rising from the pit, ember heat low; the scene draws the circles of the Inferno.
+  'burning-abyss': (t) =>
+    layer(`${url(svg(160, 160, `<g fill="${t.muted}" fill-opacity="0.07"><circle cx="24" cy="30" r="1.6"/><circle cx="96" cy="70" r="1.1"/><circle cx="140" cy="128" r="1.8"/><circle cx="58" cy="122" r="1"/></g>`))}, radial-gradient(ellipse 45% 50% at 78% 70%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 70% 35% at 60% 110%, ${alpha(t.accent2, 0.14)}, transparent 70%), radial-gradient(ellipse at 0% 0%, ${alpha(t.muted, 0.06)}, transparent 50%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 3),
+
+  // Yubel: a faint thorn trellis, rose light behind the wings and a teal chill below; the scene draws Yubel.
+  yubel: (t) =>
+    layer(`${url(svg(120, 120, `<path d="M0 60Q30 40 60 60T120 60M30 49l-4-7M90 71l4 7" fill="none" stroke="${t.accent}" stroke-opacity="0.06" stroke-width="1.2"/>`))}, radial-gradient(ellipse 45% 55% at 78% 38%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 50% 40% at 10% 105%, ${alpha(t.accent2, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent) +
+    fieldGlow(t, 2),
+
+  // D/D/D: obsidian with a gold hairline lattice, the king's gold glow and a cold dimensional violet below; the scene draws the throne.
+  ddd: (t) =>
+    layer(`${url(svg(90, 90, `<path d="M45 0L90 45L45 90L0 45Z" fill="none" stroke="${t.accent}" stroke-opacity="0.045"/>`))}, radial-gradient(ellipse 45% 55% at 78% 35%, ${alpha(t.accent, 0.15)}, transparent 70%), radial-gradient(ellipse 55% 40% at 85% 105%, ${alpha(t.accent2, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+  // Duel Monsters (Game Boy): the LCD's pixel grid and a faint darkening toward the bezel.
+  'duel-monsters-gb': (t) =>
+    layer(`${url(svg(4, 4, `<path d="M0 3.5H4M3.5 0V4" stroke="${t.text}" stroke-opacity="0.06"/>`))}, radial-gradient(ellipse 75% 75% at 50% 50%, transparent 60%, ${alpha(t.muted, 0.2)})`),
+  // Power of Chaos: coursed sandstone blocks and the warm lamplight over the duel board; the scene draws the board.
+  'power-of-chaos': (t) =>
+    layer(`${url(svg(150, 60, `<rect width="150" height="60" fill="${mix(t.muted, t.warning, 0.35)}" fill-opacity="0.1"/><path d="M0 1H150M0 31H150M75 1V31M1 31V60" stroke="#000000" stroke-opacity="0.32" stroke-width="2.5" fill="none"/><path d="M0 3H150M0 33H150M77 3V31M3 33V60" stroke="${mix(t.muted, t.warning, 0.35)}" stroke-opacity="0.09" stroke-width="1" fill="none"/>`))}, radial-gradient(ellipse 50% 55% at 80% 45%, ${alpha(t.warning, 0.14)}, transparent 70%), radial-gradient(ellipse 30% 60% at 0% 50%, ${alpha(t.warning, 0.1)}, transparent 70%), radial-gradient(ellipse 60% 40% at 10% 105%, ${alpha(t.accent, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.warning) +
+    fieldGlow(t, 2),
+  // Tag Force: the handheld's black gloss, a dusk glow over the bay; the scene draws Duel Academy's island.
+  'tag-force': (t) =>
+    layer(`linear-gradient(180deg, ${alpha('#ffffff', 0.04)}, transparent 35%), radial-gradient(ellipse 50% 45% at 78% 68%, ${alpha(t.accent, 0.14)}, transparent 70%), radial-gradient(ellipse 60% 40% at 50% -10%, ${alpha(t.accent2, 0.12)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+  // World Championship: the touch screen's grid paper, faint; the scene draws the dual screens.
+  'world-championship': (t) =>
+    layer(`${url(svg(96, 96, `<path d="M0 .5H96M.5 0V96M24 0V96M48 0V96M72 0V96M0 24H96M0 48H96M0 72H96" stroke="${t.accent}" stroke-opacity="0.05" fill="none"/><path d="M0 .5H96M.5 0V96" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="2" fill="none"/>`))}, radial-gradient(ellipse 45% 55% at 80% 45%, ${alpha(t.accent, 0.14)}, transparent 70%), radial-gradient(ellipse 60% 40% at 0% 100%, ${alpha(t.accent2, 0.1)}, transparent 70%)`) +
+    tileHoverGlow(t.accent) +
+    fieldGlow(t, 2),
+  // Forbidden Memories: the black void, a PS1 ordered dither and the gold board's glow from below right.
+  'forbidden-memories': (t) =>
+    layer(`${url(svg(8, 8, [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((b, k) => `<rect x="${(k % 4) * 2}" y="${Math.floor(k / 4) * 2}" width="2" height="2" fill="${t.accent}" fill-opacity="${Math.round(b * 0.25) / 100}"/>`).join('')))}, radial-gradient(ellipse 55% 45% at 76% 90%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 30% 25% at 76% 12%, ${alpha(t.accent, 0.08)}, transparent 70%)`) +
+    fieldGlow(t, 2),
+  // Duelists of the Roses: PS2 bloom, gold over the shield and a crimson glow from the board below.
+  'duelists-of-the-roses': (t) =>
+    layer(`radial-gradient(ellipse 40% 45% at 84% 30%, ${alpha(t.accent, 0.16)}, transparent 70%), radial-gradient(ellipse 60% 40% at 78% 105%, ${alpha(t.opp, 0.2)}, transparent 70%), radial-gradient(ellipse 50% 40% at 0% 0%, ${alpha(t.opp, 0.1)}, transparent 70%)`) +
+    fieldGlow(t, 2),
+  // Eternal Duelist Soul: the title screen's glowing green grid over deep navy.
+  'eternal-duelist-soul': (t) =>
+    layer(`${url(svg(50, 50, `<path d="M0 0.5H50M0.5 0V50" stroke="${t.success}" stroke-opacity="0.12"/>`))}, radial-gradient(ellipse 60% 55% at 72% 45%, ${alpha(t.success, 0.1)}, transparent 70%), radial-gradient(ellipse 50% 40% at 10% 100%, ${alpha(t.border, 0.12)}, transparent 70%)`) +
+    fieldGlow(t, 2),
 };
 
 // Starlight Rare foil, dark or light (`k` scales the sheen).
