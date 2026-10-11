@@ -1,0 +1,44 @@
+// Shared kit for theme UI chrome (chrome/<id>.js): DuelingBook selectors for
+// the surfaces a theme restyles, and small helpers. Every selector starts with
+// `html body` so chrome wins over the base area sheets (css.js) and skins.
+// Rules (tested): no layout changes on DuelingBook elements (no width,
+// height, padding, margin, top/left, font-size, line-height), never card faces,
+// colours from tokens only; our own ::before/::after may be positioned.
+
+export const sel = (list) => list.map((s) => `html body ${s}`).join(', ');
+
+const DIALOG_IDS = ['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'];
+
+export const SEL = {
+  // Main menu tiles (the label is a sibling span, positioned by DuelingBook).
+  tile: sel(['#main_menu .menu_btn .content']),
+  tileHover: sel(['#main_menu .menu_btn:hover .content']),
+  tileLabel: sel(['#main_menu .menu_btn span']),
+  // Buttons everywhere (div.button.proxy over native submits).
+  button: sel(['#content .button']),
+  buttonHover: sel(['#content .button:hover', '#content .button.button_selected']),
+  buttonDown: sel(['#content .button.button_down', '#content .button:active']),
+  // Pop-ups.
+  dialog: sel(DIALOG_IDS.map((d) => `#content ${d}`)),
+  dialogTitle: sel(DIALOG_IDS.map((d) => `#content ${d} .title_txt`)),
+  // Chat windows.
+  chat: sel(['#chats .chat .chat_background']),
+  chatTop: sel(['#chats .chat .chat_top_bg']),
+  // Duel screen.
+  life: sel(['#duel .lifepoints .life_border']),
+  lifeSelf: sel(['#duel #lifepoints1 .life_bar']),
+  lifeOpp: sel(['#duel #lifepoints2 .life_bar']),
+  phase: sel(['#duel .phase .background']),
+  // Panels in the duel room and deck constructor.
+  lobbyPanel: sel(['#duel_room .background', '#duel_room .users']),
+  deckPanel: sel(['#deck_constructor .deck_bg', '#deck_constructor #search']),
+  // Text fields.
+  field: sel(['#content input[type=text]', '#content input[type=password]', '#content .textinput', '#content textarea']),
+};
+
+// An SVG string as a CSS url().
+export const svgUrl = (svg) => `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+export const svg = (w, h, body) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${body}</svg>`;
+// #rrggbb + alpha 0-1 -> #rrggbbaa
+export const alpha = (hex, a) => `${hex}${Math.round(a * 255).toString(16).padStart(2, '0')}`;
+export const n1 = (v) => Math.round(v * 10) / 10;

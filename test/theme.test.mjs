@@ -8,6 +8,7 @@ import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme
 import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { skinBackdrop, skinCss } from '../src/features/theme/skins.js';
+import { CHROME_IDS, chromeCss } from '../src/features/theme/chrome.js';
 import { PARTICLES, SCENE_IDS, SHADERS, sceneMarkup } from '../src/features/theme/scenes.js';
 import { QUALITY, fragmentSource, uniformName } from '../src/features/theme/shader.js';
 import { PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
@@ -425,4 +426,20 @@ test('shaders: registered shaders are well-formed and sit behind the scene', () 
   assert.equal(DEFAULTS.themeQuality, 'low');
   assert.equal(withDefaults({ themeQuality: 'ultra' }).themeQuality, 'low');
   assert.equal(QUALITY.off, null);
+});
+
+test('chrome: theme UI chrome never changes layout or card faces, and follows the area switches', () => {
+  CHROME_IDS.forEach((id) => {
+    const t = PRESETS.find((p) => p.id === id).tokens;
+    const css = chromeCss(id, t);
+    assert.ok(css.length > 50, `${id} has chrome`);
+    assert.doesNotMatch(css, /NaN|undefined/, id);
+    // Our own pseudo-elements may be positioned; DuelingBook elements may not.
+    const own = css.replace(/[^{}]*::(before|after)[^{}]*\{[^}]*\}/g, '');
+    assert.doesNotMatch(own, /(?<![-\w])(width|height|padding|margin|font-size|line-height|left|top|right|bottom)\s*:/i, `${id} changes layout`);
+    assert.doesNotMatch(css, /\.cardfront|\.card\b/, `${id} touches card faces`);
+    const off = chromeCss(id, t, { menu: false, dialogs: false, duel: false, chat: false, lobby: false, deck: false });
+    assert.doesNotMatch(off, /#main_menu|#content #msg|#duel |#chats|#duel_room|#deck_constructor/, `${id} ignores area switches`);
+  });
+  assert.equal(chromeCss('obsidian', PRESETS[0].tokens), '');
 });

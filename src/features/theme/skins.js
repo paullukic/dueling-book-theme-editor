@@ -343,10 +343,15 @@ const AREA_OF = [
   ['menu', (sel) => sel.includes('#main_menu')],
   ['dialogs', (sel) => DIALOGS.some((d) => sel.includes(`#content ${d}`))],
   ['field', (sel) => sel.includes('img.field_')],
+  ['lobby', (sel) => sel.includes('#duel_room')],
+  ['deck', (sel) => sel.includes('#deck_constructor')],
+  ['duel', (sel) => sel.includes('#duel ') || sel.includes('#duel.') || sel.includes('#duel:')],
+  ['chat', (sel) => sel.includes('#chats')],
+  ['scrollbars', (sel) => sel.includes('scrollbar')],
 ];
 
 // Data URIs are percent-encoded, so every brace here is CSS structure.
-const keepAreas = (css, areas) =>
+export const keepAreas = (css, areas) =>
   css
     .split('}')
     .filter((rule) => {

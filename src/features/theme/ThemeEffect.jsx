@@ -6,6 +6,7 @@ import { AREA_CSS, backdropCss, fontCss, varsCss } from './css';
 import { ICON_STYLES, fieldCss, iconCss } from './art';
 import { LAYER_ID, MOTIF_ID, skinCss } from './skins';
 import { FX_ID, PARTICLES, SHADERS, sceneMarkup } from './scenes';
+import { chromeCss } from './chrome';
 import { startFx } from './particles';
 import { clearInk, inkCss, inkPass } from './inkGuard';
 
@@ -96,6 +97,14 @@ const ThemeEffect = () => {
     [on, s.themeEffects, s.themeMotif, s.themePreset, artTokens, areas.menu, areas.dialogs, areas.field],
   );
   useStyle('dbte-theme-skin', skin);
+
+  // The theme's own UI chrome (buttons, tiles, pop-ups, panels in its style).
+  const chrome = useMemo(
+    () => (on && s.themeEffects ? chromeCss(s.themePreset, artTokens, areas) || null : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [on, s.themeEffects, s.themePreset, artTokens, JSON.stringify(areas)],
+  );
+  useStyle('dbte-theme-chrome', chrome);
   const hasSkin = !!skin;
   useEffect(() => {
     if (!hasSkin) return undefined;
