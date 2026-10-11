@@ -51,8 +51,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   return `
 html body { --dbtc-s: ${svgUrl(scan)}; --dbtc-notch: ${svgUrl(notch)}; --dbtc-plate: ${svgUrl(plate)}; --dbtc-lp: ${svgUrl(lp)}; }
 /* Menu tiles: the home menu's borderless rows on a fading glass band, a lime tick; hover underlines in lime. */
-${SEL.tile} { background: linear-gradient(90deg, ${lime} 0 3px, transparent 3px), var(--dbtc-s), linear-gradient(90deg, ${alpha(ink, 0.88)}, ${alpha(glass, 0.6)} 65%, ${alpha(glass, 0.12)}) !important; border-color: transparent !important; background-origin: border-box !important; border-radius: 0 !important; box-shadow: inset 0 -1px 0 ${alpha(gunHi, 0.4)} !important; }
-${SEL.tileHover} { background: linear-gradient(90deg, ${lime} 0 6px, transparent 6px), linear-gradient(90deg, ${alpha(lime, 0.22)}, transparent 70%), var(--dbtc-s), linear-gradient(90deg, ${alpha(ink, 0.9)}, ${alpha(glassHi, 0.7)} 65%, ${alpha(glass, 0.2)}) !important; border-color: transparent !important; background-origin: border-box !important; box-shadow: inset 0 -2px 0 ${lime}, 0 6px 18px -8px ${alpha(lime, 0.6)} !important; }
+${SEL.tile} { background: var(--dbtc-s), linear-gradient(90deg, ${alpha(ink, 0.88)}, ${alpha(glass, 0.6)} 65%, ${alpha(glass, 0.12)}) !important; border-color: transparent !important; background-origin: border-box !important; border-radius: 0 !important; box-shadow: inset 3px 0 0 ${lime}, inset 0 -1px 0 ${alpha(gunHi, 0.4)} !important; }
+${SEL.tileHover} { background: var(--dbtc-s), linear-gradient(90deg, ${alpha(lime, 0.16)}, transparent 70%), linear-gradient(90deg, ${alpha(ink, 0.9)}, ${alpha(glassHi, 0.7)} 65%, ${alpha(glass, 0.2)}) !important; border-color: transparent !important; background-origin: border-box !important; box-shadow: inset 6px 0 0 ${lime}, inset 0 -2px 0 ${lime}, 0 6px 18px -8px ${alpha(lime, 0.6)} !important; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 1px 2px ${ink} !important; }
 
 /* Buttons: black pills with a white rim; the chosen one fills lime with black text. */
@@ -78,8 +78,8 @@ ${SEL.chat} { background: ${slab()} !important; box-shadow: inset 0 0 0 1px ${gu
 
 /* Duel: LP plates with a coloured top stripe; phases as gold-ringed orbs. */
 ${SEL.life} { border-color: ${gunEdge} !important; border-radius: 0 !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); box-shadow: 0 0 0 1px ${ink}, 0 6px 14px -4px ${ink} !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${t.self} 0 4px, ${alpha('#ffffff', 0.1)} 4px, transparent 40%), linear-gradient(90deg, ${mix(t.self, ink, 0.82)}, ${mix(t.self, ink, 0.62)}) !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${t.opp} 0 4px, ${alpha('#ffffff', 0.1)} 4px, transparent 40%), linear-gradient(90deg, ${mix(t.opp, ink, 0.82)}, ${mix(t.opp, ink, 0.62)}) !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, ink, 0.6)}, ${mix(t.self, ink, 0.3)}) !important; box-shadow: inset 0 4px 0 ${t.self}, inset 0 5px 0 ${alpha('#ffffff', 0.25)} !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, ink, 0.6)}, ${mix(t.opp, ink, 0.3)}) !important; box-shadow: inset 0 4px 0 ${t.opp}, inset 0 5px 0 ${alpha('#ffffff', 0.25)} !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${ink} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -38px; top: calc(50% - 11px); width: 36px; height: 22px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 3px ${ink} !important; }
@@ -87,11 +87,11 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${mix(gold, '#ffffff', 0.
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, t.bg, 0.5)}, ${ink}) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 28%, ${alpha('#ffffff', 0.22)}, transparent 40%), radial-gradient(circle at 50% 50%, ${mix(t.self, t.bg, 0.55)}, ${mix(t.self, ink, 0.8)}) !important; border-radius: 50% !important; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 28%, ${alpha('#ffffff', 0.4)}, transparent 45%), radial-gradient(circle, ${mix(t.self, '#ffffff', 0.1)}, ${mix(t.self, ink, 0.4)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 28%, ${alpha('#ffffff', 0.4)}, transparent 45%), radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.1)}, ${mix(t.opp, ink, 0.4)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.8)}; }
-${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${ink} !important; }
-${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${t.opp} 0 3px, ${mix(t.opp, ink, 0.55)} 3px) !important; }
-${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${t.self} 0 3px, ${mix(t.self, ink, 0.55)} 3px) !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 35%, ${mix(t.opp, ink, 0.3)}, ${mix(t.opp, ink, 0.65)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 35%, ${mix(t.self, ink, 0.35)}, ${mix(t.self, ink, 0.7)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.8)}; }
+${sel(['#duel .phase span', '#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${ink} !important; }
+${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${t.self} 0 3px, ${mix(t.self, ink, 0.55)} 3px) !important; }
+${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${t.opp} 0 3px, ${mix(t.opp, ink, 0.55)} 3px) !important; }
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${ink} !important; }
 ${SEL.duelLog} { background: ${slab()} !important; border-color: ${gun} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { border-radius: 3px !important; box-shadow: 0 0 0 2px ${ink}, 0 0 0 4px ${gold}, 0 0 16px 2px ${alpha(ur, 0.65)} !important; }

@@ -7,7 +7,7 @@ import { H, n1, polar, W } from './kit.js';
 // and light shafts. Now and then the red half-tone Skill cut-in slashes across
 // the top-left sky, and » chevrons stream along the floor's edge.
 
-const gx = 1214;
+const gx = 1400;
 const gy = 470;
 const gr = 124;
 
@@ -84,14 +84,17 @@ const scene = (t) => {
 <radialGradient id="dbtefx-dl-portal" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.18" stop-color="${azureHi}" stop-opacity="0.85"/><stop offset="0.6" stop-color="${azure}" stop-opacity="0.6"/><stop offset="1" stop-color="${mix(t.bg, azure, 0.4)}" stop-opacity="0.9"/></radialGradient>
 <radialGradient id="dbtefx-dl-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0.55" stop-color="${azure}" stop-opacity="0.4"/><stop offset="1" stop-color="${azure}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-dl-fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, t.bg, 0.35)}"/></linearGradient>
+<linearGradient id="dbtefx-dl-fadeg" gradientUnits="userSpaceOnUse" x1="1290" y1="0" x2="1420" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/><stop offset="1" stop-color="#ffffff"/></linearGradient><mask id="dbtefx-dl-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="url(#dbtefx-dl-fadeg)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dl-sky)"/>
-<g style="animation: dbtefx-dl-skill 11s ease-out infinite;"><g transform="translate(850 78) rotate(-4 280 70) scale(0.9)"><path d="M24 20H560L536 104H0Z" fill="url(#dbtefx-dl-fade)"/><g fill="${mix(red, '#000000', 0.5)}" fill-opacity="0.5">${dots}</g><path d="M24 20H560L557 30H21Z" fill="${mix(red, '#ffffff', 0.35)}"/><path d="M0 104H536L533 114H-3Z" fill="${yellow}"/><path d="M-26 104L4 20H18L-12 104Z" fill="${yellow}"/><path d="M562 20H580L556 104H538Z" fill="${yellow}" fill-opacity="0.85"/></g></g>
+<g style="animation: dbtefx-dl-skill 11s ease-out infinite;"><g transform="translate(860 752) rotate(-3 280 70) scale(0.8)"><path d="M24 20H560L536 104H0Z" fill="url(#dbtefx-dl-fade)"/><g fill="${mix(red, '#000000', 0.5)}" fill-opacity="0.5">${dots}</g><path d="M24 20H560L557 30H21Z" fill="${mix(red, '#ffffff', 0.35)}"/><path d="M0 104H536L533 114H-3Z" fill="${yellow}"/><path d="M-26 104L4 20H18L-12 104Z" fill="${yellow}"/><path d="M562 20H580L556 104H538Z" fill="${yellow}" fill-opacity="0.85"/></g></g>
 <!--mid-->
+<g mask="url(#dbtefx-dl-mask)">
 <path d="M0 ${hz}H${W}V${H}H0Z" fill="url(#dbtefx-dl-floor)"/>
 <path d="${floor}" stroke="${azureHi}" stroke-opacity="0.32" stroke-width="1.4" fill="none"/>
 <path d="${lit}" fill="${azure}" fill-opacity="0.2" stroke="${azureHi}" stroke-opacity="0.85" stroke-width="2"/>
 ${shafts}
+<g transform="translate(${gx} 790) scale(0.5) translate(${-gx} -790)">
 <ellipse cx="${gx}" cy="${gy}" rx="${gr + 120}" ry="${gr + 120}" fill="url(#dbtefx-dl-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
 <path d="M${gx - 230} 790L${gx - 200} 760H${gx + 200}L${gx + 230} 790Z" fill="${stoneLo}" stroke="${stoneHi}" stroke-opacity="0.5"/>
 <path d="M${gx - 190} 760L${gx - 165} 730H${gx + 165}L${gx + 190} 760Z" fill="${stone}" stroke="${stoneHi}" stroke-opacity="0.5"/>
@@ -108,10 +111,12 @@ ${shafts}
 <circle cx="${gx}" cy="${gy}" r="${gr + 36}" fill="none" stroke="${azure}" stroke-opacity="0.8" stroke-width="2" stroke-dasharray="14 10" style="animation: dbtefx-spin 40s linear infinite reverse; transform-origin: ${gx}px ${gy}px;"/>
 ${pylon(gx - 186, 1)}${pylon(gx + 186, -1)}
 <g style="animation: dbtefx-bob 4s ease-in-out infinite;"><path d="M${gx - 34} ${gy - gr - 60}L${gx} ${gy - gr - 108}L${gx + 34} ${gy - gr - 60}L${gx} ${gy - gr - 12}Z" fill="${yellow}" stroke="${mix(yellow, '#000000', 0.45)}" stroke-width="2"/><path d="M${gx} ${gy - gr - 108}L${gx + 34} ${gy - gr - 60}L${gx} ${gy - gr - 60}Z" fill="#ffffff" fill-opacity="0.45"/><path d="M${gx - 34} ${gy - gr - 60}L${gx} ${gy - gr - 12}V${gy - gr - 60}Z" fill="${mix(yellow, '#000000', 0.35)}"/></g>
+</g>
+</g>
 <!--near-->
 ${[0, 0.4, 0.8, 1.2, 1.6, 2].map((d, i) => chev(1080 + i * 0, d)).join('')}
 <style>
-@keyframes dbtefx-dl-skill { 0% { transform: translateX(-90px); opacity: 0; } 5% { transform: translateX(0); opacity: 0.9; } 60% { transform: translateX(24px); opacity: 0.9; } 68% { transform: translateX(70px); opacity: 0; } 100% { transform: translateX(70px); opacity: 0; } }
+@keyframes dbtefx-dl-skill { 0% { transform: translateX(-90px); opacity: 0; } 5% { transform: translateX(0); opacity: 0.6; } 60% { transform: translateX(24px); opacity: 0.6; } 68% { transform: translateX(70px); opacity: 0; } 100% { transform: translateX(70px); opacity: 0; } }
 @keyframes dbtefx-dl-chev { 0% { transform: translateX(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateX(380px); opacity: 0; } }
 </style>`;
 };
@@ -119,7 +124,7 @@ ${[0, 0.4, 0.8, 1.2, 1.6, 2].map((d, i) => chev(1080 + i * 0, d)).join('')}
 export default scene;
 
 export const particles = [
-  { kind: 'mote', count: 36, colors: ['accent', 'link'], rise: true, column: true, columnX: 0.79 },
-  { kind: 'spark', count: 14, colors: ['accent2'], column: true, columnX: 0.79 },
+  { kind: 'mote', count: 36, colors: ['accent', 'link'], rise: true, column: true, columnX: 0.9 },
+  { kind: 'spark', count: 14, colors: ['accent2'], column: true, columnX: 0.9 },
   { kind: 'star', count: 40, colors: ['text'] },
 ];

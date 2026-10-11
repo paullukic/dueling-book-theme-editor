@@ -9,9 +9,9 @@ import { H, n1, polar, rng, W } from './kit.js';
 // disc: a dark blue orb in a gold ring. Behind, the home menu's slashed
 // glass panels and hairlines cross a nebula (WebGL) under fine scanlines.
 
-const cx = 1225;
+const cx = 1430;
 // Field plane (X across, Z away from the viewer) to screen.
-const proj = (X, Z) => [n1(cx + (X * 590) / (Z + 4)), n1(373 + 1947 / (Z + 4))];
+const proj = (X, Z) => [n1(cx + (X * 330) / (Z + 4)), n1(373 + 1947 / (Z + 4))];
 
 const scene = (t) => {
   const rand = rng(2022);
@@ -39,7 +39,7 @@ const scene = (t) => {
   const seams = [-0.52, 0.52].map((X) => `M${proj(X, 0).join(' ')}L${proj(X, 3.3).join(' ')}`).join('') + [1.05, 2.15].map((Z) => `M${proj(-1.6, Z).join(' ')}L${proj(1.6, Z).join(' ')}`).join('');
 
   // The Ultra Rare: dark card body, gold rim, violet art with a winged silhouette of light.
-  const cw = 168;
+  const cw = 118;
   const ch = n1(cw * 1.46);
   const fan = (dir) => {
     let s = '';
@@ -69,8 +69,8 @@ ${art}
   }
 
   // Turn disc: dark blue orb in a gold ring, ticks turning.
-  const ox = 1352;
-  const oy = 206;
+  const ox = 1425;
+  const oy = 150;
   let ticks = '';
   for (let i = 0; i < 24; i++) {
     const [x1, y1] = polar(0, 0, 50, i * 15);
@@ -90,7 +90,7 @@ ${art}
   }).join('');
 
   const [px, py] = proj(0, 1.6);
-  const cy = n1(py - 196);
+  const cy = n1(py - 170);
 
   return `<defs>
 <radialGradient id="dbtefx-md-sky" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="700"><stop offset="0" stop-color="${mix(t.bg, ur, 0.4)}" stop-opacity="0.6"/><stop offset="0.6" stop-color="${mix(t.bg, ur, 0.15)}" stop-opacity="0.25"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient>
@@ -105,18 +105,21 @@ ${art}
 <radialGradient id="dbtefx-md-orb" cx="0.4" cy="0.32" r="0.7"><stop offset="0" stop-color="${mix(blue, '#ffffff', 0.35)}"/><stop offset="0.45" stop-color="${mix(blue, t.bg, 0.45)}"/><stop offset="1" stop-color="${ink}"/></radialGradient>
 <linearGradient id="dbtefx-md-ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.55)}"/><stop offset="0.5" stop-color="${gold}"/><stop offset="1" stop-color="${mix(gold, ink, 0.5)}"/></linearGradient>
 <clipPath id="dbtefx-md-clip"><rect x="${-cw / 2}" y="${-ch / 2}" width="${cw}" height="${ch}" rx="5"/></clipPath>
+<linearGradient id="dbtefx-md-fadeg" gradientUnits="userSpaceOnUse" x1="1290" y1="0" x2="1420" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/><stop offset="1" stop-color="#ffffff"/></linearGradient><mask id="dbtefx-md-fade" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="url(#dbtefx-md-fadeg)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-md-sky)"/>
 ${slashes}
 ${hair}
 <!--mid-->
+<g mask="url(#dbtefx-md-fade)">
 <g transform="translate(${cx} ${cy})"><g style="animation: dbtefx-spin 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-md-burst)"/></g></g>
 ${tiles}
 <path d="${seams}" stroke="${mix(blue, '#ffffff', 0.3)}" stroke-opacity="0.35" stroke-width="1.6"/>
 <ellipse cx="${px}" cy="${py}" rx="120" ry="34" fill="url(#dbtefx-md-pool)" style="animation: dbtefx-pulse 3.5s ease-in-out infinite;"/>
 <path d="M${px - 40} ${py}L${px - 64} ${n1(cy + 60)}H${px + 64}L${px + 40} ${py}Z" fill="${mix(ur, '#ffffff', 0.4)}" fill-opacity="0.12"/>
 <g transform="translate(${cx} ${cy})"><g style="animation: dbtefx-bob 6s ease-in-out infinite;">${card}</g></g>
-<g transform="translate(${ox} ${oy})"><circle r="62" fill="${ink}" fill-opacity="0.6"/><circle r="58" fill="url(#dbtefx-md-ring)"/><circle r="48" fill="url(#dbtefx-md-orb)" stroke="${ink}" stroke-width="2"/><g style="animation: dbtefx-spin 30s linear infinite;"><path d="${ticks}" stroke="${ink}" stroke-opacity="0.55" stroke-width="2"/></g><path d="M-30 -22A38 38 0 0 1 22 -32" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/><path d="M-22 4H22M-14 16H14" stroke="#ffffff" stroke-opacity="0.75" stroke-width="5" stroke-linecap="round"/></g>
+<g transform="translate(${ox} ${oy}) scale(0.8)"><circle r="62" fill="${ink}" fill-opacity="0.6"/><circle r="58" fill="url(#dbtefx-md-ring)"/><circle r="48" fill="url(#dbtefx-md-orb)" stroke="${ink}" stroke-width="2"/><g style="animation: dbtefx-spin 30s linear infinite;"><path d="${ticks}" stroke="${ink}" stroke-opacity="0.55" stroke-width="2"/></g><path d="M-30 -22A38 38 0 0 1 22 -32" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/><path d="M-22 4H22M-14 16H14" stroke="#ffffff" stroke-opacity="0.75" stroke-width="5" stroke-linecap="round"/></g>
+</g>
 <!--near-->
 ${motes}
 <style>
@@ -128,7 +131,7 @@ export default scene;
 
 export const particles = [
   { kind: 'star', count: 90, colors: ['text', 'accent2'] },
-  { kind: 'mote', count: 26, colors: ['accent2', 'warning'], rise: true, column: true, columnX: 0.76 },
+  { kind: 'mote', count: 26, colors: ['accent2', 'warning'], rise: true, column: true, columnX: 0.9 },
   { kind: 'meteor', count: 1, colors: ['accent2'] },
 ];
 

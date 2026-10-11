@@ -9,7 +9,7 @@ import { H, n1, polar, rng, W } from './kit.js';
 // at its top. Soft diagonal beams and cyan lightning cross the sky like the
 // game's menu backdrops.
 
-const bx = 1218;
+const bx = 1430;
 const top = 610;
 const bot = 852;
 const halfTop = 118;
@@ -123,6 +123,7 @@ const scene = (t) => {
 <radialGradient id="dbtefx-ld-pool" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="0.3" stop-color="${cyanHi}" stop-opacity="0.5"/><stop offset="1" stop-color="${cyan}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ld-card" cx="0.5" cy="0.45" r="0.65"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="${cyanHi}" stop-opacity="0.75"/><stop offset="1" stop-color="${cyan}" stop-opacity="0.25"/></radialGradient>
 <radialGradient id="dbtefx-ld-burst" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${gold}" stop-opacity="0.55"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-ld-fadeg" gradientUnits="userSpaceOnUse" x1="1290" y1="0" x2="1420" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/><stop offset="1" stop-color="#ffffff"/></linearGradient><mask id="dbtefx-ld-fade" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="url(#dbtefx-ld-fadeg)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ld-violet)"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ld-sky)"/>
@@ -130,6 +131,7 @@ ${beams}
 <path d="${bolts}" fill="none" stroke="${cyan}" stroke-opacity="0.1" stroke-width="7" stroke-linejoin="bevel"/>
 <path d="${bolts}" fill="none" stroke="${cyanHi}" stroke-opacity="0.4" stroke-width="1.5" stroke-linejoin="bevel"/>
 <!--mid-->
+<g mask="url(#dbtefx-ld-fade)"><g transform="translate(${bx} 860) scale(0.62) translate(${-bx} -860)">
 <path d="${quad(-0.03, -0.04, 1.03, 1.04)}" fill="${cyan}" fill-opacity="0.1" stroke="${cyan}" stroke-opacity="0.3" stroke-width="14" stroke-linejoin="round"/>
 <path d="${quad(-0.03, -0.04, 1.03, 1.04)}" fill="url(#dbtefx-ld-mat)" stroke="${cyanHi}" stroke-opacity="0.9" stroke-width="2.4"/>
 <path d="${quad(-0.03, 0.47, 1.03, 0.53)}" fill="${cyanHi}" fill-opacity="0.12"/>
@@ -140,6 +142,7 @@ ${stack(-0.13, 0.22)}${stack(1.13, 0.22)}${stack(-0.15, 0.95)}${stack(1.15, 0.95
 <ellipse cx="${bx}" cy="560" rx="230" ry="150" fill="url(#dbtefx-ld-pool)" opacity="0.35"/>
 ${vortex}
 <g transform="translate(${bx} 206) scale(1.4)"><g style="animation: dbtefx-ld-hover 6s ease-in-out infinite;"><g style="animation: dbtefx-spin 40s linear infinite;"><path d="${rays}" fill="url(#dbtefx-ld-burst)"/></g><rect x="-42" y="-60" width="84" height="120" rx="5" fill="url(#dbtefx-ld-card)" stroke="#ffffff" stroke-width="2.2"/><rect x="-34" y="-50" width="68" height="60" rx="2" fill="none" stroke="${cyan}" stroke-opacity="0.75" stroke-width="1.4"/><path d="M-34 20H34M-34 31H22M-34 42H28" stroke="${cyan}" stroke-opacity="0.6" stroke-width="2"/></g></g>
+</g></g>
 <!--near-->
 ${motes}
 <style>
@@ -151,7 +154,7 @@ ${motes}
 export default scene;
 
 export const particles = [
-  { kind: 'spark', count: 30, colors: ['accent', 'accent2'], column: true, columnX: 0.75 },
+  { kind: 'spark', count: 30, colors: ['accent', 'accent2'], column: true, columnX: 0.9 },
   { kind: 'star', count: 60, colors: ['text'] },
   { kind: 'meteor', count: 1, colors: ['accent'] },
 ];

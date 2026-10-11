@@ -1,7 +1,8 @@
 // legacy-of-the-duelist: the HD-era menus of Legacy of the Duelist / Link
 // Evolution. Elongated-octagon capsules in a cyan double bevel over a navy
 // grid, gold text on the selected row, silver-to-cyan title bars with heavy
-// black lettering, a rainbow LP gauge with a red "LP" cap, silver Turn keys.
+// black lettering, an LP gauge that turns green, yellow then red as life runs
+// out, with a red "LP" cap, teal phase chips that light gold.
 // (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
@@ -32,8 +33,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Title bar: a long chamfered plate, chrome-silver fading into cyan, with a bright rim.
   const titleBar = svg(400, 60, `<defs><linearGradient id="p" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${cyanLo}"/><stop offset="0.16" stop-color="${mix(cyan, '#ffffff', 0.25)}"/><stop offset="0.5" stop-color="${mix(silver, '#ffffff', 0.55)}"/><stop offset="0.84" stop-color="${mix(cyan, '#ffffff', 0.25)}"/><stop offset="1" stop-color="${cyanLo}"/></linearGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><path d="M2 4H398L382 56H18Z" fill="${navyDeep}" stroke="${cyan}" stroke-width="2"/><path d="M14 9H386L373 51H27Z" fill="url(#p)"/><path d="M14 9H386L373 51H27Z" fill="url(#s)"/><path d="M27 51H373" stroke="${cyanHi}" stroke-width="1.4"/><path d="M0 30H10M390 30H400" stroke="${cyan}" stroke-width="2"/>`);
 
-  // Rainbow LP gauge (LotD's red-yellow-green bar) and its red "LP" cap.
-  const rainbow = `linear-gradient(90deg, ${t.danger}, ${t.warning} 25%, ${gold} 50%, ${t.success} 85%)`;
+  // LotD's red "LP" cap beside the gauge.
   const lpCap = svg(44, 30, `<path d="M4 1H40L43 15L40 29H4L1 15Z" fill="${mix(t.danger, ink, 0.25)}" stroke="${mix(t.danger, '#ffffff', 0.4)}" stroke-width="1.4"/><text x="22" y="21" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="15" fill="${gold}" stroke="${ink}" stroke-width="0.6">LP</text>`);
 
   // Gold "!" seal LotD hangs on unplayed story duels; rides the hovered row.
@@ -92,9 +92,9 @@ ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, 
 ${SEL.chat} { background: ${panelFill} !important; box-shadow: inset 0 0 0 1px ${cyan}, inset 0 0 0 3px ${alpha(navyDeep, 0.9)}, inset 0 0 0 4px ${alpha(cyan, 0.35)} !important; }
 ${sel(['#chats .chat .title_txt', '#chats .chat .chat_title'])} { color: ${t.text} !important; text-shadow: ${outline} !important; }
 
-/* Duel: rainbow LP gauge in a cyan-rimmed plate with a red LP cap; silver Turn-key phases. */
+/* Duel: LP gauge coloured by life left (--dbte-lp), cyan-rimmed plate, red LP cap; teal phase chips. */
 ${SEL.life} { border-color: ${cyan} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${alpha(navyDeep, 0.95)}, 0 0 0 4px ${alpha(cyan, 0.55)}, 0 4px 10px -3px ${ink} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; background: linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 42%, ${alpha(ink, 0.25)}), ${rainbow} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, ${t.success} clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 42%, ${alpha(ink, 0.25)}), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 45%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 75%, ${ink})) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${navyDeep}, ${ink}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -46px; top: calc(50% - 15px); width: 44px; height: 30px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${ink}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${gold} !important; text-shadow: ${outline}, 0 0 6px ${ink} !important; }
@@ -104,13 +104,13 @@ ${sel(['#duel .phase .background .background_inner'])} { background: linear-grad
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-g), linear-gradient(180deg, ${mix(navy, cyan, 0.3)}, ${navyDeep}) !important; border-radius: 24% !important; }
 ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${mix(gold, '#ffffff', 0.45)}, ${gold} 60%, ${mix(gold, t.warning, 0.6)}) !important; box-shadow: 0 0 0 2px ${ink}, 0 0 16px ${alpha(gold, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: ${outline} !important; }
-${sel(['#duel .phase.active span'])} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.6)} !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.6)} !important; }
 ${SEL.duelLog} { background: ${panelFill} !important; border-color: ${cyan} !important; box-shadow: inset 0 0 0 3px ${alpha(navyDeep, 0.9)}, inset 0 0 0 4px ${alpha(cyan, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${cyan}, 0 0 0 4px ${navyDeep}, 0 0 0 5px ${alpha(cyan, 0.45)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, #ffffff, ${silver}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(silver, '#ffffff', 0.5)}, ${mix(silver, t.muted, 0.4)}) !important; }
-${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, ink, 0.1)}, ${mix(t.opp, ink, 0.55)}) !important; }
-${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, ink, 0.1)}, ${mix(t.self, ink, 0.55)}) !important; }
+${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, ink, 0.1)}, ${mix(t.self, ink, 0.55)}) !important; }
+${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, ink, 0.1)}, ${mix(t.opp, ink, 0.55)}) !important; }
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.text} !important; text-shadow: ${outline} !important; }
 
 /* Duel room: panels framed in the cyan bevel; titles keep a navy plate so the rim never runs through them. */
