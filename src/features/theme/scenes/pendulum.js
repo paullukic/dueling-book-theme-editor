@@ -2,7 +2,7 @@ import { mix } from '../../../lib/color.js';
 import { anim, glow, H, n1, polar, runeRing, W } from './kit.js';
 
 // Pendulum: the ARC-V Pendulum Summon. Two Pendulum Scales stand as pillars of
-// light (scale 1 in your colour, scale 8 in the opponent colour); between them a portal turns in the sky and its
+// light (scale 1 in your colour, scale 12 in the opponent colour); between them a portal turns in the sky and its
 // pendulum swings slowly, drawing an arc of light.
 const SWING = 7; // seconds per full swing (there and back)
 
@@ -55,7 +55,7 @@ ${[0, 1, 2].map((i) => `<ellipse cx="${x}" cy="${ground}" rx="44" ry="10" fill="
 <g fill="url(#dbtefx-pe-cone)">${[1, 0.75, 0.5, 0.28].map((k) => `<path d="M${n1(hx - 50 * k)} ${hy}L${n1(hx - (hx - lx - 60) * k)} ${ground}H${n1(hx + (rx - 60 - hx) * k)}L${n1(hx + 50 * k)} ${hy}Z"/>`).join('')}</g>
 <!--mid-->
 ${pillar(lx, left, 1, left, 'l', 0)}
-${pillar(rx, right, 8, right, 'r', 0.7)}
+${pillar(rx, right, 12, right, 'r', 0.7)}
 <path d="M${polar(hx, hy, len, 68).join(' ')}A${len} ${len} 0 0 1 ${polar(hx, hy, len, 112).join(' ')}" fill="none" stroke="${t.text}" stroke-opacity="0.12" stroke-width="2" stroke-dasharray="2 10"/>
 <g transform="translate(${hx} ${hy})"><g style="animation: dbtefx-pe-swing ${SWING}s ease-in-out infinite;">
 <g fill="none" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-linecap="round"><g style="animation: dbtefx-pe-ta ${SWING}s linear infinite;">${trail(1)}</g><g style="animation: dbtefx-pe-tb ${SWING}s linear infinite;">${trail(-1)}</g></g>
