@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { retryStorage, updateSettings, useSettings, useStorageProblem } from '../lib/settings';
-import { CARD_TEXT_SIZES, DEFAULT_PSCT_COLORS } from '../lib/defaults';
 import { useLocal, useLocalProblem } from '../lib/localStore';
 import { useDuelState } from '../lib/bridge';
 import { requestDesktopPermission } from '../lib/notify';
-import { ColorRow, Disclosure, Group, SliderRow, ToggleRow } from './controls';
-import ThemeSection from './ThemeSection';
+import { Disclosure, Group, SliderRow, ToggleRow } from './controls';
+import ThemeTab from './ThemeTab';
 import AliasEditor from './AliasEditor';
 import ShortcutEditor from './ShortcutEditor';
 import DeckTools from '../features/deck';
-import BackgroundPicker from './BackgroundPicker';
 import { SupportNudge, SupportTab, WhatsNew } from './Support';
 import { CardsIcon, ChatIcon, CloseIcon, HeartIcon, PaletteIcon, SwordsIcon } from './icons';
 
@@ -22,96 +20,6 @@ const TABS = [
 ];
 
 const set = (key) => (value) => updateSettings({ [key]: value });
-
-const LookTab = () => {
-  const s = useSettings();
-  const setPsctColor = (k) => (v) => updateSettings({ psctColors: { ...s.psctColors, [k]: v } });
-  const setMenu = (k) => (v) => updateSettings({ menuColors: { ...s.menuColors, [k]: v } });
-  return (
-    <>
-      <ThemeSection />
-      <Group title="Cards">
-        <ToggleRow
-          label="Colour card text"
-          description="Colours each part of an effect: when it activates, its cost or target, what it does, and its limits."
-          checked={s.psctEnabled}
-          onChange={set('psctEnabled')}
-        >
-          <ColorRow label="Condition (before :)" value={s.psctColors.condition} onChange={setPsctColor('condition')} />
-          <ColorRow label="Cost or target (before ;)" value={s.psctColors.cost} onChange={setPsctColor('cost')} />
-          <ColorRow label="Effect" value={s.psctColors.effect} onChange={setPsctColor('effect')} />
-          <ColorRow label="Limits (once per turn…)" value={s.psctColors.restriction} onChange={setPsctColor('restriction')} />
-          <button type="button" className="btn btn-quiet" onClick={() => updateSettings({ psctColors: DEFAULT_PSCT_COLORS })}>
-            Reset colours
-          </button>
-        </ToggleRow>
-        <SliderRow
-          label="Card text size"
-          value={s.cardTextSize}
-          values={CARD_TEXT_SIZES}
-          format={(v) => (v === 0 ? 'Default' : `${v}px`)}
-          onChange={set('cardTextSize')}
-        />
-      </Group>
-      <Group title="Simple dark mode">
-        <ToggleRow
-          label="Dark mode"
-          description={
-            s.themeEnabled
-              ? 'The full theme already covers this. It applies again if you turn the theme off.'
-              : 'Darkens only the lobby, chat, search and deck panels. Admins stay green, followed players blue.'
-          }
-          checked={s.darkMode}
-          onChange={set('darkMode')}
-        />
-      </Group>
-      <Group title="Main menu">
-        <ToggleRow
-          label="Compact buttons"
-          description="Shorter main menu buttons so the whole menu fits on small screens."
-          checked={s.smallerMenu}
-          onChange={set('smallerMenu')}
-        />
-        <ToggleRow
-          label="Button colours"
-          description={
-            s.themeEnabled && s.themeAreas.menu
-              ? 'The full theme styles these buttons now. To use your own colours, turn off Main menu under What to restyle.'
-              : 'Pick the fill, border and glow of the main menu buttons.'
-          }
-          checked={s.menuColorsEnabled}
-          onChange={set('menuColorsEnabled')}
-        >
-          <ColorRow label="Fill" value={s.menuColors.bg} onChange={setMenu('bg')} />
-          <SliderRow label="Fill opacity" value={s.menuColors.bgAlpha} min={0} max={1} step={0.05} format={(v) => `${Math.round(v * 100)}%`} onChange={setMenu('bgAlpha')} />
-          <ColorRow label="Border" value={s.menuColors.border} onChange={setMenu('border')} />
-          <SliderRow label="Border opacity" value={s.menuColors.borderAlpha} min={0} max={1} step={0.05} format={(v) => `${Math.round(v * 100)}%`} onChange={setMenu('borderAlpha')} />
-          <ColorRow label="Edge glow" value={s.menuColors.edge} onChange={setMenu('edge')} />
-          <SliderRow label="Glow opacity" value={s.menuColors.edgeAlpha} min={0} max={1} step={0.05} format={(v) => `${Math.round(v * 100)}%`} onChange={setMenu('edgeAlpha')} />
-        </ToggleRow>
-      </Group>
-      <Group title="Background">
-        <ToggleRow
-          label="Your own background"
-          description="Replace the circuit-board background with any image. It is shrunk and stored on this computer."
-          checked={s.backgroundEnabled}
-          onChange={set('backgroundEnabled')}
-        >
-          <BackgroundPicker />
-          <SliderRow
-            label="Image strength"
-            value={s.backgroundOpacity}
-            min={0.1}
-            max={1}
-            step={0.05}
-            format={(v) => `${Math.round(v * 100)}%`}
-            onChange={set('backgroundOpacity')}
-          />
-        </ToggleRow>
-      </Group>
-    </>
-  );
-};
 
 const DuelTab = () => {
   const s = useSettings();
@@ -458,7 +366,7 @@ const Panel = ({ onClose, logoUrl }) => {
         <StorageProblem />
         <WhatsNew meta={meta} setMeta={setMeta} />
         {tab !== 'more' && <SupportNudge meta={meta} setMeta={setMeta} />}
-        {tab === 'look' && <LookTab />}
+        {tab === 'look' && <ThemeTab />}
         {tab === 'duel' && <DuelTab />}
         {tab === 'chat' && <ChatTab />}
         {tab === 'deck' && <DeckTools />}
