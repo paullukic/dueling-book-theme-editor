@@ -45,8 +45,8 @@ const scene = (t) => {
   // Water: a crescent slash of woodblock water, thin at both ends and full in
   // the middle, scalloped eddies on its inner edge, foam fingers curling
   // forward off its leading tip.
-  const A0 = 120;
-  const A1 = 380;
+  const A0 = 92;
+  const A1 = 336;
   const wave = `<path d="${band(A0, A1, 176, 158, 82, 0.5)}" fill="${waterDeep}" stroke="${ink}" stroke-width="3"/>
 <path d="${band(A0 + 8, A1 - 6, 181, 163, 56, 0.5)}" fill="${water}"/>
 <path d="${band(A0 + 30, A1 - 18, 193, 175, 14, 0.5)}" fill="${foam}"/>
@@ -85,18 +85,15 @@ const scene = (t) => {
   const raceme = (x, y, len, s, dur, delay) => {
     const r = rng(Math.round(x * 7));
     const bend = (r() - 0.5) * 14;
-    const n = 10;
     let f = '';
-    for (let i = 0; i < n; i++) {
-      const u = i / (n - 1);
+    for (let i = 0; i < 30; i++) {
+      const u = Math.pow(r(), 0.8);
       const cy = y + 6 + u * len;
-      const cx = x + Math.sin(u * Math.PI) * bend;
-      const w = (1 - u * 0.75) * 11 * s;
-      const fr = (1 - u * 0.55) * 6 * s;
-      const col = mix(mix(wisteria, t.bg, 0.4), mix(wisteria, '#ffffff', 0.45), u * 0.8 + r() * 0.15);
-      f += `<ellipse cx="${n1(cx - w)}" cy="${n1(cy)}" rx="${n1(fr)}" ry="${n1(fr * 0.62)}" transform="rotate(${n1(30 + r() * 20)} ${n1(cx - w)} ${n1(cy)})" fill="${col}"/><ellipse cx="${n1(cx + w)}" cy="${n1(cy + 4 * s)}" rx="${n1(fr)}" ry="${n1(fr * 0.62)}" transform="rotate(${n1(-30 - r() * 20)} ${n1(cx + w)} ${n1(cy + 4 * s)})" fill="${col}"/><circle cx="${n1(cx)}" cy="${n1(cy + 2 * s)}" r="${n1(fr * 0.8)}" fill="${mix(col, t.bg, 0.2)}"/>`;
+      const cx = x + Math.sin(u * Math.PI) * bend + (r() - 0.5) * 2 * (1 - u * 0.8) * 20 * s;
+      const fr = (2.2 + (1 - u) * 3.2 + r() * 1.5) * s;
+      f += `<ellipse cx="${n1(cx)}" cy="${n1(cy)}" rx="${n1(fr)}" ry="${n1(fr * 0.75)}" fill="${mix(mix(wisteria, t.bg, 0.45), mix(wisteria, '#ffffff', 0.5), u * 0.7 + r() * 0.3)}"/>`;
     }
-    return `<g style="transform-origin: ${n1(x)}px ${n1(y)}px; animation: dbtefx-reed ${dur}s ease-in-out ${n1(-delay)}s infinite;"><path d="M${n1(x)} ${n1(y - 20)}Q${n1(x + bend)} ${n1(y + len * 0.5)} ${n1(x)} ${n1(y + len)}" fill="none" stroke="${ink}" stroke-width="1.6"/>${f}</g>`;
+    return `<g style="transform-origin: ${n1(x)}px ${n1(y)}px; animation: dbtefx-reed ${dur}s ease-in-out ${n1(-delay)}s infinite;"><path d="M${n1(x - 21 * s)} ${y}C${n1(x - 21 * s)} ${n1(y + len * 0.5)} ${n1(x - 4)} ${n1(y + len * 0.9)} ${n1(x + bend * 0.3)} ${n1(y + len + 4)}C${n1(x + 4)} ${n1(y + len * 0.9)} ${n1(x + 21 * s)} ${n1(y + len * 0.5)} ${n1(x + 21 * s)} ${y}Z" fill="${mix(wisteria, t.bg, 0.55)}" fill-opacity="0.75"/><path d="M${n1(x)} ${n1(y - 20)}Q${n1(x + bend)} ${n1(y + len * 0.5)} ${n1(x)} ${n1(y + len)}" fill="none" stroke="${ink}" stroke-width="1.6"/>${f}</g>`;
   };
   let wisteriaL = '';
   let wisteriaR = '';
@@ -108,6 +105,17 @@ const scene = (t) => {
   });
   // The vine and leaves they hang from.
   const vine = `<path d="M100 30Q260 -6 420 40M1280 22Q1390 -10 1490 30" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>${[120, 180, 236, 300, 350, 400, 1300, 1350, 1410, 1460].map((x, i) => `<path d="M${x} ${20 + (i % 3) * 5}q14 -12 30 -4q-14 12 -30 4z" fill="${mix(t.success, t.bg, 0.55)}"/>`).join('')}`;
+
+  // A cedar forest along the foot, inked dark: depth under the mist.
+  let cedars = '';
+  const cr = rng(41);
+  for (let x = -20; x < 1630; x += 46 + cr() * 50) {
+    if (x > 470 && x < 980 && cr() < 0.7) continue;
+    const h = 90 + cr() * 100;
+    const w = 26 + cr() * 16;
+    const b = 905;
+    cedars += `M${n1(x)} ${n1(b - h)}L${n1(x + w * 0.55)} ${n1(b - h * 0.62)}L${n1(x + w * 0.3)} ${n1(b - h * 0.62)}L${n1(x + w)} ${n1(b - h * 0.25)}L${n1(x + w * 0.4)} ${n1(b - h * 0.25)}L${n1(x + w * 1.2)} ${b}H${n1(x - w * 1.2)}L${n1(x - w * 0.4)} ${n1(b - h * 0.25)}L${n1(x - w)} ${n1(b - h * 0.25)}L${n1(x - w * 0.3)} ${n1(b - h * 0.62)}L${n1(x - w * 0.55)} ${n1(b - h * 0.62)}Z`;
+  }
 
   // Mountain ridges in mist (the wisteria mountain of the Final Selection).
   const ridge = (y, amp, seed, color, o) => {
@@ -125,6 +133,7 @@ ${glow('dbtefx-ds-ember', flame, 0.5, 0.5, 0.5, 0.3)}
 <linearGradient id="dbtefx-ds-fire" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.55" stop-color="${flame}"/><stop offset="1" stop-color="${mix(flame, '#ffffff', 0.45)}"/></linearGradient>
 <linearGradient id="dbtefx-ds-fireband" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t.accent}"/><stop offset="1" stop-color="${flame}"/></linearGradient>
 <linearGradient id="dbtefx-ds-wis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(wisteria, t.bg, 0.35)}"/><stop offset="0.5" stop-color="${wisteria}"/><stop offset="1" stop-color="${mix(wisteria, '#ffffff', 0.3)}"/></linearGradient>
+<radialGradient id="dbtefx-ds-wglow"><stop offset="0" stop-color="${wisteria}" stop-opacity="0.55"/><stop offset="1" stop-color="${wisteria}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-ds-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.muted}" stop-opacity="0"/><stop offset="1" stop-color="${t.muted}" stop-opacity="0.12"/></linearGradient>
 </defs>
 ${ridge(640, 90, 3, mix(t.bg, t.muted, 0.16), 0.9)}
@@ -137,6 +146,7 @@ ${ridge(720, 70, 5, mix(t.bg, t.link, 0.1), 0.95)}
 <g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-swayb 11s ease-in-out infinite;">${wave}${curls}${crest}</g>
 ${blade}
 <!--near-->
+<path d="${cedars}" fill="${ink}"/>
 ${vine}
 ${wisteriaL}
 ${wisteriaR}`;

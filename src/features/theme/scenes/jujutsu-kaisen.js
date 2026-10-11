@@ -35,6 +35,9 @@ const scene = (t) => {
     }
     x += w + 4;
   }
+  // A tall stepped tower with an antenna, rooftop tanks, unlit billboard frames.
+  const tower = `<path d="M1286 900V420H1300V380H1316V350H1356V380H1372V420H1386V900Z" fill="${mix(ink, t.surface, 0.2)}"/><path d="M1336 350V280" stroke="${mix(ink, t.surface, 0.2)}" stroke-width="3"/><circle cx="1336" cy="280" r="3" fill="${red}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/><path d="M1296 430H1376M1296 470H1376M1296 510H1376M1296 550H1376M1296 590H1376M1296 630H1376M1296 670H1376M1296 710H1376M1296 750H1376" stroke="${mix(t.opp, ink, 0.6)}" stroke-opacity="0.6" stroke-width="2"/>`;
+  const extras = [[540, 712], [760, 740], [1120, 690], [1460, 700], [160, 700]].map(([bx, by]) => `<path d="M${bx} ${by}h16v-14q-8 -5 -16 0Z" fill="${ink}"/>`).join('');
   // The cylinder tower with its vertical fins.
   const cyl = `<path d="M300 900V560Q336 540 372 560V900Z" fill="${mix(ink, t.surface, 0.3)}"/>${[312, 324, 336, 348, 360].map((fx) => `<path d="M${fx} 556V900" stroke="${mix(t.muted, ink, 0.6)}" stroke-width="1.2"/>`).join('')}<path d="M300 560Q336 540 372 560" fill="none" stroke="${violet}" stroke-opacity="0.6" stroke-width="2"/>`;
   // The veil: a vast dark dome descending over the city, its rim inked.
@@ -59,44 +62,53 @@ const scene = (t) => {
   }
   const purple = `<circle cx="${SX}" cy="${SY}" r="330" fill="url(#dbtefx-jjk-aura)"/>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 80s linear infinite;"><path d="${corona}" stroke="${mix(violet, '#ffffff', 0.4)}" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/></g>
-<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="124" fill="url(#dbtefx-jjk-sphere)"/><circle cx="${SX}" cy="${SY}" r="124" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
+<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="124" fill="url(#dbtefx-jjk-sphere)" fill-opacity="0.35"/><circle cx="${SX}" cy="${SY}" r="124" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 14s linear infinite reverse;" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round">${swirl}</g>`;
   // Red and blue: two orbs circling the sphere, swinging in toward it.
   const orb = (color, r, phase, dur) => `<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin ${dur}s linear ${n1(-phase)}s infinite;"><g transform="translate(${SX + 205} ${SY})"><g ${anim('jjk-near', dur / 2, phase / 2, 'ease-in-out')}><circle r="${r * 3.4}" fill="url(#dbtefx-jjk-${color === red ? 'red' : 'blue'})"/><circle r="${r}" fill="${color}"/><circle r="${r}" fill="none" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="2"/><circle r="${n1(r * 0.5)}" fill="#ffffff" fill-opacity="0.9"/></g></g></g>`;
 
-  // Black flash: tapered black bolts haloed in red, forking out from one strike.
-  const FX = 1360;
-  const FY = 560;
-  const bolt = (ang, len, w0, seed) => {
+  // Black flash: jagged black lightning haloed in red, cracking from the
+  // sphere's rim down toward the city, each bolt tapering and forking.
+  const zig = (ax, ay, bx, by, w0, seed, segs = 8) => {
     const r = rng(seed);
-    const pts = [[FX, FY]];
-    for (let i = 1; i <= 7; i++) pts.push(polar(FX, FY, (len * i) / 7, ang + (r() - 0.5) * 34));
+    const dx = bx - ax;
+    const dy = by - ay;
+    const l = Math.hypot(dx, dy);
+    const nx = -dy / l;
+    const ny = dx / l;
+    const pts = [];
+    for (let i = 0; i <= segs; i++) {
+      const u = i / segs;
+      const j = i === 0 || i === segs ? 0 : (i % 2 ? 1 : -1) * (0.04 + r() * 0.07) * l;
+      pts.push([ax + dx * u + nx * j, ay + dy * u + ny * j]);
+    }
     const left = [];
     const right = [];
     pts.forEach(([px, py], i) => {
-      const w = w0 * (1 - i / 7.4);
-      const [nx, ny] = i < pts.length - 1 ? pts[i + 1] : [px + (px - pts[i - 1][0]), py + (py - pts[i - 1][1])];
-      const dx = nx - px;
-      const dy = ny - py;
-      const l = Math.hypot(dx, dy) || 1;
-      left.push(`${n1(px - (dy / l) * w)} ${n1(py + (dx / l) * w)}`);
-      right.unshift(`${n1(px + (dy / l) * w)} ${n1(py - (dx / l) * w)}`);
+      const w = w0 * (1 - (i / segs) * 0.85);
+      left.push(`${n1(px + nx * w)} ${n1(py + ny * w)}`);
+      right.unshift(`${n1(px - nx * w)} ${n1(py - ny * w)}`);
     });
-    return `M${left.join('L')}L${right.join('L')}Z`;
+    return { d: `M${left.join('L')}L${right.join('L')}Z`, pts };
   };
-  const strikes = [[200, 230, 9, 3], [250, 180, 7, 5], [150, 170, 6, 7], [300, 130, 5, 11], [40, 120, 5, 13], [100, 90, 4, 17]].map(([a, l, w, sd]) => bolt(a, l, w, sd)).join('');
-  const bolts = `<g ${anim('jjk-flash', 4.5, 0)}><circle cx="${FX}" cy="${FY}" r="70" fill="url(#dbtefx-jjk-red)"/><path d="${strikes}" fill="${red}" fill-opacity="0.5" stroke="${red}" stroke-width="8" stroke-opacity="0.45" stroke-linejoin="round"/><path d="${strikes}" fill="${ink}" stroke="${mix(red, '#000000', 0.5)}" stroke-width="1.5"/><circle cx="${FX}" cy="${FY}" r="9" fill="${ink}" stroke="${red}" stroke-width="3"/></g>`;
+  let strikes = '';
+  [[1100, 430, 1050, 660, 9, 3], [1250, 440, 1330, 690, 8, 5], [1300, 300, 1470, 250, 6, 7]].forEach(([ax, ay, bx, by, w, sd]) => {
+    const main = zig(ax, ay, bx, by, w, sd);
+    strikes += main.d;
+    const [mx, my] = main.pts[3];
+    const [ex, ey] = main.pts[6];
+    strikes += zig(mx, my, mx + (bx - ax) * 0.3 + (by - ay) * 0.25, my + (by - ay) * 0.3 - (bx - ax) * 0.25, w * 0.5, sd + 20, 5).d;
+    strikes += zig(ex, ey, ex + (bx - ax) * 0.2 - (by - ay) * 0.2, ey + (by - ay) * 0.2 + (bx - ax) * 0.2, w * 0.35, sd + 40, 4).d;
+  });
+  const bolts = `<g ${anim('jjk-flash', 4.5, 0)}><path d="${strikes}" fill="none" stroke="${red}" stroke-width="22" stroke-opacity="0.18" stroke-linejoin="round"/><path d="${strikes}" fill="${red}" stroke="${mix(red, '#ffffff', 0.25)}" stroke-width="8" stroke-opacity="0.7" stroke-linejoin="miter"/><path d="${strikes}" fill="${ink}" stroke="${ink}" stroke-width="1" stroke-linejoin="miter"/></g>`;
 
   // Sealing talismans: paper strips, a red border, a column of brush strokes
   // (no real characters) and a red seal.
   const talisman = (tx, s, dur, delay) => {
     const r = rng(Math.round(tx));
-    let strokes = '';
-    for (let i = 0; i < 5; i++) {
-      const y = -30 + i * 11;
-      strokes += r() < 0.5 ? `M${n1(-7 + r() * 3)} ${y}q7 ${n1(-2 + r() * 3)} ${n1(13 + r() * 2)} ${n1(r() * 3)}` : `M${n1(-2 + r() * 4)} ${y - 4}q${n1(-3 + r() * 2)} 6 ${n1(-5 + r() * 2)} 10M${n1(1 + r() * 3)} ${y - 2}l5 6`;
-    }
-    return `<g transform="translate(${n1(tx)} 0) scale(${s})"><g ${anim('fall', dur, delay, 'ease-in-out')}><rect x="-17" y="-48" width="34" height="96" fill="${paper}"/><rect x="-13.5" y="-44.5" width="27" height="89" fill="none" stroke="${red}" stroke-width="1.8"/><path d="${strokes}" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/><rect x="-7" y="24" width="14" height="14" fill="${red}" fill-opacity="0.85"/><path d="M-4 27h8M-4 31h8M0 27v8" stroke="${paper}" stroke-width="1.2"/></g></g>`;
+    const k = r();
+    const strokes = `M0 -34Q${n1(-2 + k * 4)} -6 1 16q-3 3 -6 1M-8 ${n1(-26 + k * 4)}q8 -2 16 0M-6 ${n1(-14 + k * 6)}q6 2 13 -1M-9 ${n1(0 + k * 4)}q9 -1 18 1`;
+    return `<g transform="translate(${n1(tx)} 0) scale(${s})"><g ${anim('fall', dur, delay, 'ease-in-out')}><rect x="-17" y="-48" width="34" height="96" fill="${paper}"/><rect x="-13.5" y="-44.5" width="27" height="89" fill="none" stroke="${red}" stroke-width="1.8"/><path d="${strokes}" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round"/><rect x="-7" y="24" width="14" height="14" fill="${red}" fill-opacity="0.85"/><path d="M-4 27h8M-4 31h8M0 27v8" stroke="${paper}" stroke-width="1.2"/></g></g>`;
   };
   const talismans = [[200, 1, 19, 2], [1300, 1.15, 23, 9], [1470, 0.85, 17, 4], [1110, 0.9, 26, 15], [300, 0.75, 21, 12]].map(([tx, sc, dur, d]) => talisman(tx, sc, dur, d)).join('');
 
@@ -121,7 +133,7 @@ const scene = (t) => {
 
   return `<style>@keyframes dbtefx-jjk-throb { 0%, 100% { transform: scale(0.97); } 50% { transform: scale(1.04); } }
 @keyframes dbtefx-jjk-near { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-90px, 0) scale(0.75); } }
-@keyframes dbtefx-jjk-flash { 0%, 64%, 100% { opacity: 0.25; } 70% { opacity: 1; } 76% { opacity: 0.6; } 80% { opacity: 1; } 90% { opacity: 0.4; } }</style>
+@keyframes dbtefx-jjk-flash { 0%, 64%, 100% { opacity: 0.55; } 70% { opacity: 1; } 76% { opacity: 0.6; } 80% { opacity: 1; } 90% { opacity: 0.4; } }</style>
 <defs>
 ${glow('dbtefx-jjk-aura', violet, 0.5, 0.5, 0.5, 0.5)}
 ${glow('dbtefx-jjk-red', red, 0.5, 0.5, 0.5, 0.6)}
@@ -136,6 +148,8 @@ ${bolts}
 ${orb(red, 24, 0, 18)}
 ${orb(blue, 24, 9, 18)}
 <g fill="${ink}"><path d="${towers}"/></g>
+${tower}
+${extras}
 ${cyl}
 <path d="${lights}" fill="${mix(t.warning, t.text, 0.4)}" fill-opacity="0.55"/>
 <!--near-->
@@ -170,10 +184,20 @@ void main() {
   float near = smoothstep(560.0, 80.0, length(p - vec2(1180.0, 330.0)));
   float energy = smoothstep(0.45, 0.9, f * 0.7 + tongues * 0.5) * (0.35 + 0.65 * near);
   vec3 col = u_bg;
-  col = mix(col, u_opp * 0.35, energy * 0.6 * (1.0 - uv.y * 0.3));
-  col = mix(col, u_accent * 0.7, smoothstep(0.65, 1.0, f) * near * 0.8);
+  col = mix(col, u_opp * 0.45, energy * 0.75 * (1.0 - uv.y * 0.3));
+  col = mix(col, u_accent * 0.75, smoothstep(0.6, 1.0, f) * near * 0.9);
   // Black wisps cut through.
   col *= 1.0 - 0.5 * smoothstep(0.55, 0.75, fbm(q * 2.4 - w + vec2(t, 0.0))) * near;
+  // Hollow purple: a turbulent ball of violet energy, white-hot at the core.
+  vec2 sp = p - vec2(1180.0, 330.0);
+  float sr = length(sp) / 124.0;
+  float tw = sr * 3.2 - u_time * 0.6;
+  vec2 tp = mat2(cos(tw), -sin(tw), sin(tw), cos(tw)) * (sp / 124.0);
+  float swirl = fbm(tp * 2.6 + vec2(0.0, u_time * 0.1));
+  float ball = smoothstep(1.05, 0.9, sr);
+  vec3 core = mix(u_accent, vec3(1.0), smoothstep(0.55, 0.0, sr) * 0.85);
+  col = mix(col, core * (0.6 + swirl * 0.8), ball);
+  col += u_accent * 0.6 * smoothstep(1.6, 1.0, sr) * (1.0 - ball) * (0.5 + swirl);
   col *= 1.0 - 0.45 * dot(uv - 0.5, uv - 0.5) * 2.0;
   gl_FragColor = vec4(dither(col), 1.0);
 }`,

@@ -42,7 +42,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // talisman pinned across it, the spiral button as its seal.
   let glyph = '';
   [[-6, 22, 12, 1], [-3, 30, 7, 5], [-6, 38, 12, -1]].forEach(([x, y, w, c]) => { glyph += `M${100 + x} ${y}q${w / 2} ${c} ${w} 0`; });
-  const crest = svg(200, 72, `${btnDefs}<path d="M8 40C40 26 90 30 120 31C150 32 176 26 194 30C170 38 140 44 110 44C70 44 40 46 8 40Z" fill="none" stroke="${cursed}" stroke-opacity="0.75" stroke-width="4" stroke-linejoin="round"/><path d="M8 40C40 26 90 30 120 31C150 32 176 26 194 30C170 38 140 44 110 44C70 44 40 46 8 40Z" fill="${ink}"/><path d="M14 39C48 30 92 33 120 33.5C148 34 170 30 186 31.5" fill="none" stroke="${cursed}" stroke-width="1.6" stroke-opacity="0.85" stroke-linecap="round"/><g fill="${red}"><circle cx="34" cy="26" r="3"/><circle cx="44" cy="22" r="1.6"/><circle cx="160" cy="48" r="2.6"/><circle cx="170" cy="52" r="1.4"/><circle cx="150" cy="22" r="1.8"/></g><path d="M86 4H114V68H86Z" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><path d="M89 7H111V65H89Z" fill="none" stroke="${red}" stroke-width="1.4"/><path d="${glyph}" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/><path d="M100 14V44" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>${spiral(100, 55, 7)}`);
+  const crest = svg(200, 72, `${btnDefs}<path d="M6 42C36 20 92 24 122 26C152 28 178 20 196 26C176 42 140 50 108 50C70 50 38 54 6 42Z" fill="none" stroke="${cursed}" stroke-opacity="0.85" stroke-width="4" stroke-linejoin="round"/><path d="M6 42C36 20 92 24 122 26C152 28 178 20 196 26C176 42 140 50 108 50C70 50 38 54 6 42Z" fill="${ink}"/><path d="M14 39C48 30 92 33 120 33.5C148 34 170 30 186 31.5" fill="none" stroke="${cursed}" stroke-width="1.6" stroke-opacity="0.85" stroke-linecap="round"/><g fill="${red}"><circle cx="34" cy="26" r="3"/><circle cx="44" cy="22" r="1.6"/><circle cx="160" cy="48" r="2.6"/><circle cx="170" cy="52" r="1.4"/><circle cx="150" cy="22" r="1.8"/></g><path d="M86 4H114V68H86Z" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><path d="M89 7H111V65H89Z" fill="none" stroke="${red}" stroke-width="1.4"/><path d="${glyph}" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/><path d="M100 14V44" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>${spiral(100, 55, 7)}`);
   // A talisman strip edge for chat headers: paper with a red border.
   const strip = svg(60, 14, `<rect width="60" height="14" fill="${paper}"/><path d="M0 2H60M0 12H60" stroke="${red}" stroke-width="1.2"/><path d="M8 7q4 -2 8 0M28 5l3 4M44 7q3 2 7 -1" fill="none" stroke="${ink}" stroke-width="1.4" stroke-linecap="round"/>`);
   // Phase discs: a spiral button.
@@ -53,7 +53,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
       const rr = (15 * i) / 26;
       d += `L${(22.5 + Math.cos(a) * rr).toFixed(2)} ${(22.5 + Math.sin(a) * rr).toFixed(2)}`;
     }
-    return `<path d="${d}" fill="none" stroke="${gold}" stroke-opacity="0.4" stroke-width="1.6" stroke-linecap="round"/><circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${gold}" stroke-opacity="0.6" stroke-width="1.4"/>`;
+    return `<path d="${d}" fill="none" stroke="${mix(cursed, t.text, 0.4)}" stroke-opacity="0.45" stroke-width="1.6" stroke-linecap="round"/><circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${cursed}" stroke-opacity="0.7" stroke-width="1.4"/>`;
   })());
   // Cursed-energy flames for the tile foot: violet tongues with black cores.
   const flame = (x, h, w) => `M${x - w} 26C${x - w} ${26 - h * 0.4} ${x - w * 0.1} ${26 - h * 0.55} ${x + w * 0.5} ${26 - h}C${x + w * 0.1} ${26 - h * 0.6} ${x + w} ${26 - h * 0.35} ${x + w} 26Z`;
@@ -105,7 +105,7 @@ ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 1
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a talisman strip under a navy header; the window edged in cursed violet. */
-${SEL.chatTop} { background: var(--dbtc-u4) 0 100% / 60px 7px repeat-x, linear-gradient(180deg, ${navy}, ${navyDeep}) !important; box-shadow: inset 0 -8px 0 ${alpha(t.bg, 0)}, inset 0 1px 0 ${alpha('#ffffff', 0.1)} !important; }
+${SEL.chatTop} { background: radial-gradient(ellipse 60% 120% at 20% 100%, ${alpha(cursed, 0.25)}, transparent 70%), linear-gradient(180deg, ${navy}, ${navyDeep}) !important; box-shadow: inset 0 -2px 0 ${red}, inset 0 -4px 0 ${paper}, inset 0 -5px 0 ${red}, inset 0 1px 0 ${alpha('#ffffff', 0.1)} !important; }
 ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 3px; width: 20px; height: 20px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${sel(['#chats .chat .chat_top span'])} { ${label} }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${alpha(cursed, 0.45)}, inset -1px 0 0 ${alpha(cursed, 0.45)}, inset 0 -1px 0 ${alpha(cursed, 0.45)} !important; }
@@ -117,7 +117,7 @@ ${SEL.lifeSelf} { background: var(--dbtc-u6) 0 50% / 60px 100% repeat-x, linear-
 ${SEL.lifeOpp} { background: var(--dbtc-u6) 0 50% / 60px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: -4px; width: 16px; height: 36px; pointer-events: none; background: var(--dbtc-u7) center / contain no-repeat; transform: rotate(-6deg); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: radial-gradient(circle at 40% 35%, ${mix(gold, '#ffffff', 0.35)}, ${gold} 55%, ${goldDim}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }
+${SEL.phase} { background: conic-gradient(from 210deg, ${cursed}, ${ink}, ${mix(cursed, '#ffffff', 0.4)}, ${ink}, ${cursed}) !important; box-shadow: 0 0 0 1px ${ink}, 0 0 12px -2px ${alpha(cursed, 0.8)}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${navyDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${navy} 30%, ${navyDeep}) !important; }
@@ -128,6 +128,10 @@ ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${navy}, ${
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ink}, 0 0 0 3px ${cursed}, 0 0 12px ${alpha(cursed, 0.6)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDim}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(red, t.bg, 0.2)}, ${mix(red, t.bg, 0.55)}) !important; }
+
+${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, t.bg, 0.15)}, ${mix(t.self, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, t.bg, 0.15)}, ${mix(t.opp, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 
 /* Duel room: navy panels in brush-ink frames; labels on a navy plate. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(navy, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }

@@ -43,6 +43,7 @@ const scene = (t) => {
   let cannons = '';
   for (let i = 0; i < 7; i++) {
     const u = 0.5 + i * 0.075;
+    if (u > 0.66 && u < 0.86) continue;
     const [x, y] = pt(TOP, u);
     const s = 0.4 + u * 0.9;
     cannons += `<g transform="translate(${x} ${y}) scale(${n1(s)})"><rect x="-9" y="-11" width="18" height="9" rx="2"/><path d="M-4 -9L-26 -15L-26 -10L-4 -5Z"/><circle cx="-6" cy="-3" r="4.5"/><circle cx="6" cy="-3" r="4.5"/></g>`;
@@ -67,6 +68,31 @@ const scene = (t) => {
   // Wire from an anchor in the wall face; the scout swings on it like a pendulum.
   const swing = (ax, ay, len, s, dur, delay, dir) =>
     `<g style="transform-origin: ${ax}px ${ay}px; animation: dbtefx-aot-swing${dir < 0 ? 'b' : ''} ${dur}s ease-in-out ${n1(-delay)}s infinite;"><path d="M${ax} ${ay}V${ay + len}" stroke="${mix(t.text, t.muted, 0.5)}" stroke-opacity="0.75" stroke-width="${n1(0.9 * s)}"/><circle cx="${ax}" cy="${ay}" r="${n1(2 * s)}" fill="${ink}"/><g transform="translate(${ax} ${ay + len})${dir < 0 ? ' scale(-1 1)' : ''}">${scout(s)}</g></g>`;
+
+  // The colossal hand: four skinless fingers hooked over the parapet from
+  // behind the wall, red muscle with pale tendons, steam lifting off them.
+  const finger = (len, w) => {
+    // Outline down one side (x sign flips for the other): knuckle arch over
+    // the parapet, then phalanges narrowing with a swell at each joint.
+    const side = [[0.5, -14], [0.44, 0.28], [0.49, 0.4], [0.39, 0.52], [0.34, 0.66], [0.38, 0.74], [0.3, 0.86], [0.2, 0.97]];
+    const P = (k, [fx, fy]) => `${n1(k * fx * w)} ${fy < 0 ? fy : n1(fy * len)}`;
+    const d = `M${P(-1, side[0])}C${n1(-w * 0.5)} -44 ${n1(w * 0.5)} -44 ${P(1, side[0])}${side.slice(1).map((q) => `L${P(1, q)}`).join('')}Q0 ${n1(len * 1.04)} ${P(-1, side[7])}${side.slice(1, 7).reverse().map((q) => `L${P(-1, q)}`).join('')}Z`;
+    return `<path d="${d}" fill="url(#dbtefx-aot-flesh)" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M${n1(-w * 0.24)} -26Q${n1(-w * 0.3)} ${n1(len * 0.4)} ${n1(-w * 0.12)} ${n1(len * 0.9)}M${n1(w * 0.22)} -26Q${n1(w * 0.26)} ${n1(len * 0.4)} ${n1(w * 0.12)} ${n1(len * 0.9)}M${n1(-w * 0.08)} -30Q${n1(-w * 0.1)} ${n1(len * 0.5)} 0 ${n1(len * 0.95)}" fill="none" stroke="${mix(t.danger, t.text, 0.45)}" stroke-opacity="0.35" stroke-width="1.4"/>
+<path d="M${n1(w * 0.06)} -32V${n1(len * 0.86)}" stroke="${t.text}" stroke-opacity="0.22" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M${n1(-w * 0.2)} ${n1(len * 0.9)}Q0 ${n1(len * 0.86)} ${n1(w * 0.2)} ${n1(len * 0.9)}Q${n1(w * 0.18)} ${n1(len * 1.01)} 0 ${n1(len * 1.02)}Q${n1(-w * 0.18)} ${n1(len * 1.01)} ${n1(-w * 0.2)} ${n1(len * 0.9)}Z" fill="${mix(t.text, t.danger, 0.35)}" fill-opacity="0.75" stroke="${ink}" stroke-width="1.4"/>
+<path d="M${n1(-w * 0.46)} ${n1(len * 0.4)}Q0 ${n1(len * 0.46)} ${n1(w * 0.46)} ${n1(len * 0.4)}M${n1(-w * 0.36)} ${n1(len * 0.74)}Q0 ${n1(len * 0.79)} ${n1(w * 0.36)} ${n1(len * 0.74)}" fill="none" stroke="${ink}" stroke-opacity="0.7" stroke-width="2"/>`;
+  };
+  // The back of the hand rises from behind the wall into the steam; the
+  // fingers sit side by side, splayed a little, knuckles over the parapet.
+  const [hx, hy] = pt(TOP, 0.765);
+  const fingers = [[-66, 98, 38, -12], [-22, 128, 44, -4], [22, 140, 46, 3], [66, 120, 42, 10]].map(([dx, len, w, rot]) => `<g transform="translate(${dx} 8) rotate(${rot})">${finger(len, w)}</g>`).join('');
+  const back = `<path d="M-96 -2C-112 -60 -76 -128 -46 -190H54C82 -128 110 -60 92 -2Z" fill="url(#dbtefx-aot-back)"/><path d="M-66 -10Q-40 -100 -10 -190M-22 -14Q-10 -100 4 -190M22 -14Q16 -100 14 -190M66 -10Q46 -100 26 -190" fill="none" stroke="${t.text}" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round"/><path d="M-82 -20Q-62 -100 -30 -190M-44 -16Q-26 -100 -6 -190M0 -16Q4 -100 9 -190M44 -16Q32 -100 20 -190M82 -20Q64 -100 40 -190" fill="none" stroke="${ink}" stroke-opacity="0.35" stroke-width="1.6"/><path d="M-96 -2C-106 -40 -100 -70 -86 -100M92 -2C104 -40 100 -70 88 -100" fill="none" stroke="${ink}" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"/>`;
+  const hand = `<g transform="translate(${hx} ${n1(hy + 2)}) rotate(-21)">${back}${fingers}</g>`;
+  let handSteam = '';
+  [[1180, 180, 60], [1260, 150, 74], [1330, 130, 60], [1220, 120, 50], [1300, 90, 56]].forEach(([x, y, r], i) => {
+    handSteam += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#dbtefx-aot-puff)" ${anim('aot-boil', 9 + i * 2, i * 3, 'ease-in-out')}/>`;
+  });
 
   // Birds: freedom over the wall.
   const bird = (x, y, s, d) =>
@@ -119,6 +145,8 @@ ${glow('dbtefx-aot-haze', t.muted, 0.5, 0.5, 0.5, 0.16)}
 <radialGradient id="dbtefx-aot-puff" cx="0.42" cy="0.38" r="0.6"><stop offset="0" stop-color="${steam}" stop-opacity="0.22"/><stop offset="0.55" stop-color="${mix(steam, heat, 0.3)}" stop-opacity="0.1"/><stop offset="1" stop-color="${steam}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-aot-wall" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="${stone}" stop-opacity="0.5"/><stop offset="0.55" stop-color="${stone}"/><stop offset="1" stop-color="${stoneLit}"/></linearGradient>
 <linearGradient id="dbtefx-aot-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${heat}" stop-opacity="0.18"/><stop offset="0.25" stop-color="${t.bg}" stop-opacity="0"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0.7"/></linearGradient>
+<linearGradient id="dbtefx-aot-flesh" x1="0" y1="0" x2="0.7" y2="1"><stop offset="0" stop-color="${mix(mix(t.danger, heat, 0.35), t.bg, 0.2)}"/><stop offset="0.3" stop-color="${mix(t.danger, t.bg, 0.45)}"/><stop offset="1" stop-color="${mix(t.danger, t.bg, 0.78)}"/></linearGradient>
+<linearGradient id="dbtefx-aot-back" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix(t.danger, t.bg, 0.55)}"/><stop offset="0.5" stop-color="${mix(mix(t.danger, heat, 0.25), t.bg, 0.3)}" stop-opacity="0.9"/><stop offset="1" stop-color="${steam}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-aot-town" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${heat}" stop-opacity="0"/><stop offset="0.6" stop-color="${heat}" stop-opacity="0.14"/><stop offset="1" stop-color="${heat}" stop-opacity="0.05"/></linearGradient>
 <linearGradient id="dbtefx-aot-gas" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.text}" stop-opacity="0.5"/><stop offset="1" stop-color="${t.text}" stop-opacity="0"/></linearGradient>
 </defs>
@@ -134,10 +162,11 @@ ${glow('dbtefx-aot-haze', t.muted, 0.5, 0.5, 0.5, 0.16)}
 <path d="${curvePath(TOP)}" fill="none" stroke="${mix(heat, t.text, 0.4)}" stroke-opacity="0.7" stroke-width="3"/>
 <path d="${curvePath(lerpCurve(0.035))}" fill="none" stroke="${ink}" stroke-opacity="0.6" stroke-width="2"/>
 <g fill="${ink}">${cannons}</g>
-${bird(1100, 120, 1.2, 0)}${bird(1170, 95, 0.9, 3)}${bird(1240, 140, 1, 6)}${bird(1330, 80, 0.8, 9)}${bird(1040, 160, 0.7, 12)}
-${swing(1300, 250, 230, 1.6, 7, 0, 1)}
-${swing(1470, 210, 150, 1.1, 8.5, 2.5, -1)}
-${swing(1130, 330, 120, 0.8, 6.2, 4, 1)}
+${bird(1080, 150, 1.2, 0)}${bird(1150, 110, 0.9, 3)}${bird(1030, 190, 0.8, 6)}${bird(1210, 80, 0.8, 9)}
+${hand}
+${handSteam}
+${swing(1405, 250, 200, 1.5, 7, 0, -1)}
+${swing(1060, 370, 140, 1, 6.2, 3, 1)}
 <!--near-->
 <rect x="0" y="760" width="${W}" height="140" fill="url(#dbtefx-aot-town)"/>
 <g fill="${ink}"><path d="${roofs}${extras}"/>${spire}</g>

@@ -115,6 +115,10 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDim}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(vermilion, t.bg, 0.3)}, ${mix(vermilion, t.bg, 0.62)}) !important; }
 
+${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, t.bg, 0.15)}, ${mix(t.self, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, t.bg, 0.15)}, ${mix(t.opp, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
+
 /* Duel room: lacquer panels in vermilion frames; labels on a lacquer plate. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(lacquerHi, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${gold}, ${vermDeep} 30%, ${vermilion} 55%, ${vermDeep} 80%, ${gold}) !important; filter: none !important; }

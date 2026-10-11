@@ -35,7 +35,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   };
   const wings = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${fan(mix(t.text, t.accent, 0.1), false)}<g transform="translate(2.5 1)">${fan(mix(t.muted, t.accent, 0.5), true)}</g></g>`;
   // Crest: a steel shield plate with the wings, over two crossed ODM blades.
-  const blade = (rot) => `<g transform="rotate(${rot} 80 34)"><path d="M18 31.5H128L142 34L128 36.5H18Z" fill="${steel}" stroke="${t.bg}" stroke-width="0.8"/><path d="M40 31.6L36 36.4M64 31.6L60 36.4M88 31.6L84 36.4M112 31.6L108 36.4" stroke="${t.bg}" stroke-opacity="0.6" stroke-width="0.8"/><path d="M6 31H18V37H6Z" fill="${leather}" stroke="${t.bg}" stroke-width="0.8"/></g>`;
+  const blade = (rot) => `<g transform="rotate(${rot} 80 34)"><path d="M18 30H128L146 34L128 38H18Z" fill="${steel}" stroke="${t.bg}" stroke-width="1"/><path d="M18 30.2H128L146 34" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="0.9"/><path d="M42 30.2L37 37.8M66 30.2L61 37.8M90 30.2L85 37.8M114 30.2L109 37.8" stroke="${t.bg}" stroke-opacity="0.7" stroke-width="1"/><path d="M4 29.5H18V38.5H4Z" fill="${leather}" stroke="${t.bg}" stroke-width="1"/><path d="M8 29.5V38.5M12 29.5V38.5" stroke="${leatherHi}" stroke-width="0.8"/></g>`;
   const crest = svg(160, 64, `${blade(-14)}${blade(14)}<path d="M62 8H98V34Q98 48 80 56Q62 48 62 34Z" fill="${clothDeep}" stroke="${steel}" stroke-width="2"/><path d="M66 12H94V33Q94 44 80 51Q66 44 66 33Z" fill="none" stroke="${steelDim}" stroke-width="0.8"/>${wings(80, 36, 1.05)}`);
   // Small crest for menu tiles: the shield and wings alone.
   const badge = svg(30, 34, `<path d="M3 2H27V19Q27 28 15 33Q3 28 3 19Z" fill="${clothDeep}" stroke="${steel}" stroke-width="1.6"/>${wings(15, 21, 0.62)}`);
@@ -121,6 +121,10 @@ ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.sur
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steel}, 0 0 0 4px ${plateDeep}, 0 0 0 5px ${alpha(steel, 0.45)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${steel}, ${steelDim}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(t.accent, t.bg, 0.45)}, ${clothDeep}) !important; }
+
+${sel(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.self, t.bg, 0.15)}, ${mix(t.self, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn .blue', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(180deg, ${mix(t.opp, t.bg, 0.15)}, ${mix(t.opp, t.bg, 0.55)}) !important; }
+${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 
 /* Duel room: riveted steel rings around plate-dark panels; labels on a plate. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(plate, 0.6)}, ${alpha(t.bg, 0.8)}) !important; box-shadow: 0 10px 26px -12px #000000; }
