@@ -29,12 +29,12 @@ const whiteDragon = (t) => {
   const rand = rng(79);
 
   // White Lightning: from the jaws up and left across the sky, forking.
-  const mx = 1205;
+  const mx = 1350;
   const my = 312;
-  const main = bolt(rand, [mx, my], [1060, 90], 6, 14) + bolt(rand, [1060, 90], [1010, -20], 5, 16);
-  const forkA = bolt(rand, [1110, 170], [1010, 190], 4, 10);
-  const forkB = bolt(rand, [1060, 90], [980, 120], 4, 9);
-  const forkC = bolt(rand, [1040, 30], [970, 40], 3, 8);
+  const main = bolt(rand, [mx, my], [1290, 110], 6, 12) + bolt(rand, [1290, 110], [1262, -20], 5, 12);
+  const forkA = bolt(rand, [1315, 200], [1236, 226], 4, 8);
+  const forkB = bolt(rand, [1290, 110], [1232, 136], 4, 7);
+  const forkC = bolt(rand, [1278, 40], [1240, 56], 3, 6);
   const lightning = [main, forkA, forkB, forkC];
   const strike = (o) => lightning.map((d, i) => `<path d="${d}" fill="none" stroke="${ice}" stroke-width="${i ? 9 : 16}" stroke-opacity="${o * 0.35}" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-width="${i ? 2.6 : 4.5}" stroke-linejoin="round" stroke-linecap="round"/>`).join('');
 

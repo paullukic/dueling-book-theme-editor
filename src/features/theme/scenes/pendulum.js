@@ -9,18 +9,18 @@ const SWING = 7; // seconds per full swing (there and back)
 const pendulum = (t) => {
   const left = t.self;
   const right = t.opp;
-  const hx = 1405; // hinge, inside the portal, right of the feed
-  const hy = 232;
-  const len = 250;
+  const hx = 1470; // hinge on the right scale's column, in the gutter
+  const hy = 300;
+  const len = 220;
   const lx = 118; // scale pillars flank the page (and the duel field) in the gutters
-  const rx = 1480;
+  const rx = 1470;
   const ground = 800;
 
   // The arc of light: short arc pieces fading away from the bob, one trail for each direction.
   const trail = (side) => {
     let s = '';
     for (let i = 0; i < 7; i++) {
-      const a = 90 - side * (2 + i * 2.6);
+      const a = 90 - side * (1 + i * 1.4);
       const [x0, y0] = polar(0, 0, len, a - 2.3);
       const [x1, y1] = polar(0, 0, len, a + 2.3);
       s += `<path d="M${x0} ${y0}A${len} ${len} 0 0 1 ${x1} ${y1}" stroke-opacity="${n1(0.85 - i * 0.12)}" stroke-width="${n1(16 - i * 1.6)}"/>`;
@@ -32,12 +32,12 @@ const pendulum = (t) => {
   const pillar = (x, color, num, gem, id, delay) => `<ellipse cx="${x}" cy="${ground - 340}" rx="74" ry="620" fill="url(#dbtefx-pe-${id})"/>
 <rect x="${x - 3}" y="0" width="6" height="${ground}" fill="${mix(color, '#ffffff', 0.6)}" fill-opacity="0.7"/>
 ${[0, 1, 2].map((i) => `<ellipse cx="${x}" cy="${ground}" rx="44" ry="10" fill="none" stroke="${mix(color, '#ffffff', 0.4)}" stroke-width="2" style="animation: dbtefx-pe-rise 4.5s ease-in ${n1(-(delay + i * 1.5))}s infinite;"/>`).join('')}
-<g transform="translate(${x} 330)"><path d="M0 -40L22 -14L0 12L-22 -14Z" fill="${gem}" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2"/><path d="M0 -40L22 -14L0 -8Z" fill="#ffffff" fill-opacity="0.35"/>
+<g transform="translate(${x} 150)"><path d="M0 -40L22 -14L0 12L-22 -14Z" fill="${gem}" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2"/><path d="M0 -40L22 -14L0 -8Z" fill="#ffffff" fill-opacity="0.35"/>
 <text y="78" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#ffffff" fill-opacity="0.92" stroke="${color}" stroke-width="2">${num}</text></g>`;
 
 
   return `<style>
-@keyframes dbtefx-pe-swing { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+@keyframes dbtefx-pe-swing { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
 @keyframes dbtefx-pe-ta { 0% { opacity: 0; } 22% { opacity: 1; } 46%, 100% { opacity: 0; } }
 @keyframes dbtefx-pe-tb { 0%, 50% { opacity: 0; } 72% { opacity: 1; } 96%, 100% { opacity: 0; } }
 @keyframes dbtefx-pe-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-560px); opacity: 0; } }
@@ -56,7 +56,7 @@ ${[0, 1, 2].map((i) => `<ellipse cx="${x}" cy="${ground}" rx="44" ry="10" fill="
 <!--mid-->
 ${pillar(lx, left, 1, left, 'l', 0)}
 ${pillar(rx, right, 12, right, 'r', 0.7)}
-<path d="M${polar(hx, hy, len, 74).join(' ')}A${len} ${len} 0 0 1 ${polar(hx, hy, len, 106).join(' ')}" fill="none" stroke="${t.text}" stroke-opacity="0.12" stroke-width="2" stroke-dasharray="2 10"/>
+<path d="M${polar(hx, hy, len, 82).join(' ')}A${len} ${len} 0 0 1 ${polar(hx, hy, len, 98).join(' ')}" fill="none" stroke="${t.text}" stroke-opacity="0.12" stroke-width="2" stroke-dasharray="2 10"/>
 <g transform="translate(${hx} ${hy})"><g style="animation: dbtefx-pe-swing ${SWING}s ease-in-out infinite;">
 <g fill="none" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-linecap="round"><g style="animation: dbtefx-pe-ta ${SWING}s linear infinite;">${trail(1)}</g><g style="animation: dbtefx-pe-tb ${SWING}s linear infinite;">${trail(-1)}</g></g>
 <path d="M0 0V${len - 64}" stroke="${t.text}" stroke-opacity="0.55" stroke-width="2.5"/>

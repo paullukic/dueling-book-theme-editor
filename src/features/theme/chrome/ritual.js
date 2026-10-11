@@ -162,7 +162,7 @@ ${SEL.life} {
   background: repeating-linear-gradient(90deg, transparent 0 14px, ${alpha(t.bg, 0.55)} 14px 15px) left top / 56% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, inset 0 0 0 1px ${alpha(blue, 0.4)}, 0 0 10px -2px ${alpha(blue, 0.55)} !important;
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.58)}, ${mix(mix(t.self, t.danger, 0.12), '#000000', 0.2)} 70%, ${mix(mix(t.self, t.danger, 0.15), '#000000', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.58)}, ${mix(mix(t.self, t.danger, 0.1), '#000000', 0.12)} 70%, ${mix(mix(t.self, t.danger, 0.2), '#000000', 0.22)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.58)}, ${mix(t.opp, '#000000', 0.2)} 70%, ${mix(t.opp, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 

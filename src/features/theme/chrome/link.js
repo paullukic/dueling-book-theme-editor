@@ -171,7 +171,7 @@ ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 3px !importa
 ${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 270, true))} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_border::after'])} { content: ""; position: absolute; right: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 90, true))} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${mix(t.self, '#000000', 0.32)}) !important; }
+${SEL.lifeSelf} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self} 70%, ${mix(t.self, '#000000', 0.2)}) !important; }
 ${SEL.lifeOpp} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${mix(t.opp, '#000000', 0.25)}) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${hex(0.12)} left center / 12px auto, ${deep} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }

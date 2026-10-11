@@ -202,13 +202,13 @@ ${SEL.phase} { background: ${t.accent2} !important; border-radius: 50% !importan
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle, ${mix(t.raised, t.accent, 0.2)}, ${t.bg}) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -14px; pointer-events: none;
-  background: var(--dm-ring) center / 100% 100% no-repeat; opacity: 1;
+  content: ""; position: absolute; inset: -6px; pointer-events: none;
+  background: var(--dm-ring) center / 100% 100% no-repeat; opacity: 0.55;
 }
 html body { --dm-ring: ${svgUrl(phaseRing(t, kit))}; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 20px ${alpha(t.self, 0.7)}, 0 0 8px ${t.accent2} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 20px ${alpha(t.opp, 0.7)} !important; }
-${sel(['#duel .phase.active .background::after'])} { opacity: 1; filter: drop-shadow(0 0 3px ${t.accent2}); }
+${sel(['#duel .phase.active .background::after'])} { inset: -12px; opacity: 1; filter: drop-shadow(0 0 3px ${t.accent2}); }
 ${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.22)} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 4px ${t.bg} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${t.accent2} !important; border-radius: 999px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${vellum} !important; border-radius: 999px !important; }

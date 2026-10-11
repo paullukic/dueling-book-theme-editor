@@ -179,7 +179,7 @@ ${sel(['#duel .lifepoints .life_border::after'])} {
   content: ""; position: absolute; right: -9px; top: -5px; width: 4px; height: 29px; border-radius: 2px;
   background: linear-gradient(180deg, ${hi}, ${gold} 50%, ${lo}); box-shadow: 0 0 0 1px ${alpha('#000000', 0.6)};
 }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 45%), linear-gradient(90deg, ${mix(self, '#000000', 0.62)}, ${mix(mix(self, t.danger, 0.28), '#000000', 0.3)} 70%, ${mix(mix(self, t.danger, 0.32), '#000000', 0.4)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 18%, ${alpha('#ffffff', 0.4)} 26%, transparent 38%), linear-gradient(90deg, ${mix(mix(self, t.danger, 0.2), '#000000', 0.08)}, ${mix(mix(self, t.danger, 0.25), '#000000', 0.25)} 55%, ${mix(mix(self, t.danger, 0.3), '#000000', 0.45)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(obelisk, '#000000', 0.6)}, ${mix(obelisk, '#000000', 0.2)} 70%, ${mix(obelisk, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
@@ -200,7 +200,10 @@ ${sel(['#duel .phase span'])} { color: ${lo} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${hi}, ${gold} 50%, ${lo}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${t.raised}, ${deep}) !important; }
-${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${hi} !important; }
+${sel(['#duel #start_turn span', '#duel #end_turn span'])} { color: ${hi} !important; }
+${sel(['#duel #turn .red'])} { background: radial-gradient(circle at 50% 35%, ${hi}, ${gold} 70%) !important; }
+${sel(['#duel #turn .blue'])} { background: radial-gradient(circle at 50% 35%, ${mix(obelisk, '#ffffff', 0.55)}, ${mix(obelisk, '#ffffff', 0.25)} 70%) !important; }
+${sel(['#duel #turn span'])} { color: ${t.bg} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 ${sel(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${alpha(gold, 0.35)}; }
 ${sel(['#duel .cout_txt'])} { background: ${papyrus}, linear-gradient(180deg, ${t.surface}, ${deep}) !important; box-shadow: inset 0 0 0 1px ${lo}, inset 0 0 0 3px ${t.bg}, inset 0 0 0 4px ${alpha(gold, 0.35)} !important; }
 ${sel(['#duel #preview_txt'])} { box-shadow: inset 0 0 0 1px ${alpha(gold, 0.4)}, inset 0 3px 0 ${alpha(gold, 0.2)}; }

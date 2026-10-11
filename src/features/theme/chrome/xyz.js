@@ -179,7 +179,7 @@ ${T(['#duel .phase .background .background_inner'])} { background: #000000 !impo
 ${T(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${field} center / 40px, radial-gradient(circle at 50% 38%, ${t.raised}, ${t.bg}) !important; }
 ${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 40%, ${mix(t.self, '#ffffff', 0.35)}, ${t.self} 35%, ${mix(t.self, t.bg, 0.6)} 75%) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}, 0 0 0 2px ${alpha(gold, 0.8)} !important; }
 ${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 40%, ${mix(t.opp, '#ffffff', 0.35)}, ${t.opp} 35%, ${mix(t.opp, t.bg, 0.6)} 75%) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}, 0 0 0 2px ${alpha(gold, 0.8)} !important; }
-${T(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px #000000 !important; }
+${T(['#duel .phase span'])} { color: ${mix(t.text, t.accent, 0.12)} !important; text-shadow: 0 1px 1px #000000 !important; }
 ${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 0 3px #000000, 0 1px 1px #000000 !important; }
 ${T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${goldLight}, ${gold} 45%, ${goldDeep}) !important; }
 ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${t.bg} !important; }

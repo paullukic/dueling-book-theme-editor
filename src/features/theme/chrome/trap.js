@@ -164,7 +164,7 @@ ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: steel jaws; the active one is sprung */
-${SEL.phase} { background: repeating-conic-gradient(${steelHi} 0deg 6deg, ${mix(steel, t.bg, 0.4)} 6deg 15deg) !important; box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 2px 6px ${alpha('#000000', 0.8)}; }
+${SEL.phase} { background: linear-gradient(180deg, ${steelHi}, ${mix(steel, t.bg, 0.4)}) !important; box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 2px 6px ${alpha('#000000', 0.8)}; }
 ${sel(['#duel .phase .background .background_top'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${plateDark} !important; box-shadow: inset 0 0 0 1px ${magLo}; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${plate}, ${plateDark} 80%) !important; }
@@ -176,7 +176,7 @@ ${sel(['#duel .phase.active .background::before'])} {
   -webkit-mask: radial-gradient(circle, transparent 60%, #000000 62%, #000000 72%, transparent 74%); mask: radial-gradient(circle, transparent 60%, #000000 62%, #000000 72%, transparent 74%);
   filter: drop-shadow(0 0 3px ${mag});
 }
-${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 14px 2px ${alpha(mag, 0.75)}; }
+${sel(['#duel .phase.active .background'])} { background: repeating-conic-gradient(${steelHi} 0deg 6deg, ${mix(steel, t.bg, 0.4)} 6deg 15deg) !important; box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 14px 2px ${alpha(mag, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${hazard(4)} !important; }

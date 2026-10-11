@@ -2,8 +2,7 @@
 // sandstone slabs with dark lapis ink; panels are a lapis tomb ceiling.
 // Every frame is a bevelled band of polished gold with a thin lapis inlay.
 // The signature is the scene's Millennium Puzzle inside the ring of the
-// Items, used as the pop-up crest, on the active phase and above the
-// selected tile. Black and gold
+// Items, used as the pop-up crest and above the selected tile. Black and gold
 // belong to Divine; Millennium is sand, lapis and gold.
 import { mix } from '../../../lib/color.js';
 
@@ -201,17 +200,13 @@ ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(lapis, '#000000', 0.45)}, ${lapis} 70%, ${mix(lapis, gold, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
-/* Phases: sandstone discs in gold; the active one wears the Puzzle crest */
+/* Phases: sandstone discs in gold; the active one glows */
 ${SEL.phase} { background: ${goldBand} !important; box-shadow: 0 2px 6px ${alpha('#000000', 0.8)}; }
 ${sel(['#duel .phase .background .background_top'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 55%) !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${lapis} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${sand}, ${sandLow} 85%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, '#ffffff', 0.2)}, ${t.self} 45%, ${mix(t.self, '#000000', 0.5)} 85%) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, '#000000', 0.2)}, ${mix(t.self, '#000000', 0.4)} 45%, ${mix(t.self, '#000000', 0.65)} 85%) !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.opp, '#ffffff', 0.2)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.5)} 85%) !important; }
-${sel(['#duel .phase.active .background::before'])} {
-  content: ""; position: absolute; left: 50%; top: -30px; width: 34px; height: 34px; margin-left: -17px;
-  background: var(--mi-crest) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(gold, 0.8)});
-}
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 2px ${alpha(t.bg, 0.8)}, 0 0 14px 2px ${alpha(gold, 0.6)}; }
 ${inked(['#duel .phase span'])} { color: ${ink} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
 ${inked(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.9)} !important; }

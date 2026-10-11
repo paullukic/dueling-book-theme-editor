@@ -166,7 +166,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: var(--sp-medal) center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${mix(t.opp, '#000000', 0.25)} 70%, ${mix(mix(t.opp, t.danger, 0.15), '#000000', 0.32)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.45)}, ${t.opp} 70%, ${mix(t.opp, '#000000', 0.12)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: SPELL medallions; the active one turns an arcane circle */
