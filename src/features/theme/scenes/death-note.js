@@ -89,7 +89,7 @@ const scene = (t) => {
       const step = rand() < 0.4 ? 6 + rand() * 14 : 0;
       d += `M${n1(x)} ${H}V${n1(H - h + step)}H${n1(x + w * 0.2)}V${n1(H - h)}H${n1(x + w * 0.8)}V${n1(H - h + step)}H${n1(x + w)}V${H}Z`;
       if (rand() < 0.25) ant += `M${n1(x + w * 0.5)} ${n1(H - h)}v-${n1(10 + rand() * 18)}`;
-      if (!pale) for (let k = 0; k < 4; k++) if (rand() < 0.6) lit += `<rect x="${n1(x + 4 + rand() * (w - 8))}" y="${n1(H - h + 8 + rand() * (h - 12))}" width="2" height="1.6"/>`;
+      if (!pale) for (let k = 0; k < 4; k++) if (rand() < 0.6) lit += `M${Math.round(x + 4 + rand() * (w - 8))} ${Math.round(H - h + 8 + rand() * (h - 12))}h2v2h-2z`;
       x += w + rand() * 3;
     }
     return { d, ant, lit };
@@ -122,7 +122,7 @@ const scene = (t) => {
 ${tower}
 <rect y="760" width="${W}" height="140" fill="url(#dbtefx-dn-city)"/>
 <path d="${nearRow.d}" fill="${mix(t.bg, '#000000', 0.35)}"/><path d="${nearRow.ant}" stroke="${mix(t.bg, '#000000', 0.35)}" stroke-width="1.5"/>
-<g fill="${t.text}" fill-opacity="0.35">${nearRow.lit}</g>
+<path d="${nearRow.lit}" fill="${t.text}" fill-opacity="0.35"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dn-vig)"/>
 <!--mid-->
 <circle cx="${bx + 30}" cy="${by - 20}" r="360" fill="url(#dbtefx-dn-halo)"/>

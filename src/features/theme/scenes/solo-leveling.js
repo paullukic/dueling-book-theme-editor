@@ -26,12 +26,12 @@ const scene = (t) => {
       const w = 24 + r() * 58;
       const h = hMin + r() * (x > 520 && x < 1000 ? (hMax - hMin) * 0.35 : hMax - hMin);
       const y = yBase - h;
-      const broken = r() < 0.8;
+      const broken = r() < 0.6;
       let crown = `H${n1(x + w)}`;
       if (broken) {
-        const k = 4 + Math.floor(r() * 4);
+        const k = 3 + Math.floor(r() * 3);
         crown = '';
-        for (let i = 1; i <= k; i++) crown += `L${n1(x + (w * i) / k)} ${n1(y + (i === k ? r() * 50 : r() * 44 - (i % 2 ? 0 : 16)))}`;
+        for (let i = 1; i <= k; i++) crown += `L${n1(x + (w * i) / k)} ${n1(y + (i === k ? r() * 40 : r() < 0.5 ? r() * 8 : r() * 46))}`;
       }
       body += `M${n1(x)} ${H}V${n1(y)}${crown}V${H}Z`;
       if (rim && x + w > 760 && r() < 0.6) edge += `M${n1(x + w)} ${n1(y + 6)}V${n1(y + 30 + h * 0.18)}`;
@@ -134,6 +134,9 @@ void main() {
   col += u_accent * 0.85 * arms * fall;
   col += mix(u_accent, u_text, 0.7) * 0.5 * pow(arms, 3.0) * fall;
   col = mix(col, u_bg * 0.5, (1.0 - arms) * smoothstep(0.32, 0.1, r) * 0.5);
+  float storm = fbm(s * 3.0 + 11.0);
+  col = mix(col, u_bg * 0.35, smoothstep(0.22, 0.42, r) * smoothstep(0.9, 0.45, r) * smoothstep(0.45, 0.75, storm) * 0.8);
+  col += mix(u_accent, u_text, 0.4) * 0.25 * smoothstep(0.55, 0.8, storm) * exp(-pow((r - 0.3) * 8.0, 2.0));
   col += mix(u_text, vec3(1.0), 0.5) * core;
   col += u_accent * 0.1 * exp(-r * 1.6);
   float k = floor(u_time / 3.0);

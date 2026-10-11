@@ -102,10 +102,10 @@ const scene = (t) => {
     let d = `M${x0} ${y0s}`;
     let x = x0;
     let y = y0s;
-    const n = 7;
+    const n = 9;
     for (let k = 1; k <= n; k++) {
-      x += (rand() - 0.5) * 34;
-      y -= len / n;
+      x += (k % 2 ? 1 : -1) * (rand() < 0.75 ? 1 : -0.4) * (4 + rand() * 20);
+      y -= (len / n) * (0.6 + rand() * 0.8);
       d += `L${n1(x)} ${n1(y)}`;
       if (k === 3 && rand() < 0.7) d += `M${n1(x)} ${n1(y)}l${n1((rand() - 0.5) * 50)} ${n1(-len * 0.25)}M${n1(x)} ${n1(y)}`;
     }

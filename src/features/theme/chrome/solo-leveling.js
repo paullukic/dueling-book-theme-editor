@@ -28,7 +28,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const ring = svg(45, 45, `<g fill="none" stroke="${ice}" stroke-opacity="0.55" stroke-width="1.4"><path d="M22.5 3.5A19 19 0 0 1 41.5 22.5M22.5 41.5A19 19 0 0 1 3.5 22.5" stroke-dasharray="20 4"/></g><circle cx="22.5" cy="22.5" r="15.5" fill="none" stroke="${cyan}" stroke-opacity="0.3"/>`);
 
   const scan = `repeating-linear-gradient(180deg, ${alpha(cyan, 0.04)} 0 1px, transparent 1px 3px)`;
-  const glass = (lift = 0) => `linear-gradient(180deg, ${alpha(cyan, 0.08 + lift)}, transparent 45%), ${scan}, linear-gradient(180deg, ${alpha(glassTop, 0.97)}, ${alpha(glassBot, 0.98)})`;
+  const glass = (lift = 0) => `linear-gradient(180deg, ${alpha(cyan, 0.08 + lift)}, transparent 45%), ${scan}, linear-gradient(180deg, ${glassTop}, ${glassBot})`;
   const label = `color: ${t.text} !important; text-shadow: 0 0 6px ${alpha(cyan, 0.6)}, 0 1px 2px #000000 !important;`;
   const header = (h = 34) => `linear-gradient(180deg, ${alpha(cyan, 0.16)} 0 ${h}px, ${alpha(cyan, 0.75)} ${h}px ${h + 1}px, transparent ${h + 1}px)`;
 
