@@ -316,7 +316,7 @@ test('skins: archetype art renders the same every time and stays compact', () =>
 });
 
 test('scenes: every archetype has one, it can hold still, and bad colours draw nothing', () => {
-  PRESETS.filter((p) => p.group === 'archetype').forEach((p) => assert.ok(SCENE_IDS.includes(p.id), p.id));
+  PRESETS.filter((p) => p.group !== 'clean').forEach((p) => assert.ok(SCENE_IDS.includes(p.id), p.id));
   const t = PRESETS.find((p) => p.id === 'blackwing').tokens;
   const moving = sceneSvg('blackwing', t);
   assert.match(moving, /animation: dbtefx-fall/);
