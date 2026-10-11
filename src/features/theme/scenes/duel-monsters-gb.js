@@ -120,7 +120,7 @@ const scene = (t) => {
 @keyframes dbtefx-gb-lpb { 0%, 49.9% { opacity: 0; } 50%, 100% { opacity: 1; } }
 @keyframes dbtefx-gb-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(${P}px); } }</style>${grid}
 <!--mid-->
-<g shape-rendering="crispEdges">${lp}<g style="animation: dbtefx-gb-lpa 14s steps(1, end) infinite;">${lpA}</g><g style="animation: dbtefx-gb-lpb 14s steps(1, end) infinite;">${lpB}</g>
+<g shape-rendering="crispEdges" opacity="0.18">${lp}<g style="animation: dbtefx-gb-lpa 14s steps(1, end) infinite;">${lpA}</g><g style="animation: dbtefx-gb-lpb 14s steps(1, end) infinite;">${lpB}</g>
 <g style="animation: dbtefx-gb-idle 1.6s steps(1, end) infinite;">${card}</g>${stats}${hand}${msg}${mask}${cursor}</g>`;
 };
 

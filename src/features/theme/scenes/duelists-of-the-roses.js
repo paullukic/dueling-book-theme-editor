@@ -133,9 +133,9 @@ ${ring(petal, 0.56, 36, base, ` stroke="${hi}" stroke-opacity="0.8" stroke-width
 <rect width="1600" height="900" fill="url(#dbtefx-dor-sky)"/>
 <ellipse cx="1280" cy="270" rx="420" ry="340" fill="url(#dbtefx-dor-bloom)" style="animation: dbtefx-pulse 7s ease-in-out infinite;"/>
 <!--mid-->
-<g>${tiles}${marks}<path d="${grid}" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"/>${sel}</g>
+<g opacity="0.6">${tiles}${marks}<path d="${grid}" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"/>${sel}</g>
 <polygon points="${quad(-3.5, 0, 3.5, 7)}" fill="url(#dbtefx-dor-sky)" fill-opacity="0.25"/>
-${scroll(-1)}${scroll(1)}${shieldArt}${stems}${roses}
+<g opacity="0.22">${scroll(-1)}${scroll(1)}${shieldArt}${stems}${roses}</g>
 <!--near-->
 ${petals}`;
 };

@@ -8,6 +8,7 @@
 // (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 import { pxText, textWidth } from '../scenes/pixel-kit.js';
+import { PIXEL_DIGITS } from './pixel-font.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -59,6 +60,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   const u = [svgUrl(bevelSvg(hi, lo)), svgUrl(brackets), svgUrl(lpTag)];
   return `
+@font-face { font-family: "DBTE Pixel"; src: url(${PIXEL_DIGITS}) format("woff"); }
 html body { ${u.map((v, i) => `--dbtc-u${i}: ${v};`).join(' ')} }
 /* Menu tiles: navy windows with the pixel bevel; the hovered one flashes the orange selection brackets. */
 ${SEL.tile} { ${panel()} border-style: solid !important; border-image: var(--dbtc-u0) 4 / 9px stretch !important; border-radius: 0 !important; box-shadow: 4px 4px 0 ${alpha(ink, 0.7)} !important; image-rendering: pixelated; }
@@ -85,10 +87,15 @@ ${SEL.chat} { ${panel()} box-shadow: inset 3px 0 0 ${hi}, inset -3px 0 0 ${lo}, 
 /* Duel: LP bars in mint panels; bevelled phase keys, orange when active. */
 ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-shadow: 0 0 0 3px ${mint}, 0 0 0 5px ${ink}, inset 0 2px 0 ${alpha('#ffffff', 0.3)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)} 0 25%, transparent 25%), ${t.self} !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)} 0 25%, transparent 25%), ${t.opp} !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)} 0 3px, transparent 3px), ${mintLo} !important; }
+${SEL.lifeSelf} { background: linear-gradient(0deg, ${t.self} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mintHi} 0 3px, transparent 3px), ${mint} !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${t.opp} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mintHi} 0 3px, transparent 3px), ${mint} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 1px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; image-rendering: pixelated; }
-${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: ${outline(ink, 2)} !important; }
+${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${navy} !important; -webkit-text-fill-color: currentColor !important; text-shadow: none !important; }
+/* Our counters sit on their own plate: no extra ink blur behind the number. */
+${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
+${sel(['#duel #lifepoints1[data-dbte-lp~="low"] .life_txt', '#duel #lifepoints2[data-dbte-lp~="low"] .life_txt', '#duel #lifepoints1[data-dbte-lp~="zero"] .life_txt', '#duel #lifepoints2[data-dbte-lp~="zero"] .life_txt'])} { color: #ffffff !important; text-shadow: ${outline(ink, 2)} !important; }
+${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; border-radius: 0 !important; }

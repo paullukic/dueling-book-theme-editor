@@ -42,7 +42,15 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   // Crowned finial for the top corners of tiles.
   const finial = svg(26, 22, `<path d="M3 21h20l-2-6H5Z" fill="${goldLo}"/><path d="M5 15l-2-9 6 4 4-8 4 8 6-4-2 9Z" fill="${gold}" stroke="${goldHi}" stroke-width="0.8"/><circle cx="13" cy="2.5" r="2" fill="${goldHi}"/>`);
   const roseCursor = svg(30, 30, `<g transform="translate(15 15)">${roseSvg(13, rose)}</g>`);
-  const lpTag = svg(34, 20, `<rect x="1" y="1" width="32" height="18" rx="3" fill="${ink}" stroke="${gold}" stroke-width="1.5"/><text x="17" y="14.8" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="13" fill="${goldHi}">LP</text>`);
+  // LP crests: a rose in a gold ring with small scroll wings (white rose for you, red for the opponent).
+  const crest = (base) => svg(46, 40, `<path d="M12 22c-6-1-10-5-11-10c3 3 7 4 11 4M34 22c6-1 10-5 11-10c-3 3-7 4-11 4" fill="none" stroke="${gold}" stroke-width="2.4" stroke-linecap="round"/><circle cx="23" cy="20" r="15" fill="${ink}" stroke="${gold}" stroke-width="3"/><circle cx="23" cy="20" r="11.5" fill="none" stroke="${goldLo}"/><g transform="translate(23 20.5)">${roseSvg(10, base)}</g>`);
+  // Phase medallion: a five-lobed gold rose outline around the disc.
+  let lobes = '';
+  for (let i = 0; i < 5; i++) {
+    const a = (i * 72 - 90) * Math.PI / 180;
+    lobes += `<circle cx="${n1(32 + Math.cos(a) * 17)}" cy="${n1(32 + Math.sin(a) * 17)}" r="15"/>`;
+  }
+  const medal = svg(64, 64, `<g fill="${goldLo}">${lobes}</g><g fill="${gold}" transform="translate(32 32) scale(0.92) translate(-32 -32)">${lobes}</g><circle cx="32" cy="32" r="25" fill="${goldHi}"/><circle cx="32" cy="32" r="23" fill="${ink}"/>`);
 
   const lacquerBg = (lift = 0) => `linear-gradient(180deg, ${alpha('#ffffff', 0.1 + lift)}, transparent 38%), radial-gradient(ellipse 90% 70% at 50% 0%, ${alpha(t.opp, 0.35 + lift)}, transparent 70%), linear-gradient(180deg, ${lacquer}, ${lacquerDeep})`;
   const goldEdge = `0 0 0 1px ${goldLo}, 0 0 0 3px ${gold}, 0 0 0 4px ${ink}`;
@@ -65,7 +73,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
-  const u = [svgUrl(frameSvg), svgUrl(medallion), svgUrl(finial), svgUrl(roseCursor), svgUrl(lpTag)];
+  const u = [svgUrl(frameSvg), svgUrl(medallion), svgUrl(finial), svgUrl(roseCursor), svgUrl(crest(t.accent2)), svgUrl(crest(rose)), svgUrl(medal)];
   return `
 html body { ${u.map((v, i) => `--dbtc-u${i}: ${v};`).join(' ')} }
 /* Menu tiles: crimson lacquer in gold filigree, a crowned finial on the top right corner; hover swaps it for a red rose at the left. */
@@ -92,13 +100,19 @@ ${SEL.chatTop} { background: ${lacquerBg()} !important; box-shadow: inset 0 -2px
 ${SEL.chat} { background: linear-gradient(180deg, ${mix(t.surface, lacquerDeep, 0.4)}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${goldLo}, inset -1px 0 0 ${goldLo}, inset 0 -1px 0 ${goldLo} !important; }
 
 /* Duel: teal (player) and crimson (enemy) LP panels in gold; gold-ringed phase discs. */
-${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${goldLo}, 0 0 10px -2px ${alpha(gold, 0.5)}, 0 4px 10px -3px #000000 !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -38px; top: 2px; width: 34px; height: 20px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
-${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 2px 0 ${ink}, 0 0 6px ${ink} !important; font-family: Georgia, "Times New Roman", serif !important; }
-${SEL.phase} { background: conic-gradient(from 210deg, ${goldHi}, ${goldLo}, ${gold}, ${goldLo}, ${goldHi}) !important; box-shadow: 0 0 0 1px ${ink}, 0 0 10px -2px ${alpha(gold, 0.5)}, 0 4px 8px -2px #000000 !important; }
+${SEL.life} { border-color: ${gold} !important; border-radius: 14px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${goldLo}, 0 0 0 4px ${ink}, 0 0 10px -2px ${alpha(gold, 0.5)}, 0 4px 10px -3px #000000 !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp}, ${sel(['#duel .lifepoints .black_bar'])} { border-radius: 12px !important; }
+${SEL.lifeSelf} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.8)}, ${mix(t.self, t.bg, 0.55)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${lacquerDeep}, ${mix(t.opp, t.bg, 0.6)}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.08)}, transparent 50%), ${ink} !important; }
+${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
+${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -50px; top: -6px; width: 46px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${on(sel(['#duel #lifepoints2']), 'before')} { content: ""; position: absolute; left: -50px; top: -6px; width: 46px; height: 40px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { color: ${mix(t.text, gold, 0.25)} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 0 2px 0 ${ink}, 0 0 4px ${ink} !important; font-family: Georgia, "Times New Roman", serif !important; font-variant-numeric: lining-nums tabular-nums !important; font-feature-settings: "lnum" 1, "tnum" 1 !important; }
+/* Our counters sit on their own plate: no extra ink blur behind the number. */
+${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
+${SEL.phase} { background: var(--dbtc-u6) center / 100% 100% no-repeat !important; border-radius: 0 !important; box-shadow: none !important; filter: drop-shadow(0 3px 3px ${alpha('#000000', 0.7)}) drop-shadow(0 0 6px ${alpha(gold, 0.35)}); }
+${sel(['#duel .phase.active .background'])} { background: var(--dbtc-u6) center / 100% 100% no-repeat !important; border-radius: 0 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${lacquer}, ${lacquerDeep}) !important; }

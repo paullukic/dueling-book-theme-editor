@@ -17,6 +17,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const stoneLo = mix(t.border, t.bg, 0.7);
   const plate = mix(t.bg, '#000000', 0.3);
   const navy = mix(t.opp, t.bg, 0.45);
+  const navyDeep = mix(t.opp, t.bg, 0.68);
   const red = mix(t.self, t.bg, 0.3);
   const rim = mix(t.text, '#ffffff', 0.5);
 
@@ -53,7 +54,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Yellow pyramid cursor pointing right (flat-shaded).
   const cursor = svg(22, 26, `<polygon points="1,1 21,13 1,25" fill="${t.warning}"/><polygon points="1,13 21,13 1,25" fill="${mix(t.warning, t.bg, 0.4)}"/><polygon points="1,1 6,4 6,22 1,25" fill="${mix(t.warning, '#ffffff', 0.45)}"/>`);
   // LP tag: white letters on navy.
-  const lpTag = svg(30, 18, `<rect x="0.5" y="0.5" width="29" height="17" rx="3" fill="${navy}" stroke="${rim}"/><text x="15" y="13.5" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="12" fill="${rim}">LP</text>`);
+  // YOU / COM tags beside the LP boxes, as in the duel screen's corner.
+  const tag = (text, fill) => svg(38, 20, `<rect x="0.75" y="0.75" width="36.5" height="18.5" rx="4" fill="${fill}" stroke="${rim}" stroke-width="1.5"/><text x="19" y="14.6" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="12.5" fill="#ffffff">${text}</text>`);
 
   const dith = 'var(--dbtc-u1)';
   const label = `color: ${t.text} !important; text-shadow: 2px 2px 0 #000000 !important;`;
@@ -63,7 +65,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const popBtn = (text, wide, fill) => {
     const w = wide ? 234.85 : 153.4;
     const h = wide ? 78.5 : 78.47;
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect x="7" y="11" width="${w - 14}" height="56" rx="8" fill="#000000"/><rect x="9" y="13" width="${w - 18}" height="52" rx="7" fill="${fill}" stroke="${rim}" stroke-width="2.5"/><rect x="13" y="16" width="${w - 26}" height="16" rx="5" fill="#ffffff" fill-opacity="0.16"/><text x="${w / 2 + 1.5}" y="42.5" dominant-baseline="central" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="26" letter-spacing="2" fill="#000000">${text}</text><text x="${w / 2}" y="41" dominant-baseline="central" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="26" letter-spacing="2" fill="#ffffff">${text}</text></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect x="7" y="11" width="${w - 14}" height="56" rx="8" fill="#000000"/><rect x="9" y="13" width="${w - 18}" height="52" rx="7" fill="${fill}" stroke="${rim}" stroke-width="2.5"/><rect x="13" y="16" width="${w - 26}" height="16" rx="5" fill="#ffffff" fill-opacity="0.16"/><text x="${w / 2 + 1.5}" y="42.5" dominant-baseline="central" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="26" letter-spacing="2" fill="#000000">${text}</text><text x="${w / 2}" y="41" dominant-baseline="central" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="26" letter-spacing="2" fill="${fill === navy ? gold : '#ffffff'}">${text}</text></svg>`;
   };
   const popImg = (name) => sel([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
   const popCss = [['ok_btn', 'OK', navy, false], ['yes_btn', 'YES', navy, false], ['no_btn', 'NO', red, false], ['cancel_btn', 'CANCEL', red, true]]
@@ -74,7 +76,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   const platePanel = `background: ${dith}, linear-gradient(180deg, ${mix(t.surface, t.border, 0.12)}, ${plate}) !important;`;
 
-  const u = [svgUrl(frameSvg), svgUrl(dither), svgUrl(sunDisk), svgUrl(cursor), svgUrl(lpTag)];
+  const u = [svgUrl(frameSvg), svgUrl(dither), svgUrl(sunDisk), svgUrl(cursor), svgUrl(tag('YOU', red)), svgUrl(tag('COM', navy))];
   return `
 html body { ${u.map((v, i) => `--dbtc-u${i}: ${v};`).join(' ')} }
 /* Menu tiles: black plates in a carved sandstone band; the hovered tile gets the yellow pyramid cursor. */
@@ -84,7 +86,7 @@ ${on(SEL.tileHover, 'before')} { content: ""; position: absolute; left: -30px; t
 ${SEL.tileLabel} { ${label} }
 
 /* Buttons: the small navy boxes with a white rim; gold when hovered. */
-${SEL.button}, ${sel(['#content #settings_content > div.button:not(.title_txt)'])} { ${chip(navy)} color: ${rim} !important; text-shadow: 1px 1px 0 #000000 !important; }
+${SEL.button}, ${sel(['#content #settings_content > div.button:not(.title_txt)'])} { ${chip(navy)} color: ${gold} !important; text-shadow: 1px 1px 0 #000000 !important; }
 ${SEL.buttonHover} { ${chip(mix(gold, t.bg, 0.25), 0.3)} color: ${t.accentText} !important; text-shadow: none !important; }
 ${SEL.buttonDown} { ${chip(mix(gold, t.bg, 0.5), 0)} color: ${t.text} !important; }
 ${SEL.submit} { background: ${navy} !important; border: 1px solid ${rim} !important; color: ${rim} !important; border-radius: 4px !important; }
@@ -99,19 +101,23 @@ ${SEL.dialogTitle} { color: ${gold} !important; text-shadow: 2px 2px 0 #000000 !
 ${SEL.chatTop} { background: ${dith}, linear-gradient(180deg, ${stoneHi}, ${stone} 30%, ${stoneLo}) !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 -3px 0 #000000 !important; }
 ${SEL.chat} { ${platePanel} box-shadow: inset 2px 0 0 ${stone}, inset -2px 0 0 ${stone}, inset 0 -2px 0 ${stone} !important; }
 
-/* Duel: LP in the game's red (you) and navy (opponent) boxes; navy phase chips, gold when active. */
-${SEL.life} { border-color: ${rim} !important; border-radius: 5px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), ${dith}, ${t.self} !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), ${dith}, ${t.opp} !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -34px; top: 3px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
-${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 2px 2px 0 #000000 !important; }
-${SEL.phase} { background: ${rim} !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
-${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: #000000 !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 55%), ${navy} !important; }
+/* Duel: flat white numerals in the game's navy LP boxes, a YOU (red) or COM (navy) tag at the left, a thin
+   gold strip along the foot for the life left; square navy phase chips in a gold rim, gold when active. */
+${SEL.life} { border-color: ${rim} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
+${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
+${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -42px; top: 3px; width: 38px; height: 20px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
+${on(sel(['#duel #lifepoints2']), 'before')} { content: ""; position: absolute; left: -42px; top: 3px; width: 38px; height: 20px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; }
+${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { color: #ffffff !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 #000000, 0 0 1px #000000 !important; font-variant-numeric: tabular-nums; }
+/* Our counters sit on their own plate: no extra ink blur behind the number. */
+${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
+${SEL.phase} { background: ${gold} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
+${sel(['#duel .phase .background .background_top'])} { background: none !important; border-radius: 3px !important; }
+${sel(['#duel .phase .background .background_inner'])} { background: #000000 !important; border-radius: 2px !important; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { border-radius: 2px !important; background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 55%), ${navy} !important; }
 ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 55%), ${gold} !important; box-shadow: 0 0 12px ${alpha(gold, 0.7)}; }
-${sel(['#duel .phase span'])} { color: #ffffff !important; text-shadow: 2px 2px 0 #000000 !important; }
+${sel(['#duel .phase span'])} { color: ${gold} !important; text-shadow: 2px 2px 0 #000000 !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.accentText} !important; text-shadow: none !important; }
 ${SEL.duelLog} { ${platePanel} box-shadow: inset 0 0 0 6px ${stone}, inset 0 1px 0 7px ${stoneHi}, inset 0 0 0 8px ${gold}, inset 0 0 0 9px #000000 !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${gold}, 0 0 0 5px ${stone}, 0 0 0 6px #000000 !important; }

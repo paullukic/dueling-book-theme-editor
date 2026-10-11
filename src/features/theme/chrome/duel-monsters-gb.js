@@ -4,7 +4,9 @@
 // an inverted (ink) bar; numbers and pop-up buttons are set in a pixel font.
 // No glow, no blur, no gradients: four flat shades only.
 // (t, kit) -> CSS string; see chrome/kit.js.
+import { mix } from '../../../lib/color.js';
 import { pxText, textWidth } from '../scenes/pixel-kit.js';
+import { PIXEL_DIGITS } from './pixel-font.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -67,7 +69,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Everything pictorial is shown on the LCD: greyscale, multiplied into the green.
   const lcdIcons = ['refresh_btn', 'screenshot_btn', 'mute_btn', 'lookup', 'duel_btn', 'admin_btn', 'die_btn', 'coin_btn', 'sword', 'like_btn', 'dislike_btn', 'liked_by', 'play_btn', 'pause_btn', 'plus_btn', 'minus_btn', 'stats_teal', 'stats_red', 'key', 'hide', 'hand', 'next_sleeve_btn', 'prev_sleeve_btn', 'export_btn', 'blue_target', 'red_target', 'green_target', 'arrow'];
-  const lcdImages = sel(['#front_page img', '#content .avatar img.image', '#duel #field_spell_pic img', ...lcdIcons.map((n) => `img[src*="/svg/${n}"]`)]);
+  const lcdImages = sel(['#content .avatar img.image', '#duel #field_spell_pic img', ...lcdIcons.map((n) => `img[src*="/svg/${n}"]`)]);
   // Avatar frame: an LCD window ring around the picture.
   const avatarFrame = crisp(64, 64, `${ring(64, 0, 4, ink)}${ring(64, 5, 2, dark)}`);
   const u0 = svgUrl(frameSvg);
@@ -76,6 +78,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const u3 = svgUrl(lpChip);
   const u4 = svgUrl(avatarFrame);
   return `
+@font-face { font-family: "DBTE Pixel"; src: url(${PIXEL_DIGITS}) format("woff"); }
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: LCD windows; the hovered one gets the blinking arrow cursor and an inverted bar. */
 ${SEL.tile} { background: ${flat()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 4 / 9px stretch !important; border-radius: 0 !important; box-shadow: 4px 4px 0 ${alpha(ink, 0.35)} !important; image-rendering: pixelated; }
@@ -103,10 +106,13 @@ ${SEL.chat} { background: ${flat()} !important; box-shadow: inset 3px 0 0 ${ink}
 /* Duel: segmented LCD life bars with an LP chip; square phase buttons, the active one inverted. */
 ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${pale}, 0 0 0 4px ${ink}, 4px 4px 0 4px ${alpha(ink, 0.3)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: ${segs(t.self)} !important; }
-${SEL.lifeOpp} { background: ${segs(t.opp)} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { background: ${segs(ink)} !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${dark} 0 5px, ${mix(dark, ink, 0.5)} 5px 6px) !important; }
+${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -36px; top: 2px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
-${sel(['#duel .lifepoints .life_txt'])} { color: ${ink} !important; text-shadow: -2px 0 0 ${pale}, 2px 0 0 ${pale}, 0 -2px 0 ${pale}, 0 2px 0 ${pale} !important; font-family: "Lucida Console", "Courier New", monospace !important; font-weight: 700 !important; }
+${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${pale} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 ${ink}, 2px 0 0 ${ink} !important; }
+/* Our counters sit on their own plate: no extra ink blur behind the number. */
+${on(sel(['#duel #lifepoints1.lifepoints .life_txt', '#duel #lifepoints2.lifepoints .life_txt']).replace(/html body/g, 'html:not([data-dbte-lpstyle]) body'), 'before')} { background: none !important; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; box-shadow: 3px 3px 0 ${alpha(ink, 0.35)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${pale} !important; border-radius: 0 !important; }
@@ -151,7 +157,7 @@ ${sel(['#content .os-scrollbar-track'])} { background: ${alpha(dark, 0.25)} !imp
 /* Pictures and DuelingBook's coloured icons go through the LCD; avatar frames become LCD windows. */
 ${lcdImages} { filter: grayscale(1) contrast(1.15) !important; mix-blend-mode: multiply !important; }
 ${sel(['#content .avatar'])} { background-color: ${pale} !important; }
-${sel(['#duel .duel_avatar img.image'])} { filter: grayscale(1) sepia(1) hue-rotate(38deg) saturate(1.5) contrast(1.05) !important; }
+${sel(['#front_page img', '#duel .duel_avatar img.image'])} { filter: grayscale(1) sepia(1) hue-rotate(38deg) saturate(1.7) brightness(0.8) contrast(1.1) !important; mix-blend-mode: normal !important; }
 ${sel(['img.avatar_frame', 'img[src*="/svg/avatar_red"]', 'img[src*="/svg/avatar_teal"]'])} { content: var(--dbtc-u4) !important; filter: none !important; image-rendering: pixelated; }
 ${sel(['#duel #turn .red', '#duel #turn .blue', '#duel #start_turn .red', '#duel #end_turn .red', '#duel #start_turn .blue', '#duel #end_turn .blue'])} { background: ${ink} !important; filter: none !important; border-radius: 0 !important; }
 ${sel(['#chats .chat input', '#deck_constructor #search input[type=text]'])} { border-color: ${ink} !important; outline-color: ${ink} !important; }

@@ -99,14 +99,14 @@ const scene = (t) => {
 <path d="${grid}" stroke="${t.success}" stroke-opacity="0.07" stroke-width="7"/>
 <path d="${grid}" stroke="${t.success}" stroke-opacity="0.22" stroke-width="1.5"/>
 <!--mid-->
-<g shape-rendering="crispEdges">
+<g shape-rendering="crispEdges" opacity="0.18">
 ${lpPanel(92, 'OPPONENT')}<g style="animation: dbtefx-eds-lpa 10s steps(1, end) infinite;">${lpDigits(92, '8000')}</g><g style="animation: dbtefx-eds-lpb 10s steps(1, end) infinite;">${lpDigits(92, '6500')}</g>
 <rect x="${bx - A}" y="${by - A}" width="${bw + 2 * A}" height="${bh + 2 * A}" fill="${ink}"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="url(#dbtefx-eds-brick)"/>${slots}${faceDown(1, 0)}${faceDown(3, 1)}${faceDown(0, 1)}
 <g style="animation: dbtefx-eds-lunge 5s steps(2, end) infinite;">${ours}</g>
 ${lpPanel(584, 'YOU')}${lpDigits(584, '8000')}
 ${info}
 </g>
-<g shape-rendering="crispEdges" style="transform-origin: 1286px ${wy + 24}px; animation: dbtefx-eds-pop 5s steps(8, end) infinite;">${attack}</g>`;
+<g opacity="0.22"><g shape-rendering="crispEdges" style="transform-origin: 1286px ${wy + 24}px; animation: dbtefx-eds-pop 5s steps(8, end) infinite;">${attack}</g></g>`;
 };
 
 export default scene;
