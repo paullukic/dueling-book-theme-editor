@@ -49,7 +49,7 @@ const ddd = (t) => {
 
   // Obsidian pillars with gold bands, receding on either side of the hall.
   const pillar = (x, w, top, k) => `<rect x="${n1(x - w / 2)}" y="${top}" width="${w}" height="${900 - top}" fill="url(#dbtefx-ddd-pillar)" fill-opacity="${k}"/><path d="M${n1(x - w / 2)} ${top + 40}h${w}M${n1(x - w / 2)} ${top + 52}h${w}M${n1(x - w / 2)} 780h${w}" stroke="${gold}" stroke-opacity="${n1(0.6 * k)}" stroke-width="3"/><path d="M${n1(x - w / 2 - 10)} ${top}h${w + 20}l-10 22h${-w}Z" fill="${goldDeep}" fill-opacity="${k}"/>`;
-  const pillars = pillar(1030, 44, 90, 0.6) + pillar(1590, 60, 50, 0.85);
+  const pillars = `<g class="dbtefx-ddd-nearpillar">${pillar(1030, 44, 90, 0.6)}</g>${pillar(1590, 60, 50, 0.85)}`;
 
   // D/D/D Doom King Armageddon: the real card artwork, enthroned in the gate.
   const king = cardArt(t, { id: 'dbtefx-ddd-hero', card: CARDS.doomKingArmageddon, x: kx - 230, y: 40, w: 460, h: 560, focus: [0.5, 0.42], zoom: 0.92, blend: 'normal', feather: 0.7, fade: 0.6, grade: 'contrast(1.2) saturate(0.8)', tint: violet, tintAmt: 0.25, backdrop: ink, backdropAmt: 0.85, glow: violet, breathe: 16 });
@@ -68,7 +68,7 @@ const ddd = (t) => {
   const contract = `<g transform="translate(${cx0} ${cy0}) rotate(-6) scale(0.8)">
 <path d="M-104 -96H104V112H-104Z" fill="url(#dbtefx-ddd-parch)"/>
 <path d="M-104 -96H104M-104 112H104" stroke="${mix(parchment, ink, 0.5)}" stroke-width="2"/>
-${script}
+<g opacity="0.7">${script}</g>
 <path d="M-80 82C-66 70 -58 92 -44 78C-34 68 -26 88 -12 76" fill="none" stroke="${crimson}" stroke-width="2.4"/>
 <circle cx="64" cy="76" r="24" fill="url(#dbtefx-ddd-seal)" stroke="${mix(crimson, t.bg, 0.5)}" stroke-width="2" style="animation: dbtefx-ddd-seal 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center;"/>
 <circle cx="64" cy="76" r="15" fill="none" stroke="${goldLit}" stroke-width="1.6"/>

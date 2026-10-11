@@ -161,6 +161,9 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 /* Scrollbars: jacket zippers. */
 ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradient(180deg, ${chrome} 0 3px, ${leatherDark} 3px 5px), ${chrome} !important; border-radius: 3px !important; box-shadow: inset 0 0 0 1px ${leatherDark}, 0 0 0 1px ${alpha(orange, 0.6)} !important; }
 
+/* Duel: Surge stands behind the empty top-right zones, so she waits for the menu. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-herogrp { display: none; }
+
 /* Pop-up buttons in the theme material. */
 ${popCss}
 `;

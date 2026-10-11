@@ -119,6 +119,8 @@ ${CARD_ART_KEYFRAMES}
 <radialGradient id="dbtefx-sd-neb2" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.12"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-sd-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.5)}" stop-opacity="0.3"/><stop offset="0.5" stop-color="${t.accent}" stop-opacity="0.09"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-sd-trail" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.32"/><stop offset="0.55" stop-color="${t.accent}" stop-opacity="0.14"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
+<filter id="dbtefx-sd-soft" x="-0.2" y="-0.2" width="1.4" height="1.4"><feGaussianBlur stdDeviation="40"/></filter>
+<mask id="dbtefx-sd-stagefade" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><rect x="480" y="70" width="740" height="860" fill="#000000" filter="url(#dbtefx-sd-soft)"/></mask>
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-sd-sky)"/>
 <ellipse cx="1180" cy="290" rx="640" ry="300" fill="url(#dbtefx-sd-neb)" transform="rotate(-16 1180 290)"/>
@@ -136,9 +138,9 @@ ${CARD_ART_KEYFRAMES}
 <path d="M120 ${deckY}H${deckEnd}M228 446V${sky}M272 446V${sky}" stroke="${t.accent}" stroke-opacity="0.28" stroke-width="1.2"/>
 <circle cx="256" cy="414" r="3" fill="${t.accent2}"/>
 <!--mid-->
-<path d="${trailD}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="90" stroke-linecap="round" stroke-opacity="0.45"/>
+<g class="dbtefx-sd-trailgrp"><path d="${trailD}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="90" stroke-linecap="round" stroke-opacity="0.45"/>
 <path d="${trailD}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="18" stroke-linecap="round"/>
-<path d="${strands}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="5" stroke-linecap="round"/>
+<path d="${strands}" fill="none" stroke="url(#dbtefx-sd-trail)" stroke-width="5" stroke-linecap="round"/></g>
 <g stroke="${mix(t.accent, '#ffffff', 0.55)}" stroke-linecap="round"><path d="${dots(dust[0])}" stroke-width="1.6" stroke-opacity="0.7"/><path d="${dots(dust[1])}" stroke-width="2.6" stroke-opacity="0.85"/></g>
 ${sparkles}
 <g class="dbtefx-sd-stage">${stageSparkles}</g>

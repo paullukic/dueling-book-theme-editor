@@ -81,6 +81,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
+  // Crisp LP fill: a hard ramp, one sharp highlight line, no soft glaze.
+  const crispFill = (hi, lo) => `linear-gradient(180deg, transparent 2px, ${alpha('#ffffff', 0.55)} 2px 3px, transparent 3px), linear-gradient(90deg, ${hi}, ${lo})`;
   const vars = [frameSvg, crestTile, chart, crown, phaseRing, lifeCrest].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
@@ -111,10 +113,10 @@ ${sel(['#chats .chat .chat_top span'])} { color: ${bone} !important; text-shadow
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${stone}, ${stoneDeep}) !important; box-shadow: inset 1px 0 0 ${sulphurDeep}, inset -1px 0 0 ${sulphurDeep}, inset 0 -1px 0 ${sulphurDeep}, inset 0 0 30px -10px ${alpha(ember, 0.5)} !important; }
 
 /* Duel: stone-bound life bars led by the laurel; phases are the nine circles. */
-${SEL.life} { border-color: ${mix(stoneDeep, '#000000', 0.35)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${alpha(bone, 0.22)}, inset 0 0 0 1px ${ember}, inset 0 0 6px ${alpha(ember, 0.55)}, 0 0 12px -2px ${alpha(ember, 0.6)} !important; }
+${SEL.life} { border-color: ${mix(stoneDeep, '#000000', 0.35)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${alpha(bone, 0.22)}, inset 0 0 0 1px ${ember}, 0 0 12px -2px ${alpha(ember, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: ${crispFill(mix(t.self, '#ffffff', 0.1), mix(t.self, '#7a1d00', 0.45))} !important; }
+${SEL.lifeOpp} { background: ${crispFill(mix(t.opp, '#ffffff', 0.15), mix(t.opp, '#1a2430', 0.45))} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: radial-gradient(circle, ${stoneDeep} 60%, ${sulphurDeep} 62%, ${ink} 70%) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(ember, 0.7)} !important; }

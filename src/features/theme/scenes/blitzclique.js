@@ -200,7 +200,7 @@ const blitzclique = (t) => {
 <!--mid-->
 <g style="animation: dbtefx-bcq-cloud 50s ease-in-out infinite;">${storm(1250, 66, 9)}</g>
 <circle cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
-${surge}
+<g class="dbtefx-bcq-herogrp">${surge}</g>
 <g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">
 ${strike}
 <g transform="translate(${ix} ${iy}) scale(${is})">

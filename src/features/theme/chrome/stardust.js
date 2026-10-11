@@ -149,6 +149,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Duel: no sparkles over the stage; zone borders calmed toward silver. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-stage { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-trailgrp { mask: url(#dbtefx-sd-stagefade); }
+/* Front page Welcome / Forum / Rules: night plates so the links read over the dragon. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 3px; }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;
 };

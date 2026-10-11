@@ -97,7 +97,7 @@ ${SEL.buttonHover} { background: linear-gradient(160deg, ${alpha('#ffffff', 0.2)
 ${SEL.buttonDown} { background: ${night} !important; border-color: ${amethyst} !important; box-shadow: inset 0 2px 5px #000000 !important; }
 
 /* Pop-ups: a glass casket in a gold setting under the seven gems on a ruin lintel. */
-${SEL.dialog} { background: linear-gradient(160deg, ${alpha('#ffffff', 0.07)}, transparent 40%), radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(amethyst, 0.18)}, transparent 70%), var(--dbtc-u1), linear-gradient(180deg, ${glassHi}, ${night}) !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${gold}, 0 0 0 4px ${night}, 0 0 0 5px ${alpha(amethyst, 0.6)}, 0 24px 60px -12px #000000 !important; }
+${SEL.dialog} { background: linear-gradient(160deg, ${alpha('#ffffff', 0.07)}, transparent 40%), radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(amethyst, 0.18)}, transparent 70%), var(--dbtc-u1), linear-gradient(180deg, ${glassHi}, ${night}) !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${gold}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8px; right: 8px; bottom: 8px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(20)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 100px); top: -60px; right: auto; bottom: auto; width: 200px; height: 75px; pointer-events: none; z-index: 1; background: var(--dbtc-u2) center / contain no-repeat; transform: none; filter: drop-shadow(0 3px 4px #000000); }
 ${SEL.dialogTitle} { ${label} }
@@ -115,6 +115,7 @@ ${SEL.lifeOpp} { background: ${prism(t.opp)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -3px; width: 34px; height: 34px; z-index: 2; pointer-events: none; background: var(--dbtc-u${5 + gems.length}) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 html body:has(#duel:not([style*="none"])) .dbtefx-cb-bow { opacity: 0.4; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(44px, 0); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edgegem { opacity: 0.45; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: conic-gradient(from 0deg, ${gems.join(', ')}, ${gems[0]}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: radial-gradient(circle, ${night} 62%, ${gold} 66%, ${goldDk} 76%) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }

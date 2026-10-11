@@ -63,6 +63,8 @@ ${CARD_ART_KEYFRAMES}
 <radialGradient id="dbtefx-ut-sun" cx="${cx}" cy="300" r="760" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${goldHi}" stop-opacity="0.75"/><stop offset="0.18" stop-color="${gold}" stop-opacity="0.38"/><stop offset="0.5" stop-color="${gold}" stop-opacity="0.1"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ut-rays" cx="${cx}" cy="300" r="900" gradientUnits="userSpaceOnUse"><stop offset="0.1" stop-color="${goldHi}" stop-opacity="0.38"/><stop offset="0.4" stop-color="${gold}" stop-opacity="0.08"/><stop offset="0.75" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ut-mist" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${goldHi}" stop-opacity="0.85"/><stop offset="0.5" stop-color="${gold}" stop-opacity="0.35"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-ut-gapfade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="0.06" stop-color="#000000"/><stop offset="0.94" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<mask id="dbtefx-ut-stagegap" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><rect x="440" y="0" width="800" height="900" fill="url(#dbtefx-ut-gapfade)"/></mask>
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-ut-sky)"/>
 <path d="${stars}" stroke="${t.text}" stroke-opacity="0.6" stroke-width="1.8" stroke-linecap="round"/>
@@ -71,8 +73,8 @@ ${CARD_ART_KEYFRAMES}
 <path d="${heart}" fill="${red}" fill-opacity="0.18"/><path d="${heart}" fill="none" stroke="${mix(night, t.opp, 0.45)}" stroke-width="9"/><path d="${heart}" fill="none" stroke="${red}" stroke-width="2.4" style="animation: dbtefx-ut-glow 4s ease-in-out infinite;"/>
 <circle cx="${tx}" cy="240" r="62" fill="none" stroke="${t.opp}" stroke-opacity="0.35" stroke-width="2"/>
 <path d="M${tx} 160V200" stroke="${mix(night, t.opp, 0.3)}" stroke-width="3"/><circle cx="${tx}" cy="158" r="3" fill="${red}"/>
-<path d="${city}" fill="${mix(night, t.opp, 0.16)}"/>
-<path d="${lights}" stroke="${t.opp}" stroke-opacity="0.7" stroke-width="2.4" stroke-linecap="round"/>
+<g class="dbtefx-ut-city"><path d="${city}" fill="${mix(night, t.opp, 0.16)}"/>
+<path d="${lights}" stroke="${t.opp}" stroke-opacity="0.7" stroke-width="2.4" stroke-linecap="round"/></g>
 <!--mid-->
 <g class="dbtefx-ut-sunglow"><rect width="1600" height="900" fill="url(#dbtefx-ut-sun)"/>
 <g style="transform-origin: ${cx}px 300px; animation: dbtefx-spin 160s linear infinite;"><path d="${rays}" fill="url(#dbtefx-ut-rays)"/></g>

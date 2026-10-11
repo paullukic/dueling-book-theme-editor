@@ -146,8 +146,8 @@ const scene = (t) => {
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-md-sky)" fill-opacity="0.9"/>
 <g class="dbtefx-md-moon"><circle cx="1020" cy="140" r="260" fill="url(#dbtefx-md-moonglow)"/>
-<circle cx="1020" cy="140" r="54" fill="url(#dbtefx-md-moon)"/></g>
-<g fill="${mix(cream, gold, 0.4)}" fill-opacity="0.35"><circle cx="1004" cy="128" r="9"/><circle cx="1034" cy="160" r="6"/><circle cx="1040" cy="122" r="4"/></g>
+<circle cx="1020" cy="140" r="54" fill="url(#dbtefx-md-moon)"/>
+<g fill="${mix(cream, gold, 0.4)}" fill-opacity="0.35"><circle cx="1004" cy="128" r="9"/><circle cx="1034" cy="160" r="6"/><circle cx="1040" cy="122" r="4"/></g></g>
 ${stars}
 <g fill="${mix(t.bg, t.accent, 0.2)}" fill-opacity="0.8">${town}</g>
 <g fill="${glowWin}" fill-opacity="0.7">${townWins}</g>

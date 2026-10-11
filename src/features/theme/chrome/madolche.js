@@ -131,7 +131,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradien
 
 /* Pop-up buttons as macaron pills. */
 ${popCss}
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-moon { opacity: 0.2; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-moon { opacity: 0; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-lolly { opacity: 0; }
 `;
 };

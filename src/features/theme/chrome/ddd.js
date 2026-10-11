@@ -126,7 +126,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, $
 /* Duel: gold-bound life bars led by the wax seal; phases are clock dials. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${goldDeep}, inset 0 0 0 1px ${alpha(goldLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.15)}, ${mix(t.self, t.danger, 0.22)} 50%, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.45)}) !important; box-shadow: inset 0 0 0 1px ${ink}, inset 0 -2px 0 ${alpha(violet, 0.85)}, inset 0 1px 0 ${alpha(violet, 0.5)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.15)}, ${mix(t.self, t.danger, 0.22)} 50%, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.45)}) !important; box-shadow: inset 0 0 0 1px ${ink} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.1)}, ${t.opp} 50%, ${mix(t.opp, t.bg, 0.3)}) !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -142,6 +142,10 @@ ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_t
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(crimson, '#ffffff', 0.12)}, ${mix(crimson, t.bg, 0.5)}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, ${obsidianDeep}) !important; box-shadow: inset 0 0 0 1px ${gold}, inset 0 0 0 3px ${obsidianDeep}, inset 0 0 0 4px ${goldDeep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${gold}, 0 0 0 4px ${ink}, 0 0 0 5px ${goldDeep}, 0 0 16px -4px ${alpha(violet, 0.8)} !important; }
+
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-nearpillar { display: none; }
+/* Front page Welcome / Forum / Rules: obsidian plates so the clock dial never runs through them. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(obsidianDeep, 0.92)} !important; box-shadow: 0 0 0 0.25em ${alpha(obsidianDeep, 0.92)} !important; border-radius: 1px; }
 
 /* Duel room: gold rims around obsidian. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(obsidian, 0.85)}, ${alpha(t.bg, 0.9)}) !important; box-shadow: 0 10px 26px -12px #000000; }

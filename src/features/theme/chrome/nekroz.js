@@ -116,8 +116,8 @@ ${SEL.phase} { background: ${facets(iceDim)} !important; box-shadow: 0 0 0 1px $
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${glassDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${facetsDim(mix(glass, ice, 0.2))} !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: ${facetsDim(mix(t.self, t.bg, 0.55))} !important; box-shadow: 0 0 0 2px ${t.self}, 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${facetsDim(mix(t.opp, t.bg, 0.55))} !important; box-shadow: 0 0 0 2px ${t.opp}, 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: ${facetsDim(mix(t.self, t.bg, 0.2))} !important; box-shadow: 0 0 0 2px ${t.self}, 0 0 14px ${alpha(t.self, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${facetsDim(mix(t.opp, t.bg, 0.2))} !important; box-shadow: 0 0 0 2px ${t.opp}, 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${iceHi} !important; text-shadow: 1px 1px 0 ${ink}, -1px 1px 0 ${ink}, 1px -1px 0 ${ink}, -1px -1px 0 ${ink}, 0 0 6px #000000 !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${ink}, 0 0 6px ${ink} !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, glass, 0.4)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${iceDim}, inset 0 0 0 4px ${alpha(glassDeep, 0.9)}, inset 0 0 0 5px ${alpha(iceHi, 0.25)} !important; }

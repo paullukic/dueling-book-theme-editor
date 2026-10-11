@@ -72,7 +72,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const blade = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 48%, ${alpha(night, 0.3)} 52%, transparent), linear-gradient(90deg, ${mix(c, t.bg, 0.5)}, ${mix(c, '#ffffff', 0.18)} 45%, ${c} 62%, ${mix(c, t.bg, 0.35)})`;
+  const blade = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 42%, transparent 66%, ${alpha(night, 0.32)}), linear-gradient(90deg, ${mix(c, t.bg, 0.5)}, ${mix(c, '#ffffff', 0.18)} 45%, ${c} 62%, ${mix(c, t.bg, 0.35)})`;
   const vars = [frameSvg, crest, grain, gable, guard, chevron, sun].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
@@ -150,6 +150,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Duel: the sunburst hot spot dims behind the opponent's avatar; zone borders calmed. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.35; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-city { mask: url(#dbtefx-ut-stagegap); }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;
 };
