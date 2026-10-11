@@ -5,7 +5,7 @@ import { contrast, flattenLayers, mix, parseCssColor, readableOn } from '../src/
 import { DEFAULT_PSCT_COLORS } from '../src/lib/defaults.js';
 import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
-import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, varsCss } from '../src/features/theme/css.js';
+import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCss, roleColors, varsCss } from '../src/features/theme/css.js';
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { keepAreas, skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { CHROME_IDS, chromeCss } from '../src/features/theme/chrome.js';
@@ -481,4 +481,13 @@ test('areas: switched-off rules inside @media blocks drop cleanly, the rest surv
 
 test('chrome: every archetype and duel theme has its own UI chrome', () => {
   PRESETS.filter((p) => p.group !== 'clean').forEach((p) => assert.ok(CHROME_IDS.includes(p.id), p.id));
+});
+
+test('user lists: following, admin and adjudicator names get distinct, readable colours on every preset', () => {
+  // The Game Boy LCD has one readable ink; its four shades cannot carry four roles.
+  PRESETS.filter((p) => p.id !== 'duel-monsters-gb').forEach((p) => {
+    const roles = Object.values(roleColors(p.tokens));
+    assert.equal(new Set(roles).size, roles.length, `${p.id} reuses a role colour`);
+    roles.forEach((c) => assert.ok(contrast(c, p.tokens.surface) >= 4.5, `${p.id} role ${c} unreadable`));
+  });
 });

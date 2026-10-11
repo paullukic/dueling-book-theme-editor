@@ -43,9 +43,37 @@ html body #duel .lifepoints .black_bar { background-color: color-mix(in srgb, va
 html body #duel .lifepoints .life_txt { color: var(--dbt-raised) !important; text-shadow: 0 1px 2px var(--dbt-text) !important; }
 `;
 
+// Name colours in user lists (following, admins, adjudicators): each role gets
+// its own colour even when a theme reuses one token for several (Angelechy's
+// link, accent and warning are the same gold). First readable, unused pick wins.
+const ROLE_PREFS = [
+  ['following', ['link', 'accent2', 'accent']],
+  ['admin1', ['success', 'accent2', 'link']],
+  ['admin3', ['warning', 'danger', 'accent2', 'success']],
+  ['adjudicator', ['accent2', 'danger', 'success', 'link']],
+];
+const rgbDist = (a, b) => {
+  const [x, y] = [toRgb(a), toRgb(b)];
+  return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
+};
+export const roleColors = (t) => {
+  const used = [t.text];
+  const readable = (c) => contrast(c, t.surface) >= 4.5;
+  const apart = (gap) => (c) => readable(c) && used.every((u) => rgbDist(c, u) > gap);
+  const spare = ['success', 'warning', 'danger', 'accent2', 'link', 'accent', 'opp', 'self'].map((k) => t[k]).filter(isHex);
+  return Object.fromEntries(ROLE_PREFS.map(([role, prefs]) => {
+    const tokens = prefs.map((k) => t[k]).filter(isHex);
+    const pool = [...tokens, ...spare, ...[...tokens, ...spare].map((c) => mix(c, t.text, 0.4))];
+    const pick = pool.find(apart(70)) || pool.find(apart(35)) || pool.find(readable) || tokens[0];
+    used.push(pick);
+    return [role, pick];
+  }));
+};
+
 export const varsCss = ({ tokens, radius, backdrop }) => {
   const lines = Object.keys(tokens).filter((k) => isHex(tokens[k])).map((k) => `  --dbt-${k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${tokens[k]};`);
   const [r, g, b] = toRgb(tokens.bg);
+  Object.entries(roleColors(tokens)).forEach(([role, c]) => lines.push(`  --dbt-role-${role}: ${c};`));
   // Light themes get their own depth: shadows tinted with the ink colour, a
   // strong white highlight, a full-strength border line, opaque glass and a
   // resting accent cue on tiles. Dark themes keep black shadows.
@@ -287,11 +315,11 @@ html #content .cell2 {
 }
 html #content .cell2:hover { background-color: var(--dbt-hover) !important; border-color: var(--dbt-accent) !important; }
 html #content .cell2:active, html #content .cell2.selected { background-color: var(--dbt-press) !important; }
-html #content .cell.following, html #content .following { color: var(--dbt-link) !important; }
-html #content .cell.admin1, html #content .isAdmin { color: var(--dbt-success) !important; }
+html #content .cell.following, html #content .following { color: var(--dbt-role-following) !important; }
+html #content .cell.admin1, html #content .isAdmin { color: var(--dbt-role-admin1) !important; }
 html #content .cell.admin2 { color: var(--dbt-muted) !important; }
-html #content .cell.admin3, html #content .cell.admin4 { color: var(--dbt-warning) !important; }
-html #content .cell.adjudicator { color: var(--dbt-accent2) !important; }
+html #content .cell.admin3, html #content .cell.admin4 { color: var(--dbt-role-admin3) !important; }
+html #content .cell.adjudicator { color: var(--dbt-role-adjudicator) !important; }
 /* The selected row stands apart from every other row (following, staff, plain): accent wash + accent bar. */
 html #content .cell1.selected, html #content .cell2.selected {
   background-color: color-mix(in srgb, var(--dbt-accent) 30%, var(--dbt-surface)) !important;
