@@ -28,12 +28,12 @@ export const foil = (t, light) => {
   // Card geometry (59 x 86 proportions), tilted a little, in the right third.
   const cw = 336;
   const ch = 490;
-  const cx = 1222;
+  const cx = 1290;
   const cy = 452;
   const x0 = -cw / 2;
   const y0 = -ch / 2;
-  const body = light ? mix(t.bg, t.border, 0.28) : mix(t.accent2, t.bg, 0.82);
-  const bodyLo = light ? mix(t.bg, t.border, 0.5) : t.bg;
+  const body = light ? mix(t.accent, '#ffffff', 0.3) : mix(t.accent2, t.bg, 0.82);
+  const bodyLo = light ? mix(t.accent, t.text, 0.25) : t.bg;
 
   // Level stars on the card: eight foil sparkles in a row, right-aligned.
   let levels = '';
@@ -101,27 +101,28 @@ export const foil = (t, light) => {
 <clipPath id="dbtefx-sl-clip"><rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="12"/></clipPath>
 <linearGradient id="dbtefx-sl-body" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="${body}"/><stop offset="1" stop-color="${bodyLo}"/></linearGradient>
 <linearGradient id="dbtefx-sl-name" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${silverHi}"/><stop offset="0.45" stop-color="${silver}"/><stop offset="0.55" stop-color="${silverLo}"/><stop offset="1" stop-color="${silverHi}"/></linearGradient>
-<linearGradient id="dbtefx-sl-band" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.42" stop-color="#ffffff" stop-opacity="${light ? 0.75 : 0.32}"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="${light ? 0.95 : 0.55}"/><stop offset="0.58" stop-color="#ffffff" stop-opacity="${light ? 0.75 : 0.32}"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+<linearGradient id="dbtefx-sl-ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.text}"/><stop offset="0.5" stop-color="${mix(t.text, t.accent, 0.6)}"/><stop offset="1" stop-color="${t.text}"/></linearGradient>
+<linearGradient id="dbtefx-sl-band" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.42" stop-color="#ffffff" stop-opacity="${light ? 0.3 : 0.32}"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="${light ? 0.5 : 0.55}"/><stop offset="0.58" stop-color="#ffffff" stop-opacity="${light ? 0.3 : 0.32}"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <radialGradient id="dbtefx-sl-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${light ? '#ffffff' : t.accent2}" stop-opacity="${light ? 0.9 : 0.26}"/><stop offset="0.55" stop-color="${light ? '#ffffff' : t.accent}" stop-opacity="${light ? 0.4 : 0.08}"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-sl-art" cx="0.5" cy="0.5" r="0.7"><stop offset="0" stop-color="${light ? '#ffffff' : mix(t.accent2, t.bg, 0.55)}"/><stop offset="1" stop-color="${light ? mix(t.bg, t.border, 0.45) : t.bg}"/></radialGradient>
-<radialGradient id="dbtefx-sl-star" gradientUnits="userSpaceOnUse" cx="${acx}" cy="${acy}" r="${n1(as * 0.47)}"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="${silverHi}" stop-opacity="0.95"/><stop offset="0.65" stop-color="${light ? t.accent : t.accent}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-sl-art" cx="0.5" cy="0.5" r="0.7"><stop offset="0" stop-color="${light ? mix(t.accent2, '#ffffff', 0.55) : mix(t.accent2, t.bg, 0.55)}"/><stop offset="1" stop-color="${light ? mix(t.accent, t.text, 0.2) : t.bg}"/></radialGradient>
+<radialGradient id="dbtefx-sl-star" gradientUnits="userSpaceOnUse" cx="${acx}" cy="${acy}" r="${n1(as * 0.47)}"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="${silverHi}" stop-opacity="0.95"/><stop offset="0.65" stop-color="${light ? mix(t.accent2, '#ffffff', 0.4) : t.accent}" stop-opacity="0.55"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-sl-bloom"><stop offset="0" stop-color="#ffffff" stop-opacity="${light ? 0.9 : 0.45}"/><stop offset="0.4" stop-color="${light ? '#ffffff' : t.accent}" stop-opacity="${light ? 0.5 : 0.14}"/><stop offset="1" stop-color="${light ? '#ffffff' : t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
 ${glitter}
 <!--mid-->
-<ellipse cx="${cx}" cy="${cy}" rx="360" ry="400" fill="url(#dbtefx-sl-halo)" style="animation: dbtefx-sl-breathe 9s ease-in-out infinite;"/>
-<g transform="translate(${cx} ${cy}) rotate(-7)">
+<ellipse cx="${cx}" cy="${cy}" rx="290" ry="320" fill="url(#dbtefx-sl-halo)" style="animation: dbtefx-sl-breathe 9s ease-in-out infinite;"/>
+<g transform="translate(${cx} ${cy}) rotate(-7) scale(0.72)">
 <rect x="${x0 + 10}" y="${y0 + 18}" width="${cw}" height="${ch}" rx="12" fill="${ink}" fill-opacity="${light ? 0.12 : 0.55}"/>
 <rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="12" fill="url(#dbtefx-sl-body)"/>
-<rect x="${x0 + 18}" y="${y0 + 18}" width="${cw - 36}" height="48" rx="3" fill="${light ? '#ffffff' : t.bg}" fill-opacity="${light ? 0.55 : 0.6}" stroke="${silver}" stroke-width="1.5"/>
-<text x="${x0 + 32}" y="${y0 + 53}" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="30" letter-spacing="1" fill="url(#dbtefx-sl-name)" stroke="${light ? t.text : '#000000'}" stroke-opacity="${light ? 0.55 : 0.4}" stroke-width="0.8">Starlight</text>
+<rect x="${x0 + 18}" y="${y0 + 18}" width="${cw - 36}" height="48" rx="3" fill="${light ? '#ffffff' : t.bg}" fill-opacity="${light ? 0.85 : 0.6}" stroke="${silver}" stroke-width="1.5"/>
+<text x="${x0 + 32}" y="${y0 + 53}" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="30" letter-spacing="1" fill="url(#dbtefx-sl-${light ? 'ink' : 'name'})" stroke="${light ? '#ffffff' : '#000000'}" stroke-opacity="${light ? 0.6 : 0.4}" stroke-width="0.8">Starlight</text>
 <circle cx="${x0 + cw - 44}" cy="${y0 + 42}" r="17" fill="${light ? t.accent : mix(t.accent2, t.bg, 0.3)}" stroke="url(#dbtefx-sl-name)" stroke-width="3"/>
 <path d="${glint(x0 + cw - 44, y0 + 42, 12, 0.2)}" fill="${silverHi}"/>
 ${levels}
 <rect x="${ax - 6}" y="${ay - 6}" width="${as + 12}" height="${as + 12}" fill="none" stroke="url(#dbtefx-sl-name)" stroke-width="4"/>
 <rect x="${ax}" y="${ay}" width="${as}" height="${as}" fill="url(#dbtefx-sl-art)"/>
 <svg x="${ax}" y="${ay}" width="${as}" height="${as}" viewBox="${ax} ${ay} ${as} ${as}" overflow="hidden">
-<path d="${rays}" fill="url(#dbtefx-sl-rc)" fill-opacity="${light ? 0.55 : 0.5}"/>
+<path d="${rays}" fill="url(#dbtefx-sl-rc)" fill-opacity="${light ? 0.8 : 0.5}"/>
 ${rings}
 <circle cx="${acx}" cy="${acy}" r="${n1(as * 0.34)}" fill="url(#dbtefx-sl-bloom)"/>
 <g fill="${silverHi}" fill-opacity="0.85">${sparks}</g>
