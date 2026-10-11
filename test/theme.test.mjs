@@ -332,3 +332,7 @@ test('scenes: only transform and opacity move (cheap to animate)', () => {
   const css = sceneSvg('frog', PRESETS.find((p) => p.id === 'frog').tokens).match(/@keyframes[^}]*\{([^@]*?)\}\s*\}/g).join('');
   assert.doesNotMatch(css.replace(/@keyframes [\w-]+/g, ''), /(?<![-\w])(width|height|left|top|r|cx|cy|fill|stroke|filter)\s*:/);
 });
+
+test('scenes: Sakura petals fall', () => {
+  assert.match(sceneSvg('sakura', PRESETS.find((p) => p.id === 'sakura').tokens), /animation: dbtefx-fall/);
+});
