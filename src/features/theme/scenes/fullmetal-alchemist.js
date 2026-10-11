@@ -7,10 +7,10 @@ import { H, n1, polar, rng, W } from './kit.js';
 // transmutation circle is active: blue-white alchemical arcs crackle off its
 // rim and sparks rise. Shader: the void's haze and the arcs' flicker.
 
-const gx = 1205;
+const gx = 1365;
 const top = 128;
 const base = 680;
-const dw = 150;
+const dw = 112;
 
 // Tree of Life (10 spheres, 22 paths) in door space: x -1..1, y 0..1.
 const SEPH = [[0, 0.08], [0.62, 0.2], [-0.62, 0.2], [0.62, 0.42], [-0.62, 0.42], [0, 0.53], [0.62, 0.68], [-0.62, 0.68], [0, 0.81], [0, 0.94]];
@@ -106,7 +106,7 @@ const scene = (t) => {
     const fingers = [-30, 0, 28].map((o, i) => arm(fx, fy, base + o, len * 0.32, fw * 0.9, bend * dir * 1.5, i).d).join('');
     return `<g style="transform-origin: ${gx}px ${y0}px; animation: dbtefx-fma-reach ${n1(7 + delay)}s ease-in-out ${n1(-delay * 1.7)}s infinite;"><path d="${main.d}${fingers}" fill="url(#dbtefx-fma-ink)"/></g>`;
   };
-  const tendrils = [[310, -1, 170, -3, 15, 0], [390, 1, 180, -2, 16, 1.3], [480, -1, 200, 2, 17, 2.1], [560, 1, 150, 3, 13, 0.6], [620, -1, 130, 4, 12, 2.8]]
+  const tendrils = [[310, -1, 120, -3, 13, 0], [390, 1, 126, -2, 14, 1.3], [480, -1, 140, 2, 15, 2.1], [560, 1, 105, 3, 11, 0.6], [620, -1, 92, 4, 10, 2.8]]
     .map(([y, d, l, bend, w, del]) => tendril(y, d, l, bend, w, del))
     .join('');
 
@@ -126,9 +126,11 @@ const scene = (t) => {
 
   // Alchemical arcs: jagged bolts from the rim, each flashing on its own beat.
   const cy = 742;
+  // The circle is drawn at r 270 and scaled down so it stays behind the duel's chat column.
+  const CK = 0.5;
   const ry = 0.2;
   const bolt = (deg, len, i) => {
-    const [x0, y0] = polar(gx, cy, R, deg);
+    const [x0, y0] = polar(gx, cy, R * CK, deg);
     const y0s = n1(cy + (y0 - cy) * ry);
     let d = `M${x0} ${y0s}`;
     let x = x0;
@@ -142,10 +144,10 @@ const scene = (t) => {
     }
     return `<g style="animation: dbtefx-fma-arc ${n1(1.8 + rand() * 1.4)}s steps(1, end) ${n1(-i * 0.73)}s infinite;"><path d="${d}" stroke="${blue}" stroke-opacity="0.2" stroke-width="11"/><path d="${d}" stroke="${blue}" stroke-opacity="0.5" stroke-width="4.5"/><path d="${d}" stroke="#ffffff" stroke-width="1.6"/></g>`;
   };
-  const bolts = [[200, 150], [222, 210], [250, 120], [290, 180], [318, 230], [340, 140], [160, 110], [20, 120], [140, 170], [185, 260], [270, 90], [330, 200]].map(([a, l], i) => bolt(a, l, i)).join('');
+  const bolts = [[200, 150], [222, 210], [250, 120], [290, 180], [318, 230], [340, 140], [160, 110], [20, 120], [140, 170], [185, 260], [270, 90], [330, 200]].map(([a, l], i) => bolt(a, l * 0.7, i)).join('');
 
   // Pillars, lintel, stepped cornice and plinth, jointed like cut stone.
-  const P = 38;
+  const P = 30;
   const xl = gx - dw - P;
   const xr = gx + dw + P;
   let joints = '';
@@ -162,14 +164,14 @@ const scene = (t) => {
 <linearGradient id="dbtefx-fma-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(stone, stoneHi, 0.3)}"/><stop offset="0.45" stop-color="${stone}"/><stop offset="1" stop-color="${mix(stoneLo, t.accent2, 0.08)}"/></linearGradient>
 <linearGradient id="dbtefx-fma-frame" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${stoneLo}"/><stop offset="0.5" stop-color="${mix(stone, stoneHi, 0.35)}"/><stop offset="1" stop-color="${stoneLo}"/></linearGradient>
 <linearGradient id="dbtefx-fma-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.text}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.text}" stop-opacity="0"/></linearGradient>
-<radialGradient id="dbtefx-fma-pool" gradientUnits="userSpaceOnUse" cx="${gx}" cy="${cy}" r="${R}" gradientTransform="translate(0 ${n1(cy * (1 - 0.24))}) scale(1 0.24)"><stop offset="0" stop-color="${blue}" stop-opacity="0.3"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-fma-pool" gradientUnits="userSpaceOnUse" cx="${gx}" cy="${cy}" r="${n1(R * CK)}" gradientTransform="translate(0 ${n1(cy * (1 - 0.24))}) scale(1 0.24)"><stop offset="0" stop-color="${blue}" stop-opacity="0.3"/><stop offset="1" stop-color="${blue}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-fma-ink" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.4)}"/></linearGradient>
 <linearGradient id="dbtefx-fma-grime" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.1"/><stop offset="0.5" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.4"/></linearGradient>
 <linearGradient id="dbtefx-fma-shadow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.5"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-fma-void)"/>
 <!--mid-->
-<path d="M${gx - 220} ${base + 26}L${gx - 420} ${H}H${gx + 420}L${gx + 220} ${base + 26}Z" fill="url(#dbtefx-fma-shadow)" opacity="0.6"/>
+<path d="M${gx - 170} ${base + 26}L${gx - 240} ${H}H${gx + 240}L${gx + 170} ${base + 26}Z" fill="url(#dbtefx-fma-shadow)" opacity="0.6"/>
 <rect x="${gx - dw}" y="${iy}" width="${dw * 2}" height="${ih}" fill="${mix(t.bg, '#000000', 0.5)}"/>
 ${eyes}
 ${leaf(-1)}${leaf(1)}
@@ -177,8 +179,8 @@ ${leaf(-1)}${leaf(1)}
 ${tendrils}
 ${arch}
 <!--near-->
-<ellipse cx="${gx}" cy="${cy}" rx="${R + 40}" ry="${n1((R + 40) * 0.24)}" fill="url(#dbtefx-fma-pool)" style="animation: dbtefx-pulse 3.2s ease-in-out infinite;"/>
-<g transform="translate(${gx} ${cy}) scale(1 ${ry})" fill="none"><g stroke="${blue}" stroke-opacity="0.3" stroke-width="9" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${blue}" stroke-opacity="0.5" stroke-width="3.5" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${bluePale}" stroke-width="1.6" vector-effect="non-scaling-stroke">${circle}</g></g>
+<ellipse cx="${gx}" cy="${cy}" rx="${n1((R + 40) * CK)}" ry="${n1((R + 40) * CK * 0.24)}" fill="url(#dbtefx-fma-pool)" style="animation: dbtefx-pulse 3.2s ease-in-out infinite;"/>
+<g transform="translate(${gx} ${cy}) scale(${CK} ${n1(ry * CK)})" fill="none"><g stroke="${blue}" stroke-opacity="0.3" stroke-width="9" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${blue}" stroke-opacity="0.5" stroke-width="3.5" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${bluePale}" stroke-width="1.6" vector-effect="non-scaling-stroke">${circle}</g></g>
 <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">${bolts}</g>
 <style>
 @keyframes dbtefx-fma-doorl { 0%, 30%, 100% { transform: translateX(-8px); } 55%, 72% { transform: translateX(-20px); } }

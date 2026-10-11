@@ -108,11 +108,11 @@ ${SEL.dialogTitle} { ${label} }
 ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), linear-gradient(180deg, ${mix(shell, t.border, 0.5)}, ${shellDeep}) !important; box-shadow: inset 0 -2px 0 ${chrome}, inset 0 -3px 0 ${ink} !important; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${shell}, ${mix(shell, t.bg, 0.6)}) !important; box-shadow: inset 2px 0 0 ${chromeDim}, inset -2px 0 0 ${chromeDim}, inset 0 -2px 0 ${chromeDim} !important; }
 
-/* Duel: chrome-cased ki gauges led by an orb; the phases are the orbs, one to six stars. */
+/* Duel: smooth chrome-cased ki gauges led by an orb; the phases are the orbs, one to six stars. */
 ${SEL.life} { border-color: ${chrome} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${chromeDim}, 0 0 14px -2px ${alpha(gold, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 999px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), repeating-linear-gradient(90deg, transparent 0 10px, ${alpha(ink, 0.25)} 10px 12px), linear-gradient(90deg, ${mix(t.self, t.bg, 0.72)}, ${mix(t.self, t.bg, 0.45)}, ${mix(mix(t.self, gold, 0.4), t.bg, 0.25)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), repeating-linear-gradient(90deg, transparent 0 10px, ${alpha(ink, 0.25)} 10px 12px), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.4)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.72)}, ${mix(t.self, t.bg, 0.45)}, ${mix(mix(t.self, gold, 0.4), t.bg, 0.25)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.4)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -22px; top: 0; width: 26px; height: 26px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(gold, 0.7)}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${chrome}, ${chromeDim}, ${mix(chrome, '#ffffff', 0.5)}, ${chromeDim}, ${chrome}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }

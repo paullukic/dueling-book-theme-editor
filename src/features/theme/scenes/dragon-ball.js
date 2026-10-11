@@ -2,11 +2,12 @@ import { mix } from '../../../lib/color.js';
 import { anim, H, n1, polar, rng, star, W } from './kit.js';
 
 // Dragon Ball: a rocky wasteland of buttes under a violet sky. A great amber
-// four-star orb hangs in a golden ki aura, the other six orbs ringed around
-// it and lighting up in turn, rocks lifting off the ground in the power-up.
+// four-star orb hangs in a golden ki aura in the right margin, the other six
+// orbs stacked above and below it and lighting up in turn, rocks lifting off
+// the ground in the power-up.
 // The shader draws the sky and the aura's rising flame.
-const C = [1290, 470];
-const R = 138;
+const C = [1432, 470];
+const R = 46;
 
 const dragonBall = (t) => {
   const r = rng(5);
@@ -43,12 +44,10 @@ ${stars}
 <circle cx="${cx}" cy="${cy}" r="${n1(rad - 1)}" fill="none" stroke="${mix(amber, ink, 0.55)}" stroke-width="${n1(Math.max(1.5, rad * 0.025))}"/>`;
   };
 
-  // The six other orbs on an arc around the hero, each glowing in turn.
-  const ring = [[160, 1], [228, 2], [256, 3], [292, 5], [320, 6], [346, 7]].map(([a, n], i) => {
-    const [x, y] = [n1(C[0] + Math.cos((a * Math.PI) / 180) * 190), n1(C[1] + Math.sin((a * Math.PI) / 180) * 300)];
-    const rad = 24 + (i % 3) * 3;
-    return `<circle cx="${x}" cy="${y}" r="${rad * 2.6}" fill="url(#dbtefx-db-halo)" style="animation: dbtefx-db-call 6s ease-in-out ${n1(-6 + i)}s infinite;"/><g ${anim('bob', n1(5 + i * 0.6), i, 'ease-in-out')}>${orb(x, y, rad, n)}</g>`;
-  }).join('');
+  // The six other orbs stacked above and below the hero in the right margin,
+  // each glowing in turn.
+  const ring = [[1446, 110, 1, 18], [1420, 200, 2, 19], [1446, 292, 3, 20], [1420, 640, 5, 20], [1446, 722, 6, 19], [1422, 800, 7, 18]].map(([x, y, n, rad], i) =>
+    `<circle cx="${x}" cy="${y}" r="${rad * 2.6}" fill="url(#dbtefx-db-halo)" style="animation: dbtefx-db-call 6s ease-in-out ${n1(-6 + i)}s infinite;"/><g ${anim('bob', n1(5 + i * 0.6), i, 'ease-in-out')}>${orb(x, y, rad, n)}</g>`).join('');
 
   // Buttes: flat-topped mesas in hazy depths; the flank facing the aura
   // catches its gold, horizontal strata band the faces.
@@ -91,7 +90,7 @@ ${stars}
 
   // Ki lightning crackling around the aura, flashing rarely.
   let bolts = '';
-  [[1130, 300, 3, 0], [1460, 560, 9, 3.8]].forEach(([x, y, seed, delay]) => {
+  [[1400, 380, 3, 0], [1460, 560, 9, 3.8]].forEach(([x, y, seed, delay]) => {
     const lr = rng(seed);
     let d = `M${x} ${y}`;
     let [px, py] = [x, y];
@@ -129,10 +128,10 @@ ${buttes(650, 8, 50, 120, mix(haze, t.bg, 0.45), mix(haze, gold, 0.35), 11)}
 ${buttes(700, 6, 120, 230, mix(rock, t.bg, 0.6), mix(rock, gold, 0.45), 13)}
 <path d="M0 690Q400 676 800 690T1600 684V${H}H0Z" fill="url(#dbtefx-db-ground)"/>
 ${craters}
-<ellipse cx="${C[0]}" cy="706" rx="330" ry="40" fill="url(#dbtefx-db-pool)"/>
+<ellipse cx="${C[0]}" cy="706" rx="60" ry="12" fill="url(#dbtefx-db-pool)"/>
 <!--mid-->
-<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out infinite;"><ellipse cx="${C[0]}" cy="706" rx="200" ry="22" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="14"/><ellipse cx="${C[0]}" cy="706" rx="200" ry="22" fill="none" stroke="${mix(gold, '#ffffff', 0.4)}" stroke-opacity="0.7" stroke-width="3"/></g>
-<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out -2s infinite;"><ellipse cx="${C[0]}" cy="706" rx="200" ry="22" fill="none" stroke="${amber}" stroke-opacity="0.3" stroke-width="10"/></g>
+<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="14"/><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${mix(gold, '#ffffff', 0.4)}" stroke-opacity="0.7" stroke-width="3"/></g>
+<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out -2s infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${amber}" stroke-opacity="0.3" stroke-width="10"/></g>
 <circle cx="${C[0]}" cy="${C[1]}" r="${R * 1.6}" fill="url(#dbtefx-db-aura)" ${anim('pulse', 1.2, 0, 'ease-in-out')}/>
 ${bolts}
 ${ring}
