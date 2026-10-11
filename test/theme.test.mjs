@@ -453,3 +453,7 @@ test('areas: switched-off rules inside @media blocks drop cleanly, the rest surv
   assert.match(out, /#duel_room \.d \{ color: blue; \}/);
   assert.equal((out.match(/\{/g) || []).length, (out.match(/\}/g) || []).length);
 });
+
+test('chrome: every archetype and duel theme has its own UI chrome', () => {
+  PRESETS.filter((p) => p.group !== 'clean').forEach((p) => assert.ok(CHROME_IDS.includes(p.id), p.id));
+});
