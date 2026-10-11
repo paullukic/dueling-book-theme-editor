@@ -19,12 +19,12 @@ const lancet = (cx, cy, r0, r1, deg, half) => {
 
 const labrynth = (t) => {
   const rand = rng(23);
-  const stone = mix(t.bg, t.accent2, 0.3);
+  const stone = mix(t.bg, t.text, 0.42);
   const silver = mix(t.accent2, '#ffffff', 0.35);
-  const glassCols = [t.accent, t.opp, t.accent2, mix(t.accent, t.opp, 0.5)].map((c) => mix(c, t.bg, 0.2));
+  const glassCols = [t.opp, t.accent2, mix(t.text, t.accent2, 0.4), mix(t.opp, t.success, 0.35)].map((c) => mix(c, t.bg, 0.2));
 
   // Rose window: sixteen lancets, eight roundels, a six-petal heart.
-  const RX = 800;
+  const RX = 920;
   const RY = 140;
   let glass = '';
   let lead = '';
@@ -88,16 +88,18 @@ const labrynth = (t) => {
     crystals += `<path d="M${mx} ${my}l6 12l-6 16l-6 -16Z" fill="url(#dbtefx-lb-crystal)"/>`;
     if (a.front) crystals += `<path d="M${a.x} ${n1(a.y + 20)}v14" stroke="${silver}" stroke-opacity="0.5"/><path d="M${a.x} ${n1(a.y + 34)}l5 9l-5 13l-5 -13Z" fill="url(#dbtefx-lb-crystal)"/>`;
   }
+  const fr = rng(71);
   const flames = flameAt
     .map(([x, y, front], i) => {
       const fy = n1(y - 34);
       const s = front ? 1.25 : 1;
-      return `<g style="transform-origin: ${x}px ${fy}px; animation: dbtefx-lb-flame ${n1(1.6 + (i % 5) * 0.37)}s ease-in-out ${n1(-i * 0.41)}s infinite;" opacity="${front ? 1 : 0.75}"><circle cx="${x}" cy="${n1(fy - 10)}" r="${n1(46 * s)}" fill="url(#dbtefx-lb-halo)"/><path d="M${x} ${n1(fy - 26 * s)}C${n1(x + 8 * s)} ${n1(fy - 12 * s)} ${n1(x + 7 * s)} ${fy} ${x} ${fy}C${n1(x - 7 * s)} ${fy} ${n1(x - 8 * s)} ${n1(fy - 12 * s)} ${x} ${n1(fy - 26 * s)}Z" fill="url(#dbtefx-lb-flame)"/></g>`;
+      const dur = n1(0.6 + fr() * 0.6);
+      return `<g opacity="${front ? 1 : 0.75}"><circle cx="${x}" cy="${n1(fy - 10)}" r="${n1(50 * s)}" fill="url(#dbtefx-lb-halo)" style="animation: dbtefx-lb-halo ${n1(dur * 2.3)}s ease-in-out ${n1(-fr() * 2)}s infinite;"/><path d="M${x} ${n1(fy - 26 * s)}C${n1(x + 8 * s)} ${n1(fy - 12 * s)} ${n1(x + 7 * s)} ${fy} ${x} ${fy}C${n1(x - 7 * s)} ${fy} ${n1(x - 8 * s)} ${n1(fy - 12 * s)} ${x} ${n1(fy - 26 * s)}Z" fill="url(#dbtefx-lb-flame)" style="transform-origin: ${x}px ${fy}px; animation: dbtefx-lb-flame ${dur}s ease-in-out ${n1(-fr())}s infinite alternate;"/></g>`;
     })
     .join('');
 
   // Checkered marble floor receding to the nave's vanishing point.
-  const VX = 800;
+  const VX = 920;
   const VY = 470;
   const fx = (k, y) => n1(VX + k * 150 * ((y - VY) / (H - VY)) * 1.4);
   const fy = (j) => n1(VY + (H + 60 - VY) * (0.62 + j * 0.065) ** 2.2);
@@ -111,12 +113,27 @@ const labrynth = (t) => {
     }
   }
 
-  // Gothic nave piers: clustered shafts rising into the dark on both sides.
-  const pier = (x, w) => {
-    let s = `<rect x="${x - w / 2}" y="0" width="${w}" height="${H}" fill="url(#dbtefx-lb-pier)"/>`;
-    for (let i = 1; i < 4; i++) s += `<path d="M${n1(x - w / 2 + (w * i) / 4)} 0V${H}" stroke="#000000" stroke-opacity="0.35" stroke-width="2"/>`;
-    return s;
+  // White marble columns framing the hall: base, fluted shaft, capital.
+  const column = (x, w) => {
+    let flutes = '';
+    for (let i = 1; i < 5; i++) flutes += `M${n1(x - w / 2 + (w * i) / 5)} 120V${H - 70}`;
+    return `<rect x="${x - w / 2}" y="110" width="${w}" height="${H - 170}" fill="url(#dbtefx-lb-marble)"/><path d="${flutes}" stroke="${mix(t.bg, t.text, 0.35)}" stroke-opacity="0.5" stroke-width="2"/><path d="M${x - w / 2 - 18} 110h${w + 36}l-10 -22h${-w - 16}Z" fill="url(#dbtefx-lb-marble)"/><rect x="${x - w / 2 - 24}" y="66" width="${w + 48}" height="22" fill="url(#dbtefx-lb-marble)"/><path d="M${x - w / 2 - 14} ${H - 60}h${w + 28}v60h${-w - 28}Z" fill="url(#dbtefx-lb-marble)"/><path d="M${x - w / 2 - 6} ${H - 70}h${w + 12}v10h${-w - 12}Z" fill="url(#dbtefx-lb-marble)"/>`;
   };
+
+  // The labyrinth beyond: pointed arches receding down a corridor under the
+  // rose window, each a little dimmer.
+  let corridor = '';
+  for (let k = 0; k < 6; k++) {
+    const sc = 0.8 ** k;
+    const w = n1(250 * sc);
+    const h = n1(470 * sc);
+    const by = n1(VY + 360 * sc);
+    const x0 = n1(VX - w / 2);
+    const x1 = n1(VX + w / 2);
+    const d = `M${x0} ${by}V${n1(by - h + w * 0.6)}Q${x0} ${n1(by - h)} ${VX} ${n1(by - h - w * 0.15)}Q${x1} ${n1(by - h)} ${x1} ${n1(by - h + w * 0.6)}V${by}`;
+    corridor += `<path d="${d}Z" fill="${mix(t.bg, t.text, 0.16 - k * 0.025)}"/><path d="${d}" fill="none" stroke="${mix(t.bg, t.text, 0.42)}" stroke-opacity="${n1(0.6 - k * 0.08)}" stroke-width="${n1(8 * sc + 1)}"/>`;
+  }
+  corridor += `<ellipse cx="${VX}" cy="${VY + 40}" rx="40" ry="70" fill="url(#dbtefx-lb-rose)"/>`;
 
   // Velvet swag: stacked festoons, each a crescent of fabric whose gradient
   // turns from shadow to a lit ridge, gathered at the ends.
@@ -139,28 +156,31 @@ const labrynth = (t) => {
   let dust = '';
   for (let i = 0; i < 26; i++) {
     const u = rand();
-    dust += `<circle cx="${n1(640 + u * 360 + rand() * 200)}" cy="${n1(260 + u * 520)}" r="${n1(0.8 + rand() * 1.6)}"/>`;
+    dust += `<circle cx="${n1(RX - 160 + u * 360 + rand() * 200)}" cy="${n1(260 + u * 520)}" r="${n1(0.8 + rand() * 1.6)}"/>`;
   }
 
-  return `<style>@keyframes dbtefx-lb-flame { 0%, 100% { transform: scale(1, 1); opacity: 0.92; } 35% { transform: scale(0.94, 1.1); opacity: 1; } 70% { transform: scale(1.05, 0.93); opacity: 0.85; } }
+  return `<style>@keyframes dbtefx-lb-flame { 0% { transform: scale(1.04, 0.9); } 40% { transform: scale(0.95, 1.1); } 70% { transform: scale(1.02, 0.96); } 100% { transform: scale(0.97, 1.06); } }
+@keyframes dbtefx-lb-halo { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 @keyframes dbtefx-lb-sway { 0%, 100% { transform: rotate(-0.6deg); } 50% { transform: rotate(0.6deg); } }
 @keyframes dbtefx-lb-shaft { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }</style>
 <defs>
-<linearGradient id="dbtefx-lb-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent2, 0.1)}"/><stop offset="0.6" stop-color="${t.bg}"/><stop offset="1" stop-color="${mix(t.bg, t.accent, 0.12)}"/></linearGradient>
-<radialGradient id="dbtefx-lb-rose" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-lb-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.text, 0.2)}"/><stop offset="0.55" stop-color="${mix(t.bg, t.text, 0.1)}"/><stop offset="1" stop-color="${mix(t.bg, t.text, 0.05)}"/></linearGradient>
+<linearGradient id="dbtefx-lb-marble" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.text, t.bg, 0.55)}"/><stop offset="0.35" stop-color="${mix(t.text, '#ffffff', 0.3)}"/><stop offset="0.6" stop-color="${mix(t.text, t.bg, 0.25)}"/><stop offset="1" stop-color="${mix(t.text, t.bg, 0.7)}"/></linearGradient>
+<radialGradient id="dbtefx-lb-rose" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(t.text, t.accent2, 0.4)}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-lb-shaftg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.2"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-lb-pier" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.bg, '#000000', 0.4)}"/><stop offset="0.35" stop-color="${mix(t.bg, t.accent2, 0.16)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.5)}"/></linearGradient>
-<linearGradient id="dbtefx-lb-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent2}" stop-opacity="0.04"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0.16"/></linearGradient>
+<linearGradient id="dbtefx-lb-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.text}" stop-opacity="0.05"/><stop offset="1" stop-color="${t.text}" stop-opacity="0.2"/></linearGradient>
 <radialGradient id="dbtefx-lb-pool" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.22"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-lb-wall)"/>
-<path d="M${VX - 60} ${VY}V160Q${VX - 60} 90 ${VX} 60Q${VX + 60} 90 ${VX + 60} 160V${VY}Z" fill="${mix(t.bg, '#000000', 0.3)}" opacity="0.6"/>
+<path d="M${VX - 130} ${H}V420Q${VX - 130} 300 ${VX} 260Q${VX + 130} 300 ${VX + 130} 420V${H}Z" fill="${mix(t.bg, '#000000', 0.25)}" opacity="0.7"/>
 <circle cx="${RX}" cy="${RY}" r="330" fill="url(#dbtefx-lb-rose)"/>
-<g style="animation: dbtefx-lb-shaft 11s ease-in-out infinite;"><path d="M700 200L860 200L1240 ${H}L520 ${H}Z" fill="url(#dbtefx-lb-shaftg)"/><path d="M760 200L820 200L980 ${H}L700 ${H}Z" fill="url(#dbtefx-lb-shaftg)"/></g>
+<g style="animation: dbtefx-lb-shaft 11s ease-in-out infinite;"><path d="M${RX - 100} 200L${RX + 60} 200L${RX + 340} ${H}L${RX - 300} ${H}Z" fill="url(#dbtefx-lb-shaftg)"/><path d="M${RX - 40} 200L${RX + 20} 200L${RX + 160} ${H}L${RX - 120} ${H}Z" fill="url(#dbtefx-lb-shaftg)"/></g>
 <g fill="${t.accent2}" fill-opacity="0.5">${dust}</g>
 <path d="${tiles}" fill="url(#dbtefx-lb-floor)"/>
+${corridor}
 <ellipse cx="${CX}" cy="${H - 40}" rx="300" ry="70" fill="url(#dbtefx-lb-pool)"/>
-<g opacity="0.85">${pier(120, 120)}${pier(1520, 130)}</g>
+${column(196, 64)}${column(1418, 64)}
 <!--mid-->
 <defs>
 <radialGradient id="dbtefx-lb-glass" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
@@ -177,7 +197,7 @@ ${glass}
 <circle cx="${RX}" cy="${RY}" r="190" fill="url(#dbtefx-lb-glass)" style="animation: dbtefx-lb-shaft 9s ease-in-out infinite;"/>
 <path d="${thin}" fill="none" stroke="${mix(t.bg, '#000000', 0.3)}" stroke-width="2"/>
 <g fill="none" stroke="${stone}" stroke-width="5" stroke-linejoin="round">${lead}<circle cx="${RX}" cy="${RY}" r="104"/><circle cx="${RX}" cy="${RY}" r="44"/></g>
-<g fill="${t.accent}" fill-opacity="0.7" stroke="${stone}" stroke-width="4">${heart}</g>
+<g fill="${mix(t.text, t.accent2, 0.3)}" fill-opacity="0.7" stroke="${stone}" stroke-width="4">${heart}</g>
 <circle cx="${RX}" cy="${RY}" r="200" fill="none" stroke="${stone}" stroke-width="12"/>
 <circle cx="${RX}" cy="${RY}" r="214" fill="none" stroke="${stone}" stroke-opacity="0.6" stroke-width="4"/>
 </g>
@@ -203,8 +223,8 @@ ${flames}
 <linearGradient id="dbtefx-lb-fold" x1="0" y1="0" x2="0" y2="1"><stop offset="0.4" stop-color="${mix(t.accent, '#000000', 0.7)}"/><stop offset="0.85" stop-color="${mix(t.accent, '#000000', 0.25)}"/><stop offset="0.95" stop-color="${mix(t.accent, '#ffffff', 0.15)}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></linearGradient>
 <linearGradient id="dbtefx-lb-tassel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.warning, '#000000', 0.35)}"/><stop offset="0.5" stop-color="${t.warning}"/><stop offset="1" stop-color="${mix(t.warning, '#000000', 0.45)}"/></linearGradient>
 </defs>
-${swag(-40, 540, 92)}${swag(1060, 1660, 80)}
-${tassel(540, 120)}${tassel(1060, 108)}`;
+${swag(-40, 560, 92)}${swag(1180, 1660, 74)}
+${tassel(560, 120)}${tassel(1180, 104)}`;
 };
 
 export default labrynth;

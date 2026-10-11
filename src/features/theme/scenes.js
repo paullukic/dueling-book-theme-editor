@@ -21,6 +21,9 @@ import * as frog from './scenes/frog.js';
 import * as angelechy from './scenes/angelechy.js';
 import * as mitsurugi from './scenes/mitsurugi.js';
 import * as gladiator from './scenes/gladiator.js';
+import * as toon from './scenes/toon.js';
+import * as kewlTune from './scenes/kewl-tune.js';
+import * as cyberDragon from './scenes/cyber-dragon.js';
 import * as sakura from './scenes/sakura.js';
 import * as midnight from './scenes/midnight.js';
 import * as snow from './scenes/snow.js';
@@ -62,6 +65,9 @@ const MODULES = {
   angelechy,
   mitsurugi,
   gladiator,
+  toon,
+  'kewl-tune': kewlTune,
+  'cyber-dragon': cyberDragon,
   sakura,
   midnight,
   snow,

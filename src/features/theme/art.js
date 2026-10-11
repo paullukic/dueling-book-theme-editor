@@ -41,6 +41,9 @@ export const ICON_STYLES = {
   angelechy: 'board',
   mitsurugi: 'torii',
   gladiator: 'shield',
+  toon: 'comic',
+  'kewl-tune': 'vinyl',
+  'cyber-dragon': 'bezel',
   'dark-magic': 'circle',
 };
 
@@ -135,6 +138,15 @@ const frame = (style, w, h, t, radius) => {
       // A round bronze shield with a raised rim and boss.
       return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent}" stroke-width="${sw * 1.4}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.78)}" fill="none" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="${sw * 0.6}"/>`;
     }
+    case 'vinyl': {
+      // A record label: groove rings and a centre hole.
+      return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${mix(t.bg, t.raised, 0.5)}" stroke="${t.accent}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.82)}" fill="none" stroke="${t.muted}" stroke-opacity="0.35" stroke-width="${sw * 0.4}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.68)}" fill="none" stroke="${t.muted}" stroke-opacity="0.25" stroke-width="${sw * 0.4}"/>`;
+    }
+    case 'bezel': {
+      // A riveted chrome bezel with a cyan core gem at the top.
+      const g = Math.min(fw, fh) * 0.09;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 3)}" fill="${t.raised}" stroke="${mix(t.border, t.text, 0.35)}" stroke-width="${sw * 1.3}"/><circle cx="${n2(x + sw * 2)}" cy="${n2(y + fh - sw * 2)}" r="${n2(sw * 0.7)}" fill="${t.muted}"/><circle cx="${n2(x + fw - sw * 2)}" cy="${n2(y + fh - sw * 2)}" r="${n2(sw * 0.7)}" fill="${t.muted}"/><path d="M${cx} ${n2(y - g * 0.2)}l${n2(g)} ${n2(g)}l${n2(-g)} ${n2(g)}l${n2(-g)} ${n2(-g)}Z" fill="${t.accent}"/>`;
+    }
     case 'hex': {
       const pts = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = (Math.PI / 3) * i;
@@ -172,7 +184,7 @@ const GLYPHS = {
 // A framed glyph in a w x h viewBox (the size DuelingBook gives the <img>).
 const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent, badge = false } = {}) => {
   // Round and hexagonal frames have less room inside than a tile.
-  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad', 'shield'].includes(style) ? 0.6 : 0.78)) / 40;
+  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad', 'shield', 'vinyl'].includes(style) ? 0.6 : 0.78)) / 40;
   const gx = (w - 40 * s) / 2;
   const gy = (h - 40 * s) / 2;
   const dot = badge ? `<circle cx="${w * 0.8}" cy="${h * 0.2}" r="${Math.min(w, h) * 0.13}" fill="${t.danger}" stroke="${t.raised}" stroke-width="${Math.min(w, h) * 0.04}"/>` : '';

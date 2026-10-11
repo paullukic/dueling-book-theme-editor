@@ -6,12 +6,13 @@ import { anim, H, n1, rng, W } from './kit.js';
 // knight, a rook and the e4 pawn) stand on true one-point perspective squares.
 
 // Ground plane to screen: X across (squares), Z depth (squares from the eye).
-const VX = 900;
-const HY = 500;
-const F = 1150;
-const CAM = 1.3;
+const VX = 700;
+const HY = 420;
+const BOFF = 2;
+const F = 1000;
+const CAM = 1.5;
 const PIECE = 760;
-const Z0 = 3.8;
+const Z0 = 3.1;
 const at = (x, z) => [n1(VX + (F * x) / z), n1(HY + (F * CAM) / z)];
 const quad = (x0, z0, x1, z1) => {
   const p = [at(x0, z0), at(x1, z0), at(x1, z1), at(x0, z1)];
@@ -55,7 +56,7 @@ const PAWN = lathe([
 const KNIGHT =
   'M-50 0L50 0L50 -7C50 -12 47 -14 43 -15C48 -17 48 -25 41 -27C37 -30 37 -33 36 -36' +
   'C48 -70 46 -110 34 -140C30 -152 24 -164 16 -172L19 -192L4 -177C-8 -175 -20 -168 -30 -157' +
-  'C-40 -146 -50 -134 -56 -122C-60 -114 -58 -106 -50 -104L-41 -106L-45 -100C-38 -95 -28 -96 -20 -100' +
+  'C-40 -146 -50 -134 -56 -122C-62 -112 -58 -100 -46 -98C-36 -96 -26 -98 -20 -100' +
   'C-12 -104 -6 -108 -3 -110C-16 -92 -30 -72 -34 -56C-38 -46 -40 -40 -36 -36' +
   'C-37 -33 -37 -30 -41 -27C-48 -25 -48 -17 -43 -15C-47 -14 -50 -12 -50 -7Z';
 
@@ -66,14 +67,14 @@ const angelechy = (t) => {
   const deep = mix(t.bg, t.opp, 0.35);
   const gold = t.accent;
   const darkSq = mix(t.bg, t.opp, 0.16);
-  const lightSq = mix(t.bg, t.text, 0.4);
+  const lightSq = mix(t.bg, t.text, 0.28);
 
   // Board squares, a gilt frame and an engraved ring on the cloud floor.
   let dark = '';
   let light = '';
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
-      const sq = quad(c - 4, Z0 + r, c - 3, Z0 + r + 1);
+      const sq = quad(c - 4 + BOFF, Z0 + r, c - 3 + BOFF, Z0 + r + 1);
       if ((r + c) % 2) light += sq;
       else dark += sq;
     }
@@ -83,7 +84,7 @@ const angelechy = (t) => {
     for (let i = 0; i <= 96; i++) {
       const a = (i / 96) * Math.PI * 2;
       const z = zc + rad * Math.sin(a);
-      if (z > 1.2) pts.push(at(rad * Math.cos(a), z).join(' '));
+      if (z > 1.2) pts.push(at(BOFF + rad * Math.cos(a), z).join(' '));
     }
     return `M${pts.join('L')}`;
   };
@@ -93,8 +94,8 @@ const angelechy = (t) => {
     const z1 = Z0 + 4 + 6.1 * Math.sin(a);
     const z2 = Z0 + 4 + 6.6 * Math.sin(a);
     if (z1 < 1.6 || z2 < 1.6) continue;
-    const p1 = at(6.1 * Math.cos(a), z1);
-    const p2 = at(6.6 * Math.cos(a), z2);
+    const p1 = at(BOFF + 6.1 * Math.cos(a), z1);
+    const p2 = at(BOFF + 6.6 * Math.cos(a), z2);
     ticks += `M${p1.join(' ')}L${p2.join(' ')}`;
   }
 
@@ -103,7 +104,7 @@ const angelechy = (t) => {
   let shapes = '';
   const piece = (file, rank, body, extra = '', behind = '', dim = 1) => {
     const z = Z0 + rank + 0.5;
-    const [px, py] = at(file - 3.5, z);
+    const [px, py] = at(file - 3.5 + BOFF, z);
     const s = Math.round((PIECE * F) / z / 100) / 1000;
     const id = `dbtefx-ae-p${file}${rank}`;
     const ref = `href="#${id}"`;
@@ -130,7 +131,7 @@ ${behind}${solid}${extra}</g>`;
     return d;
   };
   const wing = (dir) => {
-    const arm = [[6, -150], [40, -220], [100, -300], [175, -370]];
+    const arm = [[14, -128], [44, -210], [100, -300], [175, -370]];
     const tips = [];
     for (let i = 0; i <= 11; i++) {
       const a = ((-56 + i * 15.5) * Math.PI) / 180;
@@ -152,15 +153,18 @@ ${behind}${solid}${extra}</g>`;
   const halo = (cy, rx) =>
     `<ellipse cx="0" cy="${cy}" rx="${n1(rx * 2.4)}" ry="${n1(rx * 1.3)}" fill="url(#dbtefx-ae-glow)"/><ellipse cx="0" cy="${cy}" rx="${rx}" ry="${n1(rx * 0.28)}" fill="none" stroke="${gold}" stroke-width="4"/><ellipse cx="0" cy="${cy}" rx="${rx}" ry="${n1(rx * 0.28)}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-opacity="0.8"/>`;
 
-  const kingWings = `<g stroke="${gold}" stroke-opacity="0.45" stroke-width="0.8" vector-effect="non-scaling-stroke" style="transform-origin: 0px -150px; animation: dbtefx-ae-breathe 9s ease-in-out infinite;">${wing(1)}${wing(-1)}</g>`;
-  const king = piece(6, 6, KING, `${bands([[-124, 31], [-185, 37]])}<path d="M-6 -222h12" stroke="#ffffff" stroke-width="2" stroke-opacity="0.7"/><g ${anim('pulse', 5, 0, 'ease-in-out')}>${halo(-282, 36)}</g>`, kingWings);
+  const kingWings = `<g stroke="${gold}" stroke-opacity="0.45" stroke-width="0.8" vector-effect="non-scaling-stroke" style="transform-origin: 0px -128px; animation: dbtefx-ae-breathe 5s ease-in-out infinite;"><g transform="translate(0 -128) scale(0.85) translate(0 128)">${wing(1)}${wing(-1)}</g></g>`;
+  const king = piece(6, 5, KING, `${bands([[-124, 31], [-185, 37]])}<path d="M-6 -222h12" stroke="#ffffff" stroke-width="2" stroke-opacity="0.7"/><g ${anim('pulse', 5, 0, 'ease-in-out')}>${halo(-282, 36)}</g>`, kingWings);
   const knightWing = `<g transform="translate(24 -30) rotate(-4) scale(0.5)" stroke="${gold}" stroke-opacity="0.5" stroke-width="0.8" vector-effect="non-scaling-stroke">${wing(1)}</g>`;
-  const knight = piece(6, 2, KNIGHT, `<ellipse cx="-20" cy="-148" rx="4.5" ry="3" fill="${deep}"/><ellipse cx="-50" cy="-115" rx="3" ry="2" fill="${deep}"/><path d="M26 -160C34 -130 38 -96 35 -60" fill="none" stroke="${gold}" stroke-opacity="0.7" stroke-width="2.5"/>${bands([[-37, 37]])}`, knightWing);
-  const rook = piece(3, 7, ROOK, `${bands([[-119, 37]])}<path d="M-7 -108v-22a7 7 0 0 1 14 0v22z" fill="${deep}" stroke="${gold}" stroke-opacity="0.6"/>`, '', 0.6);
-  const pawn = piece(4, 3, PAWN, `${bands([[-81, 27]])}<g ${anim('pulse', 6, 2, 'ease-in-out')}>${halo(-150, 22)}</g>`, '', 0.85);
+  const mane = [[37, -64], [40, -82], [40, -100], [37, -117], [32, -133], [26, -148], [19, -162]]
+    .map(([x, y], i) => `<ellipse cx="${x}" cy="${y}" rx="5" ry="11" transform="rotate(${-20 + i * 6} ${x} ${y})" fill="url(#dbtefx-ae-leaf)"/>`)
+    .join('');
+  const knight = piece(6, 3, KNIGHT, `<path d="M-24 -142C-10 -132 -6 -118 -10 -106C-22 -110 -34 -122 -24 -142Z" fill="${shade}" fill-opacity="0.45"/><path d="M-42 -128C-34 -124 -28 -116 -26 -104" fill="none" stroke="${shade}" stroke-opacity="0.6" stroke-width="2"/><path d="M-28 -150C-24 -154 -18 -155 -13 -151C-18 -148 -23 -148 -28 -150Z" fill="${deep}"/><path d="M-30 -156C-24 -162 -16 -162 -10 -156" fill="none" stroke="${shade}" stroke-width="2"/>${mane}${bands([[-37, 37]])}`, knightWing);
+  const rook = piece(5, 7, ROOK, `${bands([[-119, 37]])}<path d="M-7 -108v-22a7 7 0 0 1 14 0v22z" fill="${deep}" stroke="${gold}" stroke-opacity="0.6"/>`, '', 0.8);
+  const pawn = piece(4, 3, PAWN, `${bands([[-81, 27]])}<g ${anim('pulse', 6, 2, 'ease-in-out')}>${halo(-150, 22)}</g>`);
 
   // e4: the square the opening pawn claims, glowing gold.
-  const e4 = quad(0, Z0 + 3, 1, Z0 + 4);
+  const e4 = quad(0 + BOFF, Z0 + 3, 1 + BOFF, Z0 + 3 + 1);
 
   let stars = '';
   for (let i = 0; i < 60; i++) {
@@ -182,7 +186,7 @@ ${behind}${solid}${extra}</g>`;
     }
     sea += `<g fill="url(#dbtefx-ae-puff)" opacity="${n1(0.35 + row * 0.11)}">${puffs}</g>`;
   }
-  const sx = 1180;
+  const sx = 1220;
   let rays = '';
   for (let i = 0; i < 22; i++) {
     const a0 = -172 + i * 7.6 + (rand() - 0.5) * 3;
@@ -203,7 +207,7 @@ ${behind}${solid}${extra}</g>`;
 <linearGradient id="dbtefx-ae-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.bg}"/><stop offset="0.4" stop-color="${mix(t.bg, t.opp, 0.2)}"/><stop offset="0.56" stop-color="${mix(t.bg, t.accent, 0.32)}"/><stop offset="0.7" stop-color="${mix(t.bg, t.opp, 0.16)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient>
 <radialGradient id="dbtefx-ae-puff" cx="0.5" cy="0.3" r="0.6"><stop offset="0" stop-color="${mix(t.opp, t.text, 0.5)}" stop-opacity="0.38"/><stop offset="0.55" stop-color="${mix(t.bg, t.opp, 0.45)}" stop-opacity="0.3"/><stop offset="1" stop-color="${mix(t.bg, t.opp, 0.3)}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ae-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="0.12" stop-color="${t.accent}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-ae-ray" gradientUnits="userSpaceOnUse" cx="${sx}" cy="${HY}" r="820"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.3"/><stop offset="0.35" stop-color="${t.accent}" stop-opacity="0.1"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-ae-ray" gradientUnits="userSpaceOnUse" cx="${sx}" cy="${HY}" r="820"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.24"/><stop offset="0.35" stop-color="${t.accent}" stop-opacity="0.06"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ae-sky)"/>
 <g fill="${t.text}" fill-opacity="0.55">${stars}</g>
@@ -213,12 +217,13 @@ ${behind}${solid}${extra}</g>`;
 <ellipse cx="${sx}" cy="${HY}" rx="520" ry="260" fill="url(#dbtefx-ae-sun)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
 <g ${anim('drift', 46, 0, 'ease-in-out')}>${sea}</g>
 <!--mid-->
-<style>@keyframes dbtefx-ae-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.035, 0.985); } }</style>
+<style>@keyframes dbtefx-ae-breathe { 0%, 100% { transform: scale(0.96, 1); } 50% { transform: scale(1.04, 1); } }</style>
 <defs>
 <linearGradient id="dbtefx-ae-ivory" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(shade, t.bg, 0.45)}"/><stop offset="0.16" stop-color="${shade}"/><stop offset="0.34" stop-color="${ivory}"/><stop offset="0.44" stop-color="#ffffff"/><stop offset="0.56" stop-color="${ivory}"/><stop offset="0.82" stop-color="${shade}"/><stop offset="0.94" stop-color="${mix(shade, t.bg, 0.35)}"/><stop offset="1" stop-color="${mix(t.accent, t.text, 0.4)}"/></linearGradient>
 <linearGradient id="dbtefx-ae-ao" x1="0" y1="0" x2="0" y2="1"><stop offset="0.8" stop-color="${t.bg}" stop-opacity="0"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0.45"/></linearGradient>
 <linearGradient id="dbtefx-ae-plume" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="${ivory}"/><stop offset="1" stop-color="${shade}"/></linearGradient>
 <linearGradient id="dbtefx-ae-plume2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="${mix(ivory, t.accent, 0.35)}"/></linearGradient>
+<linearGradient id="dbtefx-ae-leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.5)}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.3)}"/></linearGradient>
 <radialGradient id="dbtefx-ae-glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-ae-fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.opp, 0.2)}"/><stop offset="0.5" stop-color="${mix(t.bg, t.opp, 0.2)}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-ae-fadeg" x1="0" y1="0" x2="0" y2="1"><stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
@@ -230,13 +235,13 @@ ${shapes}
 <radialGradient id="dbtefx-ae-sheen" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
 <g fill="none" stroke="${gold}" stroke-opacity="0.35"><path d="${ring(6.1, Z0 + 4)}" stroke-width="1.5"/><path d="${ring(6.6, Z0 + 4)}" stroke-width="2.5"/><path d="${ticks}" stroke-opacity="0.25"/></g>
-<path d="${quad(-4.25, Z0 - 0.25, 4.25, Z0 + 8.25)}" fill="${mix(t.bg, t.accent, 0.35)}" stroke="${gold}" stroke-opacity="0.8" stroke-width="2"/>
-<path d="${quad(-4.08, Z0 - 0.08, 4.08, Z0 + 8.08)}" fill="${t.bg}" stroke="${gold}" stroke-opacity="0.5"/>
+<path d="${quad(BOFF - 4.25, Z0 - 0.25, BOFF + 4.25, Z0 + 8.25)}" fill="${mix(t.bg, t.accent, 0.35)}" stroke="${gold}" stroke-opacity="0.8" stroke-width="2"/>
+<path d="${quad(BOFF - 4.08, Z0 - 0.08, BOFF + 4.08, Z0 + 8.08)}" fill="${t.bg}" stroke="${gold}" stroke-opacity="0.5"/>
 <path d="${dark}" fill="url(#dbtefx-ae-dsq)"/>
 <path d="${light}" fill="url(#dbtefx-ae-lsq)"/>
 <ellipse cx="${sx}" cy="${at(0, Z0 + 5)[1]}" rx="70" ry="150" fill="url(#dbtefx-ae-sheen)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
 <path d="${e4}" fill="url(#dbtefx-ae-e4)" ${anim('pulse', 4, 0, 'ease-in-out')}/>
-<path d="${quad(-4.25, Z0 + 3, 4.25, Z0 + 8.25)}" fill="url(#dbtefx-ae-fog)"/>
+<path d="${quad(BOFF - 4.25, Z0 + 3, BOFF + 4.25, Z0 + 8.25)}" fill="url(#dbtefx-ae-fog)"/>
 ${rook}${king}${pawn}${knight}`;
 };
 
