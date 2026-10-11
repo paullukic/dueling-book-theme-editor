@@ -1,11 +1,15 @@
 import { mix } from '../../../lib/color.js';
 import { H, n1, rng, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
-// Blitzclique: Hideout in the Sky, Coulomb. The scrapyard gang's floating
-// shanty-island at dusk: a craggy concrete rock trailing pipes and cables, a
-// stepped pile of graffitied container-shacks, the crew banner and badge
-// billboard, a windmill, a crane, two tesla coils and the lattice radio tower
-// that catches the storm's lightning. Warm haze rises from the city far below.
+// Blitzclique: Hideout in the Sky, Coulomb. Surge Blitzclique, the real card
+// artwork loaded live from DuelingBook (cardart.js), stands in front of the
+// storm at dusk; below her the scrapyard gang's floating shanty-island
+// crosses the low sun: a craggy rock trailing pipes and cables, graffitied
+// container-shacks, the crew banner and badge billboard, a windmill, a crane,
+// two tesla coils and the lattice radio tower that catches the storm's
+// lightning. Warm haze rises from the city far below. Offline, the storm,
+// island and glow remain.
 const blitzclique = (t) => {
   const rand = rng(77);
   const dark = mix(t.bg, '#000000', 0.35);
@@ -130,9 +134,9 @@ const blitzclique = (t) => {
   const board = `<path d="M1132 470V500M1196 470V500" stroke="${steel}" stroke-width="3"/><rect x="1122" y="404" width="84" height="66" fill="${mix(t.bg, t.text, 0.12)}" stroke="${steelHi}" stroke-width="2"/><rect x="1126" y="408" width="76" height="58" fill="url(#dbtefx-bcq-board)"/>${badge(1164, 438, 1.12)}<path d="M1128 474h72" stroke="${t.warning}" stroke-opacity="0.8" stroke-width="2.2" stroke-dasharray="3 5"/>`;
 
   // Lightning: storm cloud to the tower mast, with a branch; flashes on a slow cycle.
-  const bolt = 'M1214 104L1240 136L1226 142L1266 180L1252 186L1290 240';
-  const branch = 'M1240 136L1276 128L1268 140L1304 128M1266 180L1236 196L1248 198L1224 214';
-  const strike = `<g style="animation: dbtefx-bcq-strike 7s linear -5.6s infinite;"><circle cx="1290" cy="241" r="90" fill="url(#dbtefx-bcq-halo)"/><path d="${bolt}" fill="none" stroke="${mint}" stroke-opacity="0.35" stroke-width="22" stroke-linejoin="round"/><path d="${bolt}" fill="none" stroke="${mint}" stroke-opacity="0.8" stroke-width="9" stroke-linejoin="round"/><path d="${bolt}" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linejoin="round"/><path d="${branch}" fill="none" stroke="${mint}" stroke-opacity="0.5" stroke-width="6" stroke-linejoin="round"/><path d="${branch}" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="1.8" stroke-linejoin="round"/></g>`;
+  const bolt = 'M1446 96L1420 164L1438 172L1392 262L1410 270L1352 372L1368 380L1330 489';
+  const branch = 'M1420 164L1468 204L1456 210L1490 254M1392 262L1352 282L1362 292L1324 314';
+  const strike = `<g style="animation: dbtefx-bcq-strike 7s linear -5.6s infinite;"><circle cx="1330" cy="489" r="90" fill="url(#dbtefx-bcq-halo)"/><path d="${bolt}" fill="none" stroke="${mint}" stroke-opacity="0.35" stroke-width="22" stroke-linejoin="round"/><path d="${bolt}" fill="none" stroke="${mint}" stroke-opacity="0.8" stroke-width="9" stroke-linejoin="round"/><path d="${bolt}" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linejoin="round"/><path d="${branch}" fill="none" stroke="${mint}" stroke-opacity="0.5" stroke-width="6" stroke-linejoin="round"/><path d="${branch}" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="1.8" stroke-linejoin="round"/></g>`;
   const arc = (d, dur, delay) => `<g style="animation: dbtefx-bcq-arc ${dur}s linear ${-delay}s infinite;"><path d="${d}" fill="none" stroke="${mint}" stroke-opacity="0.5" stroke-width="6" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></g>`;
 
   // Far: storm and haze cloud banks, the low sun and the city below.
@@ -165,7 +169,13 @@ const blitzclique = (t) => {
   // Near: a utility pole at the far left, its wires running off the top.
   const pole = `<path d="M172 900V96" stroke="${dark}" stroke-width="10"/><path d="M138 118h70M146 140h54" stroke="${dark}" stroke-width="6"/><g fill="${steel}"><rect x="140" y="106" width="6" height="12"/><rect x="200" y="106" width="6" height="12"/><rect x="170" y="106" width="6" height="12"/></g><rect x="178" y="168" width="22" height="36" rx="4" fill="${dark}"/><path d="M143 108Q-40 150 -60 120M203 108Q430 170 720 -6M173 108Q400 150 610 -6" fill="none" stroke="${dark}" stroke-width="2"/>`;
 
-  return `<style>
+  // Surge Blitzclique, the real card artwork, in front of the storm; the
+  // crew's island floats small in the haze below her.
+  const hx = 1215;
+  const [ix, iy, is] = [810, 466, 0.4];
+  const surge = cardArt(t, { id: 'dbtefx-bcq-hero', card: CARDS.surgeBlitzclique, x: hx - 230, y: 10, w: 460, h: 740, focus: [0.42, 0.42], zoom: 0.92, feather: 0.6, fade: 0.6, blend: 'normal', grade: 'contrast(1.1) brightness(0.88)', tint: mix(t.accent2, t.bg, 0.3), tintAmt: 0.14, backdrop: mix(t.bg, mint, 0.2), backdropAmt: 0.85, glow: mint, breathe: 16 });
+
+  return `<style>${CARD_ART_KEYFRAMES}
 @keyframes dbtefx-bcq-strike { 0%, 100% { opacity: 0; } 1% { opacity: 1; } 2.5% { opacity: 0.15; } 4% { opacity: 0.95; } 8% { opacity: 0; } }
 @keyframes dbtefx-bcq-arc { 0%, 100% { opacity: 0; } 8% { opacity: 1; } 12% { opacity: 0.1; } 16% { opacity: 0.9; } 22% { opacity: 0; } }
 @keyframes dbtefx-bcq-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
@@ -189,10 +199,11 @@ const blitzclique = (t) => {
 <path d="${city}" fill="${mix(t.bg, orange, 0.12)}" fill-opacity="0.8"/><path d="${pylons}" stroke="${mix(t.bg, orange, 0.18)}" stroke-width="2" fill="none"/>
 <!--mid-->
 <g style="animation: dbtefx-bcq-cloud 50s ease-in-out infinite;">${storm(1250, 66, 9)}</g>
+<circle cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
+${surge}
 <g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">
-<circle cx="1290" cy="300" r="190" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.45" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 ${strike}
-<g transform="translate(354 199) scale(0.72)">
+<g transform="translate(${ix} ${iy}) scale(${is})">
 <path d="${rock}" fill="url(#dbtefx-bcq-rock)"/><path d="${strata}" fill="none" stroke="${dark}" stroke-opacity="0.35" stroke-width="2"/><path d="${cracks}" fill="none" stroke="${dark}" stroke-opacity="0.5" stroke-width="1.6"/><path d="M1094 566L1112 598L1138 610" fill="none" stroke="${mintHi}" stroke-opacity="0.3" stroke-width="2"/><path d="M1150 648L1178 668L1196 706L1226 726L1246 764L1272 790L1290 818L1306 792L1336 764L1368 740L1398 704L1428 684L1450 644" fill="none" stroke="${mix(orange, t.warning, 0.5)}" stroke-opacity="0.7" stroke-width="3" stroke-linejoin="round"/>
 ${pipes}${cable(1196, 706, 70, -14, 6, 1)}${cable(1336, 764, 56, 12, 7.5, 3)}${cable(1446, 650, 64, 10, 6.8, 2)}
 ${tower}${shacks}${stair}${slab}

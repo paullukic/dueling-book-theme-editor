@@ -1,13 +1,18 @@
 import { mix } from '../../../lib/color.js';
 import { H, n1, rng, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
-// Madolche: Madolche Nights. The Chateau of sweets stands on frosted hills
-// under a sugar moon: tiers of sponge, cream and strawberry jam, towers roofed
-// in soft-serve and waffle cone, a candy-striped spire crowned with Queen
-// Tiaramisu's tiara. Every window is lit; macarons and sweets float about
-// the castle, sprinkles drift down.
+// Madolche: Madolche Nights. Madolche Queen Tiaramisu, the real card artwork
+// loaded live from DuelingBook (cardart.js), presides on her throne over the
+// Chateau of sweets on frosted hills under a sugar moon: tiers of sponge,
+// cream and strawberry jam, towers roofed in soft-serve and waffle cone, a
+// candy-striped spire crowned with her tiara. Every window is lit; sweets
+// float about, sprinkles drift down. Offline, the chateau and glow remain.
 
 const cx = 1228;
+// The chateau, shrunk to stand at the Queen's feet: its centre and scale.
+const chX = 1300;
+const chS = 0.56;
 
 const scene = (t) => {
   const rand = rng(29);
@@ -87,9 +92,7 @@ const scene = (t) => {
   const cookie = `<path d="M0 -20L5 -6L20 -6L8 3L12 18L0 9L-12 18L-8 3L-20 -6L-5 -6Z" fill="url(#dbtefx-md-waffle)" stroke="${spongeDark}" stroke-width="1"/><path d="M0 -13L3 -4L12 -4L5 2L7 11L0 6L-7 11L-5 2L-12 -4L-3 -4Z" fill="none" stroke="${cream}" stroke-width="1.6" stroke-dasharray="3 2"/>`;
   const float = (x, y, body, i, rot = 0) => `<g transform="translate(${x} ${y}) rotate(${rot})"><g style="animation: dbtefx-md-float ${n1(7 + i * 1.1)}s ease-in-out ${n1(-i * 1.9)}s infinite;">${body}</g></g>`;
   const sweets = [
-    float(1478, 520, macaron(t.accent), 0, -12),
-    float(1050, 408, candy, 1, 18),
-    float(1462, 262, `<g transform="scale(2)">${strawberry(0, 0)}</g>`, 2, 14),
+    float(1020, 690, candy, 1, 18),
     float(250, 300, macaron(mix(gold, t.bg, 0.05)), 4, 8),
     float(330, 610, cookie, 5, -14),
     float(150, 470, candy, 6, -24),
@@ -119,7 +122,10 @@ const scene = (t) => {
   let townWins = '';
   [[60, 700], [128, 660], [140, 700], [192, 712], [268, 640], [280, 690], [330, 700], [404, 728]].forEach(([x, y]) => (townWins += `<rect x="${x}" y="${y}" width="6" height="9" rx="3"/>`));
 
-  return `<style>@keyframes dbtefx-md-float { 0%, 100% { transform: translate(0, 0) rotate(-4deg); } 50% { transform: translate(0, -14px) rotate(4deg); } }
+  const queen = cardArt(t, { id: 'dbtefx-md-hero', card: CARDS.tiaramisu, x: 1030, y: 0, w: 440, h: 780, focus: [0.52, 0.44], zoom: 0.9, feather: 0.6, fade: 0.65, blend: 'normal', grade: 'brightness(0.9) contrast(1.08) saturate(1.15)', tint: t.accent, tintAmt: 0.12, backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.8, glow: t.accent2, breathe: 18 });
+
+  return `<style>${CARD_ART_KEYFRAMES}
+@keyframes dbtefx-md-float { 0%, 100% { transform: translate(0, 0) rotate(-4deg); } 50% { transform: translate(0, -14px) rotate(4deg); } }
 @keyframes dbtefx-md-lamp { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 @keyframes dbtefx-md-flag { 0%, 100% { transform: skewY(-6deg) scaleX(1); } 50% { transform: skewY(5deg) scaleX(0.9); } }</style>
 <defs>
@@ -148,9 +154,11 @@ ${stars}
 <path d="M-20 ${H}V740C140 700 300 720 460 750S760 790 900 760S1200 700 1640 720V${H}Z" fill="${mix(t.bg, t.accent, 0.14)}"/>
 <path d="M-20 740C140 700 300 720 460 750S760 790 900 760S1200 700 1640 720" fill="none" stroke="${cream}" stroke-opacity="0.18" stroke-width="5"/>
 <!--mid-->
-<ellipse cx="${cx}" cy="560" rx="360" ry="330" fill="url(#dbtefx-md-castle)"/>
+<ellipse cx="1200" cy="360" rx="360" ry="380" fill="url(#dbtefx-md-castle)"/>
+${queen}
 <path d="M-20 ${H + 20}V800C200 780 500 820 800 800S1300 770 1640 790V${H + 20}Z" fill="${mix(t.bg, t.accent2, 0.12)}"/>
 <path d="M-20 800C200 780 500 820 800 800S1300 770 1640 790" fill="none" stroke="${cream}" stroke-opacity="0.35" stroke-width="7" stroke-linecap="round"/>
+<g transform="translate(${n1(chX - cx * chS)} ${n1(860 - 860 * chS)}) scale(${chS})">
 <path d="M${cx - 30} 330h60V450h-60Z" fill="url(#dbtefx-md-choc)"/>
 <path d="M${cx - 30} 352L${cx} 200L${cx + 30} 352Z" fill="url(#dbtefx-md-tower)"/><path d="${stripes}" stroke="${cream}" stroke-opacity="0.85" stroke-width="5" clip-path="url(#dbtefx-md-spireclip)"/>
 <clipPath id="dbtefx-md-spireclip"><path d="M${cx - 30} 352L${cx} 200L${cx + 30} 352Z"/></clipPath>
@@ -174,6 +182,7 @@ ${win(cx - 136, 730, 28, 48, 9)}${win(cx - 82, 730, 28, 48, 10)}${win(cx + 54, 7
 <path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840L${cx + 186} 852Q${cx} 882 ${cx - 186} 852Z" fill="url(#dbtefx-md-gold)"/><path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840" fill="none" stroke="${cream}" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>
 <ellipse cx="${cx}" cy="858" rx="150" ry="22" fill="url(#dbtefx-md-halo)"/>
 ${lolly(cx - 196, 0)}${lolly(cx + 196, 1)}
+</g>
 ${sweets}
 <!--near-->
 <g transform="translate(250 868) rotate(-8) scale(3)">${macaron(t.accent)}</g>`;

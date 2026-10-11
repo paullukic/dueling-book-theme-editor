@@ -1,12 +1,15 @@
 import { mix } from '../../../lib/color.js';
 import { n1, polar, rng } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Crystal Beasts: the Ancient City, Rainbow Ruins. Dusk over a ruined
 // sandstone arena; seven broken columns stand in a ring on the right, each
 // crowned with one of the seven Crystal Beast gems (ruby, amber, topaz,
 // emerald, cobalt, sapphire, amethyst). Each gem throws a beam of its colour
-// up into a rainbow arching over the sky. The gems wake one after another in
-// a slow prismatic chase. No dragon, no ice: gems, sandstone and a rainbow.
+// up into Rainbow Dragon, the real card artwork loaded live from DuelingBook
+// (cardart.js), rising out of the ring under a rainbow arching over the sky.
+// The gems wake one after another in a slow prismatic chase. Offline, the
+// ring, beams, halo and rainbow still stand.
 
 const crystalBeast = (t) => {
   const rand = rng(77);
@@ -92,7 +95,7 @@ const crystalBeast = (t) => {
     const depth = (Math.sin((a * Math.PI) / 180) + 1) / 2;
     return { i, x: n1(px), y: n1(py), s: 0.72 + depth * 0.4, broken: i === 1 || i === 4 };
   });
-  const [px0, py0] = [fx, 290];
+  const [px0, py0] = [1215, 330];
   const ordered = spots.slice().sort((a, b) => a.y - b.y);
   let columns = '';
   let beams = '';
@@ -107,25 +110,10 @@ const crystalBeast = (t) => {
 
   const glows = gems.map((c, i) => `<radialGradient id="dbtefx-cb-glow${i}" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(c, '#ffffff', 0.4)}" stop-opacity="0.75"/><stop offset="0.35" stop-color="${c}" stop-opacity="0.3"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient><linearGradient id="dbtefx-cb-beam${i}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c}" stop-opacity="0.6"/><stop offset="0.7" stop-color="${c}" stop-opacity="0.3"/><stop offset="1" stop-color="${mix(c, '#ffffff', 0.5)}" stop-opacity="0.7"/></linearGradient>`).join('');
 
-  // The crystal the seven beams meet in: a great clear brilliant seen from the
-  // side, crown and pavilion facets in shades of light, rainbow fire in a few.
-  const W2 = 78;
-  const pts = { tl: [-W2 * 0.55, -40], tr: [W2 * 0.55, -40], l: [-W2, 0], r: [W2, 0], c: [0, 92] };
-  const P2 = (p) => `${n1(px0 + p[0])} ${n1(py0 + p[1])}`;
-  const girdle = [-1, -0.6, -0.2, 0.2, 0.6, 1].map((f) => [W2 * f, 0]);
-  const crownTop = [-0.55, -0.2, 0.2, 0.55].map((f) => [W2 * f, -40]);
-  const shades = ['#ffffff', mix(t.accent, '#ffffff', 0.7), mix(t.accent, '#ffffff', 0.45), mix(t.link, '#ffffff', 0.6), mix(t.accent, '#ffffff', 0.3)];
-  let crystal = '';
-  for (let i = 0; i < 5; i++) crystal += `<path d="M${P2(girdle[i])}L${P2(girdle[i + 1])}L${P2(pts.c)}Z" fill="${shades[(i * 2) % 5]}" fill-opacity="${n1(0.55 + (i % 2) * 0.25)}"/>`;
-  crystal += `<path d="M${P2(pts.l)}L${P2(crownTop[0])}L${P2(girdle[1])}ZM${P2(crownTop[0])}L${P2(crownTop[1])}L${P2(girdle[1])}ZM${P2(crownTop[2])}L${P2(crownTop[3])}L${P2(girdle[4])}Z" fill="${mix(t.accent, '#ffffff', 0.55)}" fill-opacity="0.85"/>`;
-  crystal += `<path d="M${P2(crownTop[1])}L${P2(crownTop[2])}L${P2(girdle[3])}L${P2(girdle[2])}Z" fill="#ffffff" fill-opacity="0.7"/>`;
-  crystal += `<path d="M${P2(crownTop[1])}L${P2(girdle[2])}L${P2(girdle[1])}ZM${P2(crownTop[2])}L${P2(girdle[3])}L${P2(girdle[4])}ZM${P2(crownTop[3])}L${P2(pts.r)}L${P2(girdle[4])}Z" fill="${mix(t.accent, t.bg, 0.15)}" fill-opacity="0.7"/>`;
-  crystal += `<path d="M${P2(girdle[1])}L${P2([W2 * -0.4, 0])}L${P2(pts.c)}Z" fill="${t.danger}" fill-opacity="0.45"/><path d="M${P2(girdle[3])}L${P2([W2 * 0.4, 0])}L${P2(pts.c)}Z" fill="${t.success}" fill-opacity="0.4"/><path d="M${P2([W2 * 0.4, 0])}L${P2(girdle[4])}L${P2(pts.c)}Z" fill="${t.opp}" fill-opacity="0.4"/>`;
-  const outline = `M${P2(pts.l)}L${P2(pts.tl)}L${P2(pts.tr)}L${P2(pts.r)}L${P2(pts.c)}Z`;
-  const prism = `<circle cx="${px0}" cy="${py0 + 20}" r="240" fill="url(#dbtefx-cb-halo)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-cb-wake 7s ease-in-out -1s infinite;"/>
-${crystal}<path d="${outline}M${P2(pts.l)}L${P2(pts.r)}" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2" stroke-linejoin="round"/>
-<path d="M${P2([-W2 * 0.45, -34])}L${P2([-W2 * 0.25, -34])}" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-<path d="M${n1(px0 + 30)} ${n1(py0 - 70)}L${n1(px0 + 34)} ${n1(py0 - 54)}L${n1(px0 + 50)} ${n1(py0 - 50)}L${n1(px0 + 34)} ${n1(py0 - 46)}L${n1(px0 + 30)} ${n1(py0 - 30)}L${n1(px0 + 26)} ${n1(py0 - 46)}L${n1(px0 + 10)} ${n1(py0 - 50)}L${n1(px0 + 26)} ${n1(py0 - 54)}Z" fill="#ffffff" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-cb-glint 3.5s ease-in-out infinite;"/>`;
+  // Rainbow Dragon, the real card artwork, rises out of the ring: the seven
+  // gem beams meet in its chest.
+  const dragon = cardArt(t, { id: 'dbtefx-cb-hero', card: CARDS.rainbowDragon, x: 975, y: -20, w: 480, h: 640, focus: [0.5, 0.42], zoom: 0.84, feather: 0.6, fade: 0.6, blend: 'normal', grade: 'contrast(1.12) brightness(0.9) saturate(1.1)', tint: mix(t.accent, t.bg, 0.3), tintAmt: 0.15, backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.85, glow: t.accent, breathe: 18 });
+  const prism = `<circle cx="${px0}" cy="${py0 + 20}" r="240" fill="url(#dbtefx-cb-halo)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-cb-wake 7s ease-in-out -1s infinite;"/>`;
 
   // Broken arena wall on the far right and rubble on the arena floor.
   const wall = `M1420 900V430L1446 412L1462 440L1490 404L1530 420L1600 380V900Z`;
@@ -137,7 +125,7 @@ ${crystal}<path d="${outline}M${P2(pts.l)}L${P2(pts.r)}" fill="none" stroke="#ff
     blocks += `M${n1(x)} ${n1(y)}l${n1(w)} -4l4 ${n1(w * 0.45)}l${n1(-w)} 4Z`;
   }
 
-  return `<style>
+  return `<style>${CARD_ART_KEYFRAMES}
 @keyframes dbtefx-cb-wake { 0%, 100% { opacity: 0.45; transform: scale(0.85); } 14% { opacity: 1; transform: scale(1.12); } 40% { opacity: 0.6; transform: scale(0.95); } }
 @keyframes dbtefx-cb-glint { 0%, 100% { opacity: 0; transform: scale(0.3); } 12% { opacity: 1; transform: scale(1.3); } 26% { opacity: 0; transform: scale(0.5); } }
 @keyframes dbtefx-cb-beam { 0%, 100% { opacity: 0.35; } 14% { opacity: 1; } 45% { opacity: 0.45; } }
@@ -159,12 +147,13 @@ ${glows}
 <path d="${ridge}" fill="${mix(night, t.accent, 0.12)}"/>
 <path d="M180 900V600h30v300ZM228 900V640l12-10 14 14v256ZM300 900V690h24v210Z" fill="${mix(stoneDeep, night, 0.4)}"/>
 <!--mid-->
-${beams}
-${prism}
 <ellipse cx="${fx}" cy="${fy}" rx="420" ry="190" fill="url(#dbtefx-cb-arena)"/>
 ${tiers}
 <path d="${wall}" fill="${stoneDeep}"/>
 <path d="M1420 430L1446 412L1462 440L1490 404L1530 420L1600 380" fill="none" stroke="${stoneDk}" stroke-width="3"/>
+${dragon}
+${prism}
+${beams}
 <ellipse cx="${fx}" cy="${fy + 6}" rx="${rx + 20}" ry="${ry + 10}" fill="${stoneDeep}"/>
 <ellipse cx="${fx}" cy="${fy}" rx="${rx}" ry="${ry}" fill="${mix(stoneDk, t.accent, 0.12)}"/>
 <ellipse cx="${fx}" cy="${fy}" rx="${n1(rx * 0.45)}" ry="${n1(ry * 0.45)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.35" stroke-width="2"/>

@@ -40,6 +40,12 @@ export const CARDS = {
   neos: 1393,
   elShaddollConstruct: 6535,
   trishula: 6943,
+  kagari: 9242,
+  murakumo: 16267,
+  abyssmegalo: 5550,
+  tiaramisu: 5570,
+  rainbowDragon: 3466,
+  surgeBlitzclique: 17778,
 };
 
 export const cardArtUrl = (id) => `https://images.duelingbook.com/card-pics/${~~id}.jpg`;
