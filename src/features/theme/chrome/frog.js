@@ -52,6 +52,26 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const outline = (c, w = 1.5) => [[-w, -w], [w, -w], [-w, w], [w, w], [0, w], [w, 0], [0, -w], [-w, 0]].map(([x, y]) => `${x}px ${y}px 0 ${c}`).join(', ');
   const ripple = (c) => `0 0 0 1px ${alpha(c, 0.7)}, 0 0 0 7px ${alpha(t.bg, 0.35)}, 0 0 0 8px ${alpha(c, 0.3)}, 0 0 0 16px ${alpha(t.bg, 0.2)}, 0 0 0 17px ${alpha(c, 0.14)}`;
 
+  // Phase buttons: a gold-rimmed pond well holding a notched jade lily pad. The active
+  // phase polishes the pad to wet jade (or lagoon blue for the opponent), a lotus opens
+  // in the notch and a firefly glow breathes behind it. One colour-neutral overlay (well, rim,
+  // pad edge, veins, frog-skin spots) sits over a CSS gradient that colours the pad.
+  const R = 41;
+  const P = (deg, r) => [Math.cos((deg * Math.PI) / 180), Math.sin((deg * Math.PI) / 180)].map((v) => Math.round((50 + v * r) * 10) / 10).join(' ');
+  const gold = t.warning;
+  const padPath = `M${P(-44, R)}A${R} ${R} 0 1 1 ${P(-72, R)}L${P(-58, R * 0.55)}Z`;
+  let padVeins = '';
+  for (let d = -20; d < 300; d += 34) padVeins += `M${P(d, R * 0.45)}Q${P(d + 6, R * 0.74)} ${P(d + 3, R * 0.95)}`;
+  const spots = [[150, 32, 3], [118, 35, 2], [200, 34, 2.4], [20, 34, 2.2], [262, 33, 1.7], [175, 25, 1.5], [60, 33, 1.8]].map(([d, r, s]) => { const [x, y] = P(d, r).split(' '); return `<circle cx="${x}" cy="${y}" r="${s}"/>`; }).join('');
+  const phaseDetail = svgUrl(svg(100, 100, `<defs><radialGradient id="w" cy="0.3" r="0.7"><stop offset="0" stop-color="${mix(t.opp, t.bg, 0.3)}"/><stop offset="1" stop-color="${mix(t.opp, deep, 0.12)}"/></radialGradient><linearGradient id="g" x2="0.3" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.45)}"/><stop offset="0.45" stop-color="${mix(gold, t.bg, 0.5)}"/><stop offset="1" stop-color="${mix(gold, deep, 0.28)}"/></linearGradient></defs><path d="M50 2A48 48 0 1 1 50 98A48 48 0 1 1 50 2Z${padPath}" fill="url(#w)" fill-rule="evenodd"/><circle cx="50" cy="50" r="46.6" fill="none" stroke="url(#g)" stroke-width="2.2"/><circle cx="50" cy="50" r="44.2" fill="none" stroke="${deep}" stroke-opacity="0.75"/><g fill="${deep}" fill-opacity="0.16">${spots}</g><path d="${padVeins}" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="0.8" stroke-linecap="round"/><path d="${padPath}" fill="none" stroke="${deep}" stroke-width="1.6" stroke-linejoin="round"/>`));
+  const drop = (d, r, s) => { const [x, y] = P(d, r).split(' ').map(Number); return `<circle cx="${x}" cy="${y}" r="${s}" fill="#ffffff" fill-opacity="0.3" stroke="${deep}" stroke-opacity="0.35" stroke-width="0.5"/><circle cx="${(x - s * 0.35).toFixed(1)}" cy="${(y - s * 0.35).toFixed(1)}" r="${(s * 0.38).toFixed(1)}" fill="#ffffff"/>`; };
+  const phaseShine = svgUrl(svg(100, 100, `<defs><linearGradient id="g" x2="0.3" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.4)}"/><stop offset="0.5" stop-color="${gold}"/><stop offset="1" stop-color="${mix(gold, deep, 0.45)}"/></linearGradient></defs><circle cx="50" cy="50" r="46.4" fill="none" stroke="url(#g)" stroke-width="3.4"/><path d="M${P(196, R * 0.86)}A${R * 0.86} ${R * 0.86} 0 0 1 ${P(250, R * 0.86)}" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2.6" stroke-linecap="round"/>${drop(142, 34, 2.4)}${drop(160, 29, 1.5)}${drop(28, 33, 1.7)}`));
+  const padFill = (b, on) => `radial-gradient(circle closest-side at 45% 42%, ${mix(b, '#ffffff', on ? 0.55 : 0.88)}, ${b} 62%, ${mix(b, deep, on ? 0.6 : 0.68)})`;
+  const phaseBg = (b, on) => `${on ? 'var(--dbte-frog-shine) center / 100% 100% no-repeat, ' : ''}var(--dbte-frog-phase) center / 100% 100% no-repeat, ${padFill(b, on)}`;
+  const lotusBloom = svgUrl(svg(40, 40, `<g transform="translate(20 23)" stroke="${mix(lotus, deep, 0.55)}" stroke-width="0.7" stroke-linejoin="round"><path d="M-15 2q7-9 15-2q-8 7-15 2zM15 2q-7-9-15-2q8 7 15 2z" fill="${mix(lotus, deep, 0.75)}"/><path d="M-10-9q8 1 10 9q-9-1-10-9zM10-9q-8 1-10 9q9-1 10-9z" fill="${mix(lotus, '#ffffff', 0.85)}"/><path d="M0-16q7 8 0 16q-7-8 0-16z" fill="${mix(lotus, '#ffffff', 0.7)}"/><circle r="2.8" fill="${gold}" stroke="${mix(gold, deep, 0.5)}"/></g>`));
+  const selfJade = mix(t.self, t.opp, 0.72);
+  const oppJade = mix(t.opp, t.self, 0.82);
+  const idleJade = mix(lime, t.bg, 0.34);
   const T = (list) => sel(list);
   const titles = T(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#content .subtitle']);
   const btnExtra = T(['#content .combobox', '#content input[type=submit]', '#content input[type=button]']);
@@ -67,8 +87,9 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const dlg = (suffix) => T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}${suffix}`));
 
   return `
-html body { --dbte-frog-pad: ${lily(pad, padHi, false)}; --dbte-frog-bloom: ${lily(mix(lime, t.bg, 0.7), moon, true)}; --dbte-frog-reeds: ${reeds}; }
-@keyframes dbte-frog-ripple { from { transform: scale(0.6); opacity: 0.9 } to { transform: scale(1.5); opacity: 0 } }
+html body { --dbte-frog-phase: ${phaseDetail}; --dbte-frog-shine: ${phaseShine}; --dbte-frog-pad: ${lily(pad, padHi, false)}; --dbte-frog-bloom: ${lily(mix(lime, t.bg, 0.7), moon, true)}; --dbte-frog-reeds: ${reeds}; }
+@keyframes dbte-frog-firefly { 0%, 100% { opacity: 0.7 } 50% { opacity: 1 } }
+@keyframes dbte-frog-bloom { from { transform: scale(0.4); opacity: 0 } to { transform: scale(1); opacity: 1 } }
 @keyframes dbte-frog-bob { 0%, 100% { transform: translateY(0) rotate(-3deg) } 50% { transform: translateY(-2px) rotate(3deg) } }
 @media (prefers-reduced-motion: reduce) { :root { --dbte-frog-anim: none } }
 
@@ -163,22 +184,24 @@ ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)} !important; }
 
-${SEL.phase} { background: ${deep} !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${alpha(lime, 0.6)}, 0 0 0 5px ${alpha(t.bg, 0.3)}, 0 0 0 6px ${alpha(lime, 0.22)} !important; }
-${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; border-radius: 50% !important; }
-${sel(['#duel .phase .background .background_top'])} { background: transparent !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} {
-  background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(pad, deep, 0.7)}, ${mix(pad, deep, 0.35)}) !important; border-radius: 50% !important;
-  -webkit-mask: ${notch}; mask: ${notch};
-}
-${sel(['#duel .phase.active .phase_inner.red'])} { background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(t.self, '#ffffff', 0.6)}, ${mix(t.self, pad, 0.6)} 70%) !important; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${veins}, radial-gradient(circle at 40% 35%, ${mix(t.opp, '#ffffff', 0.6)}, ${mix(t.opp, pad, 0.6)} 70%) !important; }
+${SEL.phase} { background: ${phaseBg(idleJade, false)} !important; border-radius: 50% !important; box-shadow: 0 3px 8px ${alpha(deep, 0.75)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) .background'])} { background: ${phaseBg(selfJade, true)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { background: ${phaseBg(oppJade, true)} !important; }
+${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 1px ${alpha(gold, 0.35)}, 0 3px 8px ${alpha(deep, 0.75)} !important; }
+${sel(['#duel .phase .background .background_inner', '#duel .phase .background .background_top', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue', '#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: transparent !important; }
 ${sel(['#duel .phase.active::before'])} {
-  content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; pointer-events: none; border-radius: 50%;
-  box-shadow: 0 0 0 2px ${lime}, 0 0 18px ${alpha(lime, 0.8)};
-  animation: var(--dbte-frog-anim, dbte-frog-ripple 2.4s ease-out infinite);
+  content: ""; position: absolute; left: -16%; top: -16%; right: -16%; bottom: -16%; pointer-events: none; border-radius: 50%;
+  background: radial-gradient(circle at 18% 22%, ${alpha(gold, 0.95)} 0 1.4%, transparent 3.2%), radial-gradient(circle at 86% 74%, ${alpha(gold, 0.85)} 0 1.1%, transparent 2.8%), radial-gradient(circle closest-side, transparent 68%, ${alpha(gold, 0.75)} 74%, ${alpha(gold, 0.28)} 86%, transparent 100%);
+  animation: var(--dbte-frog-anim, dbte-frog-firefly 3.2s ease-in-out infinite);
 }
-${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)}, 2px 3px 0 ${deep} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)}, 2px 3px 0 ${deep} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.blue)::before'])} { background: radial-gradient(circle at 18% 22%, ${alpha(t.opp, 0.95)} 0 1.4%, transparent 3.2%), radial-gradient(circle at 86% 74%, ${alpha(t.opp, 0.85)} 0 1.1%, transparent 2.8%), radial-gradient(circle closest-side, transparent 68%, ${alpha(t.opp, 0.75)} 74%, ${alpha(t.opp, 0.28)} 86%, transparent 100%); }
+${sel(['#duel .phase.active::after'])} {
+  content: ""; position: absolute; right: 6%; top: -6%; width: 44%; height: 44%; pointer-events: none;
+  background: ${lotusBloom} center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha(deep, 0.8)});
+  transform-origin: 50% 80%; animation: var(--dbte-frog-anim, dbte-frog-bloom 0.6s ease-out both);
+}
+${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 1px ${deep}, 0 0 4px ${deep}, 0 0 8px ${alpha(deep, 0.8)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.accentText} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.55)} !important; }
 ${turnBg} { background: ${pad} !important; border-radius: 99px !important; }
 ${turnInner} { background: radial-gradient(ellipse at 50% 120%, ${alpha(lime, 0.4)}, transparent 70%), ${mix(t.surface, deep, 0.6)} !important; border-radius: 99px !important; }
 ${turnTxt} { color: ${mix(t.text, lime, 0.5)} !important; text-shadow: ${outline(deep, 1.5)} !important; }
