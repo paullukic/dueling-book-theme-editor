@@ -4,7 +4,7 @@ import { DEFAULTS, withDefaults } from '../src/lib/defaults.js';
 import { contrast, mix } from '../src/lib/color.js';
 import { AREAS, PRESETS, TOKENS } from '../src/features/theme/presets.js';
 import { MAX_CODE_LENGTH, decodeTheme, encodeTheme } from '../src/features/theme/share.js';
-import { AREA_CSS, fontCss, varsCss } from '../src/features/theme/css.js';
+import { AREA_CSS, fontCss, readingTextCss, varsCss } from '../src/features/theme/css.js';
 import { iconCss, recolorField } from '../src/features/theme/art.js';
 import { launcherBottom } from '../src/lib/layout.js';
 
@@ -116,8 +116,20 @@ test('field: recolours the four zone gradients only', () => {
   assert.doesNotMatch(out, /stop-color="(red|#90f|#00b400|#ff8f00)"/);
 });
 
-test('css: lettering sheet only changes fonts', () => {
-  assert.doesNotMatch(fontCss, /(?<![-\w])(width|height|padding|font-size|line-height|letter-spacing|left|top|border)\s*:/i);
+test('css: lettering sheets only change fonts', () => {
+  ['system', 'card'].forEach((id) => {
+    const css = fontCss(id);
+    assert.ok(css && css.includes('font-family'), id);
+    assert.doesNotMatch(css, /(?<![-\w])(width|height|padding|font-size|line-height|letter-spacing|left|top|border)\s*:/i, id);
+  });
+  assert.equal(fontCss('original'), null);
+  assert.ok(fontCss('card').includes('MatrixRegularSmallCaps') && fontCss('card').includes('Stone Serif'));
+});
+
+test('css: reading text size touches only wrapping text boxes', () => {
+  const css = readingTextCss(1.25);
+  assert.ok(css.includes('font-size: 15px'));
+  assert.doesNotMatch(css, /\.button|\.menu_btn|\.cell\b|\.body_txt|(?<![-\w])(width|height)\s*:/);
 });
 
 test('css: a non-hex token never reaches the page', () => {

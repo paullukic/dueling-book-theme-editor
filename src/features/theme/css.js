@@ -46,22 +46,41 @@ html #greenlines { opacity: calc(var(--dbt-backdrop) * 0.7) !important; }
 html #circuit_cover { background-color: rgba(var(--dbt-bg-rgb), calc(1 - var(--dbt-backdrop) * 0.7)) !important; }
 `;
 
-export const fontCss = `
-html #content .button, html #content .combobox, html #content .cell, html #content select,
-html #content option, html #content input, html #content textarea, html #content .textarea,
-html #content .textinput, html #content .menu_btn .content span, html #content .title1,
-html #content .title2, html #content .subtitle, html #content .title_txt, html #content .body_txt,
-html #content .chat_top span, html #content .arial_black, html #content .arial_black2,
-html #content .arial_rounded18, html #content .arial_rounded20, html #content .arial_rounded25,
-html #content .bisque, html #content .kristenitc, html #content .connection_status,
-html #content .connection_status2, html #tooltips > * {
-  font-family: ${SYSTEM_FONT} !important;
-}
-html #content .title1, html #content .title2, html #content .subtitle,
-html #content .arial_black, html #content .arial_black2, html #content .menu_btn .content span {
-  font-weight: 800 !important;
-}
-`;
+// Text DuelingBook shows in its UI fonts (never card faces).
+const BODY_TEXT = [
+  '.button', '.combobox', '.cell', 'select', 'option', 'input', 'textarea', '.textarea', '.textinput',
+  '.body_txt', '.chat_top span', '.arial_rounded18', '.arial_rounded20', '.arial_rounded25', '.bisque',
+  '.kristenitc', '.connection_status', '.connection_status2',
+];
+const TITLE_TEXT = ['.menu_btn .content span', '.title1', '.title2', '.subtitle', '.title_txt', '.arial_black', '.arial_black2'];
+const sel = (list) => [...list.map((x) => `html #content ${x}`), ...(list === BODY_TEXT ? ['html #tooltips > *'] : [])].join(', ');
+
+// DuelingBook already loads the real card fonts for card faces.
+const CARD_TITLE = '"MatrixRegularSmallCaps", "Stone Serif", Georgia, serif';
+const CARD_BODY = '"Stone Serif", Georgia, serif';
+
+// 'original' -> null (DuelingBook's own fonts), 'system' -> clean UI font,
+// 'card' -> card-name small caps for titles and buttons, card-text serif elsewhere.
+export const fontCss = (id) => {
+  if (id === 'system') {
+    return `${sel(BODY_TEXT)}, ${sel(TITLE_TEXT)} { font-family: ${SYSTEM_FONT} !important; }
+${sel(TITLE_TEXT)} { font-weight: 800 !important; }`;
+  }
+  if (id === 'card') {
+    return `${sel(BODY_TEXT)} { font-family: ${CARD_BODY} !important; }
+${sel(TITLE_TEXT)}, html #content .button, html #content .combobox { font-family: ${CARD_TITLE} !important; font-weight: normal !important; }`;
+  }
+  return null;
+};
+
+// "Chat and log text" size: only boxes whose text wraps and scrolls, so a
+// bigger size can never push DuelingBook's fixed layout around.
+export const readingTextCss = (scale) => {
+  const px = Math.round(12 * scale * 10) / 10;
+  const boxes = ['.cout_txt', '.log_txt', '#bulletin_txt', '.actions_txt'];
+  const list = boxes.flatMap((b) => [`html #content ${b}`, `html #content ${b} *`]).join(', ');
+  return `${list} { font-size: ${px}px !important; line-height: 1.3 !important; }`;
+};
 
 const widgets = `
 /* Buttons: DuelingBook draws div.button.proxy over native submits */
@@ -354,7 +373,8 @@ html #content #duelmessage {
 html #content #duelmessage .square:hover { background-color: var(--dbt-accent-soft) !important; }
 html #content #duelmessage .square:active { background-color: var(--dbt-press) !important; }
 html #content #view > .background, html #content #selection > .background { background-color: var(--dbt-raised) !important; }
-html #content #view > .background_inner, html #content #selection > .background_inner { background-color: var(--dbt-glass-soft) !important; }
+/* The pile viewer (GY, banished...) and the game-over box stay see-through so the field shows. */
+html #content #view > .background_inner, html #content #selection > .background_inner { background-color: color-mix(in srgb, var(--dbt-surface) 55%, transparent) !important; }
 html #content #choose_zones .background { background-color: var(--dbt-scrim) !important; }
 html #content #card_menu .card_menu_txt { color: var(--dbt-text) !important; }
 html #duel #show_hand_btn .blue, html #duel #shuffle_btn .blue { background-color: var(--dbt-accent-soft) !important; }

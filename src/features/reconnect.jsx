@@ -62,6 +62,10 @@ const reconnectNow = (state) => {
     // the user presses DUEL themselves
   }
   window.location.reload();
+  // If the reload is blocked or cancelled, allow another attempt later.
+  setTimeout(() => {
+    reloading = false;
+  }, 10000);
 };
 
 // Watches for a dropped connection and offers (then performs) a reload.

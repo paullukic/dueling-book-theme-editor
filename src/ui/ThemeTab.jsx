@@ -13,7 +13,7 @@ import BackgroundPicker from './BackgroundPicker';
 const VIEWS = [
   { id: 'style', label: 'Style' },
   { id: 'background', label: 'Background' },
-  { id: 'cards', label: 'Card text' },
+  { id: 'cards', label: 'Text' },
   { id: 'more', label: 'More' },
 ];
 // Remembered while the page is open, so reopening the panel keeps the view.
@@ -200,12 +200,14 @@ const ShareTheme = ({ s, onBeforeApply }) => {
       setResult({ error });
       return;
     }
-    onBeforeApply();
+    onBeforeApply(patch, !!css);
     updateSettings(patch);
     if (css) setImported(css);
     setPaste('');
     setResult({
-      ok: css ? 'Theme applied. It also included custom CSS: open Custom CSS to read it and choose whether to use it.' : 'Theme applied.',
+      ok: css
+        ? 'Theme applied (Undo is at the top). It also included custom CSS: open Custom CSS to read it and choose whether to use it.'
+        : 'Theme applied. Undo is at the top if you change your mind.',
     });
   };
 
@@ -263,7 +265,7 @@ const ShareTheme = ({ s, onBeforeApply }) => {
   );
 };
 
-const StyleView = ({ s, onPick, undo, onUndo }) => {
+const StyleView = ({ s, onPick }) => {
   const base = presetById(s.themePreset);
   const edited = isEdited(s);
   let status = 'Theme is off: DuelingBook looks as usual.';
@@ -283,11 +285,6 @@ const StyleView = ({ s, onPick, undo, onUndo }) => {
           {s.themeEnabled && edited && (
             <button type="button" className="link-btn" onClick={() => onPick(base)}>
               Reset
-            </button>
-          )}
-          {undo && (
-            <button type="button" className="link-btn" onClick={onUndo}>
-              Undo
             </button>
           )}
         </p>
@@ -364,7 +361,8 @@ const BackgroundView = ({ s }) => (
 const CardTextView = ({ s }) => {
   const setPsctColor = (k) => (v) => updateSettings({ psctColors: { ...s.psctColors, [k]: v } });
   return (
-    <Group>
+    <>
+    <Group title="Card text">
       <ToggleRow
         label="Colour card text"
         description="Colours each part of an effect: when it activates, its cost or target, what it does, and its limits. Works for Pendulum and Rush Duel cards too."
@@ -387,6 +385,19 @@ const CardTextView = ({ s }) => {
         onChange={set('cardTextSize')}
       />
     </Group>
+    <Group title="Chat and log text">
+      <SliderRow
+        label="Text size"
+        value={s.readingTextScale}
+        min={0.85}
+        max={1.6}
+        step={0.05}
+        format={(v) => (v === 1 ? 'Default' : `${Math.round(v * 100)}%`)}
+        onChange={set('readingTextScale')}
+      />
+      <p className="note">Chat windows, the duel log, messages and the news bulletin. Buttons and menus keep their size so nothing overlaps.</p>
+    </Group>
+    </>
   );
 };
 
@@ -455,37 +466,54 @@ const MoreView = ({ s, onBeforeApply }) => {
 
 const ThemeTab = () => {
   const s = useSettings();
+  const [, setImported] = useLocal('customCssImported', '');
   const [view, setView] = useState(lastView);
   const [undo, setUndo] = useState(null);
   const show = (id) => {
     lastView = id;
     setView(id);
   };
-  // Keeps what was there before a preset click or a pasted code, so
-  // hand-made colours are one click away from coming back.
-  const remember = () => setUndo(snapshot(s));
+  // Keeps what was there before a preset click or a pasted code replaced
+  // hand-made colours. Undo is offered only while nothing else has changed
+  // since, so it can never wipe later edits.
+  const remember = (patch, message, importedCss = false) =>
+    setUndo({ before: snapshot(s), after: JSON.stringify({ ...snapshot(s), ...patch }), message, importedCss });
+  const undoable = undo && JSON.stringify(snapshot(s)) === undo.after;
   const onPick = (p) => {
-    if (s.themeEnabled && isEdited(s)) remember();
+    const patch = { themeEnabled: true, themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius };
+    if (isEdited(s)) remember(patch, `Switched to ${p.name}; your custom colours were replaced.`);
     else setUndo(null);
-    updateSettings({ themeEnabled: true, themePreset: p.id, themeTokens: { ...p.tokens }, themeRadius: p.radius });
+    updateSettings(patch);
   };
+  const onApplyCode = (patch, importedCss) => remember(patch, 'Theme code applied.', importedCss);
   const onUndo = () => {
-    updateSettings(undo);
+    updateSettings(undo.before);
+    if (undo.importedCss) setImported('');
     setUndo(null);
   };
   return (
     <>
-      <div className="subnav" role="group" aria-label="Theme sections">
-        {VIEWS.map((v) => (
-          <button key={v.id} type="button" aria-pressed={view === v.id} onClick={() => show(v.id)}>
-            {v.label}
-          </button>
-        ))}
+      <div className="theme-head">
+        <div className="subnav" role="group" aria-label="Theme sections">
+          {VIEWS.map((v) => (
+            <button key={v.id} type="button" aria-pressed={view === v.id} onClick={() => show(v.id)}>
+              {v.label}
+            </button>
+          ))}
+        </div>
+        {undoable && (
+          <p className="note theme-status undo-bar" role="status">
+            <span>{undo.message}</span>
+            <button type="button" className="link-btn" onClick={onUndo}>
+              Undo
+            </button>
+          </p>
+        )}
       </div>
-      {view === 'style' && <StyleView s={s} onPick={onPick} undo={undo} onUndo={onUndo} />}
+      {view === 'style' && <StyleView s={s} onPick={onPick} />}
       {view === 'background' && <BackgroundView s={s} />}
       {view === 'cards' && <CardTextView s={s} />}
-      {view === 'more' && <MoreView s={s} onBeforeApply={remember} />}
+      {view === 'more' && <MoreView s={s} onBeforeApply={onApplyCode} />}
     </>
   );
 };

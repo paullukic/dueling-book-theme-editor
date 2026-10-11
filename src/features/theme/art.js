@@ -30,7 +30,7 @@ export const iconCss = (t, radius) => {
   const arrow = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 12"><path d="M6 2l6 7 6-7" fill="none" stroke="${t.muted}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const menuRow = (fill, line) =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 813 122" preserveAspectRatio="none"><rect width="813" height="122" fill="${fill}"/><rect y="116" width="813" height="6" fill="${line}"/></svg>`;
-  const overPanel = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 634 574"><rect x="3" y="3" width="628" height="568" rx="${Math.min(radius * 3, 40)}" fill="${t.surface}" stroke="${t.border}" stroke-width="3"/></svg>`;
+  const overPanel = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 634 574"><rect x="3" y="3" width="628" height="568" rx="${Math.min(radius * 3, 40)}" fill="${t.surface}" fill-opacity="0.62" stroke="${t.border}" stroke-width="3"/></svg>`;
   const primary = (label) => button(label, t.accent, t.accent, t.accentText, radius);
   const secondary = (label) => button(label, t.raised, t.border, t.text, radius);
 

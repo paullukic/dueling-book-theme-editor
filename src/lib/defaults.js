@@ -38,6 +38,7 @@ export const DEFAULTS = {
   // Look
   darkMode: false,
   cardTextSize: 0, // 0 = DuelingBook default
+  readingTextScale: 1, // chat, logs and bulletin; 1 = DuelingBook default
   psctEnabled: false,
   psctColors: DEFAULT_PSCT_COLORS,
   smallerMenu: false,
@@ -170,6 +171,7 @@ const RANGES = {
   backgroundOpacity: [0.05, 1],
   animationSpeed: [1, 4],
   themeRadius: [0, 16],
+  readingTextScale: [0.85, 1.6],
   themeBackdrop: [0, 1],
 };
 

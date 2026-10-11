@@ -10,6 +10,7 @@ import {
   DarkModeEffect,
   MenuColorsEffect,
   PsctEffect,
+  ReadingTextEffect,
   SmallerMenuEffect,
 } from '../features/look';
 import { AlertsEffect, AnimationSpeedEffect, ShortcutsEffect, SkipIntroEffect } from '../features/duel';
@@ -121,6 +122,7 @@ const App = ({ shadowRoot }) => {
       <DarkModeEffect />
       <PsctEffect />
       <CardTextSizeEffect />
+      <ReadingTextEffect />
       <SmallerMenuEffect />
       <MenuColorsEffect />
       <BackgroundEffect />

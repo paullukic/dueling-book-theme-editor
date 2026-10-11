@@ -922,11 +922,26 @@ textarea.field {
 
 /* ---------- Theme ---------- */
 
-/* Theme tab: section switcher */
-.subnav {
+/* Theme tab: section switcher (and Undo bar), kept in view while scrolling */
+.theme-head {
   position: sticky;
   top: 0;
   z-index: 1;
+  margin: 0 -14px;
+  padding: 0 14px 2px;
+  background: var(--plate);
+}
+
+.undo-bar {
+  margin: 4px 0 0;
+  padding: 6px 9px;
+  border: 1px solid var(--gold-deep);
+  border-radius: var(--radius-sm);
+  background: rgba(232, 198, 106, 0.08);
+  color: var(--ink);
+}
+
+.subnav {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2px;

@@ -17,7 +17,7 @@ const version = () => chrome.runtime.getManifest().version;
 
 // Shown once after an update, until dismissed.
 const NEWS = [
-  'Full theme: a sleek look for every DuelingBook screen, with 16 presets (Spell, Trap, Xyz, Link…) and your own colours',
+  'Full theme: a sleek look for every DuelingBook screen, with 18 presets (Spell, Trap, Xyz, Link, Branded, Artmage…) and your own colours',
   'Share your theme as a code, or add your own CSS',
   'Reconnect automatically when DuelingBook drops you, and chat commands like /calc and /gl',
   'Turn and duel-found alerts, so you can wait in another tab',

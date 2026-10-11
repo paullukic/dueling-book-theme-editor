@@ -71,7 +71,7 @@ const ThemeEffect = () => {
     [on, tokens, s.themeRadius, s.themeBackdrop],
   );
   useStyle('dbte-theme-vars', vars);
-  useStyle('dbte-theme-font', on && s.themeFont === 'system' ? fontCss : null);
+  useStyle('dbte-theme-font', on ? fontCss(s.themeFont) : null);
 
   const icons = useMemo(() => (on && areas.icons ? iconCss(artTokens, artRadius) : null), [on, areas.icons, artTokens, artRadius]);
   useStyle('dbte-theme-icons', icons);
@@ -82,6 +82,7 @@ const ThemeEffect = () => {
   useEffect(() => {
     if (!fieldOn) {
       setField(null);
+      setFieldRetry(0);
       return undefined;
     }
     let live = true;
@@ -90,7 +91,9 @@ const ThemeEffect = () => {
       if (!live) return;
       setField(css || null);
       // A playmat file failed to download: fetch it again a few times.
-      if (missing && fieldRetry < FIELD_RETRY_MS.length) {
+      // Once everything has loaded, the next failure gets a fresh budget.
+      if (!missing && fieldRetry) setFieldRetry(0);
+      else if (missing && fieldRetry < FIELD_RETRY_MS.length) {
         timer = setTimeout(() => setFieldRetry((n) => n + 1), FIELD_RETRY_MS[fieldRetry]);
       }
     });

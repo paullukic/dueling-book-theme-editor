@@ -406,6 +406,54 @@ export const PRESETS = [
       opp: '#5b86ff',
     },
   },
+  {
+    id: 'branded',
+    group: 'archetype',
+    name: 'Branded',
+    blurb: 'Charred oxblood, brand-fire red and Albaz gold',
+    radius: 4,
+    tokens: {
+      bg: '#0c0505',
+      surface: '#1a0a0a',
+      raised: '#2a1111',
+      border: '#5a1d1a',
+      text: '#f8efe6',
+      muted: '#c9a39a',
+      link: '#f8cf6f',
+      accent: '#ff3b2b',
+      accentText: '#1c0201',
+      accent2: '#f5af50',
+      success: '#6fd08c',
+      warning: '#f8cf6f',
+      danger: '#ff6a5a',
+      self: '#ff3b2b',
+      opp: '#f2d38a',
+    },
+  },
+  {
+    id: 'artmage',
+    group: 'archetype',
+    name: 'Artmage',
+    blurb: 'Ultramarine canvas, magenta paint and gold leaf',
+    radius: 12,
+    tokens: {
+      bg: '#070c1b',
+      surface: '#0e1830',
+      raised: '#162546',
+      border: '#2b4373',
+      text: '#f4f1ea',
+      muted: '#a8b5cf',
+      link: '#8fc8ff',
+      accent: '#e8609f',
+      accentText: '#1f0412',
+      accent2: '#e8c06a',
+      success: '#7ccf9b',
+      warning: '#e8c06a',
+      danger: '#ff6b6b',
+      self: '#e8609f',
+      opp: '#6fc3ff',
+    },
+  },
 ];
 
 export const DEFAULT_PRESET = PRESETS[0];
@@ -413,6 +461,7 @@ export const DEFAULT_PRESET = PRESETS[0];
 export const PRESET_GROUPS = [
   { id: 'clean', label: 'Clean' },
   { id: 'duel', label: 'Duel themes' },
+  { id: 'archetype', label: 'Archetypes' },
 ];
 
 export const presetById = (id) => PRESETS.find((p) => p.id === id) || null;
@@ -435,6 +484,7 @@ export const AREAS = [
 export const DEFAULT_AREAS = Object.fromEntries(AREAS.map((a) => [a.id, true]));
 
 export const FONTS = [
-  { id: 'original', label: 'DuelingBook fonts' },
-  { id: 'system', label: 'Clean (system UI)' },
+  { id: 'original', label: 'DuelingBook' },
+  { id: 'system', label: 'Clean' },
+  { id: 'card', label: 'Card style' },
 ];

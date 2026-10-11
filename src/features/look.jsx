@@ -3,6 +3,7 @@ import { useSettings } from '../lib/settings';
 import { useLocal } from '../lib/localStore';
 import { removePageStyle, rgba, setPageStyle, whenElement } from '../lib/dom';
 import { darkModeCSS } from './darkModeCss';
+import { readingTextCss } from './theme/css';
 import { isLoreCard, psctCss, unwrap, wrap } from './psct';
 
 // Each effect applies its change while enabled and fully undoes it in cleanup,
@@ -33,6 +34,12 @@ export const CardTextSizeEffect = () => {
       ? `#preview_txt, #preview_txt * { font-size: ${cardTextSize}px !important; line-height: 1.35 !important; }`
       : null,
   );
+  return null;
+};
+
+export const ReadingTextEffect = () => {
+  const { readingTextScale } = useSettings();
+  useStyle('dbte-reading-text', readingTextScale !== 1 ? readingTextCss(readingTextScale) : null);
   return null;
 };
 
