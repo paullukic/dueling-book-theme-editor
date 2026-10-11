@@ -46,7 +46,8 @@ const spawn = (p, sys, w, h, r, anywhere) => {
   p.spin = (r() - 0.5) * 2 * (k.spin || 0);
   p.rot = r() * Math.PI * 2;
   p.color = sys.colors[Math.floor(r() * sys.colors.length)];
-  p.x = sys.column ? w * (0.4 + r() * 0.2) : r() * w;
+  // A column spawns in a band around columnX (0-1 across the screen, default centre).
+  p.x = sys.column ? w * ((sys.columnX ?? 0.5) - 0.1 + r() * 0.2) : r() * w;
   const dir = sys.rise ? -1 : k.dir;
   if (anywhere || dir === 0) p.y = r() * h;
   else p.y = dir < 0 ? h + 10 + r() * 40 : -10 - r() * 40;

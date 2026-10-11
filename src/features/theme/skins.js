@@ -75,12 +75,6 @@ const motifs = {
   },
   scales: (t) =>
     svg(40, 22, `<path d="M0 22a20 20 0 0 1 40 0M-20 11a20 20 0 0 1 40 0M20 11a20 20 0 0 1 40 0" fill="none" stroke="${t.accent}" stroke-opacity="0.12" stroke-width="1.2"/>`),
-  pyramids: (t) =>
-    svg(90, 60, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.13"><path d="M0 60L30 8l30 52M45 60l30-52 30 52"/><path d="M22 36q8-7 16 0q-8 7-16 0z"/><circle cx="30" cy="36" r="2" fill="${t.accent}" fill-opacity="0.25"/></g>`),
-  glyphs: (t) =>
-    svg(120, 80, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.16" stroke-width="1.6" stroke-linecap="round"><path d="M10 14q8-8 16 0q-8 8-16 0z"/><circle cx="18" cy="14" r="2" fill="${t.accent}"/><path d="M50 6v18M44 12h12M50 6q-5-5 0-8q5 3 0 8"/><path d="M78 8q4 6 8 0q4 6 8 0q4 6 8 0"/><path d="M14 52h18M23 44v16"/><path d="M52 44l8 16 8-16z"/><path d="M84 48q6-8 12 0v12"/></g>`),
-  sigil: (t) =>
-    svg(150, 150, `<g fill="none" stroke="${t.accent}" stroke-opacity="0.12" stroke-width="3" stroke-linecap="round"><circle cx="75" cy="75" r="28"/><path d="M75 31v88M53 52q22 14 44 0M53 98q22-14 44 0"/></g>`),
   petals: (t) =>
     svg(180, 180, `<g fill="${t.accent}"><path d="M30 40q10-14 20 0q-10 14-20 0z" fill-opacity="0.12" transform="rotate(25 40 40)"/><path d="M120 110q8-11 16 0q-8 11-16 0z" fill-opacity="0.09" transform="rotate(-30 128 110)"/><path d="M150 30q6-8 12 0q-6 8-12 0z" fill-opacity="0.08"/></g>`),
   slashes: (t) => svg(80, 80, `<path d="M0 80L80 0" stroke="${t.accent}" stroke-opacity="0.07" stroke-width="10"/>`),
@@ -177,7 +171,7 @@ const SKINS = {
   'white-dragon': (t) => layer(`${url(motifs.facets(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent2, 0.14)}, transparent 55%)`) + tileHoverGlow(t.accent),
   'dark-magic': (t) => layer(`${url(motifs.magicCircle(t))} center / min(90vh, 900px) no-repeat, ${url(motifs.stars(t, t.accent2, 18))}`) + tileHoverGlow(t.accent),
   'black-dragon': (t) => layer(`${url(motifs.scales(t))}, radial-gradient(ellipse at 50% 110%, ${alpha(t.accent, 0.16)}, transparent 55%)`) + tileHoverGlow(t.accent) + fieldGlow(t, 2),
-  millennium: (t) => layer(`${url(motifs.pyramids(t))}, radial-gradient(ellipse at 50% 0%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent) + dialogCorners(t.accent),
+  millennium: (t) => layer(`radial-gradient(ellipse at 50% 0%, ${alpha(t.accent, 0.12)}, transparent 55%)`) + tileHoverGlow(t.accent) + dialogCorners(t.accent),
 
   // ---------- hero skins ----------
 
@@ -235,7 +229,7 @@ ${dialogSel()} { background-image: linear-gradient(180deg, ${alpha(t.self, 0.16)
 
   // Ritual: a candle-lit summoning circle under a cobalt sky.
   ritual: (t) =>
-    layer(`${url(motifs.magicCircle(t))} center / min(95vh, 950px) no-repeat, ${url(motifs.stars(t, t.accent2, 14))}, radial-gradient(circle at 50% 55%, ${alpha(t.accent2, 0.1)}, transparent 45%)`) +
+    layer(`radial-gradient(circle at 50% 55%, ${alpha(t.accent2, 0.1)}, transparent 45%)`) +
     tileHoverGlow(t.accent) +
     dialogCorners(t.accent2) +
     fieldGlow(t, 3),
@@ -311,7 +305,7 @@ ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 20px -6px ${t.accen
     fieldGlow(t, 3),
 
   divine: (t) =>
-    layer(`${url(motifs.glyphs(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
+    layer(`radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
     `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.16)}, transparent 50%) !important; box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.7)}, 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important; }
 ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 22px -6px ${t.accent} !important; }
 ${dialogSel()} { box-shadow: 0 0 0 1px ${t.accent}, 0 0 0 3px ${t.surface}, 0 0 0 4px ${alpha(t.self, 0.8)}, 0 0 0 6px ${t.surface}, 0 0 0 7px ${alpha(t.opp, 0.8)}, 0 24px 60px -20px rgba(0, 0, 0, 0.8) !important; }` +
