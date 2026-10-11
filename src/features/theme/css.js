@@ -398,6 +398,10 @@ html #duel_room label, html #duel_room .duel_lbl, html #duel_room .watch_lbl { c
 
 const deck = `
 html #deck_constructor .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent2)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
+/* Genesys points: DuelingBook hue-rotates its badge; ours is already themed. Over the cap it sets an inline filter. */
+html #content .points { filter: none !important; }
+html #content .points .points_txt { color: var(--dbt-text) !important; text-shadow: 0 0 2px var(--dbt-surface), 0 0 2px var(--dbt-surface) !important; }
+html #content .points[style*="hue-rotate"] .points_txt { color: var(--dbt-danger) !important; }
 html #deck_constructor .side_bg, html #siding .side_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
 html #deck_constructor .extra_bg, html #siding .extra_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-warning)) !important; box-shadow: inset 0 0 0 1px var(--dbt-line); }
 html #siding .deck_bg { background-color: color-mix(in srgb, var(--dbt-surface) 82%, var(--dbt-accent2)) !important; }
