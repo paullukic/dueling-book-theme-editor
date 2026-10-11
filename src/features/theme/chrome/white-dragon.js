@@ -37,7 +37,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // The dragon's wings, spread from a crystal at the centre: finger bones and scalloped membranes.
   const wingHalf = `<path d="M84 22C70 8 46 1 4 3L13 9C20 10 24 13 27 18C33 13 39 14 44 19C50 15 56 16 61 21C67 18 73 19 78 24Z" fill="#ffffff" stroke="${deep}" stroke-width="1.3" stroke-linejoin="round"/><path d="M84 22L27 18M84 22L44 19M84 22L61 21M84 22C66 10 42 5 13 9" fill="none" stroke="${deep}" stroke-opacity="0.55" stroke-width="0.9"/><path d="M84 22C70 8 46 1 4 3" fill="none" stroke="${ice}" stroke-width="1"/>`;
-  const wings = svg(168, 30, `${wingHalf}<g transform="matrix(-1 0 0 1 168 0)">${wingHalf}</g><path d="M84 6L89 16 84 29 79 16Z" fill="${ice}" stroke="${deep}" stroke-width="1.2"/><path d="M84 6L89 16H84Z" fill="#ffffff" fill-opacity="0.8"/>`);
+  // Tile crest: the same wings, filled white to ice with a navy outline so they read on the pale plate.
+  const tileWing = wingHalf.replace('fill="#ffffff" stroke="${deep}" stroke-width="1.3"', `fill="url(#w)" stroke="${navy}" stroke-width="1.8"`);
+  const wings = svg(168, 30, `<defs><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="${ice}"/></linearGradient></defs>${tileWing}<g transform="matrix(-1 0 0 1 168 0)">${tileWing}</g><path d="M84 4L90 15 84 28 78 15Z" fill="${ice}" stroke="${navy}" stroke-width="1.6"/><path d="M84 4L90 15H84Z" fill="#ffffff" fill-opacity="0.85"/>`);
 
   // Lightning: a deep blue bolt with an ice core.
   const bolt = (d, w = 1) => `<path d="${d}" fill="none" stroke="${deep}" stroke-width="${3.2 * w}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${ice}" stroke-width="${1.3 * w}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#ffffff" stroke-width="${0.5 * w}" stroke-linejoin="round"/>`;
@@ -86,7 +88,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5], ['u6', u6]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: pale ice plates in a chamfered silver frame, the dragon's wings spread across the top. */
 ${SEL.tile} { background: ${paleBg()} !important; border-style: solid !important; border-image: var(--dbtc-u1) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 76px); top: -15px; width: 152px; height: 27px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.5)}); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 56px); top: 1px; width: 112px; height: 20px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha('#000000', 0.5)}); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: var(--dbtc-u3) 50% 100% / 100% 12px no-repeat, ${paleBg(0.2)} !important; box-shadow: 0 0 0 1px ${deep}, 0 0 22px -4px ${alpha(ice, 0.9)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { ${navyText} }
@@ -168,5 +170,17 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss(popPrimary, popSecondary)}
+
+/* Checkboxes and radios: hollow with a navy edge; ice-filled when on. */
+${sel(['#content .checkbox', '#content .radiobutton'])} { background-color: #ffffff !important; box-shadow: inset 0 0 0 2px ${navy} !important; }
+${sel(['#content .checkbox:has(img.check:not([style*="none"]))', '#content .radiobutton:has(img.check:not([style*="none"]))'])} { background-color: ${ice} !important; }
+${sel(['#content .checkbox:hover', '#content .radiobutton:hover'])} { box-shadow: inset 0 0 0 2px ${deep}, 0 0 6px ${alpha(ice, 0.8)} !important; }
+${sel(['#content .checkbox img.check', '#content .radiobutton img.check'])} { filter: brightness(0) !important; }
+
+/* Opponent side in ice and silver, never lilac. */
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(silver, navy, 0.45)}, ${mix(frost, ice, 0.35)}) !important; }
+${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${silver}, ${deep}) !important; }
+${sel(['#duel #status2 .status_txt', '#duel #countdown2'])} { text-shadow: 0 0 10px ${ice}, 0 0 2px ${navy} !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { box-shadow: 0 0 16px ${alpha(frost, 0.9)}; }
 `;
 };

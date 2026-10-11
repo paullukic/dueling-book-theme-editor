@@ -93,10 +93,10 @@ ${SEL.tileHover} { background: ${vestment(0.25)} !important; box-shadow: 0 0 0 1
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 1px 0 #ffffff, 0 0 10px #ffffff !important; }
 
 /* Buttons: white silk, gold trim below, red piping on hover. */
-${SEL.button} { background: linear-gradient(180deg, #ffffff, ${mix(white, gold, 0.12)}) !important; border-color: ${gold} !important; color: ${t.text} !important; border-radius: 3px !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)}, inset 0 1px 0 #ffffff, 0 2px 4px -1px ${ink(0.25)} !important; }
-${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: linear-gradient(180deg, #ffffff, ${mix(white, gold, 0.12)}) !important; border-color: ${gold} !important; color: ${t.text} !important; border-radius: 3px !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)}, inset 0 1px 0 #ffffff, 0 2px 4px -1px ${ink(0.25)} !important; }
-${SEL.buttonHover} { background: linear-gradient(180deg, #ffffff, ${goldPale}) !important; border-color: ${goldDeep} !important; box-shadow: inset 0 -2px 0 ${red}, 0 0 10px -1px ${alpha(gold, 0.8)} !important; }
-${SEL.buttonDown} { background: ${goldPale} !important; border-color: ${goldDeep} !important; box-shadow: inset 0 2px 4px ${ink(0.3)} !important; }
+${SEL.button} { background: linear-gradient(180deg, ${mix(gold, '#ffffff', 0.1)}, ${goldDeep}) !important; border-color: ${goldDeep} !important; color: ${t.accentText} !important; border-radius: 3px !important; text-shadow: 0 1px 1px ${ink(0.5)} !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.45)}, inset 0 0 0 1px ${alpha('#ffffff', 0.18)}, 0 2px 4px -1px ${ink(0.35)} !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: linear-gradient(180deg, ${mix(gold, '#ffffff', 0.1)}, ${goldDeep}) !important; border-color: ${goldDeep} !important; color: ${t.accentText} !important; border-radius: 3px !important; text-shadow: 0 1px 1px ${ink(0.5)} !important; box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.45)}, inset 0 0 0 1px ${alpha('#ffffff', 0.18)}, 0 2px 4px -1px ${ink(0.35)} !important; }
+${SEL.buttonHover} { background: linear-gradient(180deg, ${mix(gold, '#ffffff', 0.22)}, ${gold}) !important; border-color: ${t.text} !important; color: ${t.accentText} !important; box-shadow: inset 0 -2px 0 ${red}, 0 0 10px -1px ${alpha(gold, 0.8)} !important; }
+${SEL.buttonDown} { background: ${goldDeep} !important; border-color: ${t.text} !important; color: ${t.accentText} !important; box-shadow: inset 0 2px 4px ${ink(0.45)} !important; }
 
 /* Pop-ups: a sanctuary panel lit from above, framed in gold, a winged sun on top. */
 ${SEL.dialog} { background: ${rays(0.55, '50% -10%')}, radial-gradient(ellipse 90% 70% at 50% 0%, #ffffff, transparent 70%), linear-gradient(180deg, ${white}, ${t.surface}) !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${gold}, 0 0 0 5px ${white}, 0 0 0 6px ${alpha(gold, 0.7)}, 0 24px 50px -14px ${ink(0.45)} !important; }
@@ -159,5 +159,12 @@ ${popCss(popPrimary, popSecondary)}
 
 
 ${sel(['#content .combobox'])} { border-color: ${goldDeep} !important; box-shadow: 0 0 0 1px ${alpha(gold, 0.45)} !important; }
+
+/* Chat usernames in warm brown, not navy. */
+${sel(['#chats .cout_txt font.username', '#chats .cout_txt .username', '#chats .cout_txt font[color="#0000FF" i]'])} { color: ${t.link} !important; }
+
+/* Settings heading plates: rimmed in gold so they sit in the frame, not on it. */
+${sel(['#content #settings_content .admin_lbl'])} { box-shadow: 0 0 0 0.3em ${t.surface}, 0 0 0 calc(0.3em + 2px) ${gold} !important; }
+${sel(['#content .button.disabled'])} { color: ${mix(t.accentText, gold, 0.4)} !important; }
 `;
 };

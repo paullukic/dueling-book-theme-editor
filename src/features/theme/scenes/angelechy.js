@@ -189,17 +189,17 @@ ${behind}${solid}${extra}</g>`;
   const sx = 1220;
   let rays = '';
   for (let i = 0; i < 22; i++) {
-    const a0 = -172 + i * 7.6 + (rand() - 0.5) * 3;
+    const a0 = -96 + i * 5.2 + (rand() - 0.5) * 3;
     const w = 0.5 + rand() * (i % 3 ? 1.2 : 2.6);
-    const [x1, y1] = [sx + Math.cos(((a0 - w) * Math.PI) / 180) * 1100, HY + Math.sin(((a0 - w) * Math.PI) / 180) * 1100];
-    const [x2, y2] = [sx + Math.cos(((a0 + w) * Math.PI) / 180) * 1100, HY + Math.sin(((a0 + w) * Math.PI) / 180) * 1100];
+    const [x1, y1] = [sx + Math.cos(((a0 - w) * Math.PI) / 180) * 640, HY + Math.sin(((a0 - w) * Math.PI) / 180) * 640];
+    const [x2, y2] = [sx + Math.cos(((a0 + w) * Math.PI) / 180) * 640, HY + Math.sin(((a0 + w) * Math.PI) / 180) * 640];
     rays += `M${sx} ${HY}L${n1(x1)} ${n1(y1)}L${n1(x2)} ${n1(y2)}Z`;
   }
   let ticks2 = '';
   for (let i = 0; i < 64; i++) {
     const a0 = (i / 64) * Math.PI * 2;
-    const r0 = i % 4 ? 318 : 300;
-    ticks2 += `M${n1(sx + Math.cos(a0) * r0)} ${n1(HY + Math.sin(a0) * r0)}L${n1(sx + Math.cos(a0) * 330)} ${n1(HY + Math.sin(a0) * 330)}`;
+    const r0 = i % 4 ? 192 : 180;
+    ticks2 += `M${n1(sx + Math.cos(a0) * r0)} ${n1(HY + Math.sin(a0) * r0)}L${n1(sx + Math.cos(a0) * 200)} ${n1(HY + Math.sin(a0) * 200)}`;
   }
 
   return `<style>@keyframes dbtefx-ae-rays { 0%, 100% { transform: rotate(-2.5deg); opacity: 0.75; } 50% { transform: rotate(2.5deg); opacity: 1; } }</style>
@@ -207,14 +207,14 @@ ${behind}${solid}${extra}</g>`;
 <linearGradient id="dbtefx-ae-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.bg}"/><stop offset="0.4" stop-color="${mix(t.bg, t.opp, 0.2)}"/><stop offset="0.56" stop-color="${mix(t.bg, t.accent, 0.32)}"/><stop offset="0.7" stop-color="${mix(t.bg, t.opp, 0.16)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient>
 <radialGradient id="dbtefx-ae-puff" cx="0.5" cy="0.3" r="0.6"><stop offset="0" stop-color="${mix(t.opp, t.text, 0.5)}" stop-opacity="0.38"/><stop offset="0.55" stop-color="${mix(t.bg, t.opp, 0.45)}" stop-opacity="0.3"/><stop offset="1" stop-color="${mix(t.bg, t.opp, 0.3)}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-ae-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="0.12" stop-color="${t.accent}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-ae-ray" gradientUnits="userSpaceOnUse" cx="${sx}" cy="${HY}" r="820"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.24"/><stop offset="0.35" stop-color="${t.accent}" stop-opacity="0.06"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-ae-ray" gradientUnits="userSpaceOnUse" cx="${sx}" cy="${HY}" r="640"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.24"/><stop offset="0.35" stop-color="${t.accent}" stop-opacity="0.06"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ae-sky)"/>
 <g fill="${t.text}" fill-opacity="0.55">${stars}</g>
 <g fill="${t.accent}" fill-opacity="0.85">${twinkles}</g>
 <path d="${rays}" fill="url(#dbtefx-ae-ray)" style="transform-origin: ${sx}px ${HY}px; animation: dbtefx-ae-rays 24s ease-in-out infinite;"/>
-<g style="transform-origin: ${sx}px ${HY}px; animation: dbtefx-spin 240s linear infinite;" fill="none" stroke="${t.accent}"><circle cx="${sx}" cy="${HY}" r="330" stroke-opacity="0.35" stroke-width="2"/><circle cx="${sx}" cy="${HY}" r="300" stroke-opacity="0.22"/><path d="${ticks2}" stroke-opacity="0.3" stroke-width="1.5"/><circle cx="${sx}" cy="${HY}" r="372" stroke-opacity="0.14" stroke-dasharray="2 10"/></g>
-<ellipse cx="${sx}" cy="${HY}" rx="520" ry="260" fill="url(#dbtefx-ae-sun)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
+<g style="transform-origin: ${sx}px ${HY}px; animation: dbtefx-spin 240s linear infinite;" fill="none" stroke="${t.accent}"><circle cx="${sx}" cy="${HY}" r="200" stroke-opacity="0.35" stroke-width="2"/><circle cx="${sx}" cy="${HY}" r="180" stroke-opacity="0.22"/><path d="${ticks2}" stroke-opacity="0.3" stroke-width="1.5"/><circle cx="${sx}" cy="${HY}" r="224" stroke-opacity="0.14" stroke-dasharray="2 10"/></g>
+<ellipse cx="${sx}" cy="${HY}" rx="320" ry="220" fill="url(#dbtefx-ae-sun)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
 <g ${anim('drift', 46, 0, 'ease-in-out')}>${sea}</g>
 <!--mid-->
 <style>@keyframes dbtefx-ae-breathe { 0%, 100% { transform: scale(0.96, 1); } 50% { transform: scale(1.04, 1); } }</style>

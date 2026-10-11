@@ -117,7 +117,13 @@ ${horse ? '' : `<path d="${wing}" transform="matrix(0.62 0 0 0.62 15 -84)"/><pat
 <path d="${arm}"/><path d="${arm}" transform="scale(-1 1)"/>
 <rect x="-10" y="-272" width="24" height="38"/><path d="${head}"/>
 ${horse ? `<path d="M-108 -214h60c6 0 8 4 8 8v96c0 4 -2 8 -8 8h-60c-6 0 -8 -4 -8 -8v-96c0 -4 2 -8 8 -8Z"/><path d="M-106 -204h56v88h-56ZM-78 -204v88" fill="none" stroke="${mix(t.warning, ink, 0.55)}" stroke-width="2.5"/><circle cx="-78" cy="-160" r="9" fill="none" stroke="${mix(t.warning, ink, 0.5)}" stroke-width="2.5"/>` : ''}
-<circle cx="${horse ? -24 : -30}" cy="${horse ? -308 : -312}" r="3.4" fill="${t.danger}" style="animation: dbtefx-gb-blink 7s ease-in-out ${horse ? 0 : -2.5}s infinite; transform-box: fill-box; transform-origin: center;"/>
+<g fill="url(#dbtefx-gb-gold)" stroke="${mix(bronze, ink, 0.5)}" stroke-width="2">
+<ellipse cx="-50" cy="-222" rx="22" ry="13"/><ellipse cx="50" cy="-222" rx="22" ry="13"/>
+<path d="M-36 -122h72l-4 16h-64Z"/><path d="M-30 -106l-6 40h14l4 -40ZM30 -106l6 40h-14l-4 -40ZM-6 -106h12l-2 44h-8Z"/>
+<path d="M-26 -236C-14 -226 14 -226 26 -236L22 -200C10 -192 -10 -192 -22 -200Z"/>
+${horse ? '<path d="M2 -330L-6 -346L-10 -330C-22 -326 -34 -314 -42 -300L-58 -272L-48 -266L-34 -290C-24 -306 -10 -318 4 -318Z"/><path d="M-4 -352C6 -366 22 -368 34 -360C22 -356 12 -348 6 -338Z"/>' : '<path d="M14 -300C14 -320 2 -334 -14 -334C-28 -334 -40 -326 -46 -314L-30 -312C-22 -320 -8 -322 4 -314Z"/>'}
+</g>
+<path d="${horse ? 'M-30 -306L-18 -310L-22 -302Z' : 'M-36 -312L-24 -315L-27 -307Z'}" fill="${sun}" style="animation: dbtefx-gb-blink 7s ease-in-out ${horse ? 0 : -2.5}s infinite; transform-box: fill-box; transform-origin: center;"/>
 </g>`;
   };
 
@@ -137,7 +143,7 @@ ${horse ? `<path d="M-108 -214h60c6 0 8 4 8 8v96c0 4 -2 8 -8 8h-60c-6 0 -8 -4 -8
 <path d="${opening}" fill="url(#dbtefx-gb-gate)"/>
 <clipPath id="dbtefx-gb-door"><path d="${opening}"/></clipPath>
 <ellipse cx="${gx}" cy="${gy - 80}" rx="190" ry="200" fill="url(#dbtefx-gb-glow)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
-<g clip-path="url(#dbtefx-gb-door)" fill="${ink}">${figure(gx + 58, gy - 2, 0.8, 'eagle')}${figure(gx - 40, gy - 2, 0.86, 'horse')}
+<g clip-path="url(#dbtefx-gb-door)"><g fill="${mix(sun, '#ffffff', 0.35)}" stroke="${mix(sun, '#ffffff', 0.35)}" stroke-width="7" stroke-linejoin="round">${figure(gx + 58, gy - 2, 0.8, 'eagle').split('<g fill="url(#dbtefx-gb-gold)"')[0] + '</g>'}${figure(gx - 40, gy - 2, 0.86, 'horse').split('<g fill="url(#dbtefx-gb-gold)"')[0] + '</g>'}</g><g fill="${ink}">${figure(gx + 58, gy - 2, 0.8, 'eagle')}${figure(gx - 40, gy - 2, 0.86, 'horse')}</g>
 <path d="${bars}" stroke="${shade}" stroke-width="5" fill="none"/><path d="M${gx - 120} ${gy - 290}h240" stroke="${shade}" stroke-width="7"/>
 <path d="${Array.from({ length: 11 }, (_, i) => `M${gx - 114 + i * 23} ${gy - 290}l4 12l4 -12`).join('')}" fill="${shade}"/></g>
 <path d="M${gx - 150} ${gy}V${gy - 196}A150 150 0 0 1 ${gx + 150} ${gy - 196}V${gy}M${gx - 120} ${gy}V${gy - 190}A120 120 0 0 1 ${gx + 120} ${gy - 190}V${gy}" fill="none" stroke="${mix(stone, sun, 0.5)}" stroke-width="3"/>
@@ -146,7 +152,7 @@ ${horse ? `<path d="M-108 -214h60c6 0 8 4 8 8v96c0 4 -2 8 -8 8h-60c-6 0 -8 -4 -8
 ${dust}`;
 
   // Aquila: the eagle standard planted in the sand.
-  const [sx, sy] = [1056, 850];
+  const [sx, sy] = [1404, 880];
   const eagleWing = 'M4 0C14 -30 34 -62 58 -84L54 -66L66 -64L52 -52L62 -46L48 -38L56 -30L40 -26L44 -16L28 -14C18 -8 10 -4 4 0Z';
   const aquila = `<path d="M${sx - 3} ${sy}V${sy - 520}h6V${sy}Z" fill="${mix(bronze, t.bg, 0.4)}"/>
 <path d="M${sx - 54} ${sy - 470}h108" stroke="${bronze}" stroke-width="5"/>
@@ -162,8 +168,8 @@ ${dust}`;
   let rays = '';
   for (let i = 0; i < 5; i++) {
     const x0 = 1180 + i * 70 + rand() * 30;
-    const spread = 60 + rand() * 60;
-    const x1 = 260 + i * 170 + rand() * 60;
+    const spread = 40 + rand() * 40;
+    const x1 = 1080 + i * 80 + rand() * 30;
     rays += `<path d="M${n1(x0)} -20L${n1(x0 + 26)} -20L${n1(x1 + spread)} ${H}L${n1(x1)} ${H}Z" ${anim('pulse', n1(7 + i * 1.3), i * 1.7, 'ease-in-out')}/>`;
   }
 
@@ -196,6 +202,7 @@ ${dust}`;
 <linearGradient id="dbtefx-gb-cdepth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade}" stop-opacity="0.7"/><stop offset="1" stop-color="${shade}" stop-opacity="0"/></linearGradient>
 <pattern id="dbtefx-gb-awn" width="80" height="10" patternUnits="userSpaceOnUse"><rect width="80" height="10" fill="${mix(t.text, t.warning, 0.45)}"/><rect width="3" height="10" fill="${mix(red, t.bg, 0.3)}"/></pattern>
 <linearGradient id="dbtefx-gb-awnshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000" stop-opacity="0.5"/><stop offset="1" stop-color="#000000" stop-opacity="0.1"/></linearGradient>
+<linearGradient id="dbtefx-gb-veil" x1="0" y1="0" x2="1" y2="0"><stop offset="0.2" stop-color="${t.bg}" stop-opacity="0"/><stop offset="0.36" stop-color="${t.bg}" stop-opacity="0.6"/><stop offset="0.66" stop-color="${t.bg}" stop-opacity="0.6"/><stop offset="0.8" stop-color="${t.bg}" stop-opacity="0"/></linearGradient>
 <radialGradient id="dbtefx-gb-pool"><stop offset="0" stop-color="${sun}" stop-opacity="0.16"/><stop offset="1" stop-color="${sun}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-gb-dust"><stop offset="0" stop-color="${mix(t.warning, t.text, 0.4)}" stop-opacity="0.5"/><stop offset="1" stop-color="${mix(t.warning, t.text, 0.4)}" stop-opacity="0"/></radialGradient>
 <pattern id="dbtefx-gb-crowd" width="26" height="16" patternUnits="userSpaceOnUse"><path d="M2 16c0 -6 2 -8 5 -8a3 3 0 1 1 2 0c3 0 5 2 5 8ZM14 10c0 -5 2 -6 4 -6a2.6 2.6 0 1 1 2 0c2 0 4 1 4 6Z" fill="${shade}" fill-opacity="0.45"/></pattern>
@@ -212,7 +219,8 @@ ${cornices}
 <path d="${masts}" stroke="${mix(stone, t.bg, 0.3)}" stroke-width="4"/>
 <path d="${edge(0.1)}" stroke="${t.opp}" stroke-opacity="0.55" stroke-width="2" fill="none" ${anim('pulse', 4, 0, 'ease-in-out')}/>
 <path d="${flecks}" stroke="${mix(t.text, red, 0.4)}" stroke-opacity="0.35" stroke-width="3"/>
-${banner(330, 0.8, 0, true)}${banner(560, 0.6, 2, false)}${banner(1040, 0.6, 1, false)}${banner(1270, 0.8, 3, true)}
+<rect width="${W}" height="${H}" fill="url(#dbtefx-gb-veil)"/>
+${banner(300, 0.8, 0, true)}${banner(1300, 0.8, 3, true)}
 <!--mid-->
 <path d="${edge(0)}L${W + 40} ${H}H-40Z" fill="url(#dbtefx-gb-sand)"/>
 <path d="${edge(0)}" stroke="${shade}" stroke-width="6" fill="none"/>

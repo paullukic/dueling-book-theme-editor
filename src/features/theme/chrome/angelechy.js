@@ -80,15 +80,16 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 html body { ${[['u0', u0], ['u2', u2], ['u5', u5], ['u6', u6], ['u7', u7], ['u11', u11]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: board squares in an ivory armour frame with a gold band; a chess piece stands on each. */
 ${SEL.tile} { background: ${armour()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 11px); top: -18px; width: 22px; height: 26px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000) drop-shadow(0 0 1px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -9px; top: -12px; width: 30px; height: 36px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000) drop-shadow(0 0 1px #000000); }
 ${tilePieces}
+${on(sel(['#main_menu .menu_btn:first-child .content']), 'before')} { top: -4px; }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${armour(0.1)} !important; box-shadow: 0 0 0 1px ${gold}, 0 0 20px -4px ${alpha(gold, 0.8)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { color: ${ivory} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 
 /* Buttons: white armour plates with a gold band. */
-${SEL.button} { background: ${plate} !important; border-color: ${goldDeep} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 1px 0 #ffffff, 0 2px 5px -2px #000000 !important; }
-${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: ${plate} !important; border-color: ${goldDeep} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 1px 0 #ffffff, 0 2px 5px -2px #000000 !important; }
+${SEL.button} { background: ${plate} !important; border-color: ${gold} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 1px ${goldDeep}, inset 0 0 0 2px ${alpha('#ffffff', 0.7)}, inset 0 -4px 0 ${gold}, 0 0 0 1px ${goldDeep}, 0 2px 5px -2px #000000 !important; }
+${sel(['#content #settings_content > div.button:not(.title_txt)'])} { background: ${plate} !important; border-color: ${gold} !important; color: ${t.bg} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 1px ${goldDeep}, inset 0 0 0 2px ${alpha('#ffffff', 0.7)}, inset 0 -4px 0 ${gold}, 0 0 0 1px ${goldDeep}, 0 2px 5px -2px #000000 !important; }
 ${SEL.buttonHover} { background: linear-gradient(180deg, #ffffff, ${mix(ivory, gold, 0.35)}) !important; border-color: ${gold} !important; box-shadow: inset 0 -2px 0 ${gold}, 0 0 10px -2px ${alpha(gold, 0.9)} !important; }
 ${SEL.buttonDown} { background: ${plateShade} !important; border-color: ${gold} !important; box-shadow: inset 0 2px 4px ${alpha('#000000', 0.5)} !important; }
 ${sel(['#content .button.disabled'])} { color: ${mix(t.bg, t.muted, 0.5)} !important; }
@@ -112,14 +113,14 @@ ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, t
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
-${SEL.phase} { background: conic-gradient(from 225deg, #ffffff, ${pearl}, ${ivory}, ${plateShade}, #ffffff) !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -2px #000000 !important; }
+${SEL.phase} { background: conic-gradient(from 225deg, ${mix(gold, '#ffffff', 0.35)}, ${gold}, ${goldDeep}, ${gold}, ${mix(gold, '#ffffff', 0.35)}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${t.bg} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle, ${t.raised} 40%, ${t.surface}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle, #ffffff 30%, ${pearl}) !important; box-shadow: 0 0 14px ${alpha(gold, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.2)} 30%, ${mix(t.opp, t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle, ${t.surface} 40%, ${t.bg}) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 40% 35%, ${mix(gold, '#ffffff', 0.45)}, ${gold} 55%, ${goldDeep}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 35%, ${mix(gold, '#ffffff', 0.45)}, ${gold} 55%, ${goldDeep}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
 ${sel(['#duel .phase span'])} { color: ${pearl} !important; text-shadow: 0 1px 2px #000000 !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span'])} { color: ${t.bg} !important; text-shadow: none !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.4)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDeep}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${plate} !important; }
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.bg} !important; text-shadow: none !important; }
@@ -130,9 +131,10 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 ${lobbyBorders} { background: linear-gradient(180deg, ${alpha(t.surface, 0.7)}, ${alpha(t.bg, 0.85)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, #ffffff, ${pearl} 35%, ${gold} 50%, ${pearl} 65%, #ffffff) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(16)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 72% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
-${sel(['#content #settings_content .admin_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 42% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 2%, ${mix(t.surface, t.bg, 0.5)} 7% 93%, transparent 98%) 0 100% / 100% 46% no-repeat !important; box-shadow: none !important; }
+${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: none !important; box-shadow: none !important; z-index: 1; }
+${on(sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl']), 'before')} { content: ""; position: absolute; left: -0.5em; right: -0.5em; top: 52%; bottom: -0.15em; z-index: -1; pointer-events: none; background: linear-gradient(90deg, transparent, ${mix(t.surface, t.bg, 0.5)} 0.4em calc(100% - 0.4em), transparent); }
+${on(sel(['#content #settings_content .admin_lbl']), 'before')} { content: ""; position: absolute; left: -0.5em; right: -0.5em; top: 22%; bottom: 8%; z-index: -1; pointer-events: none; background: linear-gradient(90deg, transparent, ${mix(t.surface, t.bg, 0.5)} 0.4em calc(100% - 0.4em), transparent); }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.14)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(gold, 0.35)}, ${alpha(ivory, 0.08)}) !important; }
 

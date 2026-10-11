@@ -93,7 +93,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 html body { ${[['u0', u0], ['u1', u1], ['u2', u2], ['u3', u3], ['u4', u4], ['u5', u5], ['u6', u6]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: sandstone blocks in a riveted bronze frieze, a laurel sprig on top. */
 ${SEL.tile} { background: ${stoneBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 9px 4px round !important; border-radius: 0 !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 17px); top: -5px; width: 34px; height: 12px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 22px); top: -7px; width: 44px; height: 16px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: linear-gradient(0deg, ${alpha(banner, 0.35)}, transparent 70%), ${stoneBg(0.06)} !important; box-shadow: 0 0 20px -5px ${alpha(bronze, 0.9)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 8px ${alpha(t.bg, 0.9)} !important; }
@@ -140,9 +140,10 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(stone, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }
 ${on(lobbyBorders, 'before')} { background: linear-gradient(160deg, ${bronzeLit}, ${bronze} 30%, ${bronzeDeep} 55%, ${bronze} 80%, ${bronzeLit}) !important; filter: none !important; }
 ${on(lobbyBorders, 'after')} { content: ""; position: absolute; inset: -1px; pointer-events: none; ${frame(14)} }
-${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(180deg, transparent 63%, ${t.bg} 63% 82%, transparent 82%) center / 74% 100% no-repeat !important; }
-${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 72% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
-${sel(['#content #settings_content .admin_lbl'])} { background: linear-gradient(90deg, transparent, ${t.bg} 10% 90%, transparent) 0 42% / 100% 22% no-repeat !important; box-shadow: none !important; border-radius: 0 !important; }
+${sel(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 2%, ${mix(t.surface, t.bg, 0.5)} 7% 93%, transparent 98%) 0 100% / 100% 46% no-repeat !important; box-shadow: none !important; }
+${sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl', '#content #settings_content .admin_lbl'])} { background: none !important; box-shadow: none !important; z-index: 1; }
+${on(sel(['#duel_room #decklist > span.arial_black2', '#duel_room #mode > span.arial_black2', '#duel_room #filter > span.arial_black2', '#duel_room #host_lbl']), 'before')} { content: ""; position: absolute; left: -0.5em; right: -0.5em; top: 52%; bottom: -0.15em; z-index: -1; pointer-events: none; background: linear-gradient(90deg, transparent, ${mix(t.surface, t.bg, 0.5)} 0.4em calc(100% - 0.4em), transparent); }
+${on(sel(['#content #settings_content .admin_lbl']), 'before')} { content: ""; position: absolute; left: -0.5em; right: -0.5em; top: 22%; bottom: 8%; z-index: -1; pointer-events: none; background: linear-gradient(90deg, transparent, ${mix(t.surface, t.bg, 0.5)} 0.4em calc(100% - 0.4em), transparent); }
 ${sel(['#duel_room .duelbutton .background'])} { background: linear-gradient(90deg, ${alpha(banner, 0.22)}, transparent 40%), ${t.raised} !important; }
 ${sel(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(90deg, ${alpha(banner, 0.45)}, ${alpha(bronze, 0.15)}) !important; }
 

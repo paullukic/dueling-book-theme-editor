@@ -201,21 +201,23 @@ ${full ? '<ellipse cx="93" cy="-27" rx="1.6" ry="5" fill="#000000"/>' : ''}
 <linearGradient id="dbtefx-mt-pillar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.accent, t.bg, 0.55)}"/><stop offset="0.6" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.25)}"/></linearGradient>
 <linearGradient id="dbtefx-mt-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0"/><stop offset="0.5" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0.28"/><stop offset="1" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-mt-rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.3)}"/><stop offset="1" stop-color="${mix(gold, t.bg, 0.5)}"/></linearGradient>
+<linearGradient id="dbtefx-mt-cfg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="760" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<mask id="dbtefx-mt-cf" maskUnits="userSpaceOnUse" x="-200" y="0" width="2000" height="${H}"><rect x="-200" width="2000" height="${H}" fill="url(#dbtefx-mt-cfg)"/></mask>
 </defs>
 <rect width="${W}" height="620" fill="url(#dbtefx-mt-sky)"/>
 <ellipse cx="1270" cy="230" rx="360" ry="260" fill="url(#dbtefx-mt-storm)"/>
-${drift(48, 0, `${cloud(-40, 250, 760, 110, 3, mix(storm, t.bg, 0.25))}${cloud(860, 150, 800, 100, 5, mix(storm, t.bg, 0.3))}`)}
+<g mask="url(#dbtefx-mt-cf)">${drift(48, 0, `${cloud(-40, 250, 760, 110, 3, mix(storm, t.bg, 0.25))}${cloud(860, 150, 800, 100, 5, mix(storm, t.bg, 0.3))}`)}</g>
 ${bolts}
 <g opacity="0.75">${breathe(4, `<g fill="${shadowHead}">${neck([[1240, 134], [1310, 120], [1380, 150], [1430, 280], [1440, 520]], 30, 48, false)}${neck([[1394, 162], [1430, 180], [1450, 250], [1460, 420]], 24, 40, false)}</g>`)}
 ${breathe(2, `${head(1150, 124, 0.5, -4, false)}${head(1312, 156, 0.45, 6, false)}`)}</g>
 ${breathe(0, `${neck([[1214, 250], [1290, 262], [1360, 320], [1396, 440], [1410, 600]], 58, 86, true)}${head(1060, 230, 0.85, 0, true)}`)}
-${drift(30, 8, `${cloud(-60, 420, 900, 90, 21, mix(storm, t.bg, 0.4))}${cloud(1100, 470, 560, 70, 23, mix(storm, t.bg, 0.45))}`)}
+<g mask="url(#dbtefx-mt-cf)">${drift(30, 8, `${cloud(-60, 420, 900, 90, 21, mix(storm, t.bg, 0.4))}${cloud(1100, 470, 560, 70, 23, mix(storm, t.bg, 0.45))}`)}</g>
 <path d="M0 640L120 560L230 600L380 500L520 590L640 540L760 610L900 520L1040 600L1200 540L1380 610L1520 530L1600 580V${H}H0Z" fill="${mix(storm, t.bg, 0.62)}"/>
 <rect y="560" width="${W}" height="150" fill="url(#dbtefx-mt-mist)"/>
 <path d="${forest}" fill="${mix(storm, t.bg, 0.8)}"/>
 <path d="M0 720L180 650L340 700L520 640L700 700L880 660L1060 710L1240 670L1420 710L1600 660V${H}H0Z" fill="${mix(storm, t.bg, 0.82)}"/>
 <!--mid-->
-${drift(24, 3, cloud(240, 470, 380, 64, 13, mix(storm, t.bg, 0.2)))}
+<g mask="url(#dbtefx-mt-cf)">${drift(24, 3, cloud(240, 470, 380, 64, 13, mix(storm, t.bg, 0.2)))}</g>
 <circle cx="${mx}" cy="${my}" r="280" fill="url(#dbtefx-mt-halo)" ${anim('bloom', 8, 0, 'ease-in-out')}/>
 ${torii}
 <circle cx="${mx}" cy="${my}" r="${mr + 8}" fill="${mix(gold, t.bg, 0.5)}"/>
