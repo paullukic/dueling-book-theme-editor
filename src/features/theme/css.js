@@ -292,6 +292,11 @@ html #content .cell.admin1, html #content .isAdmin { color: var(--dbt-success) !
 html #content .cell.admin2 { color: var(--dbt-muted) !important; }
 html #content .cell.admin3, html #content .cell.admin4 { color: var(--dbt-warning) !important; }
 html #content .cell.adjudicator { color: var(--dbt-accent2) !important; }
+/* The selected row stands apart from every other row (following, staff, plain): accent wash + accent bar. */
+html #content .cell1.selected, html #content .cell2.selected {
+  background-color: color-mix(in srgb, var(--dbt-accent) 30%, var(--dbt-surface)) !important;
+  box-shadow: inset 4px 0 0 var(--dbt-accent), inset 0 0 0 1px var(--dbt-accent) !important;
+}
 html #content .cell .online, html #content .online { background-color: var(--dbt-success) !important; }
 html #content .cell .away { background-color: var(--dbt-muted) !important; }
 html #content .list, html #content .users { background-color: var(--dbt-surface) !important; color: var(--dbt-text); }
