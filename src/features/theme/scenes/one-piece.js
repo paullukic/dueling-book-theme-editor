@@ -16,34 +16,27 @@ const onePiece = (t) => {
   const timber = mix(mix(t.accent, t.accent2, 0.35), t.bg, 0.72);
   const canvas = mix(t.text, t.accent, 0.35);
 
-  // A towering cumulus: overlapping lobes narrowing upward over a flat base,
-  // painted as three merged masses (shadow, body, sunlit crown), each shifted
-  // further toward the sun, so the tower is modelled as one form.
-  const tower = (cx, base, w, h, seed, sun) => {
+  // A sunset cloud bank: many soft, wide lobes laid back to front, dark
+  // and cool on top, lit gold and rose from beneath by the low sun, each
+  // lobe given a bright underside lip.
+  const bank = (x0, x1, top, bottom, seed) => {
     const r = rng(seed);
+    let body = '';
+    let lips = '';
     const rows = 7;
-    const lobes = [];
     for (let row = 0; row < rows; row++) {
       const k = row / (rows - 1);
-      const span = w * (1 - k * 0.5);
-      const n = Math.max(2, Math.round(span / 90));
-      for (let i = 0; i < n; i++) {
-        const edge = i === 0 || i === n - 1;
-        const rad = (span / n) * (edge ? 0.5 + r() * 0.2 : 0.7 + r() * 0.3) * (1 - k * 0.2);
-        const x = cx - span / 2 + ((i + 0.5) / n) * span + (r() - 0.5) * 24 + Math.sin(k * 2.2 + seed) * w * 0.08;
-        lobes.push([x, base - 50 - k * h - r() * 16, rad]);
+      const y = top + k * (bottom - top);
+      const inset = (1 - Math.sin(k * Math.PI * 0.5 + 0.35)) * (x1 - x0) * 0.35;
+      for (let x = x0 + inset + r() * 30; x < x1 - inset * 0.3; x += 70 + r() * 70) {
+        const rx = 70 + r() * 90;
+        const ry = 20 + r() * 18 + (1 - k) * 10;
+        const fill = mix(mix(cloudBody, t.bg, 0.25), mix(rim, t.accent2, 0.35), Math.pow(k, 1.4) * 0.85);
+        body += `<ellipse cx="${n1(x)}" cy="${n1(y)}" rx="${n1(rx)}" ry="${n1(ry)}" fill="${fill}" fill-opacity="${n1(0.75 + k * 0.2)}"/>`;
+        if (k > 0.55 && r() < 0.6) lips += `<path d="M${n1(x - rx * 0.45)} ${n1(y + ry * 0.8)}Q${n1(x)} ${n1(y + ry * 1.02)} ${n1(x + rx * 0.45)} ${n1(y + ry * 0.8)}" stroke-opacity="${n1(0.1 + k * 0.35)}"/>`;
       }
     }
-    const [sx, sy] = sun;
-    const len = Math.hypot(sx - cx, sy - base) || 1;
-    const [ux, uy] = [(sx - cx) / len, (sy - base) / len];
-    const mass = (dx, dy, shrink, pick) => lobes.filter(pick).map(([x, y, rad]) => `<circle cx="${n1(x + dx)}" cy="${n1(y + dy)}" r="${n1(rad * shrink)}"/>`).join('');
-    const top = base - 50 - h * 0.35;
-    const id = `dbtefx-op-t${seed}`;
-    return `<defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="0" y1="${n1(base - h - 140)}" x2="0" y2="${base}"><stop offset="0" stop-color="${mix(rim, t.accent2, 0.2)}"/><stop offset="0.5" stop-color="${mix(cloudBody, t.accent2, 0.4)}"/><stop offset="1" stop-color="${mix(cloudBody, t.accent2, 0.12)}"/></linearGradient></defs>
-<g fill="${mix(cloudBody, t.bg, 0.45)}">${mass(0, 0, 1, () => true)}<rect x="${n1(cx - w * 0.55)}" y="${n1(base - 70)}" width="${n1(w * 1.1)}" height="70" rx="35"/></g>
-<g fill="${mix(cloudBody, t.bg, 0.15)}">${mass(n1(ux * w * 0.05), -8, 0.94, () => true)}</g>
-<g fill="url(#${id})">${mass(n1(ux * w * 0.1), n1(-14 + uy * 4), 0.86, ([, y]) => y < top + 40)}</g>`;
+    return `${body}<g fill="none" stroke="${rim}" stroke-width="2" stroke-linecap="round">${lips}</g>`;
   };
 
   // Gulls: a soft M, flapping slowly.
@@ -107,7 +100,7 @@ const onePiece = (t) => {
   let stratus = '';
   for (let i = 0; i < 6; i++) {
     const y = 420 + i * 22 + sr() * 12;
-    const x = 420 + sr() * 900;
+    const x = 1000 + sr() * 500;
     const w = 160 + sr() * 260;
     const hh = 6 + sr() * 8;
     stratus += `<path d="M${n1(x - w)} ${n1(y)}Q${n1(x)} ${n1(y - hh * 2)} ${n1(x + w)} ${n1(y)}Q${n1(x)} ${n1(y + hh * 0.6)} ${n1(x - w)} ${n1(y)}Z" fill="url(#dbtefx-op-strat)" fill-opacity="${n1(0.5 + i * 0.08)}"/>`;
@@ -133,17 +126,14 @@ const onePiece = (t) => {
 <rect width="${W}" height="${H}" fill="url(#dbtefx-op-sky)"/>
 <rect y="${HORIZON}" width="${W}" height="${H - HORIZON}" fill="url(#dbtefx-op-sea)"/>
 <ellipse cx="${SUN[0]}" cy="${SUN[1]}" rx="520" ry="300" fill="url(#dbtefx-op-sunglow)" ${anim('pulse', 10, 0, 'ease-in-out')}/>
-<g style="animation: dbtefx-op-cloud 70s ease-in-out infinite;">
-${tower(230, 540, 440, 400, 3, SUN)}
-${tower(1420, 520, 420, 330, 5, SUN)}
-</g>
+<g style="animation: dbtefx-op-cloud 70s ease-in-out infinite;">${bank(1040, 1700, 120, 470, 3)}</g>
 <g style="animation: dbtefx-op-cloud 90s ease-in-out -30s infinite;">${stratus}</g>
 <circle cx="${SUN[0]}" cy="${SUN[1]}" r="34" fill="url(#dbtefx-op-sun)"/>
 <rect x="0" y="${HORIZON - 1}" width="${W}" height="3" fill="${rim}" fill-opacity="0.35"/>
 <!--mid-->
 <g fill="none" stroke="${mix(t.text, t.opp, 0.4)}" stroke-linecap="round">${swell}</g>
 ${glitter}
-<g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(240, 140, 1, 0)}${gull(300, 176, 0.75, 0.6)}${gull(196, 196, 0.6, 1.1)}${gull(1470, 112, 0.7, 0.4)}</g>
+<g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(1420, 96, 0.9, 0)}${gull(1470, 126, 0.7, 0.6)}${gull(1380, 140, 0.55, 1.1)}</g>
 <g style="transform-origin: 1236px 660px; animation: dbtefx-op-rock 11s ease-in-out infinite;">
 <path d="M1150 610V244M1276 604V132" stroke="${ink}" stroke-width="8" stroke-linecap="round"/>
 <path d="M1150 610V244M1276 604V132" stroke="${rim}" stroke-opacity="0.45" stroke-width="1.6" transform="translate(3 0)"/>
@@ -155,7 +145,7 @@ ${glitter}
 <g fill="none" stroke="${mix(canvas, t.accent2, 0.5)}" stroke-opacity="0.5" stroke-width="1.2"><path d="M1240 206Q1226 320 1236 448M1312 206Q1300 320 1310 450"/><path d="M1126 296Q1116 350 1124 404M1176 296Q1168 350 1174 404"/></g>
 ${hat(1270, 330, 1.2, t.accent, t.accent2, ink)}
 <path d="M1164 200H1392M1074 290H1228M1160 446H1392M1072 402H1230" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>
-<g style="transform-origin: 1276px 140px; animation: dbtefx-op-flag 3.4s ease-in-out infinite;"><path d="M1276 112Q1240 104 1206 116Q1214 132 1204 150Q1240 140 1276 150Z" fill="${ink}"/>${hat(1240, 134, 0.3, t.accent, t.accent2, ink)}</g>
+<g style="transform-origin: 1276px 140px; animation: dbtefx-op-flag 3.4s ease-in-out infinite;"><path d="M1276 112Q1230 116 1172 132Q1230 140 1276 150Z" fill="${ink}"/><path d="M1276 114Q1232 118 1182 132" fill="none" stroke="${rim}" stroke-opacity="0.35" stroke-width="1.2"/></g>
 <path d="${hull}" fill="url(#dbtefx-op-hull)"/>
 <path d="${planks}" fill="none" stroke="${mix(timber, t.bg, 0.4)}" stroke-width="1.6"/>
 <path d="${rail}" stroke="${ink}" stroke-width="2.4"/>

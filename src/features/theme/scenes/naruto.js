@@ -5,8 +5,9 @@ import { anim, H, n1, polar, rng, W } from './kit.js';
 // the great cliff behind the round red tower, rooftops with water tanks and
 // sagging wires, and a spiralling chakra sphere above it all, leaves caught
 // in its wind. The shader draws the dusk sky and the sphere's churning core.
-const RS = [1250, 290];
-const RR = 92;
+const RS = [1372, 600];
+const RR = 62;
+const MOON = [1250, 210];
 
 const naruto = (t) => {
   const r = rng(7);
@@ -92,7 +93,11 @@ const naruto = (t) => {
       out += `<rect x="${n1(x)}" y="${n1(top)}" width="${n1(w)}" height="${n1(H - top)}" fill="${wallC}"/><rect x="${n1(x)}" y="${n1(top)}" width="${n1(w * 0.18)}" height="${n1(H - top)}" fill="#ffffff" fill-opacity="0.04"/>`;
       if (hr() < 0.55) {
         const rh = 16 + hr() * 14;
-        out += `<path d="M${n1(x - 10)} ${n1(top + 4)}L${n1(x + w * 0.22)} ${n1(top - rh)}H${n1(x + w * 0.78)}L${n1(x + w + 10)} ${n1(top + 4)}Z" fill="${roofC}"/><path d="M${n1(x + w * 0.22)} ${n1(top - rh)}H${n1(x + w * 0.78)}" stroke="${mix(t.accent, '#ffffff', 0.35)}" stroke-opacity="${haze ? 0.25 : 0.5}" stroke-width="2"/><path d="M${n1(x - 10)} ${n1(top + 4)}H${n1(x + w + 10)}" stroke="${ink}" stroke-width="3"/>`;
+        if (!haze && hr() < 0.4) {
+          const r2 = 14;
+          out += `<path d="M${n1(x + w * 0.2)} ${n1(top - rh + 2)}Q${n1(x + w * 0.32)} ${n1(top - rh - 4)} ${n1(x + w * 0.36)} ${n1(top - rh - r2)}H${n1(x + w * 0.64)}Q${n1(x + w * 0.68)} ${n1(top - rh - 4)} ${n1(x + w * 0.8)} ${n1(top - rh + 2)}Z" fill="${mix(roofC, ink, 0.2)}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`;
+        }
+        out += `<path d="M${n1(x - 14)} ${n1(top + 1)}Q${n1(x + w * 0.12)} ${n1(top - 2)} ${n1(x + w * 0.22)} ${n1(top - rh)}H${n1(x + w * 0.78)}Q${n1(x + w * 0.88)} ${n1(top - 2)} ${n1(x + w + 14)} ${n1(top + 1)}L${n1(x + w + 8)} ${n1(top + 5)}H${n1(x - 8)}Z" fill="${roofC}"/><path d="M${n1(x + w * 0.22)} ${n1(top - rh)}H${n1(x + w * 0.78)}" stroke="${mix(t.accent, '#ffffff', 0.35)}" stroke-opacity="${haze ? 0.25 : 0.5}" stroke-width="2"/><path d="M${n1(x - 10)} ${n1(top + 4)}H${n1(x + w + 10)}" stroke="${ink}" stroke-width="3"/>`;
       } else {
         out += `<rect x="${n1(x - 3)}" y="${n1(top - 6)}" width="${n1(w + 6)}" height="8" fill="${roofC}"/>`;
         if (!calm) {
@@ -135,7 +140,7 @@ const naruto = (t) => {
 
   // The round tower: a red-banded cylinder under a flared tiered roof, a
   // blank emblem disc on its face.
-  const [tx, ty] = [1250, 560];
+  const [tx, ty] = [1130, 560];
   const tower = `<rect x="${tx - 62}" y="${ty}" width="124" height="${200}" fill="url(#dbtefx-nr-drum)"/>
 <path d="M${tx - 62} ${ty + 60}h124M${tx - 62} ${ty + 120}h124" stroke="${ink}" stroke-opacity="0.45" stroke-width="3"/>
 <g fill="${mix(t.warning, t.accent, 0.4)}" fill-opacity="0.85">${[-38, -6, 26].map((dx) => `<rect x="${tx + dx}" y="${ty + 76}" width="12" height="22" rx="6"/><rect x="${tx + dx}" y="${ty + 136}" width="12" height="22" rx="6"/>`).join('')}</g>
@@ -163,6 +168,13 @@ const naruto = (t) => {
     speed += `M${x1} ${y1}A${RR * 1.15} ${RR * 1.15} 0 0 1 ${x2} ${y2}`;
   }
 
+  // Wind trails streaming back from the sphere as it is driven forward.
+  let trails = '';
+  [[-0.7, 150, 2.5], [-0.35, 210, 4], [0, 180, 3.5], [0.35, 200, 4], [0.7, 140, 2.5]].forEach(([k, len, w], i) => {
+    const y = RS[1] + k * RR;
+    trails += `<path d="M${RS[0] - RR * 0.7} ${n1(y)}Q${n1(RS[0] - RR - len * 0.5)} ${n1(y + k * 30 - 6)} ${n1(RS[0] - RR - len)} ${n1(y + k * 60)}" fill="none" stroke="url(#dbtefx-nr-trail)" stroke-width="${w}" stroke-linecap="round" ${anim('pulse', n1(0.9 + i * 0.17), i * 0.3, 'ease-in-out')}/>`;
+  });
+
   return `<style>@keyframes dbtefx-nr-drift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-36px); } }
 @keyframes dbtefx-nr-wire { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }</style>
 <defs>
@@ -173,9 +185,13 @@ const naruto = (t) => {
 <linearGradient id="dbtefx-nr-tank" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(wall, t.muted, 0.2)}"/><stop offset="0.4" stop-color="${mix(wall, t.muted, 0.45)}"/><stop offset="1" stop-color="${wall}"/></linearGradient>
 <radialGradient id="dbtefx-nr-halo"><stop offset="0" stop-color="${chakra}" stop-opacity="0.55"/><stop offset="0.35" stop-color="${chakra}" stop-opacity="0.18"/><stop offset="1" stop-color="${chakra}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-nr-ball" cx="0.42" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.35" stop-color="${core}" stop-opacity="0.8"/><stop offset="0.85" stop-color="${chakra}" stop-opacity="0.55"/><stop offset="1" stop-color="${chakra}" stop-opacity="0.15"/></radialGradient>
+<radialGradient id="dbtefx-nr-moon" cx="0.4" cy="0.4" r="0.65"><stop offset="0" stop-color="${mix(t.text, '#ffffff', 0.4)}"/><stop offset="1" stop-color="${mix(t.text, t.accent, 0.25)}"/></radialGradient>
+<radialGradient id="dbtefx-nr-moonglow"><stop offset="0.4" stop-color="${t.text}" stop-opacity="0.18"/><stop offset="1" stop-color="${t.text}" stop-opacity="0"/></radialGradient>
+<linearGradient id="dbtefx-nr-trail" gradientUnits="userSpaceOnUse" x1="${RS[0] - RR}" y1="0" x2="${RS[0] - RR - 220}" y2="0"><stop offset="0" stop-color="${core}" stop-opacity="0.7"/><stop offset="1" stop-color="${chakra}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-nr-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dusk}" stop-opacity="0"/><stop offset="0.6" stop-color="${dusk}" stop-opacity="0.22"/><stop offset="1" stop-color="${dusk}" stop-opacity="0"/></linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-nr-sky)"/>
+<circle cx="${MOON[0]}" cy="${MOON[1]}" r="150" fill="url(#dbtefx-nr-moonglow)"/><circle cx="${MOON[0]}" cy="${MOON[1]}" r="64" fill="url(#dbtefx-nr-moon)"/><g fill="${mix(t.text, t.muted, 0.5)}" fill-opacity="0.25"><circle cx="${MOON[0] - 18}" cy="${MOON[1] - 10}" r="12"/><circle cx="${MOON[0] + 20}" cy="${MOON[1] + 16}" r="8"/><circle cx="${MOON[0] + 6}" cy="${MOON[1] - 30}" r="5"/></g>
 <g style="animation: dbtefx-nr-drift 60s ease-in-out infinite;">
 ${cloud(30, 270, 380, 70, 3)}
 ${cloud(560, 160, 280, 52, 5)}
@@ -185,11 +201,6 @@ ${cloud(560, 160, 280, 52, 5)}
 <path d="${ledges}" fill="none" stroke="${mix(dusk, t.text, 0.3)}" stroke-opacity="0.12" stroke-width="3" stroke-linecap="round"/>
 <path d="${strata}" fill="none" stroke="${ink}" stroke-opacity="0.4" stroke-width="2"/>
 <rect y="560" width="${W}" height="160" fill="url(#dbtefx-nr-mist)"/>
-<circle cx="${RS[0]}" cy="${RS[1]}" r="300" fill="url(#dbtefx-nr-halo)" ${anim('bloom', 3.2, 0, 'ease-in-out')}/>
-<circle cx="${RS[0]}" cy="${RS[1]}" r="${RR}" fill="url(#dbtefx-nr-ball)"/>
-<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 1.6s linear infinite;"><path d="${arms}" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="3" stroke-linecap="round"/></g>
-<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 2.4s linear infinite reverse;"><path d="${speed}" fill="none" stroke="${core}" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round"/></g>
-<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 7s linear infinite;">${leaves}</g>
 <!--mid-->
 <path d="${wires}" fill="none" stroke="${ink}" stroke-opacity="0.8" stroke-width="1.6" style="animation: dbtefx-nr-wire 6s ease-in-out infinite;"/>
 <path d="${poleD}" stroke="${ink}" stroke-width="5"/>
@@ -198,6 +209,12 @@ ${tower}
 ${frontRow}
 ${windows}
 <!--near-->
+${trails}
+<circle cx="${RS[0]}" cy="${RS[1]}" r="${RR * 3.4}" fill="url(#dbtefx-nr-halo)" ${anim('bloom', 3.2, 0, 'ease-in-out')}/>
+<circle cx="${RS[0]}" cy="${RS[1]}" r="${RR}" fill="url(#dbtefx-nr-ball)"/>
+<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 1.6s linear infinite;"><path d="${arms}" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="3" stroke-linecap="round"/></g>
+<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 2.4s linear infinite reverse;"><path d="${speed}" fill="none" stroke="${core}" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round"/></g>
+<g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 7s linear infinite;">${leaves}</g>
 <path d="M-40 900V830Q200 812 420 828T880 822T1300 830T1660 818V900Z" fill="${mix(t.bg, '#000000', 0.25)}"/>`;
 };
 
@@ -227,16 +244,8 @@ void main() {
   vec2 d = (vb - vec2(${RS[0]}.0, ${RS[1]}.0)) / ${RR}.0;
   float r = length(d);
   float a = atan(d.y, d.x);
-  float t = u_time;
-  float sw = fbm(vec2(a * 2.0 + r * 5.0 - t * 3.0, r * 3.0 - t * 0.6));
-  float ball = smoothstep(1.05, 0.9, r);
-  vec3 chakra = u_accent2;
-  vec3 c = mix(chakra * 0.8, mix(chakra, vec3(1.0), 0.75), smoothstep(0.35, 0.8, sw));
-  c = mix(c, vec3(1.0), smoothstep(0.45, 0.0, r));
-  col = mix(col, c, ball);
-  float wind = fbm(vec2(a * 3.0 - t * 4.0, r * 2.0)) * smoothstep(2.0, 1.0, r) * smoothstep(0.95, 1.15, r);
-  col += chakra * wind * 0.55;
-  col += chakra * exp(-max(r - 1.0, 0.0) * 1.6) * 0.35 * (1.0 - ball);
+  float wind = fbm(vec2(a * 3.0 - u_time * 3.0, r * 1.5 - u_time * 0.5));
+  col += u_accent2 * exp(-r * 0.55) * (0.35 + 0.25 * wind);
   vec2 uv = gl_FragCoord.xy / u_res;
   col *= 1.0 - 0.5 * dot(uv - 0.5, uv - 0.5);
   gl_FragColor = vec4(dither(col), 1.0);

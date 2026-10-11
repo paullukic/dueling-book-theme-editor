@@ -106,7 +106,6 @@ ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a capsule header with a chrome edge, radar body. */
 ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), linear-gradient(180deg, ${mix(shell, t.border, 0.5)}, ${shellDeep}) !important; box-shadow: inset 0 -2px 0 ${chrome}, inset 0 -3px 0 ${ink} !important; }
-${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 66px; top: 3px; width: 22px; height: 22px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${shell}, ${mix(shell, t.bg, 0.6)}) !important; box-shadow: inset 2px 0 0 ${chromeDim}, inset -2px 0 0 ${chromeDim}, inset 0 -2px 0 ${chromeDim} !important; }
 
 /* Duel: chrome-cased ki gauges led by an orb; the phases are the orbs, one to six stars. */
@@ -119,9 +118,9 @@ ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shad
 ${SEL.phase} { background: conic-gradient(from 200deg, ${chrome}, ${chromeDim}, ${mix(chrome, '#ffffff', 0.5)}, ${chromeDim}, ${chrome}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${shellDeep} !important; }
-${phaseIds.map((id) => `${sel([`#duel #${id}.phase .phase_inner.red`, `#duel #${id}.phase .phase_inner.blue`])} { background: var(--dbtc-p${id}) center / 100% 100%, var(--dbtc-u6) center / 100% 100% !important; filter: saturate(0.9) brightness(0.88); }
-${sel([`#duel #${id}.phase.active .phase_inner.red`])} { filter: none; box-shadow: 0 0 0 2px ${t.self}, 0 0 18px ${alpha(gold, 0.9)}; }
-${sel([`#duel #${id}.phase.active .phase_inner.blue`])} { filter: none; box-shadow: 0 0 0 2px ${t.opp}, 0 0 18px ${alpha(gold, 0.9)}; }`).join('\n')}
+${phaseIds.map((id) => `${sel([`#duel #${id}.phase .phase_inner.red`, `#duel #${id}.phase .phase_inner.blue`])} { background: var(--dbtc-p${id}) center / 100% 100%, var(--dbtc-u6) center / 100% 100% !important; filter: saturate(0.5) brightness(0.42); }
+${sel([`#duel #${id}.phase.active .phase_inner.red`])} { filter: none; box-shadow: 0 0 0 3px ${gold}, 0 0 0 5px ${t.self}, 0 0 24px 4px ${alpha(gold, 0.9)}; }
+${sel([`#duel #${id}.phase.active .phase_inner.blue`])} { filter: none; box-shadow: 0 0 0 3px ${gold}, 0 0 0 5px ${t.opp}, 0 0 24px 4px ${alpha(gold, 0.9)}; }`).join('\n')}
 ${sel(['#duel .phase span'])} { color: #ffffff !important; text-shadow: 0 0 2px #000000, 0 1px 3px #000000, 0 0 6px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${shell}, ${mix(shell, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${chromeDim}, inset 0 0 0 4px ${alpha(ink, 0.6)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${chrome}, 0 0 0 4px ${shellDeep}, 0 0 12px -2px ${alpha(gold, 0.5)} !important; }
@@ -155,6 +154,9 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: amber glass rods. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(amber, red, 0.3)}, ${gold}, ${mix(amber, red, 0.3)}) !important; border-radius: 999px !important; }
+
+/* Links: gold, darker on hover. */
+${sel(['#content a:hover', '#content a:active', '#content .status .reply_btn:hover', '#content #post_status_btn:hover', '#content #logged_in .logout_btn:hover', '#content #logged_in .switch_account_btn:hover'])} { color: ${mix(t.link, t.bg, 0.22)} !important; }
 
 /* Pop-up buttons in the theme material. */
 ${popCss}

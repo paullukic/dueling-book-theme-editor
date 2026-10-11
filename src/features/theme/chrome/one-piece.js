@@ -32,6 +32,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // The straw hat crest: low crown, red band, wide brim, inked edge.
   const hatSvg = (w, h) => svg(w, h, `<g transform="translate(${w / 2} ${h * 0.6}) scale(${(w / 130).toFixed(3)})" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><path d="M-62 8C-50 -2 -30 -4 0 -4C30 -4 50 -2 62 8C46 18 24 20 0 20C-24 20 -46 18 -62 8Z" fill="${t.accent}"/><path d="M-30 2C-32 -20 -18 -32 0 -32C18 -32 32 -20 30 2C12 6 -12 6 -30 2Z" fill="${t.accent}"/><path d="M-31 -8C-12 -4 12 -4 31 -8L30.5 1C12 5 -12 5 -30.5 1Z" fill="${t.accent2}"/><path d="M-22 -20C-14 -26 -6 -28 2 -28" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="2.5" stroke-linecap="round"/></g>`);
   const hat = hatSvg(44, 26);
+  // A reef knot in hemp rope: the finial on every tile but the first.
+  const knot = svg(34, 16, `<g fill="none" stroke-linecap="round"><path d="M2 8H11M23 8H32" stroke="${ropeDark}" stroke-width="5"/><path d="M2 8H11M23 8H32" stroke="${rope}" stroke-width="3.4"/><path d="M11 8C11 2 23 2 23 8C23 14 11 14 11 8Z" stroke="${ropeDark}" stroke-width="5"/><path d="M11 8C11 2 23 2 23 8C23 14 11 14 11 8Z" stroke="${rope}" stroke-width="3.4"/><path d="M17 3.4V12.6" stroke="${ropeDark}" stroke-width="1.2"/><path d="M4 8h1.6M7.4 8H9M25 8h1.6M28.4 8H30" stroke="${ropeDark}" stroke-width="1"/></g>`);
   const bigHat = hatSvg(120, 60);
 
   // A coil of rope flanking the dialog crest.
@@ -73,12 +75,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
-  const vars = [ropeFrame, hat, planks, bigHat, logPose, compass, crest].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [ropeFrame, hat, planks, bigHat, logPose, compass, crest, knot].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   return `
 html body { ${vars} }
 /* Menu tiles: timber planks lashed in a rope frame, the straw hat on top. */
 ${SEL.tile} { background: ${timberBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px round !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.8)}, inset 0 -12px 18px -8px ${alpha('#000000', 0.55)}, 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 22px); top: -14px; width: 44px; height: 26px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 17px); top: -8px; width: 34px; height: 16px; pointer-events: none; background: var(--dbtc-u7) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
+${on(sel(['#main_menu #room_btn.menu_btn .content']), 'before')} { left: calc(50% - 22px); top: -14px; width: 44px; height: 26px; background: var(--dbtc-u1) center / contain no-repeat; }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${timberBg(0.16)} !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.8)}, inset 0 0 24px ${alpha(t.accent, 0.3)}, 0 0 18px -4px ${alpha(t.accent, 0.65)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { ${label} }
@@ -96,7 +99,6 @@ ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a timber header with a rope rule, the window edged in rope. */
 ${SEL.chatTop} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180deg, ${timberLit}, ${timberDeep}) !important; box-shadow: inset 0 -3px 0 ${rope}, inset 0 -5px 0 ${ropeDark}, inset 0 1px 0 ${alpha(brass, 0.4)} !important; }
-${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 4px; width: 34px; height: 20px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${SEL.chat} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180deg, ${mix(timberDeep, t.surface, 0.2)}, ${mix(timberDeep, t.bg, 0.5)}) !important; box-shadow: inset 2px 0 0 ${ropeDark}, inset -2px 0 0 ${ropeDark}, inset 0 -2px 0 ${ropeDark} !important; }
 
 /* Duel: brass-banded life bars led by a log pose; compass-rose phases. */
@@ -145,6 +147,9 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: brass rods. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${brassDim}, ${brass}, ${brassDim}) !important; border-radius: 3px !important; }
+
+/* Links: straw gold, darker on hover. */
+${sel(['#content a:hover', '#content a:active', '#content .status .reply_btn:hover', '#content #post_status_btn:hover', '#content #logged_in .logout_btn:hover', '#content #logged_in .switch_account_btn:hover'])} { color: ${mix(t.link, t.bg, 0.22)} !important; }
 
 /* Pop-up buttons in the theme material. */
 ${popCss}

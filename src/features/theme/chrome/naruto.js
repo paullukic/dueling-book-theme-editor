@@ -102,7 +102,6 @@ ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a cloth-band header with a steel plate; washi body. */
 ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.06)}, transparent 50%), linear-gradient(180deg, ${cloth}, ${mix(cloth, t.bg, 0.4)}) !important; box-shadow: inset 0 -2px 0 ${seal}, inset 0 -3px 0 ${ink}, inset 0 1px 0 ${alpha(steel, 0.3)} !important; }
-${on(SEL.chatTop, 'after')} { content: ""; position: absolute; right: 64px; top: 4px; width: 50px; height: 17px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${paper}, ${mix(paper, t.bg, 0.6)}) !important; box-shadow: inset 2px 0 0 ${wood}, inset -2px 0 0 ${wood}, inset 0 -1px 0 ${steelDim} !important; }
 
 /* Duel: steel-plated life bars led by a kunai; shuriken phases. */
@@ -151,6 +150,9 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* Scrollbars: lacquered rollers. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(wood, t.bg, 0.3)}, ${mix(wood, seal, 0.4)}, ${mix(wood, t.bg, 0.3)}) !important; border-radius: 3px !important; }
+
+/* Links: orange, darker on hover. */
+${sel(['#content a:hover', '#content a:active', '#content .status .reply_btn:hover', '#content #post_status_btn:hover', '#content #logged_in .logout_btn:hover', '#content #logged_in .switch_account_btn:hover'])} { color: ${mix(t.link, t.bg, 0.22)} !important; }
 
 /* Pop-up buttons in the theme material. */
 ${popCss}

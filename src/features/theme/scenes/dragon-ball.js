@@ -58,6 +58,7 @@ ${stars}
     let lit = '';
     let tops = '';
     let bands = '';
+    let edges = '';
     for (let i = 0; i < count; i++) {
       const x = 40 + (i + br() * 0.6) * (W / count);
       const w = 70 + br() * 150;
@@ -68,12 +69,13 @@ ${stars}
       d += `M${n1(l - sl * 6)} ${base}L${n1(l - sl)} ${n1(base - h * 0.18)}L${n1(l)} ${n1(top + 8)}L${n1(l + 6)} ${n1(top)}H${n1(x + w * 0.1)}L${n1(x + w * 0.14)} ${n1(top + 6)}H${n1(rr - 4)}L${n1(rr)} ${n1(top + 10)}L${n1(rr + sl)} ${n1(base - h * 0.2)}L${n1(rr + sl * 7)} ${base}Z`;
       lit += `M${n1(rr - w * 0.18)} ${n1(top + 2)}H${n1(rr - 4)}L${n1(rr)} ${n1(top + 10)}L${n1(rr + sl)} ${n1(base - h * 0.2)}L${n1(rr + sl * 7)} ${base}H${n1(rr - w * 0.12)}Z`;
       tops += `M${n1(l + 6)} ${n1(top + 1)}H${n1(rr - 4)}`;
+      edges += `M${n1(rr - 4)} ${n1(top + 1)}L${n1(rr)} ${n1(top + 10)}L${n1(rr + sl)} ${n1(base - h * 0.2)}L${n1(rr + sl * 7)} ${base}`;
       for (let k = 1; k < 3; k++) {
         const y = top + (h * k) / 3.4;
         bands += `M${n1(l + 2)} ${n1(y)}H${n1(rr - 2)}`;
       }
     }
-    return `<path d="${d}" fill="${fill}"/><path d="${lit}" fill="${lip}" fill-opacity="0.32"/><path d="${bands}" stroke="${ink}" stroke-opacity="0.18" stroke-width="3"/><path d="${tops}" stroke="${lip}" stroke-width="2.5"/>`;
+    return `<path d="${d}" fill="${fill}"/><path d="${lit}" fill="${lip}" fill-opacity="0.32"/><path d="${bands}" stroke="${ink}" stroke-opacity="0.18" stroke-width="3"/><path d="${tops}" stroke="${lip}" stroke-width="2.5"/><path d="${edges}" fill="none" stroke="${mix(lip, gold, 0.5)}" stroke-opacity="0.85" stroke-width="2.5" stroke-linejoin="round"/>`;
   };
 
   // A chunk of rock: an irregular polygon with a lit upper face.
