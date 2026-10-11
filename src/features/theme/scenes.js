@@ -573,6 +573,110 @@ const crimson = (t) => `<defs><linearGradient id="dbtefx-cr-slash" x1="0" y1="0"
 <path d="M1000 -40L1600 560L1590 580L980 -30Z" fill="url(#dbtefx-cr-slash)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
 <path d="M-40 420L560 960L540 970L-50 440Z" fill="url(#dbtefx-cr-slash)" ${anim('pulse', 5, 2.5, 'ease-in-out')}/>`;
 
+// ---------- Angelechy: a chessboard in perspective, white pieces, angel wings ----------
+const angelechy = (t) => {
+  // The board recedes to a vanishing point; squares are true perspective quads.
+  const vx = 800;
+  const vy = 330;
+  const top = 560;
+  const bottom = H + 240;
+  const colX = (k, y) => n1(vx + ((k - 4) * 260 - 0) * ((y - vy) / (bottom - vy)) * 1.6);
+  const rowY = (j) => n1(top + (bottom - top) * (j / 8) ** 1.7);
+  let squares = '';
+  for (let j = 0; j < 8; j++) {
+    for (let k = -2; k < 10; k++) {
+      if ((j + k) % 2) continue;
+      const y0 = rowY(j);
+      const y1 = rowY(j + 1);
+      squares += `<path d="M${colX(k, y0)} ${y0}L${colX(k + 1, y0)} ${y0}L${colX(k + 1, y1)} ${y1}L${colX(k, y1)} ${y1}Z"/>`;
+    }
+  }
+  const ivory = mix(t.text, t.accent2, 0.12);
+  const base = (x, y, w) => `<path d="M${x - w} ${y}h${w * 2}l-${w * 0.25} -${w * 0.35}h-${w * 1.5}Z"/>`;
+  const pawn = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="0" cy="-96" r="22"/><path d="M-16 -74h32l12 60h-56Z"/>${base(0, 0, 40)}</g>`;
+  const rook = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -170v-30h14v14h14v-14h16v14h14v-14h14v30l-8 10v120h-50v-120Z"/>${base(0, 0, 50)}<path d="M-34 -14h68v-26h-68Z"/></g>`;
+  const knight = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 -20C-34 -80 -10 -110 -34 -150C-20 -190 30 -200 44 -170C52 -150 40 -130 20 -128C30 -110 46 -70 30 -20Z"/><circle cx="6" cy="-160" r="5" fill="${t.bg}"/>${base(0, 0, 50)}</g>`;
+  const king = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-8 -250h16v-20h14v-14h-14v-18h-16v18h-14v14h14Z"/><path d="M-46 -210C-30 -240 30 -240 46 -210L30 -40h-60Z"/>${base(0, 0, 62)}<path d="M-40 -60h80v-20h-80Z"/></g>`;
+  const wing = (dir) => {
+    let s = '';
+    for (let i = 0; i < 8; i++) {
+      const ang = dir > 0 ? -150 + i * 12 : -30 - i * 12;
+      const [tx, ty] = polar(1170, 330, 170 + i * 22, ang);
+      const [lx, ly] = polar(1170, 330, 90, ang - 6 * dir);
+      s += `<path d="M1170 330Q${lx} ${ly} ${tx} ${ty}Q${n1((tx + 1170) / 2)} ${n1((ty + 330) / 2 + 20)} 1170 330Z"/>`;
+    }
+    return s;
+  };
+  return `<defs>${glow('dbtefx-ae-halo', t.accent, 0.5, 0.5, 0.5, 0.45)}<linearGradient id="dbtefx-ae-board" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.accent}" stop-opacity="0"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.22"/></linearGradient></defs>
+<g fill="url(#dbtefx-ae-board)" stroke="${t.accent}" stroke-opacity="0.18">${squares}</g>
+<path d="M0 ${top}H${W}" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="2"/>
+<!--mid-->
+<circle cx="1170" cy="300" r="190" fill="url(#dbtefx-ae-halo)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
+<g fill="${ivory}" fill-opacity="0.16" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="1.5" ${anim('bloom', 8, 0, 'ease-in-out')}>${wing(1)}${wing(-1)}</g>
+<g fill="${ivory}" fill-opacity="0.4" stroke="${t.accent}" stroke-opacity="0.65" stroke-width="2">${king(1170, 650, 1.25)}${knight(380, 700, 1.1)}${rook(1430, 690, 0.95)}${pawn(640, 620, 0.85)}${pawn(900, 640, 0.9)}</g>
+<!--near-->
+<g fill="${ivory}" fill-opacity="0.55" stroke="${t.accent}" stroke-opacity="0.7" stroke-width="2.5">${pawn(130, 980, 1.6)}</g>`;
+};
+
+// ---------- Mitsurugi: moonlit shrine, sacred mirror and sword, shimenawa ----------
+const mitsurugi = (t) => {
+  const ridge = (y, amp, seed) => {
+    const rand = rng(seed);
+    let d = `M0 ${H}V${y}`;
+    for (let x = 0; x <= W; x += 80) d += `L${x} ${n1(y - rand() * amp)}`;
+    return `${d}V${H}Z`;
+  };
+  let shide = '';
+  for (let x = 140; x < W; x += 220) {
+    shide += `<g style="transform-origin: ${x}px 70px; animation: dbtefx-reed ${n1(4 + (x % 3))}s ease-in-out ${-x / 300}s infinite;"><path d="M${x} 70l14 18h-10l14 18h-10l14 18" fill="none" stroke="${t.text}" stroke-opacity="0.75" stroke-width="5" stroke-linejoin="miter"/></g>`;
+  }
+  return `<defs>${glow('dbtefx-mt-moon', t.accent2, 0.5, 0.5, 0.5, 0.5)}<radialGradient id="dbtefx-mt-mirror"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.5" stop-color="${t.accent2}" stop-opacity="0.25"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0.05"/></radialGradient></defs>
+<circle cx="1210" cy="220" r="260" fill="url(#dbtefx-mt-moon)"/>
+<circle cx="1210" cy="220" r="110" fill="${t.accent2}" fill-opacity="0.35"/>
+<path d="${ridge(600, 120, 3)}" fill="${mix(t.bg, t.accent, 0.12)}"/>
+<path d="${ridge(700, 90, 9)}" fill="${mix(t.bg, t.accent, 0.06)}"/>
+<!--mid-->
+<g fill="${t.accent}" fill-opacity="0.55"><path d="M220 360Q380 330 540 360L548 384Q380 356 212 384Z"/><rect x="248" y="400" width="276" height="16"/><rect x="278" y="380" width="22" height="380"/><rect x="472" y="380" width="22" height="380"/></g>
+<path d="M980 760L1430 300" stroke="${t.text}" stroke-opacity="0.5" stroke-width="8" stroke-linecap="round"/><path d="M1430 300l22 -30" stroke="${t.accent2}" stroke-opacity="0.7" stroke-width="10" stroke-linecap="round"/>
+<circle cx="1210" cy="520" r="130" fill="url(#dbtefx-mt-mirror)" stroke="${t.accent2}" stroke-opacity="0.7" stroke-width="10" ${anim('pulse', 5, 0, 'ease-in-out')}/>
+<circle cx="1210" cy="520" r="150" fill="none" stroke="${t.accent2}" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="6 14"/>
+<!--near-->
+<path d="M-20 52Q800 120 1620 52" fill="none" stroke="${mix(t.accent2, t.text, 0.4)}" stroke-opacity="0.75" stroke-width="16" stroke-linecap="round" stroke-dasharray="26 6"/>
+${shide}`;
+};
+
+// ---------- Gladiator Beast: the colosseum, a laurelled shield, banners ----------
+const gladiator = (t) => {
+  let tiers = '';
+  [[520, 64, 18], [590, 56, 22], [650, 48, 26]].forEach(([y, h, n], row) => {
+    const w = W / n;
+    for (let i = 0; i < n; i++) {
+      const x = i * w;
+      const dy = n1(Math.sin((i / (n - 1)) * Math.PI) * -30);
+      tiers += `<path d="M${n1(x + w * 0.18)} ${n1(y + dy + h)}V${n1(y + dy + h * 0.45)}Q${n1(x + w * 0.5)} ${n1(y + dy)} ${n1(x + w * 0.82)} ${n1(y + dy + h * 0.45)}V${n1(y + dy + h)}Z" fill-opacity="${0.5 - row * 0.12}"/>`;
+    }
+  });
+  let laurel = '';
+  for (let i = 0; i < 9; i++) {
+    const [lx, ly] = polar(1150, 300, 150, 110 + i * 15);
+    const [rx, ry] = polar(1150, 300, 150, 70 - i * 15);
+    laurel += `<ellipse cx="${lx}" cy="${ly}" rx="10" ry="22" transform="rotate(${20 + i * 15} ${lx} ${ly})"/><ellipse cx="${rx}" cy="${ry}" rx="10" ry="22" transform="rotate(${-20 - i * 15} ${rx} ${ry})"/>`;
+  }
+  const banner = (x, delay) => `<g style="transform-origin: ${x}px 0px; animation: dbtefx-reed 7s ease-in-out ${-delay}s infinite;"><path d="M${x - 50} 0h100v330l-50 -40l-50 40Z" fill="${t.accent2}" fill-opacity="0.75" stroke="${t.accent}" stroke-opacity="0.8" stroke-width="4"/><circle cx="${x}" cy="150" r="26" fill="none" stroke="${t.accent}" stroke-opacity="0.8" stroke-width="4"/></g>`;
+  return `<defs><linearGradient id="dbtefx-gb-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.warning}" stop-opacity="0"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0.2"/></linearGradient>${glow('dbtefx-gb-sun', t.warning, 0.5, 0.5, 0.5, 0.35)}</defs>
+<rect y="560" width="${W}" height="340" fill="url(#dbtefx-gb-sand)"/>
+<g fill="${mix(t.bg, t.accent, 0.25)}">${tiers}</g>
+<!--mid-->
+<circle cx="1150" cy="300" r="220" fill="url(#dbtefx-gb-sun)"/>
+<g stroke="${t.text}" stroke-opacity="0.55" stroke-width="10" stroke-linecap="round"><path d="M990 140L1310 460M1310 140L990 460"/></g>
+<g fill="${t.success}" fill-opacity="0.45">${laurel}</g>
+<circle cx="1150" cy="300" r="96" fill="${mix(t.bg, t.accent, 0.35)}" stroke="${t.accent}" stroke-opacity="0.85" stroke-width="10"/>
+<circle cx="1150" cy="300" r="60" fill="none" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="4"/>
+<circle cx="1150" cy="300" r="20" fill="${t.accent}" fill-opacity="0.8" ${anim('pulse', 4, 0, 'ease-in-out')}/>
+<!--near-->
+${banner(80, 0)}${banner(1520, 3)}`;
+};
+
 const SCENES = {
   branded,
   artmage,
@@ -583,6 +687,9 @@ const SCENES = {
   blackwing,
   lightsworn,
   frog,
+  angelechy,
+  mitsurugi,
+  gladiator,
   sakura,
   midnight,
   snow,

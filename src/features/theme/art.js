@@ -38,6 +38,9 @@ export const ICON_STYLES = {
   blackwing: 'wing',
   lightsworn: 'halo',
   frog: 'pad',
+  angelechy: 'board',
+  mitsurugi: 'torii',
+  gladiator: 'shield',
   'dark-magic': 'circle',
 };
 
@@ -117,6 +120,21 @@ const frame = (style, w, h, t, radius) => {
       const [bx, by] = [cx + rr * 0.95, cy + rr * 0.1];
       return `<path d="M${cx} ${cy}L${n2(ax)} ${n2(ay)}A${rr} ${rr} 0 1 0 ${n2(bx)} ${n2(by)}Z" fill="${mix(t.raised, t.accent, 0.22)}" stroke="${t.accent}" stroke-width="${sw}" stroke-linejoin="round"/>`;
     }
+    case 'board': {
+      // A plate with a chequered square in each corner.
+      const q = Math.min(fw, fh) * 0.18;
+      const sq = (sx, sy) => `<rect x="${n2(sx)}" y="${n2(sy)}" width="${n2(q)}" height="${n2(q)}" fill="${t.accent}" fill-opacity="0.7"/>`;
+      return `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" rx="${Math.min(r, 2)}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/>${sq(x, y)}${sq(x + fw - q, y + fh - q)}${sq(x + fw - q, y)}${sq(x, y + fh - q)}`;
+    }
+    case 'torii': {
+      // A plate under a vermilion torii lintel with upturned ends.
+      const lh = fh * 0.14;
+      return `<rect x="${n2(x + fw * 0.08)}" y="${n2(y + lh * 1.6)}" width="${n2(fw * 0.84)}" height="${n2(fh - lh * 1.6)}" rx="${Math.min(r, 3)}" fill="${t.raised}" stroke="${t.accent}" stroke-width="${sw}"/><path d="M${x} ${n2(y + lh * 0.3)}Q${cx} ${n2(y - lh * 0.3)} ${x + fw} ${n2(y + lh * 0.3)}L${n2(x + fw * 0.95)} ${n2(y + lh * 1.2)}H${n2(x + fw * 0.05)}Z" fill="${t.accent}"/>`;
+    }
+    case 'shield': {
+      // A round bronze shield with a raised rim and boss.
+      return `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${mix(t.raised, t.accent, 0.25)}" stroke="${t.accent}" stroke-width="${sw * 1.4}"/><circle cx="${cx}" cy="${cy}" r="${n2(rr * 0.78)}" fill="none" stroke="${t.accent}" stroke-opacity="0.5" stroke-width="${sw * 0.6}"/>`;
+    }
     case 'hex': {
       const pts = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = (Math.PI / 3) * i;
@@ -154,7 +172,7 @@ const GLYPHS = {
 // A framed glyph in a w x h viewBox (the size DuelingBook gives the <img>).
 const framedIcon = (glyph, w, h, t, radius, style, { ink = t.text, hi = t.accent, badge = false } = {}) => {
   // Round and hexagonal frames have less room inside than a tile.
-  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad'].includes(style) ? 0.6 : 0.78)) / 40;
+  const s = (Math.min(w, h) * (['hex', 'circle', 'rune', 'halo', 'pad', 'shield'].includes(style) ? 0.6 : 0.78)) / 40;
   const gx = (w - 40 * s) / 2;
   const gy = (h - 40 * s) / 2;
   const dot = badge ? `<circle cx="${w * 0.8}" cy="${h * 0.2}" r="${Math.min(w, h) * 0.13}" fill="${t.danger}" stroke="${t.raised}" stroke-width="${Math.min(w, h) * 0.04}"/>` : '';

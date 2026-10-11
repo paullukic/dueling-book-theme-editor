@@ -288,6 +288,28 @@ ${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 24px -4px ${alpha(t
     tileHoverGlow(t.accent) +
     fieldGlow(t, 3),
 
+  // Angelechy: a gilded board glow; the scene draws the board, pieces and feathers.
+  angelechy: (t) =>
+    layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 70% 30%, ${alpha(t.accent, 0.12)}, transparent 55%), radial-gradient(ellipse at 50% 120%, ${alpha(t.accent2, 0.12)}, transparent 60%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent) +
+    fieldGlow(t, 2),
+
+  // Mitsurugi: moonlit night haze; the scene draws the shrine.
+  mitsurugi: (t) =>
+    layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 75% 20%, ${alpha(t.accent2, 0.14)}, transparent 50%), radial-gradient(ellipse at 20% 110%, ${alpha(t.accent, 0.16)}, transparent 60%)`) +
+    tileHoverGlow(t.accent) +
+    dialogCorners(t.accent2) +
+    fieldGlow(t, 3),
+
+  // Gladiator Beast: sun-baked arena haze; the scene draws the colosseum.
+  gladiator: (t) =>
+    layer(`${url(motifs.grain(t))}, radial-gradient(ellipse at 50% 120%, ${alpha(t.accent, 0.22)}, transparent 60%), radial-gradient(ellipse at 50% -10%, ${alpha(t.warning, 0.1)}, transparent 50%)`) +
+    `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.18)}, transparent 55%) !important; }
+${TILE_HOVER} { box-shadow: inset 0 0 0 1px ${t.accent}, 0 0 20px -6px ${t.accent} !important; }` +
+    dialogCorners(t.accent) +
+    fieldGlow(t, 3),
+
   divine: (t) =>
     layer(`${url(motifs.glyphs(t))}, radial-gradient(ellipse at 50% -10%, ${alpha(t.accent, 0.26)}, transparent 45%), radial-gradient(ellipse at 0% 100%, ${alpha(t.self, 0.18)}, transparent 45%), radial-gradient(ellipse at 100% 100%, ${alpha(t.opp, 0.18)}, transparent 45%)`) +
     `${TILE} { background-image: linear-gradient(to top, ${alpha(t.accent, 0.16)}, transparent 50%) !important; box-shadow: inset 0 -2px 0 ${alpha(t.accent, 0.7)}, 0 10px 24px -14px rgba(0, 0, 0, 0.9) !important; }

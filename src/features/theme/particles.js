@@ -43,6 +43,9 @@ export const PARTICLES = {
   blackwing: [{ kind: 'feather', count: 26, colors: ['accent'] }, { kind: 'star', count: 80, colors: ['text'] }, { kind: 'meteor', count: 1, colors: ['accent'] }],
   lightsworn: [{ kind: 'mote', count: 90, colors: ['warning', 'accent'], light: true, rise: true }],
   frog: [{ kind: 'firefly', count: 50, colors: ['warning', 'accent'] }],
+  angelechy: [{ kind: 'feather', count: 22, colors: ['text', 'accent'] }, { kind: 'mote', count: 40, colors: ['accent', 'accent2'] }],
+  mitsurugi: [{ kind: 'leaf', count: 26, colors: ['accent', 'accent2'] }, { kind: 'mote', count: 30, colors: ['accent2'] }],
+  gladiator: [{ kind: 'mote', count: 80, colors: ['warning', 'accent'] }, { kind: 'ash', count: 30, colors: ['muted'] }],
 };
 
 // How each kind moves. speed in px/s at depth 1; size in px.
