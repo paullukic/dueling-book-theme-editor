@@ -1,10 +1,12 @@
 import { mix } from '../../../lib/color.js';
 import { H, n1, rng, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Nekroz: the mirror hall in the glacier. A great pointed mirror of ice
 // stands between crystal pillars, its frame bristling with frost blades
 // like folded wings. In the glass is not the hall but the Nekroz on the
-// other side: the faceted ice head of Trishula, looking out. A glint sweeps
+// other side: Trishula, the real card artwork loaded live from DuelingBook
+// (cardart.js); offline the glass stays an empty, glinting mirror. A glint sweeps
 // the glass on a slow loop, kaleidoscope shards turn around the frame, the
 // floor of ice reflects it all, snow falls.
 
@@ -61,28 +63,6 @@ const scene = (t) => {
     }
   }
 
-  // Trishula's head in the glass: faceted ice, facing left, jaw a little open.
-  const P = {
-    S: [-132, 2], N: [-100, -24], B: [-32, -50], E: [-18, -30], C: [40, -62], Hh: [86, -40], J: [74, 42], M: [-34, 12],
-    L: [-112, 34], L2: [-30, 24], Lb: [-22, 56], K: [30, 2], N1: [120, 170], N2: [190, 160], N3: [150, -10],
-  };
-  const tri = (a, b, c, fill, o = 0.9) => `<path d="M${[a, b, c].map((k) => P[k].join(' ')).join('L')}Z" fill="${fill}" fill-opacity="${o}"/>`;
-  const lit = iceLit;
-  const mid = mix(ice, violet, 0.3);
-  const shade = mix(iceMid, violet, 0.35);
-  const dark = mix(iceDark, violet, 0.3);
-  const head = [
-    tri('Hh', 'N3', 'N2', dark), tri('Hh', 'N2', 'J', shade), tri('J', 'N2', 'N1', dark, 0.8),
-    tri('L', 'L2', 'Lb', shade), tri('L2', 'J', 'Lb', dark),
-    tri('S', 'N', 'M', lit, 0.85), tri('N', 'B', 'M', mid), tri('B', 'E', 'M', lit, 0.7), tri('B', 'C', 'E', mid),
-    tri('E', 'C', 'K', shade), tri('C', 'Hh', 'K', mid, 0.8), tri('K', 'Hh', 'J', shade), tri('M', 'E', 'K', mid, 0.75), tri('M', 'K', 'J', dark),
-  ].join('');
-  const horns = `<path d="M30 -58L156 -136L62 -46ZM68 -46L196 -86L84 -30ZM-40 -46L12 -118L4 -52Z" fill="${mid}" fill-opacity="0.9"/><path d="M30 -58L156 -136M68 -46L196 -86M-40 -46L12 -118" stroke="${lit}" stroke-opacity="0.8" stroke-width="1.4"/>`;
-  const crest = `<path d="M96 -26L150 -48L112 2ZM120 26L176 18L136 58ZM140 80L196 84L152 112Z" fill="${shade}" fill-opacity="0.9"/><path d="M96 -26L150 -48M120 26L176 18M140 80L196 84" stroke="${lit}" stroke-opacity="0.6"/><path d="M-112 -10l12 -6l2 6Z" fill="${deep}"/><path d="M-96 -22L-90 -40L-84 -26ZM-78 -30L-70 -50L-64 -34ZM40 20L96 60L50 40ZM30 34L70 84L36 50Z" fill="${lit}" fill-opacity="0.85"/><path d="M-56 -40L-30 -50L-44 -34Z" fill="${lit}"/>`;
-  const teeth = `<path d="M-120 4l5 12l4 -11ZM-100 7l4 11l4 -10ZM-80 9l4 10l4 -9ZM-104 31l4 -10l4 9ZM-84 29l4 -9l4 8Z" fill="#ffffff" fill-opacity="0.85"/>`;
-  const eye = `<path d="M-34 -36L-6 -34L-20 -24Z" fill="${deep}"/><path d="M-30 -32L-10 -31" stroke="${lit}" stroke-width="2.4" stroke-linecap="round" style="animation: dbtefx-pulse 5s ease-in-out infinite;"/>`;
-  const edges = `<path d="M${['S', 'N', 'B', 'C', 'Hh', 'N3'].map((k) => P[k].join(' ')).join('L')}M${['N', 'M', 'K', 'Hh'].map((k) => P[k].join(' ')).join('L')}M${['B', 'E', 'K', 'J'].map((k) => P[k].join(' ')).join('L')}M${['S', 'M', 'J'].map((k) => P[k].join(' ')).join('L')}" fill="none" stroke="${lit}" stroke-opacity="0.45" stroke-width="1"/>`;
-
   // Crystal pillars of the hall: hexagonal prisms with pointed tops.
   const pillar = (x, h, w, o) => {
     const y = 770;
@@ -101,8 +81,9 @@ const scene = (t) => {
   const frame = `<path d="${vesica(top - 18, bot + 18, half + 22)}" fill="url(#dbtefx-nk-frame)"/><path d="${vesica(top - 12, bot + 12, half + 15)}" fill="none" stroke="${iceDark}" stroke-opacity="0.6" stroke-width="1.5"/><path d="${vesica(top - 6, bot + 6, half + 8)}" fill="${deep}"/>`;
   const gem = (y, s) => `<path d="M${cx} ${y - 16 * s}L${cx + 11 * s} ${y}L${cx} ${y + 16 * s}L${cx - 11 * s} ${y}Z" fill="url(#dbtefx-nk-gem)" stroke="${iceLit}" stroke-width="1.2"/>`;
 
-  return `<style>@keyframes dbtefx-nk-glint { 0%, 55% { transform: translateX(-420px); opacity: 0; } 60% { opacity: 1; } 85% { transform: translateX(420px); opacity: 1; } 90%, 100% { transform: translateX(420px); opacity: 0; } }
-@keyframes dbtefx-nk-breath { 0%, 100% { opacity: 0.7; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-6px); } }</style>
+  return `<style>${CARD_ART_KEYFRAMES}
+@keyframes dbtefx-nk-glint { 0%, 55% { transform: translateX(-420px); opacity: 0; } 60% { opacity: 1; } 85% { transform: translateX(420px); opacity: 1; } 90%, 100% { transform: translateX(420px); opacity: 0; } }
+</style>
 <defs>
 <linearGradient id="dbtefx-nk-hall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, ice, 0.14)}"/><stop offset="0.65" stop-color="${t.bg}"/><stop offset="1" stop-color="${mix(t.bg, ice, 0.1)}"/></linearGradient>
 <radialGradient id="dbtefx-nk-aura" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="${ice}" stop-opacity="0.3"/><stop offset="0.6" stop-color="${violet}" stop-opacity="0.08"/><stop offset="1" stop-color="${violet}" stop-opacity="0"/></radialGradient>
@@ -129,7 +110,7 @@ ${blades}
 ${frame}
 <path d="${glass}" fill="url(#dbtefx-nk-glass)"/>
 <g clip-path="url(#dbtefx-nk-clip)">
-${[[cx + 96, 236, 0.72, -14, 0.55, 3], [cx + 104, 560, 0.78, 16, 0.6, 6], [cx - 6, 392, 1.08, 0, 1, 0]].map(([x, y, k, r, o, d]) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${k})" opacity="${o}"><g style="animation: dbtefx-nk-breath 9s ease-in-out ${-d}s infinite;">${horns}${crest}${head}${teeth}${eye}${edges}</g></g>`).join('')}
+${cardArt(t, { id: 'dbtefx-nk-hero', card: CARDS.trishula, x: cx - half, y: top, w: half * 2, h: bot - top, focus: [0.52, 0.4], zoom: 1.1, feather: 0.3, fade: 0.5, blend: 'normal', backdrop: mix(t.bg, ice, 0.2), backdropAmt: 0.6, opacity: 0.95, breathe: 14, tint: mix(ice, violet, 0.3), tintAmt: 0.15 })}
 <path d="M${cx - 60} 60L${cx + 30} 60L${cx - 40} 780L${cx - 130} 780Z" fill="url(#dbtefx-nk-sheen)" style="animation: dbtefx-nk-glint 9s ease-in-out infinite;"/>
 </g>
 <path d="${glass}" fill="none" stroke="${iceLit}" stroke-opacity="0.8" stroke-width="2"/>

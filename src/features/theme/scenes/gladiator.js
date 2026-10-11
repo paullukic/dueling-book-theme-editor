@@ -1,15 +1,15 @@
 import { mix } from '../../../lib/color.js';
 import { anim, H, n1, rng, W } from './kit.js';
+import { CARD_ART_KEYFRAMES, CARDS, cardArt } from './cardart.js';
 
 // Gladiator Beast: inside the Colosseum at the hour of the games. Sunlight
-// rakes the arena; tiers of arches and the crowd ring the sand; the beasts
-// wait in the glowing gate to tag in, under an eagle standard and crimson
-// banners. The podium carries the archetype's glowing armour lines.
+// rakes the arena; tiers of arches and the crowd ring the sand; Heraklinos
+// (the real card artwork, loaded live from DuelingBook) waits in the lit
+// gate to tag in, under crimson banners.
 const gladiator = (t) => {
   const rand = rng(29);
   const stone = mix(t.accent, t.bg, 0.7);
   const shade = mix(t.bg, '#000000', 0.35);
-  const ink = mix(t.bg, '#000000', 0.6);
   const sun = mix(t.warning, '#ffffff', 0.35);
   const red = t.accent2;
   const bronze = t.accent;
@@ -101,68 +101,27 @@ ${emblem ? `<g fill="${bronze}">${wreath(x, y + h * 0.36, w * 0.56, scale)}</g>$
     flecks += `M${n1(x)} ${n1(b - rand() * (b - tp))}h${n1(2 + rand() * 3)}`;
   }
 
-  // Beast gladiators in silhouette: armoured bodies with profile beast
-  // heads. Darius: horse head and mane, scutum. Bestiari: eagle head with a
-  // hooked beak, half-raised wings, spear.
-  const figure = (x, y, s, kind) => {
-    const horse = kind === 'horse';
-    const wing = 'M40 -220C90 -250 140 -300 168 -360L164 -326L186 -320L160 -298L180 -288L150 -268L170 -256L132 -244L146 -230L104 -222L110 -206L60 -200Z';
-    const arm = 'M-56 -214C-82 -200 -88 -170 -82 -150L-78 -126H-62L-64 -150C-66 -170 -60 -190 -50 -200Z';
-    const head = horse
-      ? 'M8 -262L14 -300C14 -318 8 -330 -2 -334L-6 -350L-10 -332C-20 -330 -30 -320 -38 -306L-62 -270C-66 -262 -62 -254 -54 -254L-44 -256C-36 -262 -28 -268 -18 -272C-12 -270 -8 -266 -8 -262ZM2 -332L22 -326L12 -318L28 -310L16 -302L30 -292L18 -286L28 -274L14 -268Z'
-      : 'M10 -262L14 -300C14 -320 2 -334 -14 -334C-28 -334 -40 -326 -46 -314C-58 -312 -68 -304 -70 -292C-70 -284 -66 -280 -62 -282C-62 -290 -58 -294 -52 -294L-36 -290C-30 -280 -16 -272 -8 -262ZM8 -330L30 -350L22 -330L40 -340L26 -320L44 -322L20 -308Z';
-    return `<g transform="translate(${x} ${y}) scale(${s})">
-${horse ? '' : `<path d="${wing}" transform="matrix(0.62 0 0 0.62 15 -84)"/><path d="${wing}" transform="matrix(-0.62 0 0 0.62 -15 -84)"/><path d="M62 -330l6 -26l6 26v330h-12Z"/>`}
-<path d="M0 -104C-4 -80 -8 -50 -10 -24L-12 -4L-6 0H-30L-28 -6C-30 -40 -36 -70 -34 -96C-36 -116 -40 -128 -38 -140L-46 -128L-42 -150C-36 -170 -40 -186 -50 -200C-58 -206 -66 -210 -68 -216C-72 -230 -60 -242 -44 -240C-34 -238 -22 -234 -12 -232L-10 -244H10L12 -232C22 -234 34 -238 44 -240C60 -242 72 -230 68 -216C66 -210 58 -206 50 -200C40 -186 36 -170 42 -150L46 -128L38 -140C40 -128 36 -116 34 -96C36 -70 30 -40 28 -6L30 0H6L12 -4L10 -24C8 -50 4 -80 0 -104Z"/>
-<path d="${arm}"/><path d="${arm}" transform="scale(-1 1)"/>
-<rect x="-10" y="-272" width="24" height="38"/><path d="${head}"/>
-${horse ? `<path d="M-108 -214h60c6 0 8 4 8 8v96c0 4 -2 8 -8 8h-60c-6 0 -8 -4 -8 -8v-96c0 -4 2 -8 8 -8Z"/><path d="M-106 -204h56v88h-56ZM-78 -204v88" fill="none" stroke="${mix(t.warning, ink, 0.55)}" stroke-width="2.5"/><circle cx="-78" cy="-160" r="9" fill="none" stroke="${mix(t.warning, ink, 0.5)}" stroke-width="2.5"/>` : ''}
-<g fill="url(#dbtefx-gb-gold)" stroke="${mix(bronze, ink, 0.5)}" stroke-width="2">
-<ellipse cx="-50" cy="-222" rx="22" ry="13"/><ellipse cx="50" cy="-222" rx="22" ry="13"/>
-<path d="M-36 -122h72l-4 16h-64Z"/><path d="M-30 -106l-6 40h14l4 -40ZM30 -106l6 40h-14l-4 -40ZM-6 -106h12l-2 44h-8Z"/>
-<path d="M-26 -236C-14 -226 14 -226 26 -236L22 -200C10 -192 -10 -192 -22 -200Z"/>
-${horse ? '<path d="M2 -330L-6 -346L-10 -330C-22 -326 -34 -314 -42 -300L-58 -272L-48 -266L-34 -290C-24 -306 -10 -318 4 -318Z"/><path d="M-4 -352C6 -366 22 -368 34 -360C22 -356 12 -348 6 -338Z"/>' : '<path d="M14 -300C14 -320 2 -334 -14 -334C-28 -334 -40 -326 -46 -314L-30 -312C-22 -320 -8 -322 4 -314Z"/>'}
-</g>
-<path d="${horse ? 'M-30 -306L-18 -310L-22 -302Z' : 'M-36 -312L-24 -315L-27 -307Z'}" fill="${sun}" style="animation: dbtefx-gb-blink 7s ease-in-out ${horse ? 0 : -2.5}s infinite; transform-box: fill-box; transform-origin: center;"/>
-</g>`;
-  };
-
   // Dust kicked up at the gate's threshold.
   let dust = '';
   for (let i = 0; i < 6; i++) dust += `<ellipse cx="${n1(1180 + i * 36 + rand() * 14)}" cy="${n1(640 - rand() * 8)}" rx="${n1(26 + rand() * 18)}" ry="${n1(10 + rand() * 6)}" fill="url(#dbtefx-gb-dust)" style="animation: dbtefx-gb-dust ${n1(4 + rand() * 2)}s ease-out ${n1(-i * 0.9)}s infinite; transform-box: fill-box; transform-origin: center bottom;"/>`;
 
-  // The gate: the Porta where the beasts wait to tag in, lit from inside.
-  const [gx, gy] = [1272, 644];
-  const opening = `M${gx - 120} ${gy}V${gy - 190}A120 120 0 0 1 ${gx + 120} ${gy - 190}V${gy}Z`;
-  let bars = '';
-  for (let i = 0; i < 11; i++) {
-    const x = gx - 115 + i * 23;
-    bars += `M${x} ${gy - 290}V${n1(gy - 190 - Math.sqrt(Math.max(0, 120 ** 2 - (x - gx) ** 2)))}`;
-  }
-  const gate = `<path d="M${gx - 150} ${gy}V${gy - 196}A150 150 0 0 1 ${gx + 150} ${gy - 196}V${gy}Z" fill="${stone}"/>
-<path d="${opening}" fill="url(#dbtefx-gb-gate)"/>
-<clipPath id="dbtefx-gb-door"><path d="${opening}"/></clipPath>
-<ellipse cx="${gx}" cy="${gy - 80}" rx="190" ry="200" fill="url(#dbtefx-gb-glow)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
-<g clip-path="url(#dbtefx-gb-door)"><g fill="${mix(sun, '#ffffff', 0.35)}" stroke="${mix(sun, '#ffffff', 0.35)}" stroke-width="7" stroke-linejoin="round">${figure(gx + 58, gy - 2, 0.8, 'eagle').split('<g fill="url(#dbtefx-gb-gold)"')[0] + '</g>'}${figure(gx - 40, gy - 2, 0.86, 'horse').split('<g fill="url(#dbtefx-gb-gold)"')[0] + '</g>'}</g><g fill="${ink}">${figure(gx + 58, gy - 2, 0.8, 'eagle')}${figure(gx - 40, gy - 2, 0.86, 'horse')}</g>
-<path d="${bars}" stroke="${shade}" stroke-width="5" fill="none"/><path d="M${gx - 120} ${gy - 290}h240" stroke="${shade}" stroke-width="7"/>
-<path d="${Array.from({ length: 11 }, (_, i) => `M${gx - 114 + i * 23} ${gy - 290}l4 12l4 -12`).join('')}" fill="${shade}"/></g>
-<path d="M${gx - 150} ${gy}V${gy - 196}A150 150 0 0 1 ${gx + 150} ${gy - 196}V${gy}M${gx - 120} ${gy}V${gy - 190}A120 120 0 0 1 ${gx + 120} ${gy - 190}V${gy}" fill="none" stroke="${mix(stone, sun, 0.5)}" stroke-width="3"/>
-<path d="M${gx - 16} ${gy - 348}h32l-5 18h-22Z" fill="${bronze}"/>
-<ellipse cx="${gx}" cy="${gy + 10}" rx="150" ry="22" fill="${t.warning}" fill-opacity="0.18"/>
+  // The gate: the Porta where the beasts wait to tag in. Heraklinos, the
+  // real card artwork, stands in the lit opening; offline the gate still glows.
+  const [gx, gy] = [1290, 660];
+  const [gw, gh] = [140, 400];
+  const arch = (w, h) => `M${gx - w} ${gy}V${gy - h + w}A${w} ${w} 0 0 1 ${gx + w} ${gy - h + w}V${gy}Z`;
+  const gate = `<path d="${arch(gw + 30, gh + 30)}" fill="url(#dbtefx-gb-wall)"/>
+<path d="${arch(gw + 30, gh + 30)}" fill="${shade}" fill-opacity="0.35"/>
+<ellipse cx="${gx}" cy="${gy - 200}" rx="280" ry="320" fill="url(#dbtefx-gb-glow)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
+<path d="${arch(gw, gh)}" fill="url(#dbtefx-gb-gate)"/>
+<path d="${arch(gw, gh)}" fill="url(#dbtefx-gb-tunnel)"/>
+${cardArt(t, { id: 'dbtefx-gb-hero', card: CARDS.heraklinos, x: gx - gw, y: gy - gh, w: gw * 2, h: gh, frame: 'arch', focus: [0.47, 0.42], zoom: 0.92, feather: 0.32, fade: 0.55, backdrop: mix(t.bg, t.warning, 0.2), backdropAmt: 0.85, rim: mix(stone, sun, 0.5), glow: t.warning, breathe: 12, grade: 'sepia(0.3) saturate(0.85) contrast(1.05)' })}
+<path d="${arch(gw, gh)}" fill="${t.accent}" fill-opacity="0.22" style="mix-blend-mode: color;"/>
+<path d="${arch(gw, gh)}" fill="url(#dbtefx-gb-tunnel)" fill-opacity="0.35" style="mix-blend-mode: multiply;"/>
+<path d="${arch(gw + 30, gh + 30)}${arch(gw, gh)}" fill="none" stroke="${mix(stone, sun, 0.5)}" stroke-width="3"/>
+<path d="M${gx - 18} ${gy - gh - 32}h36l-6 22h-24Z" fill="${bronze}"/>
+<ellipse cx="${gx}" cy="${gy + 10}" rx="190" ry="26" fill="${t.warning}" fill-opacity="0.2"/>
 ${dust}`;
-
-  // Aquila: the eagle standard planted in the sand.
-  const [sx, sy] = [1404, 880];
-  const eagleWing = 'M4 0C14 -30 34 -62 58 -84L54 -66L66 -64L52 -52L62 -46L48 -38L56 -30L40 -26L44 -16L28 -14C18 -8 10 -4 4 0Z';
-  const aquila = `<path d="M${sx - 3} ${sy}V${sy - 520}h6V${sy}Z" fill="${mix(bronze, t.bg, 0.4)}"/>
-<path d="M${sx - 54} ${sy - 470}h108" stroke="${bronze}" stroke-width="5"/>
-<path d="M${sx - 48} ${sy - 470}h96v130l-48 -16l-48 16Z" fill="url(#dbtefx-gb-cloth)"/>
-<path d="M${sx - 48} ${sy - 340}l12 28M${sx - 24} ${sy - 332}l6 28M${sx} ${sy - 324}v28M${sx + 24} ${sy - 332}l-6 28M${sx + 48} ${sy - 340}l-12 28" stroke="${bronze}" stroke-width="3" stroke-linecap="round"/>
-<g fill="${bronze}">${wreath(sx, sy - 416, 24, 1.1)}</g>${swords(sx, sy - 416, 1)}
-<rect x="${sx - 26}" y="${sy - 382}" width="52" height="11" fill="${bronze}"/><path d="M${sx - 20} ${sy - 376.5}h40" stroke="${mix(red, t.bg, 0.4)}" stroke-width="2" stroke-dasharray="8 4"/>
-<circle cx="${sx}" cy="${sy - 500}" r="20" fill="none" stroke="${bronze}" stroke-width="6" stroke-dasharray="5 3"/>
-<g fill="url(#dbtefx-gb-gold)" transform="translate(${sx} ${sy - 540})"><path d="${eagleWing}"/><path d="${eagleWing}" transform="scale(-1 1)"/>
-<path d="M-10 4C-12 -12 -8 -26 2 -30C10 -30 14 -24 14 -18L22 -14L12 -12C10 -4 8 2 10 8Z"/><path d="M-16 2h32l-6 10h-20Z"/></g>`;
 
   // God rays from the opening in the velarium, high on the right.
   let rays = '';
@@ -187,8 +146,8 @@ ${dust}`;
     sandMarks += `M${x0} 660C${n1(x0 - 120)} ${n1(720 + i * 6)} ${n1(x1 + 260)} ${n1(820 + rand() * 30)} ${n1(x1)} ${y1}`;
   }
 
-  return `<style>@keyframes dbtefx-gb-sway { 0%, 100% { transform: skewX(-3deg); } 50% { transform: skewX(3deg); } }
-@keyframes dbtefx-gb-blink { 0%, 90%, 100% { opacity: 1; transform: scaleY(1); } 93%, 95% { opacity: 0.2; transform: scaleY(0.1); } }
+  return `<style>${CARD_ART_KEYFRAMES}
+@keyframes dbtefx-gb-sway { 0%, 100% { transform: skewX(-3deg); } 50% { transform: skewX(3deg); } }
 @keyframes dbtefx-gb-dust { 0% { transform: translate(0, 0) scale(0.4); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(-30px, -40px) scale(1.6); opacity: 0; } }</style>
 <defs>
 <linearGradient id="dbtefx-gb-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent2, t.bg, 0.75)}"/><stop offset="0.3" stop-color="${mix(t.warning, t.bg, 0.55)}"/><stop offset="0.6" stop-color="${t.bg}"/></linearGradient>
@@ -198,6 +157,7 @@ ${dust}`;
 <linearGradient id="dbtefx-gb-cloth" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(red, t.bg, 0.45)}"/><stop offset="0.45" stop-color="${red}"/><stop offset="1" stop-color="${mix(red, t.bg, 0.55)}"/></linearGradient>
 <linearGradient id="dbtefx-gb-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(bronze, '#ffffff', 0.45)}"/><stop offset="1" stop-color="${mix(bronze, t.bg, 0.3)}"/></linearGradient>
 <radialGradient id="dbtefx-gb-gate" cx="0.5" cy="0.75" r="0.8"><stop offset="0" stop-color="${sun}"/><stop offset="0.5" stop-color="${t.warning}"/><stop offset="1" stop-color="${mix(t.warning, t.bg, 0.6)}"/></radialGradient>
+<linearGradient id="dbtefx-gb-tunnel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade}" stop-opacity="0.95"/><stop offset="0.7" stop-color="${shade}" stop-opacity="0.75"/><stop offset="1" stop-color="${shade}" stop-opacity="0.2"/></linearGradient>
 <radialGradient id="dbtefx-gb-glow"><stop offset="0" stop-color="${t.warning}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.warning}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-gb-cdepth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade}" stop-opacity="0.7"/><stop offset="1" stop-color="${shade}" stop-opacity="0"/></linearGradient>
 <pattern id="dbtefx-gb-awn" width="80" height="10" patternUnits="userSpaceOnUse"><rect width="80" height="10" fill="${mix(t.text, t.warning, 0.45)}"/><rect width="3" height="10" fill="${mix(red, t.bg, 0.3)}"/></pattern>
@@ -227,9 +187,8 @@ ${banner(300, 0.8, 0, true)}${banner(1300, 0.8, 3, true)}
 <path d="${sandMarks}" stroke="${shade}" stroke-opacity="0.3" stroke-width="6" stroke-dasharray="220 30 90 50" fill="none"/>
 <path d="${sandMarks}" stroke="${sun}" stroke-opacity="0.16" stroke-width="2" stroke-dasharray="220 30 90 50" fill="none" transform="translate(0 -5)"/>
 <ellipse cx="760" cy="760" rx="560" ry="110" fill="url(#dbtefx-gb-pool)"/>
-${gate}
 <g fill="url(#dbtefx-gb-ray)">${rays}</g>
-${aquila}
+${gate}
 <!--near-->
 <path d="${awn}" fill="url(#dbtefx-gb-awn)" transform="skewX(0)"/>
 <path d="${awn}" fill="url(#dbtefx-gb-awnshade)"/>`;
