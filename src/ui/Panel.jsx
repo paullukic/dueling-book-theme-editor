@@ -333,7 +333,7 @@ const ChatTab = () => {
           onChange={set('chatMentionAlert')}
         />
       </Group>
-      <Group title="Chat commands">
+      <Group title="Commands">
         <ToggleRow
           label="Chat commands"
           description="Type /help in duel chat. /calc and /note stay on your screen and are never sent; DuelingBook’s own commands like /draw 2 work as always."
