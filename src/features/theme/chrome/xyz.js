@@ -55,7 +55,7 @@ ${stars ? [[b / 2 + 1, b / 2 + 1], [47 - b / 2, b / 2 + 1], [b / 2 + 1, 47 - b /
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = (suffix = '') => T(SETTINGS.map((x) => `#settings .${x}${suffix}`));
+  const settings = (suffix = '') => T(SETTINGS.map((x) => `#content #settings_content > div.${x}${suffix}`));
   // Gold corner brackets, like the corners of the card's art box.
   const units = (on) => {
     const c = on ? goldLight : gold;
@@ -102,9 +102,9 @@ ${SEL.tileHover} {
   box-shadow: 0 0 20px -6px ${alpha(gold, 0.7)} !important;
 }
 ${T(['#main_menu .menu_btn:active .content'])} { background: linear-gradient(180deg, ${t.bg}, ${t.raised}) !important; box-shadow: inset 0 3px 8px ${alpha('#000000', 0.8)} !important; }
-${T(['#main_menu .menu_btn .content::before'])} { content: ""; position: absolute; inset: -10px -16px; pointer-events: none; background: ${U(orbit(true))} center / 100% 100% no-repeat; opacity: 0; transition: opacity .2s; }
+${T(['#main_menu .menu_btn .content::before'])} { content: ""; position: absolute; inset: -10px -16px; pointer-events: none; background: ${U(orbit(true))} center / 100% 100% no-repeat; opacity: .4; transition: opacity .2s; }
 ${T(['#main_menu .menu_btn:hover .content::before'])} { opacity: 1; }
-${T(['#main_menu .menu_btn .content::after', '#main_menu .menu_btn:hover .content::after'])} { content: ""; position: absolute; left: 14px; top: -7px; right: auto; bottom: auto; width: 50px; height: 12px; pointer-events: none; background: ${U(rankRow(4))} left center / 100% 100% no-repeat; }
+${T(['#main_menu .menu_btn .content::after', '#main_menu .menu_btn:hover .content::after'])} { content: ""; position: absolute; left: 14px; top: -10px; right: auto; bottom: auto; width: 63px; height: 18px; pointer-events: none; background: ${U(rankRow(3))} left center / 100% 100% no-repeat; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content::before', '#main_menu .menu_btn.dbte-small-menu .content::after'])} { content: none; }
 ${SEL.tileLabel} { color: ${t.text} !important; text-shadow: 0 2px 2px #000000, 0 0 10px ${alpha(gold, 0.35)} !important; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content'])} { border-image: ${thinFrame} 12 / 6px / 0 stretch !important; }
@@ -112,20 +112,20 @@ ${T(['#main_menu .main_menu_circle'])} { border-color: ${goldDeep} !important; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: radial-gradient(circle at 40% 35%, #ffffff, ${gold} 50%, ${goldDeep}) !important; }
 
 /* ---- Buttons: black with a gold hairline; an overlay unit glows at each end ---- */
-${SEL.button} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])} {
   background: ${units(false)}, linear-gradient(180deg, ${t.raised}, ${ink} 55%, ${t.bg}) !important;
   border-color: ${goldDeep} !important;
   border-radius: 1px !important;
   color: ${t.text} !important;
   box-shadow: inset 0 1px 0 ${alpha(gold, 0.3)}, 0 2px 6px -2px #000000 !important;
 }
-${SEL.buttonHover} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])} {
   background: ${units(true)}, linear-gradient(180deg, ${mix(t.raised, gold, 0.16)}, ${ink} 60%, ${t.bg}) !important;
   border-color: ${gold} !important;
   color: ${goldLight} !important;
   box-shadow: inset 0 1px 0 ${alpha(goldLight, 0.5)}, 0 0 10px -2px ${alpha(gold, 0.9)} !important;
 }
-${SEL.buttonDown} { background: ${units(true)}, linear-gradient(180deg, ${t.bg}, ${mix(t.raised, gold, 0.2)}) !important; border-color: ${gold} !important; box-shadow: inset 0 2px 5px #000000 !important; }
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} { background: ${units(true)}, linear-gradient(180deg, ${t.bg}, ${mix(t.raised, gold, 0.2)}) !important; border-color: ${gold} !important; box-shadow: inset 0 2px 5px #000000 !important; }
 ${T(['#content .combobox'])} { background: linear-gradient(180deg, ${t.raised}, ${t.bg}) !important; border-color: ${goldDeep} !important; border-radius: 1px !important; box-shadow: inset 0 1px 0 ${alpha(gold, 0.25)} !important; }
 ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} { border-color: ${gold} !important; box-shadow: 0 0 8px -2px ${gold} !important; }
 ${T(['#content .combobox .combobox_line'])} { background-color: ${goldDeep} !important; }
@@ -212,6 +212,9 @@ ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(gold, 0.9)}) !important; }
 ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .1em; }
+${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
+${T(['#duel_room .format_txt::before', '#duel_room span.arial_black2::before', '#settings .admin_lbl::before', '#content .title1::before'])} { content: ""; position: absolute; left: 50%; top: -8px; bottom: -8px; width: 260px; margin-left: -130px; pointer-events: none; background: ${U(orbit(true, 300, 70))} center / 100% 100% no-repeat; opacity: .75; }
+${T(['#content .title1::before'])} { width: 420px; margin-left: -210px; }
 
 /* ---- Backdrop: a random scatter of small sparkles instead of the even grid ---- */
 html body #dbte-skin-motif { background: ${U(sparkleField)} 0 0 / 600px 600px repeat !important; }

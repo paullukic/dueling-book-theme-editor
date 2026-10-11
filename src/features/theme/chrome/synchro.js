@@ -19,6 +19,12 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const silver = mix(t.accent, t.muted, 0.45);
   const deep = mix(t.surface, t.bg, 0.45);
   const glow = t.accent2;
+  // Tuner green: the rings a Tuner becomes in the summon.
+  const tuner = t.success;
+  const tunerIcon = (on) => svg(30, 24, `${[7, 15, 23].map((x, i) => `<ellipse cx="${x}" cy="12" rx="3.2" ry="10.5" fill="none" stroke="${i === 1 ? '#ffffff' : tuner}" stroke-opacity="${on ? 1 : 0.85}" stroke-width="${on ? 1.8 : 1.4}"/>`).join('')}`);
+  // Pearl panel material: a graphite plate with a cool pearlescent sheen.
+  const pearlMat = `linear-gradient(160deg, ${mix(t.surface, pearl, 0.17)}, ${mix(t.surface, pearl, 0.04)} 42%, ${mix(t.surface, pearl, 0.12)} 72%, ${mix(t.surface, tuner, 0.1)})`;
+  const titleBar = `linear-gradient(${tuner}, ${tuner}) center bottom / 3em 2px no-repeat`;
 
   const star = (x, y, r, fill = '#ffffff', o = 1) =>
     `<path d="M${x} ${y - r}C${x + r * 0.12} ${y - r * 0.12} ${x + r * 0.12} ${y - r * 0.12} ${x + r} ${y}C${x + r * 0.12} ${y + r * 0.12} ${x + r * 0.12} ${y + r * 0.12} ${x} ${y + r}C${x - r * 0.12} ${y + r * 0.12} ${x - r * 0.12} ${y + r * 0.12} ${x - r} ${y}C${x - r * 0.12} ${y - r * 0.12} ${x - r * 0.12} ${y - r * 0.12} ${x} ${y - r}Z" fill="${fill}" opacity="${o}"/>`;
@@ -27,7 +33,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   // 9-slice white frame: pearl band, graphite gap, silver hairline; sparkles on the corners.
   const frame = (s, b) =>
     svg(48, 48, `<defs><linearGradient id="p" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="${pearl}"/><stop offset=".6" stop-color="${silver}"/><stop offset="1" stop-color="${pearl}"/></linearGradient></defs>
-<path d="M0 0H48V48H0ZM${b} ${b}V${48 - b}H${48 - b}V${b}Z" fill="url(#p)" fill-rule="evenodd"/><rect x="${b + 0.5}" y="${b + 0.5}" width="${47 - 2 * b}" height="${47 - 2 * b}" fill="none" stroke="${t.bg}" stroke-width="1"/><rect x="${b + 2}" y="${b + 2}" width="${44 - 2 * b}" height="${44 - 2 * b}" fill="none" stroke="${pearl}" stroke-opacity=".45" stroke-width=".6"/>
+<path d="M0 0H48V48H0ZM${b} ${b}V${48 - b}H${48 - b}V${b}Z" fill="url(#p)" fill-rule="evenodd"/><rect x="${b + 0.5}" y="${b + 0.5}" width="${47 - 2 * b}" height="${47 - 2 * b}" fill="none" stroke="${t.bg}" stroke-width="1"/><rect x="${b + 2}" y="${b + 2}" width="${44 - 2 * b}" height="${44 - 2 * b}" fill="none" stroke="${tuner}" stroke-opacity=".8" stroke-width=".8"/>
 ${[[s * 0.4, s * 0.4], [48 - s * 0.4, s * 0.4], [s * 0.4, 48 - s * 0.4], [48 - s * 0.4, 48 - s * 0.4]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${s * 0.22}" fill="${glow}" opacity=".35"/>${star(x, y, s * 0.38)}`).join('')}`);
 
   // Tuner rings in perspective with a streak of starlight through them.
@@ -48,14 +54,14 @@ ${on ? [48, 96, 150].map((x, i) => star(x, 30, 4 - i)).join('') : ''}`);
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  const settings = T(SETTINGS.map((x) => `#content #settings_content > div.${x}`));
   // Pop-up buttons (DuelingBook draws them as images): the primary one is the
   // white Synchro frame with a dark label, the secondary graphite in a pearl rim.
   const FONT = 'Segoe UI,Arial,sans-serif';
   const popBtn = (label, wide, primary) => {
     const w = wide ? 234.85 : 153.4;
     const h = wide ? 78.5 : 78.47;
-    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? '#ffffff' : t.raised}"/><stop offset=".55" stop-color="${primary ? pearl : t.surface}"/><stop offset="1" stop-color="${primary ? silver : deep}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="4" fill="url(#k)" stroke="${primary ? '#ffffff' : silver}" stroke-width="2.5"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="2" fill="none" stroke="${primary ? silver : alpha(pearl, 0.35)}" stroke-width="1"/>${star(w - 14, 14, 9)}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
+    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? '#ffffff' : t.raised}"/><stop offset=".55" stop-color="${primary ? pearl : t.surface}"/><stop offset="1" stop-color="${primary ? silver : deep}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="4" fill="url(#k)" stroke="${primary ? '#ffffff' : silver}" stroke-width="2.5"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="2" fill="none" stroke="${primary ? silver : alpha(pearl, 0.35)}" stroke-width="1"/><path d="M10 13.5H${w - 10}" stroke="#ffffff" stroke-width="2"/><path d="M10 ${h - 13.5}H${w - 10}" stroke="${primary ? mix(silver, t.bg, 0.3) : t.bg}" stroke-width="2"/>${[19, 27, 35].map((x, i) => `<ellipse cx="${x}" cy="39.2" rx="3" ry="14" fill="none" stroke="${i === 1 ? (primary ? silver : '#ffffff') : tuner}" stroke-width="2"/>`).join('')}<text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
   };
   const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
   const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
@@ -66,7 +72,7 @@ ${on ? [48, 96, 150].map((x, i) => star(x, 30, 4 - i)).join('') : ''}`);
   const css = `
 /* ---- Menu tiles: white Synchro frame, tuner rings that flare on hover ---- */
 ${SEL.tile} {
-  background: ${face}, ${U(rings(false))} center / 100% 100% no-repeat, ${dust} 0 0 / 120px, linear-gradient(180deg, ${t.raised}, ${deep}) !important;
+  background: ${face}, ${dust} 0 0 / 120px, linear-gradient(180deg, ${t.raised}, ${deep}) !important;
   border-color: transparent !important;
   border-image: ${tileFrame} 16 / 12px / 3px stretch !important;
   border-radius: 0 !important;
@@ -74,29 +80,32 @@ ${SEL.tile} {
   transition: background-color .15s, box-shadow .2s;
 }
 ${SEL.tileHover} {
-  background: ${face}, ${U(rings(true))} center / 100% 100% no-repeat, ${dust} 0 0 / 120px, radial-gradient(ellipse at 50% 50%, ${alpha(glow, 0.3)}, transparent 70%), linear-gradient(180deg, ${mix(t.raised, glow, 0.12)}, ${deep}) !important;
+  background: ${face}, ${dust} 0 0 / 120px, radial-gradient(ellipse at 50% 50%, ${alpha(glow, 0.3)}, transparent 70%), linear-gradient(180deg, ${mix(t.raised, glow, 0.12)}, ${deep}) !important;
   box-shadow: 0 0 22px -6px ${alpha(glow, 0.8)} !important;
 }
-${T(['#main_menu .menu_btn:active .content'])} { background: ${U(rings(true))} center / 100% 100% no-repeat, linear-gradient(180deg, ${deep}, ${t.raised}) !important; box-shadow: inset 0 3px 8px ${alpha('#000000', 0.6)} !important; }
+${T(['#main_menu .menu_btn:active .content'])} { background: linear-gradient(180deg, ${deep}, ${t.raised}) !important; box-shadow: inset 0 3px 8px ${alpha('#000000', 0.6)} !important; }
+${T(['#main_menu .menu_btn .content::before'])} { content: ""; position: absolute; left: 16px; right: 16px; top: 8px; height: 20px; pointer-events: none; background: ${U(tunerIcon(false))} left center / 24px 20px no-repeat, linear-gradient(90deg, ${alpha('#ffffff', 0.7)}, ${alpha(glow, 0.35)} 30%, transparent) 30px center / calc(100% - 30px) 1px no-repeat; }
+${T(['#main_menu .menu_btn:hover .content::before'])} { background: ${U(tunerIcon(true))} left center / 24px 20px no-repeat, linear-gradient(90deg, #ffffff, ${alpha(tuner, 0.6)} 40%, transparent) 30px center / calc(100% - 30px) 2px no-repeat; }
+${T(['#main_menu .menu_btn.dbte-small-menu .content::before'])} { content: none; }
 ${SEL.tileLabel} { color: #ffffff !important; text-shadow: 0 0 10px ${alpha(glow, 0.55)}, 0 2px 1px ${t.bg} !important; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content'])} { border-image: ${slimFrame} 16 / 6px / 0 stretch !important; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: radial-gradient(circle, #ffffff, ${glow}) !important; }
 
 /* ---- Buttons: graphite with a pearl frame; hover fills them white like the card frame ---- */
-${SEL.button} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])} {
   background: linear-gradient(180deg, ${mix(t.raised, '#ffffff', 0.06)}, ${t.raised} 50%, ${deep}) !important;
   border-color: ${silver} !important;
   border-radius: 2px !important;
   color: ${t.text} !important;
   box-shadow: inset 0 0 0 1px ${t.bg}, inset 0 0 0 2px ${alpha(pearl, 0.18)}, 0 2px 6px -2px ${alpha('#000000', 0.8)} !important;
 }
-${SEL.buttonHover} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])} {
   background: ${U(sparkle(5))} right -3px top -3px / 12px no-repeat, linear-gradient(180deg, #ffffff, ${pearl} 55%, ${silver}) !important;
   border-color: #ffffff !important;
   color: ${t.accentText} !important;
   box-shadow: 0 0 10px -1px ${alpha(glow, 0.8)} !important;
 }
-${SEL.buttonDown} { background: linear-gradient(180deg, ${silver}, ${pearl}) !important; border-color: #ffffff !important; color: ${t.accentText} !important; box-shadow: inset 0 2px 4px ${alpha(t.bg, 0.6)} !important; }
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} { background: linear-gradient(180deg, ${silver}, ${pearl}) !important; border-color: #ffffff !important; color: ${t.accentText} !important; box-shadow: inset 0 2px 4px ${alpha(t.bg, 0.6)} !important; }
 ${T(['#content .combobox'])} { background: linear-gradient(180deg, ${t.raised}, ${deep}) !important; border-color: ${silver} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 1px ${t.bg} !important; }
 ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} { border-color: #ffffff !important; box-shadow: inset 0 0 0 1px ${t.bg}, 0 0 8px -2px ${glow} !important; }
 ${T(['#content .combobox .combobox_line'])} { background-color: ${silver} !important; }
@@ -157,7 +166,7 @@ ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#d
 ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${silver} !important; }
 
 /* ---- Duel room: white-framed bays with star corners ---- */
-${lobby()} { background-color: ${alpha(t.surface, 0.85)} !important; background-image: ${dust} !important; background-size: 120px !important; }
+${lobby()} { background-color: ${alpha(t.surface, 0.9)} !important; background-image: ${pearlMat} !important; box-shadow: inset 0 0 0 1px ${alpha(tuner, 0.45)} !important; }
 ${lobby('::before')} { filter: none !important; background: linear-gradient(135deg, #ffffff, ${pearl} 30%, ${silver} 55%, ${pearl} 80%, #ffffff) !important; }
 ${T(['#duel_room #formats .format:hover > .border::before'])} { background: linear-gradient(135deg, #ffffff, ${glow} 50%, #ffffff) !important; }
 ${lobby('::after')} { content: ""; position: absolute; inset: -8px; pointer-events: none; background: ${corners(20)}; }
@@ -166,13 +175,13 @@ ${T(['#duel_room .duelbutton .background'])} { background: linear-gradient(180de
 ${T(['#duel_room .duelbutton:hover .background'])} { background: linear-gradient(180deg, ${mix(t.raised, glow, 0.18)}, ${deep}) !important; }
 
 /* ---- Deck constructor: stardust bays with a pearl rule ---- */
-${T(DECK)} { background-image: ${dust}, ${face} !important; background-size: 120px, auto !important; box-shadow: inset 0 0 0 1px ${pearl}, inset 0 0 0 3px ${t.bg}, inset 0 0 0 4px ${alpha(pearl, 0.25)} !important; }
+${T(DECK)} { background-image: ${pearlMat} !important; background-size: auto !important; box-shadow: inset 0 0 0 1px ${pearl}, inset 0 0 0 3px ${t.bg}, inset 0 0 0 4px ${alpha(tuner, 0.25)} !important; }
 ${T(DECK.map((d) => `${d}::after`))} { content: ""; position: absolute; inset: -6px; pointer-events: none; background: ${corners(16)}; }
 ${T(['#deck_constructor #search .title_txt'])} { color: #ffffff !important; text-shadow: 0 0 14px ${alpha(glow, 0.7)}, 0 2px 1px ${t.bg} !important; }
 ${T(['#deck_constructor .deck_lbl', '#deck_constructor .side_lbl', '#deck_constructor .extra_lbl'])} { color: #ffffff !important; text-shadow: 0 0 10px ${alpha(glow, 0.6)} !important; }
 
 /* ---- Settings: white frames ---- */
-${settings} { border-color: transparent !important; border-image: ${tileFrame} 16 / 12px / 3px stretch !important; border-radius: 0 !important; background-image: ${dust}, ${face} !important; }
+${settings} { border-color: transparent !important; border-image: ${tileFrame} 16 / 12px / 3px stretch !important; border-radius: 0 !important; background-color: ${t.surface} !important; background-image: ${pearlMat} !important; }
 ${T(['#settings .admin_lbl', '#settings .title1'])} { color: #ffffff !important; text-shadow: 0 0 12px ${alpha(glow, 0.6)}, 0 2px 1px ${t.bg} !important; }
 
 /* ---- Pop-up buttons, panel title plates ---- */
@@ -181,7 +190,8 @@ ${pop('yes_btn')} { content: ${U(popBtn('Yes', false, true))} !important; }
 ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(glow, 0.9)}) !important; }
-${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .2em; }
+${titles} { background: ${titleBar}, ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .2em; }
+${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 
 /* ---- Backdrop: one tuner-ring cluster, off centre, no repeat ---- */
 html body #dbte-skin-motif { background: ${U(cluster)} 78% 50% / min(110vh, 1100px) no-repeat !important; }

@@ -58,10 +58,11 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = (suffix = '') => T(SETTINGS.map((x) => `#settings .${x}${suffix}`));
+  const settings = (suffix = '') => T(SETTINGS.map((x) => `#content #settings_content > div.${x}${suffix}`));
 
   // Button: a data plate with a Link Arrow notch at each end.
-  const btnArrows = (on) => `${U(arrow('side', 270, on))} 1px center / 9px no-repeat, ${U(arrow('side', 90, on))} right 1px center / 9px no-repeat`;
+  // Two Link corner arrows pinned into opposite corners, clear of the label.
+  const btnArrows = (on) => `${U(arrow('corner', 0, on))} left top / 6px no-repeat, ${U(arrow('corner', 180, on))} right bottom / 6px no-repeat`;
 
   // Pop-up buttons (DuelingBook draws them as images): bevelled data plates cut
   // to a hex point at each end; the primary one is lit cyan with a dark label.
@@ -106,19 +107,19 @@ ${T(['#main_menu .menu_btn.dbte-small-menu .content::before', '#main_menu .menu_
 ${T(['#main_menu .main_menu_circle .background'])} { background-color: ${t.accent2} !important; }
 
 /* ---- Buttons: data plates with an arrow notch at each end ---- */
-${SEL.button} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])} {
   background: ${btnArrows(false)}, linear-gradient(180deg, ${mix(t.raised, t.accent, 0.18)}, ${t.raised} 55%, ${deep}) !important;
   border-color: ${frame} !important;
   border-radius: 1px !important;
   color: ${t.text} !important;
   box-shadow: inset 0 1px 0 ${alpha(t.accent2, 0.3)}, inset 0 -1px 0 ${alpha(t.bg, 0.7)}, 0 2px 6px -2px ${alpha('#000000', 0.8)} !important;
 }
-${SEL.buttonHover} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])} {
   background: ${btnArrows(true)}, linear-gradient(180deg, ${mix(t.raised, t.accent, 0.45)}, ${mix(t.raised, t.accent, 0.2)} 55%, ${deep}) !important;
   border-color: ${t.accent2} !important;
   box-shadow: inset 0 1px 0 ${alpha(t.accent2, 0.6)}, 0 0 10px -2px ${alpha(t.accent2, 0.8)} !important;
 }
-${SEL.buttonDown} {
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} {
   background: ${btnArrows(true)}, linear-gradient(180deg, ${deep}, ${mix(t.raised, t.accent, 0.35)}) !important;
   border-color: ${t.accent2} !important;
   box-shadow: inset 0 2px 5px ${alpha('#000000', 0.7)} !important;
@@ -144,7 +145,7 @@ ${T(['#content input[type=text]:focus', '#content input[type=password]:focus', '
 
 /* ---- Pop-ups: a Link art box with all eight arrows lit, traces out of the corners ---- */
 ${dlg()} {
-  background: ${traces} left 6px bottom 6px / 30% auto no-repeat, ${face}, ${hex(0.08)} center / 22px auto, linear-gradient(170deg, ${mix(t.surface, t.accent, 0.12)}, ${deep}) !important;
+  background: ${traces} left 6px bottom 6px / 100px auto no-repeat, ${face}, ${hex(0.08)} center / 22px auto, linear-gradient(170deg, ${mix(t.surface, t.accent, 0.12)}, ${deep}) !important;
   border-radius: 2px !important;
   box-shadow: inset 0 0 0 1px ${t.accent2}, inset 0 0 0 4px ${alpha(t.bg, 0.8)}, inset 0 0 0 5px ${alpha(t.accent, 0.6)}, 0 0 0 1px ${t.bg}, 0 0 30px -6px ${alpha(t.accent, 0.55)}, 0 24px 50px -14px ${alpha('#000000', 0.9)} !important;
 }
@@ -228,6 +229,7 @@ ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(t.accent2, 0.9)}) !important; }
 ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .15em; }
+${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${frame}, ${t.accent}) !important; border-radius: 1px !important; }

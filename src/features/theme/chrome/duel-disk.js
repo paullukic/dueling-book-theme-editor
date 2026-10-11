@@ -45,7 +45,7 @@ ${screws ? [[s / 2, s / 2], [48 - s / 2, s / 2], [s / 2, 48 - s / 2], [48 - s / 
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  const settings = T(SETTINGS.map((x) => `#content #settings_content > div.${x}`));
   // Pop-up buttons (DuelingBook draws them as images): steel keycaps with ink
   // labels; the primary one carries a red indicator strip on its left edge.
   const FONT = 'Segoe UI,Arial,sans-serif';
@@ -77,20 +77,20 @@ ${T(['#main_menu .menu_btn.dbte-small-menu .content'])} { background: ${brushed}
 ${T(['#main_menu .main_menu_circle .background'])} { background: radial-gradient(circle at 40% 35%, #ffffff, ${blade} 50%) !important; }
 
 /* ---- Buttons: silver keycaps; a blade-blue light underneath on hover ---- */
-${SEL.button} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])} {
   background: linear-gradient(180deg, #ffffff, ${t.raised} 40%, ${t.surface} 85%, ${steel}) !important;
   border-color: ${t.border} !important;
   border-radius: 3px !important;
   color: ${ink} !important;
   box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${alpha(t.border, 0.55)}, 0 1px 2px ${alpha(ink, 0.3)} !important;
 }
-${SEL.buttonHover} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])} {
   background: linear-gradient(180deg, #ffffff, ${t.raised} 55%, ${mix(t.raised, blade, 0.12)}) !important;
   border-color: ${blade} !important;
   color: ${ink} !important;
   box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 0 ${blade}, 0 0 8px -1px ${alpha(blade, 0.55)} !important;
 }
-${SEL.buttonDown} { background: linear-gradient(180deg, ${steel}, ${t.surface}) !important; border-color: ${blade} !important; box-shadow: inset 0 2px 4px ${alpha(ink, 0.35)} !important; }
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} { background: linear-gradient(180deg, ${steel}, ${t.surface}) !important; border-color: ${blade} !important; box-shadow: inset 0 2px 4px ${alpha(ink, 0.35)} !important; }
 ${T(['#content .combobox'])} { background: linear-gradient(180deg, #ffffff, ${t.raised} 45%, ${t.surface}) !important; border-color: ${t.border} !important; border-radius: 3px !important; color: ${ink} !important; box-shadow: inset 0 -2px 0 ${alpha(t.border, 0.5)}, 0 1px 2px ${alpha(ink, 0.25)} !important; }
 ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} { border-color: ${blade} !important; box-shadow: inset 0 -2px 0 ${blade} !important; }
 ${T(['#content .combobox .combobox_line'])} { background-color: ${t.border} !important; box-shadow: 1px 0 0 #ffffff; }
@@ -147,7 +147,11 @@ ${T(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 0
 ${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 1px ${alpha(ink, 0.8)} !important; }
 ${T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, #ffffff, ${t.surface} 50%, ${t.border}) !important; }
 ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${t.raised}, ${t.surface}) !important; }
-${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${t.border} !important; }
+${T(['#duel #watchers'])} { background: ${brushed}, ${plate} !important; box-shadow: ${lift} !important; }
+${T(['#duel #watchers::after'])} { content: ""; position: absolute; inset: -3px; pointer-events: none; border: 11px solid transparent; border-image: ${tileFrame} 12 / 11px / 0 stretch; }
+${T(['#duel #watchers .users', '#duel #watchers .cell1'])} { background-color: transparent !important; }
+${T(['#duel #watchers .cell1'])} { box-shadow: inset 0 -1px 0 ${alpha(groove, 0.5)}, inset 0 -2px 0 ${alpha('#ffffff', 0.7)} !important; }
+${T(['#duel #watchers .watchers_txt'])} { color: ${t.muted} !important; text-shadow: 0 1px 0 #ffffff !important; }
 
 /* ---- Duel room: silver plates, bevelled ring, corner screws ---- */
 ${lobby()} { background-color: ${alpha(t.surface, 0.9)} !important; background-image: ${brushed} !important; }
@@ -178,6 +182,8 @@ ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_
 
 /* ---- Backdrop: brushed metal in place of the hex-caret wallpaper ---- */
 html body #dbte-skin-motif { background: ${brushed} !important; }
+/* Light themes keep DuelingBook's page cover at 90%: brush the cover itself so empty page reads as steel. */
+html body #circuit_cover { background-image: repeating-linear-gradient(0deg, ${alpha(ink, 0.04)} 0 1px, transparent 1px 2px, ${alpha('#ffffff', 0.25)} 2px 3px, transparent 3px 4px), linear-gradient(112deg, ${alpha(ink, 0.06)}, transparent 16%, ${alpha('#ffffff', 0.6)} 30%, transparent 44%, ${alpha(ink, 0.05)} 52%, transparent 58%, ${alpha('#ffffff', 0.45)} 68%, transparent 80%, ${alpha(ink, 0.06)}) !important; }
 html body #dbte-skin-motif::before { background: none !important; }
 
 /* ---- Scrollbars ---- */

@@ -47,7 +47,7 @@ const cyberDragon = (t) => {
   const photon = mix(t.accent, '#ffffff', 0.55);
 
   // The coil: tail enters bottom right, loops low, rises up the right edge into the neck.
-  const ctrl = [[1560, 950], [1460, 850], [1290, 838], [1170, 762], [1162, 640], [1272, 564], [1404, 530], [1462, 430], [1420, 336], [1350, 284], [1322, 262]];
+  const ctrl = [[1560, 950], [1470, 860], [1320, 846], [1252, 776], [1250, 664], [1330, 596], [1430, 566], [1500, 500], [1508, 430], [1484, 392], [1462, 376]];
   const sp = spine(ctrl, 30);
   const last = sp.length - 1;
   const width = (i) => {
@@ -57,6 +57,8 @@ const cyberDragon = (t) => {
   let body = '';
   let glints = '';
   let spikes = '';
+  const edgeL = [];
+  const edgeR = [];
   for (let i = 0; i < last; i++) {
     const a = sp[i];
     const b = sp[i + 1];
@@ -76,6 +78,8 @@ const cyberDragon = (t) => {
     const e = [b[0] + tx * 6, b[1] + ty * 6];
     const at = (p, w, f, fwd = 0) => [p[0] + nx * w * f + tx * fwd, p[1] + ny * w * f + ty * fwd];
     const chev = (f) => (1 - Math.abs(f)) * 12;
+    edgeL.push(at(a, w0, 1));
+    edgeR.push(at(a, w0, -1));
     const band = (f0, f1, c, o = 1) => {
       const lo = Math.max(-1, Math.min(1, f0));
       const hi = Math.max(-1, Math.min(1, f1));
@@ -146,9 +150,11 @@ const cyberDragon = (t) => {
   return `<style>
 @keyframes dbtefx-cd-glint { 0%, 12%, 100% { opacity: 0; } 4% { opacity: 0.6; } }
 @keyframes dbtefx-cd-jaw { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(-17deg); } }
+@keyframes dbtefx-cd-sweep { 0% { transform: translateX(-120px); } 55%, 100% { transform: translateX(560px); } }
 @keyframes dbtefx-cd-rear { 0%, 100% { transform: rotate(0deg) translate(0, 0); } 50% { transform: rotate(-3deg) translate(-4px, -6px); } }
 </style>
 <defs>${glow('dbtefx-cd-back', t.accent, 0.5, 0.5, 0.5, 0.32)}${glow('dbtefx-cd-core', photon, 0.5, 0.5, 0.5, 0.95)}${glow('dbtefx-cd-eye', t.accent, 0.5, 0.5, 0.5, 0.7)}
+<clipPath id="dbtefx-cd-tube"><path d="${poly([...edgeL, ...edgeR.reverse()])}"/></clipPath><linearGradient id="dbtefx-cd-spec" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-cd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent, 0.08)}"/><stop offset="1" stop-color="${deep}"/></linearGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-cd-sky)"/>
 <g fill="${t.accent}" fill-opacity="0.04">${rays}</g>
@@ -156,11 +162,12 @@ const cyberDragon = (t) => {
 <!--mid-->
 <g>${body}</g>
 <g>${glints}</g>
+<g clip-path="url(#dbtefx-cd-tube)"><g transform="rotate(24 1350 640)"><rect x="1060" y="200" width="150" height="900" fill="url(#dbtefx-cd-spec)" style="animation: dbtefx-cd-sweep 9s ease-in-out infinite;"/></g></g>
 <g>${spikes}</g>
 <circle cx="${n1(gx)}" cy="${n1(gy)}" r="70" fill="url(#dbtefx-cd-core)" ${anim('bloom', 3.5, 0, 'ease-in-out')}/>
 <g transform="translate(${n1(gx)} ${n1(gy)}) rotate(${gr})"><path d="M-44 0L-18 -30L18 -30L44 0L18 30L-18 30Z" fill="${steelHi}"/><path d="M-44 0L-18 30L18 30L44 0Z" fill="${steelMd}"/><path d="M-32 0L-13 -21L13 -21L32 0L13 21L-13 21Z" fill="${seam}"/>
 <circle r="17" fill="${t.accent}"/><circle cx="-5" cy="-6" r="6" fill="#ffffff" fill-opacity="0.85"/></g>
-<g transform="translate(${n1(sp[last][0] + 4)} ${n1(sp[last][1] - 4)}) rotate(4)"><g style="animation: dbtefx-cd-rear 7s ease-in-out infinite;">${head}</g></g>
+<g transform="translate(${n1(sp[last][0] + 4)} ${n1(sp[last][1] - 4)}) rotate(4) scale(0.78)"><g style="animation: dbtefx-cd-rear 7s ease-in-out infinite;">${head}</g></g>
 <!--near-->`;
 };
 

@@ -59,7 +59,7 @@ ${lit ? `<ellipse cx="20" cy="10" rx="19" ry="9" fill="${color}" opacity=".28"/>
   const LOBBY = ['#formats .format > .border', '#decklist > .border', '#mode > .border', '#filter > .border', '#host_bg > .border'];
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  const settings = T(SETTINGS.map((x) => `#content #settings_content > div.${x}`));
   const dialogBefore = T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}::before`));
   const dialogAfter = T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d}::after`));
   const dialogBody = T(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`));
@@ -113,7 +113,7 @@ ${T(['#main_menu .main_menu_circle'])} { border-color: ${t.muted} !important; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: radial-gradient(circle at 40% 35%, #ffffff, ${t.accent} 45%, ${mix(t.accent, t.bg, 0.5)}) !important; }
 
 /* ---- Buttons: dark steel slabs, chrome rim, rivet at each end, core light on hover ---- */
-${SEL.button}, ${T(['#content .combobox'])} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])}, ${T(['#content .combobox'])} {
   background:
     linear-gradient(90deg, ${t.border} 0 1px, ${t.text} 1px 2px, ${t.muted} 2px 4px, ${t.bg} 4px 5px, transparent 5px calc(100% - 5px), ${t.bg} calc(100% - 5px) calc(100% - 4px), ${t.muted} calc(100% - 4px) calc(100% - 2px), ${t.text} calc(100% - 2px) calc(100% - 1px), ${t.border} calc(100% - 1px)),
     linear-gradient(180deg, ${mix(t.raised, t.text, 0.1)}, ${t.raised} 45%, ${steel}) !important;
@@ -123,14 +123,14 @@ ${SEL.button}, ${T(['#content .combobox'])} {
   box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.32)}, inset 0 -1px 0 ${alpha(t.bg, 0.8)}, 0 2px 4px -1px ${alpha('#000000', 0.7)} !important;
 }
 ${T(['#content .combobox'])} { background: linear-gradient(180deg, ${mix(t.raised, t.text, 0.1)}, ${t.raised} 45%, ${steel}) !important; }
-${SEL.buttonHover}, ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])}, ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} {
   background:
     linear-gradient(90deg, ${t.border} 0 1px, #ffffff 1px 2px, ${t.accent} 2px 4px, ${t.bg} 4px 5px, transparent 5px calc(100% - 5px), ${t.bg} calc(100% - 5px) calc(100% - 4px), ${t.accent} calc(100% - 4px) calc(100% - 2px), #ffffff calc(100% - 2px) calc(100% - 1px), ${t.border} calc(100% - 1px)),
     linear-gradient(180deg, ${mix(t.raised, t.accent, 0.22)}, ${mix(t.raised, t.accent, 0.08)} 50%, ${steel}) !important;
   border-color: ${t.accent} !important;
   box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.4)}, inset 0 -2px 0 ${t.accent}, 0 0 8px -2px ${t.accent} !important;
 }
-${SEL.buttonDown} {
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} {
   background: linear-gradient(180deg, ${steel}, ${mix(t.raised, t.accent, 0.18)}) !important;
   border-color: ${t.accent} !important;
   box-shadow: inset 0 2px 5px ${alpha('#000000', 0.75)}, inset 0 -1px 0 ${t.accent} !important;
@@ -263,6 +263,8 @@ ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.9)}) !important; }
 ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .15em; }
+${T(['#deck_constructor .deck_bg', '#siding .deck_bg'])} { background-color: ${mix(t.surface, t.bg, 0.25)} !important; }
+${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 
 @media (prefers-reduced-motion: reduce) { html body .menu_btn .content::before { animation: none !important; } }
 

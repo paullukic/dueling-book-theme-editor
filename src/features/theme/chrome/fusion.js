@@ -1,6 +1,6 @@
-// Fusion: Polymerization. Violet Fusion frames whose edges run from violet
-// into pink and meet in the middle (two materials merging), a two-armed
-// vortex behind every panel, swirl ornaments on the corners.
+// Fusion: Polymerization in true Fusion violet. Frame edges run from deep violet
+// into pale violet and meet in a white seam (two materials merging); a two-armed
+// swirl marks the life points and chat. No pink: that belongs to Trap.
 
 import { mix } from '../../../lib/color.js';
 
@@ -16,12 +16,13 @@ export default (t, { SEL, sel, svg, alpha }) => {
   };
   const T = (list) => sel(list);
   const vi = t.accent;
-  const pk = t.accent2;
+  // True Fusion violet throughout; the second material is a paler violet, never pink.
+  const pk = mix(vi, '#ffffff', 0.32);
   const merge = mix(vi, pk, 0.5);
   const deep = mix(t.surface, t.bg, 0.4);
   const plum = mix(vi, t.bg, 0.62);
 
-  // A two-armed spiral: one arm violet, one pink, wound into one centre.
+  // A two-armed spiral: deep and pale violet arms wound into one centre.
   const arm = (cx, cy, turns, r0, rot) => {
     let d = '';
     const n = 70;
@@ -37,7 +38,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
     svg(size, size, `<g fill="none" stroke-linecap="round" opacity="${o}"><path d="${arm(size / 2, size / 2, 1.35, size * 0.46, 0)}" stroke="${vi}" stroke-width="${w}"/><path d="${arm(size / 2, size / 2, 1.35, size * 0.46, Math.PI)}" stroke="${pk}" stroke-width="${w}"/></g><circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.07}" fill="#ffffff" opacity="${o * 0.85}"/>`);
   // Big faint vortex for panel backgrounds.
   const vortex = (o) => `radial-gradient(circle at 50% 50%, ${alpha('#ffffff', o * 0.35)} 0 2%, transparent 30%), conic-gradient(from 0deg at 50% 50%, ${alpha(vi, o)}, transparent 22%, ${alpha(pk, o)} 50%, transparent 72%, ${alpha(vi, o)})`;
-  // Merging edge: violet from the left, pink from the right, white where they meet.
+  // Merging edge: deep violet from the left, pale violet from the right, white where they meet.
   const edge = `linear-gradient(90deg, ${vi}, ${merge} 42%, ${mix(merge, '#ffffff', 0.5)} 50%, ${merge} 58%, ${pk})`;
   const face = `linear-gradient(180deg, ${alpha('#ffffff', 0.06)}, transparent 35%, ${alpha(t.bg, 0.35)})`;
   // 9-slice: rounded merging frame (horizontal gradient survives stretching).
@@ -51,20 +52,23 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const lobby = (suffix = '') => T(LOBBY.map((x) => `#duel_room ${x}${suffix}`));
   const DECK = ['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg'];
   const SETTINGS = ['about_me', 'preferences', 'social_media', 'animation', 'profile_song', 'account', 'messages', 'duel_stats', 'profile_comments'];
-  const settings = T(SETTINGS.map((x) => `#settings .${x}`));
+  const settings = T(SETTINGS.map((x) => `#content #settings_content > div.${x}`));
   // Pop-up buttons (DuelingBook draws them as images): the primary one is the
-  // merge itself (violet into pink) under a glassy highlight; the secondary is violet glass.
+  // bevelled violet metal with a dark label; the secondary is dark violet steel.
   const FONT = 'Segoe UI,Arial,sans-serif';
   const popBtn = (label, wide, primary) => {
     const w = wide ? 234.85 : 153.4;
     const h = wide ? 78.5 : 78.47;
-    return svg(w, h, `<defs><linearGradient id="k"><stop offset="0" stop-color="${primary ? vi : mix(t.raised, vi, 0.25)}"/><stop offset=".5" stop-color="${primary ? merge : t.raised}"/><stop offset="1" stop-color="${primary ? pk : mix(t.raised, pk, 0.2)}"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="18" fill="url(#k)" stroke="${primary ? mix(merge, '#ffffff', 0.45) : mix(t.border, vi, 0.5)}" stroke-width="2"/><rect x="12" y="14" width="${w - 24}" height="${(h - 28) / 2}" rx="12" fill="url(#g)" opacity="${primary ? 0.8 : 0.35}"/><text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
+    const hi = primary ? mix(vi, '#ffffff', 0.45) : mix(t.raised, vi, 0.3);
+    const mid = primary ? vi : t.raised;
+    const lo = primary ? mix(vi, t.bg, 0.35) : deep;
+    return svg(w, h, `<defs><linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset=".48" stop-color="${mid}"/><stop offset=".52" stop-color="${mix(mid, lo, 0.4)}"/><stop offset="1" stop-color="${lo}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="8" fill="url(#k)" stroke="${primary ? mix(vi, t.bg, 0.55) : mix(t.border, vi, 0.5)}" stroke-width="2"/><path d="M12 13H${w - 12}" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"/><path d="M12 ${h - 13}H${w - 12}" stroke="${t.bg}" stroke-opacity=".55" stroke-width="2"/><text x="${w / 2}" y="40.5" dominant-baseline="central" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="26" fill="${primary ? t.accentText : t.text}">${label}</text>`);
   };
   const pop = (name) => T([`#content img[src*="/svg/${name}"]`, `#content img[data-src*="/svg/${name}"]`]);
   const titles = T(['#duel_room .format_txt', '#duel_room span.arial_black2', '#settings .admin_lbl']);
 
   const css = `
-/* ---- Menu tiles: merging Fusion frame over a slow two-colour vortex ---- */
+/* ---- Menu tiles: the Fusion frame on violet steel ---- */
 ${SEL.tile} {
   background: ${face}, linear-gradient(100deg, ${mix(t.raised, vi, 0.14)}, ${deep} 55%, ${mix(deep, pk, 0.1)}) !important;
   border-color: transparent !important;
@@ -73,11 +77,6 @@ ${SEL.tile} {
   overflow: hidden;
   box-shadow: 0 10px 24px -12px ${alpha('#000000', 0.9)} !important;
 }
-${T(['#main_menu .menu_btn .content::before'])} {
-  content: ""; position: absolute; left: 74%; top: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px; pointer-events: none;
-  background: ${U(swirl(150, 1, 13))} center / 100% no-repeat; opacity: .1; transition: transform 1.4s cubic-bezier(.2,.7,.2,1), opacity .3s;
-}
-${T(['#main_menu .menu_btn:hover .content::before'])} { transform: rotate(140deg); opacity: .3; }
 ${SEL.tileHover} {
   background: ${face}, linear-gradient(100deg, ${mix(t.raised, vi, 0.26)}, ${deep} 55%, ${mix(deep, pk, 0.18)}) !important;
   transform: none;
@@ -89,20 +88,20 @@ ${T(['#main_menu .menu_btn.dbte-small-menu .content::before'])} { content: none;
 ${T(['#main_menu .main_menu_circle .background'])} { background: ${edge} !important; }
 
 /* ---- Buttons: violet capsules with a merging underline; hover fuses them ---- */
-${SEL.button} {
+${SEL.button}, ${T(['#content #settings_content > div.button'])} {
   background: linear-gradient(0deg, ${vi} 0 1px, transparent 1px) left bottom / 50% 100% no-repeat, linear-gradient(0deg, ${pk} 0 1px, transparent 1px) right bottom / 50% 100% no-repeat, linear-gradient(180deg, ${mix(t.raised, vi, 0.2)}, ${t.raised} 55%, ${deep}) !important;
   border-color: ${mix(t.border, vi, 0.35)} !important;
   border-radius: 7px !important;
   color: ${t.text} !important;
   box-shadow: inset 0 1px 0 ${alpha('#ffffff', 0.14)}, 0 2px 6px -2px ${alpha('#000000', 0.8)} !important;
 }
-${SEL.buttonHover} {
+${SEL.buttonHover}, ${T(['#content #settings_content > div.button:hover'])} {
   background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%), linear-gradient(90deg, ${vi}, ${merge} 50%, ${pk}) !important;
   border-color: ${mix(merge, '#ffffff', 0.4)} !important;
   color: ${t.accentText} !important;
   box-shadow: 0 0 12px -2px ${alpha(merge, 0.9)} !important;
 }
-${SEL.buttonDown} { background: linear-gradient(90deg, ${mix(vi, t.bg, 0.2)}, ${mix(pk, t.bg, 0.2)}) !important; border-color: ${merge} !important; color: ${t.accentText} !important; box-shadow: inset 0 2px 5px ${alpha(t.bg, 0.8)} !important; }
+${SEL.buttonDown}, ${T(['#content #settings_content > div.button:active'])} { background: linear-gradient(90deg, ${mix(vi, t.bg, 0.2)}, ${mix(pk, t.bg, 0.2)}) !important; border-color: ${merge} !important; color: ${t.accentText} !important; box-shadow: inset 0 2px 5px ${alpha(t.bg, 0.8)} !important; }
 ${T(['#content .combobox'])} { background: linear-gradient(180deg, ${mix(t.raised, vi, 0.15)}, ${deep}) !important; border-color: ${mix(t.border, vi, 0.35)} !important; border-radius: 7px !important; }
 ${T(['#content .combobox:hover', '#content .combobox.combobox_selected'])} { border-color: ${pk} !important; box-shadow: 0 0 8px -2px ${merge} !important; }
 ${T(['#content .combobox .combobox_line'])} { background: linear-gradient(180deg, ${vi}, ${pk}) !important; }
@@ -121,7 +120,7 @@ ${T(['#content input[type=text]:focus', '#content input[type=password]:focus', '
 
 /* ---- Pop-ups: the Polymerization vortex behind a merging frame, swirl corners ---- */
 ${dlg()} {
-  background: ${U(swirl(300, 0.13, 26))} center / min(80%, 300px) no-repeat, ${face}, linear-gradient(180deg, ${mix(t.surface, vi, 0.12)}, ${deep}) !important;
+  background: ${face}, linear-gradient(180deg, ${mix(t.surface, vi, 0.12)}, ${deep}) !important;
   border-radius: 14px !important;
   box-shadow: 0 0 0 2px ${t.bg}, 0 0 34px -6px ${alpha(merge, 0.6)}, 0 24px 50px -14px ${alpha('#000000', 0.9)} !important;
 }
@@ -186,12 +185,12 @@ ${pop('no_btn')} { content: ${U(popBtn('No', false, false))} !important; }
 ${pop('cancel_btn')} { content: ${U(popBtn('Cancel', true, false))} !important; }
 ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_btn:hover img', '#content .cancel_btn:hover img'])} { filter: drop-shadow(0 0 6px ${alpha(merge, 0.9)}) !important; }
 ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .3em; }
+${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${vi}, ${pk}) !important; border-radius: 99px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: linear-gradient(180deg, ${mix(vi, '#ffffff', 0.3)}, ${mix(pk, '#ffffff', 0.3)}) !important; }
 
-@media (prefers-reduced-motion: reduce) { html body .menu_btn .content::before { transition: none !important; transform: none !important; } }
 `;
   return `html body { ${[...ids].map(([s, id]) => `${id}: ${url(s)};`).join(' ')} }
 ${css.replace(/\/\*[^*]*\*\//g, '').replace(/\n\s+/g, '\n')}`;
