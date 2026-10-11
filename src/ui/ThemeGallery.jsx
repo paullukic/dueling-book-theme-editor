@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { updateSettings } from '../lib/settings';
 import { toggleId } from '../lib/favourites';
 import { PRESETS, PRESET_GROUPS, presetById } from '../features/theme/presets';
@@ -12,60 +12,53 @@ const known = (ids) => ids.map(presetById).filter(Boolean);
 
 const toggleFavourite = (s, id) => updateSettings({ themeFavourites: toggleId(s.themeFavourites, id) });
 
-// The theme in use, big, with what can be done to it.
+// The theme in use, as one compact bar: swatch, name, and what can be done to it.
 export const ThemeHero = ({ s, base, edited, onPick }) => {
   const on = s.themeEnabled;
   const fav = s.themeFavourites.includes(base.id);
-  const group = PRESET_GROUPS.find((g) => g.id === base.group);
+  const turnOn = edited ? 'Turn on your colours' : `Turn on ${base.name}`;
   let status = 'Theme is off: DuelingBook looks as usual.';
-  let shown = 'Theme is off';
-  if (on) {
-    status = edited ? `Custom colours, based on ${base.name}.` : `Using ${base.name}.`;
-    shown = edited ? 'Custom colours' : (group && group.label) || '';
-  }
+  if (on) status = edited ? `Custom colours, based on ${base.name}.` : `Using ${base.name}.`;
+  let detail = edited ? `Last used: your colours, based on ${base.name}` : `Last used: ${base.name}`;
+  if (on) detail = edited ? `Custom colours, based on ${base.name}` : base.blurb;
   return (
     <section className={`theme-hero${on ? '' : ' is-off'}`} data-place="theme" aria-label="Current theme">
-      <div className="theme-hero-art" style={on ? CHIP_LOOKS[base.id].style : undefined}>
-        {on && <img className="theme-hero-icon" src={CHIP_LOOKS[base.id].icon} alt="" />}
-        <div className="theme-hero-text">
-          <h2>{on ? base.name : 'DuelingBook’s own look'}</h2>
-          <p>{on ? base.blurb : 'No theme. Pick one below to restyle every screen.'}</p>
-        </div>
+      <span className="theme-hero-swatch" style={on ? CHIP_LOOKS[base.id].style : undefined} aria-hidden="true">
+        {on && <img src={CHIP_LOOKS[base.id].icon} alt="" />}
+      </span>
+      <div className="theme-hero-text" title={detail}>
+        <h2>{on ? base.name : 'Theme is off'}</h2>
+        <p aria-hidden="true">{detail}</p>
       </div>
-      <div className="theme-hero-bar">
-        <span className="theme-hero-status" aria-hidden="true">
-          {shown}
-        </span>
-        <span className="sr-only" aria-live="polite">
-          {status}
-        </span>
-        {on && edited && (
-          <button type="button" className="link-btn" onClick={() => onPick(base)}>
-            Reset
+      <span className="sr-only" aria-live="polite">
+        {status}
+      </span>
+      {on && edited && (
+        <button type="button" className="link-btn" onClick={() => onPick(base)}>
+          Reset
+        </button>
+      )}
+      {on ? (
+        <>
+          <button type="button" className="btn btn-quiet btn-sm" onClick={() => updateSettings({ themeEnabled: false })}>
+            Turn off
           </button>
-        )}
-        {on ? (
-          <>
-            <button type="button" className="btn btn-quiet btn-sm" onClick={() => updateSettings({ themeEnabled: false })}>
-              Turn off
-            </button>
-            <button
-              type="button"
-              className="icon-btn star-btn"
-              aria-pressed={fav}
-              aria-label={fav ? `Remove ${base.name} from favourites` : `Add ${base.name} to favourites`}
-              title={fav ? 'Remove from favourites' : 'Add to favourites'}
-              onClick={() => toggleFavourite(s, base.id)}
-            >
-              <StarIcon filled={fav} />
-            </button>
-          </>
-        ) : (
-          <button type="button" className="btn btn-sm" onClick={() => updateSettings({ themeEnabled: true })}>
-            {edited ? 'Turn on your colours' : `Turn on ${base.name}`}
+          <button
+            type="button"
+            className="icon-btn star-btn"
+            aria-pressed={fav}
+            aria-label={fav ? `Remove ${base.name} from favourites` : `Add ${base.name} to favourites`}
+            title={fav ? 'Remove from favourites' : 'Add to favourites'}
+            onClick={() => toggleFavourite(s, base.id)}
+          >
+            <StarIcon filled={fav} />
           </button>
-        )}
-      </div>
+        </>
+      ) : (
+        <button type="button" className="btn btn-sm" aria-label={turnOn} title={turnOn} onClick={() => updateSettings({ themeEnabled: true })}>
+          Turn on
+        </button>
+      )}
     </section>
   );
 };
@@ -133,6 +126,8 @@ export const ThemeGallery = ({ s, isPressed, onPick }) => {
   const { galleryFilter, galleryQuery: query } = useNav();
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
+  const pillsRef = useRef(null);
+  const [pillEdges, setPillEdges] = useState('');
   const favourites = known(s.themeFavourites);
   const recent = known(s.themeRecent);
   const filter = galleryFilter === 'all' || galleryFilter === 'favourites' || galleryFilter === 'recent' || GROUPS.some((g) => g.id === galleryFilter) ? galleryFilter : 'all';
@@ -159,6 +154,37 @@ export const ThemeGallery = ({ s, isPressed, onPick }) => {
       ...GROUPS.map((g) => ({ id: g.id, title: g.label, items: PRESETS.filter((p) => p.group === g.id) })),
     ].filter(Boolean);
   }
+
+  // The category row scrolls sideways once it outgrows the panel: fades show
+  // there is more, the mouse wheel scrolls it, and the active pill stays in view.
+  const measurePills = () => {
+    const el = pillsRef.current;
+    if (!el) return;
+    const left = el.scrollLeft > 2;
+    const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 2;
+    setPillEdges(`${left ? ' more-left' : ''}${right ? ' more-right' : ''}`);
+  };
+  useEffect(() => {
+    const el = pillsRef.current;
+    if (!el) return undefined;
+    const active = el.querySelector('[aria-pressed="true"]');
+    if (active) {
+      const pad = 28;
+      if (active.offsetLeft - pad < el.scrollLeft) el.scrollLeft = active.offsetLeft - pad;
+      else if (active.offsetLeft + active.offsetWidth + pad > el.scrollLeft + el.clientWidth) {
+        el.scrollLeft = active.offsetLeft + active.offsetWidth + pad - el.clientWidth;
+      }
+    }
+    measurePills();
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || el.scrollWidth <= el.clientWidth) return;
+      const before = el.scrollLeft;
+      el.scrollLeft += e.deltaY;
+      if (el.scrollLeft !== before) e.preventDefault();
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [filter]);
 
   const setQuery = (q) => setNav({ galleryQuery: q });
   const chips = () => [...scrollRef.current.querySelectorAll('.preset-chip')];
@@ -256,7 +282,7 @@ export const ThemeGallery = ({ s, isPressed, onPick }) => {
           </button>
         )}
       </div>
-      <div className="pills" role="group" aria-label="Theme categories">
+      <div className={`pills${pillEdges}`} ref={pillsRef} role="group" aria-label="Theme categories" onScroll={measurePills}>
         {pills.map((p) => (
           <button key={p.id} type="button" className="pill" aria-pressed={filter === p.id} onClick={() => setNav({ galleryFilter: p.id })}>
             {p.star && <StarIcon filled={filter === p.id} />}

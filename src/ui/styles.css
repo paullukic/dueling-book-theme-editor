@@ -984,7 +984,7 @@ textarea.field {
 .preset-chips {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 5px;
 }
 
 .preset-chip {
@@ -992,11 +992,11 @@ textarea.field {
   display: flex;
   align-items: flex-end;
   min-width: 0;
-  height: 58px;
-  padding: 6px 7px 9px;
+  height: 46px;
+  padding: 5px 6px 7px;
   border: 1px solid var(--line-soft);
   border-radius: var(--radius-sm);
-  background-size: 160px auto;
+  background-size: 140px auto;
   color: var(--p-text);
   text-align: left;
   cursor: pointer;
@@ -1025,9 +1025,9 @@ textarea.field {
 
 .preset-chip-icon {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 22px;
+  top: 5px;
+  right: 5px;
+  width: 18px;
   height: auto;
 }
 
@@ -1035,9 +1035,9 @@ textarea.field {
   display: -webkit-box;
   overflow: hidden;
   padding-right: 18px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 650;
-  line-height: 1.15;
+  line-height: 1.12;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
@@ -1469,32 +1469,31 @@ textarea.field {
 }
 
 .theme-hero {
-  margin: 10px 0 2px;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  margin: 8px 0 2px;
+  padding: 8px 4px 8px 8px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--plate-sunk);
 }
 
-.theme-hero-art {
+.theme-hero-swatch {
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 86px;
-  padding: 12px 54px 13px 12px;
-  background-size: 260px auto;
-  color: var(--p-text, var(--ink));
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 7px;
+  background-size: 150px auto;
 }
 
-/* Keeps the name readable over busy artwork, in the theme background colour. */
-.theme-hero-art::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--p-bg, transparent) 80%, transparent), transparent 85%);
-}
-
-.theme-hero-art::after {
+.theme-hero-swatch::after {
   content: "";
   position: absolute;
   left: 0;
@@ -1504,63 +1503,44 @@ textarea.field {
   background: var(--p-accent, transparent);
 }
 
-.theme-hero-icon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
+.theme-hero-swatch img {
+  width: 22px;
   height: auto;
 }
 
+.theme-hero.is-off .theme-hero-swatch {
+  border: 1px dashed var(--line);
+  background: transparent;
+}
+
 .theme-hero-text {
-  position: relative;
+  flex: 1;
   min-width: 0;
+}
+
+.theme-hero-text h2,
+.theme-hero-text p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .theme-hero-text h2 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 680;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  text-shadow: 0 1px 2px var(--p-bg, transparent);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.25;
+  color: var(--ink);
 }
 
 .theme-hero-text p {
-  display: -webkit-box;
-  margin: 3px 0 0;
-  overflow: hidden;
-  font-size: 12px;
-  line-height: 1.35;
-  text-shadow: 0 1px 2px var(--p-bg, transparent);
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.theme-hero.is-off .theme-hero-art {
-  min-height: 0;
-  padding-right: 12px;
-}
-
-.theme-hero.is-off .theme-hero-text p {
+  margin: 2px 0 0;
+  font-size: 11.5px;
   color: var(--ink-muted);
 }
 
-.theme-hero-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 4px 4px 4px 12px;
-  border-top: 1px solid var(--line-soft);
-  background: var(--plate);
-}
-
-.theme-hero-status {
-  flex: 1;
-  min-width: 0;
-  font-size: 12px;
-  color: var(--ink-muted);
+.theme-hero .btn-sm {
+  flex: none;
 }
 
 .star-btn[aria-pressed="true"] {
@@ -1571,21 +1551,46 @@ textarea.field {
   padding: 8px 0 4px;
 }
 
+/* One row that scrolls sideways once there are more categories than fit. */
 .pills {
   display: flex;
-  flex-wrap: wrap;
   gap: 4px;
-  margin: 8px 0;
+  margin: 5px -14px;
+  padding: 3px 14px;
+  overflow-x: auto;
+  scroll-padding: 0 28px;
+  scrollbar-width: none;
+}
+
+.pills::-webkit-scrollbar {
+  display: none;
+}
+
+.pills.more-right {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+}
+
+.pills.more-left {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 36px);
+  mask-image: linear-gradient(to right, transparent, #000 36px);
+}
+
+.pills.more-left.more-right {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent);
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  flex: none;
   height: 25px;
   padding: 0 9px;
   border: 1px solid var(--line);
   border-radius: 999px;
+  white-space: nowrap;
   background: transparent;
   color: var(--ink-muted);
   font-size: 11.5px;
@@ -1619,9 +1624,9 @@ textarea.field {
   color: var(--ink-muted);
 }
 
-/* About four rows of chips, so the theme options below stay one short scroll away. */
+/* About six rows of chips, so the theme options below stay one short scroll away. */
 .gallery-scroll {
-  max-height: 282px;
+  max-height: 328px;
   margin: 0 -6px;
   padding: 6px 6px 12px;
   overflow-y: auto;
@@ -1659,12 +1664,12 @@ textarea.field {
 
 .preset-star {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  right: 4px;
+  bottom: 7px;
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 0;
   border-radius: 5px;
@@ -1685,6 +1690,6 @@ textarea.field {
 }
 
 .preset-star svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
