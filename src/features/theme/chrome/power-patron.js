@@ -15,6 +15,15 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const glass = mix(t.raised, t.surface, 0.5);
   const seam = `linear-gradient(90deg, transparent 4%, ${alpha(ice, 0.7)} 25% 75%, transparent 96%) left bottom / 100% 1px no-repeat`;
 
+  // The field is greyed to ice, but the Pendulum scale gems keep their own blue and red:
+  // drawn again over the field, at the gem boxes of DuelingBook's field_zones art (1024 x 640).
+  const gem = (x, y, c, flip) => {
+    const p = (px, py) => `${(flip ? x + 50 - px : x + px).toFixed(1)},${(y + py).toFixed(1)}`;
+    const [l, tp, r, b, m] = [p(1.2, 19), p(18, 1.6), p(47.6, 19), p(18, 36.85), p(18, 19)];
+    return `<path d="M${l}L${tp}L${m}Z" fill="${mix(c, '#ffffff', 0.45)}"/><path d="M${tp}L${r}L${m}Z" fill="${mix(c, '#ffffff', 0.15)}"/><path d="M${l}L${b}L${m}Z" fill="${c}"/><path d="M${r}L${b}L${m}Z" fill="${mix(c, '#000000', 0.3)}"/><path d="M${l}L${tp}L${r}L${b}Z" fill="none" stroke="${mix(c, '#000000', 0.45)}" stroke-width="0.8"/>`;
+  };
+  const [gemBlue, gemRed] = ['#2a7fe6', '#e23a55'];
+  const gems = (lx, rx, top, bottom) => svgUrl(svg(1024, 640, `${gem(lx, bottom, gemBlue, true)}${gem(rx, bottom, gemRed, false)}${gem(lx, top, gemRed, true)}${gem(rx, top, gemBlue, false)}`));
   // Lace: rows of slotted piercings, faint gold.
   const laceTex = svg(24, 24, `<path d="M0 12L12 0L24 12L12 24Z" fill="none" stroke="${lace}" stroke-opacity="0.07"/><ellipse cx="12" cy="12" rx="1.2" ry="2.6" fill="${lace}" fill-opacity="0.12"/>`);
 
@@ -109,6 +118,9 @@ ${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(c
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 35%, ${mix(t.opp, '#ffffff', 0.3)}, ${t.opp} 60%, ${mix(t.opp, t.bg, 0.2)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.accentText} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.5)} !important; }
 ${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: grayscale(1) brightness(1.5) drop-shadow(0 0 2px ${alpha(ice, 0.45)}) !important; }
+${on(sel(['#duel .duel_frame:has(> img.field_zones[src$="/field_zones2.svg"])', '#duel .duel_frame:has(> img.field_zones[src$="/field_zones.svg"])']), 'after')} { content: ""; position: absolute; inset: 0; pointer-events: none; background: center / 100% 100% no-repeat; }
+${on(sel(['#duel .duel_frame:has(> img.field_zones[src$="/field_zones2.svg"])']), 'after')} { background-image: ${gems(308, 680, 87, 458)}; }
+${on(sel(['#duel .duel_frame:has(> img.field_zones[src$="/field_zones.svg"])']), 'after')} { background-image: ${gems(227, 760, 132, 412)}; }
 ${sel(['#duel .phase span'])} { color: ${iceHi} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${obsidian}) !important; box-shadow: inset 0 0 0 1px ${iceDim}, inset 0 0 0 4px ${alpha(obsidian, 0.9)}, inset 0 -2px 0 4px ${alpha(ice, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ice}, 0 0 0 4px ${obsidian}, 0 0 0 5px ${alpha(ice, 0.45)} !important; }
@@ -149,6 +161,9 @@ ${popCss}
 /* Front page: the halo's thorn rays clear out of the Welcome / Forum / Rules links, the eye and its gems drop out. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-linkhole { display: inline; }
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-eye { display: none; }
+/* Main menu: the eye, its scrolls and its halo shrink into the space right of the feed's time and Reply column
+   (eye centre viewBox 1310 300 -> 1433 405, screen x ~1820-2040). */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-sigil { transform-origin: 1310px 300px; transform: translate(122.7px, 104.7px) scale(0.45); }
 /* Duel: the sigil's right swirl clears the avatar and chat column's edge. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-sigil { transform: translate(21px, 0); }
 `;

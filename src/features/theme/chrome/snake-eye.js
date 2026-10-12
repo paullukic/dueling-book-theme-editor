@@ -187,7 +187,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
 ${sel(['#duel #lifepoints2 .life_border::before'])} { left: -22px; width: 36px; height: 36px; margin-top: -16px; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 999px !important; }
 ${SEL.lifeSelf} { background: var(--se-scales), linear-gradient(180deg, ${alpha('#ffe0a0', 0.55)}, ${alpha('#ffc070', 0.18)} 45%, transparent 55%), linear-gradient(90deg, #ffa040, #d8721e) !important; }
-${SEL.lifeOpp} { background: var(--se-scales), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: var(--se-scales), linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--se-scales), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
 
@@ -237,5 +237,6 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.accent}, ${t.accent2} 50%, ${t.accent}) !important; border-radius: 99px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${t.accent}, ${t.accent2} 50%, ${t.accent}) !important; }
 @media (prefers-reduced-motion: reduce) { html body #content *::before { transition: none !important; } }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #ecdcc8 !important; }
 `;
 };

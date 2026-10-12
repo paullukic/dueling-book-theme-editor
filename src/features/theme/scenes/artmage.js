@@ -156,9 +156,8 @@ const artmage = (t) => {
   // left gutter, one framed study in the right.
   const wood = mix(gold, '#000000', 0.5);
   const easel = `<g stroke="${wood}" stroke-width="5" stroke-linecap="round"><path d="M148 700L112 826M148 700L184 826"/><path d="M148 712V826" stroke-opacity="0.6"/><path d="M104 778H192" stroke-width="6"/></g>
-<rect x="114" y="714" width="68" height="60" fill="url(#dbtefx-am-s1)"/>
-<g fill="none" stroke-linecap="round">${[t.accent, gold, t.opp].map((c, k) => `<path d="M119 ${758 - k * 8}C134 ${736 - k * 7} 156 ${770 - k * 7} 177 ${740 - k * 7}" stroke="${c}" stroke-width="4" stroke-opacity="0.8"/>`).join('')}</g>
-<circle cx="168" cy="726" r="5" fill="${mix(gold, '#ffffff', 0.4)}"/>
+<g opacity="0.6"><rect x="114" y="714" width="68" height="60" fill="url(#dbtefx-am-s1)"/>
+<g fill="none" stroke-linecap="round" stroke-width="3" stroke-opacity="0.35">${[[118, 722, t.accent], [130, 734, gold], [116, 748, t.opp], [138, 756, gold], [124, 764, t.accent], [150, 728, t.opp], [156, 744, t.accent], [146, 762, t.opp]].map(([x, y, c]) => `<path d="M${x} ${y}l${18 + (x % 7)} -5" stroke="${c}"/>`).join('')}</g></g>
 <rect x="112" y="712" width="72" height="64" fill="none" stroke="${mix(gold, '#000000', 0.2)}" stroke-width="4"/>`;
 
   let panels = '';

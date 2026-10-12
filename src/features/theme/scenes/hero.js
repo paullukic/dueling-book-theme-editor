@@ -94,6 +94,7 @@ const hero = (t) => {
 @keyframes dbtefx-hr-wisp { 0% { transform: translateX(-160px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { transform: translateX(220px); opacity: 0; } }</style>
 <defs><linearGradient id="dbtefx-hr-haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${haze}" stop-opacity="0"/><stop offset="1" stop-color="${haze}" stop-opacity="0.85"/></linearGradient>
 <linearGradient id="dbtefx-hr-beam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.32"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
+<linearGradient id="dbtefx-hr-dim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.bg}" stop-opacity="0"/><stop offset="0.15" stop-color="${t.bg}" stop-opacity="0.2"/></linearGradient>
 <pattern id="dbtefx-hr-grid" width="12" height="16" patternUnits="userSpaceOnUse"><rect x="3" y="4" width="5" height="7" fill="${mix(t.bg, t.surface, 0.3)}"/></pattern>
 <pattern id="dbtefx-hr-lit" width="84" height="144" patternUnits="userSpaceOnUse"><g fill="${t.warning}" fill-opacity="0.85">${litTile}</g></pattern>
 <pattern id="dbtefx-hr-grid-m" href="#dbtefx-hr-grid" patternTransform="scale(1.6)"/><pattern id="dbtefx-hr-lit-m" href="#dbtefx-hr-lit" patternTransform="scale(1.6)"/>
@@ -109,7 +110,8 @@ ${cardArt(t, { id: 'dbtefx-hr-neos', card: CARDS.neos, x: cx - 270, y: 50, w: 48
 <!--near-->
 ${back}${middle}
 ${front}
-${switches}`;
+${switches}
+<rect x="0" y="560" width="440" height="${H - 560}" fill="url(#dbtefx-hr-dim)"/>`;
 };
 
 export default hero;

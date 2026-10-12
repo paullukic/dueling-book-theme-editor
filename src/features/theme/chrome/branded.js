@@ -177,7 +177,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: ${svgUrl(shackle(t, kit))} center / contain no-repeat;
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, '#8a5418', 0.5)}, ${mix(t.self, t.warning, 0.3)} 60%, #a8834f) !important; box-shadow: inset -3px 0 0 ${t.accent}, inset 0 -2px 0 ${alpha('#5a2a08', 0.5)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, '#8a5418', 0.5)}, ${mix(t.self, t.warning, 0.3)} 60%, #a8834f) !important; box-shadow: inset -3px 0 0 ${alpha('#5a2a08', 0.85)}, inset 0 -2px 0 ${alpha('#5a2a08', 0.5)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(120deg, transparent 30%, ${alpha('#ffffff', 0.35)} 31%, transparent 36%, transparent 62%, ${alpha('#ffffff', 0.3)} 63%, transparent 67%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--br-cracks), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
@@ -234,5 +234,8 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bd-herogrp, .dbtefx-bd-edge, .dbtefx-bd-top) { display: none; }
+/* Main menu: the dragon sinks below the status filter; the top shard would stand beside it. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-herogrp { transform: translateY(80px); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-top { display: none; }
 `;
 };

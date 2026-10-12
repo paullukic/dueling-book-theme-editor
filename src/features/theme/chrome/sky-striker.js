@@ -178,9 +178,13 @@ ${sel(['#duel .phase.active::before'])} {
 }
 ${sel(['#duel .phase span'])} { color: #d6e4f0 !important; text-shadow: 0 1px 2px ${deep} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 1px 1px 0 ${deep} !important; }
-${turnBg} { background: ${red} !important; border-radius: 0 !important; clip-path: ${cut(9)}; }
-${turnInner} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(red, deep, 0.4)}, ${deep}) !important; border-radius: 0 !important; clip-path: ${cut(8)}; }
-${turnTxt} { color: ${t.text} !important; text-shadow: ${hudText(red)} !important; }
+/* TURN in the turn owner's colour: red is the bottom player, blue (under it) the top one. */
+${turnBg} { background: ${t.self} !important; border-radius: 0 !important; clip-path: ${cut(9)}; }
+${T(['#duel #turn:has(> .red[style*="none"]) .background'])} { background: ${t.opp} !important; }
+${turnInner} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(t.raised, deep, 0.5)}, ${deep}) !important; border-radius: 0 !important; clip-path: ${cut(8)}; }
+${T(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${mix(t.self, deep, 0.75)} 55%, ${mix(t.self, deep, 0.35)}) !important; border-radius: 0 !important; clip-path: ${cut(8)}; box-shadow: none !important; }
+${T(['#duel #turn .blue'])} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${mix(t.opp, deep, 0.75)} 55%, ${mix(t.opp, deep, 0.35)}) !important; border-radius: 0 !important; clip-path: ${cut(8)}; box-shadow: none !important; }
+${turnTxt} { color: #ffffff !important; text-shadow: -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 1px 1px 0 ${deep}, 2px 2px 0 ${deep} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${cyan}, ${alpha(cyan, 0.35)} 40%, ${alpha(cyan, 0.35)} 60%, ${cyan}) !important; border-radius: 0 !important; filter: none; }
 ${ring('')} { background: var(--dbte-ss-scan), var(--dbte-ss-hex), ${alpha(t.surface, 0.92)} !important; border-radius: 0 !important; box-shadow: inset 0 0 30px ${alpha(cyan, 0.08)} !important; }

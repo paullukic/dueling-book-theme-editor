@@ -59,7 +59,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
     const h = 78.5;
     const fill = primary ? 'url(#g)' : robe;
     const ink = primary ? deep : t.text;
-    return svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset="0.5" stop-color="${gold}"/><stop offset="1" stop-color="${brown}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="6" fill="${fill}" stroke="${primary ? brown : gold}" stroke-width="3"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="3" fill="none" stroke="${primary ? alpha('#ffffff', 0.6) : piping}" stroke-width="1.2"/><g transform="translate(20 ${h / 2})">${star(6, primary ? deep : gold)}</g><g transform="translate(${w - 20} ${h / 2})">${star(6, primary ? deep : gold)}</g><text x="${w / 2}" y="${h / 2 + 1}" dominant-baseline="central" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-weight="700" font-size="27" letter-spacing="1" fill="${ink}">${label}</text></svg>`);
+    return svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset="0.5" stop-color="${gold}"/><stop offset="1" stop-color="${brown}"/></linearGradient></defs><rect x="6" y="10" width="${w - 12}" height="${h - 20}" rx="6" fill="${fill}" stroke="${primary ? brown : gold}" stroke-width="3"/><rect x="11" y="15" width="${w - 22}" height="${h - 30}" rx="3" fill="none" stroke="${primary ? alpha('#ffffff', 0.6) : piping}" stroke-width="1.2"/><g transform="translate(20 ${h / 2})">${star(6, primary ? deep : gold)}</g><g transform="translate(${w - 20} ${h / 2})">${star(6, primary ? deep : gold)}</g><text x="${w / 2}" y="${h / 2 + 1}" dominant-baseline="central" text-anchor="middle" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-weight="800" font-size="26" letter-spacing="0.5" fill="${ink}">${label}</text></svg>`);
   };
   const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
 
@@ -157,7 +157,7 @@ ${sel(['#chats .chat .black_line'])} { background: ${metal} !important; }
 ${SEL.life} { border-image: var(--dbte-am-bevel) 16 / 5px stretch !important; border-radius: 0 !important; box-shadow: 0 4px 10px ${alpha('#000000', 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, transparent 50%, ${alpha(deep, 0.4)}), linear-gradient(90deg, ${t.opp} 40%, ${mix(t.opp, '#2f7fc0', 0.4)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${deep}; paint-order: stroke fill; text-shadow: none !important; }
 
@@ -223,7 +223,7 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-easel, .d
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-am-wing { opacity: 0.6; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-am-wing { display: inline; }
 /* On the front page the masterwork hangs lower, clear of the Welcome / Forum / Rules links; the brush handle would cross them. */
-html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-am-gallery { transform: translateY(94px); }
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-am-gallery { transform: translateY(134px); }
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-am-brush { display: none; }
 `;
 };

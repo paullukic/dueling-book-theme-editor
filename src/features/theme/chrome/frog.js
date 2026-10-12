@@ -248,6 +248,6 @@ html body #dbte-skin-fx .dbtefx-fr-moonup { transform-origin: 1100px 110px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(350px, 30px) scale(0.75); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-pond { transform: translateX(420px); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-glintgrp { transform: translateX(350px); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, 16px) scale(0.7); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, -46px) scale(0.7); }
 `;
 };

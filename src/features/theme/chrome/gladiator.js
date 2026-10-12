@@ -122,10 +122,12 @@ ${SEL.life} { border-color: ${bronze} !important; border-radius: 3px !important;
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.18)}), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, '#000000', 0.22)}, ${t.self} 70%, ${mix(t.self, '#ffffff', 0.12)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.2)} 2px, transparent 50%, ${alpha('#000000', 0.16)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.16)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
+${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(135deg, ${alpha(bronze, 0.28)} 0 2px, transparent 2px 7px), linear-gradient(180deg, ${mix(bronzeDeep, '#000000', 0.3)}, ${mix(bronzeDeep, '#000000', 0.6)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; z-index: 3; left: -26px; top: -1px; width: 32px; height: 32px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${bronzeLit}, ${bronze}, ${bronzeDeep}, ${bronze}, ${bronzeLit}, ${bronzeDeep}, ${bronzeLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
+${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 210deg, #fff0b8, #e0b040, #9a6a18, #e0b040, #fff0b8, #9a6a18, #fff0b8) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha('#e0b040', 0.8)}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${bronzeDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${stone} 30%, ${stoneDeep}) !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(banner, '#ffffff', 0.12)} 25%, ${bannerDeep}) !important; box-shadow: 0 0 14px ${alpha(banner, 0.85)}; }

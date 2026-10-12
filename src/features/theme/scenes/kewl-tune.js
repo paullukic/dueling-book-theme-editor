@@ -73,7 +73,7 @@ ${beam(1270, 12, 'a', 9, 0)}${beam(1430, -10, 'b', 11, 3)}
 <!--mid-->
 <g transform="translate(80 0)">
 <g transform="translate(1258 520) scale(0.86) translate(-1260 -520)">
-<path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="30" stroke-opacity="0.16"/>
+<path class="dbtefx-kt-halo" d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="30" stroke-opacity="0.16"/>
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="12" stroke-opacity="0.45" style="animation: dbtefx-kt-beat 0.5s ease-out infinite;"/>
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="5"/>
 <path d="${arch}" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>

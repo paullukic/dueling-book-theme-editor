@@ -46,6 +46,7 @@ ${CARD_ART_KEYFRAMES}
 <radialGradient id="dbtefx-dt-neb2" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${jade}" stop-opacity="0.16"/><stop offset="1" stop-color="${jade}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dt-neb3" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${silk}" stop-opacity="0.13"/><stop offset="1" stop-color="${silk}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dt-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0.3" stop-color="${goldHi}" stop-opacity="0.9"/><stop offset="0.5" stop-color="${gold}" stop-opacity="0.45"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-dt-ring" cx="0.5" cy="0.5" r="0.5"><stop offset="0.46" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.53" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="0.6" stop-color="${goldHi}" stop-opacity="0.75"/><stop offset="0.8" stop-color="${gold}" stop-opacity="0.25"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-dt-moon" cx="0.42" cy="0.4" r="0.6"><stop offset="0" stop-color="${mix(t.surface, t.bg, 0.4)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.5)}"/></radialGradient>
 </defs>
 <ellipse cx="1340" cy="430" rx="460" ry="420" fill="url(#dbtefx-dt-neb1)"/>
@@ -57,7 +58,8 @@ ${cardArt(t, { id: 'dbtefx-dt-hero', card: CARDS.faimena, x: 1060, y: 150, w: 46
 <g transform="translate(1446 440) scale(0.74) translate(-1480 -440)">
 <circle cx="${cx}" cy="${cy}" r="140" fill="url(#dbtefx-dt-sun)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out infinite;"/>
 <path d="${rays}" fill="${goldHi}" fill-opacity="0.5" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out -1.5s infinite;"/>
-<circle cx="${cx}" cy="${cy}" r="46" fill="url(#dbtefx-dt-moon)"/>
+<circle cx="${cx}" cy="${cy}" r="84" fill="url(#dbtefx-dt-ring)"/>
+<circle cx="${cx}" cy="${cy}" r="46" fill="url(#dbtefx-dt-moon)" fill-opacity="0.7"/>
 <circle cx="${cx}" cy="${cy}" r="46" fill="none" stroke="${goldHi}" stroke-width="2" stroke-opacity="0.9"/>
 <path d="${sparkle(fx, fy, 24)}" fill="#ffffff" style="animation: dbtefx-pulse 3.5s ease-in-out infinite;"/>
 <circle cx="${fx}" cy="${fy}" r="7" fill="#ffffff"/>

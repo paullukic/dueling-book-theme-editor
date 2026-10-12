@@ -46,7 +46,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const beam = (a) => `linear-gradient(105deg, transparent 38%, ${alpha(moon, a)} 46%, ${alpha(moon, a * 0.4)} 52%, transparent 58%)`;
   // Power-meter slats over the left of the bar only: the numerals sit in the right 60px of its 151.
   const slats = `repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px) 0 0 / 90px 100% no-repeat`;
-  const frame = (drop = 5) => `inset 0 0 0 1px ${alpha(gold, 0.9)}, inset 0 0 0 3px ${night}, 0 0 0 2px ${night}, ${drop}px ${drop}px 0 2px ${red}`;
+  const frame = (drop = 5, tab = red) => `inset 0 0 0 1px ${alpha(gold, 0.9)}, inset 0 0 0 3px ${night}, 0 0 0 2px ${night}, ${drop}px ${drop}px 0 2px ${tab}`;
 
   const T = (list) => sel(list);
   const titles = T(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#content .subtitle']);
@@ -72,7 +72,7 @@ ${SEL.tile} {
   background: var(--dbte-hero-sky) 0 100% / auto 20% repeat-x, var(--dbte-hero-glow), var(--dbte-hero-dots), linear-gradient(180deg, ${mix(t.raised, t.opp, 0.85)}, ${t.surface} 70%) !important;
   border-color: ${night} !important;
   border-radius: 4px !important;
-  box-shadow: ${frame(5)} !important;
+  box-shadow: ${frame(5, alpha(red, 0.5))} !important;
 }
 ${SEL.tile}::before {
   content: ""; position: absolute; left: 4px; top: 3px; width: 15px; height: 15px; pointer-events: none;

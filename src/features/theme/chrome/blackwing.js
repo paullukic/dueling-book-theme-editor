@@ -274,7 +274,7 @@ ${sel(['#duel #lifepoints2::before'])} { left: -79px; top: -10px; width: 90px; h
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
 /* The hit ring follows the blade: the cut hilt corner and the point. */
 ${sel(['#duel .lifepoints'])} { --dbte-lp-clip: polygon(0 0, 147px 0, 100% 50%, 147px 100%, 6px 100%, 0 calc(100% - 6px)); --dbte-lp-outline: transparent; }
-${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, ${alpha('#ffffff', 0.2)} 30%, transparent 42%, transparent 70%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
+${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)} 0 2px, transparent 2px), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, ${alpha('#ffffff', 0.2)} 30%, transparent 42%, transparent 70%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
 ${SEL.lifeOpp} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(t.bg, t.raised, 0.6)}, #000000) !important; }
 /* A hit rakes a sheen across the fill in the side's own colour; it sits under the empty track (.black_bar) so that stays dark. */
@@ -322,5 +322,6 @@ ${sel(['#settings .admin_lbl'])} { color: ${t.text} !important; text-shadow: ${h
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, transparent 30%, ${t.accent} 30% 70%, transparent 70%), ${alpha(teal, 0.25)} !important; border-radius: 0 !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, transparent 30%, ${t.accent} 30% 70%, transparent 70%), ${alpha(teal, 0.25)} !important; }
 @media (prefers-reduced-motion: reduce) { html body #content *::before { transition: none !important; } }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #e0e0ec !important; }
 `;
 };

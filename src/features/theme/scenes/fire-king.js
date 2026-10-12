@@ -62,7 +62,7 @@ ${smoke}
 <ellipse cx="563" cy="${horizon - 152}" rx="48" ry="22" fill="url(#dbtefx-fk-lava)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
 <rect y="${horizon}" width="${W}" height="${H - horizon}" fill="url(#dbtefx-fk-sea)"/>
 <path d="M0 ${horizon}H${W}" stroke="${flame}" stroke-opacity="0.35" stroke-width="2"/>
-<path d="M480 ${horizon + 14}h160M500 ${horizon + 34}h120M530 ${horizon + 58}h70" stroke="${flame}" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round" style="animation: dbtefx-pulse 3s ease-in-out infinite;"/>
+<path class="dbtefx-fk-glint" d="M480 ${horizon + 14}h160M500 ${horizon + 34}h120M530 ${horizon + 58}h70" stroke="${flame}" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round" style="animation: dbtefx-pulse 3s ease-in-out infinite;"/>
 <!--mid-->
 <g class="dbtefx-fk-phoenix">
 <circle cx="${bx}" cy="400" r="300" fill="url(#dbtefx-fk-halo)" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>

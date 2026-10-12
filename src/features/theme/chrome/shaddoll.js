@@ -85,6 +85,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: gold-framed life bars hung from a lens; phases are core lenses. */
 ${SEL.life} { border-color: ${mix(violet, t.bg, 0.55)} !important; border-radius: 2px !important; outline: 1px dashed ${alpha(thread, 0.85)} !important; outline-offset: 2px !important; box-shadow: inset 0 0 0 1px ${alpha(thread, 0.35)}, 0 0 0 4px ${ink}, 0 0 10px 3px ${alpha(violet, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
+/* Low and zero keep the stitched ring: the danger rim is sewn in dashes too. */
+html:not([data-dbte-lpstyle]) body #duel .lifepoints:is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border { outline: 2px dashed var(--dbte-lp-outline, var(--dbt-danger)) !important; outline-offset: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.35)}, ${mix(t.self, '#ffffff', 0.38)} 60%, ${mix(t.self, '#ffffff', 0.2)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -6px; width: 18px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
@@ -136,5 +138,7 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-puppet { opac
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-gutter { display: inline; }
 /* Front page: the threads fade out behind the Welcome / Forum / Rules links. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-linkhole { display: inline; }
+/* Main menu: the puppet strings fade out above the feed, clear of the status filter. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-menuhole { display: inline; }
 `;
 };

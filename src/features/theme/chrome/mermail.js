@@ -95,7 +95,7 @@ ${sel(['#chats .chat .chat_top span'])} { color: #ffffff !important; text-shadow
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${glassDeep}) !important; box-shadow: inset 1px 0 0 ${silver}, inset -1px 0 0 ${silver}, inset 0 -1px 0 ${silver}, inset 0 0 30px -10px ${alpha(violet, 0.6)} !important; }
 
 /* Duel: pearl-bezel life bars led by a gem; phases are bubbles. */
-${SEL.life} { border-color: ${silver} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${silverDeep}, inset 0 0 0 1px ${alpha(silverLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
+${SEL.life} { border-color: ${silver} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${silverDeep}, inset 0 0 0 1px ${mix(silverDeep, '#000000', 0.25)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)} 0 2px, ${alpha('#ffffff', 0.22)} 2px, transparent 50%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.05)}, ${mix(t.self, '#000000', 0.3)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }

@@ -191,7 +191,7 @@ ${SEL.life} {
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
 ${T(['#duel .lifepoints'])} { --dbte-lp-clip: ${chamfer(6)}; }
 ${SEL.lifeSelf} {
-  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, transparent 0 3px, ${alpha('#f2fbff', 0.95)} 3px 6px, ${alpha(t.accent, 0.35)} 6px 8px, transparent 8px 55%, ${alpha(t.bg, 0.3)}), linear-gradient(90deg, ${mix(t.self, t.accent, 0.3)}, ${mix(t.self, t.accent, 0.15)} 55%, ${mix(t.self, t.accent, 0.6)} 85%, ${t.accent}) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, transparent 0 3px, ${alpha('#f2fbff', 0.95)} 3px 6px, ${alpha(t.accent, 0.35)} 6px 8px, transparent 8px 55%, ${alpha(t.bg, 0.3)}), linear-gradient(90deg, #8fd0ee, #74c2e5 55%, #5ab4dc) !important;
   box-shadow: inset 0 0 0 1px ${mix(t.bg, '#000000', 0.3)}, inset 0 -2px 0 1px ${alpha(t.bg, 0.45)} !important;
 }
 ${SEL.lifeOpp} {

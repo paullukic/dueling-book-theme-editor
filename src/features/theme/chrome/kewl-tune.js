@@ -162,8 +162,8 @@ ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(
 ${sel(['#duel .phase.active::before'])} { background: conic-gradient(${pink}, ${teal}, ${pink}); animation: var(--dbte-kt-anim, dbte-kt-pulse 1.2s ease-in-out infinite); }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${deep}, 0 0 3px ${deep} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${deep}, -1px 0 0 ${deep}, 0 1px 0 ${deep}, 0 -1px 0 ${deep}, 1px 1px 0 ${deep}, -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 0 0 6px ${deep} !important; }
-/* Main menu: the LED wall and the deck would stand behind the feed's time and Reply column. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-kt-eq, .dbtefx-kt-deck) { display: none; }
+/* Main menu: the LED wall and the deck would stand behind the feed's time and Reply column; the arch's wide halo would ghost along the feed edge. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-kt-eq, .dbtefx-kt-deck, .dbtefx-kt-halo) { display: none; }
 /* TURN lights in the turn owner's colour: red is the bottom player, blue (under it) the top one. */
 ${turnBg} { background: ${metal} !important; box-shadow: 0 0 12px -2px ${alpha(t.self, 0.8)}; }
 ${T(['#duel #turn:has(> .red[style*="none"]) .background'])} { box-shadow: 0 0 12px -2px ${alpha(t.opp, 0.8)}; }

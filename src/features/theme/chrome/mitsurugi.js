@@ -164,6 +164,9 @@ ${sel(['#content #logged_in .logout_btn', '#content #logged_in .switch_account_b
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine { display: none; }
 /* On the menu the serpent dragon keeps to the right gutter, clear of the status feed's timestamps. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-orochi { transform: translateX(400px); }
+/* The right bolt would strike beside the feed's scrollbar: it stays out past it. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-rbolt { transform: translateX(56px); }
 ${sel(['#duel_room .format > .info_btn'])} { background-color: ${t.bg} !important; border-radius: 50% !important; box-shadow: 0 0 0 5px ${t.bg} !important; }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #ece0dc !important; }
 `;
 };

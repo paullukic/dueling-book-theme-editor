@@ -82,9 +82,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 html body { ${[['u0', u0], ['u2', u2], ['u5', u5], ['u6', u6], ['u7', u7], ['u11', u11]].map(([k, v]) => `--dbtc-${k}: ${v};`).join(' ')} }
 /* Menu tiles: board squares in an ivory armour frame with a gold band; a chess piece stands on each. */
 ${SEL.tile} { background: ${armour()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px stretch !important; box-shadow: 0 10px 22px -12px #000000 !important; }
-${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -9px; top: -12px; width: 30px; height: 36px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000) drop-shadow(0 0 1px #000000); }
+${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -3px; top: -6px; width: 30px; height: 36px; pointer-events: none; background: center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000) drop-shadow(0 0 1px #000000); }
 ${tilePieces}
-${on(sel(['#main_menu .menu_btn:first-child .content']), 'before')} { top: -4px; }
+${on(sel(['#main_menu .menu_btn:first-child .content']), 'before')} { top: 2px; }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${armour(0.1)} !important; box-shadow: 0 0 0 1px ${gold}, 0 0 20px -4px ${alpha(gold, 0.8)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { color: ${ivory} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
@@ -113,7 +113,7 @@ ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; 
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, #f0d890, #c9a14a) !important; box-shadow: inset 0 0 0 1.5px ${mix('#c9a14a', '#000000', 0.45)}, inset 0 -3px 0 ${alpha(goldDeep, 0.75)}, inset 0 2px 3px ${alpha('#000000', 0.25)} !important; }
 /* The opponent's life is periwinkle silver, like their side of the board. */
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, '#dfe6ff', 0.35)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, '#dfe6ff', 0.35)}) !important; box-shadow: inset 0 0 0 1.5px #7f88c0, inset 0 2px 3px ${alpha('#000000', 0.2)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -22px; top: 1px; width: 18px; height: 28px; z-index: 2; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }

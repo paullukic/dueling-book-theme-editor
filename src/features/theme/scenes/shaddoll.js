@@ -64,7 +64,7 @@ const scene = (t) => {
 
   return `<style>${CARD_ART_KEYFRAMES}
 @keyframes dbtefx-sd-hang { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.4deg); } }
-.dbtefx-sd-linkhole, .dbtefx-sd-gutter { display: none; }
+.dbtefx-sd-linkhole, .dbtefx-sd-gutter, .dbtefx-sd-menuhole { display: none; }
 @keyframes dbtefx-sd-glint { 0%, 70%, 100% { opacity: 0; } 82% { opacity: 1; } }
 <defs>
 <linearGradient id="dbtefx-sd-void" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, violet, 0.16)}"/><stop offset="0.6" stop-color="${t.bg}"/><stop offset="1" stop-color="${navyDark}"/></linearGradient>
@@ -86,8 +86,8 @@ const scene = (t) => {
 <ellipse cx="${cx}" cy="880" rx="300" ry="60" fill="url(#dbtefx-sd-pool)"/>
 ${shards}
 <!--mid-->
-<defs><radialGradient id="dbtefx-sd-holefade"><stop offset="0.55" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
-<mask id="dbtefx-sd-links" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1300"><rect x="-200" y="-200" width="2000" height="1300" fill="#ffffff"/><ellipse class="dbtefx-sd-linkhole" cx="1330" cy="185" rx="125" ry="95" fill="url(#dbtefx-sd-holefade)"/></mask></defs>
+<defs><linearGradient id="dbtefx-sd-menufade" gradientUnits="userSpaceOnUse" x1="0" y1="-200" x2="0" y2="170"><stop offset="0.88" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient><radialGradient id="dbtefx-sd-holefade"><stop offset="0.55" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<mask id="dbtefx-sd-links" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1300"><rect x="-200" y="-200" width="2000" height="1300" fill="#ffffff"/><rect class="dbtefx-sd-menuhole" x="-200" y="-200" width="2000" height="370" fill="url(#dbtefx-sd-menufade)"/><ellipse class="dbtefx-sd-linkhole" cx="1330" cy="185" rx="125" ry="95" fill="url(#dbtefx-sd-holefade)"/></mask></defs>
 ${gutter}
 <g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${cardArt(t, { id: 'dbtefx-sd-hero', card: CARDS.elShaddollConstruct, x: ax, y: ay - 90, w: aw, h: 790, focus: [0.5, 0.508], zoom: 0.76, feather: 0.4, fade: 0.7, blend: 'normal', backdrop: mix(t.bg, violet, 0.25), backdropAmt: 0.8, glow: violet, breathe: 0, tint: navy, tintAmt: 0.3 })}

@@ -124,7 +124,7 @@ const mitsurugi = (t) => {
       d += `L${n1(cx)} ${n1(cy)}`;
       if (i === 3) d += `M${n1(cx)} ${n1(cy)}l${n1(30 + r() * 20)} ${n1(26 + r() * 10)}l-6 24M${n1(cx)} ${n1(cy)}`;
     }
-    bolts += `<path d="${d}"${clip && ` clip-path="${clip}"`} fill="none" stroke="${bolt}" stroke-width="2.4" stroke-linejoin="bevel" style="animation: dbtefx-mt-bolt 9s linear ${-delay}s infinite;"/>`;
+    bolts += `<path d="${d}"${clip ? ` clip-path="${clip}"` : ' class="dbtefx-mt-rbolt"'} fill="none" stroke="${bolt}" stroke-width="2.4" stroke-linejoin="bevel" style="animation: dbtefx-mt-bolt 9s linear ${-delay}s infinite;"/>`;
   });
 
   return `<style>@keyframes dbtefx-mt-bolt { 0%, 90%, 94%, 100% { opacity: 0; } 91%, 93% { opacity: 1; } 92% { opacity: 0.2; } }

@@ -128,7 +128,7 @@ ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !imp
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
 ${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, ${goldLit}, ${gold}, ${goldDeep}, ${gold}, ${goldLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 16px ${alpha(flame, 0.85)} !important; }
 ${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 40%, ${mix(crimson, flame, 0.25)}, ${crimson} 55%, ${mix(crimson, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${ink} !important; }
-${sel(['#duel .phase span'])} { color: ${goldLit} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase span'])} { color: #f6e8c8 !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${mix(t.bg, '#3a1405', 0.3)} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)}, 0 0 6px ${alpha(goldLit, 0.7)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }
@@ -168,5 +168,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Menu: the phoenix clears the feed's timestamp column. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-phoenix { transform: translate(28px, 0); }
+/* In a duel the sea glints would draw two grey lines between the deck and the hand. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-glint { display: none; }
 `;
 };
