@@ -175,6 +175,5 @@ ${popCss(popPrimary, popSecondary)}
 /* Player name strips: dark plate, ivory name. */
 ${sel(['#duel #avatar1', '#duel #avatar3'])} { background: ${plate} !important; }
 ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(t.opp, '#ffffff', 0.5)}, ${mix(t.opp, '#ffffff', 0.12)} 60%, ${t.opp}) !important; }
-${sel(['#duel .duel_avatar .username_txt'])} { color: #000000 !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 `;
 };

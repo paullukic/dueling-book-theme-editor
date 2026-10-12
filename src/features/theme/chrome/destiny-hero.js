@@ -126,7 +126,6 @@ ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steel}, 0 0 0 4px ${ink}, 0 0 0 5px ${bloodDeep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar3'])} { background: linear-gradient(160deg, ${mix(t.self, t.bg, 0.5)}, ${mix(t.self, t.bg, 0.8)}) !important; }
 ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, t.bg, 0.8)}) !important; }
-${sel(['#duel .duel_avatar .username_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: linear-gradient(180deg, ${mix(maroon, '#ffffff', 0.12)}, ${maroon} 55%, ${mix(maroon, t.bg, 0.35)}) !important; }
 ${sel(['#duel img.field_zones'])} { filter: brightness(0.85) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dh-moon { opacity: 0.4; }

@@ -233,10 +233,10 @@ ${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${i
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-425.6px, 505px) scale(0.4); }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-pow { display: none; }
+html body #dbte-skin-fx .dbtefx-tn-book { transform: translate(-425.6px, 505px) scale(0.4); }
+html body #dbte-skin-fx .dbtefx-tn-pow { display: none; }
 /* Shrunk into the gutter, the book keeps a real ink line. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book [stroke="#000000"] { vector-effect: non-scaling-stroke; stroke-width: 2.2px; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx #dbtefx-tn-dots circle { fill-opacity: 0.85; }
+html body #dbte-skin-fx .dbtefx-tn-book [stroke="#000000"] { vector-effect: non-scaling-stroke; stroke-width: 2.2px; }
+html body #dbte-skin-fx #dbtefx-tn-dots circle { fill-opacity: 0.85; }
 `;
 };

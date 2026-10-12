@@ -397,6 +397,9 @@ const menu = `
 html body #content #statuses { background: linear-gradient(90deg, transparent, rgba(var(--dbt-bg-rgb), 0.9) 2%, rgba(var(--dbt-bg-rgb), 0.9) 98%, transparent) !important; }
 html body #content #main_menu > .combobox.proxy { box-shadow: 0 0 0 8px rgba(var(--dbt-bg-rgb), 0.9), 0 0 16px 12px rgba(var(--dbt-bg-rgb), 0.75) !important; }
 html #content #statuses .username_txt { color: var(--dbt-accent) !important; text-shadow: none !important; }
+/* Duel names sit on side-coloured strips of any lightness: the LP numeral colour with a crisp ink outline reads on all of them
+   (the ink guard's dark text went muddy on mid-tone strips). */
+html body #content #duel .duel_avatar .username_txt.username_txt { color: var(--dbt-lp-num) !important; -webkit-text-fill-color: var(--dbt-lp-num) !important; text-shadow: -1px -1px 0 var(--dbt-lp-ink), 1px -1px 0 var(--dbt-lp-ink), -1px 1px 0 var(--dbt-lp-ink), 1px 1px 0 var(--dbt-lp-ink), 0 0 4px rgba(0, 0, 0, 0.75) !important; }
 html #content #statuses .status_txt, html #content #statuses .status_txt span { color: var(--dbt-text) !important; text-shadow: none !important; }
 html #content #statuses .date_txt { color: var(--dbt-muted) !important; }
 html #content .title1 { color: var(--dbt-text) !important; }
