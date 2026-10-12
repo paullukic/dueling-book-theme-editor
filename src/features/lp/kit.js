@@ -21,6 +21,14 @@ export const LP_RADIUS_VAR = '--dbte-lp-radius';
 // A slanted frame (a parallelogram) sets this on .lifepoints (e.g. -18deg),
 // so the hit ring and its core skew to the frame's shape.
 export const LP_SKEW_VAR = '--dbte-lp-skew';
+// A chamfered or cut frame sets this on .lifepoints to a clip-path shape
+// (e.g. polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)), so the hit
+// ring follows it.
+export const LP_CLIP_VAR = '--dbte-lp-clip';
+// A theme that draws its own hit (a palette-only blink keyed on
+// [data-dbte-lp~="hit"] on the frame's parts) sets this to `none` on
+// .lifepoints or above: the hit's coloured rim and its ring stand aside.
+export const LP_HIT_BLOOM_VAR = '--dbte-lp-hit-bloom';
 // State on each .lifepoints: "hit" | "heal", "low" | "zero", "wide".
 export const STATE_ATTR = 'data-dbte-lp';
 // On <html> while a life point style (not the theme's look) is drawn, so the

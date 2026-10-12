@@ -107,9 +107,9 @@ const setLp = (side, lp, state, pulse) => {
 };
 
 // A screenshot catches an animation wherever it is; hold each glow at its
-// brightest instead: the hit flash at 8% (its burst ring a third of the way
-// out), the heal at 30%, the low breath at its "to" frame.
-const PEAKS = { 'dbte-lp-hit': 0.08, 'dbte-lp-burst': 0.3, 'dbte-lp-heal': 0.3, 'dbte-lp-breathe': 0.999 };
+// brightest instead: the hit flash at 8% (its ring at the white-hot core),
+// the heal at 30%, the low breath at its "to" frame.
+const PEAKS = { 'dbte-lp-hit': 0.08, 'dbte-lp-burst': 0.06, 'dbte-lp-heal': 0.3, 'dbte-lp-breathe': 0.999 };
 const freezeLp = () =>
   document.getAnimations().filter((a) => {
     const at = PEAKS[a.animationName];
