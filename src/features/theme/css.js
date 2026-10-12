@@ -391,16 +391,14 @@ html #content .ui-slider-handle { background: var(--dbt-text) !important; border
 const menu = `
 /* Status feed and page title: DuelingBook writes white/cream text here, which
    vanishes on light themes; take the theme's ink instead. */
-/* The status feed reads on a near-opaque scrim across its full width
-   (timestamps and Reply links included), so scene art never sits behind the
-   text; the "All Statuses" dropdown above it gets the same backing as a halo. */
-html body #content #statuses { background: linear-gradient(90deg, transparent, rgba(var(--dbt-bg-rgb), 0.9) 2%, rgba(var(--dbt-bg-rgb), 0.9) 98%, transparent) !important; }
-html body #content #main_menu > .combobox.proxy { box-shadow: 0 0 0 8px rgba(var(--dbt-bg-rgb), 0.9), 0 0 16px 12px rgba(var(--dbt-bg-rgb), 0.75) !important; }
-html #content #statuses .username_txt { color: var(--dbt-accent) !important; text-shadow: none !important; }
+/* The feed stays see-through; its text carries a soft halo in the page colour so faint scene art behind it never
+   costs legibility. */
+html body #content #statuses :is(.username_txt, .status_txt, .status_txt span, .date_txt, .reply_btn) { text-shadow: 0 0 3px rgba(var(--dbt-bg-rgb), 0.95), 0 0 8px rgba(var(--dbt-bg-rgb), 0.7) !important; }
+html #content #statuses .username_txt { color: var(--dbt-accent) !important; }
 /* Duel names sit on side-coloured strips of any lightness: the LP numeral colour with a crisp ink outline reads on all of them
    (the ink guard's dark text went muddy on mid-tone strips). */
 html body #content #duel .duel_avatar .username_txt.username_txt { color: var(--dbt-lp-num) !important; -webkit-text-fill-color: var(--dbt-lp-num) !important; text-shadow: -1px -1px 0 var(--dbt-lp-ink), 1px -1px 0 var(--dbt-lp-ink), -1px 1px 0 var(--dbt-lp-ink), 1px 1px 0 var(--dbt-lp-ink), 0 0 4px rgba(0, 0, 0, 0.75) !important; }
-html #content #statuses .status_txt, html #content #statuses .status_txt span { color: var(--dbt-text) !important; text-shadow: none !important; }
+html #content #statuses .status_txt, html #content #statuses .status_txt span { color: var(--dbt-text) !important; }
 html #content #statuses .date_txt { color: var(--dbt-muted) !important; }
 html #content .title1 { color: var(--dbt-text) !important; }
 /* Solid tiles: DuelingBook's 4px border stays (layout) but turns invisible;
