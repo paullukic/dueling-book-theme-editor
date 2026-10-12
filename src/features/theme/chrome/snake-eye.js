@@ -180,7 +180,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important;
 /* Duel: the Snake-Eye on the life bar; scale rings round the phases, the active one an open eye. */
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px #000000, 0 0 16px -4px ${alpha(t.accent, 0.9)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -26px; top: 50%; width: 42px; height: 42px; margin-top: -21px; pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: -26px; top: 50%; width: 42px; height: 42px; margin-top: -21px; pointer-events: none;
   background: ${svgUrl(snakeEye(t, kit))} center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.8)});
 }
 /* The top bar sits on the viewport edge: its eye is inset so the rim stays whole. */
