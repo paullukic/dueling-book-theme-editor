@@ -37,8 +37,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   // Pixel "LP" chip for the life bar: a one-pixel margin all round, so no letter touches the rim.
   const lpChip = crisp(17, 11, `<rect width="17" height="11" fill="${ink}"/><path d="${pxText('LP', 2, 2, 1, true)}" fill="${pale}"/>`);
   const lpChipLow = crisp(17, 11, `<rect width="17" height="11" fill="${ink}"/><rect x="1" y="1" width="15" height="9" fill="${pale}"/><path d="${pxText('LP', 2, 2, 1, true)}" fill="${ink}"/>`);
-  // Segmented LCD bar: one-pixel gaps every 6px.
-  const segs = (c) => `repeating-linear-gradient(90deg, ${c} 0 5px, ${pale} 5px 6px)`;
   // Low bar, same polarity as at rest: the empty track's dark segments, the life left as lit ink/pale segments.
   const empty = `repeating-linear-gradient(90deg, ${dark} 0 5px, ${mix(dark, ink, 0.5)} 5px 6px)`;
   const lit = `repeating-linear-gradient(90deg, ${ink} 0 3px, ${pale} 3px 6px)`;
@@ -114,8 +112,7 @@ ${SEL.chat} { background: ${flat()} !important; box-shadow: inset 3px 0 0 ${ink}
 /* Duel: segmented LCD life bars with an LP chip; square phase buttons, the active one inverted. */
 ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${pale}, 0 0 0 4px ${ink}, 4px 4px 0 4px ${alpha(ink, 0.3)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: ${segs(ink)} !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, ${ink} 0 3px, ${pale} 3px 6px) !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { background: ${lit} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${empty} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; --dbte-lp-hit-bloom: none; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 2px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
