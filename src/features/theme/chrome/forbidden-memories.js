@@ -104,7 +104,9 @@ ${SEL.chat} { ${platePanel} box-shadow: inset 2px 0 0 ${stone}, inset -2px 0 0 $
 /* Duel: flat white numerals in the game's navy LP boxes, a YOU (red) or COM (navy) tag at the left, a thin
    gold strip along the foot for the life left; square navy phase chips in a gold rim, gold when active. */
 ${SEL.life} { border-color: ${rim} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
+/* Both bars keep the game's one blue; only yours carries the gold underline, so the sides still read apart. */
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${mix(t.opp, t.bg, 0.55)} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -42px; top: 3px; width: 38px; height: 20px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
@@ -160,5 +162,8 @@ ${popCss}
 
 @keyframes dbtc-fm-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tileHover, 'before')} { animation: none; } }
+
+/* In a duel the scene's winged sun disk stands aside: its wing tips would show in the stage's top corner. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk { display: none; }
 `;
 };

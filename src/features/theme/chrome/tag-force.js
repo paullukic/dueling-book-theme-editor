@@ -19,10 +19,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const frostDeep = mix(t.text, t.muted, 0.55);
   const ink = mix(t.bg, '#000000', 0.2);
   const pale = mix(t.accent2, '#ffffff', 0.62);
-  const paleDeep = mix(t.accent2, '#ffffff', 0.3);
-  // Inactive phase chips sit 15% dimmer than the window tabs so the orange active chip leads.
-  const chip = mix(pale, t.bg, 0.15);
-  const chipDeep = mix(paleDeep, t.bg, 0.15);
+  // Inactive phase chips: brushed silver, a step down from white so the active (cursor) chip leads.
+  const chip = '#aab4c2';
+  const chipDeep = mix(chip, t.bg, 0.25);
 
   // Fine brushed-metal grain for silver parts and a faint scanline for glass.
   const lines = svg(4, 4, `<path d="M0 .5H4" stroke="#ffffff" stroke-opacity="0.025"/>`);
@@ -92,11 +91,12 @@ ${SEL.chatTop} { background: linear-gradient(180deg, #ffffff, ${pale}) !importan
 ${sel(['#chats .chat .chat_top span'])} { color: ${ink} !important; text-shadow: none !important; }
 ${SEL.chat} { background: var(--dbtc-u0), linear-gradient(180deg, ${glass}, ${mix(t.bg, '#000000', 0.2)}) !important; box-shadow: inset 1px 0 0 ${silverDeep}, inset -1px 0 0 ${silverDeep}, inset 0 -1px 0 ${silverDeep} !important; }
 
-/* Duel: black LP header bars with the blue LP tag; silver phase chips, the active one in the cursor frame. */
+/* Duel: black LP header bars with the blue LP tag, a Slifer-red gauge for you and an Obelisk-blue one for the rival;
+   brushed-silver phase chips, the active one in the cursor frame. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${mix(blue, t.bg, 0.55)}, 0 0 0 4px ${alpha(silver, 0.6)}, 0 3px 8px -2px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(blue, t.bg, 0.45)}, ${mix(blue, t.bg, 0.1)}) !important; box-shadow: inset 0 4px 4px -2px ${alpha('#ffffff', 0.35)} !important; }
-${sel(['#duel #lifepoints1[data-dbte-lp~="low"] .life_bar', '#duel #lifepoints2[data-dbte-lp~="low"] .life_bar', '#duel #lifepoints1[data-dbte-lp~="zero"] .life_bar', '#duel #lifepoints2[data-dbte-lp~="zero"] .life_bar'])} { background: linear-gradient(90deg, ${mix(t.self, t.bg, 0.45)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${mix(t.self, t.bg, 0.15)}) !important; box-shadow: inset 0 4px 4px -2px ${alpha('#ffffff', 0.35)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, t.bg, 0.1)}) !important; box-shadow: inset 0 4px 4px -2px ${alpha('#ffffff', 0.35)} !important; }
 ${on(sel(['#duel .lifepoints .life_border']), 'after')} { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 4px; pointer-events: none; background: linear-gradient(90deg, ${t.self} 0 33.3%, ${t.warning} 33.3% 66.6%, ${t.opp} 66.6%); box-shadow: 0 1px 2px #000000; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -44px; top: 4px; width: 40px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 5px #000000 !important; }

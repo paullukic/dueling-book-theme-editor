@@ -83,7 +83,7 @@ ${SEL.chat} { background: ${panelFill} !important; box-shadow: inset 0 0 0 1px $
 
 /* Duel: slanted LP plates with an italic "LP:", round action-button phases, yellow active. */
 ${SEL.life} { border-color: ${azureHi} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 12px ${alpha(azure, 0.5)} !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), repeating-linear-gradient(115deg, transparent 0 14px, ${alpha('#ffffff', 0.08)} 14px 18px), linear-gradient(90deg, ${mix(t.self, ink, 0.55)}, ${mix(t.self, ink, 0.15)}) !important; border-radius: 2px !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), repeating-linear-gradient(115deg, transparent 0 14px, ${alpha('#ffffff', 0.08)} 14px 18px), linear-gradient(90deg, ${mix(t.self, ink, 0.65)}, ${mix(t.self, ink, 0.28)}) !important; border-radius: 2px !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), repeating-linear-gradient(115deg, transparent 0 14px, ${alpha('#ffffff', 0.08)} 14px 18px), linear-gradient(90deg, ${mix(t.opp, ink, 0.4)}, ${t.opp}) !important; border-radius: 2px !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${deep}, ${ink}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -46px; top: calc(50% - 13px); width: 44px; height: 26px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; }
@@ -126,5 +126,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 ${popCss}
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tile, 'after')} { transition: none !important; } }
+
+/* In a duel the scene's gate stands aside: in the right gutter the avatar column and the page edge cut it. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { display: none; }
 `;
 };

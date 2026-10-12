@@ -81,6 +81,8 @@ ${SEL.life} { border-color: ${gunEdge} !important; border-radius: 0 !important; 
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, ink, 0.6)}, ${mix(t.self, ink, 0.3)}) !important; box-shadow: inset 0 4px 0 ${t.self}, inset 0 5px 0 ${alpha('#ffffff', 0.25)} !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, ink, 0.6)}, ${mix(t.opp, ink, 0.3)}) !important; box-shadow: inset 0 4px 0 ${t.opp}, inset 0 5px 0 ${alpha('#ffffff', 0.25)} !important; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); border-radius: 0 !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${ink} !important; }
+/* The hit ring follows the slanted plate: 12px of run over the 31px frame is a -21deg skew. */
+${sel(['#duel .lifepoints'])} { --dbte-lp-skew: -21deg; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -38px; top: calc(50% - 11px); width: 36px; height: 22px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 3px ${ink} !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${gunHi}, ${gun}, ${mix(gun, ink, 0.45)}, ${gun}, ${gunHi}) !important; border-radius: 50% !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px ${ink} !important; }
@@ -123,5 +125,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: ${gunHi} !important; bor
 ${sel(['#content .os-scrollbar-handle:hover'])} { background: ${lime} !important; }
 
 ${popCss}
+
+/* In a duel the scene's 3D field, summoned card and menu hairlines stand aside: in the gutters they read as UI. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-md-field, .dbtefx-md-hair) { display: none; }
 `;
 };

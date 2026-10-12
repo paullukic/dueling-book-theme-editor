@@ -3,8 +3,8 @@ import { H, n1, W } from './kit.js';
 
 // World Championship (Nintendo DS, 2007-11): the touch screen's grid paper
 // behind everything, the battle cut-in's speed bands (blue for you, magenta
-// for the opponent) sweeping in from opposite corners, and stylus taps (a
-// ring and the blinking orange pixel cursor) landing in the gutters. Nothing
+// for the opponent) sweeping in from opposite corners, and one stylus tap (a
+// ring and the blinking orange pixel cursor) landing in each gutter. Nothing
 // here looks like a card zone or a counter: the duel stage and the menu feed
 // stay clear. Signature: the bands streak past and the taps land, like a turn.
 const worldChampionship = (t) => {
@@ -29,7 +29,8 @@ const worldChampionship = (t) => {
 
   // A stylus tap as the DS draws it: stepped pixel squares spreading from the
   // touch point (one DS pixel = 4 units), the blinking orange pixel cursor, the stylus tip.
-  const ring = (r, delay) => `<rect x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}" fill="none" stroke="#ffffff" stroke-width="4" stroke-dasharray="8 4" shape-rendering="crispEdges" style="animation: dbtefx-ripple 4.5s steps(6) ${n1(-delay)}s infinite; transform-box: fill-box; transform-origin: center;"/>`;
+  // The ripple is a solid square with notched (one-pixel stepped) corners, so it never reads as a dashed selection marquee.
+  const ring = (r, delay) => `<path d="M${-r + 4} ${-r}H${r - 4}V${-r + 4}H${r}V${r - 4}H${r - 4}V${r}H${-r + 4}V${r - 4}H${-r}V${-r + 4}H${-r + 4}Z" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="4" shape-rendering="crispEdges" style="animation: dbtefx-ripple 4.5s steps(6) ${n1(-delay)}s infinite; transform-box: fill-box; transform-origin: center;"/>`;
   const tap = (x, y, delay) =>
     `<g transform="translate(${x} ${y})">${ring(28, delay)}<g fill="${orange}" shape-rendering="crispEdges" style="animation: dbtefx-wc-cursor 4.5s steps(1) ${n1(-delay)}s infinite;"><path d="M-4 -16h8v8h-8zM-4 8h8v8h-8zM-16 -4h8v8h-8zM8 -4h8v8h-8z"/></g><path d="M2 2L40 56" stroke="${mix(t.text, t.muted, 0.4)}" stroke-width="7" stroke-linecap="round"/><path d="M2 2L9 12" stroke="${t.bg}" stroke-width="4" stroke-linecap="round"/></g>`;
 
@@ -50,7 +51,7 @@ const worldChampionship = (t) => {
 <g>${bands(mix(blue, '#ffffff', 0.25), [[44, 260, 4], [70, 180, 3], [96, 320, 5], [128, 140, 3], [152, 240, 4], [186, 120, 3]], 1, 0)}</g>
 <g>${bands(mix(pink, '#ffffff', 0.2), [[H - 52, 280, 4], [H - 80, 170, 3], [H - 108, 300, 5], [H - 138, 150, 3], [H - 164, 230, 4], [H - 196, 110, 3]], -1, 2.5)}</g>
 <!--near-->
-${tap(120, 260, 0)}${tap(1488, 330, 1.5)}${tap(130, 700, 3)}`;
+${tap(141, 300, 0)}${tap(1440, 620, 2.2)}`;
 };
 
 export default worldChampionship;

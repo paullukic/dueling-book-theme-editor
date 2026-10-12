@@ -5,6 +5,8 @@ import { H, n1, polar, W } from './kit.js';
 // stone, its portal a turning azure vortex, rises on the right over the
 // game's holographic duel floor: a bright perspective grid of glowing tiles
 // and light shafts, and » chevrons stream along the floor's edge.
+// In a duel the gate stands aside (chrome/duel-links.js): in the right
+// gutter the avatar column and the page edge would cut it.
 
 const gx = 1400;
 const gy = 470;
@@ -87,7 +89,7 @@ const scene = (t) => {
 <path d="${floor}" stroke="${azureHi}" stroke-opacity="0.32" stroke-width="1.4" fill="none"/>
 <path d="${lit}" fill="${azure}" fill-opacity="0.2" stroke="${azureHi}" stroke-opacity="0.85" stroke-width="2"/>
 ${shafts}
-<g transform="translate(${gx} 790) scale(0.5) translate(${-gx} -790)">
+<g class="dbtefx-dl-gate" transform="translate(${gx} 790) scale(0.5) translate(${-gx} -790)">
 <ellipse cx="${gx}" cy="${gy}" rx="${gr + 120}" ry="${gr + 120}" fill="url(#dbtefx-dl-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
 <path d="M${gx - 230} 790L${gx - 200} 760H${gx + 200}L${gx + 230} 790Z" fill="${stoneLo}" stroke="${stoneHi}" stroke-opacity="0.5"/>
 <path d="M${gx - 190} 760L${gx - 165} 730H${gx + 165}L${gx + 190} 760Z" fill="${stone}" stroke="${stoneHi}" stroke-opacity="0.5"/>

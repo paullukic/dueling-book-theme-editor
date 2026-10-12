@@ -6,7 +6,9 @@ import { H, n1, polar, rng, W } from './kit.js';
 // the centre zone an Ultra Rare is being summoned, hanging in a violet-gold
 // rarity aura and a burst of light, a foil glint sweeping its face, a winged
 // silhouette blazing in its art. Behind, the home menu's slashed
-// glass panels and hairlines cross a nebula (WebGL) under fine scanlines.
+// glass panels and hairlines cross a nebula (WebGL) under fine scanlines. In a
+// duel the field, the card and the hairlines stand aside (chrome/master-duel.js),
+// so the right gutter is only sky and nothing reads as a stray UI frame.
 
 const cx = 1430;
 // Field plane (X across, Z away from the viewer) to screen.
@@ -96,9 +98,9 @@ ${art}
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-md-sky)"/>
 ${slashes}
-${hair}
+<g class="dbtefx-md-hair">${hair}</g>
 <!--mid-->
-<g mask="url(#dbtefx-md-fade)" opacity="0.45">
+<g class="dbtefx-md-field" mask="url(#dbtefx-md-fade)" opacity="0.45">
 <g transform="translate(${cx} ${cy})"><g style="animation: dbtefx-spin 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-md-burst)"/></g></g>
 ${tiles}
 <path d="${seams}" stroke="${mix(blue, '#ffffff', 0.3)}" stroke-opacity="0.35" stroke-width="1.6"/>

@@ -7,7 +7,8 @@ import { H, n1, polar, rng, W } from './kit.js';
 // zone a summoning vortex climbs: flat rings of light and swirling ribbons
 // turning at different speeds around a bright column, a card of light rising
 // at its top. Soft diagonal beams and cyan lightning cross the sky like the
-// game's menu backdrops.
+// game's menu backdrops. In a duel the card of light stands aside
+// (chrome/legacy-of-the-duelist.js): it would sit half behind the avatar column.
 
 const bx = 1430;
 const top = 610;
@@ -141,7 +142,7 @@ ${stack(-0.13, 0.22)}${stack(1.13, 0.22)}${stack(-0.15, 0.95)}${stack(1.15, 0.95
 <path d="M${bx - 46} 712L${bx - 22} 260H${bx + 22}L${bx + 46} 712Z" fill="url(#dbtefx-ld-col)" style="animation: dbtefx-pulse 5s ease-in-out -1s infinite;"/>
 <ellipse cx="${bx}" cy="560" rx="230" ry="150" fill="url(#dbtefx-ld-pool)" opacity="0.35"/>
 ${vortex}
-<g transform="translate(${bx} 206) scale(1.4)"><g style="animation: dbtefx-ld-hover 6s ease-in-out infinite;"><g style="animation: dbtefx-spin 40s linear infinite;"><path d="${rays}" fill="url(#dbtefx-ld-burst)"/></g><rect x="-42" y="-60" width="84" height="120" rx="5" fill="url(#dbtefx-ld-card)" stroke="#ffffff" stroke-width="2.2"/><rect x="-34" y="-50" width="68" height="60" rx="2" fill="none" stroke="${cyan}" stroke-opacity="0.75" stroke-width="1.4"/><path d="M-34 20H34M-34 31H22M-34 42H28" stroke="${cyan}" stroke-opacity="0.6" stroke-width="2"/></g></g>
+<g class="dbtefx-ld-card" transform="translate(${bx} 206) scale(1.4)"><g style="animation: dbtefx-ld-hover 6s ease-in-out infinite;"><g style="animation: dbtefx-spin 40s linear infinite;"><path d="${rays}" fill="url(#dbtefx-ld-burst)"/></g><rect x="-42" y="-60" width="84" height="120" rx="5" fill="url(#dbtefx-ld-card)" stroke="#ffffff" stroke-width="2.2"/><rect x="-34" y="-50" width="68" height="60" rx="2" fill="none" stroke="${cyan}" stroke-opacity="0.75" stroke-width="1.4"/><path d="M-34 20H34M-34 31H22M-34 42H28" stroke="${cyan}" stroke-opacity="0.6" stroke-width="2"/></g></g>
 </g></g>
 <!--near-->
 ${motes}

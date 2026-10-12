@@ -141,5 +141,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons as LotD capsules. */
 ${popCss}
 @media (prefers-reduced-motion: reduce) { html body #main_menu .menu_btn .content { transition: none !important; } }
+
+/* In a duel the scene's rising card of light stands aside: it would sit half hidden behind the avatar column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ld-card { display: none; }
 `;
 };

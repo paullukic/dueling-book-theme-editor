@@ -34,9 +34,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const grid = svg(4, 4, `<path d="M0 3.5H4M3.5 0V4" stroke="${ink}" stroke-opacity="0.06"/>`);
   // The handheld's menu cursor: a solid right-pointing arrow in pixels.
   const arrow = crisp(6, 9, `<path d="M0 0h2v1h1v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-1v1h-2z" fill="${ink}"/>`);
-  // Pixel heart-less "LP" chip for the life bar.
-  const lpChip = crisp(15, 9, `<rect width="15" height="9" fill="${ink}"/><path d="${pxText('LP', 2, 1, 1)}" fill="${pale}"/>`);
-  const lpChipLow = crisp(15, 9, `<rect width="15" height="9" fill="${ink}"/><rect x="1" y="1" width="13" height="7" fill="${pale}"/><path d="${pxText('LP', 2, 1, 1)}" fill="${ink}"/>`);
+  // Pixel "LP" chip for the life bar: a one-pixel margin all round, so no letter touches the rim.
+  const lpChip = crisp(17, 11, `<rect width="17" height="11" fill="${ink}"/><path d="${pxText('LP', 2, 2, 1, true)}" fill="${pale}"/>`);
+  const lpChipLow = crisp(17, 11, `<rect width="17" height="11" fill="${ink}"/><rect x="1" y="1" width="15" height="9" fill="${pale}"/><path d="${pxText('LP', 2, 2, 1, true)}" fill="${ink}"/>`);
   // Segmented LCD bar: one-pixel gaps every 6px.
   const segs = (c) => `repeating-linear-gradient(90deg, ${c} 0 5px, ${pale} 5px 6px)`;
 
@@ -113,18 +113,19 @@ ${SEL.lifeSelf} { background: ${segs(ink)} !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, ${ink} 0 3px, ${pale} 3px 6px) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${dark} 0 5px, ${mix(dark, ink, 0.5)} 5px 6px) !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -36px; top: 2px; width: 30px; height: 18px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
-${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${pale} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 ${ink}, 2px 0 0 ${ink} !important; }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 2px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
+${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${pale} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 ${ink}, 2px 0 0 ${ink} !important; -webkit-font-smoothing: none; font-smooth: never; will-change: transform; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
 /* The number sits on a solid darkest-green plate. Low life inverts the counter within the four shades:
-   pale frame and plate, ink digits, and the LP chip blinks. */
+   pale frame and plate, ink digits, and the LP chip blinks. The digits drop 2.5px so the plate's ink rim
+   clears their top row by 2px; the life left is a dark block left of the plate (the plate hides the bar's right end). */
 ${lpAt('', '.life_txt')} { isolation: isolate; }
 ${lpAt('', '.life_txt::before')} { content: ""; position: absolute; left: -6px; right: -4px; top: 1px; bottom: 1px; z-index: -1; pointer-events: none; background: ${ink}; }
-${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt::before')} { background: ${pale}; box-shadow: inset 0 0 0 2px ${ink}; }
-${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt')} { color: ${ink} !important; text-shadow: none !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt::before')} { top: -3px; bottom: 0; background: ${pale}; box-shadow: inset 0 0 0 2px ${ink}; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt')} { color: ${ink} !important; text-shadow: none !important; transform: translateY(2.5px); }
 ${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_border')} { border-color: ${pale} !important; box-shadow: 0 0 0 2px ${ink}, inset 0 0 0 2px ${ink} !important; }
-${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_bar')} { background: ${segs(dark)} !important; }
-${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.black_bar')} { background: repeating-linear-gradient(90deg, ${pale} 0 5px, ${light} 5px 6px) !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_bar')} { background: ${segs(dark)} right 86px top 0 / min(60px, calc(var(--dbte-lp, 1) * 240px)) 100% no-repeat, repeating-linear-gradient(90deg, ${pale} 0 5px, ${light} 5px 6px) !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.black_bar')} { background: none !important; }
 ${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '').replace(/ ,/g, ',').trim()} { filter: none !important; }
 ${on(sel(['#duel #lifepoints1[data-dbte-lp~="low"]', '#duel #lifepoints2[data-dbte-lp~="low"]', '#duel #lifepoints1[data-dbte-lp~="zero"]', '#duel #lifepoints2[data-dbte-lp~="zero"]']), 'before')} { background-image: var(--dbtc-u5) !important; animation: dbtc-gb-blink 0.7s steps(1, end) infinite; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; box-shadow: 3px 3px 0 ${alpha(ink, 0.35)} !important; }

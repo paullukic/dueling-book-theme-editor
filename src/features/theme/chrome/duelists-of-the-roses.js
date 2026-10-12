@@ -106,6 +106,8 @@ ${SEL.lifeSelf} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3
 ${SEL.lifeOpp} { background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), linear-gradient(90deg, ${mix(gold, t.bg, 0.62)}, ${mix(gold, t.bg, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.08)}, transparent 50%), ${ink} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
+/* Low and zero: the shared red ring sits 1-3px outside the frame; a thin gold line stays just outside it, so the panel keeps its gilt edge. */
+${['#lifepoints1', '#lifepoints2'].map((id) => `html:not([data-dbte-lpstyle]) body #duel ${id}.lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border`).join(', ')} { box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${ink}, 0 0 0 4.5px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -50px; top: -6px; width: 46px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { content: ""; position: absolute; left: -50px; top: -6px; width: 46px; height: 40px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { color: ${mix(t.text, gold, 0.25)} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 0 2px 0 ${ink}, 0 0 4px ${ink} !important; font-family: Georgia, "Times New Roman", serif !important; font-variant-numeric: lining-nums tabular-nums !important; font-feature-settings: "lnum" 1, "tnum" 1 !important; }
@@ -117,8 +119,8 @@ ${sel(['#duel .phase .background .background_inner', '#duel .phase .phase_inner.
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ink} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${lacquer}, ${lacquerDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, '#ffffff', 0.2)}, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.7)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.opp, '#ffffff', 0.2)}, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.7)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, '#ffffff', 0.2)}, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${goldHi}, 0 0 8px 2px ${alpha(gold, 0.85)}, 0 0 18px ${alpha(t.self, 0.6)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.opp, '#ffffff', 0.2)}, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${goldHi}, 0 0 8px 2px ${alpha(gold, 0.85)}, 0 0 18px ${alpha(t.opp, 0.6)}; }
 ${sel(['#duel .phase span'])} { color: ${goldHi} !important; text-shadow: 0 2px 0 ${ink} !important; }
 ${sel(['#duel .phase.active span'])} { color: #ffffff !important; }
 ${SEL.duelLog} { background: linear-gradient(180deg, ${mix(t.surface, lacquer, 0.3)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${gold}, inset 0 0 0 4px ${ink}, inset 0 0 0 5px ${goldLo} !important; }

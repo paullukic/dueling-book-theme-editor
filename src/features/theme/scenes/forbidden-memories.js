@@ -5,7 +5,8 @@ import { n1, rng } from './kit.js';
 // void. A gold-tiled board recedes in hard perspective, flat-shaded and
 // dithered like a PS1 frame; above its far edge a card spins on its axis as
 // it is summoned, the yellow pyramid cursor bobbing over it, and a winged
-// sun-disk plate hangs in the dark above. Gold dust drifts up.
+// sun-disk plate hangs in the dark above (not in a duel: its wing tips
+// would show in the stage's top corner; chrome/forbidden-memories.js). Gold dust drifts up.
 
 const VX = 1250;
 const VY = 432;
@@ -85,7 +86,7 @@ const scene = (t) => {
     }
     return f;
   };
-  const disk = `<g>${wing(-1)}${wing(1)}<rect x="${VX - 92}" y="108" width="184" height="58" fill="${void0}" stroke="${gold}" stroke-width="5"/><rect x="${VX - 83}" y="117" width="166" height="40" fill="none" stroke="${goldLo}" stroke-width="2"/><circle cx="${VX}" cy="98" r="18" fill="${t.danger}" stroke="${gold}" stroke-width="4"/></g>`;
+  const disk = `<g class="dbtefx-fm-disk">${wing(-1)}${wing(1)}<rect x="${VX - 92}" y="108" width="184" height="58" fill="${void0}" stroke="${gold}" stroke-width="5"/><rect x="${VX - 83}" y="117" width="166" height="40" fill="none" stroke="${goldLo}" stroke-width="2"/><circle cx="${VX}" cy="98" r="18" fill="${t.danger}" stroke="${gold}" stroke-width="4"/></g>`;
 
   // The title screen's hieroglyph wall, carved faintly into the dark: columns of glyphs between rules.
   const G = ['M6 1.2a2.6 3 0 1 0 0.01 0M6 7.2V12M2.4 8H9.6', 'M6 1V12M3 3H9M3 5.4H9M3 7.8H9M2 12H10', 'M0 4.5l2-2 2 2 2-2 2 2 2-2 2 2M0 9.5l2-2 2 2 2-2 2 2 2-2 2 2', 'M6 12V4.5Q6 1 9 1.2Q7.5 3 7.5 5.5M6 7Q4 6 3.5 4', 'M1 11H11M2 11V7Q6 2 10 7V11', 'M2 2H10V10H2ZM4 4H8V8H4Z'];

@@ -91,7 +91,6 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 </g>
 <path d="M1110 640L1250 440Q1300 360 1330 332H1372Q1400 360 1450 430L1600 600V660H1110Z" fill="url(#dbtefx-tf-slope)"/>
 <path d="M1330 332H1372Q1400 360 1450 430L1600 600V610L1440 450Q1400 400 1372 340Z" fill="${rockLit}" fill-opacity="0.55"/>
-<path d="M1336 334L1352 352L1364 336" fill="none" stroke="${t.danger}" stroke-opacity="0.6" stroke-width="3"/>
 <path d="M960 652Q1000 618 1060 628L1100 640L1440 628Q1520 624 1600 640V700H940Z" fill="${rock}"/>
 <path d="M960 652Q1000 618 1060 628L1100 640L1440 628Q1520 624 1600 640" fill="none" stroke="${rockLit}" stroke-width="2.5"/>
 <path d="M975 664Q1040 652 1120 660T1300 656M990 678Q1080 668 1200 674T1460 668" fill="none" stroke="${rockLit}" stroke-opacity="0.35" stroke-width="1.5"/>
