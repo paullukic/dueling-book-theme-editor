@@ -222,6 +222,9 @@ ${T(['#content .title1::before'])} { width: 340px; margin-left: -170px; opacity:
 /* ---- Backdrop: a random scatter of small sparkles instead of the even grid ---- */
 html body #dbte-skin-motif { background: ${U(sparkleField)} 0 0 / 600px 600px repeat !important; }
 html body #dbte-skin-motif::before { background: none !important; }
+/* Main menu: the galaxy's tilted ring circled a feed timestamp; it slides out right past the timestamps and its orbiting units go. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-xy-gal { transform: translateX(210px); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-xy-units { display: none; }
 
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${goldDeep}, ${gold}, ${goldDeep}) !important; border-radius: 1px !important; }

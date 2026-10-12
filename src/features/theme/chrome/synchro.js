@@ -154,7 +154,8 @@ ${SEL.lifeOpp} { background: linear-gradient(180deg, transparent 12%, ${alpha('#
 ${T(['#duel .lifepoints .black_bar'])} { background: ${dust} 0 0 / 60px, ${deep} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 ${SEL.phase} {
-  background: repeating-conic-gradient(from 0deg, ${alpha(pearl, 0.5)} 0 26deg, ${alpha(pearl, 0.12)} 26deg 30deg) !important;
+  /* Inactive rims at half strength: the pearl is laid over the graphite, not over the bright playmat (which read as full white). */
+  background: repeating-conic-gradient(from 0deg, ${alpha(pearl, 0.5)} 0 26deg, ${alpha(pearl, 0.12)} 26deg 30deg), ${t.bg} !important;
   box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(glow, 0.6)} !important;
 }
 ${T(['#duel .phase .background .background_top'])} { background: transparent !important; }

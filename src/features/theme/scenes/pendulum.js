@@ -49,9 +49,9 @@ ${[0, 1, 2].map((i) => `<ellipse cx="${x}" cy="${ground}" rx="44" ry="10" fill="
 <linearGradient id="dbtefx-pe-cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.4)}" stop-opacity="0.08"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-pe-gem" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.self}"/><stop offset="0.5" stop-color="${mix(t.self, t.accent, 0.5)}"/><stop offset="1" stop-color="${t.accent}"/></linearGradient></defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-pe-sky)"/>
-<ellipse cx="${hx}" cy="${hy}" rx="200" ry="120" fill="url(#dbtefx-pe-portal)"/>
+<g class="dbtefx-pe-ring"><ellipse cx="${hx}" cy="${hy}" rx="200" ry="120" fill="url(#dbtefx-pe-portal)"/>
 <g transform="translate(${hx} ${hy}) scale(0.62 0.17)">${runeRing(t, 0, 0, 200, mix(t.accent, '#ffffff', 0.4), 40)}${runeRing(t, 0, 0, 140, t.self, 26, true)}<circle r="92" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="5"/></g>
-<ellipse cx="${hx}" cy="${hy}" rx="64" ry="18" fill="url(#dbtefx-pe-bob)" ${anim('bloom', 5, 0, 'ease-in-out')}/>
+<ellipse cx="${hx}" cy="${hy}" rx="64" ry="18" fill="url(#dbtefx-pe-bob)" ${anim('bloom', 5, 0, 'ease-in-out')}/></g>
 <g fill="url(#dbtefx-pe-cone)">${[1, 0.75, 0.5, 0.28].map((k) => `<path d="M${n1(hx - 50 * k)} ${hy}L${n1(hx - 120 * k)} ${ground}H${n1(hx + 120 * k)}L${n1(hx + 50 * k)} ${hy}Z"/>`).join('')}</g>
 <!--mid-->
 ${pillar(lx, left, 1, left, 'l', 0)}

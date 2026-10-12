@@ -160,7 +160,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: var(--tr-chain) 0 50% / 21px 9.5px repeat-x; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${mix(t.opp, '#000000', 0.22)} 70%, ${mix(t.opp, '#000000', 0.35)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${mix(t.opp, '#000000', 0.22)} 70%, ${mix(t.opp, '#000000', 0.35)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: steel jaws; the active one is sprung */
@@ -182,8 +182,11 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-rim { display
 /* The activation pulse would arc between the zone column and the chat: it goes in a duel. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-pulse { display: none; }
 /* Main menu: the card, its pulse and the chains that hold it sat behind the feed and the status dropdown; the side chains slide out past the timestamps. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-tr-card, .dbtefx-tr-pulse, .dbtefx-tr-hold) { display: none; }
+/* The trap hole's dark ring sat behind "Post Status" and the last timestamp: it goes too. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-tr-card, .dbtefx-tr-pulse, .dbtefx-tr-hold, .dbtefx-tr-rim) { display: none; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-side { transform: translateX(110px); }
+/* Front page: the top-right chain ran diagonally beside the Welcome / Forum / Rules links: it goes there (the card still hangs by the others). */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-top { display: none; }
 ${sel(['#duel .phase span'])} { color: ${mix(t.muted, t.text, 0.3)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${hazard(4)} !important; }

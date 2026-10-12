@@ -5,7 +5,7 @@ import { glow, H, n1, polar, rng, W } from './kit.js';
 // pour in from beyond the right edge, braid into one vortex and merge in a
 // white-violet burst that throws a shockwave. The vortex turns slowly, so the
 // arms read as energy drawn inward.
-const cx = 1300;
+const cx = 1324;
 const cy = 430;
 
 // Catmull-Rom through the points as cubic Beziers: smooth curves, few points.

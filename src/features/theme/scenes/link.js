@@ -15,9 +15,9 @@ const link = (t) => {
   const cx = 1050;
   const cy = 360;
   // The portal is drawn around (cx, cy) and placed at (PX, PY), clear of the menu feed.
-  const PX = 1420;
+  const PX = 1455;
   const PY = 400;
-  const PK = 0.32;
+  const PK = 0.26;
   const k = 1.4; // portal scale
   const s = 112 * k; // half side of the portal frame
   const lit = mix(t.accent2, '#ffffff', 0.6);

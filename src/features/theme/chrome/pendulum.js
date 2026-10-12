@@ -159,7 +159,7 @@ ${SEL.life} {
   background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 50%) !important;
   box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.78)}, 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 10px -3px ${alpha(gold, 0.6)} !important;
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.55)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.25)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.38)}, ${mix(t.opp, '#7f8fc0', 0.4)} 75%) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
@@ -212,6 +212,9 @@ ${SETTINGS} { background: ${topEdge(4)}, ${halves(0.16)}, ${dark} !important; bo
 /* ---------- Scrollbars ---------- */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${orange}, ${green}) !important; }
 ${sel(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: ${gold} !important; }
+
+/* Main menu: the portal ring above the right scale reached the feed's edge; it slides 30px right. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-pe-ring { transform: translateX(21px); }
 
 @media (prefers-reduced-motion: reduce) { html body #content *, html body #content *::before, html body #content *::after { transition: none !important; animation: none !important; } }
 `;

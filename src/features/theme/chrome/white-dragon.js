@@ -124,6 +124,9 @@ ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, navy, 0.5)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, navy, 0.5)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: -3px; width: 20px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(ice, 0.8)}); }
+/* Low: the central danger outline deepens and thickens to a 3px band between navy keylines, so it holds against the pale frost frame and the pink low glow. */
+${sel(['#duel .lifepoints'])} { --dbte-lp-outline: ${mix(t.danger, '#000000', 0.22)}; }
+${sel(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border'])} { box-shadow: 0 0 0 1px ${deep}, 0 0 0 4px ${mix(t.danger, '#000000', 0.22)}, 0 0 0 5px ${deep}, 0 0 12px 2px ${alpha(t.danger, 0.6)} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px ${navy} !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, #ffffff, ${silver}, ${frost}, ${deep}, ${frost}, #ffffff) !important; box-shadow: 0 0 0 1px ${deep}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }

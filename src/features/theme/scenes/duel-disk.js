@@ -84,7 +84,7 @@ ${hub}`;
   // Near plane: a slow light sweep across the whole disk.
   const near = `<g transform="rotate(14 ${HX} ${HY})"><rect x="${n1(HX - 300)}" y="-100" width="220" height="${H + 200}" fill="url(#dbtefx-dd-sweep)" fill-opacity=".5" style="animation: dbtefx-dd-sweep 11s ease-in-out infinite;"/></g>`;
 
-  return `${defs}${far}<!--mid-->${mid}<!--near-->${near}`;
+  return `${defs}${far}<!--mid--><g class="dbtefx-dd-disk">${mid}</g><!--near-->${near}`;
 };
 
 export default duelDisk;

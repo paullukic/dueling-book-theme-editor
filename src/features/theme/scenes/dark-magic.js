@@ -51,6 +51,8 @@ ${runeBand(cx, cy, 247, 40, 1.1, t.accent, 1.3, 77).replace('<g ', '<g stroke-op
   return `<style>${CARD_ART_KEYFRAMES}</style><defs>
 <radialGradient id="dbtefx-dm-vig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.7"/></radialGradient>
 <radialGradient id="dbtefx-dm-core" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="420"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.12"/><stop offset="0.75" stop-color="${t.accent}" stop-opacity="0.06"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
+<radialGradient id="dbtefx-dm-hole"><stop offset="0.45" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/></radialGradient>
+<mask id="dbtefx-dm-links" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#ffffff"/><ellipse cx="1360" cy="175" rx="200" ry="140" fill="url(#dbtefx-dm-hole)"/></mask>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dm-vig)"/>
 <!--mid-->

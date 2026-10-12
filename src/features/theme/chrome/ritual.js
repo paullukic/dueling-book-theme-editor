@@ -138,10 +138,12 @@ ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   border: 1px solid ${alpha(blue, 0.35)}; border-radius: 2px; box-shadow: ${bevel}, inset 0 0 30px ${alpha('#000000', 0.5)}; pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
-  content: ""; position: absolute; left: 16px; right: 16px; top: -40px; bottom: auto; width: auto; height: 50px; transform: none;
-  background: var(--ri-candles) 0 0 / 29px 50px no-repeat, var(--ri-candles) 100% 0 / 29px 50px no-repeat;
+  content: ""; position: absolute; left: 16px; right: 16px; top: -29px; bottom: auto; width: auto; height: 36px; transform: none;
+  background: var(--ri-candles) 0 0 / 21px 36px no-repeat, var(--ri-candles) 100% 0 / 21px 36px no-repeat;
   filter: drop-shadow(0 0 6px ${alpha(candle, 0.85)}); pointer-events: none; z-index: 1;
 }
+/* Front page: above the pop-up the left candle stood in the logo; there the candles stand inside the altar's top corners. */
+${DIALOGS.map((d) => `html body:has(#welcome_buttons:not([style*="none"])) #content ${d}::after`).join(', ')} { top: 9px; }
 ${SEL.dialogTitle} { ${pageText} }
 ${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: ${t.text} !important; }
 
@@ -223,6 +225,9 @@ ${SETTINGS} { background: ${slab} !important; border-color: ${frameBlue} !import
 /* ---------- Scrollbars ---------- */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${frameBlue}, ${blue}, ${frameBlue}) !important; }
 ${sel(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: ${candle} !important; }
+
+/* In a duel the altar's circle sat flush against the chat's right edge: it moves 20px right. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ri-altar { transform: translateX(14px); }
 
 @media (prefers-reduced-motion: reduce) { html body #content *, html body #content *::before, html body #content *::after { transition: none !important; animation: none !important; } }
 `;

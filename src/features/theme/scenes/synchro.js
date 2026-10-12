@@ -4,7 +4,7 @@ import { glow, H, n1, rng, W } from './kit.js';
 // Synchro: the Synchro Summon. A tuner has become a column of glowing green
 // rings; the non-tuner levels rise through them as stars, and a pearl-white
 // beam climbs the column to the summon flare at the top.
-const cx = 1480;
+const cx = 1496;
 
 const synchro = (t) => {
   const green = mix(t.success, t.self, 0.5);

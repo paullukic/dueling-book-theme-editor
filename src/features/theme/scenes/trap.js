@@ -94,7 +94,7 @@ const trap = (t) => {
 <g class="dbtefx-tr-rim" fill="none" stroke="${t.accent}"><ellipse cx="${cx - 10}" cy="${hy}" rx="176" ry="37" stroke-opacity="0.55" stroke-width="2"/><ellipse cx="${cx - 10}" cy="${hy + 4}" rx="130" ry="25" stroke-opacity="0.25"/></g>
 <!--mid-->
 <g class="dbtefx-tr-hold">${chain(1250, -30, cx - 16, cy - 104, 30, 13, 0)}</g>
-<g class="dbtefx-tr-side">${chain(1640, -20, cx + 60, cy - 96, 50, 16, 1.1)}
+<g class="dbtefx-tr-side"><g class="dbtefx-tr-top">${chain(1640, -20, cx + 60, cy - 96, 50, 16, 1.1)}</g>
 ${chain(1640, 470, cx + 76, cy + 20, 40, 15, 0.5)}
 ${chain(1640, 930, cx + 66, cy + 104, -30, 17, 1.7)}</g>
 <g class="dbtefx-tr-hold">${chain(cx - 10, hy - 6, cx - 6, cy + 112, 0, 12, 0.8)}</g>

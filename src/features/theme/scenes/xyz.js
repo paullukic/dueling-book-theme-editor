@@ -90,12 +90,14 @@ ${glow('dbtefx-xy-unit', goldHi, 0.5, 0.5, 0.5, 0.8)}
 <rect x="-200" y="-200" width="2000" height="1300" fill="url(#dbtefx-xy-sky)"/>
 ${stars}
 <!--mid-->
+<g class="dbtefx-xy-gal">
 <ellipse cx="${cx}" cy="${cy}" rx="560" ry="300" fill="url(#dbtefx-xy-halo)" transform="rotate(${tilt} ${cx} ${cy})"/>
 <g transform="translate(${cx} ${cy}) rotate(${tilt}) scale(1 ${squash})"><g style="animation: dbtefx-xy-turn 90s linear infinite;">${lanes}${dust}</g>
 <circle r="150" fill="url(#dbtefx-xy-bulge)"/></g>
 <ellipse cx="${cx}" cy="${cy}" rx="70" ry="46" fill="url(#dbtefx-xy-core)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-bloom 5s ease-in-out infinite;"/>
 ${comets}
-${units}`;
+<g class="dbtefx-xy-units">${units}</g>
+</g>`;
 };
 
 export default xyz;

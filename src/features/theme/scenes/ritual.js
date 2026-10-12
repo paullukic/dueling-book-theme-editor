@@ -106,9 +106,9 @@ const scene = (t) => {
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-sky)"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ri-halo)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
-<g fill="none" stroke="${blue}" stroke-opacity="0.12" transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})"><circle cx="${cx}" cy="${cy}" r="172" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="214" stroke-width="1" stroke-dasharray="2 10"/></g>
+<g class="dbtefx-ri-altar"><g fill="none" stroke="${blue}" stroke-opacity="0.12" transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})"><circle cx="${cx}" cy="${cy}" r="172" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="214" stroke-width="1" stroke-dasharray="2 10"/></g></g>
 <!--mid-->
-<g transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})">
+<g class="dbtefx-ri-altar"><g transform="translate(${AX} ${AY}) scale(${AK}) translate(${-cx} ${-AY})">
 <path d="M${cx - 14} ${cy + 96}H${cx + 14}L${cx + 70} 690H${cx - 70}Z" fill="url(#dbtefx-ri-beam)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
 <g transform="translate(${cx} ${cy}) scale(0.9)">
 <circle r="160" fill="url(#dbtefx-ri-core)" opacity="0.35"/>
@@ -155,7 +155,7 @@ ${[-1, 1].map((d) => `<circle cx="${cx + d * 67}" cy="788" r="4" fill="${dark}" 
 <g fill="${gold}" fill-opacity="0.8">${dishes}</g>
 ${flames}
 <g fill="none" stroke="url(#dbtefx-ri-smoke)" stroke-width="2.5" stroke-linecap="round">${smoke}</g>
-</g>
+</g></g>
 <style>@keyframes dbtefx-ri-pulse { 0%, 30% { transform: scale(0.4); opacity: 0; } 40% { opacity: 0.8; } 100% { transform: scale(2.2); opacity: 0; } }
 @keyframes dbtefx-ri-smoke { 0% { transform: translateY(10px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(6px, -70px); opacity: 0; } }
 @keyframes dbtefx-ri-glim { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }</style>

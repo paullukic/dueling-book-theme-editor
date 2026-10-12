@@ -198,9 +198,11 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; z-index: 3; left: 7px; top: 50%; width: 30px; height: 15px; transform: translateY(-50%); pointer-events: none;
   background: var(--mi-eye) center / contain no-repeat; filter: drop-shadow(0 0 2px ${alpha('#000000', 0.95)}) drop-shadow(0 0 1px ${alpha('#000000', 0.95)});
 }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(gold, 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(copper, '#000000', 0.35)}, ${copper} 55%, ${mix(copper, gold, 0.3)}) !important; }
-/* In a duel the tomb ceiling (lapis band, stars, frieze) sits under the stage's upper edge, dimmed so it reads as backdrop. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { opacity: 0.7; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(gold, 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(copper, '#000000', 0.2)}, ${mix(t.self, gold, 0.25)} 55%, ${mix(t.self, gold, 0.4)}) !important; }
+/* In a duel the tomb ceiling (lapis band, stars, frieze) sits under the stage's upper edge, dimmed to 30% so it reads as backdrop, not a band through the stage. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { opacity: 0.3; }
+/* Front page: the Stone's eye sat just under "Rules"; the Stone drops 40px. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-stone { transform: translateY(28px); }
 /* Main menu: the frieze would run through the title and the status dropdown, and the Stone's Items behind the
    feed's timestamps: the ceiling goes, the Stone slides right until only its glyph column shows past the feed. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { display: none; }

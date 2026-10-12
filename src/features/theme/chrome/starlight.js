@@ -126,6 +126,8 @@ ${sel(['#duel .phase .background .background_top'])} { background: none !importa
    on the main menu it would sit behind the feed's timestamps, so it is gone there. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translate(916px, 262px) scale(0.42); }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { display: none; }
+/* Front page: the card sat half behind the pop-up's corner; it moves 60px right. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translateX(42px); }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${light ? t.raised : t.bg} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, ${lines(light ? 0.035 : 0.05)}, radial-gradient(circle at 35% 30%, ${light ? '#ffffff' : mix(t.raised, t.border, 0.3)}, ${light ? mix(t.surface, t.bg, 0.7) : t.surface}) !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u2) center / 100% 100%, radial-gradient(circle at 35% 30%, ${light ? mix(t.self, '#ffffff', 0.25) : mix(t.self, t.bg, 0.45)}, ${mix(t.self, light ? t.text : t.bg, light ? 0.4 : 0.65)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.self : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.self, 0.85)}; }

@@ -176,10 +176,10 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: ${ankh} center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
 ${sel(['#duel .lifepoints .life_border::after'])} {
-  content: ""; position: absolute; right: -7px; top: -5px; width: 3px; height: 29px; border-radius: 2px;
+  content: ""; position: absolute; right: -4px; top: -5px; width: 2px; height: 29px; border-radius: 1px;
   background: linear-gradient(180deg, ${hi}, ${gold} 50%, ${lo}); box-shadow: 0 0 0 1px ${alpha('#000000', 0.6)};
 }
-${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 18%, ${alpha('#ffffff', 0.4)} 26%, transparent 38%), linear-gradient(90deg, ${mix(mix(self, t.danger, 0.2), '#000000', 0.08)}, ${mix(mix(self, t.danger, 0.25), '#000000', 0.25)} 55%, ${mix(mix(self, t.danger, 0.3), '#000000', 0.45)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 18%, ${alpha('#ffffff', 0.4)} 26%, transparent 38%), linear-gradient(90deg, ${mix(mix(self, t.danger, 0.2), '#000000', 0.08)}, ${mix(mix(self, t.danger, 0.2), '#000000', 0.15)} 55%, ${mix(mix(self, t.danger, 0.1), '#000000', 0.1)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(obelisk, '#000000', 0.6)}, ${mix(obelisk, '#000000', 0.2)} 70%, ${mix(obelisk, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 

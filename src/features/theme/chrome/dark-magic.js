@@ -191,6 +191,8 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent2} !important
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { clip-path: inset(0 0 0 235px); }
 /* On the main menu the circle would run through the status feed and its dropdown: the magician stands alone. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { display: none; }
+/* Front page: the circle's rune bands ran beside Welcome / Forum / Rules; a soft mask clears them there. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { mask: url(#dbtefx-dm-links); }
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 2px ${alpha(t.accent, 0.7)}, 0 0 18px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; z-index: 3; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
