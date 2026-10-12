@@ -2,7 +2,7 @@
 // bone-white saddle stitch, a deckled page edge, red ribbon bookmarks, ruled
 // page wells for text, a fountain-pen nib capping the life bars and red wax
 // on the active phase. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -99,8 +99,8 @@ ${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 21
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${leather} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(leather, t.raised, 0.7)}, ${leather} 70%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(t.self, '#ffffff', 0.2)}, ${t.self} 45%, ${mix(t.self, '#000000', 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(t.opp, '#ffffff', 0.25)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle at 40% 35%, ${deepForWhite(t.self)}, ${mix(deepForWhite(t.self), '#000000', 0.25)} 45%, ${mix(t.self, '#000000', 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u7) center / 100% 100%, radial-gradient(circle at 40% 35%, ${deepForWhite(t.opp)}, ${mix(deepForWhite(t.opp), '#000000', 0.25)} 45%, ${mix(t.opp, '#000000', 0.55)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${bone} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel .cout_txt'])} { background: ${pageWell} !important; box-shadow: inset 0 0 0 1px ${boneDim}, inset 0 0 0 4px ${alpha(ink, 0.9)}, inset 0 0 0 5px ${alpha(bone, 0.25)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ink}, 0 0 0 3px ${alpha(bone, 0.6)}, 0 0 0 6px ${leather}, 0 0 0 7px ${alpha(bone, 0.25)} !important; }

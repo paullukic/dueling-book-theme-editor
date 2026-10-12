@@ -3,7 +3,7 @@
 // band, a sword guard (tsuba) crest, life bars drawn as nichirin blades with
 // a wavy hamon, tsuba phase discs and a sheathed blade over the pop-ups.
 // (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -121,8 +121,8 @@ ${sel(['#duel .phase.active::before'])} { filter: drop-shadow(0 0 6px ${alpha(go
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${checkInk} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${lacquerHi} 30%, ${lacquer}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${lacquerHi}, ${mix(lacquer, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${vermDeep}, inset 0 0 0 4px ${alpha(checkInk, 0.9)}, inset 0 0 0 5px ${alpha(gold, 0.3)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${vermilion}, 0 0 0 4px ${checkInk}, 0 0 0 5px ${alpha(gold, 0.5)} !important; }

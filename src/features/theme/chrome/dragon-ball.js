@@ -121,7 +121,6 @@ ${SEL.life} { border-color: ${chrome} !important; border-radius: 999px !importan
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 999px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#fff3d6', 0.55)}, ${alpha('#fff3d6', 0.12)} 38%, transparent 46%), linear-gradient(90deg, ${mix(t.self, '#e0601a', 0.5)}, ${mix(t.self, '#ffb84a', 0.6)}) !important; }
 /* The numeral fade under the self count dims the orange into a deep ember, not the sky's violet ink (which turns it brown). */
-${sel(['#duel #lifepoints1'])} { --dbt-lp-ink: ${mix(t.self, '#000000', 0.72)}; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.4)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -22px; top: 0; width: 26px; height: 26px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(gold, 0.7)}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }

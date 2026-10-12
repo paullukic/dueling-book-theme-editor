@@ -115,6 +115,7 @@ ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${ink}; --lp-heal: ${dark}; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 2px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; image-rendering: pixelated; }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${pale} !important; -webkit-text-fill-color: currentColor !important; text-shadow: 2px 2px 0 ${ink}, 2px 0 0 ${ink} !important; -webkit-font-smoothing: none; font-smooth: never; will-change: transform; }
+${sel(['#duel #lifepoints1', '#duel #lifepoints2'])} { --dbte-lp-font: "DBTE Pixel", "Lucida Console", monospace; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
 /* The number sits on a solid darkest-green plate. Low life inverts the counter within the four shades:
    pale frame and plate, ink digits, and the LP chip blinks. The digits drop 2.5px so the plate's ink rim

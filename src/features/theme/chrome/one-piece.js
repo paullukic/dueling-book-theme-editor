@@ -2,7 +2,7 @@
 // and nails, twisted hemp rope frames with brass corner plates, the straw hat
 // as the crest, log-pose glass on the life bars and compass roses on the
 // phases. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -106,7 +106,6 @@ ${SEL.life} { border-color: ${brass} !important; border-radius: 4px !important; 
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(mix(t.accent, t.accent2, 0.3), '#000000', 0.3)}, ${t.accent} 45%, ${mix(t.accent, '#e0b050', 0.6)}) !important; }
 /* The numeral fade under the self count dims gold into a warm umber, not the sea's teal ink (which turns it olive). */
-${sel(['#duel #lifepoints1'])} { --dbt-lp-ink: ${mix(t.accent, '#000000', 0.72)}; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -6px; width: 22px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -115,8 +114,8 @@ ${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 20
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${sea} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(sea, t.raised, 0.5)} 30%, ${mix(sea, t.bg, 0.5)}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180deg, ${mix(timberDeep, t.surface, 0.2)}, ${mix(timberDeep, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${ropeDark}, inset 0 0 0 4px ${alpha(rope, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${brass}, 0 0 0 5px ${ropeDark}, 0 0 0 6px ${alpha(rope, 0.6)} !important; }

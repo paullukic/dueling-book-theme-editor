@@ -2,7 +2,7 @@
 // with brass rims and rivets, transmutation circles chalked on the metal,
 // crimson coat cloth for the strong actions, and alchemy-blue light when a
 // circle activates (hover, active phase). (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -111,8 +111,8 @@ ${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -4px; 
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ironDark} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(iron, t.text, 0.12)}, ${ironDark} 75%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
 ${sel(['#duel .phase span'])} { color: ${chalk} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel .cout_txt'])} { background: ${well} !important; box-shadow: inset 0 0 0 1px ${brassDim}, inset 0 0 0 4px ${alpha(ironDark, 0.9)}, inset 0 0 0 5px ${alpha(brass, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${brass}, 0 0 0 5px ${ironDark}, 0 0 0 6px ${alpha(brass, 0.5)} !important; }
