@@ -40,7 +40,7 @@ const scene = (t) => {
   const water = t.accent2;
   const foam = mix(t.accent2, '#ffffff', 0.78);
   const flame = t.warning;
-  const wisteria = mix(mix(t.muted, t.accent2, 0.25), '#ffffff', 0.1);
+  const wisteria = mix(mix(t.muted, t.accent2, 0.25), '#b49ae0', 0.4);
 
   // Water breathing: brush strokes, not outlines. Overlapping tapered strokes
   // in three blues swirl around the blade (squeezed into a tall oval), dry
@@ -72,8 +72,9 @@ const scene = (t) => {
   const curls = `<g fill="${foam}" fill-opacity="0.8">${spray}</g>`;
 
   // Sun-dance flame: the shader draws the fire; the SVG keeps its hot core
-  // line and a glow so the form still reads without WebGL.
-  const fire = `<path d="${band(215, 335, 196, 196, 56, 0.5)}" fill="url(#dbtefx-ds-ember)" opacity="0.8"/><path d="${band(218, 332, 196, 196, 8, 0.5)}" fill="${mix(flame, '#ffffff', 0.55)}"/><path d="${band(218, 332, 198, 198, 20, 0.5)}" fill="none" stroke="${flame}" stroke-opacity="0.7" stroke-width="2"/>`;
+  // line and a glow so the form still reads without WebGL. It starts late
+  // enough that its tip stays behind the duel chat.
+  const fire = `<path d="${band(244, 335, 196, 196, 56, 0.5)}" fill="url(#dbtefx-ds-ember)" opacity="0.8"/><path d="${band(247, 332, 196, 196, 8, 0.5)}" fill="${mix(flame, '#ffffff', 0.55)}"/><path d="${band(247, 332, 198, 198, 20, 0.5)}" fill="none" stroke="${flame}" stroke-opacity="0.7" stroke-width="2"/>`;
 
   // The nichirin blade, near upright: a dark steel body with a pale edge zone
   // whose boundary is a gunome hamon, the shinogi ridge and yokote line, a gold
@@ -129,6 +130,7 @@ const scene = (t) => {
     if (x > 470 && x < 980 && cr() < 0.7) continue;
     const h = 90 + cr() * 100;
     const w = 26 + cr() * 16;
+    if (x > 230 && x < 440) continue;
     const b = 905;
     cedars += `M${n1(x)} ${n1(b - h)}L${n1(x + w * 0.55)} ${n1(b - h * 0.62)}L${n1(x + w * 0.3)} ${n1(b - h * 0.62)}L${n1(x + w)} ${n1(b - h * 0.25)}L${n1(x + w * 0.4)} ${n1(b - h * 0.25)}L${n1(x + w * 1.2)} ${b}H${n1(x - w * 1.2)}L${n1(x - w * 0.4)} ${n1(b - h * 0.25)}L${n1(x - w)} ${n1(b - h * 0.25)}L${n1(x - w * 0.3)} ${n1(b - h * 0.62)}L${n1(x - w * 0.55)} ${n1(b - h * 0.62)}Z`;
   }
@@ -156,15 +158,17 @@ ${ridge(640, 90, 3, mix(t.bg, t.muted, 0.16), 0.9)}
 ${ridge(720, 70, 5, mix(t.bg, t.accent2, 0.08), 0.95)}
 <rect x="0" y="560" width="${W}" height="340" fill="url(#dbtefx-ds-mist)"/>
 <!--mid-->
+<g class="dbtefx-ds-swirl">
 <ellipse cx="${CX}" cy="${CY}" rx="240" ry="330" fill="url(#dbtefx-ds-halo)"/>
 <g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-sway 9s ease-in-out infinite;">${fire}</g>
 <circle cx="${CX}" cy="${n1(CY - 120)}" r="200" fill="url(#dbtefx-ds-ember)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
 <g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-swayb 11s ease-in-out infinite;"><g transform="translate(${CX + 62} ${CY}) scale(0.62 1.12) translate(${-CX} ${-CY})">${wave}${curls}${crest}</g></g>
+</g>
 <g class="dbtefx-ds-blade">${blade}</g>
 <!--near-->
 <path d="${cedars}" fill="${ink}"/>
-${vine}
-${wisteriaL}`;
+<g transform="translate(0 30)">${vine}
+${wisteriaL}</g>`;
 };
 
 export default scene;

@@ -4,8 +4,8 @@ import { bayer, inPoly, pxGrid, raster } from './pixel-kit.js';
 // The Eternal Duelist Soul (Game Boy Advance, 2002): bright 15-bit sprites on
 // the title screen's glowing grid. The right third is the handheld's duel
 // field seen from above: a sandstone-brick board with pale blue card slots
-// and a dragon card in attack position. No HUD text, and the main menu drops
-// the board (it would ghost behind the status feed).
+// and a dragon card in attack position. No HUD text; the board shows only off the
+// main menu, duel and front page (chrome/eternal-duelist-soul.js).
 
 const A = 4;
 

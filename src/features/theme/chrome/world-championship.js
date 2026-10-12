@@ -4,7 +4,7 @@
 // brackets of the cursor, speed-stripe life bars from the battle cut-in, and
 // pop-ups drawn as the lower screen hanging from its hinge.
 // (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { deepForWhite, mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -20,13 +20,14 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const ink = mix(t.bg, '#000000', 0.35);
   const orange = t.warning;
   const pink = t.accent2;
+  const oppDeep = deepForWhite(t.opp, '#6a2a00', 3, 0.2);
 
   // LCD dot grid (one DS pixel = 2 css px here).
   const lcd = svg(3, 3, `<path d="M0 .5H3M.5 0V3" stroke="#000000" stroke-opacity="0.14"/>`);
   // Pixel cursor brackets: four stepped corners.
   const brackets = svg(40, 40, `<g fill="${orange}" shape-rendering="crispEdges"><path d="M0 0h12v4H4v8H0z"/><path d="M40 0H28v4h8v8h4z"/><path d="M0 40h12v-4H4v-8H0z"/><path d="M40 40H28v-4h8v-8h4z"/></g><g fill="${mix(orange, '#000000', 0.55)}" shape-rendering="crispEdges"><path d="M4 4h8v2H6v6H4z"/><path d="M28 4h8v8h-2V6h-6z"/><path d="M4 36v-8h2v6h6v2z"/><path d="M36 36h-8v-2h6v-6h2z"/></g>`);
-  // Hinge above the pop-up "lower screen".
-  const hinge = svg(220, 26, `<rect x="0" y="6" width="220" height="16" rx="8" fill="${shellDeep}"/><rect x="12" y="2" width="56" height="22" rx="11" fill="${shell}" stroke="${shellDeep}" stroke-width="1.5"/><rect x="152" y="2" width="56" height="22" rx="11" fill="${shell}" stroke="${shellDeep}" stroke-width="1.5"/><rect x="18" y="5" width="44" height="5" rx="2.5" fill="#ffffff" fill-opacity="0.45"/><rect x="158" y="5" width="44" height="5" rx="2.5" fill="#ffffff" fill-opacity="0.45"/><circle cx="110" cy="14" r="3" fill="${t.success}"/>`);
+  // Hinge in the top band of the pop-up "lower screen" bezel (nothing pokes above it onto the site logo).
+  const hinge = svg(220, 14, `<rect x="0" y="3" width="220" height="8" rx="4" fill="${shellDeep}"/><rect x="12" y="0.75" width="56" height="12.5" rx="6.25" fill="${shell}" stroke="${shellDeep}" stroke-width="1.5"/><rect x="152" y="0.75" width="56" height="12.5" rx="6.25" fill="${shell}" stroke="${shellDeep}" stroke-width="1.5"/><rect x="18" y="2.5" width="44" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.45"/><rect x="158" y="2.5" width="44" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.45"/><circle cx="110" cy="7" r="2.5" fill="${t.success}"/>`);
   // Grid paper for panels: the touch screen's fine light-blue grid.
   const gridPaper = svg(24, 24, `<path d="M0 .5H24M.5 0V24" stroke="${t.accent}" stroke-opacity="0.07"/>`);
 
@@ -78,7 +79,7 @@ ${sel(['#content .button.disabled'])} { color: ${mix(t.muted, t.bg, 0.25)} !impo
 
 /* Pop-ups: the lower screen in its shell bezel, hanging from the hinge. */
 ${SEL.dialog} { background: ${screen} !important; border-radius: 6px !important; box-shadow: 0 0 0 3px ${ink}, 0 0 0 12px ${shell}, 0 0 0 14px ${shellDeep}, 6px 8px 0 14px ${alpha('#000000', 0.45)} !important; }
-${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: calc(50% - 110px); top: -30px; right: auto; bottom: auto; width: 220px; height: 26px; pointer-events: none; z-index: 0; background: var(--dbtc-u2) center / contain no-repeat; transform: none; }
+${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: calc(50% - 110px); top: -14px; right: auto; bottom: auto; width: 220px; height: 14px; pointer-events: none; z-index: 0; background: var(--dbtc-u2) center / contain no-repeat; transform: none; }
 ${on(SEL.dialog, 'after')} { content: none; }
 ${SEL.dialogTitle} { ${label} }
 ${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${t.text} !important; text-shadow: 1px 1px 0 ${ink} !important; }
@@ -92,7 +93,8 @@ ${SEL.chat} { background: ${screen} !important; box-shadow: inset 2px 0 0 ${shel
 ${SEL.life} { border-color: ${outline} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${ink}, 3px 3px 0 2px ${alpha('#000000', 0.5)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(180deg, transparent 0 5px, ${alpha('#ffffff', 0.22)} 5px 6px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.35)}, ${t.self} 55%, ${mix(t.self, t.bg, 0.35)}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(180deg, transparent 0 5px, ${alpha('#ffffff', 0.22)} 5px 6px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.35)}, ${t.opp} 55%, ${mix(t.opp, t.bg, 0.35)}) !important; }
+/* The rival's orange is too light for white numerals: its bar burns a deeper orange under them, light only along the top. */
+${SEL.lifeOpp} { background: repeating-linear-gradient(180deg, transparent 0 5px, ${alpha('#ffffff', 0.18)} 5px 6px), linear-gradient(180deg, ${t.opp}, ${oppDeep} 45%, ${mix(oppDeep, t.bg, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { ${label} }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -44px; top: 4px; width: 40px; height: 22px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${SEL.phase} { background: linear-gradient(180deg, ${mix(t.text, '#ffffff', 0.4)}, ${mix(t.text, t.muted, 0.6)}) !important; border-radius: 9px !important; box-shadow: 0 0 0 2px ${ink}, 3px 3px 0 1px ${alpha('#000000', 0.5)} !important; }

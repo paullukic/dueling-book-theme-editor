@@ -151,7 +151,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: ${hi} !important; border
 /* Pop-up buttons. */
 ${popCss}
 
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-eds-board { display: none; }
+/* The faint board would ghost behind the status feed (main menu), half under the duel chat (duel) and behind the pop-up corner (front page): it shows on the other pages only. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#duel:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-eds-board { display: none; }
 @keyframes dbtc-eds-flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tileHover, 'before')} { animation: none; } }
 `;

@@ -194,7 +194,7 @@ const naruto = (t) => {
 <g class="dbtefx-nr-moon"><circle cx="${MOON[0]}" cy="${MOON[1]}" r="150" fill="url(#dbtefx-nr-moonglow)"/><circle cx="${MOON[0]}" cy="${MOON[1]}" r="64" fill="url(#dbtefx-nr-moon)"/><g fill="${mix(t.text, t.muted, 0.5)}" fill-opacity="0.25"><circle cx="${MOON[0] - 18}" cy="${MOON[1] - 10}" r="12"/><circle cx="${MOON[0] + 20}" cy="${MOON[1] + 16}" r="8"/><circle cx="${MOON[0] + 6}" cy="${MOON[1] - 30}" r="5"/></g></g>
 <g style="animation: dbtefx-nr-drift 60s ease-in-out infinite;">
 ${cloud(30, 270, 380, 70, 3)}
-${cloud(560, 160, 280, 52, 5)}
+${cloud(-20, 180, 190, 42, 5)}
 </g>
 <g fill="${mix(t.success, t.bg, 0.74)}">${crown}</g>
 <path d="${rim}" fill="url(#dbtefx-nr-cliff)"/>
@@ -209,12 +209,14 @@ ${tower}
 ${frontRow}
 ${windows}
 <!--near-->
-${trails}
+<g class="dbtefx-nr-sphere">
+<g class="dbtefx-nr-trails">${trails}</g>
 <circle cx="${RS[0]}" cy="${RS[1]}" r="${RR * 3.4}" fill="url(#dbtefx-nr-halo)" ${anim('bloom', 3.2, 0, 'ease-in-out')}/>
 <circle cx="${RS[0]}" cy="${RS[1]}" r="${RR}" fill="url(#dbtefx-nr-ball)"/>
 <g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 1.6s linear infinite;"><path d="${arms}" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="3" stroke-linecap="round"/></g>
 <g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 2.4s linear infinite reverse;"><path d="${speed}" fill="none" stroke="${core}" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round"/></g>
 <g style="transform-origin: ${RS[0]}px ${RS[1]}px; animation: dbtefx-spin 7s linear infinite;">${leaves}</g>
+</g>
 <path d="M-40 900V830Q200 812 420 828T880 822T1300 830T1660 818V900Z" fill="${mix(t.bg, '#000000', 0.25)}"/>`;
 };
 

@@ -83,6 +83,8 @@ ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, ink, 0.6)}, ${m
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${ink} !important; }
 /* The hit ring follows the slanted plate: 12px of run over the 31px frame is a -21deg skew. */
 ${sel(['#duel .lifepoints'])} { --dbte-lp-skew: -21deg; }
+/* The top counter's hit glow stays off the opponent's deck pile just below its left end: no downward lean, and the ring's bloom is cut at the frame's foot. */
+html:not([data-dbte-lpstyle]) body #duel .lifepoints#lifepoints2 { --lp-fx-dy: 0px; --dbte-lp-clip: polygon(-24px -24px, calc(100% + 24px) -24px, calc(100% + 24px) 100%, -24px 100%); }
 /* Low: the top stripe leaves the side colour for the danger colour over a white hairline. */
 ${['#lifepoints1', '#lifepoints2'].map((id) => `html:not([data-dbte-lpstyle]) body #duel ${id}.lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_bar`).join(', ')} { box-shadow: inset 0 4px 0 ${t.danger}, inset 0 5px 0 ${alpha('#ffffff', 0.5)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -38px; top: calc(50% - 11px); width: 36px; height: 22px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; }

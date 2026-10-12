@@ -74,7 +74,6 @@ ${subTitles} { color: #ffffff !important; text-shadow: ${outline} !important; }
 /* Pop-ups: a royal-blue circuit panel with DL's angled header tab. */
 ${SEL.dialog} { background: ${panelFill}, ${deep} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${azure}, 0 0 0 4px ${alpha(deep, 0.95)}, 0 0 0 5px ${alpha(azureHi, 0.5)}, 0 26px 60px -12px ${ink} !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 0; top: 0; right: 0; width: auto; height: 78px; bottom: auto; pointer-events: none; z-index: 0; background: var(--dbtc-tab) left top / 100% 100% no-repeat; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; right: 18px; bottom: 14px; left: auto; top: auto; width: 54px; height: 20px; pointer-events: none; z-index: 0; background: var(--dbtc-chev) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { color: #ffffff !important; text-shadow: ${outline} !important; z-index: 1; }
 
 /* Chat: a flat azure header bar on a circuit body. */
@@ -129,7 +128,7 @@ ${popCss}
 
 /* In a duel the scene's gate stands aside: in the right gutter the avatar column and the page edge cut it. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { display: none; }
-/* On the main menu the gate steps right, clear of the status feed's edge. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { translate: 70px 0; }
+/* On the main menu the gate steps right, clear of the status feed's edge and its scrollbar. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { translate: 125px 0; }
 `;
 };

@@ -164,7 +164,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons: lacquer plates with a haori check, OK and Yes in vermilion. */
 ${popCss(popPrimary, popSecondary)}
 
-/* Scene: the blade stays off the menu feed and the front page's links. */
+/* Scene: the blade stays off the menu feed and the front page's links; on the menu the breathing swirl shrinks into the gutter right of the feed. */
 html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-ds-blade { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ds-swirl { transform-origin: 1330px 470px; transform: translate(185px, 0) scale(0.75); }
 `;
 };

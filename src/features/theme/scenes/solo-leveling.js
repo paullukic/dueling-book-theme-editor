@@ -7,9 +7,9 @@ import { H, n1, polar, rng, W } from './kit.js';
 // of shadow soldiers rises out of black ground smoke, backlit, eyes lit violet.
 
 // The Gate, in viewBox units: centre, half-width, half-height (its foot on the street).
-const gx = 1352;
+const gx = 1438;
 const gy = 470;
-const rx = 84;
+const rx = 66;
 const ry = 232;
 const ground = gy + ry - 6;
 
@@ -44,16 +44,19 @@ const scene = (t) => {
   };
 
   // The street running up to the Gate: kerbs, broken lane marks, cracks.
-  const street = `<path d="M0 ${H}L${gx - 70} ${ground}H${gx + 70}L${W} ${H}Z" fill="url(#dbtefx-sl-road)"/>
-<path d="M${gx - 70} ${ground}L760 ${H}M${gx + 70} ${ground}L${W} 820" stroke="${cyan}" stroke-opacity="0.22" stroke-width="2"/>
+  const street = `<path d="M0 ${H}L${gx - 56} ${ground}H${gx + 56}L${W} ${H}Z" fill="url(#dbtefx-sl-road)"/>
+<path d="M${gx - 56} ${ground}L760 ${H}M${gx + 56} ${ground}L${W} 820" stroke="${cyan}" stroke-opacity="0.22" stroke-width="2"/>
 <path d="M${gx} ${ground + 14}L${gx - 10} ${ground + 40}M${gx - 18} ${ground + 64}L${gx - 34} ${ground + 104}M${gx - 50} ${ground + 136}L${gx - 76} ${H}" stroke="${ice}" stroke-opacity="0.3" stroke-width="3"/>
 <path d="M${gx - 40} ${ground + 30}l-40 22l-26 -4l-30 24M${gx + 30} ${ground + 40}l36 26l40 2" fill="none" stroke="#000000" stroke-opacity="0.5" stroke-width="1.5"/>`;
 
-  // Rubble lifting toward the Gate.
-  const rocks = [[1250, 300, 9], [1460, 360, 12], [1430, 560, 8], [1270, 600, 10], [1500, 220, 7], [1200, 470, 6]]
+  // Mana-crystal shards lifting toward the Gate: dark glass lit cyan on the
+  // face that turns to the Gate, a bright rim and a soft halo.
+  const rocks = [[1370, 290, 9], [1500, 330, 12], [1494, 560, 8], [1372, 612, 10], [1502, 214, 7], [1378, 452, 6]]
     .map(([x, y, s], i) => {
-      const pts = Array.from({ length: 8 }, (_, k) => polar(0, 0, s * (0.55 + rand() * 0.6), k * 45 + rand() * 20).join(' '));
-      return `<g transform="translate(${x} ${y})"><g style="animation: dbtefx-sl-lift ${n1(9 + rand() * 6)}s ease-in-out ${n1(-i * 1.7)}s infinite;"><path d="M${pts.join('L')}Z" fill="${night}" stroke="${ice}" stroke-opacity="0.4" stroke-width="0.9"/></g></g>`;
+      const pts = Array.from({ length: 8 }, (_, k) => polar(0, 0, s * (0.55 + rand() * 0.6), k * 45 + rand() * 20));
+      const d = `M${pts.map((p) => p.join(' ')).join('L')}Z`;
+      const face = `M${pts[5].join(' ')}L${pts[6].join(' ')}L${pts[7].join(' ')}L${pts[0].join(' ')}L0 0Z`;
+      return `<g transform="translate(${x} ${y})"><g style="animation: dbtefx-sl-lift ${n1(9 + rand() * 6)}s ease-in-out ${n1(-i * 1.7)}s infinite;"><path d="${d}" fill="none" stroke="${cyan}" stroke-opacity="0.22" stroke-width="5" stroke-linejoin="round"/><path d="${d}" fill="${mix(night, cyan, 0.22)}"/><path d="${face}" fill="${ice}" fill-opacity="0.45"/><path d="${d}" fill="none" stroke="${ice}" stroke-opacity="0.85" stroke-width="1.1" stroke-linejoin="round"/></g></g>`;
     })
     .join('');
 
@@ -75,14 +78,14 @@ const scene = (t) => {
     const eyes = C('M-9 -182L-2.5 -180.5M9 -182L2.5 -180.5');
     return `<g transform="translate(${x} ${base})"><path d="${cape}" fill="url(#dbtefx-sl-cape)"/><path d="${C('M-42 -136L-44 -70M42 -136L44 -70')}${gear}" stroke="${night}" stroke-width="${k(8)}" stroke-linecap="round"/>${tip}<path d="${torso}${helm}${plume}" fill="url(#dbtefx-sl-shade)"/><path d="${rim}" fill="none" stroke="${ice}" stroke-opacity="0.55" stroke-width="1.4"/><g style="animation: dbtefx-pulse 3.4s ease-in-out ${-delay}s infinite;"><ellipse cx="0" cy="${k(-181)}" rx="${k(20)}" ry="${k(8)}" fill="url(#dbtefx-sl-eye)"/><path d="${eyes}" stroke="${mix(violet, '#ffffff', 0.55)}" stroke-width="${k(2.6)}" stroke-linecap="round"/></g></g>`;
   };
-  const army = [[1284, 770, 0.74, 'axe', 1.4], [1404, 772, 0.76, 'horn', 2.6], [1344, 812, 0.92, 'plume', 0]]
+  const army = [[1384, 770, 0.74, 'axe', 1.4], [1486, 772, 0.76, 'horn', 2.6], [1436, 812, 0.92, 'plume', 0]]
     .map(([x, b, s, kind, d]) => soldier(x, b, s, kind, d))
     .join('');
   // A second, fainter rank from a smaller gate in the left margin.
-  const reserve = [[70, 836, 0.5, 'horn', 1.1], [122, 846, 0.56, 'axe', 2.2]].map(([x, b, s, kind, d]) => soldier(x, b, s, kind, d)).join('');
+  const reserve = [[110, 836, 0.5, 'horn', 1.1], [162, 846, 0.56, 'axe', 2.2]].map(([x, b, s, kind, d]) => soldier(x, b, s, kind, d)).join('');
 
   // Black ground smoke the soldiers rise out of.
-  const wisps = [1250, 1310, 1380, 1440, 1500].map((x, i) => `<path d="M${x} 900C${x - 20} 860 ${x + 22} 830 ${x + 4} 790S${x - 20} 740 ${x + 8} 700" stroke="url(#dbtefx-sl-smoke)" stroke-width="${12 + (i % 3) * 6}" stroke-linecap="round" fill="none" style="animation: dbtefx-sl-wisp ${n1(7 + i * 0.9)}s ease-out ${n1(-i * 1.3)}s infinite;"/>`).join('');
+  const wisps = [1350, 1400, 1450, 1490, 1530].map((x, i) => `<path d="M${x} 900C${x - 20} 860 ${x + 22} 830 ${x + 4} 790S${x - 20} 740 ${x + 8} 700" stroke="url(#dbtefx-sl-smoke)" stroke-width="${12 + (i % 3) * 6}" stroke-linecap="round" fill="none" style="animation: dbtefx-sl-wisp ${n1(7 + i * 0.9)}s ease-out ${n1(-i * 1.3)}s infinite;"/>`).join('');
 
   return `<defs>
 <radialGradient id="dbtefx-sl-gate" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${ice}" stop-opacity="0.5"/><stop offset="0.55" stop-color="${cyan}" stop-opacity="0.3"/><stop offset="0.86" stop-color="${mix(t.bg, cyan, 0.4)}" stop-opacity="0.5"/><stop offset="0.95" stop-color="${ice}" stop-opacity="0.75"/><stop offset="1" stop-color="${cyan}" stop-opacity="0"/></radialGradient>
@@ -103,7 +106,7 @@ ${street}
 <ellipse cx="${gx}" cy="${ground}" rx="260" ry="78" fill="url(#dbtefx-sl-spill)"/>
 <ellipse cx="${gx}" cy="${gy}" rx="${rx + 10}" ry="${ry + 10}" fill="url(#dbtefx-sl-gate)"/>
 <!--mid-->
-<ellipse cx="88" cy="560" rx="38" ry="150" fill="url(#dbtefx-sl-gate)" opacity="0.5"/>
+<ellipse cx="128" cy="560" rx="38" ry="150" fill="url(#dbtefx-sl-gate)" opacity="0.5"/>
 ${city(H, 40, 150, 19, night, 0.45)}
 ${rocks}
 <!--near-->
@@ -120,8 +123,8 @@ ${army}
 export default scene;
 
 export const particles = [
-  { kind: 'mote', count: 40, colors: ['accent', 'text'], rise: true, column: true, columnX: 0.86 },
-  { kind: 'ember', count: 30, colors: ['accent2'], column: true, columnX: 0.86, speed: 0.5 },
+  { kind: 'mote', count: 40, colors: ['accent', 'text'], rise: true, column: true, columnX: 0.92 },
+  { kind: 'ember', count: 30, colors: ['accent2'], column: true, columnX: 0.92, speed: 0.5 },
   { kind: 'star', count: 50, colors: ['text'] },
 ];
 
@@ -135,8 +138,8 @@ void main() {
   vec2 uv = gl_FragCoord.xy / u_res;
   float asp = u_res.x / u_res.y;
   vec2 p = vec2(uv.x * asp, uv.y);
-  vec2 c = vec2(0.885 * asp, 0.478);
-  vec2 q = (p - c) / vec2(0.094, 0.258);
+  vec2 c = vec2(0.947 * asp, 0.478);
+  vec2 q = (p - c) / vec2(0.074, 0.258);
   float r = length(q);
   float a = atan(q.y, q.x);
   float t = u_time * 0.3;

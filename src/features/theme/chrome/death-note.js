@@ -75,10 +75,10 @@ ${SEL.buttonDown} { background: ${mix(red, '#000000', 0.65)} !important; border-
 ${sel(['#content .button.proxy::before'])} { content: ""; position: absolute; left: 3px; top: -2px; width: 7px; height: 70%; pointer-events: none; background: var(--dbtc-u4) center / 100% 100% no-repeat; filter: drop-shadow(1px 1px 1px #000000); }
 ${sel(['#content .button.disabled'])} { opacity: 0.55 !important; }
 
-/* Pop-ups: the notebook's black rules page, stitched; a quill and red ribbon bookmark hang off the top-right corner, outside the page. */
+/* Pop-ups: the notebook's black rules page, stitched; a quill and red ribbon bookmark lie across the top-right corner of the title bar, clear of the front page links. */
 ${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 0%, ${alpha(cold, 0.1)}, transparent 70%), var(--dbtc-u3), var(--dbtc-u2), linear-gradient(180deg, ${mix(leather, t.raised, 0.25)}, ${mix(t.bg, '#000000', 0.3)}) !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${mix(t.border, t.bg, 0.2)}, 0 0 0 4px ${ink}, 0 0 0 5px ${alpha(bone, 0.45)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(12)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: auto; top: -44px; right: -150px; bottom: auto; width: 144px; height: 120px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: auto; top: -34px; right: 14px; bottom: auto; width: 102px; height: 85px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a stitched leather band; the window is a ruled page. */

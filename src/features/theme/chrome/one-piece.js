@@ -10,7 +10,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const timber = mix(mix(t.accent2, t.accent, 0.4), t.bg, 0.72);
   const timberDeep = mix(timber, t.bg, 0.55);
   const timberLit = mix(timber, t.accent2, 0.12);
-  const rope = mix(t.accent, t.text, 0.3);
+  const rope = mix(mix(t.accent, t.text, 0.3), '#000000', 0.05);
   const ropeDark = mix(rope, t.bg, 0.6);
   const brass = mix(t.accent, '#ffffff', 0.12);
   const brassDim = mix(t.accent, t.bg, 0.45);
@@ -104,7 +104,7 @@ ${SEL.chat} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180de
 /* Duel: brass-banded life bars led by a log pose; rope-rimmed compass-rose phases. */
 ${SEL.life} { border-color: ${brass} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${ropeDark}, 0 0 0 4px ${alpha(rope, 0.6)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(mix(t.accent, t.accent2, 0.3), '#000000', 0.3)}, ${t.accent} 45%, ${mix(t.accent, '#e0b050', 0.6)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(mix(t.accent, t.accent2, 0.06), '#000000', 0.15)}, ${t.accent} 45%, ${mix(t.accent, '#e0b050', 0.6)}) !important; }
 /* A red inner hairline ties the gold self bar to the red self zones. */
 ${sel(['#duel #lifepoints1 .life_border'])} { box-shadow: inset 0 0 0 2px ${t.self}, 0 0 0 1px ${ink}, 0 0 0 3px ${ropeDark}, 0 0 0 4px ${alpha(rope, 0.6)}, 0 4px 10px -3px #000000 !important; }
 /* The numeral fade under the self count dims gold into a warm umber, not the sea's teal ink (which turns it olive). */

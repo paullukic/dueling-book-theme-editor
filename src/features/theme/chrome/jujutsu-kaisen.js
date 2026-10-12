@@ -109,7 +109,7 @@ ${sel(['#chats .chat .chat_top span'])} { ${label} }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${alpha(cursed, 0.45)}, inset -1px 0 0 ${alpha(cursed, 0.45)}, inset 0 -1px 0 ${alpha(cursed, 0.45)} !important; }
 
 /* Duel: life bars of red and blue cursed energy with ink wisps, a talisman at the end; spiral-button phases. */
-${SEL.life} { border-color: ${mix(cursed, t.text, 0.3)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 10px -2px ${alpha(cursed, 0.6)}, 0 4px 10px -3px #000000 !important; }
+${SEL.life} { border-color: ${mix(cursed, t.text, 0.3)} !important; border-radius: 2px !important; box-shadow: inset 0 0 0 1px ${mix(cursed, t.text, 0.3)}, 0 0 0 1px ${ink}, 0 0 10px -2px ${alpha(cursed, 0.6)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: var(--dbtc-u6) 0 0 / 100% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: var(--dbtc-u6) 0 0 / 100% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
@@ -161,8 +161,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons: a red seal block and talisman paper. */
 ${popCss(popPrimary, popSecondary)}
 
-/* Scene: the domain sits right of the menu feed's Reply column and the front page's links; the windows under Quit and the hand go dark in a duel. */
-html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-jjk-domain { transform: translateX(63px); }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-jjk-stagelights { display: none; }
+/* Scene: on the menu and the front page the domain shrinks into the right margin, clear of the feed's timestamps and Reply column and below the Welcome/Forum/Rules links; in a duel the windows under Quit and the hand go dark and the black flash and ink splat leave the narrow gutter beside the chat. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-jjk-domain { transform: translate(1438px, 345px) scale(0.42) translate(-1420px, -290px); }
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-jjk-rim { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-jjk-stagelights, .dbtefx-jjk-bolts, .dbtefx-jjk-splat) { display: none; }
 `;
 };

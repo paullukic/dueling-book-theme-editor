@@ -3,7 +3,7 @@
 // actions, Wall stone in the pop-ups, life bars cut like ODM blades with
 // their snap-off scores, gas-canister caps for the phases and a crest of one
 // ODM blade laid over a stretch of crenellated wall. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { deepForWhite, mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -49,8 +49,11 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 8px ${t.bg} !important;`;
   const steelBg = (lift = 0) => `linear-gradient(180deg, ${alpha('#ffffff', 0.08 + lift)}, transparent 40%), var(--dbtc-u2), linear-gradient(180deg, ${plate}, ${mix(plate, t.bg, 0.55)})`;
-  // ODM blade scores across a bar.
-  const scores = `repeating-linear-gradient(115deg, transparent 0 22px, ${alpha(t.bg, 0.55)} 22px 24px, ${alpha('#ffffff', 0.18)} 24px 25px)`;
+  // ODM blade snap-off scores: short notches along the bar's top edge only,
+  // so a healthy blade never reads like the low state's full-height hatch.
+  const scores = `repeating-linear-gradient(98deg, transparent 0 46px, ${alpha(t.bg, 0.45)} 46px 47.5px, ${alpha('#ffffff', 0.2)} 47.5px 48.5px) 0 0 / 100% 34% no-repeat`;
+  // The lit gas canister: hot copper, deep enough for a white label.
+  const copper = deepForWhite(mix(t.accent2, '#b0561c', 0.4), '#4a1c06', 4.5, 0);
 
   // Pop-up buttons (DuelingBook's OK/Yes/No/Cancel <img>s): riveted plates.
   const popBtn = (text, wide, c) => {
@@ -100,7 +103,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: life bars cut like ODM blades with snap-off scores and a leather grip; gas-canister phases. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${plateDeep}, 0 0 0 2px ${alpha(steel, 0.4)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.25)}), ${scores}, linear-gradient(90deg, #6f9a5e, ${mix(t.self, '#ffffff', 0.08)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.25)}), ${scores}, linear-gradient(90deg, ${mix(t.self, '#1c3a16', 0.4)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.25)}), ${scores}, linear-gradient(90deg, #c8963a, #e0b45a) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -3px; width: 18px; height: 34px; pointer-events: none; background: var(--dbtc-u7) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -108,10 +111,9 @@ ${SEL.phase} { background: conic-gradient(from 210deg, ${steel}, ${steelDim}, ${
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${plateDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(plate, t.text, 0.08)} 30%, ${plateDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.accent2, '#ffffff', 0.18)} 15%, ${t.accent2} 55%, ${mix(t.accent2, t.bg, 0.35)}) !important; box-shadow: 0 0 0 2px ${mix(t.accent2, '#ffffff', 0.3)}, 0 0 22px 5px ${alpha(t.accent2, 0.9)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(t.accent2, '#ffffff', 0.18)} 15%, ${t.accent2} 55%, ${mix(t.accent2, t.bg, 0.35)}) !important; box-shadow: 0 0 0 2px ${mix(t.accent2, '#ffffff', 0.3)}, 0 0 22px 5px ${alpha(t.accent2, 0.9)}; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${mix(copper, t.accent2, 0.15)} 15%, ${copper} 55%, ${mix(copper, t.bg, 0.35)}) !important; box-shadow: 0 0 0 2px ${t.accent2}, 0 0 22px 5px ${alpha(t.accent2, 0.85)}; }
 ${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 210deg, ${t.accent2}, ${mix(t.accent2, t.bg, 0.5)}, ${mix(t.accent2, '#ffffff', 0.3)}, ${mix(t.accent2, t.bg, 0.5)}, ${t.accent2}) !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.accentText} !important; text-shadow: 0 0 3px ${alpha('#ffffff', 0.45)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 5px ${alpha('#000000', 0.7)} !important; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, plate, 0.3)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${steelDim}, inset 0 0 0 4px ${alpha(plateDeep, 0.9)}, inset 0 0 0 5px ${alpha(steel, 0.3)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steel}, 0 0 0 4px ${plateDeep}, 0 0 0 5px ${alpha(steel, 0.45)} !important; }
@@ -152,8 +154,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons: riveted plates; OK and Yes in Survey Corps green. */
 ${popCss(popPrimary, popSecondary)}
 
-/* Scene: the titan hand stays off the menu feed and clear of the front page's links. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-aot-hand { display: none; }
-html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-aot-hand { transform: translateX(150px); }
+/* Scene: the titan hand stays off the menu feed and the front page. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-aot-hand { display: none; }
 `;
 };

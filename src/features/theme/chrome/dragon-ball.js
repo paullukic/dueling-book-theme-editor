@@ -4,7 +4,7 @@
 // life bars with a Dragon Radar (the seven star balls live in the scene only),
 // the phases are amber orbs with one to six rim stars and the life bars are
 // golden ki gauges. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { deepForWhite, mix } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -58,9 +58,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const crestSmall = svg(28, 28, capsule(24, 11));
   const crestBig = svg(84, 84, `<defs><radialGradient id="a"><stop offset="0.5" stop-color="${radar}" stop-opacity="0.45"/><stop offset="1" stop-color="${radar}" stop-opacity="0"/></radialGradient></defs><circle cx="42" cy="42" r="42" fill="url(#a)"/>${radarDisc(42, 26)}`);
   const lifeCap = svg(26, 26, radarDisc(13, 11.5));
-  // The lit phase orb burns a deeper orange so its white label reads.
-  const deep = mix(amber, '#b04a00', 0.4);
-  const phaseOrbLit = svg(45, 45, `<defs><radialGradient id="o" cx="0.5" cy="0.62" r="0.62"><stop offset="0" stop-color="${mix(deep, gold, 0.35)}"/><stop offset="0.55" stop-color="${deep}"/><stop offset="0.88" stop-color="${mix(deep, '#000000', 0.15)}"/><stop offset="1" stop-color="${mix(deep, red, 0.5)}"/></radialGradient></defs>${orb(22.5, 22.5, 21.5, 0)}`);
+  // The lit phase orb burns a deep ember orange so its white label reads.
+  const deep = deepForWhite(mix(amber, '#e07a10', 0.6), '#7a2a00', 4.5, 0);
+  const phaseOrbLit = svg(45, 45, `<defs><radialGradient id="o" cx="0.5" cy="0.62" r="0.62"><stop offset="0" stop-color="${mix(deep, gold, 0.12)}"/><stop offset="0.55" stop-color="${deep}"/><stop offset="0.88" stop-color="${mix(deep, '#000000', 0.15)}"/><stop offset="1" stop-color="${mix(deep, red, 0.5)}"/></radialGradient></defs>${orb(22.5, 22.5, 21.5, 0)}`);
   const phaseStars = (n) => {
     let d = '';
     for (let i = 0; i < n; i++) {

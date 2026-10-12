@@ -48,8 +48,9 @@ const scene = (t) => {
   const extras = [[540, 712], [760, 740], [1120, 690], [1460, 700], [160, 700]].map(([bx, by]) => `<path d="M${bx} ${by}h16v-14q-8 -5 -16 0Z" fill="${ink}"/>`).join('');
   // The cylinder tower with its vertical fins.
   const cyl = `<path d="M300 900V560Q336 540 372 560V900Z" fill="${mix(ink, t.surface, 0.3)}"/>${[312, 324, 336, 348, 360].map((fx) => `<path d="M${fx} 556V900" stroke="${mix(t.muted, ink, 0.6)}" stroke-width="1.2"/>`).join('')}<path d="M300 560Q336 540 372 560" fill="none" stroke="${violet}" stroke-opacity="0.6" stroke-width="2"/>`;
-  // The veil: a vast dark dome descending over the city, its rim inked.
-  const veil = `<path d="M-60 900C-60 300 420 120 800 120C1180 120 1660 300 1660 900" fill="url(#dbtefx-jjk-veil)"/><path d="M-60 900C-60 300 420 120 800 120C1180 120 1660 300 1660 900" fill="none" stroke="${ink}" stroke-width="10" stroke-opacity="0.75"/><path d="M-50 900C-50 310 424 132 800 132C1176 132 1650 310 1650 900" fill="none" stroke="${violet}" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="3 9"/>`;
+  // The veil: a vast dark dome descending over the city, its rim inked (the
+  // rim crosses the feed and links, so the chrome hides it on menu and front page).
+  const veil = `<path d="M-60 900C-60 300 420 120 800 120C1180 120 1660 300 1660 900" fill="url(#dbtefx-jjk-veil)"/><g class="dbtefx-jjk-rim"><path d="M-60 900C-60 300 420 120 800 120C1180 120 1660 300 1660 900" fill="none" stroke="${ink}" stroke-width="10" stroke-opacity="0.75"/><path d="M-50 900C-50 310 424 132 800 132C1176 132 1650 310 1650 900" fill="none" stroke="${violet}" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="3 9"/></g>`;
 
   // Hollow purple: an energy shell, white-hot inside, a dark band, a bright
   // rim; swirls turning within, a corona of streaks around it.
@@ -70,7 +71,7 @@ const scene = (t) => {
   }
   const purple = `<circle cx="${SX}" cy="${SY}" r="280" fill="url(#dbtefx-jjk-aura)"/>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 80s linear infinite;"><path d="${corona}" stroke="${mix(violet, '#ffffff', 0.4)}" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/></g>
-<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="108" fill="url(#dbtefx-jjk-sphere)" fill-opacity="0.35"/><circle cx="${SX}" cy="${SY}" r="108" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
+<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-jjk-throb 6s ease-in-out infinite;"><circle cx="${SX}" cy="${SY}" r="108" fill="url(#dbtefx-jjk-sphere)" fill-opacity="0.92"/><circle cx="${SX}" cy="${SY}" r="108" fill="none" stroke="${mix(violet, '#ffffff', 0.7)}" stroke-width="3"/></g>
 <g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin 14s linear infinite reverse;" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round">${swirl}</g>`;
   // Red and blue: two orbs circling the sphere, swinging in toward it.
   const orb = (color, r, phase, dur) => `<g style="transform-origin: ${SX}px ${SY}px; animation: dbtefx-spin ${dur}s linear ${n1(-phase)}s infinite;"><g transform="translate(${SX + 150} ${SY})"><g ${anim('jjk-near', dur / 2, phase / 2, 'ease-in-out')}><circle r="${r * 3.4}" fill="url(#dbtefx-jjk-${color === red ? 'red' : 'blue'})"/><circle r="${r}" fill="${color}"/><circle r="${r}" fill="none" stroke="${mix(color, '#ffffff', 0.6)}" stroke-width="2"/><circle r="${n1(r * 0.5)}" fill="#ffffff" fill-opacity="0.9"/></g></g></g>`;
@@ -152,7 +153,7 @@ ${glow('dbtefx-jjk-blue', blue, 0.5, 0.5, 0.5, 0.6)}
 ${veil}
 <!--mid-->
 <g class="dbtefx-jjk-domain">${purple}
-${bolts}
+<g class="dbtefx-jjk-bolts">${bolts}</g>
 ${orb(red, 24, 0, 18)}
 ${orb(blue, 24, 9, 18)}</g>
 <g fill="${ink}"><path d="${towers}"/></g>
@@ -162,7 +163,7 @@ ${cyl}
 <path d="${lights}" fill="${mix(t.warning, t.text, 0.4)}" fill-opacity="0.55"/>
 <path class="dbtefx-jjk-stagelights" d="${stageLights}" fill="${mix(t.warning, t.text, 0.4)}" fill-opacity="0.55"/>
 <!--near-->
-${splat(1500, 120, 0.9, red, 4)}
+<g class="dbtefx-jjk-splat">${splat(1500, 120, 0.9, red, 4)}</g>
 ${talismans}`;
 };
 
@@ -176,7 +177,8 @@ export const particles = [
 ];
 
 // WebGL layer (shader.js): cursed energy, dark flame-like turbulence rising
-// over the city and pooling around the hollow purple.
+// over the city and pooling around the hollow purple. The sphere itself is
+// the scene's SVG, so the chrome can move it off the menu feed and links.
 export const shader = {
   uniforms: ['bg', 'accent', 'opp', 'accent2'],
   frag: `
@@ -197,16 +199,6 @@ void main() {
   col = mix(col, u_accent * 0.75, smoothstep(0.6, 1.0, f) * near * 0.9);
   // Black wisps cut through.
   col *= 1.0 - 0.5 * smoothstep(0.55, 0.75, fbm(q * 2.4 - w + vec2(t, 0.0))) * near;
-  // Hollow purple: a turbulent ball of violet energy, white-hot at the core.
-  vec2 sp = p - vec2(1420.0, 290.0);
-  float sr = length(sp) / 108.0;
-  float tw = sr * 3.2 - u_time * 0.6;
-  vec2 tp = mat2(cos(tw), -sin(tw), sin(tw), cos(tw)) * (sp / 108.0);
-  float swirl = fbm(tp * 2.6 + vec2(0.0, u_time * 0.1));
-  float ball = smoothstep(1.05, 0.9, sr);
-  vec3 core = mix(u_accent, vec3(1.0), smoothstep(0.55, 0.0, sr) * 0.85);
-  col = mix(col, core * (0.6 + swirl * 0.8), ball);
-  col += u_accent * 0.6 * smoothstep(1.6, 1.0, sr) * (1.0 - ball) * (0.5 + swirl);
   col *= 1.0 - 0.45 * dot(uv - 0.5, uv - 0.5) * 2.0;
   gl_FragColor = vec4(dither(col), 1.0);
 }`,

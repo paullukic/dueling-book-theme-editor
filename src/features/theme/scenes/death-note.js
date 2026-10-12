@@ -77,7 +77,7 @@ const scene = (t) => {
   const tx = 330;
   const tower = `<path d="M${tx} 640L${tx - 3} 700L${tx - 9} 744H${tx - 13}V752H${tx - 11}L${tx - 22} 812H${tx - 27}V820H${tx - 24}L${tx - 40} ${H}H${tx + 40}L${tx + 24} 820H${tx + 27}V812H${tx + 22}L${tx + 11} 752H${tx + 13}V744H${tx + 9}L${tx + 3} 700Z" fill="${mix(t.bg, cold, 0.1)}"/><circle cx="${tx}" cy="640" r="2.4" fill="${t.danger}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/>`;
 
-  const bx = 1408;
+  const bx = 1424;
   const by = 340;
   const apple = 'M0 -34C20 -50 50 -42 50 -6C50 32 28 56 6 52C0 50 -6 50 -12 52C-32 56 -52 32 -50 -6C-50 -42 -20 -50 0 -34Z';
   return `<defs>
@@ -105,7 +105,7 @@ ${tower}
 <!--mid-->
 <circle cx="${bx + 30}" cy="${by - 20}" r="360" fill="url(#dbtefx-dn-halo)"/>
 <g style="transform-origin: ${bx}px ${by}px; animation: dbtefx-dn-drift 14s ease-in-out infinite;">
-<g transform="translate(${bx} ${by}) rotate(-12) skewX(-7) scale(0.5)">
+<g transform="translate(${bx} ${by}) rotate(-12) skewX(-7) scale(0.47)">
 <path d="M0 -130C-62 -144 -132 -140 -190 -128L-194 132C-128 122 -62 126 0 140C62 126 128 122 196 128L192 -132C132 -146 62 -146 0 -130Z" fill="${leather}" stroke="${mix(t.border, cold, 0.35)}" stroke-width="1.4"/>
 <path d="M184 -126L188 122M180 -124L184 121M176 -123L180 120M2 130C60 118 124 114 184 120" fill="none" stroke="${paperDim}" stroke-opacity="0.6" stroke-width="0.9"/>
 <path d="M0 -120C-55 -134 -120 -130 -174 -118L-178 120C-120 110 -55 114 0 128Z" fill="url(#dbtefx-dn-black)" stroke="${mix(t.border, cold, 0.2)}" stroke-width="0.8"/>

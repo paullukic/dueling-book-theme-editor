@@ -20,6 +20,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const navyDeep = mix(t.opp, t.bg, 0.68);
   const red = mix(t.self, t.bg, 0.3);
   const rim = mix(t.text, '#ffffff', 0.5);
+  // Both LP boxes share one crisp sheen: a white hairline under the rim over a soft gloss.
+  const sheen = `linear-gradient(180deg, transparent 2px, ${alpha('#ffffff', 0.55)} 2px 3px, ${alpha('#ffffff', 0.2)} 3px, transparent 50%)`;
 
   // PS1 4x4 ordered dither.
   const bay = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
@@ -91,10 +93,10 @@ ${SEL.buttonHover} { ${chip(mix(gold, t.bg, 0.25), 0.3)} color: ${t.accentText} 
 ${SEL.buttonDown} { ${chip(mix(gold, t.bg, 0.5), 0)} color: ${t.text} !important; }
 ${SEL.submit} { background: ${navy} !important; border: 1px solid ${rim} !important; color: ${rim} !important; border-radius: 4px !important; }
 
-/* Pop-ups: a black plate in the sandstone band, under the winged sun disk. */
+/* Pop-ups: a black plate in the sandstone band, the winged sun disk set on its foot (above the top edge it would cover the site logo, inside it the title). */
 ${SEL.dialog} { ${platePanel} border-radius: 0 !important; box-shadow: 0 0 0 2px #000000, 0 20px 50px -10px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: -4px; top: -4px; right: -4px; bottom: -4px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(14)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 100px); top: -50px; right: auto; bottom: auto; width: 200px; height: 70px; pointer-events: none; z-index: 1; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(2px 3px 0 #000000); transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 57px); top: auto; right: auto; bottom: -26px; width: 114px; height: 40px; pointer-events: none; z-index: 1; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(2px 3px 0 #000000); transform: none; }
 ${SEL.dialogTitle} { color: ${gold} !important; text-shadow: 2px 2px 0 #000000 !important; }
 
 /* Chat: the header is the sandstone band; the window a black plate. */
@@ -105,8 +107,8 @@ ${SEL.chat} { ${platePanel} box-shadow: inset 2px 0 0 ${stone}, inset -2px 0 0 $
    gold strip along the foot for the life left; square navy phase chips in a gold rim, gold when active. */
 ${SEL.life} { border-color: ${rim} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
 /* Yours is the YOU tag's deep crimson (darker than the danger red) with the gold underline; the rival's the COM navy. */
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, '#000000', 0.45)}, ${mix(t.self, '#000000', 0.12)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(0deg, ${mix(t.opp, t.bg, 0.55)} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), ${sheen}, linear-gradient(90deg, ${mix(t.self, '#000000', 0.45)}, ${mix(t.self, '#000000', 0.12)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(0deg, ${mix(t.opp, t.bg, 0.55)} 0 3px, transparent 3px), ${sheen}, ${mix(t.opp, t.bg, 0.12)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${on(sel(['#duel #lifepoints1']), 'before')} { content: ""; position: absolute; left: -42px; top: 3px; width: 38px; height: 20px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }

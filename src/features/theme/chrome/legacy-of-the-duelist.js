@@ -94,12 +94,20 @@ ${sel(['#chats .chat .title_txt', '#chats .chat .chat_title'])} { color: ${t.tex
 
 /* Duel: LP gauge coloured by life left (--dbte-lp), cyan-rimmed plate, red LP cap; teal phase chips. */
 ${SEL.life} { border-color: ${cyan} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${alpha(navyDeep, 0.95)}, 0 0 0 4px ${alpha(cyan, 0.55)}, 0 4px 10px -3px ${ink} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, var(--dbtc-lpok) clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)} 0 2px, ${alpha('#ffffff', 0.12)} 2px 4px, transparent 4px), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 58%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 72%, ${ink})) !important; }
-/* A flat ramp with one top highlight; the number's dark halo stays light so it never smudges the fill. */
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, var(--dbtc-lpok) clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)} 0 2px, ${alpha('#ffffff', 0.2)} 2px 5px, ${alpha('#ffffff', 0.06)} 5px 45%, transparent 55%, ${alpha(ink, 0.32)}), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 45%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 70%, ${ink}) 55%, color-mix(in srgb, var(--dbtc-lpc) 88%, #ffffff)) !important; }
+/* A glassy gauge: a lit upper half over a shaded foot, deepening toward the drained end; the number's dark halo stays light so it never smudges the fill. */
 ${sel(['#duel #lifepoints1', '#duel #lifepoints2'])} { --dbte-lp-fade: 0.35; }
 ${SEL.lifeSelf} { --dbtc-lpok: ${t.success}; }
 ${SEL.lifeOpp} { --dbtc-lpok: ${t.opp}; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${navyDeep}, ${ink}) !important; }
+/* A hit flashes the cyan rim white then red on the frame alone (the shared bloom would also light the red LP cap). */
+html:not([data-dbte-lpstyle]) body #duel .lifepoints { --dbte-lp-hit-bloom: none; }
+html:not([data-dbte-lpstyle]) body #duel .lifepoints[data-dbte-lp~="hit"] .life_border { animation: dbtc-ld-hit 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+@keyframes dbtc-ld-hit {
+  0% { filter: drop-shadow(0 0 1.5px #ffffff) drop-shadow(0 0 1.5px #ffffff) drop-shadow(0 0 4px ${t.danger}); }
+  18% { filter: drop-shadow(0 0 1.5px ${t.danger}) drop-shadow(0 0 1.5px ${t.danger}) drop-shadow(0 0 4px ${t.danger}); }
+  100% { filter: drop-shadow(0 0 0 ${t.danger}) drop-shadow(0 0 0 ${t.danger}) drop-shadow(0 0 0 ${t.danger}); }
+}
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -46px; top: calc(50% - 15px); width: 44px; height: 30px; pointer-events: none; background: var(--dbtc-lp) center / contain no-repeat; filter: drop-shadow(0 2px 3px ${ink}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${gold} !important; text-shadow: ${outline}, 0 0 6px ${ink} !important; }
 ${SEL.phase} { background: linear-gradient(180deg, ${cyanHi}, ${cyan} 45%, ${cyanLo}) !important; box-shadow: 0 0 0 2px ${ink}, 0 4px 8px -2px ${ink} !important; border-radius: 26% !important; }
