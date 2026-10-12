@@ -40,8 +40,10 @@ export const starlightChrome = (t, { SEL, sel, svg, svgUrl, alpha }, light) => {
   const glint = svg(28, 28, `<defs><radialGradient id="h"><stop offset="0" stop-color="${light ? t.accent : '#ffffff'}" stop-opacity="0.45"/><stop offset="1" stop-color="${light ? t.accent : '#ffffff'}" stop-opacity="0"/></radialGradient></defs><circle cx="14" cy="14" r="9" fill="url(#h)"/><path d="${glintPath(14, 13)}" fill="${shade(0.55)}" transform="translate(0.8 1.2)"/><path d="${glintPath(14, 13)}" fill="${light ? t.accent : silverHi}"/><path d="${glintPath(14, 6, 0.25)}" fill="${light ? '#ffffff' : '#ffffff'}"/>`);
 
   // Holo disc for the phases: concentric foil rings over the prism.
-  // Resting discs keep the dotted inner ring; the active one drops it for the sparkle.
-  const holo = (on) => svg(45, 45, `<g fill="none" stroke="${silverHi}" stroke-opacity="${light ? 0.55 : 0.28}" stroke-width="0.7"><circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="16"/>${on ? '' : '<circle cx="22.5" cy="22.5" r="11.5" stroke-dasharray="1.5 2.5"/>'}</g>${on ? `<path d="${glintPath(22.5, 5)}" transform="translate(13 -13)" fill="${silverHi}" fill-opacity="0.7"/>` : ''}`);
+  // Resting discs carry the rings; the active one is a clean lit disc with only the sparkle.
+  const holo = (on) => svg(45, 45, on
+    ? `<path d="${glintPath(22.5, 5)}" transform="translate(13 -13)" fill="${silverHi}" fill-opacity="0.7"/>`
+    : `<g fill="none" stroke="${silverHi}" stroke-opacity="${light ? 0.55 : 0.28}" stroke-width="0.7"><circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="16"/><circle cx="22.5" cy="22.5" r="11.5" stroke-dasharray="1.5 2.5"/></g>`);
 
   const label = light
     ? `color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.9)} !important;`
@@ -119,8 +121,10 @@ ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; l
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 5px ${light ? t.text : '#000000'} !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${prism.join(', ')}, ${prism[0]}) !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -2px ${shade(0.8)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
-/* In a duel the great foil card steps out of the stage into the right gutter, past the chat column. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translateX(330px); }
+/* In a duel the great foil card shrinks into the right gutter past the chat column, whole and clear of the viewport edge;
+   on the main menu it would sit behind the feed's timestamps, so it is gone there. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translate(916px, 262px) scale(0.42); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { display: none; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${light ? t.raised : t.bg} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, ${lines(light ? 0.035 : 0.05)}, radial-gradient(circle at 35% 30%, ${light ? '#ffffff' : mix(t.raised, t.border, 0.3)}, ${light ? mix(t.surface, t.bg, 0.7) : t.surface}) !important; }
 ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u2) center / 100% 100%, radial-gradient(circle at 35% 30%, ${light ? mix(t.self, '#ffffff', 0.25) : mix(t.self, t.bg, 0.45)}, ${mix(t.self, light ? t.text : t.bg, light ? 0.4 : 0.65)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.self : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.self, 0.85)}; }

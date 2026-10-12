@@ -78,14 +78,14 @@ ${dust}
 <rect x="-200" y="-200" width="2000" height="1300" fill="url(#dbtefx-sy-wash)"/>
 <!--mid-->
 <ellipse cx="${cx}" cy="830" rx="200" ry="40" fill="url(#dbtefx-sy-pool)"/>
-${backs}
+<g class="dbtefx-sy-rings">${backs}</g>
 <g mask="url(#dbtefx-sy-mask)">
 <rect x="${cx - 110}" y="-20" width="220" height="940" fill="url(#dbtefx-sy-glow)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-sy-beam 4s ease-in-out infinite;"/>
 <rect x="${cx - 12}" y="-20" width="24" height="940" fill="url(#dbtefx-sy-core)"/>
 ${streaks}
 </g>
 ${stars}
-${fronts}
+<g class="dbtefx-sy-rings">${fronts}</g>
 <ellipse cx="${cx}" cy="130" rx="170" ry="60" fill="url(#dbtefx-sy-flare)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-bloom 4s ease-in-out infinite;"/>
 <path d="M${cx - 160} 130L${cx} 125L${cx + 160} 130L${cx} 135Z" fill="#ffffff" opacity="0.8"/>`;
 };

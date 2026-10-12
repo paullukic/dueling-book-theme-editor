@@ -8,7 +8,7 @@ import { anim, H, n1, polar, W } from './kit.js';
 const cx = 1252;
 const cy = 392;
 // The altar is drawn around cx and placed, smaller, in the right gutter (AX), clear of the menu feed.
-const AX = 1478;
+const AX = 1502;
 const AY = 880;
 const AK = 0.62;
 

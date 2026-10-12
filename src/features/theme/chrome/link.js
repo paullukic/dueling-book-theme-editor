@@ -15,6 +15,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
     return `var(${ids.get(s)})`;
   };
   const lit = mix(t.warning, t.danger, 0.3);
+  // The life point end caps: orange-gold, kept off the salmon of the lit arrows.
+  const cap = mix(mix(t.warning, t.danger, 0.1), '#000000', 0.06);
   const off = t.accent;
   const frame = mix(t.accent, t.border, 0.45);
   const deep = mix(t.surface, t.bg, 0.4);
@@ -23,8 +25,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const T = (list) => sel(list);
 
   // One Link Arrow (16 box). kind: 'side' (a chevron pointing up) or 'corner' (pointing up-left).
-  const arrow = (kind, rot, on) => {
-    const c = on ? lit : off;
+  const arrow = (kind, rot, on, color) => {
+    const c = color || (on ? lit : off);
     const shape = kind === 'side' ? 'M1.5 12.5L8 3.5L14.5 12.5Z' : 'M1.5 1.5H13.5L1.5 13.5Z';
     const inner = kind === 'side' ? 'M5 11L8 6.8L11 11Z' : 'M3.6 3.6H9.4L3.6 9.4Z';
     return svg(16, 16, `<g transform="rotate(${rot} 8 8)"><path d="${shape}" fill="${c}" stroke="${t.bg}" stroke-width="1.1" stroke-linejoin="round"/><path d="${inner}" fill="${mix(c, '#ffffff', on ? 0.6 : 0.3)}" opacity="${on ? 0.8 : 0.5}"/></g>`);
@@ -170,8 +172,8 @@ ${T(['#chats .chat .black_line'])} { background-color: ${frame} !important; }
 
 /* ---- Duel: LP as a Link rating plate with end arrows; phases as arrow-cornered markers ---- */
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 3px !important; box-shadow: inset 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(t.accent2, 0.7)} !important; }
-${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 270, true))} center / 100% no-repeat; pointer-events: none; }
-${T(['#duel .lifepoints .life_border::after'])} { content: ""; position: absolute; right: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 90, true))} center / 100% no-repeat; pointer-events: none; }
+${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 270, true, cap))} center / 100% no-repeat; pointer-events: none; }
+${T(['#duel .lifepoints .life_border::after'])} { content: ""; position: absolute; right: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 90, true, cap))} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self} 55%, ${mix(t.self, '#ffffff', 0.2)}) !important; }
 ${SEL.lifeOpp} { background: ${hex(0.07)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(oppGold, t.bg, 0.35)}, ${oppGold} 60%, ${mix(oppGold, '#ffffff', 0.12)}) !important; }
@@ -236,6 +238,8 @@ ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, tr
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${frame}, ${t.accent}) !important; border-radius: 1px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: ${t.accent2} !important; }
+/* In a duel the summon portal sits behind the chat and the screen edge: it goes. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-lk-portal { display: none; }
 `;
   return `html body { ${[...ids].map(([s, id]) => `${id}: ${url(s)};`).join(' ')} }
 ${css.replace(/\/\*[^*]*\*\//g, '').replace(/\n\s+/g, '\n')}`;

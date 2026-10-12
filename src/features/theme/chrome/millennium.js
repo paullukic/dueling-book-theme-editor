@@ -201,6 +201,10 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(gold, 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(copper, '#000000', 0.35)}, ${copper} 55%, ${mix(copper, gold, 0.3)}) !important; }
 /* In a duel the tomb ceiling (lapis band, stars, frieze) sits under the stage's upper edge, dimmed so it reads as backdrop. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { opacity: 0.7; }
+/* Main menu: the frieze would run through the title and the status dropdown, and the Stone's Items behind the
+   feed's timestamps: the ceiling goes, the Stone slides right until only its glyph column shows past the feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-stone { transform: translateX(250px); }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(lapis, '#000000', 0.45)}, ${lapis} 70%, ${mix(lapis, gold, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 

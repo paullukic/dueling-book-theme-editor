@@ -179,6 +179,11 @@ ${sel(['#duel .phase.active .background::before'])} {
 ${sel(['#duel .phase.active .background'])} { background: repeating-conic-gradient(${steelHi} 0deg 6deg, ${mix(steel, t.bg, 0.4)} 6deg 15deg) !important; box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 14px 2px ${alpha(mag, 0.75)}; }
 /* In a duel the trap hole (its pink rim, glow and plum edge) would cross the stage's right edge: it goes. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-rim { display: none; }
+/* The activation pulse would arc between the zone column and the chat: it goes in a duel. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-pulse { display: none; }
+/* Main menu: the card, its pulse and the chains that hold it sat behind the feed and the status dropdown; the side chains slide out past the timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-tr-card, .dbtefx-tr-pulse, .dbtefx-tr-hold) { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-side { transform: translateX(110px); }
 ${sel(['#duel .phase span'])} { color: ${mix(t.muted, t.text, 0.3)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${hazard(4)} !important; }

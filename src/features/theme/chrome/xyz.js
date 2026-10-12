@@ -217,7 +217,7 @@ ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surf
 ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 ${T(['#duel_room .format_txt::before', '#duel_room span.arial_black2::before', '#settings .admin_lbl::before', '#content .title1::before'])} { content: ""; position: absolute; left: 50%; top: -8px; bottom: -8px; width: 260px; margin-left: -130px; pointer-events: none; background: ${U(orbit(true, 300, 70))} center / 100% 100% no-repeat; opacity: .75; }
 /* The page title's orbit runs wide, its two units out at the ends, clear of the word. */
-${T(['#content .title1::before'])} { width: 640px; margin-left: -320px; opacity: .55; background-image: ${U(orbit(true, 640, 70, [[0.035, 0.5], [0.965, 0.5]]))}; }
+${T(['#content .title1::before'])} { width: 340px; margin-left: -170px; opacity: .55; background-image: ${U(orbit(true, 340, 70, [[0.035, 0.5], [0.965, 0.5]]))}; }
 
 /* ---- Backdrop: a random scatter of small sparkles instead of the even grid ---- */
 html body #dbte-skin-motif { background: ${U(sparkleField)} 0 0 / 600px 600px repeat !important; }

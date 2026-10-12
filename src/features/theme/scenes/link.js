@@ -15,9 +15,9 @@ const link = (t) => {
   const cx = 1050;
   const cy = 360;
   // The portal is drawn around (cx, cy) and placed at (PX, PY), clear of the menu feed.
-  const PX = 1490;
+  const PX = 1420;
   const PY = 400;
-  const PK = 0.5;
+  const PK = 0.32;
   const k = 1.4; // portal scale
   const s = 112 * k; // half side of the portal frame
   const lit = mix(t.accent2, '#ffffff', 0.6);
@@ -88,7 +88,7 @@ const link = (t) => {
 <ellipse cx="${PX}" cy="${PY}" rx="520" ry="440" fill="url(#dbtefx-lk-sky)"/>
 <g stroke="url(#dbtefx-lk-floor)" stroke-width="1.5" fill="none">${grid}</g>
 <!--mid-->
-<g transform="translate(${PX} ${PY}) scale(${PK}) translate(${-cx} ${-cy})">
+<g class="dbtefx-lk-portal" transform="translate(${PX} ${PY}) scale(${PK}) translate(${-cx} ${-cy})">
 <g fill="none" stroke="${line}" stroke-opacity="0.35" stroke-width="2.5">${feed(0, 1, 260)}${feed(2, -1, 420)}${feed(4, 1, 300)}</g>
 <path d="M${cx - 56} ${cy}L${cx - 18} -40H${cx + 18}L${cx + 56} ${cy}Z" fill="url(#dbtefx-lk-shaft)" opacity="0" ${a('beam', 0, '50% 100%')}/>
 <g fill="none" stroke="${line}">

@@ -129,7 +129,7 @@ ${sel(['#content input:focus', '#content textarea:focus'])} { outline: 1px solid
 
 /* ---------- Pop-ups: the altar, its summoning circle and two candles ---------- */
 ${SEL.dialog} {
-  background: var(--ri-circle) 50% calc(50% + 160px) / 260px 260px no-repeat, radial-gradient(ellipse 60% 60% at 50% 100%, ${alpha(blue, 0.12)}, transparent 70%), ${slab} !important;
+  background: radial-gradient(ellipse 60% 60% at 50% 100%, ${alpha(blue, 0.12)}, transparent 70%), ${slab} !important;
   border-radius: 4px !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 0 5px ${frameBlue}, 0 0 0 6px ${alpha(blue, 0.6)}, 0 30px 70px -20px ${alpha('#000000', 0.95)}, 0 0 50px -10px ${alpha(blue, 0.35)} !important;
 }

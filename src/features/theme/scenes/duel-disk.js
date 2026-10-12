@@ -3,9 +3,8 @@ import { H, n1, polar, W } from './kit.js';
 
 // Duel Disk (light): a Battle City duel disk strapped on at the right edge.
 // The round hub with its deck holder, the fan of five card blades opening up
-// from it, the forearm plate running off the bottom-right corner and the life
-// point counter on the plate. Brushed steel throughout, ink shadows, blade blue
-// and counter red. Signature motion: the blade fan slowly opens and settles while
+// from it and the forearm plate running off the bottom-right corner. Brushed
+// steel throughout, ink shadows, blade blue and a red jewel. Signature motion: the blade fan slowly opens and settles while
 // a light sweep travels along the steel.
 
 const HX = 1290;
@@ -15,7 +14,6 @@ const duelDisk = (t) => {
   const ink = t.text;
   const steel = mix(t.border, t.surface, 0.35);
   const groove = mix(t.border, ink, 0.35);
-  const lcd = mix(ink, t.opp, 0.18);
   const blade = t.accent;
   const red = t.accent2;
   const lit = mix(red, '#ffffff', 0.35);
@@ -30,12 +28,11 @@ ${metal('bg', mix(t.bg, '#ffffff', 0.35), t.bg, mix(t.bg, ink, 0.06), 1, 1)}
 <radialGradient id="dbtefx-dd-hub" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="${t.raised}"/><stop offset="1" stop-color="${steel}"/></radialGradient>
 <radialGradient id="dbtefx-dd-gem" cx=".38" cy=".32" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".3" stop-color="${lit}"/><stop offset="1" stop-color="${mix(red, ink, 0.35)}"/></radialGradient>
 <radialGradient id="dbtefx-dd-shadow"><stop offset="0" stop-color="${ink}" stop-opacity=".22"/><stop offset="1" stop-color="${ink}" stop-opacity="0"/></radialGradient>
-<radialGradient id="dbtefx-dd-lcdglow"><stop offset="0" stop-color="${red}" stop-opacity=".35"/><stop offset="1" stop-color="${red}" stop-opacity="0"/></radialGradient>
 <linearGradient id="dbtefx-dd-sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <pattern id="dbtefx-dd-brush" width="6" height="3" patternUnits="userSpaceOnUse"><rect width="6" height="1" fill="${ink}" fill-opacity=".035"/></pattern>
 <clipPath id="dbtefx-dd-hubclip"><circle cx="${HX}" cy="${HY}" r="122"/></clipPath>
 </defs>
-<style>@keyframes dbtefx-dd-fan { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(2.5deg); } } @keyframes dbtefx-dd-sweep { 0% { transform: translateX(-320px); } 60%, 100% { transform: translateX(320px); } } @keyframes dbtefx-dd-led { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }</style>`;
+<style>@keyframes dbtefx-dd-fan { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(2.5deg); } } @keyframes dbtefx-dd-sweep { 0% { transform: translateX(-320px); } 60%, 100% { transform: translateX(320px); } }</style>`;
 
   // Far plane: brushed steel, a soft diagonal sheen, engine-turned rings round the hub.
   let rings = '';
@@ -55,19 +52,12 @@ ${slot}<rect x="-4" y="-286" width="8" height="150" rx="4" fill="${blade}" fill-
   };
   const fan = [-8, 14, 36, 58, 80].map(bladeAt).join('');
 
-  // Forearm plate down to the bottom-right corner, with the life point counter.
+  // Forearm plate down to the bottom-right corner.
   const arm = `<g transform="rotate(-24 ${HX} ${HY})"><g transform="translate(${HX} ${HY})">
 <path d="M-92 0V520Q-92 560 -52 560H52Q92 560 92 520V0Z" fill="url(#dbtefx-dd-mh)" stroke="${groove}" stroke-width="3"/>
 <path d="M-80 120V540M80 120V540" stroke="${t.border}" stroke-width="2"/><path d="M-76 120V540" stroke="#ffffff" stroke-opacity=".8" stroke-width="1.5"/>
 ${[300, 380, 460].map((y) => `<rect x="-70" y="${y}" width="140" height="10" rx="5" fill="${steel}" stroke="${groove}" stroke-width="1.5"/>`).join('')}
-<g transform="translate(0 230) rotate(24)">
-<rect x="-70" y="-58" width="140" height="116" rx="12" fill="url(#dbtefx-dd-m)" stroke="${groove}" stroke-width="3"/>
-<rect x="-58" y="-44" width="116" height="74" rx="6" fill="${lcd}" stroke="${ink}" stroke-opacity=".5" stroke-width="2"/>
-<ellipse cx="0" cy="-7" rx="70" ry="40" fill="url(#dbtefx-dd-lcdglow)"/>
-${[0, 1, 2, 3, 4, 5, 6, 7].map((k) => `<rect x="${-48 + k * 12}" y="-30" width="9" height="46" rx="1.5" fill="${lit}" fill-opacity="${k < 6 ? 0.85 : 0.18}"/>`).join('')}
-<path d="M-50 22H50" stroke="${lit}" stroke-opacity=".45" stroke-width="2"/>
-<rect x="-56" y="38" width="22" height="9" rx="2" fill="${red}" style="animation: dbtefx-dd-led 2.4s ease-in-out infinite;"/><rect x="-28" y="38" width="22" height="9" rx="2" fill="${blade}" fill-opacity=".85"/>
-</g></g></g>`;
+</g></g>`;
 
   // The hub: rim, dial ticks, deck holder, centre jewel.
   let ticks = '';

@@ -189,14 +189,16 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent2} !important
 /* Duel: life points sealed by a spell circle, phases inside glyph rings. */
 /* In a duel the spell circle stays right of the stage, out from behind the decks and the last zone column. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { clip-path: inset(0 0 0 235px); }
+/* On the main menu the circle would run through the status feed and its dropdown: the magician stands alone. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { display: none; }
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 2px ${alpha(t.accent, 0.7)}, 0 0 18px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
-  /* A solid seal: its face hides the frame's rounded end, so one ring shows, not two. */
-  background: var(--dm-gold) center / contain no-repeat, radial-gradient(circle, ${t.bg} 0 66%, transparent 69%); border-radius: 50%; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
+  /* A solid seal on a dark backing disc: it hides the frame's rounded end, so one ring shows, not two. */
+  background: var(--dm-gold) center / contain no-repeat, radial-gradient(circle, ${t.bg} 0 66%, transparent 69%); border-radius: 50%; box-shadow: 0 0 0 4px ${t.bg}; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 999px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.accent, 0.5)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.45)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.accent, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dm-runes) left center / 48px 10px repeat-x, ${t.bg} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 6px ${t.bg}, 0 0 10px ${t.accent} !important; }

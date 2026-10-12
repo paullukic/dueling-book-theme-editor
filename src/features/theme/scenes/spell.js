@@ -114,8 +114,8 @@ const spell = (t) => {
 <path d="M${bx - 100} ${by - 4}L${bx - 60} ${cy + 60}H${bx + 60}L${bx + 100} ${by - 4}Z" fill="url(#dbtefx-sp-beam)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <g transform="translate(${bx} ${by - 44}) scale(1 0.26)"><g fill="none" stroke="${pale}" stroke-width="3.5" stroke-linecap="round" style="animation: dbtefx-spin 26s linear infinite;">${arms}</g><g fill="none" stroke="${teal}" stroke-opacity="0.35" style="animation: dbtefx-spin 40s linear infinite reverse;"><circle r="196" stroke-width="2"/><circle r="110" stroke-width="1.5" stroke-dasharray="6 10"/></g></g>
 <ellipse cx="${bx}" cy="${by - 44}" rx="130" ry="34" fill="url(#dbtefx-sp-pool)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
-<circle cx="${bx}" cy="${cy}" r="170" fill="url(#dbtefx-sp-core)" opacity="0.32"/>
-<g transform="translate(${bx} ${cy})"><g style="animation: dbtefx-sp-hover 9s ease-in-out infinite;">${card}</g></g>
+<g class="dbtefx-sp-cast"><circle cx="${bx}" cy="${cy}" r="170" fill="url(#dbtefx-sp-core)" opacity="0.32"/>
+<g transform="translate(${bx} ${cy})"><g style="animation: dbtefx-sp-hover 9s ease-in-out infinite;">${card}</g></g></g>
 <circle cx="1482" cy="600" r="96" fill="url(#dbtefx-sp-core)" opacity="0.22"/>
 <g transform="translate(1482 600) rotate(8) scale(0.55)"><g style="animation: dbtefx-sp-hover 11s ease-in-out -4s infinite;">${card}</g></g>
 <path d="M${bx - 26} 690H${bx + 26}L${bx + 18} 828H${bx - 18}Z" fill="url(#dbtefx-sp-wood)"/>

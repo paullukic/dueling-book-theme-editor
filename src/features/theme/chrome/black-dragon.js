@@ -53,9 +53,9 @@ const jaw = (t, kit) => {
   return kit.svg(100, 100, `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.45)}"/><stop offset="1" stop-color="${t.raised}"/></linearGradient></defs><g fill="url(#g)" stroke="${mix(t.accent, t.bg, 0.3)}" stroke-width="0.7" stroke-linejoin="round">${s}</g><circle cx="50" cy="50" r="34" fill="none" stroke="${t.accent}" stroke-width="1.2"/>`);
 };
 
-// The Red-Eye: a gunmetal diamond holding a red slit eye.
-const eye = (t, kit) =>
-  kit.svg(48, 48, `<defs><radialGradient id="i"><stop offset="0" stop-color="${t.accent2}"/><stop offset="0.55" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.55)}"/></radialGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.5)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient></defs><path d="M24 2L46 24L24 46L2 24Z" fill="url(#s)" stroke="${t.accent}" stroke-width="1.2"/><path d="M8 24Q24 10 40 24Q24 38 8 24Z" fill="url(#i)" stroke="${t.bg}" stroke-width="1"/><path d="M24 15.5Q21.6 24 24 32.5Q26.4 24 24 15.5Z" fill="${t.bg}"/><circle cx="21" cy="21" r="1.4" fill="#ffffff" fill-opacity="0.8"/>`);
+// The Red-Eye: a gunmetal diamond holding a red slit eye; the diamond's rim is steel at rest, red when the life runs low.
+const eye = (t, kit, rim = t.accent) =>
+  kit.svg(48, 48, `<defs><radialGradient id="i"><stop offset="0" stop-color="${t.accent2}"/><stop offset="0.55" stop-color="${t.accent}"/><stop offset="1" stop-color="${mix(t.accent, t.bg, 0.55)}"/></radialGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.raised, t.text, 0.5)}"/><stop offset="1" stop-color="${t.bg}"/></linearGradient></defs><path d="M24 2L46 24L24 46L2 24Z" fill="url(#s)" stroke="${rim}" stroke-width="1.2"/><path d="M8 24Q24 10 40 24Q24 38 8 24Z" fill="url(#i)" stroke="${t.bg}" stroke-width="1"/><path d="M24 15.5Q21.6 24 24 32.5Q26.4 24 24 15.5Z" fill="${t.bg}"/><circle cx="21" cy="21" r="1.4" fill="#ffffff" fill-opacity="0.8"/>`);
 
 export default (tokens, kit) => {
   // Crimson and graphite only: the second accent is a pale hot crimson, never orange.
@@ -180,8 +180,9 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important;
 ${SEL.life} { border-color: ${steel} !important; border-radius: 0 !important; box-shadow: 0 0 0 1px #000000, inset 0 0 0 1px ${alpha(mix(steel, t.text, 0.3), 0.55)}, 0 0 12px -4px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -30px; top: 50%; width: 46px; height: 46px; margin-top: -23px; pointer-events: none;
-  background: ${svgUrl(eye(t, kit))} center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.8)});
+  background: ${svgUrl(eye(t, kit, mix(steel, t.text, 0.25)))} center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha('#000000', 0.9)});
 }
+${sel(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"], [data-dbte-lp~="hit"]) .life_border::before'])} { background-image: ${svgUrl(eye(t, kit))}; filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.8)}); }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(mix(t.self, '#ffffff', 0.5), 0.45)}, transparent 40%), linear-gradient(90deg, ${mix(ember, t.bg, 0.4)}, ${ember} 55%, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 40%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.25)}) !important; }

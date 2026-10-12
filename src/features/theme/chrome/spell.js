@@ -2,7 +2,7 @@
 // around a dark art artBg, the SPELL attribute medallion pinned to the
 // corner, a lattice of spell sparkles behind pop-ups and chat, and an arcane
 // octagram that turns under the active phase.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 export default (t, kit) => {
   const { SEL, sel, svgUrl, svg, alpha, n1 } = kit;
@@ -165,8 +165,8 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -26px; top: -1px; width: 21px; height: 21px;
   background: var(--sp-medal) center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.1)}, ${t.self} 60%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.45)}, ${t.opp} 70%, ${mix(t.opp, '#000000', 0.12)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.1)}, ${t.self} 60%, ${mix(t.self, '#ffffff', 0.3)}) !important; box-shadow: inset 0 0 0 1px ${mix(t.self, '#000000', 0.5)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, ${alpha('#ffffff', 0.06)} 45%, transparent 55%), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.16)}, ${t.opp} 65%, ${mix(t.opp, '#000000', 0.15)}) !important; box-shadow: inset 0 0 0 1px ${mix(t.opp, '#000000', 0.5)} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: SPELL medallions; the active one turns an arcane circle */
@@ -174,8 +174,8 @@ ${SEL.phase} { background: radial-gradient(circle at 38% 30%, ${frameHi}, ${gree
 ${sel(['#duel .phase .background .background_top'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 50%) !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${t.text} !important; opacity: 0.9; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(artBg, green, 0.25)}, ${artBg} 80%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.self, '#ffffff', 0.2)}, ${t.self} 45%, ${mix(t.self, '#000000', 0.5)} 85%) !important; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(t.opp, '#ffffff', 0.2)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.5)} 85%) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 50% 30%, ${mix(deepForWhite(t.self), t.self, 0.3)}, ${deepForWhite(t.self)} 45%, ${mix(t.self, '#000000', 0.6)} 85%) !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 50% 30%, ${mix(deepForWhite(t.opp), t.opp, 0.3)}, ${deepForWhite(t.opp)} 45%, ${mix(t.opp, '#000000', 0.6)} 85%) !important; }
 ${sel(['#duel .phase.active .background::before'])} {
   content: ""; position: absolute; inset: -11px; border-radius: 50%;
   background: var(--sp-octa) center / 100% 100% no-repeat; filter: drop-shadow(0 0 4px ${alpha(gold, 0.8)});
@@ -226,5 +226,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${sel(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: ${frameHi} !important; }
 
 @media (prefers-reduced-motion: reduce) { html body #content *, html body #content *::before, html body #content *::after { transition: none !important; animation: none !important; } }
+/* Main menu: the cast card hung behind the feed's timestamps; it goes there. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sp-cast { display: none; }
 `;
 };

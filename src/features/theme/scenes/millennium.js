@@ -110,6 +110,7 @@ ${pyramid(300, 784, 190, 150)}${pyramid(600, 778, 120, 96)}${pyramid(960, 772, 9
 <rect y="120" width="${W}" height="6" fill="${t.accent}" fill-opacity="0.6"/><rect y="126" width="${W}" height="30" fill="${t.bg}" fill-opacity="0.6"/><rect y="156" width="${W}" height="3" fill="${t.accent}" fill-opacity="0.4"/>
 <path d="${frieze}" fill="${t.accent}" fill-opacity="0.55"/><path d="${ties}" stroke="${t.bg}" stroke-width="2.5"/></g>
 <!--mid-->
+<g class="dbtefx-mi-stone">
 <path d="M${cx - 128} 900V300Q${cx - 128} 196 ${cx} 186Q${cx + 128} 196 ${cx + 128} 300V900Z" fill="url(#dbtefx-mi-stone)" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="2"/>
 <path d="M${cx - 88} 900V310Q${cx - 88} 222 ${cx} 214Q${cx + 88} 222 ${cx + 88} 310V900M${cx - 120} 900V304M${cx + 120} 900V304" fill="none" stroke="${deep}" stroke-width="2.5"/>
 <g fill="none" stroke="${deep}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${cols}</g>
@@ -130,6 +131,7 @@ ${ring}
 <g transform="translate(${n1(cx - 26)} ${n1(ry - 12)}) scale(0.4) rotate(4)" fill="none" stroke="${bronze}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="${wdjat}"/><circle r="16" fill="${bronze}"/></g>
 <g clip-path="url(#dbtefx-mi-clip)"><rect x="${cx - 260}" y="${ry - 120}" width="80" height="260" fill="url(#dbtefx-mi-glint)" style="animation: dbtefx-mi-glint 9s ease-in-out infinite;"/></g>
 <path d="M${P('l')}L${P('f')}L${P('r')}M${P('f')}L${P('v')}" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
+</g>
 </g>
 <style>@keyframes dbtefx-mi-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 @keyframes dbtefx-mi-shadow { 0% { transform: scale(0.7); opacity: 0; } 15% { opacity: 1; } 100% { transform: scale(3.4); opacity: 0; } }

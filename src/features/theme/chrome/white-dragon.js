@@ -2,7 +2,7 @@
 // with dark navy lettering, a dragon's spread wings across every menu tile,
 // chamfered silver frames with crystal studs, deep blue for what is active,
 // pale blue lightning on hover and over the pop-ups. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -16,6 +16,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const paleIce = mix(frost, ice, 0.18);
   const paleIce2 = mix(frost, ice, 0.4);
   const silver = mix(frost, t.muted, 0.35);
+  // Active phase disc: deep enough under the white label (4.5:1 at its lightest stop).
+  const activeDisc = deepForWhite(t.self, '#0b2a66', 5.5);
 
   // Faceted ice on pale panels: a triangle lattice, each face lit a little differently.
   const shades = [0.025, 0.06, 0.035, 0.075, 0.015, 0.05];
@@ -127,7 +129,7 @@ ${SEL.phase} { background: conic-gradient(from 200deg, #ffffff, ${silver}, ${fro
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${deep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, #ffffff 30%, ${paleIce2}) !important; }
-${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle at 50% 35%, ${mix(ice, '#ffffff', 0.3)}, ${mix(ice, deep, 0.35)} 55%, ${mix(ice, deepDark, 0.7)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px ${alpha(ice, 0.9)}, 0 0 16px 4px ${alpha('#ffffff', 0.55)}, 0 0 30px 8px ${alpha(ice, 0.9)}; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle at 50% 35%, ${activeDisc}, ${mix(activeDisc, navy, 0.3)} 60%, ${mix(activeDisc, navy, 0.6)}) !important; box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px ${alpha(ice, 0.95)}, 0 0 16px 4px ${alpha('#ffffff', 0.6)}, 0 0 30px 8px ${alpha(ice, 0.95)}; }
 ${sel(['#duel .phase span'])} { color: ${navy} !important; text-shadow: 0 1px 0 #ffffff !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${navy}, 0 0 4px ${navy}, 0 0 1px ${navy} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${deep} !important; }
@@ -182,8 +184,10 @@ ${sel(['#content .checkbox:hover', '#content .radiobutton:hover'])} { box-shadow
 ${sel(['#content .checkbox img.check', '#content .radiobutton img.check'])} { filter: brightness(0) !important; }
 
 /* Opponent side in ice and silver, never lilac. */
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(silver, navy, 0.4)}, ${mix(ice, navy, 0.42)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 50%), linear-gradient(90deg, ${mix(silver, navy, 0.4)}, ${mix(ice, navy, 0.42)} 55%, ${mix(ice, navy, 0.72)}) !important; }
 ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${silver}, ${deep}) !important; }
+/* Front page Welcome / Forum / Rules: white on night plates so they read over the dragon. */
+${sel(['#welcome_buttons > span'])} { color: #ffffff !important; background: ${alpha(navy, 0.88)} !important; box-shadow: 0 0 0 0.25em ${alpha(navy, 0.88)} !important; border-radius: 2px; text-shadow: 0 1px 2px #000000, 0 0 6px ${navy} !important; }
 ${sel(['#duel #status2 .status_txt', '#duel #countdown2'])} { text-shadow: 0 0 10px ${ice}, 0 0 2px ${navy} !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px ${alpha(frost, 0.9)}, 0 0 16px 4px ${alpha('#ffffff', 0.55)}, 0 0 30px 8px ${alpha(frost, 0.9)}; }
 `;
