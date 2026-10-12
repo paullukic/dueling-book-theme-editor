@@ -35,13 +35,13 @@ const facetCrystal = (cx, cy, r) => {
   const shade = [];
   for (let i = 0; i < 6; i++) {
     const a = i * 60 - 90;
-    const [l, s] = kite(cx, cy, r, r * 0.07, a);
+    const [l, s] = kite(cx, cy, r, r * 0.05, a);
     lit.push(l);
     shade.push(s);
     [[0.42, 0.3], [0.62, 0.22], [0.8, 0.13]].forEach(([at, len]) => {
       const [bx, by] = polar(cx, cy, r * at, a);
       [-60, 60].forEach((side) => {
-        const [bl, bs] = kite(bx, by, r * len, r * 0.032, a + side);
+        const [bl, bs] = kite(bx, by, r * len, r * 0.022, a + side);
         lit.push(bl);
         shade.push(bs);
       });
@@ -60,7 +60,7 @@ const snow = (t) => {
 <rect width="1600" height="900" fill="url(#dbtefx-sn-sky)"/>
 <path d="M-100 250Q300 120 760 210T1700 150V300Q1240 360 780 300T-100 380Z" fill="url(#dbtefx-sn-aurora)" filter="url(#dbtefx-sn-soft)" ${anim('drift', 40, 0, 'ease-in-out')}/>
 <!--mid-->
-<g style="transform-origin: 1600px 300px; animation: dbtefx-spin 360s linear infinite;" stroke-linejoin="round">
+<g style="transform-origin: 1600px 300px; animation: dbtefx-spin 360s linear infinite;" stroke-linejoin="round" opacity="0.7">
 <path d="${c.lit}" fill="url(#dbtefx-sn-ice)" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="1"/>
 <path d="${c.shade}" fill="${t.accent}" fill-opacity="0.08" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="1"/>
 <circle cx="1600" cy="300" r="10" fill="#ffffff" fill-opacity="0.7" stroke="${t.accent}" stroke-opacity="0.25"/>

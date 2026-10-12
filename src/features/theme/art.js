@@ -569,8 +569,9 @@ const fetchField = (name) => {
 };
 
 export const recolorField = (svg, t) => {
-  const selfAlt = mix(t.self, t.accent2, 0.55);
-  const oppAlt = mix(t.opp, t.accent2, 0.55);
+  // Each side's second zone colour stays in that side's hue: mixing in accent2 cast a red tint on cool sides.
+  const selfAlt = mix(t.self, t.text, 0.35);
+  const oppAlt = mix(t.opp, t.text, 0.35);
   const map = [
     [/stop-color="(red|#f00|#ff0000)"/gi, t.self],
     [/stop-color="(#90f|#9900ff)"/gi, selfAlt],
@@ -579,8 +580,8 @@ export const recolorField = (svg, t) => {
   ];
   const out = map.reduce((acc, [re, color]) => acc.replace(re, `stop-color="${color}"`), svg);
   // Zone wells are unfilled shapes at 20-30% (black): fine on dark pages, a grey slab on paper.
-  // Light themes tint them with the theme's border colour instead.
-  return isLightTheme(t) ? out.replace(/(\.cls-[\w.,-]*)\{fill-opacity:([\d.]+);\}/g, (m, cls, o) => `${cls}{fill:${t.border};fill-opacity:${o};}`) : out;
+  // Light themes tint them with the theme's border colour instead, at half strength so gold borders never wash the field olive.
+  return isLightTheme(t) ? out.replace(/(\.cls-[\w.,-]*)\{fill-opacity:([\d.]+);\}/g, (m, cls, o) => `${cls}{fill:${t.border};fill-opacity:${(o * 0.5).toFixed(3)};}`) : out;
 };
 
 // { css, missing }: missing counts files that could not be fetched this time.

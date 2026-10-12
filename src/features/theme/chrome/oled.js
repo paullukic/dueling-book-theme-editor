@@ -14,6 +14,7 @@ ${SEL.life} { border-color: #d8d8d8 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: #000000 !important; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: none !important; }
-${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: #e6e6e6 !important; }
+${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: #bfbfbf !important; }
 ${sel(['#duel .phase.active span'])} { color: #000000 !important; }
+${sel(['#content img[src*="/svg/ok_btn."]', '#content img[src*="/svg/yes_btn."]'])} { filter: brightness(0.85) !important; }
 `;

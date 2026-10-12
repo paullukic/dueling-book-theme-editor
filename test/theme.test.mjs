@@ -120,8 +120,8 @@ test('field: recolours the four zone gradients only', () => {
   const out = recolorField(svg, t);
   assert.ok(out.includes(`stop-color="${t.self}"`));
   assert.ok(out.includes(`stop-color="${t.opp}"`));
-  assert.ok(out.includes(`stop-color="${mix(t.self, t.accent2, 0.55)}"`));
-  assert.ok(out.includes(`stop-color="${mix(t.opp, t.accent2, 0.55)}"`));
+  assert.ok(out.includes(`stop-color="${mix(t.self, t.text, 0.35)}"`));
+  assert.ok(out.includes(`stop-color="${mix(t.opp, t.text, 0.35)}"`));
   assert.ok(out.includes('fill="#fff"'));
   assert.doesNotMatch(out, /stop-color="(red|#90f|#00b400|#ff8f00)"/);
 });

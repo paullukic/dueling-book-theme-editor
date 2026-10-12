@@ -3,7 +3,7 @@ import { n1, polar } from './kit.js';
 // Parchment (light): a scholar's desk. Soft window light falls from the top
 // right, away from the menu, onto a sepia-ink astrolabe drawn on the page;
 // its star map (the rete) turns very slowly. Dust drifts in the light.
-const CX = 1625;
+const CX = 1578;
 const CY = 470;
 const R = 235;
 
