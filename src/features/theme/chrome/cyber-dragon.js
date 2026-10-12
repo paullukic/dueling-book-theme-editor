@@ -186,14 +186,17 @@ ${SEL.life} {
   border-color: transparent !important;
   border-image: ${slimFrame} 10 / 7px / 1px stretch !important;
   border-radius: 0 !important;
-  box-shadow: 0 0 0 1px ${alpha(t.bg, 0.8)}, 0 4px 10px -2px ${alpha('#000000', 0.7)} !important;
+  box-shadow: none !important;
 }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
+${T(['#duel .lifepoints'])} { --dbte-lp-clip: ${chamfer(6)}; }
 ${SEL.lifeSelf} {
-  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(180deg, ${alpha(t.accent, 0.8)} 0 2px, transparent 2px), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.2)}, ${t.self} 55%, ${mix(t.self, t.accent, 0.6)} 85%, ${t.accent}) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, transparent 0 3px, ${alpha('#f2fbff', 0.95)} 3px 6px, ${alpha(t.accent, 0.35)} 6px 8px, transparent 8px 55%, ${alpha(t.bg, 0.3)}), linear-gradient(90deg, ${mix(t.self, t.accent, 0.3)}, ${mix(t.self, t.accent, 0.15)} 55%, ${mix(t.self, t.accent, 0.6)} 85%, ${t.accent}) !important;
+  box-shadow: inset 0 0 0 1px ${mix(t.bg, '#000000', 0.3)}, inset 0 -2px 0 1px ${alpha(t.bg, 0.45)} !important;
 }
 ${SEL.lifeOpp} {
-  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp}) !important;
+  background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(t.bg, 0.55)} 13px 15px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%, ${alpha(t.bg, 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.2)}, ${t.opp}) !important;
+  box-shadow: inset 0 0 0 1px ${mix(t.bg, '#000000', 0.3)} !important;
 }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${plating(15, 0.35)}, ${mix(t.bg, '#000000', 0.3)} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 4px ${t.bg}, 0 0 8px ${alpha(t.bg, 0.9)} !important; }
@@ -274,8 +277,6 @@ ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, tr
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.border}, ${t.text} 40%, ${t.muted} 70%, ${t.border}) !important; border-radius: 2px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: linear-gradient(90deg, ${t.border}, #ffffff 40%, ${t.accent} 70%, ${t.border}) !important; }
 
-/* ---- Duel: the dim chrome serpent shows in the left gutter ---- */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cd-gutter { display: inline; }
 `;
   return `html body { ${[...ids].map(([s, id]) => `${id}: ${url(s)};`).join(' ')} }
 ${css.replace(/\/\*[^*]*\*\//g, '').replace(/\n\s+/g, '\n')}`;

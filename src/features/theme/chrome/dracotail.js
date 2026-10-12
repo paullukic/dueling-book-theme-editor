@@ -125,9 +125,9 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 
 /* Duel: gold-framed life bars with a scale weave and a fin finial; zodiac-ring phases. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${plumDeep}, 0 0 0 2px ${alpha(gold, 0.45)}, 0 4px 10px -3px #000000 !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; box-shadow: inset 0 -3px 0 ${mix(t.border, "#ffffff", 0.22)}, inset 0 1px 0 ${alpha(t.border, 0.8)} !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.18)}, ${t.self} 45%, ${mix(t.self, t.border, 0.72)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.18)}, ${t.opp} 45%, ${mix(t.opp, t.border, 0.72)}) !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; box-shadow: inset 0 -1px 0 ${alpha(plumDeep, 0.6)}, inset 0 1px 0 ${alpha(t.border, 0.8)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.18)}, ${t.self} 45%, ${mix(t.self, t.border, 0.3)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.18)}, ${t.opp} 45%, ${mix(t.opp, t.border, 0.3)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -17px; top: -6px; width: 18px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${goldHi}, ${goldDim}, ${gold}, ${goldDim}, ${goldHi}) !important; box-shadow: 0 0 0 1px ${plumDeep}, 0 4px 10px -2px #000000 !important; }

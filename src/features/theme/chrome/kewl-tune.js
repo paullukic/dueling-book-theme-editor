@@ -144,8 +144,8 @@ ${sel(['#chats .chat .black_line'])} { background: linear-gradient(90deg, transp
 
 ${SEL.life} { border-color: ${deep} !important; border-radius: 5px !important; box-shadow: inset 0 0 0 1px ${alpha(metal, 0.6)}, 0 0 0 1px ${alpha(metal, 0.5)}, 0 0 14px -4px ${alpha(teal, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; }
-${SEL.lifeSelf} { background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(deep, 0.75)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, deep, 0.85)}, ${mix(t.self, '#ffffff', 0.88)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, transparent 55%, ${alpha(deep, 0.6)} 75%, ${alpha(deep, 0.78)}), repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(deep, 0.75)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, deep, 0.85)}, ${mix(t.opp, '#ffffff', 0.88)}) !important; }
+${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(deep, 0.75)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, deep, 0.85)}, ${mix(t.self, '#ffffff', 0.88)}) !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 6px, ${alpha(deep, 0.75)} 6px 7px), linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, deep, 0.85)}, ${mix(t.opp, '#ffffff', 0.88)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: repeating-linear-gradient(90deg, ${alpha(t.text, 0.07)} 0 5px, ${deep} 5px 7px), ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: -2px -2px 0 ${deep}, 2px -2px 0 ${deep}, -2px 2px 0 ${deep}, 2px 2px 0 ${deep}, 0 2px 0 ${deep}, 2px 0 0 ${deep}, 0 -2px 0 ${deep}, -2px 0 0 ${deep}, 0 0 10px ${alpha(teal, 0.6)} !important; }
 
@@ -162,11 +162,15 @@ ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(
 ${sel(['#duel .phase.active::before'])} { background: conic-gradient(${pink}, ${teal}, ${pink}); animation: var(--dbte-kt-anim, dbte-kt-pulse 1.2s ease-in-out infinite); }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${deep}, 0 0 3px ${deep} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${deep}, -1px 0 0 ${deep}, 0 1px 0 ${deep}, 0 -1px 0 ${deep}, 1px 1px 0 ${deep}, -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 0 0 6px ${deep} !important; }
-/* Main menu: the LED wall would stand behind the feed's time and Reply column. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-kt-eq { display: none; }
-${turnBg} { background: ${metal} !important; box-shadow: 0 0 12px -2px ${alpha(pink, 0.8)}; }
-${turnInner} { background: radial-gradient(ellipse at 50% 100%, ${alpha(pink, 0.5)}, transparent 70%), ${deep} !important; }
-${turnTxt} { color: ${mix(t.text, pink, 0.6)} !important; text-shadow: ${neonText(pink)} !important; }
+/* Main menu: the LED wall and the deck would stand behind the feed's time and Reply column. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-kt-eq, .dbtefx-kt-deck) { display: none; }
+/* TURN lights in the turn owner's colour: red is the bottom player, blue (under it) the top one. */
+${turnBg} { background: ${metal} !important; box-shadow: 0 0 12px -2px ${alpha(t.self, 0.8)}; }
+${T(['#duel #turn:has(> .red[style*="none"]) .background'])} { box-shadow: 0 0 12px -2px ${alpha(t.opp, 0.8)}; }
+${turnInner} { background: ${deep} !important; }
+${T(['#duel #turn .red', '#duel #start_turn .red', '#duel #end_turn .red'])} { background: radial-gradient(ellipse at 50% 100%, ${mix(t.self, '#ffffff', 0.75)}, ${mix(t.self, deep, 0.7)} 75%) !important; box-shadow: inset 0 0 0 1px ${alpha('#ffffff', 0.35)} !important; }
+${T(['#duel #turn .blue'])} { background: radial-gradient(ellipse at 50% 100%, ${mix(t.opp, '#ffffff', 0.75)}, ${mix(t.opp, deep, 0.7)} 75%) !important; box-shadow: inset 0 0 0 1px ${alpha('#ffffff', 0.35)} !important; }
+${turnTxt} { color: #ffffff !important; text-shadow: 1px 0 0 ${deep}, -1px 0 0 ${deep}, 0 1px 0 ${deep}, 0 -1px 0 ${deep}, 0 0 4px ${deep} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${pink}, ${mix(pink, teal, 0.5)} 50%, ${teal}) !important; filter: drop-shadow(0 0 6px ${alpha(pink, 0.7)}); }
 ${ring('::after')} {

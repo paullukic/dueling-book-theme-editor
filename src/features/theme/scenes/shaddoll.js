@@ -54,7 +54,8 @@ const scene = (t) => {
   let clouds = '';
   for (let i = 0; i < 6; i++) clouds += `<ellipse cx="${n1(rand() * W)}" cy="${n1(560 + rand() * 360)}" rx="${n1(320 + rand() * 260)}" ry="${n1(90 + rand() * 60)}"/>`;
 
-  // The threads sway in a group of their own so the front-page mask (dbtefx-sd-links)
+  // The threads sway in a group of their own so the front-page mask (dbtefx-sd-links,
+  // also over the far plane's light cone)
   // sits outside the animated transform: Chrome ignores it under one.
   // Duel only: a few faint threads hang down the left gutter, each ending in a small lens.
   const gutter = `<g class="dbtefx-sd-gutter" fill="none" stroke="${thread}" stroke-width="1.1" stroke-opacity="0.4">${[[112, 360, 0], [146, 520, 3], [178, 300, 6]]
@@ -80,8 +81,8 @@ const scene = (t) => {
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sd-void)" fill-opacity="0.85"/>
 <path d="${lattice}" fill="none" stroke="${violet}" stroke-opacity="0.16" mask="url(#dbtefx-sd-lmask)"/>
 <g fill="url(#dbtefx-sd-fog)">${clouds}</g>
-<path d="M${cx - 70} 0H${cx + 70}L${cx + 300} ${H}H${cx - 300}Z" fill="url(#dbtefx-sd-cone)"/>
-<ellipse cx="${cx}" cy="150" rx="260" ry="240" fill="url(#dbtefx-sd-burst)"/>
+<g mask="url(#dbtefx-sd-links)"><path d="M${cx - 70} 0H${cx + 70}L${cx + 300} ${H}H${cx - 300}Z" fill="url(#dbtefx-sd-cone)"/>
+<ellipse cx="${cx}" cy="150" rx="260" ry="240" fill="url(#dbtefx-sd-burst)"/></g>
 <ellipse cx="${cx}" cy="880" rx="300" ry="60" fill="url(#dbtefx-sd-pool)"/>
 ${shards}
 <!--mid-->
@@ -103,8 +104,7 @@ ${bar}
 <g fill="none" stroke="${thread}" stroke-width="1.1" stroke-opacity="0.5">
 <g style="transform-origin: 90px 0px; animation: dbtefx-reed 9s ease-in-out infinite;"><path d="M90 -10V300"/><circle cx="90" cy="306" r="5" fill="url(#dbtefx-sd-orb)" stroke="${gold}"/></g>
 <g style="transform-origin: 1560px 0px; animation: dbtefx-reed 11s ease-in-out -4s infinite;"><path d="M1560 -10V210"/><circle cx="1560" cy="216" r="4" fill="url(#dbtefx-sd-orb)" stroke="${gold}"/></g>
-</g>
-<path d="M-20 ${H + 20}L40 790L110 830L150 760L230 ${H + 20}Z" fill="${ink}"/><path d="M40 790L110 830L150 760" fill="none" stroke="${violet}" stroke-opacity="0.45" stroke-width="1.5"/>`;
+</g>`;
 };
 
 export default scene;

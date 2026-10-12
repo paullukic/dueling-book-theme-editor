@@ -96,7 +96,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: ice-rimmed obsidian life bars with a thorn finial; eye-sigil phases. */
 ${SEL.life} { border-color: ${ice} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${obsidian}, 0 0 0 2px ${iceDim}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.2)} 2px, transparent 50%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, '#0a3a55', 0.18)}, ${mix(t.self, '#06243a', 0.4)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: -6px; width: 16px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -146,7 +146,10 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss}
 
-/* Front page: the halo's thorn rays clear out of the Welcome / Forum / Rules links. */
+/* Front page: the halo's thorn rays clear out of the Welcome / Forum / Rules links, the eye and its gems drop out. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-linkhole { display: inline; }
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-eye { display: none; }
+/* Duel: the sigil's right swirl clears the avatar and chat column's edge. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-sigil { transform: translate(21px, 0); }
 `;
 };

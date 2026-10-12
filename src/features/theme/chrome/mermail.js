@@ -40,7 +40,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Phase discs: a bubble ring with a highlight.
   const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20" fill="none" stroke="${pearl}" stroke-opacity="0.8" stroke-width="1.4"/><path d="M4.6 16A19 19 0 0 1 16 4.6" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="1.6" stroke-linecap="round"/>`);
-  const lifeCrest = svg(40, 40, `<path d="M20 3C28 12 33 20 33 26a13 13 0 0 1 -26 0C7 20 12 12 20 3Z" fill="${goldDeep}" stroke="${pearlLit}" stroke-width="2"/><path d="M20 10C25 16 28 21 28 25.5a8 8 0 0 1 -16 0C12 21 15 16 20 10Z" fill="${gem}" stroke="${pearl}" stroke-width="1.2"/><circle cx="17" cy="22" r="2.4" fill="#ffffff" fill-opacity="0.75"/>`);
+  const lifeCrest = svg(40, 40, `<path d="M20 3C28 12 33 20 33 26a13 13 0 0 1 -26 0C7 20 12 12 20 3Z" fill="${pearlDeep}" stroke="${pearlLit}" stroke-width="2"/><path d="M20 10C25 16 28 21 28 25.5a8 8 0 0 1 -16 0C12 21 15 16 20 10Z" fill="${mix(aqua, '#ffffff', 0.2)}" stroke="${pearl}" stroke-width="1.2"/><circle cx="17" cy="22" r="2.4" fill="#ffffff" fill-opacity="0.75"/>`);
 
   const plate = `linear-gradient(180deg, ${pearlLit}, ${pearl} 45%, ${mix(pearl, aqua, 0.4)})`;
   const glassBg = (lift = 0) => `linear-gradient(180deg, ${alpha(aqua, 0.18 + lift)}, transparent 45%), var(--dbtc-u2), linear-gradient(180deg, ${water}, ${waterDeep})`;
@@ -97,7 +97,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${gl
 /* Duel: pearl-bezel life bars led by a gem; phases are bubbles. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${silverDeep}, inset 0 0 0 1px ${alpha(silverLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)} 0 2px, ${alpha('#ffffff', 0.22)} 2px, transparent 50%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.05)}, ${mix(t.self, '#000000', 0.3)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }

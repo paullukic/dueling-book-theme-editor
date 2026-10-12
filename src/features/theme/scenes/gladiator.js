@@ -180,7 +180,7 @@ ${cornices}
 <path d="${edge(0.1)}" stroke="${t.opp}" stroke-opacity="0.55" stroke-width="2" fill="none" ${anim('pulse', 4, 0, 'ease-in-out')}/>
 <path d="${flecks}" stroke="${mix(t.text, red, 0.4)}" stroke-opacity="0.35" stroke-width="3"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-gb-veil)"/>
-${banner(300, 0.8, 0, true)}<g class="dbtefx-gb-banner-r">${banner(1300, 0.8, 3, true)}</g>
+<g class="dbtefx-gb-banner-l">${banner(300, 0.8, 0, true)}</g><g class="dbtefx-gb-banner-r">${banner(1300, 0.8, 3, true)}</g>
 <!--mid-->
 <path d="${edge(0)}L${W + 40} ${H}H-40Z" fill="url(#dbtefx-gb-sand)"/>
 <path d="${edge(0)}" stroke="${shade}" stroke-width="6" fill="none"/>

@@ -112,10 +112,10 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${silverLit}, ${silver}, 
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: repeating-conic-gradient(from -2deg, ${silverLit} 0deg 4deg, ${silverDeep} 4deg 45deg) !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${glass} 30%, ${glassDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.self, '#ffffff', 0.3)} 25%, ${mix(t.self, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${gold}, 0 0 18px ${alpha(gold, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.3)} 25%, ${mix(t.opp, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 18px ${alpha(gold, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.self, '#ffffff', 0.3)} 25%, ${mix(t.self, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 18px ${alpha(gold, 0.85)} !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 30% 26%, #ffffff 0 3%, ${alpha(goldLit, 0.85)} 8%, transparent 20%), radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.3)} 25%, ${mix(t.opp, t.bg, 0.45)}) !important; box-shadow: 0 0 0 2px ${goldLit}, 0 0 18px ${alpha(gold, 0.85)} !important; }
 ${on(sel(['#duel .phase.active']), 'after')} { content: ""; position: absolute; right: -9px; top: -11px; width: 28px; height: 28px; z-index: 3; pointer-events: none; background: ${svgUrl(svg(22, 22, `<path d="M11 0L12.6 9.4L22 11L12.6 12.6L11 22L9.4 12.6L0 11L9.4 9.4Z" fill="${goldLit}"/><path d="M11 5L11.8 10.2L17 11L11.8 11.8L11 17L10.2 11.8L5 11L10.2 10.2Z" fill="#ffffff"/>`))} center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(gold, 0.95)}); }
-${sel(['#duel .phase.active .background'])} { background: conic-gradient(from 200deg, ${goldLit}, ${gold}, ${goldDeep}, ${gold}, ${goldLit}) !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red, .phase_inner.blue) .background'])} { background: conic-gradient(from 200deg, ${goldLit}, ${gold}, ${goldDeep}, ${gold}, ${goldLit}) !important; }
 ${sel(['#duel .phase span'])} { color: ${silverLit} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${silverDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.12)}, ${mix(violet, t.bg, 0.5)}) !important; }
@@ -153,7 +153,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 
 /* The armillary stays whole or not at all: on the front page it would run through the
-   Welcome / Forum / Rules links, in a duel the right column cuts it into fragments. */
-html body:is(:has(#welcome_buttons:not([style*="none"])), :has(#duel:not([style*="none"]))) #dbte-skin-fx .dbtefx-cs-armillary { display: none; }
+   Welcome / Forum / Rules links, on the menu behind the feed's timestamps, in a duel the
+   right column cuts it into fragments. */
+html body:is(:has(#welcome_buttons:not([style*="none"])), :has(#duel:not([style*="none"])), :has(#main_menu:not([style*="none"]))) #dbte-skin-fx .dbtefx-cs-armillary { display: none; }
 `;
 };

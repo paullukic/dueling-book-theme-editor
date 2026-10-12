@@ -69,7 +69,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const rev = (c) => `repeating-linear-gradient(90deg, transparent 0 9px, ${alpha(steelDark, 0.85)} 9px 11px) left center / 52% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(90deg, ${mix(c, t.bg, 0.6)}, ${c} 50%, ${mix(c, t.bg, 0.42)})`;
+  const rev = (c) => `repeating-linear-gradient(90deg, transparent 0 9px, ${alpha(steelDark, 0.85)} 9px 11px) left center / 52% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(90deg, ${mix(c, t.bg, 0.33)}, ${c} 50%, ${mix(c, t.bg, 0.3)})`;
   const vars = [frameSvg, crest, brushed, gable, plug, arcStrip].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
@@ -147,6 +147,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(1102.4px, 329.2px) scale(0.2805); }
+/* The stage overhangs the viewport by 6% a side, so viewBox x 1514 is the right edge: core at 1450, 20px in. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(1115.9px, 338px) scale(0.26); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { display: none; }
 `;
 };

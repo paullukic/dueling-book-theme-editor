@@ -119,7 +119,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${gl
 ${SEL.life} { border-color: ${silver} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${silverDeep}, inset 0 0 0 2px ${ink}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: radial-gradient(ellipse 22% 90% at 96% 50%, ${alpha('#fff3c4', 0.75)}, transparent 70%), linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffe9a8', 0.3)} 2px, transparent 45%, ${alpha('#5a1400', 0.25)}), linear-gradient(90deg, #e0561a, #f27a22 45%, #ffb02e) !important; box-shadow: inset 0 0 0 1px ${ink} !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, '#ffffff', 0.15)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: repeating-conic-gradient(from -3deg, ${flame} 0deg 6deg, ${goldDeep} 6deg 30deg) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
@@ -166,5 +166,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* Menu: the phoenix clears the feed's timestamp column. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-phoenix { transform: translate(28px, 0); }
 `;
 };

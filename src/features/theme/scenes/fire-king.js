@@ -64,6 +64,7 @@ ${smoke}
 <path d="M0 ${horizon}H${W}" stroke="${flame}" stroke-opacity="0.35" stroke-width="2"/>
 <path d="M480 ${horizon + 14}h160M500 ${horizon + 34}h120M530 ${horizon + 58}h70" stroke="${flame}" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round" style="animation: dbtefx-pulse 3s ease-in-out infinite;"/>
 <!--mid-->
+<g class="dbtefx-fk-phoenix">
 <circle cx="${bx}" cy="400" r="300" fill="url(#dbtefx-fk-halo)" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 <g style="transform-origin: ${bx}px 400px; animation: dbtefx-spin 90s linear infinite;"><path d="${tongues}" fill="url(#dbtefx-fk-fire)" opacity="0.7"/></g>
 <circle cx="${bx}" cy="400" r="185" fill="none" stroke="url(#dbtefx-fk-ring)" stroke-width="10" stroke-opacity="0.55"/>
@@ -71,6 +72,7 @@ ${smoke}
 <circle cx="${bx}" cy="400" r="173" fill="none" stroke="${gold}" stroke-width="2" stroke-opacity="0.6"/>
 <circle cx="${bx}" cy="452" r="120" fill="none" stroke="${flame}" stroke-width="8" style="animation: dbtefx-fk-reborn 8s ease-out infinite; transform-box: fill-box; transform-origin: center;"/>
 ${cardArt(t, { id: 'dbtefx-fk-hero', card: CARDS.sacredGarunix, x: 1050, y: 40, w: 520, h: 760, focus: [0.5, 0.42], zoom: 0.92, blend: 'normal', feather: 0.62, fade: 0.9, backdrop: mix(t.bg, crimson, 0.3), backdropAmt: 0.6, breathe: 12 })}
+</g>
 <!--near-->
 <g fill="url(#dbtefx-fk-pyre)">${pyre}</g>`;
 };

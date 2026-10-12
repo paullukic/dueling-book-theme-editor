@@ -135,12 +135,14 @@ ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) sp
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${bronzeDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(banner, '#ffffff', 0.15)}, ${bannerDeep}) !important; }
 /* Card text: a stone margin ring outside the box gives the words room (no padding on DuelingBook's box). */
-${sel(['#duel #preview_txt'])} { background: ${mix(t.surface, stoneDeep, 0.5)} !important; box-shadow: 0 0 0 5px ${mix(t.surface, stoneDeep, 0.5)}, 0 0 0 6.5px ${bronze}, 0 0 0 7.5px ${bronzeDeep} !important; }
+${sel(['#duel #preview_txt'])} { background: ${mix(t.surface, stoneDeep, 0.5)} !important; border-color: transparent !important; box-shadow: 2px 0 0 7px ${mix(t.surface, stoneDeep, 0.5)}, 2px 0 0 8.5px ${bronze}, 2px 0 0 9.5px ${bronzeDeep} !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${stoneDeep}) !important; box-shadow: inset 0 0 0 2px ${bronze}, inset 0 0 0 4px ${bronzeDeep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${bronze}, 0 0 0 4px ${bronzeDeep}, 0 6px 16px -6px #000000 !important; }
 
-/* Front page: the right banner would hang behind the Welcome / Forum / Rules links. */
-html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-gb-banner-r { display: none; }
+/* Front page: the banners would hang behind the logo and the Welcome / Forum / Rules links. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-gb-banner-l, .dbtefx-gb-banner-r) { display: none; }
+/* Menu: the right banner would hang between the "All Statuses" dropdown and the camera button. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-gb-banner-r { display: none; }
 
 /* Duel room: bronze rings around stone panels. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(stone, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }

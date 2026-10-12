@@ -178,7 +178,7 @@ ${sel(['#duel .phase.active::before'])} {
 ${sel(['#duel .phase span'])} { color: ${paper} !important; ${stroke(3)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${paper} !important; ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { ${stroke(4)} text-shadow: 2px 2px 0 ${ink} !important; }
-${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: brightness(0) drop-shadow(0 0 0.5px #000000) drop-shadow(2px 2px 0 ${alpha(cyan, 0.6)}) !important; }
+${sel(['#content img.field_zones', '#content img.field_decks'])} { filter: drop-shadow(0 0 0.6px ${ink}) drop-shadow(0 0 0.6px ${ink}) drop-shadow(2px 2px 0 ${alpha(ink, 0.75)}) !important; }
 ${turnBg} { background: ${ink} !important; box-shadow: 4px 4px 0 ${ink}; }
 ${turnInner} { background: ${dots(red, 0.4, 6, 1.2)}, ${pop} !important; }
 ${turnTxt} { color: ${ink} !important; text-shadow: 2px 2px 0 ${paper} !important; }
@@ -233,7 +233,7 @@ ${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${i
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-473px, 474px) scale(0.44); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-425.6px, 505px) scale(0.4); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-pow { display: none; }
 /* Shrunk into the gutter, the book keeps a real ink line. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book [stroke="#000000"] { vector-effect: non-scaling-stroke; stroke-width: 2.2px; }
