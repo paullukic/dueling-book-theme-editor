@@ -104,7 +104,7 @@ ${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important;
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: ${gauge(t.self)} !important; }
 /* The opponent's pale silver darkens through its right half, so the numerals sit on a deeper value. */
-${SEL.lifeOpp} { background: var(--dbtc-u7) 0 0 / 64px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 48%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.38)}) !important; }
+${SEL.lifeOpp} { background: var(--dbtc-u7) 0 0 / 64px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 48%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${mix(t.opp, '#000000', 0.12)} 40%, ${mix(t.opp, '#000000', 0.42)} 75%, ${mix(t.opp, '#000000', 0.5)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -7px; width: 16px; height: 42px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${silver}, ${silverDim}, ${t.text}, ${silverDim}, ${silver}) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }

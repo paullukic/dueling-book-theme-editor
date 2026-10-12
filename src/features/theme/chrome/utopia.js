@@ -76,7 +76,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   // Your side: one polished-gold bevel (no blue in the mix, which turns gold olive), lit at 40%.
   const bladeSelf = `${gloss}, linear-gradient(90deg, ${mix(t.self, '#000000', 0.12)}, ${mix(t.self, '#ffffff', 0.3)} 40%, ${t.self} 62%, ${mix(t.self, '#000000', 0.32)})`;
   // Opponent: pearl steel that deepens to the right, so the numerals sit on a darker value.
-  const bladeOpp = `${gloss}, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${mix(t.opp, '#ffffff', 0.15)} 30%, ${mix(t.opp, '#000000', 0.3)} 58%, ${mix(t.opp, '#000000', 0.45)})`;
+  const bladeOpp = `${gloss}, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${mix(t.opp, '#000000', 0.1)} 30%, ${mix(t.opp, '#000000', 0.38)} 58%, ${mix(t.opp, '#000000', 0.52)})`;
   const vars = [frameSvg, crest, grain, gable, guard, chevron, sun].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
@@ -154,6 +154,10 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Duel: the sunburst hot spot dims behind the opponent's avatar; zone borders calmed. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.21; }
+/* Main menu: the sunburst dimmed behind the feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.7; }
+/* Front page: the Welcome / Forum / Rules links on a dark night plate. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 2px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-city { mask: url(#dbtefx-ut-stagegap); }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;

@@ -100,13 +100,14 @@ ${SEL.dialogTitle} { color: ${steelLit} !important; text-shadow: 0 2px 0 ${ink},
 
 /* Chat: a black steel bar with a steel lip and a red hairline. */
 ${SEL.chatTop} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.07)}, transparent 55%), linear-gradient(90deg, ${ink}, ${iron} 25%, ${iron} 75%, ${ink}) !important; box-shadow: inset 0 1px 0 ${alpha(steelLit, 0.45)}, inset 0 -2px 0 ${blood} !important; }
+${sel(['#content font[color="#FF0000" i]', '#content font[color="red" i]'])} { color: ${t.link} !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: ${steelLit} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${iron}, ${ironDeep}) !important; box-shadow: inset 1px 0 0 ${steelDeep}, inset -1px 0 0 ${steelDeep}, inset 0 -1px 0 ${steelDeep}, inset 0 0 30px -12px ${alpha(blood, 0.45)} !important; }
 
 /* Duel: steel-bound life bars led by the D lozenge; phases are spiked steel rings. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(steelLit, 0.4)}, 0 0 12px -3px ${alpha(blood, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(steelDeep, 0.7)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.48)}, ${mix(steel, '#ffffff', 0.15)} 38%, ${mix(steel, t.bg, 0.18)} 62%, ${mix(steel, t.bg, 0.58)}) !important; box-shadow: inset 0 -2px 0 ${alpha(steelDeep, 0.7)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.24)}, transparent 46%, ${alpha('#000000', 0.2)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.15)} 40%, ${mix(t.opp, t.bg, 0.4)} 70%, ${mix(t.opp, t.bg, 0.62)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -116,7 +117,7 @@ ${SEL.phase} { background: radial-gradient(circle, ${ironDeep} 62%, ${steelLit} 
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${steelDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${iron} 30%, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(maroon, '#ffffff', 0.08)} 25%, ${maroon} 60%, ${mix(maroon, t.bg, 0.4)}) !important; box-shadow: 0 0 0 1px ${steelLit}, 0 0 14px ${alpha(blood, 0.6)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(maroon, '#ffffff', 0.08)} 25%, ${maroon} 60%, ${mix(maroon, t.bg, 0.4)}) !important; box-shadow: 0 0 0 2px ${steel}, 0 0 14px ${alpha(blood, 0.6)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${oppDisc} 25%, ${mix(oppDisc, t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${steelLit} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }

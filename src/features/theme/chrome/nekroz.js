@@ -16,8 +16,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const glassDeep = mix(t.bg, t.accent, 0.04);
   const ink = mix(t.bg, '#000000', 0.45);
   // Active phase crystal: the side colour deepened until white lettering reads.
-  const selfLit = deepForWhite(t.self, t.bg, 5);
-  const oppLit = deepForWhite(t.opp, t.bg, 5);
+  const selfLit = deepForWhite(t.self, t.bg, 4.5);
+  const oppLit = deepForWhite(t.opp, t.bg, 4.5);
 
   // Frost hairlines crossing the glass.
   const frost = svg(70, 70, `<path d="M0 70L70 0M-10 30L30 -10M40 80L80 40" stroke="${ice}" stroke-opacity="0.07" stroke-width="0.8"/><path d="M22 48l6 -6M26 44l4 2M24 46l-2 -4" stroke="${iceHi}" stroke-opacity="0.08" stroke-width="0.7"/>`);
@@ -160,6 +160,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Main menu: the mirror stands aside from the status feed's timestamp column; duel: its frost blades step out from the chat border. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-nk-mirror { display: none; }
+/* Front page: the Welcome / Forum / Rules links on a dark glass plate. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(glassDeep, 0.92)} !important; box-shadow: 0 0 0 0.25em ${alpha(glassDeep, 0.92)} !important; border-radius: 1px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-nk-mirror { transform: translateX(26px); }
 `;
 };

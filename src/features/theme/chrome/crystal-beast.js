@@ -4,7 +4,7 @@
 // sapphire, amethyst) in turn; the pop-up crest is all seven set in an arc on
 // a sandstone lintel of the Rainbow Ruins; life bars are prism-cut and
 // capped with a set gem; phases are brilliant-cut discs. (t, kit) -> CSS string.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -117,6 +117,10 @@ html body:has(#duel:not([style*="none"])) .dbtefx-cb-bow { opacity: 0.4; }
 /* Duel: the arena and Rainbow Dragon stand aside (they sat in the opponent's zones and the stage);
    the two front columns slide out past the chat column into the right gutter. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-arena { display: none; }
+/* Duel: the rainbow stays out of the stage (its sliver showed between the opponent's deck and avatar). */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-bowgap { mask: url(#dbtefx-cb-stagegap); }
+/* Status feed: Reply and Post Status in gem gold instead of plain link blue. */
+${sel(['#content .status .reply_btn', '#content #post_status_btn'])} { color: ${t.accent2} !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(110px, 0); }
 /* Main menu: no gem columns behind the status feed. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-cb-cols, .dbtefx-cb-edge) { display: none; }
@@ -129,8 +133,8 @@ ${SEL.phase} { background: radial-gradient(circle, ${night} 62%, ${gold} 66%, ${
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${night} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${glassHi} 35%, ${night}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, t.bg, 0.38)} 15%, ${mix(t.self, t.bg, 0.5)} 50%, ${mix(t.self, t.bg, 0.72)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, t.bg, 0.38)} 15%, ${mix(t.opp, t.bg, 0.5)} 50%, ${mix(t.opp, t.bg, 0.72)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(deepForWhite(t.self, t.bg), '#ffffff', 0.12)} 15%, ${deepForWhite(t.self, t.bg)} 55%, ${mix(deepForWhite(t.self, t.bg), t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(deepForWhite(t.opp, t.bg), '#ffffff', 0.12)} 15%, ${deepForWhite(t.opp, t.bg)} 55%, ${mix(deepForWhite(t.opp, t.bg), t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u1), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${amethyst}, inset 0 0 0 1px ${goldDk} !important; }

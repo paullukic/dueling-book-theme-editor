@@ -8,7 +8,7 @@ import { n1, polar } from './kit.js';
 // stay readable.
 const CX = 1442;
 const CY = 450;
-const R = 70;
+const R = 60;
 const K = R / 235;
 const L = (v) => n1(v * K);
 

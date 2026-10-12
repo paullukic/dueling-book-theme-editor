@@ -96,7 +96,7 @@ const scene = (t) => {
     float(1020, 690, candy, 1, 18),
     float(250, 300, macaron(mix(gold, t.bg, 0.05)), 4, 8),
     float(330, 610, cookie, 5, -14),
-    float(150, 470, `<g transform="scale(0.7)">${candy}</g>`, 6, -24),
+    float(150, 470, `<g transform="scale(0.7)" opacity="0.6">${candy}</g>`, 6, -24),
   ].join('');
 
   // Swirl lollipops lighting the way to the door.

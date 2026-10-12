@@ -200,7 +200,7 @@ const blitzclique = (t) => {
 <g style="animation: dbtefx-bcq-cloud 80s ease-in-out -30s infinite;">${cloud(980, 10, 1.2, 7, mix(t.bg, '#000000', 0.22), mix(t.bg, mint, 0.22), 4, 0.8)}</g>
 <path d="${city}" fill="${mix(t.bg, orange, 0.12)}" fill-opacity="0.8"/><path d="${pylons}" stroke="${mix(t.bg, orange, 0.18)}" stroke-width="2" fill="none"/>
 <!--mid-->
-<g style="animation: dbtefx-bcq-cloud 50s ease-in-out infinite;">${storm(1250, 66, 9)}</g>
+<g class="dbtefx-bcq-storm"><g style="animation: dbtefx-bcq-cloud 50s ease-in-out infinite;">${storm(1250, 66, 9)}</g></g>
 <circle cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 <g class="dbtefx-bcq-herogrp">${surge}</g>
 <g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">

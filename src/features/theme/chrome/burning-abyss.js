@@ -163,6 +163,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss}
 /* Duel: Dante shrinks to head and shoulders around his face, clear of the viewport edge and the chat column. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-dante { transform-origin: 1440px 477px; transform: translateX(-28px) scale(0.7); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-dante { transform-origin: 1480px 477px; transform: translateX(-28px) scale(0.62); }
 `;
 };

@@ -167,6 +167,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss}
 /* Duel: Yubel steps right so a slice of wing and eye shows in the right gutter, past the chat column. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-figure { transform: translateX(96px); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-figure { transform: translateX(120px); }
 `;
 };

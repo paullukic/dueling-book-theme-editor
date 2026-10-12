@@ -127,7 +127,7 @@ ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '
 ${sel(['#duel #turn span', '#duel #start_turn span', '#duel #end_turn span'])} { color: ${t.text} !important; text-shadow: 1px 0 0 ${ink}, -1px 0 0 ${ink}, 0 1px 0 ${ink}, 0 -1px 0 ${ink}, 0 2px 3px #000000 !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(bronzeDeep, t.surface, 0.4)}, ${panelDark}) !important; box-shadow: inset 0 0 0 1px ${brass}, inset 0 0 0 3px ${ink}, inset 0 0 0 4px ${alpha(patina, 0.5)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${brass}, 0 0 0 4px ${ink}, 0 0 0 5px ${brassDeep} !important; }
-${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(patina, t.bg, 0.35)}, ${mix(patina, t.bg, 0.75)}) !important; }
+${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(patina, '#ffffff', 0.08)}, ${mix(patina, t.bg, 0.55)}) !important; box-shadow: 0 0 0 2px ${patina}, 0 0 0 4px ${ink}, 0 0 0 5px ${mix(patina, t.bg, 0.5)} !important; }
 
 /* Duel room: brass rims around bronze-dark panels, a riveted frame over each. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(bronzeDeep, 0.9)}, ${alpha(t.bg, 0.92)}) !important; box-shadow: 0 10px 26px -12px #000000; }

@@ -142,11 +142,13 @@ const crystalBeast = (t) => {
 <radialGradient id="dbtefx-cb-arena" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(t.accent, '#ffffff', 0.3)}" stop-opacity="0.35"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-cb-fade" cx="1250" cy="560" r="1100" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#ffffff"/><stop offset="0.75" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <mask id="dbtefx-cb-bowmask"><rect width="1600" height="900" fill="url(#dbtefx-cb-fade)"/></mask>
+<linearGradient id="dbtefx-cb-gapfade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="0.06" stop-color="#000000"/><stop offset="0.94" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<mask id="dbtefx-cb-stagegap" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><rect x="430" y="0" width="830" height="900" fill="url(#dbtefx-cb-gapfade)"/></mask>
 ${glows}
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-cb-sky)"/>
 <path d="${stars}" stroke="${t.text}" stroke-opacity="0.55" stroke-width="1.8" stroke-linecap="round"/>
-<g class="dbtefx-cb-bow" mask="url(#dbtefx-cb-bowmask)"><g style="animation: dbtefx-cb-shimmer 9s ease-in-out infinite;">${rainbow}</g></g>
+<g class="dbtefx-cb-bowgap"><g class="dbtefx-cb-bow" mask="url(#dbtefx-cb-bowmask)"><g style="animation: dbtefx-cb-shimmer 9s ease-in-out infinite;">${rainbow}</g></g></g>
 <path d="${ridge}" fill="${mix(night, t.accent, 0.12)}"/>
 <path d="M180 900V600h30v300ZM228 900V640l12-10 14 14v256ZM300 900V690h24v210Z" fill="${mix(stoneDeep, night, 0.4)}"/>
 <!--mid-->
