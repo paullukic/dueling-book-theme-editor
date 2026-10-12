@@ -104,6 +104,7 @@ ${farPillars}
 <path d="M-20 770H1620V${H + 20}H-20Z" fill="url(#dbtefx-nk-floor)"/>
 <path d="M-20 770H1620" stroke="${iceLit}" stroke-opacity="0.35" stroke-width="1.5"/>
 <!--mid-->
+<g class="dbtefx-nk-mirror">
 <ellipse cx="${cx}" cy="420" rx="420" ry="400" fill="url(#dbtefx-nk-aura)"/>
 <g mask="url(#dbtefx-nk-refl)"><g transform="translate(0 ${n1(770 * 2)}) scale(1 -1)">${frame}<path d="${glass}" fill="url(#dbtefx-nk-glass)"/></g></g>
 ${blades}
@@ -117,6 +118,7 @@ ${cardArt(t, { id: 'dbtefx-nk-hero', card: CARDS.trishula, x: cx - half, y: top,
 ${gem(top - 30, 1.3)}${gem(bot + 26, 0.9)}
 <path d="M${cx - 190} 770h380l-24 -20h-332Z" fill="${iceMid}"/><path d="M${cx - 166} 750h332l-30 -24h-272Z" fill="url(#dbtefx-nk-frame)"/>
 ${shards}
+</g>
 <!--near-->
 ${pillars}`;
 };

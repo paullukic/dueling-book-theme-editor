@@ -163,6 +163,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradien
 
 /* Duel: Surge stands behind the empty top-right zones, so she waits for the menu. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-herogrp { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-bolt { transform: translateX(21px); }
+/* Front page: the bolt fades in below the Welcome / Forum / Rules links. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-bolt { mask: url(#dbtefx-bcq-boltfade); }
 
 /* Pop-up buttons in the theme material. */
 ${popCss}

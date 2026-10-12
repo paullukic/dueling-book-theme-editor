@@ -173,7 +173,7 @@ ${demon}
 ${smoke}
 <g fill="${ink}">${flyers}</g>
 <!--near-->
-${dante}
+<g class="dbtefx-ba-dante">${dante}</g>
 ${outcrop}
 `;
 };

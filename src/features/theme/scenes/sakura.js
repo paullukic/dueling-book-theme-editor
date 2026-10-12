@@ -13,7 +13,7 @@ const sakura = (t) => {
   const petal = ([x, y, k, rot, o]) => `<path d="${PETAL}" transform="translate(${x} ${y}) rotate(${rot}) scale(${k})" fill="${pink}" fill-opacity="${o}"/>`;
   const bark = mix(t.bg, t.text, 0.25);
   // Right edge: a branch hanging from the top; left edge: a low sprig.
-  const right = [[1478, 92, 1.5, 10, 0.7], [1530, 160, 1.1, 40, 0.55], [1450, 210, 0.8, -25, 0.5], [1570, 260, 1.3, 70, 0.62], [1500, 330, 0.9, 15, 0.45], [1585, 70, 0.7, -50, 0.5]];
+  const right = [[1478, 92, 1.5, 10, 0.7], [1530, 160, 1.1, 40, 0.55], [1494, 238, 0.7, -25, 0.5], [1570, 260, 1.3, 70, 0.62], [1478, 350, 0.9, 15, 0.45], [1585, 70, 0.7, -50, 0.5]];
   const left = [[70, 560, 1.2, 30, 0.6], [140, 630, 0.8, -15, 0.5], [40, 690, 1, 55, 0.55]];
   const falling = [[1440, 420, 0.8, 120, 0.5], [1555, 470, 0.6, 200, 0.4], [1490, 560, 0.7, 60, 0.45], [120, 470, 0.7, 160, 0.45], [60, 780, 0.6, 250, 0.4], [170, 820, 0.8, 30, 0.35]];
   return `<defs><radialGradient id="dbtefx-sk-g" cx="0.95" cy="0.1" r="0.55"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.2"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient></defs>

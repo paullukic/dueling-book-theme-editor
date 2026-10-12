@@ -68,7 +68,7 @@ const ddd = (t) => {
   const contract = `<g transform="translate(${cx0} ${cy0}) rotate(-6) scale(0.8)">
 <path d="M-104 -96H104V112H-104Z" fill="url(#dbtefx-ddd-parch)"/>
 <path d="M-104 -96H104M-104 112H104" stroke="${mix(parchment, ink, 0.5)}" stroke-width="2"/>
-<g opacity="0.7">${script}</g>
+<g class="dbtefx-ddd-script" opacity="0.7">${script}</g>
 <path d="M-80 82C-66 70 -58 92 -44 78C-34 68 -26 88 -12 76" fill="none" stroke="${crimson}" stroke-width="2.4"/>
 <circle cx="64" cy="76" r="24" fill="url(#dbtefx-ddd-seal)" stroke="${mix(crimson, t.bg, 0.5)}" stroke-width="2" style="animation: dbtefx-ddd-seal 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center;"/>
 <circle cx="64" cy="76" r="15" fill="none" stroke="${goldLit}" stroke-width="1.6"/>
@@ -84,7 +84,7 @@ const ddd = (t) => {
     const [x, y] = [n1(cx0 - 52 + i * 2.4), n1(cy0 - 96 - i * 22)];
     chain += i % 2 ? `<rect x="${x - 3}" y="${y - 10}" width="6" height="20" rx="3"/>` : `<ellipse cx="${x}" cy="${y}" rx="7" ry="11"/>`;
   }
-  const chains = `<g fill="none" stroke="${gold}" stroke-width="3">${chain}</g>`;
+  const chains = `<g class="dbtefx-ddd-chain" fill="none" stroke="${gold}" stroke-width="3">${chain}</g>`;
 
   return `<style>@keyframes dbtefx-ddd-ink { 0%, 100% { opacity: 0; } 12%, 30% { opacity: 0.95; } 50% { opacity: 0; } }
 @keyframes dbtefx-ddd-seal { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.06); opacity: 1; } } ${CARD_ART_KEYFRAMES}</style>

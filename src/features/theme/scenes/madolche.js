@@ -88,14 +88,15 @@ const scene = (t) => {
 
   // Floating sweets around the castle.
   const macaron = (c1) => `<ellipse cx="0" cy="-7" rx="22" ry="10" fill="${c1}"/><path d="M-20 -2Q-22 2 -18 2H18Q22 2 20 -2Z" fill="${cream}"/><ellipse cx="0" cy="7" rx="22" ry="9" fill="${mix(c1, t.bg, 0.25)}"/><path d="M-21 -1q4 4 8 0q4 4 8 0q4 4 8 0q4 4 8 0q4 4 8 0" fill="none" stroke="${mix(c1, t.bg, 0.4)}" stroke-width="1.6"/><ellipse cx="-7" cy="-11" rx="8" ry="2.5" fill="#ffffff" fill-opacity="0.35"/>`;
-  const candy = `<path d="M-12 -8L-24 -14L-22 0L-24 14L-12 8Z" fill="${mix(t.accent, cream, 0.3)}"/><path d="M12 -8L24 -14L22 0L24 14L12 8Z" fill="${mix(t.accent, cream, 0.3)}"/><ellipse rx="14" ry="11" fill="${t.accent}"/><path d="M-8 -9L4 9M0 -11L10 5" stroke="${cream}" stroke-width="2.4"/>`;
+  // A wrapped candy, inked and shaded like the macaron and the cookie.
+  const candy = `<g stroke="${spongeDark}" stroke-width="1" stroke-linejoin="round"><path d="M-12 -8L-24 -14L-22 0L-24 14L-12 8Z" fill="${mix(t.accent, cream, 0.3)}"/><path d="M12 -8L24 -14L22 0L24 14L12 8Z" fill="${mix(t.accent, cream, 0.3)}"/><ellipse rx="14" ry="11" fill="${t.accent}"/></g><ellipse cy="4" rx="12" ry="5" fill="${mix(t.accent, t.bg, 0.35)}" fill-opacity="0.6"/><path d="M-8 -9L4 9M0 -11L10 5" stroke="${cream}" stroke-width="2.4"/><path d="M-9 -5Q-6 -9 -1 -9.5" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round"/>`;
   const cookie = `<path d="M0 -20L5 -6L20 -6L8 3L12 18L0 9L-12 18L-8 3L-20 -6L-5 -6Z" fill="url(#dbtefx-md-waffle)" stroke="${spongeDark}" stroke-width="1"/><path d="M0 -13L3 -4L12 -4L5 2L7 11L0 6L-7 11L-5 2L-12 -4L-3 -4Z" fill="none" stroke="${cream}" stroke-width="1.6" stroke-dasharray="3 2"/>`;
   const float = (x, y, body, i, rot = 0) => `<g transform="translate(${x} ${y}) rotate(${rot})"><g style="animation: dbtefx-md-float ${n1(7 + i * 1.1)}s ease-in-out ${n1(-i * 1.9)}s infinite;">${body}</g></g>`;
   const sweets = [
     float(1020, 690, candy, 1, 18),
     float(250, 300, macaron(mix(gold, t.bg, 0.05)), 4, 8),
     float(330, 610, cookie, 5, -14),
-    float(150, 470, candy, 6, -24),
+    float(150, 470, `<g transform="scale(0.7)">${candy}</g>`, 6, -24),
   ].join('');
 
   // Swirl lollipops lighting the way to the door.

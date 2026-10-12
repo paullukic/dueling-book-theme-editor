@@ -3,7 +3,7 @@
 // Nekroz mirror (violet gem, frost-blade wings) as the crest, ice-shard life
 // caps and faceted crystal phases. No rings, no gold: ice and mirror only.
 // (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -15,6 +15,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const glass = mix(t.surface, t.accent, 0.08);
   const glassDeep = mix(t.bg, t.accent, 0.04);
   const ink = mix(t.bg, '#000000', 0.45);
+  // Active phase crystal: the side colour deepened until white lettering reads.
+  const selfLit = deepForWhite(t.self, t.bg, 5);
+  const oppLit = deepForWhite(t.opp, t.bg, 5);
 
   // Frost hairlines crossing the glass.
   const frost = svg(70, 70, `<path d="M0 70L70 0M-10 30L30 -10M40 80L80 40" stroke="${ice}" stroke-opacity="0.07" stroke-width="0.8"/><path d="M22 48l6 -6M26 44l4 2M24 46l-2 -4" stroke="${iceHi}" stroke-opacity="0.08" stroke-width="0.7"/>`);
@@ -116,8 +119,8 @@ ${SEL.phase} { background: ${facets(iceDim)} !important; box-shadow: 0 0 0 1px $
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${glassDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${facetsDim(mix(glass, ice, 0.2))} !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: ${facetsDim(mix(t.self, t.bg, 0.2))} !important; box-shadow: 0 0 0 2px ${t.self}, 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${facetsDim(mix(t.opp, t.bg, 0.2))} !important; box-shadow: 0 0 0 2px ${t.opp}, 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: ${facetsDim(selfLit)} !important; box-shadow: 0 0 0 2px ${t.self}, 0 0 14px ${alpha(t.self, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${facetsDim(oppLit)} !important; box-shadow: 0 0 0 2px ${t.opp}, 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${iceHi} !important; text-shadow: 1px 1px 0 ${ink}, -1px 1px 0 ${ink}, 1px -1px 0 ${ink}, -1px -1px 0 ${ink}, 0 0 6px #000000 !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${ink}, 0 0 6px ${ink} !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${mix(t.surface, glass, 0.4)}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${iceDim}, inset 0 0 0 4px ${alpha(glassDeep, 0.9)}, inset 0 0 0 5px ${alpha(iceHi, 0.25)} !important; }
@@ -155,5 +158,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons cut from ice. */
 ${popCss}
+/* Main menu: the mirror stands aside from the status feed's timestamp column; duel: its frost blades step out from the chat border. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-nk-mirror { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-nk-mirror { transform: translateX(26px); }
 `;
 };

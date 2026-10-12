@@ -4,7 +4,7 @@
 // two bat wings, and every pop-up hangs under the Clock Tower Prison's face,
 // its red second hand a breath before midnight. Phases are spiked steel rings.
 // (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 const f1 = (v) => Math.round(v * 10) / 10;
@@ -19,6 +19,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const ink = mix(t.bg, '#000000', 0.5);
   const iron = mix(t.raised, t.bg, 0.2);
   const ironDeep = mix(t.bg, t.raised, 0.3);
+  // Lit discs deep enough for white lettering: maroon for your side, steel blue for the opponent.
+  const maroon = deepForWhite(blood, t.bg);
+  const oppDisc = deepForWhite(t.opp, t.bg);
 
   // The D lozenge: a steel-rimmed diamond with a blood-red D.
   const lozenge = (cx, cy, s, mark = blood) =>
@@ -103,7 +106,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${iron}, ${iro
 /* Duel: steel-bound life bars led by the D lozenge; phases are spiked steel rings. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(steelLit, 0.4)}, 0 0 12px -3px ${alpha(blood, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(mix(blood, '#000000', 0.5), 0.7)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(steelDeep, 0.7)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.24)}, transparent 46%, ${alpha('#000000', 0.2)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.15)} 40%, ${mix(t.opp, t.bg, 0.4)} 70%, ${mix(t.opp, t.bg, 0.62)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -113,8 +116,8 @@ ${SEL.phase} { background: radial-gradient(circle, ${ironDeep} 62%, ${steelLit} 
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${steelDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${iron} 30%, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, t.bg, 0.45)} 25%, ${mix(t.self, t.bg, 0.78)}) !important; box-shadow: 0 0 0 1px ${steelLit}, 0 0 14px ${alpha(t.self, 0.6)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 25%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(maroon, '#ffffff', 0.08)} 25%, ${maroon} 60%, ${mix(maroon, t.bg, 0.4)}) !important; box-shadow: 0 0 0 1px ${steelLit}, 0 0 14px ${alpha(blood, 0.6)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${oppDisc} 25%, ${mix(oppDisc, t.bg, 0.4)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${steelLit} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${steelDeep} !important; }
@@ -124,7 +127,8 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 ${sel(['#duel #avatar1', '#duel #avatar3'])} { background: linear-gradient(160deg, ${mix(t.self, t.bg, 0.5)}, ${mix(t.self, t.bg, 0.8)}) !important; }
 ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, t.bg, 0.8)}) !important; }
 ${sel(['#duel .duel_avatar .username_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
-${sel(['#duel img.field_zones'])} { filter: saturate(0.55) brightness(0.72) !important; }
+${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: linear-gradient(180deg, ${mix(maroon, '#ffffff', 0.12)}, ${maroon} 55%, ${mix(maroon, t.bg, 0.35)}) !important; }
+${sel(['#duel img.field_zones'])} { filter: brightness(0.85) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dh-moon { opacity: 0.4; }
 
 /* Duel room: steel rims around black panels, the chamfered frame over each. */

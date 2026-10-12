@@ -126,7 +126,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${obsidian}, $
 /* Duel: gold-bound life bars led by the wax seal; phases are clock dials. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${goldDeep}, inset 0 0 0 1px ${alpha(goldLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.15)}, ${mix(t.self, t.danger, 0.22)} 50%, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.45)}) !important; box-shadow: inset 0 0 0 1px ${ink} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.36)}, transparent 45%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(mix(t.self, t.danger, 0.3), t.bg, 0.15)}, ${mix(t.self, t.danger, 0.22)} 50%, ${mix(mix(t.self, t.danger, 0.3), '#000000', 0.26)}) !important; box-shadow: inset 0 0 0 1px ${ink} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.1)}, ${t.opp} 50%, ${mix(t.opp, t.bg, 0.3)}) !important; box-shadow: inset 0 -2px 0 ${alpha(gold, 0.6)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -144,6 +144,8 @@ ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${gold}, 0 0 0 4px ${ink}, 0 0 0 5px ${goldDeep}, 0 0 16px -4px ${alpha(violet, 0.8)} !important; }
 
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-nearpillar { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-chain { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-script { opacity: 0.49; }
 /* Front page Welcome / Forum / Rules: obsidian plates so the clock dial never runs through them. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(obsidianDeep, 0.92)} !important; box-shadow: 0 0 0 0.25em ${alpha(obsidianDeep, 0.92)} !important; border-radius: 1px; }
 

@@ -1,6 +1,8 @@
 // OLED: true black, drawn with light. Tiles are outlines only (white
 // hairlines on black), hover fills them with a breath of white, pop-ups get a
-// hairline frame, and the deck bands are neutral grey. No colour, no glow.
+// hairline frame, and the deck bands are neutral grey. No glow; the only
+// colour is the side colour on the lit phase disc.
+import { deepForWhite } from '../../../lib/color.js';
 
 export default (t, { SEL, sel, alpha }) => `
 ${SEL.tile} { background: transparent !important; box-shadow: inset 0 0 0 1px ${alpha(t.text, 0.4)} !important; }
@@ -14,7 +16,8 @@ ${SEL.life} { border-color: #d8d8d8 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: #000000 !important; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: none !important; }
-${sel(['#duel .phase.active .phase_inner.red', '#duel .phase.active .phase_inner.blue'])} { background: #bfbfbf !important; }
-${sel(['#duel .phase.active span'])} { color: #000000 !important; }
-${sel(['#content img[src*="/svg/ok_btn."]', '#content img[src*="/svg/yes_btn."]'])} { filter: brightness(0.85) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: ${deepForWhite(t.self)} !important; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: ${deepForWhite(t.opp)} !important; }
+${sel(['#duel .phase.active span'])} { color: #ffffff !important; }
+${sel(['#content img[src*="/svg/ok_btn_up"]', '#content img[src*="/svg/yes_btn_up"]', '#content img[data-src*="/svg/ok_btn_up"]', '#content img[data-src*="/svg/yes_btn_up"]'])} { filter: brightness(0.85) !important; }
 `;

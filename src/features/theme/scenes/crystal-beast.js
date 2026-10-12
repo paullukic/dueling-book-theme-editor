@@ -98,13 +98,15 @@ const crystalBeast = (t) => {
   const [px0, py0] = [1215, 330];
   const ordered = spots.slice().sort((a, b) => a.y - b.y);
   let columns = '';
+  let edgeColumns = '';
   let beams = '';
   ordered.forEach(({ i, x, y, s, broken }) => {
     const col = column(x, y, s, broken);
     const gy = n1(col.top - 36 * s);
     const settingW = 24 * s;
     // Front-right columns straddle the chat column's edge in a duel: chrome slides them into the gutter.
-    columns += x > 1380 ? `<g class="dbtefx-cb-edge">${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/><g class="dbtefx-cb-edgegem">${gem(x, gy, s * 1.4, gems[i], i)}</g></g>` : `${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/>${gem(x, gy, s * 1.4, gems[i], i)}`;
+    if (x > 1380) edgeColumns += `<g class="dbtefx-cb-edge">${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/><g class="dbtefx-cb-edgegem">${gem(x, gy, s * 1.4, gems[i], i)}</g></g>`;
+    else columns += `${col.d}<path d="M${n1(x - settingW)} ${n1(col.top)}L${n1(x - settingW * 0.6)} ${n1(gy + 6 * s)}H${n1(x + settingW * 0.6)}L${n1(x + settingW)} ${n1(col.top)}Z" fill="url(#dbtefx-cb-gold)" stroke="${mix(t.accent2, '#000000', 0.45)}" stroke-width="1"/>${gem(x, gy, s * 1.4, gems[i], i)}`;
     const delay = n1(-((6 - i) / 7) * 7);
     beams += `<path d="M${n1(x - 8 * s)} ${n1(gy - 8)}L${n1(px0 - 4)} ${py0}H${n1(px0 + 4)}L${n1(x + 8 * s)} ${n1(gy - 8)}Z" fill="url(#dbtefx-cb-beam${i})" style="animation: dbtefx-cb-beam 7s ease-in-out ${delay}s infinite;"/>`;
   });
@@ -148,18 +150,21 @@ ${glows}
 <path d="${ridge}" fill="${mix(night, t.accent, 0.12)}"/>
 <path d="M180 900V600h30v300ZM228 900V640l12-10 14 14v256ZM300 900V690h24v210Z" fill="${mix(stoneDeep, night, 0.4)}"/>
 <!--mid-->
-<ellipse cx="${fx}" cy="${fy}" rx="420" ry="190" fill="url(#dbtefx-cb-arena)"/>
-${tiers}
+<g class="dbtefx-cb-arena"><ellipse cx="${fx}" cy="${fy}" rx="420" ry="190" fill="url(#dbtefx-cb-arena)"/>
+${tiers}</g>
 <path d="${wall}" fill="${stoneDeep}"/>
 <path d="M1420 430L1446 412L1462 440L1490 404L1530 420L1600 380" fill="none" stroke="${stoneDk}" stroke-width="3"/>
+<g class="dbtefx-cb-arena">
 ${dragon}
 ${prism}
-${beams}
+<g class="dbtefx-cb-cols">${beams}</g>
 <ellipse cx="${fx}" cy="${fy + 6}" rx="${rx + 20}" ry="${ry + 10}" fill="${stoneDeep}"/>
 <ellipse cx="${fx}" cy="${fy}" rx="${rx}" ry="${ry}" fill="${mix(stoneDk, t.accent, 0.12)}"/>
 <ellipse cx="${fx}" cy="${fy}" rx="${n1(rx * 0.45)}" ry="${n1(ry * 0.45)}" fill="none" stroke="${t.accent2}" stroke-opacity="0.35" stroke-width="2"/>
-${columns}
+<g class="dbtefx-cb-cols">${columns}</g>
 <path d="${blocks}" fill="${stoneDk}" stroke="${stoneDeep}" stroke-width="1"/>
+</g>
+${edgeColumns}
 <!--near-->
 <path d="M0 900V820Q300 780 620 830T1100 860Q1350 840 1600 870V900Z" fill="${night}"/>`;
 };

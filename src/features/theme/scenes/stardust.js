@@ -127,10 +127,10 @@ ${CARD_ART_KEYFRAMES}
 <ellipse cx="300" cy="230" rx="440" ry="210" fill="url(#dbtefx-sd-neb2)" transform="rotate(-12 300 230)"/>
 <g stroke="${t.text}" stroke-linecap="round"><path d="${dots(starSets[0])}" stroke-width="1.2" stroke-opacity="0.45"/><path d="${dots(starSets[1])}" stroke-width="1.8" stroke-opacity="0.6"/><path d="${dots(starSets[2])}" stroke-width="2.6" stroke-opacity="0.75"/></g>
 <path d="${skyGlints}" fill="#ffffff" fill-opacity="0.75"/>
-<path d="${towers}" fill="${mix(night, t.border, 0.4)}"/>
+<g class="dbtefx-sd-city"><path d="${towers}" fill="${mix(night, t.border, 0.4)}"/>
 <path d="${towers}" fill="url(#dbtefx-sd-win)" fill-opacity="0.35"/><path d="${towers}" fill="url(#dbtefx-sd-win2)"/>
 <path d="M1085 494v-30M1285 522v-24" stroke="${t.accent2}" stroke-width="2"/><circle cx="1085" cy="462" r="3" fill="${t.accent2}"/><circle cx="1285" cy="496" r="3" fill="${t.accent2}"/>
-<path d="${streaks}" stroke="${city}" stroke-opacity="0.32" stroke-width="2" stroke-linecap="round"/>
+<path d="${streaks}" stroke="${city}" stroke-opacity="0.32" stroke-width="2" stroke-linecap="round"/></g>
 <path d="M0 ${sky}H1600" stroke="${mix(t.accent, t.bg, 0.5)}" stroke-opacity="0.6"/>
 <path d="${stays}" stroke="${mix(t.accent, night, 0.4)}" stroke-opacity="0.5" stroke-width="1.1"/>
 <path d="${pylon}${deck}" fill="${iron}"/>

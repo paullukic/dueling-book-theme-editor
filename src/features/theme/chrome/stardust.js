@@ -103,7 +103,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 ${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${night}, 0 0 0 2px ${alpha(mint, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: ${gauge(t.self)} !important; }
-${SEL.lifeOpp} { background: ${gauge(t.opp)} !important; }
+/* The opponent's pale silver darkens through its right half, so the numerals sit on a deeper value. */
+${SEL.lifeOpp} { background: var(--dbtc-u7) 0 0 / 64px 100% repeat-x, linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 48%, ${alpha('#000000', 0.12)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.38)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -7px; width: 16px; height: 42px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${silver}, ${silverDim}, ${t.text}, ${silverDim}, ${silver}) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }
@@ -150,6 +151,7 @@ ${popCss}
 /* Duel: no sparkles over the stage; zone borders calmed toward silver. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-stage { display: none; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-trailgrp { mask: url(#dbtefx-sd-stagefade); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-city { mask: url(#dbtefx-sd-stagefade); }
 /* Front page Welcome / Forum / Rules: night plates so the links read over the dragon. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 3px; }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }

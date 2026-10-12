@@ -9,6 +9,9 @@ import { keepAreas } from './skins.js';
 import spell from './chrome/spell.js';
 import oled from './chrome/oled.js';
 import midnight from './chrome/midnight.js';
+import parchment from './chrome/parchment.js';
+import graphite from './chrome/graphite.js';
+import snow from './chrome/snow.js';
 import trap from './chrome/trap.js';
 import fusion from './chrome/fusion.js';
 import synchro from './chrome/synchro.js';
@@ -81,6 +84,9 @@ import eternalDuelistSoul from './chrome/eternal-duelist-soul.js';
 const CHROME = {
   oled,
   midnight,
+  parchment,
+  graphite,
+  snow,
   'burning-abyss': burningAbyss,
   yubel,
   ddd,

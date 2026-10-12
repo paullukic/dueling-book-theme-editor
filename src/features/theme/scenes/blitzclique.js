@@ -190,6 +190,8 @@ const blitzclique = (t) => {
 <radialGradient id="dbtefx-bcq-halo"><stop offset="0" stop-color="${mint}" stop-opacity="0.6"/><stop offset="1" stop-color="${mint}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-bcq-glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${orange}" stop-opacity="0.4"/><stop offset="1" stop-color="${orange}" stop-opacity="0"/></radialGradient>
 <radialGradient id="dbtefx-bcq-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${mix(t.warning, '#ffffff', 0.4)}"/><stop offset="0.7" stop-color="${mix(t.warning, orange, 0.5)}"/><stop offset="1" stop-color="${orange}" stop-opacity="0.6"/></radialGradient>
+<linearGradient id="dbtefx-bcq-boltgrad" gradientUnits="userSpaceOnUse" x1="0" y1="250" x2="0" y2="360"><stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<mask id="dbtefx-bcq-boltfade" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="url(#dbtefx-bcq-boltgrad)"/></mask>
 </defs>
 <rect x="-100" y="-60" width="1800" height="1020" fill="url(#dbtefx-bcq-sky)"/>
 
@@ -202,7 +204,7 @@ const blitzclique = (t) => {
 <circle cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 <g class="dbtefx-bcq-herogrp">${surge}</g>
 <g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">
-${strike}
+<g class="dbtefx-bcq-bolt">${strike}</g>
 <g transform="translate(${ix} ${iy}) scale(${is})">
 <path d="${rock}" fill="url(#dbtefx-bcq-rock)"/><path d="${strata}" fill="none" stroke="${dark}" stroke-opacity="0.35" stroke-width="2"/><path d="${cracks}" fill="none" stroke="${dark}" stroke-opacity="0.5" stroke-width="1.6"/><path d="M1094 566L1112 598L1138 610" fill="none" stroke="${mintHi}" stroke-opacity="0.3" stroke-width="2"/><path d="M1150 648L1178 668L1196 706L1226 726L1246 764L1272 790L1290 818L1306 792L1336 764L1368 740L1398 704L1428 684L1450 644" fill="none" stroke="${mix(orange, t.warning, 0.5)}" stroke-opacity="0.7" stroke-width="3" stroke-linejoin="round"/>
 ${pipes}${cable(1196, 706, 70, -14, 6, 1)}${cable(1336, 764, 56, 12, 7.5, 3)}${cable(1446, 650, 64, 10, 6.8, 2)}

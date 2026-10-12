@@ -3,7 +3,7 @@
 // ember at the corners; the signature is Dante's laurel wreath, and pop-ups
 // are crowned by the Gate of Hell with its glowing inscription. Phases are
 // the nine circles seen from above. (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 const f1 = (v) => Math.round(v * 10) / 10;
@@ -123,9 +123,10 @@ ${SEL.phase} { background: radial-gradient(circle, ${stoneDeep} 60%, ${sulphurDe
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${stoneDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${stone} 25%, ${ink}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.2)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self, t.bg)} 30%, ${mix(deepForWhite(t.self, t.bg), t.bg, 0.45)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.85)}; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.2)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${bone} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
+${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${sulphurDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(ember, '#ffffff', 0.12)}, ${mix(ember, t.bg, 0.5)}) !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${stone}, ${stoneDeep}) !important; box-shadow: inset 0 0 0 1px ${alpha(bone, 0.4)}, inset 0 0 0 3px ${stoneDeep}, inset 0 0 0 4px ${sulphurDeep} !important; }
@@ -161,5 +162,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* Duel: Dante shrinks to head and shoulders around his face, clear of the viewport edge and the chat column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-dante { transform-origin: 1440px 477px; transform: translateX(-28px) scale(0.7); }
 `;
 };

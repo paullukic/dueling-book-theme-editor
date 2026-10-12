@@ -47,11 +47,11 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   // Life bar finial: the Rising Sword's gold guard and grip.
   const guard = svg(18, 44, `<path d="M9 1L12 4V14H6V4Z" fill="${white}" stroke="${goldDk}" stroke-width="0.6"/><circle cx="9" cy="17" r="3.4" fill="${gold}" stroke="${goldDk}" stroke-width="0.8"/><path d="M7 20H11V27H7Z" fill="${night}"/><path d="M1 27L9 30L17 27L16 33L9 35L2 33Z" fill="${gold}" stroke="${goldDk}" stroke-width="0.8"/><path d="M5 35H13L11 43H7Z" fill="${pearl}"/><circle cx="9" cy="31" r="1.6" fill="${red}"/>`);
 
-  // Phase overlay: a gold sunburst.
+  // Phase overlay: a gold sunburst on the rim only, clear of the letters.
   let rays = '';
   for (let i = 0; i < 16; i++) {
     const a = (Math.PI / 8) * i;
-    rays += `M${n1(22.5 + Math.cos(a) * 15)} ${n1(22.5 + Math.sin(a) * 15)}L${n1(22.5 + Math.cos(a) * 21)} ${n1(22.5 + Math.sin(a) * 21)}`;
+    rays += `M${n1(22.5 + Math.cos(a) * 18.5)} ${n1(22.5 + Math.sin(a) * 18.5)}L${n1(22.5 + Math.cos(a) * 21)} ${n1(22.5 + Math.sin(a) * 21)}`;
   }
   const sun = svg(45, 45, `<path d="${rays}" stroke="${goldHi}" stroke-opacity="0.75" stroke-width="1.6"/><circle cx="22.5" cy="22.5" r="21" fill="none" stroke="${gold}" stroke-opacity="0.6"/>`);
 
@@ -72,7 +72,11 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const lobbyBorders = sel(['#duel_room #formats .format > .border', '#duel_room #decklist > .border', '#duel_room #mode > .border', '#duel_room #filter > .border', '#duel_room #host_bg > .border']);
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
-  const blade = (c) => `linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 42%, transparent 66%, ${alpha(night, 0.32)}), linear-gradient(90deg, ${mix(c, t.bg, 0.5)}, ${mix(c, '#ffffff', 0.18)} 45%, ${c} 62%, ${mix(c, t.bg, 0.35)})`;
+  const gloss = `linear-gradient(180deg, ${alpha('#ffffff', 0.38)}, transparent 42%, transparent 66%, ${alpha(night, 0.32)})`;
+  // Your side: one polished-gold bevel (no blue in the mix, which turns gold olive), lit at 40%.
+  const bladeSelf = `${gloss}, linear-gradient(90deg, ${mix(t.self, '#000000', 0.12)}, ${mix(t.self, '#ffffff', 0.3)} 40%, ${t.self} 62%, ${mix(t.self, '#000000', 0.32)})`;
+  // Opponent: pearl steel that deepens to the right, so the numerals sit on a darker value.
+  const bladeOpp = `${gloss}, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${mix(t.opp, '#ffffff', 0.15)} 30%, ${mix(t.opp, '#000000', 0.3)} 58%, ${mix(t.opp, '#000000', 0.45)})`;
   const vars = [frameSvg, crest, grain, gable, guard, chevron, sun].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
@@ -103,8 +107,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: polished blade life bars capped with the Rising Sword guard; sunburst phases. */
 ${SEL.life} { border-color: ${white} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${night}, 0 0 0 3px ${gold}, 0 0 0 4px ${night}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: ${blade(t.self)} !important; }
-${SEL.lifeOpp} { background: ${blade(t.opp)} !important; }
+${SEL.lifeSelf} { background: ${bladeSelf} !important; }
+${SEL.lifeOpp} { background: ${bladeOpp} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -17px; top: -8px; width: 18px; height: 44px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${goldHi}, ${goldDk}, ${gold}, ${goldDk}, ${goldHi}) !important; box-shadow: 0 0 0 1px ${night}, 0 4px 10px -2px #000000 !important; }
@@ -149,7 +153,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss}
 /* Duel: the sunburst hot spot dims behind the opponent's avatar; zone borders calmed. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.35; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.21; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-city { mask: url(#dbtefx-ut-stagegap); }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }
 `;

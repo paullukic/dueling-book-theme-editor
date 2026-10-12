@@ -133,5 +133,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradien
 ${popCss}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-moon { opacity: 0; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-lolly { opacity: 0; }
+/* Front page: the Welcome / Forum / Rules links on a dark chocolate plate. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(chocDeep, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(chocDeep, 0.9)} !important; border-radius: 3px; }
 `;
 };

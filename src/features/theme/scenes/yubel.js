@@ -104,7 +104,7 @@ ${window}
 <path d="${skyline}" fill="${mix(t.bg, t.raised, 0.5)}"/>
 <g fill="${gold}" fill-opacity="0.7">${windows}</g>
 <!--mid-->
-${figure}
+<g class="dbtefx-yb-figure">${figure}</g>
 <!--near-->
 ${vines}`;
 };

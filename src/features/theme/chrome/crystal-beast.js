@@ -108,13 +108,20 @@ ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; text-shad
 ${SEL.chat} { background: var(--dbtc-u1), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.6)}) !important; box-shadow: inset 1px 0 0 ${goldDk}, inset -1px 0 0 ${goldDk}, inset 0 -1px 0 ${goldDk} !important; }
 
 /* Duel: prism-cut life bars capped with a set gem; brilliant-cut phases. */
-${SEL.life} { border-color: ${gold} !important; border-image: linear-gradient(90deg, ${gems.map((g) => mix(g, t.bg, 0.4)).join(', ')}) 1 !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${goldDk}, 0 0 0 3px ${gold}, 0 0 0 4px ${night}, 0 4px 10px -3px #000000 !important; }
+${SEL.life} { border-color: ${gold} !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${goldDk}, 0 0 0 3px ${gold}, 0 0 0 4px ${night}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: ${prism(t.self)} !important; }
 ${SEL.lifeOpp} { background: ${prism(t.opp)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -3px; width: 34px; height: 34px; z-index: 2; pointer-events: none; background: var(--dbtc-u${5 + gems.length}) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 html body:has(#duel:not([style*="none"])) .dbtefx-cb-bow { opacity: 0.4; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(44px, 0); }
+/* Duel: the arena and Rainbow Dragon stand aside (they sat in the opponent's zones and the stage);
+   the two front columns slide out past the chat column into the right gutter. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-arena { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(110px, 0); }
+/* Main menu: no gem columns behind the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-cb-cols, .dbtefx-cb-edge) { display: none; }
+/* Front page: the Welcome / Forum / Rules links on a dark glass plate. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 3px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edgegem { opacity: 0.45; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) .background', '#duel .phase.active:has(.phase_inner.blue) .background'])} { background: conic-gradient(from 0deg, ${gems.join(', ')}, ${gems[0]}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
