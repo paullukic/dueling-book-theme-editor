@@ -40,7 +40,8 @@ export const starlightChrome = (t, { SEL, sel, svg, svgUrl, alpha }, light) => {
   const glint = svg(28, 28, `<defs><radialGradient id="h"><stop offset="0" stop-color="${light ? t.accent : '#ffffff'}" stop-opacity="0.45"/><stop offset="1" stop-color="${light ? t.accent : '#ffffff'}" stop-opacity="0"/></radialGradient></defs><circle cx="14" cy="14" r="9" fill="url(#h)"/><path d="${glintPath(14, 13)}" fill="${shade(0.55)}" transform="translate(0.8 1.2)"/><path d="${glintPath(14, 13)}" fill="${light ? t.accent : silverHi}"/><path d="${glintPath(14, 6, 0.25)}" fill="${light ? '#ffffff' : '#ffffff'}"/>`);
 
   // Holo disc for the phases: concentric foil rings over the prism.
-  const holo = svg(45, 45, `<g fill="none" stroke="${silverHi}" stroke-opacity="${light ? 0.55 : 0.28}" stroke-width="0.7"><circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="16"/><circle cx="22.5" cy="22.5" r="11.5" stroke-dasharray="1.5 2.5"/></g><path d="${glintPath(22.5, 5)}" transform="translate(13 -13)" fill="${silverHi}" fill-opacity="0.7"/>`);
+  // Resting discs keep the dotted inner ring; the active one drops it for the sparkle.
+  const holo = (on) => svg(45, 45, `<g fill="none" stroke="${silverHi}" stroke-opacity="${light ? 0.55 : 0.28}" stroke-width="0.7"><circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="16"/>${on ? '' : '<circle cx="22.5" cy="22.5" r="11.5" stroke-dasharray="1.5 2.5"/>'}</g>${on ? `<path d="${glintPath(22.5, 5)}" transform="translate(13 -13)" fill="${silverHi}" fill-opacity="0.7"/>` : ''}`);
 
   const label = light
     ? `color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.9)} !important;`
@@ -79,9 +80,10 @@ export const starlightChrome = (t, { SEL, sel, svg, svgUrl, alpha }, light) => {
   const panelInset = `inset 0 0 0 1px ${silverDim}, inset 0 0 0 4px ${alpha(stockLo, 0.9)}, inset 0 0 0 5px ${alpha(silver, light ? 0.6 : 0.3)}`;
 
   const u0 = svgUrl(glint);
-  const u1 = svgUrl(holo);
+  const u1 = svgUrl(holo(false));
+  const u2 = svgUrl(holo(true));
   return `
-html body { --dbtc-u0: ${u0}; --dbtc-u1: ${u1}; --dbtc-rim: ${rim()}; --dbtc-rim2: ${rim(65)}; }
+html body { --dbtc-u0: ${u0}; --dbtc-u1: ${u1}; --dbtc-u2: ${u2}; --dbtc-rim: ${rim()}; --dbtc-rim2: ${rim(65)}; }
 /* Menu tiles: foil stock with hairlines, a prism rim and two corner glints. */
 ${SEL.tile} { background: ${tileBg(light ? 0.07 : 0.1)} !important; ${foilRim(2)} box-shadow: inset 0 1px 0 ${alpha('#ffffff', light ? 0.9 : 0.14)}, inset 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.7)}, 0 12px 24px -12px ${shade(0.85)} !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: -13px; top: -13px; width: 26px; height: 26px; pointer-events: none; background: var(--dbtc-u0) left top / 26px 26px no-repeat; }
@@ -117,10 +119,12 @@ ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; l
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 5px ${light ? t.text : '#000000'} !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${prism.join(', ')}, ${prism[0]}) !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -2px ${shade(0.8)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
+/* In a duel the great foil card steps out of the stage into the right gutter, past the chat column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translateX(330px); }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${light ? t.raised : t.bg} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, ${lines(light ? 0.035 : 0.05)}, radial-gradient(circle at 35% 30%, ${light ? '#ffffff' : mix(t.raised, t.border, 0.3)}, ${light ? mix(t.surface, t.bg, 0.7) : t.surface}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.self, '#ffffff', 0.25)}, ${mix(t.self, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.self : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.self, 0.85)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u1) center / 100% 100%, radial-gradient(circle at 35% 30%, ${mix(t.opp, '#ffffff', 0.25)}, ${mix(t.opp, light ? t.text : t.bg, 0.4)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.opp : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.opp, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u2) center / 100% 100%, radial-gradient(circle at 35% 30%, ${light ? mix(t.self, '#ffffff', 0.25) : mix(t.self, t.bg, 0.45)}, ${mix(t.self, light ? t.text : t.bg, light ? 0.4 : 0.65)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.self : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.self, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u2) center / 100% 100%, radial-gradient(circle at 35% 30%, ${light ? mix(t.opp, '#ffffff', 0.25) : mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, light ? t.text : t.bg, light ? 0.4 : 0.65)}) !important; box-shadow: 0 0 12px 3px ${alpha(light ? t.opp : '#ffffff', 0.6)}, 0 0 22px 4px ${alpha(t.opp, 0.85)}; }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px ${alpha(light ? t.text : t.bg, 0.6)}, 0 4px 10px -2px ${shade(0.8)} !important; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: ${light ? `0 1px 0 #ffffff` : `0 1px 2px #000000`} !important; }
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 4px ${light ? t.text : '#000000'} !important; }

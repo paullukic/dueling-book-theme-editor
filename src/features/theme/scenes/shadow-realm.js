@@ -28,9 +28,9 @@ const scene = (t) => {
   }
 
   // Eyes splitting open in the clouds: slit pupils, staggered blinks.
-  const eye = (x, y, s, d) => `<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="90" ry="44" fill="url(#dbtefx-sr-eglow)"/><path d="M-70 4Q-30 -26 0 -24Q34 -22 66 -2Q30 22 0 22Q-34 24 -70 4Z" fill="${mix(t.bg, violet, 0.12)}"/><g style="animation: dbtefx-sr-blink ${n1(8 + d)}s ease-in-out ${n1(-d * 1.9)}s infinite; transform-box: fill-box; transform-origin: center;"><path d="M-56 2Q-24 -20 0 -19Q28 -18 54 0Q26 17 0 17Q-26 18 -56 2Z" fill="${mix(t.bg, violet, 0.35)}"/><circle r="16" fill="url(#dbtefx-sr-iris)"/><path d="M0 -14Q4 0 0 14Q-4 0 0 -14Z" fill="#000000"/><circle cx="-6" cy="-6" r="2.5" fill="#ffffff" fill-opacity="0.8"/></g></g>`;
+  const eye = (x, y, s, d, cls = '') => `<g${cls ? ` class="${cls}"` : ''} transform="translate(${x} ${y}) scale(${s})"><ellipse rx="90" ry="44" fill="url(#dbtefx-sr-eglow)"/><path d="M-70 4Q-30 -26 0 -24Q34 -22 66 -2Q30 22 0 22Q-34 24 -70 4Z" fill="${mix(t.bg, violet, 0.12)}"/><g style="animation: dbtefx-sr-blink ${n1(8 + d)}s ease-in-out ${n1(-d * 1.9)}s infinite; transform-box: fill-box; transform-origin: center;"><path d="M-56 2Q-24 -20 0 -19Q28 -18 54 0Q26 17 0 17Q-26 18 -56 2Z" fill="${mix(t.bg, violet, 0.35)}"/><circle r="16" fill="url(#dbtefx-sr-iris)"/><path d="M0 -14Q4 0 0 14Q-4 0 0 -14Z" fill="#000000"/><circle cx="-6" cy="-6" r="2.5" fill="#ffffff" fill-opacity="0.8"/></g></g>`;
   const eyes = [[350, 96, 0.7], [640, 66, 0.55], [900, 86, 0.75], [1400, 270, 0.7], [1400, 84, 0.5], [1478, 600, 0.5]]
-    .map(([x, y, s], i) => eye(x, y, s, i * 1.1)).join('');
+    .map(([x, y, s], i) => eye(x, y, s, i * 1.1, i === 2 ? 'dbtefx-sr-instage' : '')).join('');
 
   // Lost souls: hollow figures in glowing outline, drifting.
   const soul = (x, y, s, d) => `<g transform="translate(${x} ${y}) scale(${s})"><g style="animation: dbtefx-sr-drift ${n1(9 + d)}s ease-in-out ${n1(-d)}s infinite;"><path d="M0 -96C14 -96 20 -84 18 -72C16 -62 10 -58 8 -54C26 -50 40 -40 44 -20C48 6 34 30 30 60C26 84 14 100 4 120C2 96 -6 92 -12 110C-14 84 -26 70 -30 50C-38 20 -48 -8 -40 -30C-34 -44 -22 -52 -8 -54C-12 -58 -18 -64 -18 -74C-18 -88 -12 -96 0 -96Z" fill="${green}" fill-opacity="0.07" stroke="${green}" stroke-opacity="0.75" stroke-width="2.5"/></g></g>`;
@@ -54,9 +54,9 @@ const scene = (t) => {
 <radialGradient id="dbtefx-sr-shade" cx="0.5" cy="0.45" r="0.75"><stop offset="0.5" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.8"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sr-sky)"/>
-<rect width="${W}" height="${H}" fill="url(#dbtefx-sr-void)"/>
-<g fill="none" stroke="${violet}" stroke-linecap="round" style="transform-origin: ${vx}px ${vy}px; animation: dbtefx-spin 160s linear infinite reverse;">${arms}</g>
-<g transform="translate(${vx} ${vy + 4}) scale(0.62)" fill="none" stroke="${green}" stroke-width="5" stroke-linecap="round" ${anim('pulse', 6, 0, 'ease-in-out')}><path d="M-62 2Q-14 -38 52 -2Q4 26 -62 2ZM52 -2L84 -4M-60 -30Q-4 -58 66 -30M-4 20L-10 60M14 18Q34 48 56 52Q70 54 66 40Q60 32 52 40"/><circle r="13" fill="${green}"/></g>
+<rect class="dbtefx-sr-instage" width="${W}" height="${H}" fill="url(#dbtefx-sr-void)"/>
+<g class="dbtefx-sr-instage" fill="none" stroke="${violet}" stroke-linecap="round" style="transform-origin: ${vx}px ${vy}px; animation: dbtefx-spin 160s linear infinite reverse;">${arms}</g>
+<g class="dbtefx-sr-instage" transform="translate(${vx} ${vy + 4}) scale(0.62)" fill="none" stroke="${green}" stroke-width="5" stroke-linecap="round" ${anim('pulse', 6, 0, 'ease-in-out')}><path d="M-62 2Q-14 -38 52 -2Q4 26 -62 2ZM52 -2L84 -4M-60 -30Q-4 -58 66 -30M-4 20L-10 60M14 18Q34 48 56 52Q70 54 66 40Q60 32 52 40"/><circle r="13" fill="${green}"/></g>
 ${eyes}
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sr-under)"/>
 <!--mid-->

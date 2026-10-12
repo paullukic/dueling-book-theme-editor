@@ -66,6 +66,7 @@ export default (tokens, kit) => {
   const metal = `linear-gradient(180deg, ${mix(t.raised, t.text, 0.1)} 0%, ${t.raised} 22%, ${t.surface} 60%, ${mix(t.surface, t.bg, 0.6)} 100%)`;
   const heat = (o) => `radial-gradient(ellipse 70% 50% at 50% 115%, ${alpha(t.accent, o)}, transparent 70%)`;
   const steel = mix(t.border, t.text, 0.18);
+  const ember = mix(t.self, '#000000', 0.2);
   const plate = t.surface;
   const halo = `0 0 3px ${plate}, 0 0 5px ${plate}, 0 0 7px ${plate}, 0 0 9px ${plate}, 0 0 9px ${plate}`;
   const cut = (n) => `polygon(${n}px 0, 100% 0, 100% calc(100% - ${n}px), calc(100% - ${n}px) 100%, 0 100%, 0 ${n}px)`;
@@ -176,13 +177,13 @@ ${sel(['#chats .chat .cout_txt'])} { background-color: ${mix(t.bg, t.surface, 0.
 ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important; }
 
 /* Duel: a molten life bar guarded by the red eye; phases in steel jaws. */
-${SEL.life} { border-color: ${steel} !important; border-radius: 0 !important; box-shadow: 0 0 0 1px #000000, inset 0 0 0 1px ${alpha(t.accent, 0.6)}, 0 0 16px -4px ${alpha(t.accent, 0.8)} !important; }
+${SEL.life} { border-color: ${steel} !important; border-radius: 0 !important; box-shadow: 0 0 0 1px #000000, inset 0 0 0 1px ${alpha(mix(steel, t.text, 0.3), 0.55)}, 0 0 12px -4px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -30px; top: 50%; width: 46px; height: 46px; margin-top: -23px; pointer-events: none;
   background: ${svgUrl(eye(t, kit))} center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.8)});
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.accent2, 0.55)}, transparent 40%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(mix(t.self, '#ffffff', 0.5), 0.45)}, transparent 40%), linear-gradient(90deg, ${mix(ember, t.bg, 0.4)}, ${ember} 55%, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: repeating-linear-gradient(100deg, transparent 0 14px, ${alpha(t.bg, 0.35)} 14px 15px, transparent 15px 31px), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 40%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--bd-scales), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
@@ -190,7 +191,7 @@ ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shad
 ${SEL.phase} { background: ${steel} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 30%, ${t.raised}, #000000) !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
-${sel(['#duel .phase .background::after'])} {
+${sel(['#duel .phase.active .background::after'])} {
   content: ""; position: absolute; inset: -14px; pointer-events: none;
   background: ${svgUrl(jaw(t, kit))} center / 100% 100% no-repeat;
 }

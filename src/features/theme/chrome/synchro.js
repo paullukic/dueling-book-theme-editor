@@ -146,12 +146,14 @@ ${T(['#chats .chat .black_line'])} { background-color: ${silver} !important; }
 ${SEL.life} { border-color: transparent !important; border-image: ${slimFrame} 16 / 7px / 1px stretch !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${silver}, 0 0 0 3px ${t.bg}, 0 0 12px -3px ${alpha(glow, 0.8)} !important; }
 ${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -9px; border-radius: 50%; border: 2px solid ${tuner}; background: ${deep}; box-shadow: 0 0 0 1px ${t.bg}, 0 0 8px ${alpha(tuner, 0.8)}; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, transparent 12%, ${alpha('#ffffff', 0.6)} 21%, transparent 31%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self}) !important; }
+/* Low swaps the frame for the danger one; the silver outer line stays, just outside its hairline. */
+${T(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border'])} { outline: 1px solid ${silver}; outline-offset: 1px; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 40%), linear-gradient(180deg, transparent 12%, ${alpha('#ffffff', 0.6)} 21%, transparent 31%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, transparent 12%, ${alpha('#ffffff', 0.6)} 21%, transparent 31%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${dust} 0 0 / 60px, ${deep} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 ${SEL.phase} {
-  background: repeating-conic-gradient(from 0deg, ${pearl} 0 26deg, ${alpha(pearl, 0.25)} 26deg 30deg) !important;
+  background: repeating-conic-gradient(from 0deg, ${alpha(pearl, 0.5)} 0 26deg, ${alpha(pearl, 0.12)} 26deg 30deg) !important;
   box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(glow, 0.6)} !important;
 }
 ${T(['#duel .phase .background .background_top'])} { background: transparent !important; }

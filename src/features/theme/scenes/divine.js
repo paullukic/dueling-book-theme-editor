@@ -52,7 +52,7 @@ const scene = (t) => {
 <circle cx="${raX}" cy="${raY}" r="190" fill="url(#dbtefx-dv-sun)" opacity="0.22" ${anim('bloom', 8, 2, 'ease-in-out')}/>
 ${god('obelisk', -60, 150, 250, 680, [0.5, 0.35], 1.0, 0, { blend: 'multiply', backdrop: mix(blue, t.bg, 0.62), glow: blue })}
 ${god('slifer', 1380, -40, 260, 250, [0.45, 0.4], 1.0, 10, { blend: 'screen', backdrop: mix(red, t.bg, 0.8), glow: red })}
-${god('ra', 1300, 170, 330, 640, [0.55, 0.45], 1.0, 5, { blend: 'screen', backdrop: mix(gold, t.bg, 0.72), fade: 0.45 })}`;
+${god('ra', 1300, 170, 330, 640, [0.55, 0.45], 1.0, 5, { blend: 'screen', backdrop: mix(gold, t.bg, 0.72), fade: 0.45, opacity: 0.85 })}`;
 };
 
 export default scene;

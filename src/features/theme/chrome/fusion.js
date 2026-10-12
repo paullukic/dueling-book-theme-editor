@@ -152,10 +152,10 @@ ${SEL.phase} {
 ${T(['#duel .phase .background .background_top'])} { background: transparent !important; }
 ${T(['#duel .phase .background .background_inner'])} { background: ${t.bg} !important; }
 ${T(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${vortex(0.22)}, radial-gradient(circle, ${t.raised}, ${deep}) !important; }
-${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, #ffffff 0 6%, transparent 30%), conic-gradient(from 0deg, ${t.self}, ${vi}, ${t.self}, ${pk}, ${t.self}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)} !important; }
-${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, #ffffff 0 6%, transparent 30%), conic-gradient(from 0deg, ${t.opp}, ${vi}, ${t.opp}, ${pk}, ${t.opp}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)} !important; }
+${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, #ffffff 0 6%, transparent 30%), linear-gradient(${alpha(t.bg, 0.42)}, ${alpha(t.bg, 0.42)}), conic-gradient(from 0deg, ${t.self}, ${vi}, ${t.self}, ${pk}, ${t.self}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)} !important; }
+${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, #ffffff 0 6%, transparent 30%), linear-gradient(${alpha(t.bg, 0.42)}, ${alpha(t.bg, 0.42)}), conic-gradient(from 0deg, ${t.opp}, ${vi}, ${t.opp}, ${pk}, ${t.opp}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)} !important; }
 ${T(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.35)} !important; text-shadow: 0 1px 1px ${t.bg} !important; }
-${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 0 4px ${t.bg}, 0 1px 1px ${t.bg} !important; }
+${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${t.bg}, -1px 0 0 ${t.bg}, 0 1px 0 ${t.bg}, 0 -1px 0 ${t.bg}, 0 0 4px ${t.bg} !important; }
 ${T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${edge} !important; }
 ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${deep} !important; }
 ${T(['#duel #watchers'])} { box-shadow: inset 0 0 0 1px ${mix(t.border, vi, 0.4)} !important; }

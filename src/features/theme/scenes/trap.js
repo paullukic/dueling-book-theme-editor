@@ -89,9 +89,9 @@ const trap = (t) => {
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tr-sky)"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tr-halo)" ${anim('pulse', 7, 0, 'ease-in-out')}/>
-<ellipse cx="${cx - 10}" cy="${hy}" rx="260" ry="62" fill="url(#dbtefx-tr-pitglow)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
-<ellipse cx="${cx - 10}" cy="${hy}" rx="186" ry="40" fill="url(#dbtefx-tr-pit)"/>
-<g fill="none" stroke="${t.accent}"><ellipse cx="${cx - 10}" cy="${hy}" rx="176" ry="37" stroke-opacity="0.55" stroke-width="2"/><ellipse cx="${cx - 10}" cy="${hy + 4}" rx="130" ry="25" stroke-opacity="0.25"/></g>
+<ellipse class="dbtefx-tr-rim" cx="${cx - 10}" cy="${hy}" rx="260" ry="62" fill="url(#dbtefx-tr-pitglow)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
+<ellipse class="dbtefx-tr-rim" cx="${cx - 10}" cy="${hy}" rx="186" ry="40" fill="url(#dbtefx-tr-pit)"/>
+<g class="dbtefx-tr-rim" fill="none" stroke="${t.accent}"><ellipse cx="${cx - 10}" cy="${hy}" rx="176" ry="37" stroke-opacity="0.55" stroke-width="2"/><ellipse cx="${cx - 10}" cy="${hy + 4}" rx="130" ry="25" stroke-opacity="0.25"/></g>
 <!--mid-->
 ${chain(1250, -30, cx - 16, cy - 104, 30, 13, 0)}
 ${chain(1640, -20, cx + 60, cy - 96, 50, 16, 1.1)}

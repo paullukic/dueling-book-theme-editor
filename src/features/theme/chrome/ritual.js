@@ -23,6 +23,8 @@ export default (t, kit) => {
   const titleHalo = (c) => `${[3, 7, 11].map((x) => `-${x}px 0 2px ${c}, ${x}px 0 2px ${c}`).join(', ')}, 0 -3px 2px ${c}, 0 3px 3px ${c}`;
   const blue = t.accent;
   const candle = t.accent2;
+  // Candle gold saturated past the pale token, so a full bar reads as gold, not sand.
+  const gold = mix(t.self, '#a86a00', 0.5);
   const frameBlue = mix(blue, t.bg, 0.42);
   const stone = mix(t.raised, t.muted, 0.12);
   const stoneDark = mix(t.surface, t.bg, 0.5);
@@ -162,7 +164,7 @@ ${SEL.life} {
   background: repeating-linear-gradient(90deg, transparent 0 14px, ${alpha(t.bg, 0.55)} 14px 15px) left top / 56% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, inset 0 0 0 1px ${alpha(blue, 0.4)}, 0 0 10px -2px ${alpha(blue, 0.55)} !important;
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.58)}, ${mix(mix(t.self, t.danger, 0.1), '#000000', 0.12)} 70%, ${mix(mix(t.self, t.danger, 0.2), '#000000', 0.22)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(mix(t.self, '#ffffff', 0.55), 0.6)}, ${alpha(t.self, 0)} 42%, transparent 70%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(gold, '#000000', 0.3)}, ${gold} 45%, ${mix(gold, t.self, 0.5)} 80%, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.58)}, ${mix(t.opp, '#000000', 0.2)} 70%, ${mix(t.opp, '#000000', 0.32)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
@@ -179,7 +181,7 @@ ${sel(['#duel .phase.active .background::before'])} {
   filter: drop-shadow(0 0 5px ${alpha(candle, 0.8)}); animation: dbte-ritual-turn 40s linear infinite;
 }
 @keyframes dbte-ritual-turn { to { transform: rotate(360deg); } }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.muted, t.text, 0.4)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${frameBlue} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${slab} !important; }

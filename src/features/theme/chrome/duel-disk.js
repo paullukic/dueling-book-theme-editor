@@ -141,10 +141,10 @@ ${SEL.phase} {
 ${T(['#duel .phase .background .background_top'])} { background: transparent !important; }
 ${T(['#duel .phase .background .background_inner'])} { background: ${groove} !important; }
 ${T(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle at 45% 35%, #ffffff, ${t.raised} 40%, ${t.surface} 80%) !important; box-shadow: inset 0 -2px 3px ${alpha(ink, 0.2)} !important; }
-${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 42% 32%, #ffffff 0 8%, ${mix(t.self, '#ffffff', 0.25)} 22%, ${t.self} 55%, ${mix(t.self, ink, 0.4)}) !important; box-shadow: 0 0 10px ${alpha(t.self, 0.6)} !important; }
-${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 42% 32%, #ffffff 0 8%, ${mix(t.opp, '#ffffff', 0.25)} 22%, ${t.opp} 55%, ${mix(t.opp, ink, 0.4)}) !important; box-shadow: 0 0 10px ${alpha(t.opp, 0.6)} !important; }
+${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 42% 32%, ${alpha('#ffffff', 0.85)} 0 8%, transparent 26%), radial-gradient(circle at 42% 32%, ${mix(t.self, ink, 0.15)}, ${mix(t.self, ink, 0.2)} 55%, ${mix(t.self, ink, 0.45)}) !important; box-shadow: 0 0 10px ${alpha(t.self, 0.6)} !important; }
+${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 42% 32%, ${alpha('#ffffff', 0.85)} 0 8%, transparent 26%), radial-gradient(circle at 42% 32%, ${mix(t.opp, ink, 0.15)}, ${mix(t.opp, ink, 0.2)} 55%, ${mix(t.opp, ink, 0.45)}) !important; box-shadow: 0 0 10px ${alpha(t.opp, 0.6)} !important; }
 ${T(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 0 #ffffff !important; }
-${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 1px ${alpha(ink, 0.8)} !important; }
+${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${ink}, -1px 0 0 ${ink}, 0 1px 0 ${ink}, 0 -1px 0 ${ink}, 0 1px 3px ${alpha(ink, 0.8)} !important; }
 ${T(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, #ffffff, ${t.surface} 50%, ${t.border}) !important; }
 ${T(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${t.raised}, ${t.surface}) !important; }
 ${T(['#duel #watchers'])} { background: ${brushed}, ${plate} !important; box-shadow: ${lift} !important; }

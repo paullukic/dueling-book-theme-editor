@@ -110,6 +110,7 @@ export const foil = (t, light) => {
 </defs>
 ${glitter}
 <!--mid-->
+<g class="dbtefx-sl-card">
 <ellipse cx="${cx}" cy="${cy}" rx="290" ry="320" fill="url(#dbtefx-sl-halo)" style="animation: dbtefx-sl-breathe 9s ease-in-out infinite;"/>
 <g transform="translate(${cx} ${cy}) rotate(-7) scale(0.72)">
 <rect x="${x0 + 10}" y="${y0 + 18}" width="${cw}" height="${ch}" rx="12" fill="${ink}" fill-opacity="${light ? 0.12 : 0.55}"/>
@@ -138,6 +139,7 @@ ${rings}
 <rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="12" fill="none" stroke="url(#dbtefx-sl-name)" stroke-width="3"/>
 <rect x="${x0 + 7}" y="${y0 + 7}" width="${cw - 14}" height="${ch - 14}" rx="7" fill="none" stroke="url(#dbtefx-sl-rc)" stroke-width="2" stroke-opacity="0.85"/>
 <g clip-path="url(#dbtefx-sl-clip)"><g transform="rotate(20)"><rect x="-120" y="-700" width="200" height="1400" fill="url(#dbtefx-sl-band)" style="animation: dbtefx-sl-sweep 9s cubic-bezier(.45,0,.25,1) infinite;"/></g></g>
+</g>
 </g>
 <!--near-->
 ${glints}`;

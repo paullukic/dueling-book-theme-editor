@@ -165,7 +165,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -26px; top: -1px; width: 21px; height: 21px;
   background: var(--sp-medal) center / contain no-repeat; filter: drop-shadow(0 1px 1px ${alpha('#000000', 0.9)});
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.1)}, ${t.self} 60%, ${mix(t.self, '#ffffff', 0.3)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, '#000000', 0.45)}, ${t.opp} 70%, ${mix(t.opp, '#000000', 0.12)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 

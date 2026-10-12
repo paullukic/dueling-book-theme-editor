@@ -177,7 +177,9 @@ ${sel(['#duel .phase.active .background::before'])} {
   filter: drop-shadow(0 0 3px ${mag});
 }
 ${sel(['#duel .phase.active .background'])} { background: repeating-conic-gradient(${steelHi} 0deg 6deg, ${mix(steel, t.bg, 0.4)} 6deg 15deg) !important; box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 14px 2px ${alpha(mag, 0.75)}; }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
+/* In a duel the trap hole (its pink rim, glow and plum edge) would cross the stage's right edge: it goes. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tr-rim { display: none; }
+${sel(['#duel .phase span'])} { color: ${mix(t.muted, t.text, 0.3)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${hazard(4)} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${plateDark} !important; }

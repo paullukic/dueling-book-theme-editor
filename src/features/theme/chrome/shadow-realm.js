@@ -188,8 +188,10 @@ ${sel(['#duel .phase .background::after'])} {
   background: ${svgUrl(eyeRing(t, kit))} center / 100% 100% no-repeat; opacity: 0.85;
 }
 ${sel(['#duel .phase.active .background::after'])} { opacity: 1; filter: drop-shadow(0 0 4px ${t.accent}); }
-${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.self, 0.8)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 22px ${alpha(t.opp, 0.7)} !important; }
+${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 2px ${alpha(t.self, 0.9)}, 0 0 14px 2px ${alpha(mix(t.self, '#ffffff', 0.4), 0.7)}, 0 0 30px 6px ${alpha(t.self, 0.85)} !important; }
+/* In a duel the vortex's dark heart and the eye above it sit behind the opponent's zones and deck: gone there. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sr-instage { display: none; }
+${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 0 2px ${alpha(t.opp, 0.9)}, 0 0 14px 2px ${alpha(mix(t.opp, '#ffffff', 0.4), 0.6)}, 0 0 30px 6px ${alpha(t.opp, 0.8)} !important; }
 ${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.2)} !important; text-shadow: 0 1px 0 #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${edge} !important; border-radius: 1px !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${slab} !important; border-radius: 0 !important; }

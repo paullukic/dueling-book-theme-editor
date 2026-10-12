@@ -14,10 +14,12 @@ export default (t, { SEL, sel, svg, alpha }) => {
     if (!ids.has(s)) ids.set(s, `--dbc${ids.size}`);
     return `var(${ids.get(s)})`;
   };
-  const lit = mix(t.danger, t.warning, 0.28);
+  const lit = mix(t.warning, t.danger, 0.3);
   const off = t.accent;
   const frame = mix(t.accent, t.border, 0.45);
   const deep = mix(t.surface, t.bg, 0.4);
+  // The opponent's gold, deepened off khaki so it stays gold under the hex plating.
+  const oppGold = mix(mix(t.opp, t.danger, 0.12), '#000000', 0.15);
   const T = (list) => sel(list);
 
   // One Link Arrow (16 box). kind: 'side' (a chevron pointing up) or 'corner' (pointing up-left).
@@ -171,8 +173,8 @@ ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 3px !importa
 ${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 270, true))} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_border::after'])} { content: ""; position: absolute; right: -9px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: ${U(arrow('side', 90, true))} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self} 70%, ${mix(t.self, '#000000', 0.2)}) !important; }
-${SEL.lifeOpp} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${mix(t.opp, '#000000', 0.25)}) !important; }
+${SEL.lifeSelf} { background: ${hex(0.22)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${t.self} 55%, ${mix(t.self, '#ffffff', 0.2)}) !important; }
+${SEL.lifeOpp} { background: ${hex(0.07)} left center / 12px auto, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(oppGold, t.bg, 0.35)}, ${oppGold} 60%, ${mix(oppGold, '#ffffff', 0.12)}) !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${hex(0.12)} left center / 12px auto, ${deep} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.bg, 0.9)} !important; }
 ${SEL.phase} {

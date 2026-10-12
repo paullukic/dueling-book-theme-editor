@@ -187,10 +187,13 @@ ${sel(['#chats .chat .cout_txt'])} { background-color: ${mix(t.bg, t.surface, 0.
 ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent2} !important; }
 
 /* Duel: life points sealed by a spell circle, phases inside glyph rings. */
+/* In a duel the spell circle stays right of the stage, out from behind the decks and the last zone column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { clip-path: inset(0 0 0 235px); }
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 2px ${alpha(t.accent, 0.7)}, 0 0 18px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
-  background: var(--dm-gold) center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
+  /* A solid seal: its face hides the frame's rounded end, so one ring shows, not two. */
+  background: var(--dm-gold) center / contain no-repeat, radial-gradient(circle, ${t.bg} 0 66%, transparent 69%); border-radius: 50%; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 999px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(t.text, 0.25)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.accent, 0.5)}, ${t.self}) !important; }

@@ -9,6 +9,8 @@ import { mix } from '../../../lib/color.js';
 export default (t, kit) => {
   const { SEL, sel, svgUrl, svg, alpha, n1 } = kit;
   const gold = t.accent;
+  // Polished copper for your side: deeper than the token so the gold highlight reads on it.
+  const copper = mix(t.self, '#000000', 0.15);
   const glint = mix(gold, '#ffffff', 0.72);
   const hi = mix(gold, '#ffffff', 0.45);
   const ochre = mix(mix(gold, t.danger, 0.3), '#000000', 0.42);
@@ -163,7 +165,7 @@ ${sel(DIALOGS.map((d) => `#content ${d}::before`))} {
   border: 12px solid transparent; border-image: var(--mi-bevel) 10 / 12px / 0 stretch; background: none; pointer-events: none; z-index: 0;
 }
 ${sel(DIALOGS.map((d) => `#content ${d}::after`))} {
-  content: ""; position: absolute; left: 50%; top: -34px; right: auto; bottom: auto; width: 64px; height: 64px; margin-left: -32px; transform: none;
+  content: ""; position: absolute; left: 50%; top: -40px; right: auto; bottom: auto; width: 64px; height: 64px; margin-left: -32px; transform: none;
   background: var(--mi-crest) center / contain no-repeat; pointer-events: none; z-index: 1; filter: drop-shadow(0 3px 4px ${alpha('#000000', 0.7)});
 }
 ${SEL.dialogTitle}, ${inked(DIALOGS.map((d) => `#content ${d} .title_txt`))} { ${inkText} }
@@ -196,7 +198,9 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   content: ""; position: absolute; left: 7px; top: 50%; width: 30px; height: 15px; transform: translateY(-50%); pointer-events: none;
   background: var(--mi-eye) center / contain no-repeat; filter: drop-shadow(0 0 2px ${alpha('#000000', 0.95)}) drop-shadow(0 0 1px ${alpha('#000000', 0.95)});
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self} 75%, ${mix(t.self, gold, 0.4)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(gold, 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(copper, '#000000', 0.35)}, ${copper} 55%, ${mix(copper, gold, 0.3)}) !important; }
+/* In a duel the tomb ceiling (lapis band, stars, frieze) sits under the stage's upper edge, dimmed so it reads as backdrop. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mi-ceiling { opacity: 0.7; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(lapis, '#000000', 0.45)}, ${lapis} 70%, ${mix(lapis, gold, 0.25)}) !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 

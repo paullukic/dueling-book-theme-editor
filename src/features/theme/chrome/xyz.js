@@ -19,6 +19,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const goldLight = mix(t.accent, '#ffffff', 0.45);
   const goldDeep = mix(t.accent, t.bg, 0.45);
   const ink = mix(t.surface, t.bg, 0.3);
+  // The opponent's violet, lifted so a healthy bar reads lit, not dusk.
+  const violet = mix(t.opp, '#8a5ce8', 0.5);
 
   const star5 = (x, y, r, fill) => {
     const pts = [];
@@ -37,9 +39,9 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const rankRow = (n, r = 6) => svg(n * r * 2.5, r * 2.4, defs + Array.from({ length: n }, (_, i) => rankStar(r * 1.2 + i * r * 2.5, r * 1.2, r)).join(''));
   const rankOne = (r = 10) => svg(r * 2.4, r * 2.4, defs + rankStar(r * 1.2, r * 1.2, r));
   // Overlay units on their orbit.
-  const orbit = (on, w = 220, h = 60) =>
+  const orbit = (on, w = 220, h = 60, at = [[0.12, 0.62], [0.86, 0.38], [0.5, 0.88]]) =>
     svg(w, h, `${on ? unitDefs : ''}<ellipse cx="${w / 2}" cy="${h / 2}" rx="${w / 2 - 6}" ry="${h / 2 - 8}" fill="none" stroke="${gold}" stroke-opacity="${on ? 0.6 : 0.16}" stroke-width="1" stroke-dasharray="${on ? 'none' : '2 5'}"/>
-${on ? [[0.12, 0.62], [0.86, 0.38], [0.5, 0.88]].map(([fx, fy]) => `<circle cx="${(w * fx).toFixed(1)}" cy="${(h * fy).toFixed(1)}" r="9" fill="url(#u)"/>`).join('') : ''}`);
+${on ? at.map(([fx, fy]) => `<circle cx="${(w * fx).toFixed(1)}" cy="${(h * fy).toFixed(1)}" r="9" fill="url(#u)"/>`).join('') : ''}`);
   // 9-slice gold double rule on black, with a Rank star at each corner.
   const frame = (s, b, stars = true) =>
     svg(48, 48, `${stars ? defs : ''}<rect x=".5" y=".5" width="47" height="47" fill="none" stroke="${gold}" stroke-width="1"/><rect x="${b}" y="${b}" width="${48 - 2 * b}" height="${48 - 2 * b}" fill="none" stroke="${goldDeep}" stroke-width=".7"/>
@@ -166,8 +168,8 @@ ${T(['#chats .chat .black_line'])} { background-color: ${goldDeep} !important; }
 ${SEL.life} { border-color: ${gold} !important; border-radius: 3px !important; box-shadow: inset 0 0 0 1px #000000, 0 0 0 1px #000000, 0 0 10px -2px ${alpha(gold, 0.6)} !important; }
 ${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -11px; top: 50%; width: 22px; height: 22px; margin-top: -11px; background: ${U(rankOne())} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.2)}, ${mix(t.self, '#ffffff', 0.12)}) !important; }
-${SEL.lifeOpp} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, '#000000', 0.12)}) !important; }
+${SEL.lifeSelf} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.2)}, ${mix(t.self, '#ffffff', 0.12)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
+${SEL.lifeOpp} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(violet, t.bg, 0.3)}, ${violet} 60%, ${mix(violet, '#ffffff', 0.15)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.6)} !important; }
 ${T(['#duel .lifepoints .black_bar'])} { background: ${field} 0 0 / 70px, ${t.bg} !important; }
 ${T(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 3px #000000, 0 1px 0 #000000, 0 0 10px #000000 !important; }
 ${SEL.phase} {
@@ -214,7 +216,8 @@ ${T(['#content .ok_btn:hover img', '#content .yes_btn:hover img', '#content .no_
 ${titles} { background: ${t.surface} !important; box-shadow: 0 0 0 .3em ${t.surface} !important; border-radius: .1em; }
 ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, transparent 16%, ${t.surface} 24% 76%, transparent 84%) !important; box-shadow: none !important; }
 ${T(['#duel_room .format_txt::before', '#duel_room span.arial_black2::before', '#settings .admin_lbl::before', '#content .title1::before'])} { content: ""; position: absolute; left: 50%; top: -8px; bottom: -8px; width: 260px; margin-left: -130px; pointer-events: none; background: ${U(orbit(true, 300, 70))} center / 100% 100% no-repeat; opacity: .75; }
-${T(['#content .title1::before'])} { width: 420px; margin-left: -210px; }
+/* The page title's orbit runs wide, its two units out at the ends, clear of the word. */
+${T(['#content .title1::before'])} { width: 640px; margin-left: -320px; opacity: .55; background-image: ${U(orbit(true, 640, 70, [[0.035, 0.5], [0.965, 0.5]]))}; }
 
 /* ---- Backdrop: a random scatter of small sparkles instead of the even grid ---- */
 html body #dbte-skin-motif { background: ${U(sparkleField)} 0 0 / 600px 600px repeat !important; }

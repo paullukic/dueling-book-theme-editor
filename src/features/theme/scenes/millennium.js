@@ -105,10 +105,10 @@ const scene = (t) => {
 <g fill="url(#dbtefx-mi-ray)" style="transform-origin: ${cx}px ${ry}px; animation: dbtefx-spin 420s linear infinite;">${rays}</g>
 <path d="M0 780Q240 740 520 772T1040 760T1600 770V900H0Z" fill="${mix(t.bg, '#000000', 0.15)}"/>
 ${pyramid(300, 784, 190, 150)}${pyramid(600, 778, 120, 96)}${pyramid(960, 772, 90, 70)}
-<rect width="${W}" height="126" fill="${mix(t.bg, t.accent2, 0.3)}" fill-opacity="0.9"/>
+<g class="dbtefx-mi-ceiling"><rect width="${W}" height="126" fill="${mix(t.bg, t.accent2, 0.3)}" fill-opacity="0.9"/>
 <g fill="${t.accent}" fill-opacity="0.75">${stars}</g>
 <rect y="120" width="${W}" height="6" fill="${t.accent}" fill-opacity="0.6"/><rect y="126" width="${W}" height="30" fill="${t.bg}" fill-opacity="0.6"/><rect y="156" width="${W}" height="3" fill="${t.accent}" fill-opacity="0.4"/>
-<path d="${frieze}" fill="${t.accent}" fill-opacity="0.55"/><path d="${ties}" stroke="${t.bg}" stroke-width="2.5"/>
+<path d="${frieze}" fill="${t.accent}" fill-opacity="0.55"/><path d="${ties}" stroke="${t.bg}" stroke-width="2.5"/></g>
 <!--mid-->
 <path d="M${cx - 128} 900V300Q${cx - 128} 196 ${cx} 186Q${cx + 128} 196 ${cx + 128} 300V900Z" fill="url(#dbtefx-mi-stone)" stroke="${t.accent}" stroke-opacity="0.35" stroke-width="2"/>
 <path d="M${cx - 88} 900V310Q${cx - 88} 222 ${cx} 214Q${cx + 88} 222 ${cx + 88} 310V900M${cx - 120} 900V304M${cx + 120} 900V304" fill="none" stroke="${deep}" stroke-width="2.5"/>

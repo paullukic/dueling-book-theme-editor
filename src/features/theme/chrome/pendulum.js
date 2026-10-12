@@ -159,8 +159,8 @@ ${SEL.life} {
   background: linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 50%) !important;
   box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 10px -3px ${alpha(gold, 0.6)} !important;
 }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.55)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.accent, '#000000', 0.6)}, ${mix(t.accent, '#000000', 0.25)} 75%, ${mix(mix(t.accent, t.opp, 0.3), '#000000', 0.3)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(orange, '#000000', 0.55)}, ${orange} 75%, ${mix(orange, gold, 0.5)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
+${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.accent, '#000000', 0.6)}, ${mix(t.accent, '#000000', 0.25)} 75%, ${mix(mix(t.accent, t.opp, 0.3), '#000000', 0.3)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${alpha('#000000', 0.9)}, 0 0 6px ${alpha('#000000', 0.8)} !important; }
 
 /* Phases: Pendulum-card rings; the active one carries the swing's arc */
@@ -176,7 +176,7 @@ ${sel(['#duel .phase.active .background::before'])} {
   filter: drop-shadow(0 0 3px ${gold});
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 1px ${alpha('#000000', 0.8)}, 0 0 14px 2px ${alpha(gold, 0.55)}; }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
+${sel(['#duel .phase span'])} { color: ${mix(t.muted, t.text, 0.35)} !important; text-shadow: 0 1px 1px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .phase.active span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.95)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${orange}, ${green}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${dark} !important; }
