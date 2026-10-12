@@ -110,6 +110,7 @@ const powerPatron = (t) => {
   return `<style>
 @keyframes dbtefx-pp-orbit { ${orbitKeys.join(' ')} }
 @keyframes dbtefx-pp-run { 0% { transform: translateY(-120px); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(560px); opacity: 0; } }
+.dbtefx-pp-linkhole { display: none; }
 @keyframes dbtefx-pp-iris { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.18); opacity: 1; } }
 </style>
 <defs>
@@ -120,6 +121,8 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <linearGradient id="dbtefx-pp-fade" x1="0" y1="${ey + 230}" x2="0" y2="900" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff" stop-opacity="1"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.45"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/></linearGradient>
 <linearGradient id="dbtefx-pp-band" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <mask id="dbtefx-pp-roadmask"><path d="${road}" fill="url(#dbtefx-pp-fade)"/></mask>
+<radialGradient id="dbtefx-pp-holefade"><stop offset="0.55" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<mask id="dbtefx-pp-links" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><ellipse class="dbtefx-pp-linkhole" cx="1330" cy="180" rx="125" ry="90" fill="url(#dbtefx-pp-holefade)"/></mask>
 <clipPath id="dbtefx-pp-roadclip"><path d="${road}"/></clipPath>
 <linearGradient id="dbtefx-pp-blade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(lace, obsidian, 0.4)}"/><stop offset="1" stop-color="${obsidian}"/></linearGradient>
 </defs>
@@ -129,6 +132,7 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <path d="M${r0} ${ey + 230}L${b0} 900M${r1} ${ey + 230}L${b1} 900" stroke="${iceHi}" stroke-opacity="0.35" stroke-width="1.5"/>
 <!--mid-->
 <ellipse cx="${ex}" cy="${ey}" rx="230" ry="200" fill="url(#dbtefx-pp-glow)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
+<g mask="url(#dbtefx-pp-links)">
 <path d="${blades}" fill="url(#dbtefx-pp-blade)" stroke="${obsidian}" stroke-width="1.5"/>
 <g fill="${mix(ice, t.bg, 0.55)}" fill-opacity="0.85" stroke="${t.warning}" stroke-opacity="0.75" stroke-width="1.1">${holes}</g>
 <path d="${veins}" stroke="${t.warning}" stroke-opacity="0.4" stroke-width="1.2" stroke-dasharray="10 4 2 4"/>
@@ -136,6 +140,7 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <path d="${rims}" fill="none" stroke="${ice}" stroke-opacity="0.45" stroke-width="1.2"/>
 <circle cx="${ex}" cy="${ey}" r="96" fill="${obsidian}" stroke="${ice}" stroke-opacity="0.5" stroke-width="2"/>
 <g style="transform-origin: ${ex}px ${ey}px; animation: dbtefx-spin 200s linear infinite;" fill="none" stroke="${iceHi}" stroke-opacity="0.55" stroke-width="1.4" stroke-linecap="round">${script}<circle cx="${ex}" cy="${ey}" r="134" stroke-opacity="0.3"/><circle cx="${ex}" cy="${ey}" r="166" stroke-opacity="0.3" stroke-dasharray="2 6"/></g>
+</g>
 <g fill="none" stroke-linecap="round" stroke-linejoin="round">
 <path d="${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${ice}" stroke-opacity="0.35" stroke-width="10"/>
 <path d="${fork(1)}${tendril(-1)}${tendril(1)}" stroke="${iceHi}" stroke-width="3"/>

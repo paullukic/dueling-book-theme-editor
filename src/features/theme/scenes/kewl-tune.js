@@ -77,9 +77,9 @@ ${beam(1270, 12, 'a', 9, 0)}${beam(1430, -10, 'b', 11, 3)}
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="12" stroke-opacity="0.45" style="animation: dbtefx-kt-beat 0.5s ease-out infinite;"/>
 <path d="${arch}" fill="none" stroke="url(#dbtefx-kt-neon)" stroke-width="5"/>
 <path d="${arch}" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
-<path d="${ghost}" fill="${t.accent}" fill-opacity="0.12"/>
+<g class="dbtefx-kt-eq"><path d="${ghost}" fill="${t.accent}" fill-opacity="0.12"/>
 <g>${eq}</g>
-<path d="${cells}" stroke="${night}" stroke-width="3"/>
+<path d="${cells}" stroke="${night}" stroke-width="3"/></g>
 <path d="M1092 716H1434V1000H1092Z" fill="${mix(t.surface, '#000000', 0.35)}"/>
 <path d="M1092 716H1434" stroke="${t.accent2}" stroke-width="3"/><path d="M1092 726H1434" stroke="${t.accent2}" stroke-opacity="0.25" stroke-width="8"/>
 <g transform="translate(1262 842)">

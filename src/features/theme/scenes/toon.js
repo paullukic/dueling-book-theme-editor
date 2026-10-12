@@ -128,7 +128,7 @@ const toon = (t) => {
 <g style="transform-origin: 1340px 560px; animation: dbtefx-tn-turnrays 90s linear infinite;"><path d="${rays}" fill="url(#dbtefx-tn-ray)"/></g>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tn-ben)" mask="url(#dbtefx-tn-fade)"/>
 <!--mid-->
-<g class="dbtefx-tn-book"><g transform="translate(1398 830) scale(0.58) translate(-1250 -850)">
+<g class="dbtefx-tn-book"><g transform="translate(1418 775) scale(0.58) translate(-1250 -850)">
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="none" stroke="${off}" stroke-width="5" transform="translate(6 4)"/>
 <path d="M1040 770L1250 820L1460 770L1468 800L1250 850L1032 800Z" fill="${cover}" stroke="${ink}" stroke-width="5" stroke-linejoin="round"/>
 <path d="M1050 784Q1150 772 1250 806Q1350 772 1450 784L1456 798Q1350 788 1250 824Q1150 788 1044 798Z" fill="${mix(page, t.muted, 0.4)}" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>

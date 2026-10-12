@@ -228,7 +228,7 @@ ${[[-226, 40], [-170, 70], [-60, 54], [40, 80], [150, 46], [210, 64]].map(([dx, 
 ${crust(cx - 246, cx + 246, 432, 7)}${crust(cx - 150, cx + 150, 398, 9)}${crust(cx - 236, cx - 120, 471, 13)}
 ${fan(cx - 222, 432, 34, coral)}${fan(cx + 214, 432, 26, coral2, -1)}${fan(cx + 120, 398, 22, coral)}${fan(cx - 196, colTop + 70, 20, coral2)}
 </g>
-${bubbles}
+<g class="dbtefx-mm-bubbles">${bubbles}</g>
 <!--near-->
 <g fill="${mix(t.bg, '#000000', 0.2)}"><path d="M-40 ${H + 20}V840C40 810 120 830 180 860S260 ${H} 300 ${H + 20}Z"/><path d="M1640 ${H + 20}V820C1560 800 1500 830 1460 860S1400 ${H} 1380 ${H + 20}Z"/></g>
 ${fan(120, 852, 70, mix(coral, t.bg, 0.3))}${fan(1500, 840, 80, mix(coral2, t.bg, 0.3), -1)}

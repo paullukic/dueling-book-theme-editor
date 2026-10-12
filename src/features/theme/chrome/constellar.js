@@ -104,8 +104,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${glass}, ${gl
 /* Duel: silver-bezel life bars led by the crest; phases are compass rings. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${silverDeep}, inset 0 0 0 1px ${alpha(silverLit, 0.5)}, 0 0 12px -2px ${alpha(violet, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: radial-gradient(ellipse 18% 70% at 88% 18%, ${alpha('#ffffff', 0.55)}, transparent 70%), linear-gradient(180deg, ${alpha('#ffffff', 0.55)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.12)}, ${mix(t.self, '#ffffff', 0.12)} 55%, ${mix(t.self, '#ffffff', 0.32)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${silverLit}, ${silver}, ${silverDeep}, ${silver}, ${silverLit}, ${silverDeep}, ${silverLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(violet, 0.7)} !important; }
@@ -151,5 +151,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+
+/* The armillary stays whole or not at all: on the front page it would run through the
+   Welcome / Forum / Rules links, in a duel the right column cuts it into fragments. */
+html body:is(:has(#welcome_buttons:not([style*="none"])), :has(#duel:not([style*="none"]))) #dbte-skin-fx .dbtefx-cs-armillary { display: none; }
 `;
 };

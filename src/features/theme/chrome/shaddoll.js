@@ -74,7 +74,7 @@ ${SEL.buttonDown} { background: ${navyDeep} !important; border-color: ${violet} 
 /* Pop-ups: a lacquer stage in the gold frame, held by the control bar. */
 ${SEL.dialog} { background: radial-gradient(ellipse 80% 60% at 50% 0%, ${alpha(violet, 0.22)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${navy}, ${t.bg}) !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${goldDim}, 0 0 0 4px ${navyDeep}, 0 0 0 5px ${alpha(gold, 0.6)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 8px; top: 8px; right: 8px; bottom: 8px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(20)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 90px); top: -40px; right: auto; bottom: auto; width: 180px; height: 50px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 90px); top: -55px; right: auto; bottom: auto; width: 180px; height: 50px; pointer-events: none; z-index: 1; background: var(--dbtc-u3) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a lacquer header on a gold rule, the window edged in gold. */
@@ -86,7 +86,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 ${SEL.life} { border-color: ${mix(violet, t.bg, 0.55)} !important; border-radius: 2px !important; outline: 1px dashed ${alpha(thread, 0.85)} !important; outline-offset: 2px !important; box-shadow: inset 0 0 0 1px ${alpha(thread, 0.35)}, 0 0 0 4px ${ink}, 0 0 10px 3px ${alpha(violet, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.35)}, ${mix(t.self, '#ffffff', 0.38)} 60%, ${mix(t.self, '#ffffff', 0.2)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.26)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -6px; width: 18px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${goldHi}, ${goldDim}, ${gold}, ${goldDim}, ${goldHi}) !important; box-shadow: 0 0 0 1px ${navyDeep}, 0 4px 10px -2px #000000 !important; }
@@ -133,5 +133,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in lacquer and gold. */
 ${popCss}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-puppet { opacity: 0; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-gutter { display: inline; }
+/* Front page: the threads fade out behind the Welcome / Forum / Rules links. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-linkhole { display: inline; }
 `;
 };

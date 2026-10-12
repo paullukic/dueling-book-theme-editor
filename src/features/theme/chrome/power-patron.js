@@ -43,7 +43,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const gable = svg(160, 64, `${fan}<path d="M40 58H120" stroke="${ice}" stroke-width="2"/>${forks(80, 6, 40, 2)}${eye(80, 42, 30, 10)}`);
 
   // Phase overlay: the almond eye outline. Life bar finial: a thorn blade.
-  const almond = svg(45, 45, `<path d="M4 22.5Q22.5 6 41 22.5Q22.5 39 4 22.5Z" fill="none" stroke="${iceHi}" stroke-opacity="0.55" stroke-width="1"/><circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${ice}" stroke-opacity="0.3" stroke-width="0.8"/>`);
+  const almond = svg(45, 45, `<path d="M2.5 22.5Q5 19.6 8 18.2M2.5 22.5Q5 25.4 8 26.8M42.5 22.5Q40 19.6 37 18.2M42.5 22.5Q40 25.4 37 26.8" fill="none" stroke="${iceHi}" stroke-opacity="0.6" stroke-width="1" stroke-linecap="round"/><circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${ice}" stroke-opacity="0.3" stroke-width="0.8"/>`);
   const thorn = svg(16, 40, `<path d="M8 1L12 30L8 39L4 30Z" fill="${obsidian}" stroke="${ice}" stroke-width="1"/><ellipse cx="8" cy="20" rx="1.3" ry="4" fill="${lace}"/><circle cx="8" cy="31" r="2.2" fill="${ice}"/>`);
 
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(ice, 0.35)} !important;`;
@@ -97,7 +97,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 ${SEL.life} { border-color: ${ice} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${obsidian}, 0 0 0 2px ${iceDim}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.14)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.14)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: -6px; width: 16px; height: 40px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${iceHi}, ${iceDim}, ${ice}, ${iceDim}, ${iceHi}) !important; box-shadow: 0 0 0 1px ${obsidian}, 0 4px 10px -2px #000000 !important; }
@@ -145,5 +145,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+
+/* Front page: the halo's thorn rays clear out of the Welcome / Forum / Rules links. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-linkhole { display: inline; }
 `;
 };

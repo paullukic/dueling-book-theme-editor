@@ -54,7 +54,7 @@ ${CARD_ART_KEYFRAMES}
 <g stroke="${t.text}" stroke-linecap="round">${stars.map((d, i) => `<path d="${d}" stroke-width="${1.4 + i}" stroke-opacity="${0.75 - i * 0.2}"/>`).join('')}</g>
 <!--mid-->
 ${cardArt(t, { id: 'dbtefx-dt-hero', card: CARDS.faimena, x: 1060, y: 150, w: 460, h: 720, focus: [0.6, 0.42], zoom: 0.9, blend: 'normal', feather: 0.75, fade: 0.75, backdrop: mix(t.bg, t.border, 0.4), backdropAmt: 0.6, breathe: 14 })}
-<g transform="translate(1480 440) scale(0.74) translate(-1480 -440)">
+<g transform="translate(1446 440) scale(0.74) translate(-1480 -440)">
 <circle cx="${cx}" cy="${cy}" r="140" fill="url(#dbtefx-dt-sun)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out infinite;"/>
 <path d="${rays}" fill="${goldHi}" fill-opacity="0.5" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-dt-corona 7s ease-in-out -1.5s infinite;"/>
 <circle cx="${cx}" cy="${cy}" r="46" fill="url(#dbtefx-dt-moon)"/>

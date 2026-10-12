@@ -161,7 +161,9 @@ ${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(c
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle at 40% 30%, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 45%, ${mix(t.opp, deep, 0.4)} 80%) !important; box-shadow: 0 0 16px ${alpha(t.opp, 0.9)}; }
 ${sel(['#duel .phase.active::before'])} { background: conic-gradient(${pink}, ${teal}, ${pink}); animation: var(--dbte-kt-anim, dbte-kt-pulse 1.2s ease-in-out infinite); }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px ${deep}, 0 0 3px ${deep} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${deep} !important; text-shadow: 0 0 6px ${alpha('#ffffff', 0.7)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${deep}, -1px 0 0 ${deep}, 0 1px 0 ${deep}, 0 -1px 0 ${deep}, 1px 1px 0 ${deep}, -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 0 0 6px ${deep} !important; }
+/* Main menu: the LED wall would stand behind the feed's time and Reply column. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-kt-eq { display: none; }
 ${turnBg} { background: ${metal} !important; box-shadow: 0 0 12px -2px ${alpha(pink, 0.8)}; }
 ${turnInner} { background: radial-gradient(ellipse at 50% 100%, ${alpha(pink, 0.5)}, transparent 70%), ${deep} !important; }
 ${turnTxt} { color: ${mix(t.text, pink, 0.6)} !important; text-shadow: ${neonText(pink)} !important; }

@@ -54,8 +54,16 @@ const scene = (t) => {
   let clouds = '';
   for (let i = 0; i < 6; i++) clouds += `<ellipse cx="${n1(rand() * W)}" cy="${n1(560 + rand() * 360)}" rx="${n1(320 + rand() * 260)}" ry="${n1(90 + rand() * 60)}"/>`;
 
+  // The threads sway in a group of their own so the front-page mask (dbtefx-sd-links)
+  // sits outside the animated transform: Chrome ignores it under one.
+  // Duel only: a few faint threads hang down the left gutter, each ending in a small lens.
+  const gutter = `<g class="dbtefx-sd-gutter" fill="none" stroke="${thread}" stroke-width="1.1" stroke-opacity="0.4">${[[112, 360, 0], [146, 520, 3], [178, 300, 6]]
+    .map(([x, len, d]) => `<g style="transform-origin: ${x}px 0px; animation: dbtefx-reed ${9 + d / 3}s ease-in-out ${-d}s infinite;"><path d="M${x} -10V${len}"/><circle cx="${x}" cy="${len + 5}" r="4" fill="url(#dbtefx-sd-orb)" stroke="${gold}" stroke-opacity="0.6"/></g>`)
+    .join('')}</g>`;
+
   return `<style>${CARD_ART_KEYFRAMES}
 @keyframes dbtefx-sd-hang { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.4deg); } }
+.dbtefx-sd-linkhole, .dbtefx-sd-gutter { display: none; }
 @keyframes dbtefx-sd-glint { 0%, 70%, 100% { opacity: 0; } 82% { opacity: 1; } }
 <defs>
 <linearGradient id="dbtefx-sd-void" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, violet, 0.16)}"/><stop offset="0.6" stop-color="${t.bg}"/><stop offset="1" stop-color="${navyDark}"/></linearGradient>
@@ -77,10 +85,17 @@ const scene = (t) => {
 <ellipse cx="${cx}" cy="880" rx="300" ry="60" fill="url(#dbtefx-sd-pool)"/>
 ${shards}
 <!--mid-->
+<defs><radialGradient id="dbtefx-sd-holefade"><stop offset="0.55" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<mask id="dbtefx-sd-links" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1300"><rect x="-200" y="-200" width="2000" height="1300" fill="#ffffff"/><ellipse class="dbtefx-sd-linkhole" cx="1330" cy="185" rx="125" ry="95" fill="url(#dbtefx-sd-holefade)"/></mask></defs>
+${gutter}
 <g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${cardArt(t, { id: 'dbtefx-sd-hero', card: CARDS.elShaddollConstruct, x: ax, y: ay - 90, w: aw, h: 790, focus: [0.5, 0.508], zoom: 0.76, feather: 0.4, fade: 0.7, blend: 'normal', backdrop: mix(t.bg, violet, 0.25), backdropAmt: 0.8, glow: violet, breathe: 0, tint: navy, tintAmt: 0.3 })}
+</g>
+<g class="dbtefx-sd-puppet" mask="url(#dbtefx-sd-links)"><g style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 <g fill="none" stroke="${violet}"><path d="${strings.join('')}" stroke="${ink}" stroke-opacity="0.55" stroke-width="3.5"/><path d="${strings.join('')}" stroke-opacity="0.2" stroke-width="7"/><path d="${strings.join('')}" stroke="${thread}" stroke-width="1.4"/><path d="${above}" stroke="${thread}" stroke-opacity="0.5" stroke-width="1.2"/></g>
 <g fill="none" stroke="#ffffff" stroke-width="1.6" stroke-opacity="0.85">${glints}</g>
+</g></g>
+<g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${knots}
 ${bar}
 </g>

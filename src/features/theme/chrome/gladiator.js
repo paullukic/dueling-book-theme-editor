@@ -121,7 +121,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 ${SEL.life} { border-color: ${bronze} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${bronzeDeep}, inset 0 0 0 1px ${alpha(bronzeLit, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)} 0 2px, ${alpha('#ffffff', 0.18)} 2px, transparent 50%, ${alpha('#000000', 0.18)}), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, '#000000', 0.22)}, ${t.self} 70%, ${mix(t.self, '#ffffff', 0.12)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)} 0 2px, ${alpha('#ffffff', 0.2)} 2px, transparent 50%, ${alpha('#000000', 0.16)}), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.16)}, ${t.opp} 60%, ${mix(t.opp, '#ffffff', 0.22)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; z-index: 3; left: -26px; top: -1px; width: 32px; height: 32px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${bronzeLit}, ${bronze}, ${bronzeDeep}, ${bronze}, ${bronzeLit}, ${bronzeDeep}, ${bronzeLit}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 4px 10px -2px #000000 !important; }
@@ -134,8 +134,13 @@ ${sel(['#duel .phase span'])} { color: ${mix(bronzeLit, t.text, 0.4)} !important
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: 1px 0 0 ${t.bg}, -1px 0 0 ${t.bg}, 0 1px 0 ${t.bg}, 0 -1px 0 ${t.bg}, 0 0 8px ${alpha(t.bg, 0.8)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${bronzeDeep} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(banner, '#ffffff', 0.15)}, ${bannerDeep}) !important; }
+/* Card text: a stone margin ring outside the box gives the words room (no padding on DuelingBook's box). */
+${sel(['#duel #preview_txt'])} { background: ${mix(t.surface, stoneDeep, 0.5)} !important; box-shadow: 0 0 0 5px ${mix(t.surface, stoneDeep, 0.5)}, 0 0 0 6.5px ${bronze}, 0 0 0 7.5px ${bronzeDeep} !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${stoneDeep}) !important; box-shadow: inset 0 0 0 2px ${bronze}, inset 0 0 0 4px ${bronzeDeep} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${bronze}, 0 0 0 4px ${bronzeDeep}, 0 6px 16px -6px #000000 !important; }
+
+/* Front page: the right banner would hang behind the Welcome / Forum / Rules links. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-gb-banner-r { display: none; }
 
 /* Duel room: bronze rings around stone panels. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(stone, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }

@@ -273,6 +273,9 @@ ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, tr
 /* ---- Scrollbars: chrome rods ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.border}, ${t.text} 40%, ${t.muted} 70%, ${t.border}) !important; border-radius: 2px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: linear-gradient(90deg, ${t.border}, #ffffff 40%, ${t.accent} 70%, ${t.border}) !important; }
+
+/* ---- Duel: the dim chrome serpent shows in the left gutter ---- */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cd-gutter { display: inline; }
 `;
   return `html body { ${[...ids].map(([s, id]) => `${id}: ${url(s)};`).join(' ')} }
 ${css.replace(/\/\*[^*]*\*\//g, '').replace(/\n\s+/g, '\n')}`;

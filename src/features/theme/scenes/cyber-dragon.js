@@ -42,13 +42,30 @@ const cyberDragon = (t) => {
     .map(([x0, y0, x1, y1, x2, y2, x3, y3 = y2]) => `M${x0} ${y0}H${x1}L${x2} ${y2}H${x3}${y3 !== y2 ? `V${y3}` : ''}`).join('');
   const nodes = [[1040, 180], [1010, 690], [1520, 250]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="${t.accent}"/>`).join('');
 
+  // Duel only: a dim chrome serpent coiled up the left gutter, plated segments
+  // tapering to the tail, the head raised at the top with a photon slit.
+  const spine = (k) => [150 + 22 * Math.sin(k * Math.PI * 2.2), 860 - 700 * k];
+  let plates = '';
+  for (let i = 0; i < 28; i++) {
+    const k = i / 27;
+    const [x, y] = spine(k);
+    const [x1, y1] = spine(Math.min(1, k + 0.01));
+    const deg = n1((Math.atan2(y1 - y, x1 - x) * 180) / Math.PI + 90);
+    plates += `<ellipse cx="${n1(x)}" cy="${n1(y)}" rx="${n1(7 + 15 * k)}" ry="${n1(6 + 5 * k)}" transform="rotate(${deg} ${n1(x)} ${n1(y)})"/>`;
+  }
+  const [hx, hy] = spine(1);
+  const head = `M${n1(hx - 22)} ${n1(hy + 10)}L${n1(hx - 8)} ${n1(hy - 30)}L${n1(hx + 30)} ${n1(hy - 58)}L${n1(hx + 20)} ${n1(hy - 24)}L${n1(hx + 24)} ${n1(hy + 8)}Z`;
+  const gutter = `<g class="dbtefx-cd-gutter" opacity="0.26"><g fill="url(#dbtefx-cd-chrome)" stroke="${t.accent}" stroke-opacity="0.45" stroke-width="1.2">${plates}<path d="${head}"/></g><path d="M${n1(hx + 4)} ${n1(hy - 26)}l14 -12" stroke="${photon}" stroke-width="2.5" stroke-linecap="round"/></g>`;
+
   return `<style>${CARD_ART_KEYFRAMES}
+.dbtefx-cd-gutter { display: none; }
 @keyframes dbtefx-cd-sweep { 0%, 45% { transform: translateX(-520px); } 80%, 100% { transform: translateX(620px); } }
 @keyframes dbtefx-cd-scan { 0% { transform: translateY(-80px); opacity: 0; } 10%, 90% { opacity: 1; } 100% { transform: translateY(900px); opacity: 0; } }</style>
 <defs>${glow('dbtefx-cd-back', t.accent, 0.5, 0.5, 0.5, 0.32)}${glow('dbtefx-cd-core', photon, 0.5, 0.5, 0.5, 0.5)}
 <linearGradient id="dbtefx-cd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(t.bg, t.accent, 0.08)}"/><stop offset="1" stop-color="${deep}"/></linearGradient>
 <linearGradient id="dbtefx-cd-spec" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="${photon}" stop-opacity="0.5"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-cd-scanl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${photon}" stop-opacity="0"/><stop offset="0.85" stop-color="${photon}" stop-opacity="0.22"/><stop offset="0.9" stop-color="${photon}" stop-opacity="0.5"/><stop offset="1" stop-color="${photon}" stop-opacity="0"/></linearGradient>
+<linearGradient id="dbtefx-cd-chrome" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(t.muted, t.bg, 0.4)}"/><stop offset="0.45" stop-color="${mix(t.text, t.muted, 0.3)}"/><stop offset="1" stop-color="${mix(t.muted, t.bg, 0.55)}"/></linearGradient>
 <pattern id="dbtefx-cd-lines" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="${deep}" fill-opacity="0.45"/></pattern>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-cd-sky)"/>
@@ -56,6 +73,7 @@ const cyberDragon = (t) => {
 <path d="${traces}" fill="none" stroke="${t.accent}" stroke-opacity="0.22" stroke-width="2"/>${nodes}
 <ellipse cx="${rx}" cy="${ry}" rx="560" ry="560" fill="url(#dbtefx-cd-back)"/>
 <!--mid-->
+${gutter}
 <g transform="translate(${rx} ${ry})" fill="none" stroke="${t.accent}">
 <g style="animation: dbtefx-spin 90s linear infinite;"><path d="${ticks}" stroke-opacity="0.35" stroke-width="2"/><circle r="270" stroke-opacity="0.18" stroke-dasharray="120 40 20 40" stroke-width="3"/></g>
 <g style="animation: dbtefx-spin 60s linear infinite reverse;"><path d="${chevrons}" stroke-opacity="0.6" stroke-width="3"/><circle r="390" stroke-opacity="0.1" stroke-dasharray="4 14" stroke-width="2"/></g>

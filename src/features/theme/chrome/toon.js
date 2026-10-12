@@ -15,7 +15,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   const pop = t.accent;
   const red = t.accent2;
   // Duel panels sit beside the board for a whole game: a softer, warmer cream.
-  const duelPaper = mix(mix(t.text, t.bg, 0.93), t.accent, 0.95);
+  const duelPaper = '#efe2c4';
   const cyan = t.link;
   // Ben-Day dots: one dot grid in a colour, size s px.
   const dots = (c, a, s = 8, r = 1.7) => `radial-gradient(circle, ${alpha(c, a)} ${r}px, transparent ${r + 0.6}px) 0 0 / ${s}px ${s}px`;
@@ -127,7 +127,7 @@ ${sel(['#content #msg::before', '#content #link::before', '#content #confirm::be
   content: ""; position: absolute; right: -26px; top: -30px; width: 76px; height: 76px; pointer-events: none;
   background: ${burst(pop)} center / contain no-repeat; transform: rotate(-8deg);
 }
-${SEL.dialogTitle} { color: ${pop} !important; ${stroke(5)} text-shadow: 3px 3px 0 ${ink} !important; }
+${SEL.dialogTitle} { color: ${ink} !important; -webkit-text-stroke: 0 !important; text-shadow: 3px 3px 0 ${pop}, 4px 4px 0 ${alpha(red, 0.55)} !important; }
 ${sel(['#content #msg .body_txt', '#content #link .body_txt', '#content #confirm .body_txt', '#content #confirm2 .body_txt', '#content #input .body_txt', '#content #input2 .body_txt', '#content #combo .body_txt'])} { color: ${ink} !important; }
 ${imgSel('ok_btn')} { content: ${plate('OK', 153.4, pop, ink)} !important; }
 ${imgSel('yes_btn')} { content: ${plate('Yes', 153.4, pop, ink)} !important; }
@@ -233,7 +233,7 @@ ${SEL.settingsPanel} { border-radius: 14px !important; box-shadow: 0 0 0 3px ${i
 ${sel(['#content .os-scrollbar-handle'])} { background: ${pop} !important; border-radius: 99px !important; box-shadow: inset 0 0 0 1.5px ${ink}; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 2px ${ink}, 2px 2px 0 ${ink} !important; background-color: ${paper} !important; }
 ${sel(['#content .checkbox .check', '#content .radiobutton .check'])} { filter: brightness(0) !important; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-464px, 450px) scale(0.44); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book { transform: translate(-473px, 474px) scale(0.44); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-pow { display: none; }
 /* Shrunk into the gutter, the book keeps a real ink line. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tn-book [stroke="#000000"] { vector-effect: non-scaling-stroke; stroke-width: 2.2px; }

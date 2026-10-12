@@ -170,7 +170,7 @@ ${fire ? `<circle cx="${x}" cy="${y}" r="${n1(r * 0.62)}" fill="none" stroke="${
 <path d="${streaks}" stroke="${mix(amber, '#ffffff', 0.3)}" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
 <g fill="none" stroke="${amber}" stroke-opacity="0.1"><circle cx="${cx}" cy="${cy}" r="380" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="470" stroke-dasharray="3 14" stroke-width="3"/></g>
 <!--mid-->
-<g class="dbtefx-rz-core"><g transform="translate(${cx} ${cy}) scale(0.82) translate(${-cx} ${-cy})">
+<g class="dbtefx-rz-core"><g transform="translate(${cx - 80} ${cy}) scale(0.76) translate(${-cx} ${-cy})">
 ${blade}
 <path d="${units.map((u) => u.cable).join('')}" fill="none" stroke="${steelDark}" stroke-width="14" stroke-linecap="round"/>
 <path d="${units.map((u) => u.cable).join('')}" fill="none" stroke="${mix(amber, t.bg, 0.55)}" stroke-width="3" stroke-dasharray="6 9" stroke-linecap="round"/>

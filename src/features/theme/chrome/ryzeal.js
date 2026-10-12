@@ -51,16 +51,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   // Spark plug finial for the life bar: terminal, ceramic insulator, hex nut, electrode.
   const plug = svg(16, 42, `<rect x="6" y="0.5" width="4" height="4" rx="1" fill="${steelHi}"/><path d="M5 5H11L11.6 19H4.4Z" fill="${mix(amber, steelDark, 0.25)}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5.2 9H10.8M5 13H11" stroke="${steelDark}" stroke-opacity="0.4" stroke-width="0.8"/><path d="M2 19H14V25H2Z" fill="${steel}" stroke="${steelDark}" stroke-width="0.8"/><path d="M5 25H11V34H5Z" fill="${steelHi}" stroke="${steelDark}" stroke-width="0.6"/><path d="M8 34V38H11V36" fill="none" stroke="${steelHi}" stroke-width="1.2"/><path d="M9 38.5L12 41" stroke="${ice}" stroke-width="1.4"/>`);
 
-  // Phase overlay: a flywheel ring gear.
-  let teeth = '';
-  for (let i = 0; i < 30; i++) {
-    const a = (Math.PI / 15) * i;
-    teeth += `M${n1(22.5 + Math.cos(a) * 18.5)} ${n1(22.5 + Math.sin(a) * 18.5)}L${n1(22.5 + Math.cos(a) * 21.5)} ${n1(22.5 + Math.sin(a) * 21.5)}`;
-  }
-  const gear = svg(45, 45, `<path d="${teeth}" stroke="${steelHi}" stroke-opacity="0.65" stroke-width="2"/><circle cx="22.5" cy="22.5" r="18" fill="none" stroke="${steelDark}" stroke-width="1"/>`);
-
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${steelDark}, 0 0 8px ${steelDark} !important;`;
-  const metal = (lift = 0) => `var(--dbtc-u6) left 6px bottom 3px / 36px 8px repeat-x, radial-gradient(ellipse 60% 120% at 0% 50%, ${alpha(amber, 0.14 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${mix(plate, t.text, 0.06)}, ${mix(t.surface, t.bg, 0.4)})`;
+  const metal = (lift = 0) => `var(--dbtc-u5) left 6px bottom 3px / 36px 8px repeat-x, radial-gradient(ellipse 60% 120% at 0% 50%, ${alpha(amber, 0.14 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${mix(plate, t.text, 0.06)}, ${mix(t.surface, t.bg, 0.4)})`;
 
   // Pop-up buttons: chamfered steel plates, bolted at the ends.
   const popBtn = (text, wide, c) => {
@@ -78,7 +70,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha, n1 }) => {
   const deckPanels = sel(['#deck_constructor .deck_bg', '#deck_constructor .side_bg', '#deck_constructor .extra_bg', '#deck_constructor #search .search_bg']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
   const rev = (c) => `repeating-linear-gradient(90deg, transparent 0 9px, ${alpha(steelDark, 0.85)} 9px 11px) left center / 52% 100% no-repeat, linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 45%), linear-gradient(90deg, ${mix(c, t.bg, 0.6)}, ${c} 50%, ${mix(c, t.bg, 0.42)})`;
-  const vars = [frameSvg, crest, brushed, gable, plug, gear, arcStrip].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
+  const vars = [frameSvg, crest, brushed, gable, plug, arcStrip].map((s, i) => `--dbtc-u${i}: ${svgUrl(s)};`).join(' ');
 
   return `
 html body { ${vars} }
@@ -116,9 +108,9 @@ ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shad
 ${SEL.phase} { background: conic-gradient(from 210deg, ${steelHi}, ${steelDark}, ${steel}, ${steelDark}, ${steelHi}) !important; box-shadow: 0 0 0 1px ${steelDark}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${steelDark} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${plate} 40%, ${steelDark}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.3)} 15%, ${t.self} 45%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.3)} 15%, ${t.opp} 45%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: radial-gradient(circle, ${plate} 40%, ${steelDark}) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, ${mix(t.self, '#ffffff', 0.3)} 15%, ${t.self} 45%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.3)} 15%, ${t.opp} 45%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${mix(t.surface, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${amber}, inset 0 0 0 1px ${steel} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steelHi}, 0 0 0 4px ${steelDark}, 0 0 0 5px ${alpha(amber, 0.7)} !important; }
@@ -155,6 +147,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(1108px, 338px) scale(0.26); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(1102.4px, 329.2px) scale(0.2805); }
 `;
 };
