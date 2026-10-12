@@ -113,9 +113,10 @@ ${on(sel(['#chats .chat']), 'before')} { content: ""; position: absolute; left: 
 ${on(sel(['#chats .chat']), 'after')} { content: ""; position: absolute; right: -14px; bottom: -14px; width: 28px; height: 28px; pointer-events: none; z-index: 61; background: var(--dbtc-u0) center / contain no-repeat; }
 
 /* Duel: life bars in a prism rim with a hairline sheen; holo-disc phases. */
-${SEL.life} { border-color: ${silver} !important; border-image: ${rim(90)} 1 !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -3px ${shade(0.8)} !important; }
+${SEL.life} { border-color: ${silver} !important; border-image: ${rim(90)} 1 !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${alpha(light ? t.border : t.bg, 0.9)}, 0 4px 10px -3px ${shade(0.8)} !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), ${lines(0.1)}, linear-gradient(90deg, ${mix(t.self, light ? t.text : t.bg, 0.45)}, ${t.self}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.32)}, transparent 50%), ${lines(0.1)}, linear-gradient(90deg, ${mix(t.opp, light ? t.text : t.bg, 0.5)}, ${mix(t.opp, light ? t.text : t.bg, 0.22)}) !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp}, ${sel(['#duel .lifepoints .black_bar'])} { border-radius: 3px !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${lines(light ? 0.04 : 0.05)}, linear-gradient(180deg, ${light ? mix(t.border, t.bg, 0.38) : t.bg}, ${light ? mix(t.border, t.bg, 0.5) : mix(t.bg, t.surface, 0.5)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -15px; top: 50%; width: 12px; height: 12px; margin-top: -6px; pointer-events: none; background: var(--dbtc-u0) center / contain no-repeat; z-index: 2; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${light ? t.text : '#000000'}, 0 0 5px ${light ? t.text : '#000000'} !important; }

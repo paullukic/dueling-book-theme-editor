@@ -173,7 +173,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 /* Duel: a chained life bar, brand crimson against white-gold; chained phases. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px #000000, 0 0 16px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -17px; top: 50%; width: 30px; height: 22px; margin-top: -11px; pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: -17px; top: 50%; width: 30px; height: 22px; margin-top: -11px; pointer-events: none;
   background: ${svgUrl(shackle(t, kit))} center / contain no-repeat;
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }

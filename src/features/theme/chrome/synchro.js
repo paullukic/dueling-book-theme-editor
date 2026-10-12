@@ -144,7 +144,7 @@ ${T(['#chats .chat .black_line'])} { background-color: ${silver} !important; }
 
 /* ---- Duel: LP in a white frame with a starlight streak; phases as tuner rings ---- */
 ${SEL.life} { border-color: transparent !important; border-image: ${slimFrame} 16 / 7px / 1px stretch !important; border-radius: 0 !important; box-shadow: 0 0 0 2px ${silver}, 0 0 0 3px ${t.bg}, 0 0 12px -3px ${alpha(glow, 0.8)} !important; }
-${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -9px; border-radius: 50%; border: 2px solid ${tuner}; background: ${deep}; box-shadow: 0 0 0 1px ${t.bg}, 0 0 8px ${alpha(tuner, 0.8)}; pointer-events: none; }
+${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; z-index: 3; left: -9px; top: 50%; width: 14px; height: 14px; margin-top: -9px; border-radius: 50%; border: 2px solid ${tuner}; background: ${deep}; box-shadow: 0 0 0 1px ${t.bg}, 0 0 8px ${alpha(tuner, 0.8)}; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 1px !important; }
 /* Low swaps the frame for the danger one; the silver outer line stays, just outside its hairline. */
 /* The central low rule draws the danger outline 1-3px out, over the silver line: the silver moves just outside it. */

@@ -195,7 +195,7 @@ ${SEL.life} {
   box-shadow: 0 0 0 1px ${brown}, 0 0 12px -2px ${alpha(gold, 0.55)} !important;
 }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: 7px; top: 50%; width: 30px; height: 15px; transform: translateY(-50%); pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: 7px; top: 50%; width: 30px; height: 15px; transform: translateY(-50%); pointer-events: none;
   background: var(--mi-eye) center / contain no-repeat; filter: drop-shadow(0 0 2px ${alpha('#000000', 0.95)}) drop-shadow(0 0 1px ${alpha('#000000', 0.95)});
 }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha(gold, 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(copper, '#000000', 0.35)}, ${copper} 55%, ${mix(copper, gold, 0.3)}) !important; }

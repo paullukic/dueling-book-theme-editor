@@ -166,7 +166,7 @@ ${T(['#chats .chat .black_line'])} { background-color: ${goldDeep} !important; }
 
 /* ---- Duel: LP in a gold-ruled black capsule led by a Rank star; phases as orbits ---- */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 3px !important; box-shadow: inset 0 0 0 1px #000000, 0 0 0 1px #000000, 0 0 10px -2px ${alpha(gold, 0.6)} !important; }
-${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; left: -11px; top: 50%; width: 22px; height: 22px; margin-top: -11px; background: ${U(rankOne())} center / 100% no-repeat; pointer-events: none; }
+${T(['#duel .lifepoints .life_border::before'])} { content: ""; position: absolute; z-index: 3; left: -11px; top: 50%; width: 22px; height: 22px; margin-top: -11px; background: ${U(rankOne())} center / 100% no-repeat; pointer-events: none; }
 ${T(['#duel .lifepoints .life_bar'])} { border-radius: 3px !important; }
 ${SEL.lifeSelf} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, '#000000', 0.2)}, ${mix(t.self, '#ffffff', 0.12)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.7)} !important; }
 ${SEL.lifeOpp} { background: ${field} 0 0 / 70px, linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 50%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(violet, t.bg, 0.3)}, ${violet} 60%, ${mix(violet, '#ffffff', 0.15)}) !important; box-shadow: inset 0 0 0 2px ${alpha('#000000', 0.6)} !important; }

@@ -193,7 +193,7 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { clip-p
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dm-seal { display: none; }
 ${SEL.life} { border-color: ${t.accent2} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 2px ${alpha(t.accent, 0.7)}, 0 0 18px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: -12px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none;
   /* A solid seal on a dark backing disc: it hides the frame's rounded end, so one ring shows, not two. */
   background: var(--dm-gold) center / contain no-repeat, radial-gradient(circle, ${t.bg} 0 66%, transparent 69%); border-radius: 50%; box-shadow: 0 0 0 4px ${t.bg}; filter: drop-shadow(0 0 4px ${alpha(t.accent, 0.9)});
 }

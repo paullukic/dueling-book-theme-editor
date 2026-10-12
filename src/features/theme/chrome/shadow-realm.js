@@ -171,7 +171,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important;
 /* Duel: the eye guards the life bar; phases are cracked rings of green light. */
 ${SEL.life} { border-color: ${edge} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px #000000, 0 0 18px -4px ${alpha(t.accent, 0.7)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -24px; top: 50%; width: 34px; height: 34px; margin-top: -17px; pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: -24px; top: 50%; width: 34px; height: 34px; margin-top: -17px; pointer-events: none;
   background: var(--sr-vortex) center / contain no-repeat; filter: drop-shadow(0 0 3px ${t.accent});
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }

@@ -181,7 +181,7 @@ ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 99px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.7)}, ${t.self} 50%, ${mix(t.self, deep, 0.55)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, deep, 0.55)}) !important; }
 /* A lily pad as the life bar's end cap. */
-${sel(['#duel .lifepoints::before'])} { content: ""; position: absolute; left: -20px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbte-frog-pad) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${deep}); }
+${sel(['#duel .lifepoints::before'])} { content: ""; position: absolute; z-index: 3; left: -20px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbte-frog-pad) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${deep}); }
 ${sel(['#duel .lifepoints .black_bar'])} { background: ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: ${outline(deep, 2)} !important; }
 

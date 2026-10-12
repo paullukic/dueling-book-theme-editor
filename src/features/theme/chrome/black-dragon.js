@@ -179,7 +179,7 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${t.accent} !important;
 /* Duel: a molten life bar guarded by the red eye; phases in steel jaws. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 0 !important; box-shadow: 0 0 0 1px #000000, inset 0 0 0 1px ${alpha(mix(steel, t.text, 0.3), 0.55)}, 0 0 12px -4px ${alpha('#000000', 0.9)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -30px; top: 50%; width: 46px; height: 46px; margin-top: -23px; pointer-events: none;
+  content: ""; position: absolute; z-index: 3; left: -30px; top: 50%; width: 46px; height: 46px; margin-top: -23px; pointer-events: none;
   background: ${svgUrl(eye(t, kit, mix(steel, t.text, 0.25)))} center / contain no-repeat; filter: drop-shadow(0 0 4px ${alpha('#000000', 0.9)});
 }
 ${sel(['#duel .lifepoints:is([data-dbte-lp~="low"], [data-dbte-lp~="zero"], [data-dbte-lp~="hit"]) .life_border::before'])} { background-image: ${svgUrl(eye(t, kit))}; filter: drop-shadow(0 0 5px ${alpha(t.accent, 0.8)}); }
