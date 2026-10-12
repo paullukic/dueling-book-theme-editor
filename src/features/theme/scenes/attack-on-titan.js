@@ -163,7 +163,7 @@ ${glow('dbtefx-aot-haze', t.muted, 0.5, 0.5, 0.5, 0.16)}
 ${bird(1080, 150, 1.2, 0)}${bird(1150, 110, 0.9, 3)}${bird(1030, 190, 0.8, 6)}${bird(1210, 80, 0.8, 9)}
 ${hand}
 ${handSteam}
-${swing(1432, 206, 290, 3.1, 8, 0, 1)}
+<g opacity="0.6">${swing(1432, 206, 290, 3.1, 8, 0, 1)}</g>
 <!--near-->
 <rect x="0" y="760" width="${W}" height="140" fill="url(#dbtefx-aot-town)"/>
 <g fill="${ink}"><path d="${roofs}${extras}"/>${spire}</g>

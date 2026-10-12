@@ -91,7 +91,7 @@ ${SEL.chat} { background: ${pageWell} !important; box-shadow: inset 1px 0 0 ${bo
 ${SEL.life} { border-color: ${mix(t.border, t.bg, 0.1)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 2px ${alpha(bone, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${t.opp}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${t.opp} 70%, ${mix(t.opp, '#000000', 0.38)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -6px; width: 18px; height: 40px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; transform: rotate(-24deg); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${bone} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${mix(t.muted, '#ffffff', 0.45)}, ${mix(t.muted, t.bg, 0.45)}, #ffffff, ${mix(t.muted, t.bg, 0.45)}, ${mix(t.muted, '#ffffff', 0.45)}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }

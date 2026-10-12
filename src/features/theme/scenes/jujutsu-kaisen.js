@@ -30,7 +30,9 @@ const scene = (t) => {
     if (lit() < 0.35) towers += `M${n1(x + w * 0.4)} ${n1(top)}V${n1(top - 26)}h2V${n1(top)}Z`;
     for (let wy = top + 14; wy < 880; wy += 16) {
       for (let wx = x + 6; wx < x + w - 8; wx += 12) {
-        if (lit() < 0.16) lights += `M${n1(wx)} ${n1(wy)}h5v6h-5Z`;
+        // No lit windows behind the duel's watcher list (left column, above y 740).
+        const behindWatchers = wx > 110 && wx < 420 && wy < 740;
+        if (lit() < 0.16 && !behindWatchers) lights += `M${n1(wx)} ${n1(wy)}h5v6h-5Z`;
       }
     }
     x += w + 4;

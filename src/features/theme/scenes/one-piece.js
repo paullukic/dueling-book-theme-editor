@@ -2,8 +2,9 @@ import { mix } from '../../../lib/color.js';
 import { anim, H, n1, polar, rng, W } from './kit.js';
 
 // One Piece: dusk on the Grand Line. Oda's towering cumulus stacks, a low
-// sun on the horizon and a pirate caravel running before the wind, backlit,
-// a straw hat painted on its main sail. The shader draws the open sea.
+// sun on the horizon and, far off at the right edge (clear of the menu feed
+// and the duel's avatar column), a pirate caravel running before the wind,
+// backlit, a straw hat painted on its main sail. The shader draws the open sea.
 const HORIZON = 560;
 const SUN = [1236, 548];
 
@@ -133,7 +134,8 @@ const onePiece = (t) => {
 <!--mid-->
 <g fill="none" stroke="${mix(t.text, t.opp, 0.4)}" stroke-linecap="round">${swell}</g>
 ${glitter}
-<g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(1420, 96, 0.9, 0)}${gull(1470, 126, 0.7, 0.6)}${gull(1380, 140, 0.55, 1.1)}</g>
+<g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(1470, 96, 0.9, 0)}${gull(1500, 126, 0.7, 0.6)}${gull(1440, 140, 0.55, 1.1)}</g>
+<g transform="translate(1212 455) scale(0.22)">
 <g style="transform-origin: 1236px 660px; animation: dbtefx-op-rock 11s ease-in-out infinite;">
 <path d="M1150 610V244M1276 604V132" stroke="${ink}" stroke-width="8" stroke-linecap="round"/>
 <path d="M1150 610V244M1276 604V132" stroke="${rim}" stroke-opacity="0.45" stroke-width="1.6" transform="translate(3 0)"/>
@@ -154,17 +156,9 @@ ${hat(1270, 330, 1.2, t.accent, t.accent2, ink)}
 <g fill="${ink}"><circle cx="1350" cy="584" r="5"/><circle cx="1378" cy="582" r="5"/><circle cx="1404" cy="580" r="5"/></g>
 <circle cx="1428" cy="548" r="14" fill="${t.accent}" fill-opacity="0.35" ${anim('pulse', 3.2, 0, 'ease-in-out')}/><rect x="1424" y="542" width="8" height="12" rx="2" fill="${rim}"/>
 </g>
-<g transform="translate(1508 566) scale(0.54)"><g style="transform-origin: 0 10px; animation: dbtefx-op-rock 9s ease-in-out -3s infinite;">
-<path d="M0 6V-176M-46 8V-118" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>
-<path d="${sail(-22, 62, -166, -42, 16)}" fill="url(#dbtefx-op-canvas)"/>
-<path d="${sail(-72, -18, -110, -30, 10)}" fill="url(#dbtefx-op-canvas)" opacity="0.92"/>
-<path d="M-28 -168H68M-26 -40H68M-78 -112H-14" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>
-<path d="M0 -176Q-24 -174 -50 -166Q-24 -160 0 -160Z" fill="${ink}"/>
-<path d="M-96 2Q-20 18 70 4L76 -10L92 -12L86 18Q80 34 64 40H-66Q-86 28 -96 2Z" fill="url(#dbtefx-op-hull)"/>
-<path d="M-96 2Q-20 18 70 4L76 -10L92 -12" fill="none" stroke="${rim}" stroke-width="3" stroke-linejoin="round"/>
-</g></g>
 <path d="M1088 664Q1060 650 1030 664Q1070 672 1110 668ZM1380 664Q1440 660 1520 672Q1440 676 1390 670Z" fill="${mix(t.text, t.opp, 0.2)}" fill-opacity="0.75" ${anim('pulse', 2.6, 0, 'ease-in-out')}/>
 <path d="M1050 668H1430" stroke="${mix(t.text, t.opp, 0.3)}" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
+</g>
 <!--near-->
 <g style="animation: dbtefx-op-swell 14s ease-in-out infinite;">
 <path d="M-60 900V846Q40 818 150 832Q230 842 300 826Q420 800 540 836Q640 858 760 840Q900 812 1020 838Q1120 856 1240 830Q1380 800 1500 826Q1600 846 1660 836V900Z" fill="url(#dbtefx-op-foam)"/>

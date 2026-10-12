@@ -42,12 +42,13 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
     holes += `<ellipse cx="${(22.5 + Math.cos(a) * 15).toFixed(2)}" cy="${(22.5 + Math.sin(a) * 15).toFixed(2)}" rx="3" ry="1.6" transform="rotate(${(a * 180) / Math.PI + 90} ${(22.5 + Math.cos(a) * 15).toFixed(2)} ${(22.5 + Math.sin(a) * 15).toFixed(2)})"/>`;
   }
   const guard = svg(45, 45, `<circle cx="22.5" cy="22.5" r="20.5" fill="none" stroke="${gold}" stroke-opacity="0.7" stroke-width="1.5"/><g fill="${t.bg}" fill-opacity="0.55">${holes}</g>`);
-  // Mokko tsuba outline around each phase disc: four lobes on the diagonals,
-  // cusped at the sides, with seppa plates at top and bottom; open in the middle.
+  // Mokko tsuba outline around each phase disc: four short lobes on the
+  // diagonals (neighbouring phases never touch), cusped at the sides, with
+  // seppa plates at top and bottom; open in the middle.
   let lobe = '';
   for (let i = 0; i <= 96; i++) {
     const a = (i / 96) * Math.PI * 2;
-    const rad = 23.8 + 4.3 * Math.pow(Math.abs(Math.sin(2 * a)), 0.9);
+    const rad = 23.8 + 3.4 * Math.pow(Math.abs(Math.sin(2 * a)), 0.9);
     lobe += `${i ? 'L' : 'M'}${(30 + Math.cos(a) * rad).toFixed(2)} ${(30 + Math.sin(a) * rad).toFixed(2)}`;
   }
   const tsubaRim = svg(60, 60, `<path d="${lobe}ZM30 7.8A22.2 22.2 0 1 0 30 52.2A22.2 22.2 0 1 0 30 7.8Z" fill="${gold}" fill-rule="evenodd" stroke="${checkInk}" stroke-width="1"/><path d="${lobe}Z" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="0.6" transform="translate(30 30) scale(0.96) translate(-30 -30)"/><g fill="${goldDim}" stroke="${checkInk}" stroke-width="0.6"><rect x="26.5" y="5.6" width="7" height="2.6" rx="0.6"/><rect x="26.5" y="51.8" width="7" height="2.6" rx="0.6"/></g>`);
@@ -115,7 +116,7 @@ ${SEL.lifeOpp} { background: var(--dbtc-u7) 0 0 / 100% 100% no-repeat, linear-gr
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -16px; top: -5px; width: 18px; height: 40px; pointer-events: none; background: var(--dbtc-u8) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${goldDim}, ${checkInk}, ${goldDim}, ${checkInk}, ${goldDim}) !important; box-shadow: 0 0 0 1px ${checkInk}, 0 4px 10px -2px #000000 !important; }
-${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -8px; top: -8px; right: -8px; bottom: -8px; pointer-events: none; background: var(--dbtc-u9) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 3px #000000); }
+${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -2px; top: -2px; right: -2px; bottom: -2px; pointer-events: none; background: var(--dbtc-u9) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 3px #000000); }
 ${sel(['#duel .phase.active::before'])} { filter: drop-shadow(0 0 6px ${alpha(gold, 0.9)}) drop-shadow(0 2px 3px #000000); }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${checkInk} !important; }

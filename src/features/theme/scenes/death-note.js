@@ -3,7 +3,7 @@ import { anim, H, n1, rng, W } from './kit.js';
 
 // Death Note: the notebook falls from the shinigami realm to the human world.
 // It hangs open in a shaft of cold light above night-time Tokyo: the black
-// first page printed with its rules in white blackletter, the ruled page
+// first page left bare (it sits under the menu feed), the ruled page
 // beside it half full of handwritten names, a red ribbon trailing from the
 // spine. One bitten red apple slips from the pages and falls. Torn pages drift down; storm
 // clouds churn behind (shader).
@@ -28,26 +28,6 @@ const script = (rand, x0, x1, y, size) => {
   return d;
 };
 
-// Blackletter-like print: narrow slanted-cap strokes grouped into words.
-const gothic = (rand, x0, x1, y, h) => {
-  let d = '';
-  let x = x0;
-  while (x < x1 - 8) {
-    const letters = 2 + Math.floor(rand() * 5);
-    for (let i = 0; i < letters && x < x1 - 4; i++) {
-      const strokes = rand() < 0.4 ? 2 : 1;
-      for (let k = 0; k < strokes; k++) {
-        const tall = rand() < 0.18 ? h * 1.55 : h;
-        d += `M${n1(x)} ${n1(y)}l1.6 -1V${n1(y - tall)}l-1.6 1Z`;
-        x += 2.5;
-      }
-      x += 1.3;
-    }
-    x += h * 0.9;
-  }
-  return d;
-};
-
 const scene = (t) => {
   const rand = rng(1107);
   const paperLit = mix(t.text, '#ffffff', 0.3);
@@ -57,9 +37,7 @@ const scene = (t) => {
   const cold = t.accent2;
   const red = t.accent;
 
-  // Left: the black rules page. Right: ruled paper with names, half full.
-  let gothicText = gothic(rand, -126, -54, -88, 8.5);
-  for (let i = 0; i < 12; i++) gothicText += gothic(rand, -158, i === 11 ? -90 : -22, -64 + i * 14.5, 4.6);
+  // Right page: ruled paper with names, half full.
   let lines = '';
   let names = '';
   for (let i = 0; i < 17; i++) {
@@ -99,7 +77,7 @@ const scene = (t) => {
   const tx = 330;
   const tower = `<path d="M${tx} 640L${tx - 3} 700L${tx - 9} 744H${tx - 13}V752H${tx - 11}L${tx - 22} 812H${tx - 27}V820H${tx - 24}L${tx - 40} ${H}H${tx + 40}L${tx + 24} 820H${tx + 27}V812H${tx + 22}L${tx + 11} 752H${tx + 13}V744H${tx + 9}L${tx + 3} 700Z" fill="${mix(t.bg, cold, 0.1)}"/><circle cx="${tx}" cy="640" r="2.4" fill="${t.danger}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/>`;
 
-  const bx = 1380;
+  const bx = 1424;
   const by = 340;
   const apple = 'M0 -34C20 -50 50 -42 50 -6C50 32 28 56 6 52C0 50 -6 50 -12 52C-32 56 -52 32 -50 -6C-50 -42 -20 -50 0 -34Z';
   return `<defs>
@@ -127,12 +105,11 @@ ${tower}
 <!--mid-->
 <circle cx="${bx + 30}" cy="${by - 20}" r="360" fill="url(#dbtefx-dn-halo)"/>
 <g style="transform-origin: ${bx}px ${by}px; animation: dbtefx-dn-drift 14s ease-in-out infinite;">
-<g transform="translate(${bx} ${by}) rotate(-12) skewX(-7) scale(0.92)">
+<g transform="translate(${bx} ${by}) rotate(-12) skewX(-7) scale(0.5)">
 <path d="M0 -130C-62 -144 -132 -140 -190 -128L-194 132C-128 122 -62 126 0 140C62 126 128 122 196 128L192 -132C132 -146 62 -146 0 -130Z" fill="${leather}" stroke="${mix(t.border, cold, 0.35)}" stroke-width="1.4"/>
 <path d="M184 -126L188 122M180 -124L184 121M176 -123L180 120M2 130C60 118 124 114 184 120" fill="none" stroke="${paperDim}" stroke-opacity="0.6" stroke-width="0.9"/>
 <path d="M0 -120C-55 -134 -120 -130 -174 -118L-178 120C-120 110 -55 114 0 128Z" fill="url(#dbtefx-dn-black)" stroke="${mix(t.border, cold, 0.2)}" stroke-width="0.8"/>
 <path d="M-166 -108C-118 -120 -56 -122 -10 -110L-10 116C-56 106 -118 104 -168 112Z" fill="none" stroke="${paperDim}" stroke-opacity="0.35" stroke-width="0.8"/>
-<path d="${gothicText}" fill="${paperLit}" fill-opacity="0.78" transform="skewY(-3)"/>
 <g style="transform-origin: 0px 0px; animation: dbtefx-dn-page 7s ease-in-out infinite;">
 <path d="M0 -120C55 -136 120 -132 172 -122L178 116C120 108 55 112 0 128Z" fill="url(#dbtefx-dn-pageR)"/>
 <path d="${lines}" stroke="${cold}" stroke-opacity="0.34" stroke-width="0.7"/>
@@ -142,7 +119,7 @@ ${tower}
 <g style="transform-origin: 2px 126px; animation: dbtefx-dn-ribbon 6s ease-in-out infinite;"><path d="M-2 120C-6 170 10 210 2 262L12 254L18 266C24 214 8 172 10 120Z" fill="url(#dbtefx-dn-ribbon)"/></g>
 </g>
 </g>
-<g transform="translate(${bx + 104} 470)"><g style="animation: dbtefx-dn-apple 12s cubic-bezier(0.5, 0, 0.9, 0.6) -4s infinite;">
+<g transform="translate(${bx + 52} 470) scale(0.72)"><g style="animation: dbtefx-dn-apple 12s cubic-bezier(0.5, 0, 0.9, 0.6) -4s infinite;">
 <path d="${apple}" fill="url(#dbtefx-dn-apple)"/>
 <path d="M49 -16C41 -14 36 -8 39 -1C33 3 33 11 39 16C35 21 38 27 45 25C50 14 51 0 49 -16Z" fill="url(#dbtefx-dn-flesh)" stroke="${mix(red, '#000000', 0.45)}" stroke-width="1.4"/>
 <path d="M14 -40C32 -42 48 -32 52 -12" fill="none" stroke="${mix(cold, '#ffffff', 0.4)}" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>

@@ -6,7 +6,7 @@ import { anim, H, n1, polar, rng, star, W } from './kit.js';
 // orbs stacked above and below it and lighting up in turn, rocks lifting off
 // the ground in the power-up.
 // The shader draws the sky and the aura's rising flame.
-const C = [1432, 470];
+const C = [1444, 470];
 const R = 46;
 
 const dragonBall = (t) => {
@@ -46,7 +46,7 @@ ${stars}
 
   // The six other orbs stacked above and below the hero in the right margin,
   // each glowing in turn.
-  const ring = [[1446, 110, 1, 18], [1420, 200, 2, 19], [1446, 292, 3, 20], [1420, 640, 5, 20], [1446, 722, 6, 19], [1422, 800, 7, 18]].map(([x, y, n, rad], i) =>
+  const ring = [[1446, 110, 1, 18], [1420, 200, 2, 19], [1446, 292, 3, 20], [1420, 636, 5, 20], [1446, 706, 6, 19], [1422, 772, 7, 18]].map(([x, y, n, rad], i) =>
     `<circle cx="${x}" cy="${y}" r="${rad * 2.6}" fill="url(#dbtefx-db-halo)" style="animation: dbtefx-db-call 6s ease-in-out ${n1(-6 + i)}s infinite;"/><g ${anim('bob', n1(5 + i * 0.6), i, 'ease-in-out')}>${orb(x, y, rad, n)}</g>`).join('');
 
   // Buttes: flat-topped mesas in hazy depths; the flank facing the aura

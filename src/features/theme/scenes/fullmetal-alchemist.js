@@ -99,6 +99,7 @@ const scene = (t) => {
     return { d: `M${side(1).join('L')}L${side(-1).reverse().join('L')}Z`, tip: pts[7] };
   };
   // Black arms spilling out of the gap, each splitting into grasping fingers.
+  // All reach right, so the hands open in the margin, never under the menu feed.
   const tendril = (y0, dir, len, bend, w0, delay) => {
     const main = arm(gx, y0, dir > 0 ? -8 : 188, len, w0, bend * dir, delay);
     const [fx, fy, fw] = main.tip;
@@ -106,7 +107,7 @@ const scene = (t) => {
     const fingers = [-30, 0, 28].map((o, i) => arm(fx, fy, base + o, len * 0.32, fw * 0.9, bend * dir * 1.5, i).d).join('');
     return `<g style="transform-origin: ${gx}px ${y0}px; animation: dbtefx-fma-reach ${n1(7 + delay)}s ease-in-out ${n1(-delay * 1.7)}s infinite;"><path d="${main.d}${fingers}" fill="url(#dbtefx-fma-ink)"/></g>`;
   };
-  const tendrils = [[310, -1, 120, -3, 13, 0], [390, 1, 126, -2, 14, 1.3], [480, -1, 140, 2, 15, 2.1], [560, 1, 105, 3, 11, 0.6], [620, -1, 92, 4, 10, 2.8]]
+  const tendrils = [[310, 1, 120, -3, 13, 0], [390, 1, 126, -2, 14, 1.3], [480, 1, 140, 2, 15, 2.1], [560, 1, 105, 3, 11, 0.6], [620, 1, 92, 4, 10, 2.8]]
     .map(([y, d, l, bend, w, del]) => tendril(y, d, l, bend, w, del))
     .join('');
 

@@ -1,7 +1,8 @@
 // dragon-ball: capsule tech and star orbs. Panels are glossy indigo capsule
 // shells in a rounded chrome rim, pop-ups are radar screens (a faint green
-// grid and range rings), every crest is an amber glass orb with red stars,
-// the phases are the orbs themselves (one to six stars) and the life bars are
+// grid and range rings), tiles are crested with a capsule and the dialog and
+// life bars with a Dragon Radar (the seven star balls live in the scene only),
+// the phases are amber orbs with one to six rim stars and the life bars are
 // golden ki gauges. (t, kit) -> CSS string; see chrome/kit.js.
 import { mix } from '../../../lib/color.js';
 
@@ -48,9 +49,16 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const grid = svg(40, 40, `<path d="M0 0.5H40M0.5 0V40" stroke="${radar}" stroke-opacity="0.09"/>`);
   const rings = svg(400, 400, `<g fill="none" stroke="${radar}" stroke-opacity="0.12"><circle cx="200" cy="200" r="60"/><circle cx="200" cy="200" r="120"/><circle cx="200" cy="200" r="180"/></g><path d="M200 0V400M0 200H400" stroke="${radar}" stroke-opacity="0.08"/><circle cx="262" cy="146" r="4" fill="${gold}" fill-opacity="0.5"/><circle cx="126" cy="252" r="3" fill="${gold}" fill-opacity="0.35"/>`);
 
-  const crestSmall = svg(28, 28, `${orbDefs}${orb(14, 14, 12, 1, 0.34)}`);
-  const crestBig = svg(84, 84, `${orbDefs}<defs><radialGradient id="a"><stop offset="0.5" stop-color="${gold}" stop-opacity="0.6"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></radialGradient></defs><circle cx="42" cy="42" r="42" fill="url(#a)"/>${orb(42, 42, 26, 4, 0.2)}`);
-  const lifeCap = svg(26, 26, `${orbDefs}${orb(13, 13, 11.5, 2, 0.26)}`);
+  // The scene holds the seven balls (1 to 7 stars) and nothing else may add
+  // one: tiles wear a capsule, the dialog and life bars a Dragon Radar.
+  const capsule = (w, h) => {
+    const r = h / 2;
+    return `<g transform="rotate(-28 14 14)"><rect x="${14 - w / 2}" y="${14 - r}" width="${w}" height="${h}" rx="${r}" fill="${mix(chrome, '#ffffff', 0.4)}" stroke="${ink}" stroke-width="1"/><path d="M14 ${14 - r}H${14 + w / 2 - r}A${r} ${r} 0 0 1 ${14 + w / 2 - r} ${14 + r}H14Z" fill="${amber}"/><path d="M14 ${14 - r}V${14 + r}" stroke="${ink}" stroke-width="1"/><path d="M${14 - w / 2 + r} ${14 - r + 2}H${14 + w / 2 - r}" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.2" stroke-linecap="round"/></g>`;
+  };
+  const radarDisc = (c, r) => `<circle cx="${c}" cy="${c}" r="${r}" fill="${mix(chrome, '#ffffff', 0.25)}" stroke="${ink}" stroke-width="${(r * 0.05).toFixed(2)}"/><circle cx="${c}" cy="${c}" r="${(r * 0.8).toFixed(2)}" fill="${mix(radar, t.bg, 0.55)}"/><g fill="none" stroke="${radar}" stroke-opacity="0.75" stroke-width="${(r * 0.04).toFixed(2)}"><circle cx="${c}" cy="${c}" r="${(r * 0.52).toFixed(2)}"/><path d="M${(c - r * 0.8).toFixed(2)} ${c}H${(c + r * 0.8).toFixed(2)}M${c} ${(c - r * 0.8).toFixed(2)}V${(c + r * 0.8).toFixed(2)}"/></g><circle cx="${(c + r * 0.32).toFixed(2)}" cy="${(c - r * 0.26).toFixed(2)}" r="${(r * 0.12).toFixed(2)}" fill="${gold}"/><path d="M${(c - r * 0.55).toFixed(2)} ${(c - r * 0.35).toFixed(2)}A${(r * 0.65).toFixed(2)} ${(r * 0.65).toFixed(2)} 0 0 1 ${(c + r * 0.1).toFixed(2)} ${(c - r * 0.62).toFixed(2)}" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="${(r * 0.06).toFixed(2)}" stroke-linecap="round"/>`;
+  const crestSmall = svg(28, 28, capsule(24, 11));
+  const crestBig = svg(84, 84, `<defs><radialGradient id="a"><stop offset="0.5" stop-color="${radar}" stop-opacity="0.45"/><stop offset="1" stop-color="${radar}" stop-opacity="0"/></radialGradient></defs><circle cx="42" cy="42" r="42" fill="url(#a)"/>${radarDisc(42, 26)}`);
+  const lifeCap = svg(26, 26, radarDisc(13, 11.5));
   const phaseOrb = svg(45, 45, `${orbDefs}${orb(22.5, 22.5, 21.5, 0)}`);
   const phaseStars = (n) => {
     let d = '';
@@ -111,7 +119,9 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${shell}, ${mi
 /* Duel: smooth chrome-cased ki gauges led by an orb; the phases are the orbs, one to six stars. */
 ${SEL.life} { border-color: ${chrome} !important; border-radius: 999px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${chromeDim}, 0 0 14px -2px ${alpha(gold, 0.5)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 999px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.72)}, ${mix(t.self, t.bg, 0.45)}, ${mix(mix(t.self, gold, 0.4), t.bg, 0.25)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#fff3d6', 0.55)}, ${alpha('#fff3d6', 0.12)} 38%, transparent 46%), linear-gradient(90deg, ${mix(t.self, '#e0601a', 0.5)}, ${mix(t.self, '#ffb84a', 0.6)}) !important; }
+/* The numeral fade under the self count dims the orange into a deep ember, not the sky's violet ink (which turns it brown). */
+${sel(['#duel #lifepoints1'])} { --dbt-lp-ink: ${mix(t.self, '#000000', 0.72)}; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.4)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -22px; top: 0; width: 26px; height: 26px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 0 5px ${alpha(gold, 0.7)}); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
