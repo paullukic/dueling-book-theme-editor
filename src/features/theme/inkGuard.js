@@ -120,7 +120,7 @@ const sel = (v) => `html body #content [${INK_ATTR}="${v}"][${INK_ATTR}][${INK_A
 export const inkCss = `
 ${sel('theme')} { color: var(--dbt-text) !important; }
 ${sel('light')} { color: #ffffff !important; }
-${sel('dark')} { color: #111111 !important; }
+${sel('dark')} { color: #111111 !important; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.55) !important; }
 `;
 
 const ownsText = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
