@@ -17,6 +17,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const gold = t.accent2;
   const lacquer = mix(t.surface, t.bg, 0.4);
   const straw = mix(gold, t.text, 0.45);
+  // Your blade: polished gold, not the token's muted brass.
+  const polished = '#d4a440';
+  const cream = mix(t.text, gold, 0.2);
 
   // Seigaiha waves, faint gold.
   const waves = svg(40, 20, `<g fill="none" stroke="${gold}" stroke-opacity="0.08" stroke-width="1"><path d="M0 20a20 20 0 0 1 40 0M6 20a14 14 0 0 1 28 0M12 20a8 8 0 0 1 16 0"/><path d="M-20 10a20 20 0 0 1 40 0M-14 10a14 14 0 0 1 28 0M-8 10a8 8 0 0 1 16 0M20 10a20 20 0 0 1 40 0M26 10a14 14 0 0 1 28 0M32 10a8 8 0 0 1 16 0"/></g>`);
@@ -44,8 +47,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // A wrapped hilt (tsuka) with its guard: the blade is the life bar.
   let wrap = '';
-  for (let i = 0; i < 4; i++) wrap += `<path d="M${3 + i * 4.6} 10l2.3 5 2.3-5-2.3-5Z" fill="${shu}" fill-opacity="0.85"/>`;
-  const hilt = svg(30, 30, `<rect x="1" y="9" width="21" height="12" rx="2" fill="${sumi}" stroke="${gold}" stroke-width="0.8"/><g transform="translate(0 5)">${wrap}</g><rect x="0" y="10" width="2" height="10" fill="${gold}"/><ellipse cx="25.4" cy="15" rx="4.4" ry="14" fill="${sumi}" stroke="${gold}" stroke-width="1.4"/><ellipse cx="25.4" cy="15" rx="2.2" ry="10.5" fill="none" stroke="${shu}" stroke-width="0.9"/><path d="M25.4 3.4v3M25.4 23.6v3" stroke="${gold}" stroke-width="1"/><rect x="28.6" y="9.5" width="1.4" height="11" fill="${gold}"/>`);
+  for (let i = 0; i < 4; i++) wrap += `<path d="M${3 + i * 4.6} 10l2.3 5 2.3-5-2.3-5Z" fill="${gold}" stroke="#000000" stroke-width="0.5"/>`;
+  const hilt = svg(30, 30, `<rect x="1" y="9" width="21" height="12" rx="2" fill="${sumi}" stroke="${gold}" stroke-width="0.8"/><g transform="translate(0 5)">${wrap}</g><rect x="0" y="10" width="2" height="10" fill="${gold}"/><ellipse cx="25.4" cy="15" rx="4.4" ry="14" fill="${sumi}" stroke="${gold}" stroke-width="1.4"/><ellipse cx="25.4" cy="15" rx="2.2" ry="10.5" fill="none" stroke="${mix(gold, sumi, 0.4)}" stroke-width="0.9"/><path d="M25.4 3.4v3M25.4 23.6v3" stroke="${gold}" stroke-width="1"/><rect x="28.6" y="9.5" width="1.4" height="11" fill="${gold}"/>`);
 
   // The tempered line (hamon) along the blade.
   const hamon = svg(40, 26, `<path d="M0 17q5-4 10 0t10 0t10 0t10 0" fill="none" stroke="${mix(gold, '#ffffff', 0.35)}" stroke-opacity="0.4" stroke-width="1.4"/>`);
@@ -105,10 +108,10 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: life bars are blades with a wrapped hilt; phases are sword guards. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 2px 14px 14px 2px !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px 14px 14px 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, ${alpha('#ffffff', 0.1)} 40%, ${alpha('#000000', 0.2)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(polished, t.bg, 0.25)}, ${polished} 55%, ${mix(polished, '#ffffff', 0.3)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, ${alpha('#000000', 0.25)}), var(--dbtc-u4) 0 0 / 40px 100% repeat-x, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.55)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbtc-u2) 0 0 / 40px 20px, ${sumi} !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -30px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -27px; top: -3px; width: 36px; height: 36px; z-index: 3; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${gold}, ${mix(gold, sumi, 0.5)}, ${gold}, ${mix(gold, sumi, 0.6)}, ${gold}) !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
@@ -154,6 +157,11 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss(popPrimary, popSecondary)}
+/* Front page links: cream on a dark lacquer plate (the token peach turns pink-red over the art). */
+${sel(['#welcome_buttons > span'])} { color: ${cream} !important; background: ${alpha(sumi, 0.82)} !important; border-radius: 3px !important; box-shadow: 0 0 0 4px ${alpha(sumi, 0.82)} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#content #logged_in .logout_btn', '#content #logged_in .switch_account_btn', '#content #bulletin_txt a', '#content #bulletin_txt a font'])} { color: ${cream} !important; }
+/* The shrine stands behind the menu's status feed and peeks out beside the duel stage. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine { display: none; }
 ${sel(['#duel_room .format > .info_btn'])} { background-color: ${t.bg} !important; border-radius: 50% !important; box-shadow: 0 0 0 5px ${t.bg} !important; }
 `;
 };

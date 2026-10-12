@@ -135,13 +135,13 @@ ${shimmer}
 ${pad(640, 391, 30, 60, 0.22, 0.2)}${pad(960, 398, 42, 300, 0.24, 0.22)}${pad(1012, 408, 26, 160, 0.24, 0.2)}${pad(1490, 396, 36, 250, 0.22, 0.22)}
 ${lotus(990, 398, 0.38, 2)}
 <!--mid-->
-${ripple(1400, 776, 320, 0, 9)}${ripple(1400, 776, 320, 4.5, 9)}${ripple(1140, 504, 120, 2, 8)}
+<g class="dbtefx-fr-pond">${ripple(1400, 776, 320, 0, 9)}${ripple(1400, 776, 320, 4.5, 9)}${ripple(1140, 504, 120, 2, 8)}
 ${pad(1140, 500, 90, 200, 0.3, 0.27)}
 ${pad(1500, 640, 112, 110, 0.33, 0.3)}
 ${lotus(1130, 712, 1.1, 3)}
 ${pad(1150, 836, 130, 300, 0.36, 0.3)}
 ${pad(1400, 770, 290, 215, 0.33, 0.34)}
-${cardArt(t, { id: 'dbtefx-fr-hero', card: CARDS.desFrog, x: 1040, y: 430, w: 440, h: 400, focus: [0.58, 0.58], zoom: 1.05, blend: 'normal', feather: 0.82, fade: 0.55, grade: 'saturate(0.85)', tint: mix(t.accent, t.bg, 0.25), tintAmt: 0.35, backdrop: mix(t.bg, t.accent, 0.1), backdropAmt: 0.5, glow: t.accent, breathe: 10 })}
+${cardArt(t, { id: 'dbtefx-fr-hero', card: CARDS.desFrog, x: 1040, y: 430, w: 440, h: 400, focus: [0.58, 0.58], zoom: 1.05, blend: 'normal', feather: 0.82, fade: 0.55, grade: 'saturate(0.85)', tint: mix(t.accent, t.bg, 0.25), tintAmt: 0.35, backdrop: mix(t.bg, t.accent, 0.1), backdropAmt: 0.5, glow: t.accent, breathe: 10 })}</g>
 <!--near-->
 <g fill="${reedC}" stroke="${moon}" stroke-opacity="0.18">${blade(1490, 400, -40, 9)}${blade(1450, 300, 18, 8)}${blade(1530, 250, -30, 7)}</g>${cattail(1470, 500, -28, 2)}${cattail(1420, 410, -8, 0.7)}`;
 };

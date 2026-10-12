@@ -79,7 +79,7 @@ ${bank(820, 60, 150, 0.7, 3)}
 </defs>
 <circle cx="${SX}" cy="${SY}" r="420" fill="url(#dbtefx-ls-sun)"/>
 <circle cx="${SX}" cy="${SY - 60}" r="300" fill="url(#dbtefx-ls-flare)" ${anim('pulse', 8, 0, 'ease-in-out')}/>
-${cardArt(t, { id: 'dbtefx-ls-hero', card: CARDS.judgmentDragon, x: SX - 330, y: SY - 330, w: 680, h: 640, focus: [0.5, 0.45], zoom: 0.92, feather: 0.62, fade: 0.6, blend: 'normal', grade: 'saturate(1.25) contrast(1.12) sepia(0.15)', backdrop: '#ffffff', backdropAmt: 0.7, opacity: 0.85, glow: t.accent, breathe: 16 })}
+<g class="dbtefx-ls-herogrp">${cardArt(t, { id: 'dbtefx-ls-hero', card: CARDS.judgmentDragon, x: SX - 330, y: SY - 330, w: 680, h: 640, focus: [0.5, 0.45], zoom: 0.92, feather: 0.62, fade: 0.6, blend: 'normal', grade: 'saturate(1.25) contrast(1.12) sepia(0.15)', backdrop: '#ffffff', backdropAmt: 0.7, opacity: 0.85, glow: t.accent, breathe: 16 })}</g>
 ${bank(850, 80, 170, 0.8, 7)}
 ${bank(905, 110, 190, 1, 11)}`;
 };

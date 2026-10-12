@@ -161,7 +161,7 @@ ${SEL.life} {
 }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
 ${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(cyan, '#ffffff', 0.6)}, ${cyan} 45%, ${mix(cyan, deep, 0.55)}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(cyan, '#ffffff', 0.45)}, ${mix(cyan, deep, 0.2)} 45%, ${mix(cyan, deep, 0.65)}) !important; }
+${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 8px, ${alpha(deep, 0.85)} 8px 10px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.6)}, ${t.opp} 45%, ${mix(t.opp, deep, 0.55)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--dbte-ss-scan), repeating-linear-gradient(90deg, ${alpha(cyan, 0.08)} 0 8px, transparent 8px 10px), ${deep} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: -1.5px -1.5px 0 ${deep}, 1.5px -1.5px 0 ${deep}, -1.5px 1.5px 0 ${deep}, 1.5px 1.5px 0 ${deep}, 0 0 8px ${alpha(cyan, 0.8)} !important; }
 
@@ -176,7 +176,7 @@ ${sel(['#duel .phase.active::before'])} {
   background: var(--dbte-ss-reticle) center / contain no-repeat;
   animation: var(--dbte-ss-anim, dbte-ss-lock 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both);
 }
-${sel(['#duel .phase span'])} { color: ${t.muted} !important; text-shadow: 0 1px 2px ${deep} !important; }
+${sel(['#duel .phase span'])} { color: #d6e4f0 !important; text-shadow: 0 1px 2px ${deep} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; text-shadow: -1px -1px 0 ${deep}, 1px -1px 0 ${deep}, -1px 1px 0 ${deep}, 1px 1px 0 ${deep} !important; }
 ${turnBg} { background: ${red} !important; border-radius: 0 !important; clip-path: ${cut(9)}; }
 ${turnInner} { background: var(--dbte-ss-scan), linear-gradient(180deg, ${mix(red, deep, 0.4)}, ${deep}) !important; border-radius: 0 !important; clip-path: ${cut(8)}; }
@@ -219,6 +219,9 @@ ${SEL.settingsPanel} { background-image: ${brackets(t.text, 14, 2)} !important; 
 ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradient(0deg, ${cyan} 0 4px, transparent 4px 6px) !important; border-radius: 0 !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { border-radius: 0 !important; box-shadow: inset 0 0 0 1.5px ${cyan} !important; }
 ${sel(['#content .radiobutton'])} { transform: rotate(45deg) scale(0.85); }
+/* The chat column cuts the ace in a duel: she recedes; the radar's bearing ring stays off the menu's status feed. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-acegrp { opacity: 0.7; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-hud { display: none; }
 `;
   return `html body { ${defs.map((d, i) => `--dbte-ss-${i}: ${d};`).join(' ')} }
 ${body}`;

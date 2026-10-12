@@ -23,7 +23,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const plateShade = mix(t.text, t.border, 0.55);
   const gold = t.accent;
   const goldDeep = mix(t.accent, t.bg, 0.4);
-  // The opponent is the gold army (the periwinkle opp token stays for the scene's sky).
+  // The opponent's turn mark is the gold army; their life bar is periwinkle, matching their side of the board.
   const army = mix(t.accent, '#000000', 0.08);
   const sq1 = mix(t.surface, t.bg, 0.3);
   const sq2 = mix(t.raised, t.border, 0.25);
@@ -110,8 +110,9 @@ ${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${al
 /* Duel: plated life bars with a king at the end; checkered phase discs. */
 ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(gold, ivory, 0.55)}, ${mix(gold, ivory, 0.3)}) !important; box-shadow: inset 0 0 0 1.5px ${goldDeep}, inset 0 -3px 0 ${alpha(goldDeep, 0.5)} !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(army, t.bg, 0.3)}, ${army}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(gold, '#7a5a20', 0.35)}, ${mix(gold, ivory, 0.25)}) !important; box-shadow: inset 0 0 0 1.5px ${mix(goldDeep, '#000000', 0.25)}, inset 0 -3px 0 ${alpha(goldDeep, 0.75)}, inset 0 2px 3px ${alpha('#000000', 0.25)} !important; }
+/* The opponent's life is periwinkle silver, like their side of the board. */
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, '#dfe6ff', 0.35)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -134,6 +135,8 @@ ${sel(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="r
 ${sel(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${mix(t.opp, '#ffffff', 0.35)} !important; }
 /* The winged king stands behind the chat column in a duel: only a lone wing showed, so he waits for the menu. */
 html body:has(#duel:not([style*="none"])) .dbtefx-ae-hero { opacity: 0; }
+/* On the menu the pieces stand back, right of the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ae-pieces { transform-origin: 1640px 900px; transform: scale(0.62); }
 ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 6px 16px -6px #000000 !important; }
 

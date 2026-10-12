@@ -156,7 +156,7 @@ ${orochi}
 <path d="M0 720L180 650L340 700L520 640L700 700L880 660L1060 710L1240 670L1420 710L1600 660V${H}H0Z" fill="${mix(storm, t.bg, 0.82)}"/>
 <!--mid-->
 <g mask="url(#dbtefx-mt-cf)">${drift(24, 3, cloud(240, 470, 380, 64, 13, mix(storm, t.bg, 0.2)))}</g>
-<g transform="translate(1282 800) scale(0.6) translate(-1230 -798)">
+<g class="dbtefx-mt-shrine" transform="translate(1282 800) scale(0.6) translate(-1230 -798)">
 <circle cx="${mx}" cy="${my}" r="280" fill="url(#dbtefx-mt-halo)" ${anim('bloom', 8, 0, 'ease-in-out')}/>
 ${torii}
 <circle cx="${mx}" cy="${my}" r="${mr + 8}" fill="${mix(gold, t.bg, 0.5)}"/>

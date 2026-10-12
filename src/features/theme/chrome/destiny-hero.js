@@ -21,8 +21,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const ironDeep = mix(t.bg, t.raised, 0.3);
 
   // The D lozenge: a steel-rimmed diamond with a blood-red D.
-  const lozenge = (cx, cy, s) =>
-    `<g transform="translate(${cx} ${cy}) scale(${s})"><path d="M0 -12L12 0L0 12L-12 0Z" fill="${ink}" stroke="${steelLit}" stroke-width="1.3"/><path d="M-4.6 -5.6H0.6C5.8 -5.6 8 -2.8 8 0C8 2.8 5.8 5.6 0.6 5.6H-4.6ZM-1.4 -3.2V3.2H0.4C3.4 3.2 4.8 1.8 4.8 0C4.8 -1.8 3.4 -3.2 0.4 -3.2Z" fill="${blood}" fill-rule="evenodd"/></g>`;
+  const lozenge = (cx, cy, s, mark = blood) =>
+    `<g transform="translate(${cx} ${cy}) scale(${s})"><path d="M0 -12L12 0L0 12L-12 0Z" fill="${ink}" stroke="${steelLit}" stroke-width="1.3"/><path d="M-4.6 -5.6H0.6C5.8 -5.6 8 -2.8 8 0C8 2.8 5.8 5.6 0.6 5.6H-4.6ZM-1.4 -3.2V3.2H0.4C3.4 3.2 4.8 1.8 4.8 0C4.8 -1.8 3.4 -3.2 0.4 -3.2Z" fill="${mark}" fill-rule="evenodd"/></g>`;
   // A bat wing (membrane between three finger bones), pointing left (d = -1) or right (d = 1).
   const wing = (x, y, d, k) => {
     const p = (dx, dy) => `${f1(x + d * dx * k)} ${f1(y + dy * k)}`;
@@ -51,7 +51,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
 
   // Phase discs: a steel ring with four short spikes.
   const phaseRing = svg(45, 45, `<circle cx="22.5" cy="22.5" r="19.5" fill="none" stroke="${steel}" stroke-width="1.8"/><circle cx="22.5" cy="22.5" r="16.6" fill="none" stroke="${blood}" stroke-opacity="0.85" stroke-width="1"/><path d="M22.5 0L25 4H20ZM45 22.5L41 25V20ZM22.5 45L20 41H25ZM0 22.5L4 20V25Z" fill="${steelLit}"/>`);
-  const lifeCrest = svg(40, 40, lozenge(20, 20, 1.5));
+  const lifeCrest = svg(40, 40, lozenge(20, 20, 1.5, steelLit));
 
   const plateBg = (lift = 0) => `radial-gradient(ellipse 80% 70% at 50% -10%, ${alpha(steel, 0.12 + lift)}, transparent 70%), linear-gradient(0deg, ${alpha(blood, 0.12 + lift)}, transparent 35%), var(--dbtc-u2), linear-gradient(180deg, ${iron}, ${ironDeep})`;
 
@@ -103,10 +103,12 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${iron}, ${iro
 /* Duel: steel-bound life bars led by the D lozenge; phases are spiked steel rings. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 1px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(steelLit, 0.4)}, 0 0 12px -3px ${alpha(blood, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(blood, 0.55)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.34)}, transparent 46%, ${alpha('#000000', 0.18)}), linear-gradient(90deg, ${mix(steel, t.bg, 0.35)}, ${steelLit} 38%, ${steel} 62%, ${mix(steel, t.bg, 0.5)}) !important; box-shadow: inset 0 -2px 0 ${alpha(mix(blood, '#000000', 0.5), 0.7)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.24)}, transparent 46%, ${alpha('#000000', 0.2)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${mix(t.opp, t.bg, 0.15)} 40%, ${mix(t.opp, t.bg, 0.4)} 70%, ${mix(t.opp, t.bg, 0.62)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 36px; height: 36px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
+/* Front page Welcome / Forum / Rules: iron plates so the links read over the clock face. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(ironDeep, 0.92)} !important; box-shadow: 0 0 0 0.25em ${alpha(ironDeep, 0.92)} !important; border-radius: 1px; }
 ${SEL.phase} { background: radial-gradient(circle, ${ironDeep} 62%, ${steelLit} 64%, ${steelDeep} 72%) !important; box-shadow: 0 0 0 1px ${ink}, 0 0 10px -2px ${alpha(blood, 0.6)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${steelDeep} !important; }

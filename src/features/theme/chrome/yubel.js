@@ -117,8 +117,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${wine}, ${win
 /* Duel: rose-bound life bars led by the third eye; phases are rose windows. */
 ${SEL.life} { border-color: ${mix(mauve, t.bg, 0.3)} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, inset 0 0 0 1px ${alpha(goldLit, 0.4)}, 0 0 12px -2px ${alpha(mauve, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${roseLit}, ${rose} 42%, ${mix(rose, t.bg, 0.55)} 72%) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.25)}, ${t.opp} 42%, ${mix(t.opp, t.bg, 0.5)} 72%) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, '#ffffff', 0.25)}, ${t.self} 42%, ${mix(t.self, t.bg, 0.28)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, '#ffffff', 0.25)}, ${t.opp} 42%, ${mix(t.opp, t.bg, 0.28)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: radial-gradient(circle, ${wineDeep} 62%, ${gold} 64%, ${goldDeep} 70%, ${ink} 72%) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(rose, 0.7)} !important; }

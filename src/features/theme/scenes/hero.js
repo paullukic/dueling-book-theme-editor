@@ -102,7 +102,7 @@ ${glow('dbtefx-hr-cloud', mix(t.bg, t.opp, 0.22), 0.5, 0.5, 0.5, 0.9)}${glow('db
 ${beam(330, 0)}${beam(1270, 5)}
 <!--mid-->
 ${cloudBank}
-${cardArt(t, { id: 'dbtefx-hr-neos', card: CARDS.neos, x: cx - 270, y: 50, w: 480, h: 680, focus: [0.5, 0.4], zoom: 1, feather: 0.5, fade: 0.7, blend: 'screen', backdrop: mix(t.bg, t.opp, 0.18), backdropAmt: 0.9, glow: t.opp, breathe: 16, grade: 'brightness(0.9) contrast(1.05)' })}
+${cardArt(t, { id: 'dbtefx-hr-neos', card: CARDS.neos, x: cx - 270, y: 50, w: 480, h: 680, focus: [0.5, 0.4], zoom: 1, feather: 0.5, fade: 0.7, blend: 'screen', backdrop: mix(t.bg, t.opp, 0.18), backdropAmt: 0.9, glow: t.opp, breathe: 16, opacity: 0.7, grade: 'brightness(0.72) contrast(1.05)' })}
 <rect x="${cx - 300}" y="260" width="560" height="480" fill="url(#dbtefx-hr-haze)" mask="url(#dbtefx-hr-neos-m)"/>
 <g style="animation: dbtefx-hr-wisp 26s linear infinite;"><ellipse cx="${cx - 40}" cy="${cy + 26}" rx="170" ry="16" fill="url(#dbtefx-hr-wispg)"/></g>
 <g style="animation: dbtefx-hr-wisp 34s linear -15s infinite;"><ellipse cx="${cx + 10}" cy="${cy - 22}" rx="130" ry="12" fill="url(#dbtefx-hr-wispg)"/></g>

@@ -197,7 +197,7 @@ ${sel(['#duel .phase.active::before'])} {
 }
 ${sel(['#duel .phase.active:has(.phase_inner.blue)::before'])} { background: radial-gradient(circle at 18% 22%, ${alpha(t.opp, 0.95)} 0 1.4%, transparent 3.2%), radial-gradient(circle at 86% 74%, ${alpha(t.opp, 0.85)} 0 1.1%, transparent 2.8%), radial-gradient(circle closest-side, transparent 68%, ${alpha(t.opp, 0.75)} 74%, ${alpha(t.opp, 0.28)} 86%, transparent 100%); }
 ${sel(['#duel .phase.active::after'])} {
-  content: ""; position: absolute; right: -6%; top: -20%; width: 66%; height: 66%; pointer-events: none;
+  content: ""; position: absolute; right: -2%; top: -13%; width: 53%; height: 53%; pointer-events: none;
   background: ${lotusBloom} center / contain no-repeat; filter: drop-shadow(0 2px 2px ${alpha(deep, 0.8)});
   transform-origin: 50% 80%; animation: var(--dbte-frog-anim, dbte-frog-bloom 0.6s ease-out both);
 }
@@ -241,7 +241,11 @@ ${SEL.settingsPanel} { border-radius: 28px !important; box-shadow: 0 0 0 1px ${d
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${pad}, ${lime}) !important; border-radius: 99px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${lime} !important; }
 ${sel(['#content .checkbox'])} { border-radius: 5px !important; }
-/* In a duel the moon would sit inside the stage: it moves out to the right gutter. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(430px, 30px); }
+/* In a duel the moon would sit inside the stage: it moves out to the right gutter, whole, and the near pads
+   and the frog follow it out past the stage's right edge. On the menu it shrinks clear of the status filter. */
+html body #dbte-skin-fx .dbtefx-fr-moonup { transform-origin: 1100px 110px; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(350px, 30px) scale(0.75); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-pond { transform: translateX(420px); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, -12px) scale(0.8); }
 `;
 };

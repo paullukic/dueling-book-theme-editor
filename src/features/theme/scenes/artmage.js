@@ -164,7 +164,7 @@ const artmage = (t) => {
 <linearGradient id="dbtefx-am-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${gold}" stop-opacity="0.12"/><stop offset="1" stop-color="${gold}" stop-opacity="0"/></linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-am-wall)"/>
-<g fill="none" stroke="${mix(t.bg, gold, 0.18)}" stroke-width="2">${panels}<path d="M0 780H${W}" stroke-width="4"/><path d="M0 790H${W}" stroke-opacity="0.6"/></g>
+<g fill="none" stroke="${mix(t.bg, gold, 0.18)}" stroke-width="2"><g class="dbtefx-am-wainscot">${panels}</g><path d="M0 780H${W}" stroke-width="4"/><path d="M0 790H${W}" stroke-opacity="0.6"/></g>
 <path d="M0 ${RAIL}H${W}" stroke="${mix(t.bg, gold, 0.5)}" stroke-width="4"/><path d="M0 ${RAIL + 4}H${W}" stroke="#000000" stroke-opacity="0.4" stroke-width="2"/>
 <path d="M${PX + 30} ${RAIL}H${PX + PW - 30}L${PX + PW + 130} ${H}H${PX - 130}Z" fill="url(#dbtefx-am-beam)"/>
 <g class="dbtefx-am-studies">${study(1090, 650, 130, 96, 'ribbon', 'dbtefx-am-s1')}

@@ -13,6 +13,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const white = t.raised;
   const ink = (a) => alpha(t.text, a);
   const red = t.self;
+  // Your life: polished brass, brighter than the bronze ink.
+  const brass = '#d9a52a';
 
   // Sunburst rays, as on the Lightsworn card art behind each figure.
   const rays = (a = 0.5, at = '50% -30%') => `repeating-conic-gradient(from 0deg at ${at}, ${alpha('#ffffff', a)} 0deg 3deg, transparent 3deg 9deg)`;
@@ -113,7 +115,7 @@ ${SEL.chat} { background: linear-gradient(180deg, ${white}, ${t.surface}) !impor
 /* Duel: gilded life bars with a sun-disc cap; phases as halos. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${white}, 0 0 0 2px ${alpha(gold, 0.6)}, 0 3px 8px -3px ${ink(0.4)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 6px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.text, 0.3)}, ${t.self}, ${mix(t.self, gold, 0.4)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.6)}, ${alpha('#ffffff', 0.12)} 45%, transparent 55%), linear-gradient(90deg, ${mix(brass, t.text, 0.25)}, ${brass} 60%, ${mix(brass, '#ffffff', 0.35)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.text, 0.3)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(goldDeep, t.text, 0.45)}, ${mix(goldDeep, t.text, 0.7)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -31px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }
@@ -121,10 +123,13 @@ ${SEL.phase} { background: conic-gradient(from 210deg, ${gold}, ${goldPale}, #ff
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${white} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, #ffffff 35%, ${mix(t.surface, gold, 0.15)}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.1)} 30%, ${mix(t.self, t.text, 0.35)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
+/* Active: a sun disc - deep amber behind the white letters (4.5:1), bright gold rim, rays of light round it. */
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${t.accent} 0 34%, ${alpha(brass, 0.9)} 52%, ${alpha('#f6d878', 0.55)} 74%, ${alpha(brass, 0.35)}), repeating-conic-gradient(from 0deg, ${alpha('#ffffff', 0.85)} 0deg 4deg, transparent 4deg 15deg), ${brass} !important; box-shadow: 0 0 18px ${alpha('#ffe9a0', 0.95)}, 0 0 6px #ffffff; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.1)} 30%, ${mix(t.opp, t.text, 0.35)}) !important; box-shadow: 0 0 16px ${alpha(gold, 0.9)}; }
 ${sel(['#duel .phase span'])} { color: ${goldDeep} !important; text-shadow: 0 1px 0 #ffffff !important; }
-${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${t.text} !important; }
+${sel(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${t.text}, 0 0 4px ${mix(t.accent, t.text, 0.4)} !important; }
+/* The Judgment Dragon washes out behind the duel's chat column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ls-herogrp { display: none; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDeep}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, #ffffff, ${goldPale}) !important; }
 ${sel(['#duel .cout_txt'])} { background: ${rays(0.35, '50% -20%')}, linear-gradient(180deg, ${white}, ${t.surface}) !important; box-shadow: inset 0 0 0 1px ${gold}, inset 0 0 0 4px ${white}, inset 0 0 0 5px ${alpha(gold, 0.5)} !important; }

@@ -42,6 +42,8 @@ export default (t, { SEL, sel, svg, alpha }) => {
     svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} 78.5"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${primary ? mix(gold, '#ffffff', 0.6) : mix(t.raised, t.opp, 0.75)}"/><stop offset="1" stop-color="${primary ? gold : t.surface}"/></linearGradient></defs><rect x="10" y="14" width="${w - 16}" height="58" rx="6" fill="${red}"/><rect x="5" y="9" width="${w - 16}" height="58" rx="6" fill="url(#g)" stroke="${night}" stroke-width="4"/><rect x="10" y="14" width="${w - 26}" height="48" rx="3" fill="none" stroke="${primary ? alpha('#ffffff', 0.55) : alpha(gold, 0.8)}" stroke-width="1.5"/><text x="${(w - 6) / 2}" y="39" dominant-baseline="central" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="${primary ? night : t.text}">${label}</text></svg>`);
   const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const beam = (a) => `linear-gradient(105deg, transparent 38%, ${alpha(moon, a)} 46%, ${alpha(moon, a * 0.4)} 52%, transparent 58%)`;
+  // Power-meter slats over the left of the bar only: the numerals sit in the right 60px of its 151.
+  const slats = `repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px) 0 0 / 90px 100% no-repeat`;
   const frame = (drop = 5) => `inset 0 0 0 1px ${alpha(gold, 0.9)}, inset 0 0 0 3px ${night}, 0 0 0 2px ${night}, ${drop}px ${drop}px 0 2px ${red}`;
 
   const T = (list) => sel(list);
@@ -141,10 +143,10 @@ ${SEL.chat} {
 }
 ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 
-${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 4px 0 0 2px ${red}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
+${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 3px 0 0 2px ${alpha(red, 0.5)}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)}, ${t.self} 40%, ${mix(t.self, red, 0.45)} 75%, ${mix(t.self, night, 0.55)}) !important; }
-${SEL.lifeOpp} { background: repeating-linear-gradient(90deg, transparent 0 13px, ${alpha(night, 0.75)} 13px 15px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
+${SEL.lifeSelf} { background: ${slats}, linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)}, ${t.self} 40%, ${mix(t.self, red, 0.45)} 75%, ${mix(t.self, night, 0.55)}) !important; }
+${SEL.lifeOpp} { background: ${slats}, linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(${alpha(night, 0.7)}, ${alpha(night, 0.7)}), var(--dbte-hero-sky) 0 100% / auto 100% repeat-x, var(--dbte-hero-glow), ${night} !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; -webkit-text-stroke: 4px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
 
@@ -160,10 +162,10 @@ ${sel(['#duel .phase.active::before'])} {
   animation: var(--dbte-hero-anim, dbte-hero-sweep 5s ease-in-out infinite);
 }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 0 ${night}, 0 0 3px ${night} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.text} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${night} !important; -webkit-text-stroke: 0 !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.55)} !important; }
 ${turnBg} { background: ${gold} !important; box-shadow: 0 0 0 2px ${night}, 3px 3px 0 2px ${red}; }
 ${turnInner} { background: ${beam(0.35)}, linear-gradient(180deg, ${mix(t.raised, t.opp, 0.8)}, ${night}) !important; }
-${turnTxt} { color: ${gold} !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 2px 2px 0 ${red} !important; }
+${turnTxt} { color: #ffffff !important; -webkit-text-stroke: 3px ${night}; paint-order: stroke fill; text-shadow: 1px 1px 0 ${night} !important; }
 
 ${ring('::before')} { background: linear-gradient(135deg, ${gold}, ${mix(gold, red, 0.5)} 60%, ${red}) !important; filter: none; }
 ${ring('')} {

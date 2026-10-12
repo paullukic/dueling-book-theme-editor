@@ -39,20 +39,17 @@ const chainRing = (t, kit) => {
     const x = r1(50 + Math.cos(rad) * 40);
     const y = r1(50 + Math.sin(rad) * 40);
     s += i % 2
-      ? `<rect x="-5" y="-1.4" width="10" height="2.8" rx="1.4" fill="${gold}" transform="translate(${x} ${y}) rotate(${a + 90})"/>`
-      : `<rect x="-5.5" y="-3.4" width="11" height="6.8" rx="3.4" fill="none" stroke="${gold}" stroke-width="1.6" transform="translate(${x} ${y}) rotate(${a + 90})"/>`;
+      ? `<rect x="-4.5" y="-1.2" width="9" height="2.4" rx="1.2" fill="${gold}" transform="translate(${x} ${y}) rotate(${a + 90})"/>`
+      : `<rect x="-5" y="-3" width="10" height="6" rx="3" fill="none" stroke="${gold}" stroke-width="1.5" transform="translate(${x} ${y}) rotate(${a + 90})"/>`;
   }
   return kit.svg(100, 100, `<g stroke-linejoin="round">${s}</g>`);
 };
 
-// A short chain of three interlocked oval links running into the life
-// bar's frame: open links side-on, edge-on links as thick bars between.
+// One full oval chain link, threaded through the life bar's frame edge.
 const shackle = (t, kit) => {
   const gold = mix(whiteGold(t), t.bg, 0.1);
   const dark = mix(gold, '#000000', 0.55);
-  const open = (x) => `<rect x="${x}" y="5" width="15" height="14" rx="7" fill="none" stroke="${dark}" stroke-width="4.4"/><rect x="${x}" y="5" width="15" height="14" rx="7" fill="none" stroke="${gold}" stroke-width="2.6"/>`;
-  const edge = (x) => `<rect x="${x}" y="9.6" width="13" height="4.8" rx="2.4" fill="${gold}" stroke="${dark}" stroke-width="1"/>`;
-  return kit.svg(48, 24, `${open(1)}${edge(12)}${open(22)}${edge(33)}`);
+  return kit.svg(30, 22, `<rect x="2" y="2" width="26" height="18" rx="9" fill="none" stroke="${dark}" stroke-width="4.6"/><rect x="2" y="2" width="26" height="18" rx="9" fill="none" stroke="${gold}" stroke-width="2.8"/><path d="M8 4.6h12" stroke="#ffffff" stroke-opacity="0.55" stroke-width="0.9" stroke-linecap="round"/>`);
 };
 
 // Pop-up buttons: a black-crimson plate in a solid gilt rim, a cross-brand
@@ -175,11 +172,11 @@ ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 /* Duel: a chained life bar, brand crimson against white-gold; chained phases. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px #000000, 0 0 16px -4px ${alpha(t.accent, 0.8)} !important; }
 ${sel(['#duel .lifepoints .life_border::before'])} {
-  content: ""; position: absolute; left: -44px; top: 50%; width: 48px; height: 24px; margin-top: -12px; pointer-events: none;
+  content: ""; position: absolute; left: -17px; top: 50%; width: 30px; height: 22px; margin-top: -11px; pointer-events: none;
   background: ${svgUrl(shackle(t, kit))} center / contain no-repeat;
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: radial-gradient(ellipse 30% 80% at 90% 100%, ${alpha(wg, 0.6)}, transparent), linear-gradient(180deg, ${alpha(wg, 0.4)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: radial-gradient(ellipse 30% 80% at 90% 100%, ${alpha('#ffffff', 0.4)}, transparent), linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, '#8a5418', 0.5)}, ${mix(t.self, t.warning, 0.3)}) !important; box-shadow: inset -3px 0 0 ${t.accent}, inset 0 -2px 0 ${alpha('#5a2a08', 0.5)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(120deg, transparent 30%, ${alpha('#ffffff', 0.35)} 31%, transparent 36%, transparent 62%, ${alpha('#ffffff', 0.3)} 63%, transparent 67%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--br-cracks), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
@@ -188,7 +185,7 @@ ${SEL.phase} { background: ${gold} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: radial-gradient(circle at 50% 70%, ${alpha(t.accent, 0.25)}, transparent 60%), ${stone} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -14px; pointer-events: none;
+  content: ""; position: absolute; inset: -9px; pointer-events: none;
   background: ${svgUrl(chainRing(t, kit))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 22px ${alpha(t.accent, 0.85)}, 0 0 6px ${wg} !important; }
@@ -235,6 +232,6 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 /* Scrollbars: a gold chain bar. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-herogrp { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bd-herogrp, .dbtefx-bd-edge) { display: none; }
 `;
 };

@@ -69,9 +69,9 @@ ${CARD_ART_KEYFRAMES}
 ${deck}
 <g ${zoomTo}>${radar}</g>
 <!--mid-->
-${ace}
+<g class="dbtefx-ss-acegrp">${ace}</g>
 ${speed}
-<g ${zoomTo}>${frame}</g>
+<g class="dbtefx-ss-hud" ${zoomTo}>${frame}</g>
 <!--near-->
 <g transform="translate(1430 806) scale(0.6)">
 <ellipse rx="230" ry="46" fill="url(#dbtefx-ss-pad)"/>

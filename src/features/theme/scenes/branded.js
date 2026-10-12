@@ -28,7 +28,7 @@ const branded = (t) => {
   };
 
   // Mirrorjade's floating crystal shards, each scored with a brand.
-  const shard = (x, y, s, d) => `<g ${anim('bob', 5 + d, d, 'ease-in-out')}><path d="M${x} ${n1(y - 40 * s)}L${n1(x + 16 * s)} ${n1(y - 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}L${n1(x - 12 * s)} ${n1(y + 8 * s)}Z" fill="url(#dbtefx-bd-ice)" stroke="${ice}" stroke-opacity="0.8" stroke-width="1.5"/><path d="M${x} ${n1(y - 40 * s)}L${n1(x - 2 * s)} ${n1(y + 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}" fill="none" stroke="#ffffff" stroke-opacity="0.4"/><path d="${crossBrand(x + 1 * s, y, 0.28 * s)}" fill="${brand}" fill-opacity="0.85"/></g>`;
+  const shard = (x, y, s, d, cls = '') => `<g${cls && ` class="${cls}"`} ${anim('bob', 5 + d, d, 'ease-in-out')}><path d="M${x} ${n1(y - 40 * s)}L${n1(x + 16 * s)} ${n1(y - 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}L${n1(x - 12 * s)} ${n1(y + 8 * s)}Z" fill="url(#dbtefx-bd-ice)" stroke="${ice}" stroke-opacity="0.8" stroke-width="1.5"/><path d="M${x} ${n1(y - 40 * s)}L${n1(x - 2 * s)} ${n1(y + 6 * s)}L${n1(x + 8 * s)} ${n1(y + 38 * s)}" fill="none" stroke="#ffffff" stroke-opacity="0.4"/><path d="${crossBrand(x + 1 * s, y, 0.28 * s)}" fill="${brand}" fill-opacity="0.85"/></g>`;
 
   // Burning crags of the wasteland.
   let crags = `M0 ${H}`;
@@ -57,7 +57,7 @@ const branded = (t) => {
 <path d="M1130 900L${ridge.slice(1)}L1600 900Z" fill="${mix(t.bg, '#000000', 0.4)}"/>
 <path d="${ridge}" fill="none" stroke="${t.accent}" stroke-opacity="0.55" stroke-width="2"/>
 <g style="transform-origin: 1340px 760px; animation: dbtefx-bd-brand 4s ease-in-out infinite;"><circle cx="1340" cy="760" r="56" fill="url(#dbtefx-bd-core)"/><path d="${crossBrand(1340, 756, 0.8)}" fill="${brand}" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2"/><path d="M1340 749L1345 756L1340 763L1335 756Z" fill="#ffffff"/></g>
-${shard(1150, 70, 0.7, 0)}${shard(1490, 520, 0.8, 1.6)}${shard(1120, 560, 0.65, 3)}`;
+${shard(1150, 70, 0.7, 0)}${shard(1490, 520, 0.8, 1.6, 'dbtefx-bd-edge')}${shard(1120, 560, 0.65, 3)}`;
 };
 
 export default branded;

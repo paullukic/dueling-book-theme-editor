@@ -32,13 +32,13 @@ export default (t0, { SEL, sel, svg, svgUrl, alpha }) => {
   const pin = (x) => `<path d="M${x} 6L${x + 4} 18H${x - 4}Z" fill="${silver}"/><path d="M${x - 5} 18H${x + 5}V44H${x - 5}Z" fill="${velvetDeep}" stroke="${silver}" stroke-width="1.3"/><path d="M${x} 23A2.5 2.5 0 0 1 ${x + 2.5} 26V34H${x - 2.5}V26A2.5 2.5 0 0 1 ${x} 23Z" fill="${t.accent}" fill-opacity="0.8"/>`;
   const gable = svg(160, 60, `<path d="M20 44H140" stroke="${silver}" stroke-width="2"/>${pin(30)}${pin(130)}<path d="M52 44V28A30 30 0 0 1 80 2A30 30 0 0 1 108 28V44Z" fill="${velvetDeep}" stroke="${silver}" stroke-width="1.6"/><path d="M59 44V30A23 23 0 0 1 80 10A23 23 0 0 1 101 30V44" fill="none" stroke="${silver}" stroke-opacity="0.55" stroke-width="0.9"/><circle cx="80" cy="29" r="10" fill="${mix(t.accent, t.bg, 0.4)}" stroke="${silver}" stroke-width="1.2"/><g fill="none" stroke="${silver}" stroke-width="0.8"><circle cx="80" cy="24.5" r="4.5"/><circle cx="80" cy="33.5" r="4.5"/><circle cx="75.5" cy="29" r="4.5"/><circle cx="84.5" cy="29" r="4.5"/></g><circle cx="80" cy="29" r="1.8" fill="${crystal}"/><path d="M36 44H124V48H36Z" fill="${silver}"/>${drop(48, 48)}${drop(64, 48, 0.8)}${drop(80, 48, 1.3)}${drop(96, 48, 0.8)}${drop(112, 48)}`);
 
-  // Rose window tracery laid over the phase discs.
-  let petals = '';
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2;
-    petals += `<circle cx="${(22.5 + Math.cos(a) * 12.5).toFixed(2)}" cy="${(22.5 + Math.sin(a) * 12.5).toFixed(2)}" r="6.6"/>`;
+  // Rose window tracery on the phase discs: only the rim, so the letters stand on clear glass.
+  let cusps = '';
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    cusps += `<circle cx="${(22.5 + Math.cos(a) * 20.5).toFixed(2)}" cy="${(22.5 + Math.sin(a) * 20.5).toFixed(2)}" r="2.6"/>`;
   }
-  const rose = svg(45, 45, `<g fill="none" stroke="${silver}" stroke-opacity="0.32" stroke-width="0.9">${petals}<circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="6"/></g>`);
+  const rose = svg(45, 45, `<g fill="none" stroke="${silver}" stroke-opacity="0.32" stroke-width="0.9">${cusps}<circle cx="22.5" cy="22.5" r="20.5"/><circle cx="22.5" cy="22.5" r="17.6" stroke-opacity="0.2"/></g>`);
 
   // A silver candelabrum of three lit candles standing at the life bar's end.
   const flame = (x, y, k = 1) => `<ellipse cx="${x}" cy="${y - 4 * k}" rx="${4.6 * k}" ry="${6 * k}" fill="${alpha(t.warning, 0.28)}"/><path d="M${x} ${y - 8.5 * k}C${x + 2.6 * k} ${y - 4.5 * k} ${x + 2.4 * k} ${y} ${x} ${y}C${x - 2.4 * k} ${y} ${x - 2.6 * k} ${y - 4.5 * k} ${x} ${y - 8.5 * k}Z" fill="${t.warning}"/><path d="M${x} ${y - 5 * k}C${x + 1 * k} ${y - 3 * k} ${x + 1 * k} ${y - 0.6 * k} ${x} ${y - 0.6 * k}C${x - 1 * k} ${y - 0.6 * k} ${x - 1 * k} ${y - 3 * k} ${x} ${y - 5 * k}Z" fill="#ffffff"/>`;
@@ -46,6 +46,8 @@ export default (t0, { SEL, sel, svg, svgUrl, alpha }) => {
   const candle = (x, top, bot) => `<rect x="${x - 1.9}" y="${top}" width="3.8" height="${bot - top}" rx="0.8" fill="${wax}"/><path d="M${x - 3.6} ${bot}H${x + 3.6}L${x + 2.4} ${bot + 2}H${x - 2.4}Z" fill="${silver}"/>`;
   const candelabrum = svg(36, 48, `<g fill="none" stroke="${silver}" stroke-width="1.6" stroke-linecap="round"><path d="M18 40V22"/><path d="M18 30C12 30 6 29 6 22M18 30C24 30 30 29 30 22"/></g><path d="M11 46H25L21.5 41H14.5Z" fill="${silver}"/><circle cx="18" cy="34" r="2.2" fill="${t.accent}" stroke="${silver}" stroke-width="0.8"/>${candle(6, 13, 21)}${candle(30, 13, 21)}${candle(18, 8, 21)}${flame(6, 12.5)}${flame(30, 12.5)}${flame(18, 7.5, 1.15)}`);
 
+  // Your side's life: a lit rose, not the velvet's maroon.
+  const roseLit = '#b8546e';
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.accent, 0.45)} !important;`;
   const velvetBg = (lift = 0) => `radial-gradient(ellipse 70% 90% at 50% 0%, ${alpha(mix(t.accent, '#ffffff', 0.15), 0.22 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${velvet}, ${velvetDeep})`;
 
@@ -100,9 +102,11 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: silver-framed life bars lit by a candelabrum; rose-window phases. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${velvetDeep}, 0 0 0 2px ${alpha(silver, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.42)}, ${alpha('#ffffff', 0.08)} 45%, transparent 55%), var(--dbtc-u2), linear-gradient(90deg, ${mix(roseLit, t.bg, 0.3)}, ${roseLit} 60%, ${mix(roseLit, '#ffffff', 0.2)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -30px; top: -14px; width: 33px; height: 44px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
+/* The top bar sits on the viewport edge: its candelabrum stands lower and shorter so the flames stay whole. */
+${on(sel(['#duel #lifepoints2']), 'before')} { top: -2px; height: 36px; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 200deg, ${silver}, ${silverDim}, ${t.text}, ${silverDim}, ${silver}) !important; box-shadow: 0 0 0 1px ${velvetDeep}, 0 4px 10px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
@@ -151,5 +155,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss(popPrimary, popSecondary)}
 /* In a duel the rose window and the swag cords would hang over the board. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-lb-rosewin, .dbtefx-lb-tassels) { display: none; }
+/* On the menu the rose window rises and dims behind the title and its carousel dots. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-lb-rosewin { transform: translateY(-90px); opacity: 0.4; }
 `;
 };

@@ -214,6 +214,8 @@ ${SEL.settingsPanel} { background: var(--dbte-am-swash) 100% 100% / 130px 22px n
 ${sel(['#content .os-scrollbar-handle'])} { background: ${metal} !important; border-radius: 1px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, inset 0 0 0 2.5px ${brown} !important; }
 /* In a duel the stage covers the gallery: the painting, its ribbon, the brush and the studies would show through empty zones. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery) { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery, .dbtefx-am-wainscot) { display: none; }
+/* The status feed spans the menu: the hung canvases and the brush stay off it. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery) { display: none; }
 `;
 };

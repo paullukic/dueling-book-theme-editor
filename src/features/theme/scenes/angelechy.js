@@ -231,7 +231,7 @@ ${behind}${solid}${extra}</g>`;
 <linearGradient id="dbtefx-ae-lsq" gradientUnits="userSpaceOnUse" x1="0" y1="${at(0, Z0 + 8)[1]}" x2="0" y2="${H}"><stop offset="0" stop-color="${mix(t.bg, t.text, 0.16)}"/><stop offset="1" stop-color="${lightSq}"/></linearGradient>
 <linearGradient id="dbtefx-ae-dsq" gradientUnits="userSpaceOnUse" x1="0" y1="${at(0, Z0 + 8)[1]}" x2="0" y2="${H}"><stop offset="0" stop-color="${mix(t.bg, t.opp, 0.08)}"/><stop offset="1" stop-color="${darkSq}"/></linearGradient>
 ${shapes}
-<radialGradient id="dbtefx-ae-e4" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.75"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.15"/></radialGradient>
+<radialGradient id="dbtefx-ae-e4" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.45"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0.09"/></radialGradient>
 <radialGradient id="dbtefx-ae-sheen" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${t.accent}" stop-opacity="0.4"/><stop offset="1" stop-color="${t.accent}" stop-opacity="0"/></radialGradient>
 </defs>
 <g fill="none" stroke="${gold}" stroke-opacity="0.35"><path d="${ring(6.1, Z0 + 4)}" stroke-width="1.5"/><path d="${ring(6.6, Z0 + 4)}" stroke-width="2.5"/><path d="${ticks}" stroke-opacity="0.25"/></g>
@@ -242,7 +242,7 @@ ${shapes}
 <ellipse cx="${sx}" cy="${at(0, Z0 + 5)[1]}" rx="70" ry="150" fill="url(#dbtefx-ae-sheen)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
 <path d="${e4}" fill="url(#dbtefx-ae-e4)" ${anim('pulse', 4, 0, 'ease-in-out')}/>
 <path d="${quad(BOFF - 4.25, Z0 + 3, BOFF + 4.25, Z0 + 8.25)}" fill="url(#dbtefx-ae-fog)"/>
-${rook}<g class="dbtefx-ae-hero">${king}</g>${pawn}<g class="dbtefx-ae-hero">${knight}</g>`;
+<g class="dbtefx-ae-pieces">${rook}<g class="dbtefx-ae-hero">${king}</g>${pawn}<g class="dbtefx-ae-hero">${knight}</g></g>`;
 };
 
 export default angelechy;

@@ -113,7 +113,7 @@ const lifeBlade = (t, kit, teal, low = false) => {
     + `<path d="M10 0.4H146" stroke="${mix(t.text, rimA, 0.4)}" stroke-opacity="0.55" stroke-width="0.6"/>`
     + `<path d="M10 30.8H146" stroke="#000000" stroke-width="0.8"/>`
     + `<path d="M151 2.4L155.6 15.5L151 28.6" fill="none" stroke="${mix(t.text, rimA, 0.3)}" stroke-opacity="0.5" stroke-width="0.6"/>`
-    + `<path d="M153.6 15.5l-2-1.9v3.8z" fill="${low ? t.danger : t.accent2}"/>`
+    + `<path d="M153.6 15.5l-2-1.9v3.8z" fill="${low ? t.danger : teal}"/>`
     + '</svg>';
 };
 
@@ -173,7 +173,7 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; inset: 1px; pointer-events: none; opacity: 0.7;
-  background: linear-gradient(90deg, ${teal}, ${t.accent} 60%, transparent) left top / 100% 2px no-repeat, var(--bw-wing) 2px bottom / auto 92% no-repeat, var(--bw-quills) right bottom / auto 62% no-repeat; transition: filter 0.2s, opacity 0.2s;
+  background: linear-gradient(90deg, ${teal}, ${t.accent} 60%, transparent) left top / 100% 2px no-repeat, var(--bw-wing) 2px bottom / auto 92% no-repeat, var(--bw-quills) right bottom / auto 46% no-repeat; transition: filter 0.2s, opacity 0.2s;
 }
 ${SEL.tileHover} {
   background: ${notchLine(teal)}, linear-gradient(-45deg, transparent calc(50% - 0.7px), ${t.accent} 0 calc(50% + 0.7px), transparent 0) right bottom / 9px 9px no-repeat, ${oil(0.24)}, ${jet} !important;
@@ -272,24 +272,23 @@ ${sel(['#duel .lifepoints::before'])} {
 }
 ${sel(['#duel #lifepoints2::before'])} { left: -79px; top: -10px; width: 90px; height: 52px; background-image: ${svgUrl(lifeWing(t, kit, teal, true))}; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
-${SEL.lifeOpp} { background: ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
+${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
+${SEL.lifeOpp} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(t.bg, t.raised, 0.6)}, #000000) !important; }
-${sel(['#duel .lifepoints[data-dbte-lp~="hit"] .life_bar::after'])} {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(105deg, transparent 20%, ${alpha(teal, 0.55)} 42%, ${alpha('#ffffff', 0.5)} 50%, ${alpha(teal, 0.4)} 58%, transparent 78%);
-}
+/* A hit rakes a sheen across the fill in the side's own colour; it sits under the empty track (.black_bar) so that stays dark. */
+${sel(['#duel #lifepoints1[data-dbte-lp~="hit"]'])} { --bw-hit: linear-gradient(105deg, transparent 20%, ${alpha(teal, 0.55)} 42%, ${alpha('#ffffff', 0.5)} 50%, ${alpha(teal, 0.4)} 58%, transparent 78%); }
+${sel(['#duel #lifepoints2[data-dbte-lp~="hit"]'])} { --bw-hit: linear-gradient(105deg, transparent 20%, ${alpha(t.opp, 0.55)} 42%, ${alpha('#ffffff', 0.5)} 50%, ${alpha(t.opp, 0.4)} 58%, transparent 78%); }
 
 ${SEL.phase} { background: ${mix(t.border, t.accent, 0.5)} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${jet} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -8px; pointer-events: none;
+  content: ""; position: absolute; inset: -3px; pointer-events: none;
   background: ${svgUrl(wreath(t, kit, teal))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 18px ${alpha(t.self, 0.75)} !important; }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 18px ${alpha(t.opp, 0.75)} !important; }
-${sel(['#duel .phase span'])} { text-shadow: 0 1px 0 #000000 !important; }
+${sel(['#duel .phase span'])} { color: #dcd8ee !important; text-shadow: 0 1px 0 #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${t.accent} !important; border-radius: 0 !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: ${jet} !important; border-radius: 0 !important; }
 ${sel(['#duel #watchers'])} { background: ${panel} !important; box-shadow: inset 0 0 0 1px ${alpha(t.accent, 0.4)}, inset 3px 0 0 ${teal} !important; }
