@@ -25,6 +25,8 @@ export const LP_SKEW_VAR = '--dbte-lp-skew';
 // (e.g. polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)), so the hit
 // ring follows it.
 export const LP_CLIP_VAR = '--dbte-lp-clip';
+// A theme whose frame is drawn on a pseudo-element (not the box) sets this to transparent to drop the rectangular low outline.
+export const LP_OUTLINE_VAR = '--dbte-lp-outline';
 // A theme that draws its own hit (a palette-only blink keyed on
 // [data-dbte-lp~="hit"] on the frame's parts) sets this to `none` on
 // .lifepoints or above: the hit's coloured rim and its ring stand aside.

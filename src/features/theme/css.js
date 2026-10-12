@@ -575,7 +575,7 @@ html body #duel #lifepoints1 .life_txt, html body #duel #lifepoints2 .life_txt {
    never reads like a healthy (red) side colour and never costs the number its
    contrast. */
 html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_border {
-  outline: 2px solid var(--dbt-danger) !important; outline-offset: 1px !important;
+  outline: 2px solid var(--dbte-lp-outline, var(--dbt-danger)) !important; outline-offset: 1px !important;
 }
 html:not([data-dbte-lpstyle]) body #duel :is(#lifepoints1, #lifepoints2):is([data-dbte-lp~="low"], [data-dbte-lp~="zero"]) .life_bar {
   background: repeating-linear-gradient(135deg, color-mix(in srgb, black 14%, transparent) 0 1.5px, transparent 1.5px 7px), linear-gradient(90deg, oklch(from var(--dbt-danger) ${rampEnd} c h), var(--dbt-danger) 55%) !important;

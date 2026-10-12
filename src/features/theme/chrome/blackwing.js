@@ -273,7 +273,7 @@ ${sel(['#duel .lifepoints::before'])} {
 ${sel(['#duel #lifepoints2::before'])} { left: -79px; top: -10px; width: 90px; height: 52px; background-image: ${svgUrl(lifeWing(t, kit, teal, true))}; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
 /* The hit ring follows the blade: the cut hilt corner and the point. */
-${sel(['#duel .lifepoints'])} { --dbte-lp-clip: polygon(0 0, 147px 0, 100% 50%, 147px 100%, 6px 100%, 0 calc(100% - 6px)); }
+${sel(['#duel .lifepoints'])} { --dbte-lp-clip: polygon(0 0, 147px 0, 100% 50%, 147px 100%, 6px 100%, 0 calc(100% - 6px)); --dbte-lp-outline: transparent; }
 ${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, ${alpha('#ffffff', 0.2)} 30%, transparent 42%, transparent 70%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
 ${SEL.lifeOpp} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(t.bg, t.raised, 0.6)}, #000000) !important; }
