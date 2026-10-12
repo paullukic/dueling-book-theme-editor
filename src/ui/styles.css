@@ -1519,15 +1519,15 @@ textarea.field {
   gap: 5px;
 }
 
-/* A setting reached from search: pulses once, then settles. */
+/* A setting reached from search: holds long enough to find after the scroll, then fades slowly. */
 .place-flash {
   border-radius: var(--radius-sm);
-  animation: dbte-place-flash 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: dbte-place-flash 4.5s ease-out;
 }
 
 @keyframes dbte-place-flash {
   0%,
-  35% {
+  55% {
     background-color: color-mix(in srgb, var(--gold) 12%, transparent);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 12%, transparent), 0 0 0 6px var(--gold);
   }

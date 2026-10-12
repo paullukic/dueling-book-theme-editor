@@ -328,7 +328,7 @@ const reveal = (root, jump) => {
   // Restart the animation when the same place is opened twice in a row.
   void el.offsetWidth;
   el.classList.add('place-flash');
-  setTimeout(() => el.classList.remove('place-flash'), 1700);
+  setTimeout(() => el.classList.remove('place-flash'), 4600);
   if (found === jump.place) return '';
   return `“${target.label}” ${target.needs || `is inside “${placeById[found].label}”`}.`;
 };
