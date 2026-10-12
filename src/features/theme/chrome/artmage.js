@@ -94,7 +94,7 @@ ${SEL.tile} {
   box-shadow: inset 0 0 0 2px ${robe}, inset 0 0 0 3px ${piping}, inset 0 -14px 24px -12px ${alpha('#000000', 0.5)}, 0 12px 22px -12px #000000 !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; left: 6px; bottom: 5px; width: 28px; height: 23px; pointer-events: none;
+  content: ""; position: absolute; left: 4px; bottom: 3px; width: 20px; height: 16px; pointer-events: none;
   background: var(--dbte-am-palette) center / contain no-repeat; filter: drop-shadow(0 1px 2px ${deep});
 }
 ${SEL.tileHover} {
@@ -217,5 +217,13 @@ ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery, .dbtefx-am-wainscot) { display: none; }
 /* The status feed spans the menu: the hung canvases and the brush stay off it. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-brush, .dbtefx-am-studies, .dbtefx-am-gallery) { display: none; }
+/* The gutter pieces belong to the duel and the menu only; the right study stays quiet beside the duel's avatars. */
+html body #dbte-skin-fx :is(.dbtefx-am-easel, .dbtefx-am-wing) { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-am-easel, .dbtefx-am-wing) { display: inline; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-am-wing { opacity: 0.6; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-am-wing { display: inline; }
+/* On the front page the masterwork hangs lower, clear of the Welcome / Forum / Rules links; the brush handle would cross them. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-am-gallery { transform: translateY(94px); }
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-am-brush { display: none; }
 `;
 };

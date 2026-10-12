@@ -128,8 +128,8 @@ ${back}<ellipse cx="${x}" cy="${n1(y - h * 0.42)}" rx="${n1(wd * 0.8)}" ry="${n1
 <rect y="${horizon}" width="${W}" height="${H - horizon}" fill="url(#dbtefx-fr-water)"/>
 <use href="#dbtefx-fr-bank" transform="matrix(1 0 0 -0.6 0 ${n1(horizon * 1.6 + 6)})" opacity="0.4"/>
 <path d="${surface}" stroke="${moon}" stroke-opacity="0.07" stroke-width="1.5"/>
-<ellipse cx="1100" cy="${horizon + 140}" rx="240" ry="170" fill="url(#dbtefx-fr-moon)"/>
-${shimmer}
+<g class="dbtefx-fr-glintgrp"><ellipse cx="1100" cy="${horizon + 140}" rx="240" ry="170" fill="url(#dbtefx-fr-moon)"/>
+${shimmer}</g>
 <ellipse cx="420" cy="${horizon + 6}" rx="560" ry="30" fill="url(#dbtefx-fr-mist)" ${anim('drift', 30, 0, 'ease-in-out')}/>
 <ellipse cx="1150" cy="${horizon + 12}" rx="480" ry="26" fill="url(#dbtefx-fr-mist)" ${anim('drift', 36, 12, 'ease-in-out')}/>
 ${pad(640, 391, 30, 60, 0.22, 0.2)}${pad(960, 398, 42, 300, 0.24, 0.22)}${pad(1012, 408, 26, 160, 0.24, 0.2)}${pad(1490, 396, 36, 250, 0.22, 0.22)}

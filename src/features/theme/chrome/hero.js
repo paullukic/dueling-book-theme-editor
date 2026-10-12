@@ -12,6 +12,8 @@ const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[
 export default (t, { SEL, sel, svg, alpha }) => {
   const gold = t.accent;
   const red = t.accent2;
+  // In a duel the panel drops are navy: red edges round the chat and the life bar read as alerts.
+  const navy = t.border;
   const night = mix(t.bg, '#000000', 0.6);
   const moon = mix(gold, '#ffffff', 0.45);
   // The Hero Signal: spiked H in a moon disc.
@@ -73,7 +75,7 @@ ${SEL.tile} {
   box-shadow: ${frame(5)} !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; left: 6px; top: 5px; width: 18px; height: 18px; pointer-events: none;
+  content: ""; position: absolute; left: 4px; top: 3px; width: 15px; height: 15px; pointer-events: none;
   background: ${signal(gold)} center / contain no-repeat;
   filter: drop-shadow(0 0 6px ${alpha(moon, 0.5)}); opacity: 0.9;
 }
@@ -143,7 +145,7 @@ ${SEL.chat} {
 }
 ${sel(['#chats .chat .black_line'])} { background-color: ${gold} !important; }
 
-${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 3px 0 0 2px ${alpha(red, 0.5)}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
+${SEL.life} { border-color: ${gold} !important; border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 3px 0 0 2px ${navy}, 0 0 14px -4px ${alpha(gold, 0.6)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: ${slats}, linear-gradient(180deg, ${mix(t.self, '#ffffff', 0.45)}, ${t.self} 40%, ${mix(t.self, red, 0.45)} 75%, ${mix(t.self, night, 0.55)}) !important; }
 ${SEL.lifeOpp} { background: ${slats}, linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.7)}, ${t.opp} 50%, ${mix(t.opp, night, 0.6)}) !important; }
@@ -200,7 +202,7 @@ ${SEL.field} {
 }
 ${sel(['#content input[type=text]:focus', '#content input[type=password]:focus', '#content textarea:focus'])} { outline: 2px solid ${gold} !important; box-shadow: 3px 3px 0 ${red}, 0 0 14px -2px ${alpha(gold, 0.6)} !important; }
 
-${duelPanels} { border-color: ${night} !important; border-radius: 4px !important; box-shadow: inset 0 0 0 1px ${alpha(gold, 0.7)}, 0 0 0 2px ${night}, 4px 4px 0 2px ${red} !important; }
+${duelPanels} { border-color: ${night} !important; border-radius: 4px !important; box-shadow: inset 0 0 0 1px ${alpha(gold, 0.7)}, 0 0 0 2px ${night}, 4px 4px 0 2px ${navy} !important; }
 ${sel(['#duel .cout_txt'])} { background: var(--dbte-hero-dots), linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; }
 ${SEL.settingsPanel} { border-radius: 4px !important; box-shadow: 0 0 0 2px ${night}, 6px 6px 0 2px ${red} !important; }
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${gold}, ${mix(gold, red, 0.5)}) !important; border-radius: 2px !important; }

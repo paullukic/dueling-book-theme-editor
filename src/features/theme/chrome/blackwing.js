@@ -173,7 +173,7 @@ ${SEL.tile} {
 }
 ${sel(['#main_menu .menu_btn .content::before'])} {
   content: ""; position: absolute; inset: 1px; pointer-events: none; opacity: 0.7;
-  background: linear-gradient(90deg, ${teal}, ${t.accent} 60%, transparent) left top / 100% 2px no-repeat, var(--bw-wing) 2px bottom / auto 92% no-repeat, var(--bw-quills) right bottom / auto 46% no-repeat; transition: filter 0.2s, opacity 0.2s;
+  background: linear-gradient(90deg, ${teal}, ${t.accent} 60%, transparent) left top / 100% 2px no-repeat, var(--bw-wing) 1px bottom / auto 72% no-repeat, var(--bw-quills) right bottom / auto 46% no-repeat; transition: filter 0.2s, opacity 0.2s;
 }
 ${SEL.tileHover} {
   background: ${notchLine(teal)}, linear-gradient(-45deg, transparent calc(50% - 0.7px), ${t.accent} 0 calc(50% + 0.7px), transparent 0) right bottom / 9px 9px no-repeat, ${oil(0.24)}, ${jet} !important;
@@ -272,7 +272,9 @@ ${sel(['#duel .lifepoints::before'])} {
 }
 ${sel(['#duel #lifepoints2::before'])} { left: -79px; top: -10px; width: 90px; height: 52px; background-image: ${svgUrl(lifeWing(t, kit, teal, true))}; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 0 !important; }
-${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
+/* The hit ring follows the blade: the cut hilt corner and the point. */
+${sel(['#duel .lifepoints'])} { --dbte-lp-clip: polygon(0 0, 147px 0, 100% 50%, 147px 100%, 6px 100%, 0 calc(100% - 6px)); }
+${SEL.lifeSelf} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.22)}, linear-gradient(180deg, ${alpha('#ffffff', 0.5)}, ${alpha('#ffffff', 0.2)} 30%, transparent 42%, transparent 70%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self} 70%, ${mix(t.self, t.opp, 0.35)}) !important; }
 ${SEL.lifeOpp} { background: var(--bw-hit, linear-gradient(transparent, transparent)), ${oil(0.18)}, linear-gradient(180deg, ${alpha('#ffffff', 0.2)}, transparent 40%, ${alpha('#000000', 0.25)}), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp} 70%, ${mix(t.opp, t.self, 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(t.bg, t.raised, 0.6)}, #000000) !important; }
 /* A hit rakes a sheen across the fill in the side's own colour; it sits under the empty track (.black_bar) so that stays dark. */
@@ -283,7 +285,7 @@ ${SEL.phase} { background: ${mix(t.border, t.accent, 0.5)} !important; border-ra
 ${sel(['#duel .phase .background .background_inner'])} { background: ${jet} !important; border-radius: 50% !important; }
 ${sel(['#duel .phase .background .background_top', '#duel .phase .phase_inner'])} { border-radius: 50% !important; }
 ${sel(['#duel .phase .background::after'])} {
-  content: ""; position: absolute; inset: -3px; pointer-events: none;
+  content: ""; position: absolute; inset: -3px; pointer-events: none; transform: scale(0.92);
   background: ${svgUrl(wreath(t, kit, teal))} center / 100% 100% no-repeat;
 }
 ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 18px ${alpha(t.self, 0.75)} !important; }

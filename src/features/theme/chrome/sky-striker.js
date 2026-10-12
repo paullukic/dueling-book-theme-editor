@@ -45,7 +45,7 @@ export default (t, { SEL, sel, svg, alpha }) => {
   };
   const imgSel = (name) => sel([`#content img[src*="/svg/${name}"]`]);
   const hudText = (c) => `0 0 6px ${alpha(c, 0.85)}, 0 0 1px ${c}, 2px 2px 0 ${deep}`;
-  const reticle = svgUrl(svg(80, 80, `<g fill="none" stroke="${red}" stroke-width="2.5"><path d="M4 22V4h18M58 4h18v18M76 58v18H58M22 76H4V58"/><circle cx="40" cy="40" r="34" stroke-width="1" stroke-dasharray="4 6" stroke-opacity="0.8"/></g><g stroke="${red}" stroke-width="2"><path d="M40 0v9M40 71v9M0 40h9M71 40h9"/></g>`));
+  const reticle = svgUrl(svg(80, 80, `<g fill="none" stroke="#ffffff" stroke-width="2.5"><path d="M4 22V4h18M58 4h18v18M76 58v18H58M22 76H4V58"/><circle cx="40" cy="40" r="34" stroke-width="1" stroke-dasharray="4 6" stroke-opacity="0.8"/></g><g stroke="${mix(cyan, '#ffffff', 0.4)}" stroke-width="2"><path d="M40 0v9M40 71v9M0 40h9M71 40h9"/></g>`));
 
   const T = (list) => sel(list);
   const titles = T(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#content .subtitle']);
@@ -219,6 +219,8 @@ ${SEL.settingsPanel} { background-image: ${brackets(t.text, 14, 2)} !important; 
 ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradient(0deg, ${cyan} 0 4px, transparent 4px 6px) !important; border-radius: 0 !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { border-radius: 0 !important; box-shadow: inset 0 0 0 1.5px ${cyan} !important; }
 ${sel(['#content .radiobutton'])} { transform: rotate(45deg) scale(0.85); }
+/* The front-page links sit over the ace's red armour: a dark plate keeps them legible. */
+${sel(['#welcome_buttons > span'])} { background: ${alpha(deep, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(deep, 0.9)} !important; border-radius: 0; }
 /* The chat column cuts the ace in a duel: she recedes; the radar's bearing ring stays off the menu's status feed. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-acegrp { opacity: 0.7; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-hud { display: none; }

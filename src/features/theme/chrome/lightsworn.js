@@ -112,10 +112,13 @@ ${on(SEL.chatTop, 'after')} { content: ""; position: absolute; left: 0; right: 0
 ${sel(['#chats .chat .chat_top span'])} { color: ${t.text} !important; }
 ${SEL.chat} { background: linear-gradient(180deg, ${white}, ${t.surface}) !important; box-shadow: inset 1px 0 0 ${gold}, inset -1px 0 0 ${gold}, inset 0 -1px 0 ${gold} !important; }
 
+/* Status feed: the like / dislike thumbs get a dark outline so they hold on the cream page. */
+${sel(['#main_menu img[src*="/svg/like_btn"]', '#main_menu img[src*="/svg/dislike_btn"]'])} { filter: drop-shadow(0.6px 0 0 ${ink(0.75)}) drop-shadow(-0.6px 0 0 ${ink(0.75)}) drop-shadow(0 0.6px 0 ${ink(0.75)}) drop-shadow(0 -0.6px 0 ${ink(0.75)}); }
+
 /* Duel: gilded life bars with a sun-disc cap; phases as halos. */
 ${SEL.life} { border-color: ${gold} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${white}, 0 0 0 2px ${alpha(gold, 0.6)}, 0 3px 8px -3px ${ink(0.4)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 6px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.6)}, ${alpha('#ffffff', 0.12)} 45%, transparent 55%), linear-gradient(90deg, ${mix(brass, t.text, 0.25)}, ${brass} 60%, ${mix(brass, '#ffffff', 0.35)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.6)}, ${alpha('#ffffff', 0.12)} 45%, transparent 55%), linear-gradient(90deg, ${mix(brass, '#ffffff', 0.2)}, ${brass} 50%, #c48a1a) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.55)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.text, 0.3)}, ${t.opp}, ${mix(t.opp, '#ffffff', 0.3)}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${mix(goldDeep, t.text, 0.45)}, ${mix(goldDeep, t.text, 0.7)}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -31px; top: -2px; width: 34px; height: 34px; pointer-events: none; background: var(--dbtc-u1) center / contain no-repeat; }

@@ -93,13 +93,13 @@ html body {
 
 /* Menu tiles: black-crimson stone, the cross-brand on the left edge, crimson glow beneath. */
 ${SEL.tile} {
-  background: var(--br-sigil) 4px center / 15px 32px no-repeat, ${fire(0.3)}, var(--br-cracks), ${stone} !important;
+  background: var(--br-sigil) 3px center / 12px 26px no-repeat, ${fire(0.3)}, var(--br-cracks), ${stone} !important;
   border-color: transparent !important;
   border-radius: 3px !important;
   box-shadow: inset 0 0 0 1px ${rim}, inset 0 2px 0 ${alpha(wg, 0.55)}, inset 0 -2px 0 ${alpha(t.accent, 0.5)}, 0 14px 28px -14px #000000 !important;
 }
 ${SEL.tileHover} {
-  background: var(--br-sigil) 4px center / 15px 32px no-repeat, ${fire(0.6)}, var(--br-cracks), ${stone} !important;
+  background: var(--br-sigil) 3px center / 12px 26px no-repeat, ${fire(0.6)}, var(--br-cracks), ${stone} !important;
   box-shadow: inset 0 0 0 1px ${wg}, inset 0 -3px 0 ${t.accent}, inset 0 -16px 20px -14px ${alpha(wg, 0.6)}, 0 0 22px -6px ${alpha(t.accent, 0.9)} !important;
 }
 ${sel(['#main_menu .menu_btn:active .content'])} { background: ${stone} !important; box-shadow: inset 0 3px 10px #000000, inset 0 0 0 1px ${t.text} !important; }
@@ -158,6 +158,7 @@ ${pseudo(SEL.dialog, 'after')} {
   background: var(--br-sigil) 4px 2px / 18px 38px no-repeat;
 }
 ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 #000000, 0 0 16px ${alpha(t.accent, 0.6)} !important; }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #e8d8c8 !important; }
 
 /* Chat: a gilt-ruled header over black stone. */
 ${SEL.chatTop} {
@@ -176,7 +177,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
   background: ${svgUrl(shackle(t, kit))} center / contain no-repeat;
 }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: radial-gradient(ellipse 30% 80% at 90% 100%, ${alpha('#ffffff', 0.4)}, transparent), linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, '#8a5418', 0.5)}, ${mix(t.self, t.warning, 0.3)}) !important; box-shadow: inset -3px 0 0 ${t.accent}, inset 0 -2px 0 ${alpha('#5a2a08', 0.5)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.45)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, '#8a5418', 0.5)}, ${mix(t.self, t.warning, 0.3)} 60%, #a8834f) !important; box-shadow: inset -3px 0 0 ${t.accent}, inset 0 -2px 0 ${alpha('#5a2a08', 0.5)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(120deg, transparent 30%, ${alpha('#ffffff', 0.35)} 31%, transparent 36%, transparent 62%, ${alpha('#ffffff', 0.3)} 63%, transparent 67%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--br-cracks), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }
@@ -232,6 +233,6 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 /* Scrollbars: a gold chain bar. */
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; }
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bd-herogrp, .dbtefx-bd-edge) { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bd-herogrp, .dbtefx-bd-edge, .dbtefx-bd-top) { display: none; }
 `;
 };

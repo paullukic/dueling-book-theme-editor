@@ -101,7 +101,7 @@ ${SEL.tile} {
   box-shadow: inset 0 1px 0 ${alpha(moon, 0.15)}, inset 0 -10px 18px -10px ${alpha(lime, 0.25)}, 0 0 0 1px ${deep}, 0 12px 24px -14px #000000 !important;
 }
 ${SEL.tile}::before {
-  content: ""; position: absolute; right: 10px; top: 6px; width: 24px; height: 24px; pointer-events: none;
+  content: ""; position: absolute; right: 6px; top: 4px; width: 20px; height: 20px; pointer-events: none;
   background: var(--dbte-frog-pad) center / contain no-repeat; filter: drop-shadow(0 2px 2px ${deep});
   animation: var(--dbte-frog-anim, dbte-frog-bob 5s ease-in-out infinite);
 }
@@ -241,11 +241,13 @@ ${SEL.settingsPanel} { border-radius: 28px !important; box-shadow: 0 0 0 1px ${d
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${pad}, ${lime}) !important; border-radius: 99px !important; }
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${lime} !important; }
 ${sel(['#content .checkbox'])} { border-radius: 5px !important; }
-/* In a duel the moon would sit inside the stage: it moves out to the right gutter, whole, and the near pads
-   and the frog follow it out past the stage's right edge. On the menu it shrinks clear of the status filter. */
+/* In a duel the moon would sit inside the stage: it moves out to the right gutter, whole, with its glint on
+   the water, and the near pads and the frog follow it out past the stage's right edge. On the menu it shrinks
+   clear of the status filter and drops clear of the top edge. */
 html body #dbte-skin-fx .dbtefx-fr-moonup { transform-origin: 1100px 110px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(350px, 30px) scale(0.75); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-pond { transform: translateX(420px); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, -12px) scale(0.8); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-glintgrp { transform: translateX(350px); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, 16px) scale(0.7); }
 `;
 };

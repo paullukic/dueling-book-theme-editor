@@ -113,7 +113,8 @@ const mitsurugi = (t) => {
   forest += `L${W} ${H}Z`;
 
   let bolts = '';
-  [[300, 90, 7, 3], [1400, 60, 11, 7.5]].forEach(([x, y, seed, delay]) => {
+  // The left bolt is cut off high, above the menu's first tile.
+  [[300, 90, 7, 3, 'url(#dbtefx-mt-boltclip)'], [1400, 60, 11, 7.5, '']].forEach(([x, y, seed, delay, clip]) => {
     const r = rng(seed);
     let d = `M${x} ${y}`;
     let [cx, cy] = [x, y];
@@ -123,7 +124,7 @@ const mitsurugi = (t) => {
       d += `L${n1(cx)} ${n1(cy)}`;
       if (i === 3) d += `M${n1(cx)} ${n1(cy)}l${n1(30 + r() * 20)} ${n1(26 + r() * 10)}l-6 24M${n1(cx)} ${n1(cy)}`;
     }
-    bolts += `<path d="${d}" fill="none" stroke="${bolt}" stroke-width="2.4" stroke-linejoin="bevel" style="animation: dbtefx-mt-bolt 9s linear ${-delay}s infinite;"/>`;
+    bolts += `<path d="${d}"${clip && ` clip-path="${clip}"`} fill="none" stroke="${bolt}" stroke-width="2.4" stroke-linejoin="bevel" style="animation: dbtefx-mt-bolt 9s linear ${-delay}s infinite;"/>`;
   });
 
   return `<style>@keyframes dbtefx-mt-bolt { 0%, 90%, 94%, 100% { opacity: 0; } 91%, 93% { opacity: 1; } 92% { opacity: 0.2; } }
@@ -142,13 +143,14 @@ ${CARD_ART_KEYFRAMES}
 <linearGradient id="dbtefx-mt-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0"/><stop offset="0.5" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0.28"/><stop offset="1" stop-color="${mix(storm, t.text, 0.25)}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-mt-rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.3)}"/><stop offset="1" stop-color="${mix(gold, t.bg, 0.5)}"/></linearGradient>
 <linearGradient id="dbtefx-mt-cfg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="760" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<clipPath id="dbtefx-mt-boltclip"><rect x="0" y="0" width="${W}" height="155"/></clipPath>
 <mask id="dbtefx-mt-cf" maskUnits="userSpaceOnUse" x="-200" y="0" width="2000" height="${H}"><rect x="-200" width="2000" height="${H}" fill="url(#dbtefx-mt-cfg)"/></mask>
 </defs>
 <rect width="${W}" height="620" fill="url(#dbtefx-mt-sky)"/>
 <ellipse cx="1270" cy="230" rx="360" ry="260" fill="url(#dbtefx-mt-storm)"/>
 <g mask="url(#dbtefx-mt-cf)">${drift(48, 0, `${cloud(-40, 250, 760, 110, 3, mix(storm, t.bg, 0.25))}${cloud(860, 150, 800, 100, 5, mix(storm, t.bg, 0.3))}`)}</g>
 ${bolts}
-${orochi}
+<g class="dbtefx-mt-orochi">${orochi}</g>
 <g mask="url(#dbtefx-mt-cf)">${drift(30, 8, `${cloud(-60, 420, 900, 90, 21, mix(storm, t.bg, 0.4))}${cloud(1060, 640, 600, 80, 23, mix(storm, t.bg, 0.45))}`)}</g>
 <path d="M0 640L120 560L230 600L380 500L520 590L640 540L760 610L900 520L1040 600L1200 540L1380 610L1520 530L1600 580V${H}H0Z" fill="${mix(storm, t.bg, 0.62)}"/>
 <rect y="560" width="${W}" height="150" fill="url(#dbtefx-mt-mist)"/>

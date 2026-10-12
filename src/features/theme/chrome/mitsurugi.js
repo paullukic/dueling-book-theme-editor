@@ -103,7 +103,7 @@ ${SEL.dialogTitle} { color: ${t.text} !important; text-shadow: 0 2px 0 ${sumi}, 
 /* Chat: a vermilion lintel under a black cap; steel rails down the window. */
 ${SEL.chatTop} { background: linear-gradient(180deg, ${sumi} 0 4px, ${shuLit} 4px, ${shu} 40%, ${shuDeep}) !important; box-shadow: inset 0 -2px 0 ${sumi} !important; border-radius: 0 !important; }
 ${sel(['#chats .chat .chat_top span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${sumi}, 0 0 4px ${sumi} !important; }
-${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 2px 0 0 ${shu}, inset -2px 0 0 ${shu}, inset 4px 0 0 ${sumi}, inset -4px 0 0 ${sumi}, inset 0 -1px 0 ${steel} !important; }
+${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 2px 0 0 ${alpha(gold, 0.7)}, inset -2px 0 0 ${alpha(gold, 0.7)}, inset 4px 0 0 ${sumi}, inset -4px 0 0 ${sumi}, inset 0 -1px 0 ${steel} !important; }
 
 /* Duel: life bars are blades with a wrapped hilt; phases are sword guards. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 2px 14px 14px 2px !important; box-shadow: 0 0 0 1px ${sumi}, 0 4px 10px -3px #000000 !important; }
@@ -123,8 +123,8 @@ ${sel(['#duel .phase span'])} { color: ${steel} !important; text-shadow: 0 1px 2
 ${sel(['#duel .phase.active span', '#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 1px 0 0 ${sumi}, -1px 0 0 ${sumi}, 0 1px 0 ${sumi}, 0 -1px 0 ${sumi}, 0 2px 3px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${sumi} !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${shuLit}, ${shuDeep}) !important; }
-${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 0 0 2px ${shu}, inset 0 0 0 5px ${sumi}, inset 0 0 0 6px ${alpha(steel, 0.35)} !important; }
-${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${shu}, 0 0 0 3px ${sumi}, 0 6px 16px -6px #000000 !important; }
+${sel(['#duel .cout_txt'])} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, ${lacquer}) !important; box-shadow: inset 0 0 0 2px ${alpha(gold, 0.7)}, inset 0 0 0 5px ${sumi}, inset 0 0 0 6px ${alpha(steel, 0.35)} !important; }
+${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 1px ${alpha(gold, 0.8)}, 0 0 0 3px ${sumi}, 0 6px 16px -6px #000000 !important; }
 
 /* Duel room: vermilion rings, gate frames. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(t.surface, 0.8)}, ${alpha(sumi, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }
@@ -162,6 +162,8 @@ ${sel(['#welcome_buttons > span'])} { color: ${cream} !important; background: ${
 ${sel(['#content #logged_in .logout_btn', '#content #logged_in .switch_account_btn', '#content #bulletin_txt a', '#content #bulletin_txt a font'])} { color: ${cream} !important; }
 /* The shrine stands behind the menu's status feed and peeks out beside the duel stage. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-shrine { display: none; }
+/* On the menu the serpent dragon keeps to the right gutter, clear of the status feed's timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mt-orochi { transform: translateX(400px); }
 ${sel(['#duel_room .format > .info_btn'])} { background-color: ${t.bg} !important; border-radius: 50% !important; box-shadow: 0 0 0 5px ${t.bg} !important; }
 `;
 };

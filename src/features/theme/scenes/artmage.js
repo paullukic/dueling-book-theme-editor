@@ -6,11 +6,12 @@ import { anim, H, n1, rng, W } from './kit.js';
 // facade (rose window, lit arcades, spires crowned with paint-orbs) above a
 // rippling lake. A spellbound brush floats at the canvas and its stroke
 // leaves the painting, sweeping across the hall and fading, again and again.
-// Lesser canvases hang salon-style from the same rail.
+// Lesser canvases hang salon-style from the same rail. In the duel and on
+// the menu a small easel and one framed study keep to the gutters.
 
 // A carved gilt frame: moulding, bead line, bevel, sight edge, corner
-// leaves and an optional shell crest.
-const frame = (x, y, w, h, b, id, crest) => {
+// leaves (optional on small pieces) and an optional shell crest.
+const frame = (x, y, w, h, b, id, crest, leaves = true) => {
   const scroll = (cx, cy, sx, sy) =>
     `<g transform="translate(${cx} ${cy}) scale(${sx} ${sy})"><path d="M0 0C16 2 34 16 40 40C16 34 2 16 0 0Z" fill="url(#${id})" stroke="#000000" stroke-opacity="0.3"/><path d="M4 4C14 -6 34 -8 40 4C44 14 32 18 28 10M4 4C-6 14 -8 34 4 40C14 44 18 32 10 28" fill="none" stroke-width="4" stroke-linecap="round"/><circle cx="2" cy="2" r="6" fill="url(#${id})"/></g>`;
   const corners = [
@@ -34,7 +35,7 @@ const frame = (x, y, w, h, b, id, crest) => {
 <rect x="${x - b * 0.55}" y="${y - b * 0.55}" width="${w + b * 1.1}" height="${h + b * 1.1}" fill="none" stroke="#000000" stroke-opacity="0.35" stroke-width="3" stroke-dasharray="2 5"/>
 <rect x="${x - 4}" y="${y - 4}" width="${w + 8}" height="${h + 8}" fill="none" stroke="#000000" stroke-opacity="0.55" stroke-width="6"/>
 <rect x="${x - 1}" y="${y - 1}" width="${w + 2}" height="${h + 2}" fill="none" stroke="#ffffff" stroke-opacity="0.5"/>
-<g stroke="url(#${id})">${corners.map(([a, c, sx, sy]) => scroll(n1(a), n1(c), sx, sy)).join('')}</g>${shell}`;
+${leaves ? `<g stroke="url(#${id})">${corners.map(([a, c, sx, sy]) => scroll(n1(a), n1(c), sx, sy)).join('')}</g>` : ''}${shell}`;
 };
 
 const sparkle = (x, y, r) =>
@@ -128,7 +129,8 @@ const artmage = (t) => {
 
   // Lesser canvases, hung salon-style: miniature Artmage works, a rainbow
   // paint ribbon (their magic) and the gold four-point star of their books.
-  const study = (x, y, w, h, kind, id) => {
+  const study = (x, y, w, h, kind, id, hung = true) => {
+    const b = hung ? 14 : 9;
     const cx = n1(x + w / 2);
     const cy = n1(y + h / 2);
     let art = '';
@@ -145,8 +147,19 @@ const artmage = (t) => {
       });
       art += `<path d="M${cx} ${n1(cy - r)}Q${n1(cx + q)} ${n1(cy - q)} ${n1(cx + r)} ${cy}Q${n1(cx + q)} ${n1(cy + q)} ${cx} ${n1(cy + r)}Q${n1(cx - q)} ${n1(cy + q)} ${n1(cx - r)} ${cy}Q${n1(cx - q)} ${n1(cy - q)} ${cx} ${n1(cy - r)}Z" fill="${gold}" stroke="${mix(gold, '#000000', 0.45)}" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="${n1(r * 0.2)}" fill="${mix(gold, '#ffffff', 0.55)}"/>`;
     }
-    return `<path d="M${cx} ${RAIL}L${x + 4} ${y - 14}M${cx} ${RAIL}L${x + w - 4} ${y - 14}" stroke="${gold}" stroke-opacity="0.3"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>${art}${frame(x, y, w, h, 14, 'dbtefx-am-giltd', false)}`;
+    const wire = hung ? `M${cx} ${RAIL}L${x + 4} ${y - b}M${cx} ${RAIL}L${x + w - 4} ${y - b}` : `M${cx} ${y - 34}L${x + 4} ${y - b}M${cx} ${y - 34}L${x + w - 4} ${y - b}`;
+    return `<path d="${wire}" stroke="${gold}" stroke-opacity="0.3"/>${hung ? '' : `<circle cx="${cx}" cy="${y - 34}" r="2.5" fill="${gold}" fill-opacity="0.6"/>`}<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>${art}${frame(x, y, w, h, b, 'dbtefx-am-giltd', false, hung)}`;
   };
+
+  // Gutter pieces for the duel and the menu, where the gallery stands back
+  // (the chrome shows them per page): a small canvas on an easel low in the
+  // left gutter, one framed study in the right.
+  const wood = mix(gold, '#000000', 0.5);
+  const easel = `<g stroke="${wood}" stroke-width="5" stroke-linecap="round"><path d="M148 700L112 826M148 700L184 826"/><path d="M148 712V826" stroke-opacity="0.6"/><path d="M104 778H192" stroke-width="6"/></g>
+<rect x="114" y="714" width="68" height="60" fill="url(#dbtefx-am-s1)"/>
+<g fill="none" stroke-linecap="round">${[t.accent, gold, t.opp].map((c, k) => `<path d="M119 ${758 - k * 8}C134 ${736 - k * 7} 156 ${770 - k * 7} 177 ${740 - k * 7}" stroke="${c}" stroke-width="4" stroke-opacity="0.8"/>`).join('')}</g>
+<circle cx="168" cy="726" r="5" fill="${mix(gold, '#ffffff', 0.4)}"/>
+<rect x="112" y="712" width="72" height="64" fill="none" stroke="${mix(gold, '#000000', 0.2)}" stroke-width="4"/>`;
 
   let panels = '';
   for (let x = 40; x < W; x += 260) panels += `<rect x="${x}" y="800" width="220" height="80" rx="4"/>`;
@@ -169,6 +182,8 @@ const artmage = (t) => {
 <path d="M${PX + 30} ${RAIL}H${PX + PW - 30}L${PX + PW + 130} ${H}H${PX - 130}Z" fill="url(#dbtefx-am-beam)"/>
 <g class="dbtefx-am-studies">${study(1090, 650, 130, 96, 'ribbon', 'dbtefx-am-s1')}
 ${study(1262, 628, 120, 150, 'star', 'dbtefx-am-s2')}</g>
+<g class="dbtefx-am-easel">${easel}</g>
+<g class="dbtefx-am-wing">${study(1422, 482, 70, 96, 'star', 'dbtefx-am-s2', false)}</g>
 <!--mid-->
 <defs>
 <linearGradient id="dbtefx-am-gilt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.45)}"/><stop offset="0.25" stop-color="${gold}"/><stop offset="0.5" stop-color="${mix(gold, '#000000', 0.35)}"/><stop offset="0.7" stop-color="${mix(gold, '#ffffff', 0.25)}"/><stop offset="1" stop-color="${mix(gold, '#000000', 0.45)}"/></linearGradient>

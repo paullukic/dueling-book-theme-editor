@@ -100,6 +100,7 @@ ${sel(['#content .button.disabled'])} { color: ${mix(t.bg, t.muted, 0.5)} !impor
 ${SEL.dialog} { background: radial-gradient(ellipse 70% 60% at 50% 0%, ${alpha(gold, 0.16)}, transparent 70%), var(--dbtc-u11) 0 0 / 48px 48px, linear-gradient(180deg, ${t.surface}, ${t.bg}) !important; border-radius: 3px !important; box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(18)} background: none; transform: none; }
 ${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: calc(50% - 80px); top: -38px; right: auto; bottom: auto; width: 160px; height: 60px; pointer-events: none; z-index: 1; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 3px 3px #000000); transform: none; }
+${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #e8e0d0 !important; }
 ${SEL.dialogTitle} { color: ${ivory} !important; text-shadow: 0 2px 0 ${t.bg}, 0 0 14px ${alpha(gold, 0.45)} !important; }
 
 /* Chat: an ivory plate header with a gold band; the board below. */
@@ -110,10 +111,10 @@ ${SEL.chat} { background: linear-gradient(180deg, ${alpha(t.surface, 0.9)}, ${al
 /* Duel: plated life bars with a king at the end; checkered phase discs. */
 ${SEL.life} { border-color: ${ivory} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${gold}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, ${mix(gold, '#7a5a20', 0.35)}, ${mix(gold, ivory, 0.25)}) !important; box-shadow: inset 0 0 0 1.5px ${mix(goldDeep, '#000000', 0.25)}, inset 0 -3px 0 ${alpha(goldDeep, 0.75)}, inset 0 2px 3px ${alpha('#000000', 0.25)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 50%), linear-gradient(90deg, #f0d890, #c9a14a) !important; box-shadow: inset 0 0 0 1.5px ${mix('#c9a14a', '#000000', 0.45)}, inset 0 -3px 0 ${alpha(goldDeep, 0.75)}, inset 0 2px 3px ${alpha('#000000', 0.25)} !important; }
 /* The opponent's life is periwinkle silver, like their side of the board. */
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.3)}, ${mix(t.opp, '#dfe6ff', 0.35)}) !important; }
-${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -14px; top: 1px; width: 18px; height: 28px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
+${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -22px; top: 1px; width: 18px; height: 28px; z-index: 2; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${on(sel(['#duel #lifepoints2']), 'before')} { background-image: var(--dbtc-u6); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${ivory} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 225deg, ${mix(gold, '#ffffff', 0.35)}, ${gold}, ${goldDeep}, ${gold}, ${mix(gold, '#ffffff', 0.35)}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 4px 10px -2px #000000 !important; }

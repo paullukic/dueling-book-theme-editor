@@ -186,7 +186,7 @@ ${sel(['#duel .lifepoints .life_border::before'])} {
 /* The top bar sits on the viewport edge: its eye is inset so the rim stays whole. */
 ${sel(['#duel #lifepoints2 .life_border::before'])} { left: -22px; width: 36px; height: 36px; margin-top: -16px; }
 ${sel(['#duel .lifepoints .life_bar'])} { border-radius: 999px !important; }
-${SEL.lifeSelf} { background: var(--se-scales), linear-gradient(180deg, ${alpha(t.accent2, 0.45)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, #d8721e) !important; }
+${SEL.lifeSelf} { background: var(--se-scales), linear-gradient(180deg, ${alpha('#ffe0a0', 0.55)}, ${alpha('#ffc070', 0.18)} 45%, transparent 55%), linear-gradient(90deg, #ffa040, #d8721e) !important; }
 ${SEL.lifeOpp} { background: var(--se-scales), linear-gradient(180deg, ${alpha(t.text, 0.35)}, transparent 50%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.5)}, ${t.opp}) !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: var(--se-scales), #000000 !important; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 0 #000000, 0 0 6px #000000, 0 0 3px #000000 !important; }

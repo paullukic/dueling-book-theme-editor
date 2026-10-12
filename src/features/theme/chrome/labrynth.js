@@ -47,7 +47,9 @@ export default (t0, { SEL, sel, svg, svgUrl, alpha }) => {
   const candelabrum = svg(36, 48, `<g fill="none" stroke="${silver}" stroke-width="1.6" stroke-linecap="round"><path d="M18 40V22"/><path d="M18 30C12 30 6 29 6 22M18 30C24 30 30 29 30 22"/></g><path d="M11 46H25L21.5 41H14.5Z" fill="${silver}"/><circle cx="18" cy="34" r="2.2" fill="${t.accent}" stroke="${silver}" stroke-width="0.8"/>${candle(6, 13, 21)}${candle(30, 13, 21)}${candle(18, 8, 21)}${flame(6, 12.5)}${flame(30, 12.5)}${flame(18, 7.5, 1.15)}`);
 
   // Your side's life: a lit rose, not the velvet's maroon.
-  const roseLit = '#b8546e';
+  const roseLit = '#c45a7a';
+  // The flower-of-life pattern on the life fills stops short of the numerals.
+  const lifeDamask = [0, 28, 56].map((x) => `var(--dbtc-u2) ${x}px 50% / 28px 28px no-repeat`).join(', ');
   const label = `color: ${t.text} !important; text-shadow: 0 1px 0 ${t.bg}, 0 0 10px ${alpha(t.accent, 0.45)} !important;`;
   const velvetBg = (lift = 0) => `radial-gradient(ellipse 70% 90% at 50% 0%, ${alpha(mix(t.accent, '#ffffff', 0.15), 0.22 + lift)}, transparent 70%), var(--dbtc-u2), linear-gradient(180deg, ${velvet}, ${velvetDeep})`;
 
@@ -102,8 +104,8 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${t.surface}, 
 /* Duel: silver-framed life bars lit by a candelabrum; rose-window phases. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${velvetDeep}, 0 0 0 2px ${alpha(silver, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.42)}, ${alpha('#ffffff', 0.08)} 45%, transparent 55%), var(--dbtc-u2), linear-gradient(90deg, ${mix(roseLit, t.bg, 0.3)}, ${roseLit} 60%, ${mix(roseLit, '#ffffff', 0.2)}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), var(--dbtc-u2), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.42)}, ${alpha('#ffffff', 0.08)} 45%, transparent 55%), ${lifeDamask}, linear-gradient(90deg, ${mix(roseLit, t.bg, 0.15)}, ${roseLit} 60%, ${mix(roseLit, '#ffffff', 0.2)}) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.28)}, transparent 45%), ${lifeDamask}, linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -30px; top: -14px; width: 33px; height: 44px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; }
 /* The top bar sits on the viewport edge: its candelabrum stands lower and shorter so the flames stay whole. */
 ${on(sel(['#duel #lifepoints2']), 'before')} { top: -2px; height: 36px; }
@@ -156,6 +158,6 @@ ${popCss(popPrimary, popSecondary)}
 /* In a duel the rose window and the swag cords would hang over the board. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-lb-rosewin, .dbtefx-lb-tassels) { display: none; }
 /* On the menu the rose window rises and dims behind the title and its carousel dots. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-lb-rosewin { transform: translateY(-90px); opacity: 0.4; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-lb-rosewin { transform: translateY(-132px); opacity: 0.4; }
 `;
 };
