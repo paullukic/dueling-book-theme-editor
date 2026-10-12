@@ -22,6 +22,8 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const mintLo = mix(mint, t.bg, 0.45);
   const orange = t.accent;
   const blue = t.raised;
+  // Your LP fill: a deeper mint than the numeral plate, so the two read apart.
+  const fill = mix(mint, '#0a8a50', 0.5);
 
   const crisp = (w, h, body) => svg(w, h, `<g shape-rendering="crispEdges">${body}</g>`);
   // Pixel bevel frame (12px art, 4px slice): ink outline, light top-left, dark bottom-right.
@@ -89,19 +91,19 @@ ${SEL.chat} { ${panel()} box-shadow: inset 3px 0 0 ${hi}, inset -3px 0 0 ${lo}, 
 ${SEL.life} { border-color: ${ink} !important; border-radius: 0 !important; box-shadow: 0 0 0 3px ${mint}, 0 0 0 5px ${ink}, inset 0 2px 0 ${alpha('#ffffff', 0.3)} !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 0 !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)} 0 3px, transparent 3px), ${mintLo} !important; }
-${SEL.lifeSelf} { background: linear-gradient(0deg, ${t.self} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mintHi} 0 3px, transparent 3px), ${mint} !important; }
+${SEL.lifeSelf} { background: linear-gradient(0deg, ${mix(fill, ink, 0.35)} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mix(fill, '#ffffff', 0.4)} 0 3px, transparent 3px), ${fill} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(0deg, ${mix(t.opp, ink, 0.2)} 0 4px, ${ink} 4px 6px, transparent 6px), linear-gradient(180deg, ${mix(t.opp, '#ffffff', 0.6)} 0 3px, transparent 3px), ${mix(t.opp, '#ffffff', 0.3)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -40px; top: 1px; width: 34px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; image-rendering: pixelated; }
 ${sel(['#duel #lifepoints1 .life_txt', '#duel #lifepoints2 .life_txt'])} { font-family: "DBTE Pixel", "Lucida Console", monospace !important; font-weight: 400 !important; color: ${navy} !important; -webkit-text-fill-color: currentColor !important; text-shadow: none !important; }
 /* Our counters sit on their own plate: no extra ink blur behind the number. */
 /* The number sits on a solid mint plate with a navy rule, like the LP panels in the game; low keeps
    the plate and turns the rule red. The plate hides the bar's right end, so in low the life left is a
-   red block just left of the plate, over the dark red track. */
+   red stub just left of the plate, scaled to the visible part of the track, over the dark red track. */
 ${lpAt('', '.life_txt')} { isolation: isolate; }
 ${lpAt('', '.life_txt::before')} { content: ""; position: absolute; left: -6px; right: -4px; top: 1px; bottom: 1px; z-index: -1; pointer-events: none; background: linear-gradient(180deg, ${mintHi} 0 2px, ${mint} 2px); box-shadow: 0 0 0 2px ${ink}; }
 ${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt::before')} { box-shadow: 0 0 0 2px ${t.danger}; }
 ${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_txt')} { color: ${navy} !important; text-shadow: none !important; }
-${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_bar')} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)} 0 3px, ${t.danger} 3px) right 86px top 0 / min(60px, calc(var(--dbte-lp, 1) * 240px)) 100% no-repeat, repeating-linear-gradient(135deg, ${alpha(t.danger, 0.18)} 0 1.5px, transparent 1.5px 7px), ${mix(t.danger, '#000000', 0.84)} !important; }
+${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.life_bar')} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.35)} 0 3px, ${mix(t.danger, '#000000', 0.22)} 3px) right 86px top 0 / max(4px, calc(var(--dbte-lp, 1) * (100% - 86px))) 100% no-repeat, repeating-linear-gradient(135deg, ${alpha(t.danger, 0.18)} 0 1.5px, transparent 1.5px 7px), ${mix(t.danger, '#000000', 0.84)} !important; }
 ${lpAt(':is([data-dbte-lp~="low"], [data-dbte-lp~="zero"])', '.black_bar')} { background: none !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
 ${SEL.phase} { background: ${ink} !important; border-radius: 0 !important; }
@@ -149,6 +151,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: ${hi} !important; border
 /* Pop-up buttons. */
 ${popCss}
 
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-eds-board { display: none; }
 @keyframes dbtc-eds-flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tileHover, 'before')} { animation: none; } }
 `;

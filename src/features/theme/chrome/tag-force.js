@@ -95,12 +95,12 @@ ${SEL.chat} { background: var(--dbtc-u0), linear-gradient(180deg, ${glass}, ${mi
    brushed-silver phase chips, the active one in the cursor frame. */
 ${SEL.life} { border-color: ${silver} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${mix(blue, t.bg, 0.55)}, 0 0 0 4px ${alpha(silver, 0.6)}, 0 3px 8px -2px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, t.bg, 0.5)}, ${mix(t.self, t.bg, 0.15)}) !important; box-shadow: inset 0 4px 4px -2px ${alpha('#ffffff', 0.35)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(90deg, ${mix(t.self, t.bg, 0.55)}, ${mix(t.self, t.bg, 0.2)}) !important; box-shadow: inset 0 2px 0 -1px ${alpha('#ffffff', 0.6)}, inset 0 4px 4px -2px ${alpha('#ffffff', 0.25)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(90deg, ${mix(t.opp, t.bg, 0.45)}, ${mix(t.opp, t.bg, 0.1)}) !important; box-shadow: inset 0 4px 4px -2px ${alpha('#ffffff', 0.35)} !important; }
 ${on(sel(['#duel .lifepoints .life_border']), 'after')} { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 4px; pointer-events: none; background: linear-gradient(90deg, ${t.self} 0 33.3%, ${t.warning} 33.3% 66.6%, ${t.opp} 66.6%); box-shadow: 0 1px 2px #000000; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -44px; top: 4px; width: 40px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 1px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 1px 2px #000000, 0 0 5px #000000 !important; }
-${SEL.phase} { background: linear-gradient(180deg, #ffffff, ${silver}) !important; border-radius: 8px !important; box-shadow: 0 0 0 1px ${ink}, 0 3px 6px -2px #000000 !important; }
+${SEL.phase} { background: linear-gradient(180deg, ${mix(chip, '#ffffff', 0.3)}, ${chipDeep}) !important; border-radius: 8px !important; box-shadow: 0 0 0 1px ${ink}, 0 3px 6px -2px #000000 !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; border-radius: 7px !important; }
 ${sel(['#duel .phase .background', '#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { border-radius: 7px !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: transparent !important; border-radius: 7px !important; }
@@ -141,5 +141,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* In a duel the academy's west-wing windows would sit in the gap between the field and the avatar column. */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tf-westwing { display: none; }
 `;
 };

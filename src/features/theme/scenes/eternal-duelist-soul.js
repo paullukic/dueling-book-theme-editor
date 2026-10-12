@@ -4,8 +4,8 @@ import { bayer, inPoly, pxGrid, raster } from './pixel-kit.js';
 // The Eternal Duelist Soul (Game Boy Advance, 2002): bright 15-bit sprites on
 // the title screen's glowing grid. The right third is the handheld's duel
 // field seen from above: a sandstone-brick board with pale blue card slots
-// and a dragon card in attack position. No HUD text: the board sits behind
-// the main menu's status feed, where ghost lettering competes with the posts.
+// and a dragon card in attack position. No HUD text, and the main menu drops
+// the board (it would ghost behind the status feed).
 
 const A = 4;
 
@@ -73,7 +73,7 @@ const scene = (t) => {
 <path d="${grid}" stroke="${t.success}" stroke-opacity="0.07" stroke-width="7"/>
 <path d="${grid}" stroke="${t.success}" stroke-opacity="0.22" stroke-width="1.5"/>
 <!--mid-->
-<g shape-rendering="crispEdges" opacity="0.18">
+<g class="dbtefx-eds-board" shape-rendering="crispEdges" opacity="0.18">
 <rect x="${bx - A}" y="${by - A}" width="${bw + 2 * A}" height="${bh + 2 * A}" fill="${ink}"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="url(#dbtefx-eds-brick)"/>${slots}${faceDown(1, 0)}${faceDown(3, 1)}${faceDown(0, 1)}
 <g style="animation: dbtefx-eds-lunge 5s steps(2, end) infinite;">${ours}</g>
 </g>`;

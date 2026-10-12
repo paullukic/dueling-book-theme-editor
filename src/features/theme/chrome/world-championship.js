@@ -135,5 +135,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* The right-hand stylus tap would land on the status feed's edge: the main menu drops it. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-wc-tap { display: none; }
 `;
 };

@@ -94,7 +94,9 @@ ${sel(['#chats .chat .title_txt', '#chats .chat .chat_title'])} { color: ${t.tex
 
 /* Duel: LP gauge coloured by life left (--dbte-lp), cyan-rimmed plate, red LP cap; teal phase chips. */
 ${SEL.life} { border-color: ${cyan} !important; border-radius: 6px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${alpha(navyDeep, 0.95)}, 0 0 0 4px ${alpha(cyan, 0.55)}, 0 4px 10px -3px ${ink} !important; }
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, var(--dbtc-lpok) clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.3)}, transparent 42%, ${alpha(ink, 0.25)}), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 45%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 75%, ${ink})) !important; }
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 5px !important; --dbtc-lpc: color-mix(in srgb, color-mix(in srgb, var(--dbtc-lpok) clamp(0%, calc((var(--dbte-lp, 1) - 0.4) * 1000%), 100%), ${gold}) clamp(0%, calc((var(--dbte-lp, 1) - 0.2) * 1000%), 100%), ${t.danger}); background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)} 0 2px, ${alpha('#ffffff', 0.12)} 2px 4px, transparent 4px), linear-gradient(90deg, color-mix(in srgb, var(--dbtc-lpc) 58%, ${ink}), color-mix(in srgb, var(--dbtc-lpc) 72%, ${ink})) !important; }
+/* A flat ramp with one top highlight; the number's dark halo stays light so it never smudges the fill. */
+${sel(['#duel #lifepoints1', '#duel #lifepoints2'])} { --dbte-lp-fade: 0.35; }
 ${SEL.lifeSelf} { --dbtc-lpok: ${t.success}; }
 ${SEL.lifeOpp} { --dbtc-lpok: ${t.opp}; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${navyDeep}, ${ink}) !important; }

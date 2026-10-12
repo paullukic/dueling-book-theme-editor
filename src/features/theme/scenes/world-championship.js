@@ -51,7 +51,7 @@ const worldChampionship = (t) => {
 <g>${bands(mix(blue, '#ffffff', 0.25), [[44, 260, 4], [70, 180, 3], [96, 320, 5], [128, 140, 3], [152, 240, 4], [186, 120, 3]], 1, 0)}</g>
 <g>${bands(mix(pink, '#ffffff', 0.2), [[H - 52, 280, 4], [H - 80, 170, 3], [H - 108, 300, 5], [H - 138, 150, 3], [H - 164, 230, 4], [H - 196, 110, 3]], -1, 2.5)}</g>
 <!--near-->
-${tap(141, 300, 0)}${tap(1440, 620, 2.2)}`;
+${tap(141, 300, 0)}<g class="dbtefx-wc-tap">${tap(1440, 620, 2.2)}</g>`;
 };
 
 export default worldChampionship;

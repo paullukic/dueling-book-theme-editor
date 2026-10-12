@@ -27,8 +27,10 @@ const tagForce = (t) => {
   };
 
 
-  // Academy windows: rows of warm lights, a few blinking.
+  // Academy windows: rows of warm lights, a few blinking. The west wing's rows are their own group
+  // (in a duel they would show in the gap between the field and the avatar column).
   let windows = '';
+  let westWing = '';
   let blink = 0;
   const row = (x0, x1, y, step) => {
     for (let x = x0; x <= x1; x += step) {
@@ -37,7 +39,9 @@ const tagForce = (t) => {
       const anim = blink < 6 && rand() > 0.82 ? ` style="animation: dbtefx-pulse ${n1(3 + rand() * 4)}s ease-in-out ${n1(-rand() * 5)}s infinite;"` : '';
       if (anim) blink++;
       const ww = rand() > 0.7 ? 10 : 6;
-      windows += `<rect x="${n1(x)}" y="${y}" width="${ww}" height="${rand() > 0.8 ? 6 : 9}" fill="${lamp}" fill-opacity="${n1(0.55 + rand() * 0.4)}"${anim}/>`;
+      const win = `<rect x="${n1(x)}" y="${y}" width="${ww}" height="${rand() > 0.8 ? 6 : 9}" fill="${lamp}" fill-opacity="${n1(0.55 + rand() * 0.4)}"${anim}/>`;
+      if (x0 === 1046) westWing += win;
+      else windows += win;
     }
   };
   row(1046, 1112, 600, 13);
@@ -83,7 +87,7 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 <ellipse cx="1360" cy="630" rx="340" ry="200" fill="url(#dbtefx-tf-sun)"/><ellipse cx="1360" cy="636" rx="240" ry="56" fill="url(#dbtefx-tf-sun)"/>
 <path d="M0 0H${W}V340Q800 250 0 330Z" fill="url(#dbtefx-tf-gloss)"/>
 <!--mid-->
-<g transform="translate(60 4) translate(1330 650) scale(1.1) translate(-1330 -650)">
+<g transform="translate(100 4) translate(1330 650) scale(1.1) translate(-1330 -650)">
 <g fill="url(#dbtefx-tf-plume)">
 <ellipse cx="1340" cy="292" rx="46" ry="30" style="animation: dbtefx-tf-smoke 12s ease-out 0s infinite; transform-box: fill-box; transform-origin: center;"/>
 <ellipse cx="1346" cy="296" rx="50" ry="32" style="animation: dbtefx-tf-smoke 12s ease-out -4s infinite; transform-box: fill-box; transform-origin: center;"/>
@@ -108,7 +112,7 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 <path d="M1130 498L1182 410L1170 498Z" fill="#ffffff" fill-opacity="0.18"/>
 <path d="M1036 590H1328" stroke="${dusk}" stroke-opacity="0.7" stroke-width="2"/>
 <path d="M1036 640V590H1124M1132 640V506M1102 640V470L1110 444M1246 640V470L1254 444M1240 640V590" fill="none" stroke="${dusk}" stroke-opacity="0.75" stroke-width="2"/>
-${windows}
+${windows}<g class="dbtefx-tf-westwing">${westWing}</g>
 
 </g>
 <path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664V700H${LX - 66}Z" fill="${rock}"/><path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664" fill="none" stroke="${rockLit}" stroke-width="2"/>

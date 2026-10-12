@@ -101,11 +101,11 @@ ${SEL.dialogTitle} { color: ${gold} !important; text-shadow: 2px 2px 0 #000000 !
 ${SEL.chatTop} { background: ${dith}, linear-gradient(180deg, ${stoneHi}, ${stone} 30%, ${stoneLo}) !important; box-shadow: inset 0 -2px 0 ${gold}, inset 0 -3px 0 #000000 !important; }
 ${SEL.chat} { ${platePanel} box-shadow: inset 2px 0 0 ${stone}, inset -2px 0 0 ${stone}, inset 0 -2px 0 ${stone} !important; }
 
-/* Duel: flat white numerals in the game's navy LP boxes, a YOU (red) or COM (navy) tag at the left, a thin
+/* Duel: flat white numerals in the game's crimson (YOU) and navy (COM) LP boxes, the tag at the left, a thin
    gold strip along the foot for the life left; square navy phase chips in a gold rim, gold when active. */
 ${SEL.life} { border-color: ${rim} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px #000000, 2px 3px 0 ${alpha('#000000', 0.6)} !important; }
-/* Both bars keep the game's one blue; only yours carries the gold underline, so the sides still read apart. */
-${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
+/* Yours is the YOU tag's deep crimson (darker than the danger red) with the gold underline; the rival's the COM navy. */
+${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; background: linear-gradient(0deg, ${gold} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), linear-gradient(90deg, ${mix(t.self, '#000000', 0.45)}, ${mix(t.self, '#000000', 0.12)}) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(0deg, ${mix(t.opp, t.bg, 0.55)} 0 3px, transparent 3px), linear-gradient(180deg, ${alpha('#ffffff', 0.22)}, transparent 50%), ${mix(t.opp, t.bg, 0.12)} !important; }
 ${sel(['#duel .lifepoints .black_bar'])} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.14)}, transparent 50%), ${navyDeep} !important; }
 ${sel(['#duel .lifepoints'])} { --lp-hit: ${t.danger}; --lp-heal: ${t.success}; }
@@ -163,7 +163,8 @@ ${popCss}
 @keyframes dbtc-fm-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
 @media (prefers-reduced-motion: reduce) { ${on(SEL.tileHover, 'before')} { animation: none; } }
 
-/* In a duel the scene's winged sun disk stands aside: its wing tips would show in the stage's top corner. */
-html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk { display: none; }
+/* In a duel the scene's winged sun disk stands aside (its wing tips would show in the stage's top corner), and on the
+   main menu (it sits behind the status filter). */
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk { display: none; }
 `;
 };

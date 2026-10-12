@@ -90,7 +90,7 @@ ${SEL.chat} { background: ${panel} !important; outline: 3px solid ${sand} !impor
 /* Duel: the heart-and-gold-LP plaque on a stone bar, a crimson gauge for you and a sky-blue one for the rival; blue capsule phase pills on stone. */
 ${SEL.life} { border-color: ${sandLit} !important; border-radius: 5px !important; box-shadow: 0 0 0 3px ${sand}, 0 0 0 5px ${mix(sandDeep, '#000000', 0.3)}, inset 0 0 0 1px ${ink}, 0 5px 10px -2px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, t.bg, 0.2)}, ${mix(mix(t.self, '#5a0a14', 0.35), t.bg, 0.4)}) !important; box-shadow: inset 0 3px 3px -1px ${alpha('#ffffff', 0.4)} !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${mix(t.self, '#000000', 0.25)}, ${mix(t.self, '#000000', 0.52)}) !important; box-shadow: inset 0 2px 0 -1px ${alpha(gold, 0.8)}, inset 0 4px 4px -2px ${alpha(gold, 0.3)} !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${mix(blue, t.bg, 0.15)}, ${mix(blue, t.bg, 0.45)}) !important; box-shadow: inset 0 3px 3px -1px ${alpha('#ffffff', 0.4)} !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -64px; top: 2px; width: 60px; height: 26px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; filter: drop-shadow(0 1px 1px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${mix(gold, '#ffffff', 0.45)} !important; text-shadow: 0 2px 0 ${ink}, 0 0 3px #000000, 0 0 6px #000000 !important; }
