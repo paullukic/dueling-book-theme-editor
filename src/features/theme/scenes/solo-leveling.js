@@ -78,6 +78,8 @@ const scene = (t) => {
   const army = [[1284, 770, 0.74, 'axe', 1.4], [1404, 772, 0.76, 'horn', 2.6], [1344, 812, 0.92, 'plume', 0]]
     .map(([x, b, s, kind, d]) => soldier(x, b, s, kind, d))
     .join('');
+  // A second, fainter rank from a smaller gate in the left margin.
+  const reserve = [[70, 836, 0.5, 'horn', 1.1], [122, 846, 0.56, 'axe', 2.2]].map(([x, b, s, kind, d]) => soldier(x, b, s, kind, d)).join('');
 
   // Black ground smoke the soldiers rise out of.
   const wisps = [1250, 1310, 1380, 1440, 1500].map((x, i) => `<path d="M${x} 900C${x - 20} 860 ${x + 22} 830 ${x + 4} 790S${x - 20} 740 ${x + 8} 700" stroke="url(#dbtefx-sl-smoke)" stroke-width="${12 + (i % 3) * 6}" stroke-linecap="round" fill="none" style="animation: dbtefx-sl-wisp ${n1(7 + i * 0.9)}s ease-out ${n1(-i * 1.3)}s infinite;"/>`).join('');
@@ -101,12 +103,14 @@ ${street}
 <ellipse cx="${gx}" cy="${ground}" rx="260" ry="78" fill="url(#dbtefx-sl-spill)"/>
 <ellipse cx="${gx}" cy="${gy}" rx="${rx + 10}" ry="${ry + 10}" fill="url(#dbtefx-sl-gate)"/>
 <!--mid-->
+<ellipse cx="88" cy="560" rx="38" ry="150" fill="url(#dbtefx-sl-gate)" opacity="0.5"/>
 ${city(H, 40, 150, 19, night, 0.45)}
 ${rocks}
 <!--near-->
 <rect y="700" width="${W}" height="200" fill="url(#dbtefx-sl-fog)"/>
 ${wisps}
 ${army}
+<g opacity="0.55">${reserve}</g>
 <style>
 @keyframes dbtefx-sl-lift { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-8px, -26px) rotate(24deg); } }
 @keyframes dbtefx-sl-wisp { 0% { transform: translateY(40px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-110px); opacity: 0; } }

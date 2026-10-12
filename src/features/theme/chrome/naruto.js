@@ -2,7 +2,7 @@
 // washi between lacquered wooden rollers; crests are forged steel headband
 // plates engraved with a single kunai; buttons are paper seal tags; a kunai leads
 // the life bars and shuriken sit on the phases. (t, kit) -> CSS string.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -101,7 +101,7 @@ ${SEL.chat} { background: var(--dbtc-u2), linear-gradient(180deg, ${paper}, ${mi
 /* Duel: steel-plated life bars led by a kunai; shuriken phases. */
 ${SEL.life} { border-color: ${steel} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${cloth}, 0 0 0 4px ${alpha(steel, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 3px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.self, t.bg, 0.6)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, #d8661a, #f08a1c) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -17px; top: -8px; width: 16px; height: 42px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -109,9 +109,10 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${steel}, ${steelDim}, ${
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${paperDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(paper, t.raised, 0.5)} 30%, ${paperDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.self, '#ffffff', 0.15)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${mix(t.opp, '#ffffff', 0.15)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 30%, ${mix(deepForWhite(t.self), '#000000', 0.3)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.75)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 30%, ${mix(deepForWhite(t.opp), '#000000', 0.3)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000, 0 0 4px #000000 !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.7)} !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${paper}, ${mix(paper, t.bg, 0.5)}) !important; box-shadow: inset 3px 0 0 ${wood}, inset -3px 0 0 ${wood}, inset 0 0 0 4px ${alpha(steelDim, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${steel}, 0 0 0 4px ${cloth}, 0 0 0 5px ${alpha(steel, 0.5)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${steel}, ${steelDim}) !important; }
@@ -150,5 +151,9 @@ ${sel(['#content a:hover', '#content a:active', '#content .status .reply_btn:hov
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+
+/* Scene: the moon stays out from behind the menu feed and the front page's links; the tower's disc out of the duel stage. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-nr-moon { display: none; }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-nr-disc { display: none; }
 `;
 };

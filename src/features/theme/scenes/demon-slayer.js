@@ -159,8 +159,8 @@ ${ridge(720, 70, 5, mix(t.bg, t.accent2, 0.08), 0.95)}
 <ellipse cx="${CX}" cy="${CY}" rx="240" ry="330" fill="url(#dbtefx-ds-halo)"/>
 <g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-sway 9s ease-in-out infinite;">${fire}</g>
 <circle cx="${CX}" cy="${n1(CY - 120)}" r="200" fill="url(#dbtefx-ds-ember)" ${anim('pulse', 5, 0, 'ease-in-out')}/>
-<g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-swayb 11s ease-in-out infinite;"><g transform="translate(${CX + 30} ${CY}) scale(0.62 1.12) translate(${-CX} ${-CY})">${wave}${curls}${crest}</g></g>
-${blade}
+<g style="transform-origin: ${CX}px ${CY}px; animation: dbtefx-ds-swayb 11s ease-in-out infinite;"><g transform="translate(${CX + 62} ${CY}) scale(0.62 1.12) translate(${-CX} ${-CY})">${wave}${curls}${crest}</g></g>
+<g class="dbtefx-ds-blade">${blade}</g>
 <!--near-->
 <path d="${cedars}" fill="${ink}"/>
 ${vine}

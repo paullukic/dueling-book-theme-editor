@@ -135,7 +135,7 @@ const onePiece = (t) => {
 <g fill="none" stroke="${mix(t.text, t.opp, 0.4)}" stroke-linecap="round">${swell}</g>
 ${glitter}
 <g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(1470, 96, 0.9, 0)}${gull(1500, 126, 0.7, 0.6)}${gull(1440, 140, 0.55, 1.1)}</g>
-<g transform="translate(1212 455) scale(0.22)">
+<g transform="translate(1205 465) scale(0.19)">
 <g style="transform-origin: 1236px 660px; animation: dbtefx-op-rock 11s ease-in-out infinite;">
 <path d="M1150 610V244M1276 604V132" stroke="${ink}" stroke-width="8" stroke-linecap="round"/>
 <path d="M1150 610V244M1276 604V132" stroke="${rim}" stroke-opacity="0.45" stroke-width="1.6" transform="translate(3 0)"/>

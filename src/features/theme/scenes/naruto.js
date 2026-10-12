@@ -147,7 +147,7 @@ const naruto = (t) => {
 <path d="M${tx - 96} ${ty + 8}Q${tx - 50} ${ty - 6} ${tx - 40} ${ty - 30}H${tx + 40}Q${tx + 50} ${ty - 6} ${tx + 96} ${ty + 8}Z" fill="${roof}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
 <path d="M${tx - 58} ${ty - 30}Q${tx - 30} ${ty - 40} ${tx - 24} ${ty - 58}H${tx + 24}Q${tx + 30} ${ty - 40} ${tx + 58} ${ty - 30}Z" fill="${mix(roof, ink, 0.2)}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
 <path d="M${tx - 96} ${ty + 8}Q${tx - 50} ${ty - 6} ${tx - 40} ${ty - 30}H${tx + 40}" fill="none" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-opacity="0.5" stroke-width="1.5"/>
-<circle cx="${tx}" cy="${ty + 32}" r="20" fill="${mix(t.text, t.accent, 0.2)}" stroke="${roof}" stroke-width="5"/><circle cx="${tx}" cy="${ty + 32}" r="11" fill="none" stroke="${roof}" stroke-opacity="0.6" stroke-width="2"/>`;
+<g class="dbtefx-nr-disc"><circle cx="${tx}" cy="${ty + 32}" r="20" fill="${mix(t.text, t.accent, 0.2)}" stroke="${roof}" stroke-width="5"/><circle cx="${tx}" cy="${ty + 32}" r="11" fill="none" stroke="${roof}" stroke-opacity="0.6" stroke-width="2"/></g>`;
 
   // Chakra sphere: three spiral arms spinning fast inside, a wind ring
   // turning the other way, leaves orbiting in its draft.
@@ -191,7 +191,7 @@ const naruto = (t) => {
 <linearGradient id="dbtefx-nr-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dusk}" stop-opacity="0"/><stop offset="0.6" stop-color="${dusk}" stop-opacity="0.22"/><stop offset="1" stop-color="${dusk}" stop-opacity="0"/></linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-nr-sky)"/>
-<circle cx="${MOON[0]}" cy="${MOON[1]}" r="150" fill="url(#dbtefx-nr-moonglow)"/><circle cx="${MOON[0]}" cy="${MOON[1]}" r="64" fill="url(#dbtefx-nr-moon)"/><g fill="${mix(t.text, t.muted, 0.5)}" fill-opacity="0.25"><circle cx="${MOON[0] - 18}" cy="${MOON[1] - 10}" r="12"/><circle cx="${MOON[0] + 20}" cy="${MOON[1] + 16}" r="8"/><circle cx="${MOON[0] + 6}" cy="${MOON[1] - 30}" r="5"/></g>
+<g class="dbtefx-nr-moon"><circle cx="${MOON[0]}" cy="${MOON[1]}" r="150" fill="url(#dbtefx-nr-moonglow)"/><circle cx="${MOON[0]}" cy="${MOON[1]}" r="64" fill="url(#dbtefx-nr-moon)"/><g fill="${mix(t.text, t.muted, 0.5)}" fill-opacity="0.25"><circle cx="${MOON[0] - 18}" cy="${MOON[1] - 10}" r="12"/><circle cx="${MOON[0] + 20}" cy="${MOON[1] + 16}" r="8"/><circle cx="${MOON[0] + 6}" cy="${MOON[1] - 30}" r="5"/></g></g>
 <g style="animation: dbtefx-nr-drift 60s ease-in-out infinite;">
 ${cloud(30, 270, 380, 70, 3)}
 ${cloud(560, 160, 280, 52, 5)}

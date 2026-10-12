@@ -20,6 +20,7 @@ const scene = (t) => {
   // Shibuya skyline: towers with window grids, a cylinder tower, blank screens.
   let towers = '';
   let lights = '';
+  let stageLights = '';
   const lit = rng(9);
   let x = -20;
   while (x < 1620) {
@@ -32,7 +33,12 @@ const scene = (t) => {
       for (let wx = x + 6; wx < x + w - 8; wx += 12) {
         // No lit windows behind the duel's watcher list (left column, above y 740).
         const behindWatchers = wx > 110 && wx < 420 && wy < 740;
-        if (lit() < 0.16 && !behindWatchers) lights += `M${n1(wx)} ${n1(wy)}h5v6h-5Z`;
+        // Windows under the Quit button and the hand go dark during a duel (see the chrome).
+        const underHand = wx > 240 && wx < 900;
+        if (lit() < 0.16 && !behindWatchers) {
+          if (underHand) stageLights += `M${n1(wx)} ${n1(wy)}h5v6h-5Z`;
+          else lights += `M${n1(wx)} ${n1(wy)}h5v6h-5Z`;
+        }
       }
     }
     x += w + 4;
@@ -145,15 +151,16 @@ ${glow('dbtefx-jjk-blue', blue, 0.5, 0.5, 0.5, 0.6)}
 </defs>
 ${veil}
 <!--mid-->
-${purple}
+<g class="dbtefx-jjk-domain">${purple}
 ${bolts}
 ${orb(red, 24, 0, 18)}
-${orb(blue, 24, 9, 18)}
+${orb(blue, 24, 9, 18)}</g>
 <g fill="${ink}"><path d="${towers}"/></g>
 ${tower}
 ${extras}
 ${cyl}
 <path d="${lights}" fill="${mix(t.warning, t.text, 0.4)}" fill-opacity="0.55"/>
+<path class="dbtefx-jjk-stagelights" d="${stageLights}" fill="${mix(t.warning, t.text, 0.4)}" fill-opacity="0.55"/>
 <!--near-->
 ${splat(1500, 120, 0.9, red, 4)}
 ${talismans}`;

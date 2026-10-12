@@ -3,7 +3,7 @@
 // notification emblem, segmented HP gauges capped with a mana crystal; the
 // shadow-violet of the Necromancer class marks what you press.
 // (t, kit) -> CSS string; see chrome/kit.js.
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 
 const on = (list, pseudo) => list.split(', ').map((s) => `${s}::${pseudo}`).join(', ');
 
@@ -88,12 +88,12 @@ ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; l
 ${sel(['#duel .lifepoints .life_txt'])} { color: #ffffff !important; text-shadow: 0 0 6px ${alpha(cyan, 0.8)}, 0 1px 2px #000000 !important; }
 ${SEL.phase} { background: linear-gradient(180deg, ${cyan}, ${edgeDim}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 10px -2px ${alpha(cyan, 0.6)} !important; }
 ${sel(['#duel .phase.active .background'])} { background: linear-gradient(180deg, ${mix(violet, '#ffffff', 0.4)}, ${violet}) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 0 3px ${mix(violet, '#ffffff', 0.35)}, 0 0 20px 6px ${alpha(violet, 0.9)} !important; }
-${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: ${t.bg} !important; text-shadow: 0 0 3px ${alpha('#ffffff', 0.7)} !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span', '#duel .phase.active:has(.phase_inner.blue) span'])} { color: #ffffff !important; text-shadow: 0 1px 2px ${alpha('#000000', 0.6)} !important; }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${glassBot} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, ${scan}, radial-gradient(circle, ${mix(t.bg, cyan, 0.22)}, ${glassBot} 75%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, #ffffff 0, ${mix(violet, '#ffffff', 0.55)} 18%, ${violet} 46%, ${mix(violet, t.bg, 0.55)} 80%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.55)}, 0 0 0 4px ${mix(violet, '#ffffff', 0.15)}, 0 0 22px 7px ${alpha(mix(violet, '#ffffff', 0.2), 0.95)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, #ffffff 0, ${mix(violet, '#ffffff', 0.55)} 18%, ${violet} 46%, ${mix(violet, t.bg, 0.55)} 80%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.55)}, 0 0 0 4px ${mix(violet, '#ffffff', 0.15)}, 0 0 22px 7px ${alpha(mix(violet, '#ffffff', 0.2), 0.95)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, ${deepForWhite(violet)} 40%, ${mix(deepForWhite(violet), t.bg, 0.45)} 85%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.55)}, 0 0 0 4px ${mix(violet, '#ffffff', 0.15)}, 0 0 22px 7px ${alpha(mix(violet, '#ffffff', 0.2), 0.95)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u3) center / 100% 100%, radial-gradient(circle, ${deepForWhite(violet)} 40%, ${mix(deepForWhite(violet), t.bg, 0.45)} 85%) !important; box-shadow: 0 0 0 2px ${mix(violet, '#ffffff', 0.55)}, 0 0 0 4px ${mix(violet, '#ffffff', 0.15)}, 0 0 22px 7px ${alpha(mix(violet, '#ffffff', 0.2), 0.95)}; }
 ${sel(['#duel .phase span'])} { color: ${ice} !important; text-shadow: 0 0 6px ${alpha(cyan, 0.8)}, 0 1px 2px #000000 !important; }
 ${sel(['#duel .cout_txt'])} { background: ${header(0)}, ${glass()} !important; box-shadow: inset 0 0 0 1px ${edgeDim}, inset 0 0 0 3px ${alpha(t.bg, 0.9)}, inset 0 0 0 4px ${alpha(cyan, 0.3)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 1px ${cyan}, 0 0 0 4px ${t.bg}, 0 0 0 5px ${alpha(cyan, 0.4)}, 0 0 14px ${alpha(cyan, 0.4)} !important; }

@@ -37,7 +37,6 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
     }
     return `${d}Z`;
   };
-  const orbDefs = `<defs><radialGradient id="o" cx="0.5" cy="0.62" r="0.62"><stop offset="0" stop-color="${mix(gold, '#ffffff', 0.45)}"/><stop offset="0.5" stop-color="${mix(amber, gold, 0.4)}"/><stop offset="0.88" stop-color="${amber}"/><stop offset="1" stop-color="${mix(amber, red, 0.5)}"/></radialGradient></defs>`;
   const orb = (cx, cy, r, n, starScale = 0.2) =>
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#o)" stroke="${mix(amber, ink, 0.55)}" stroke-width="${(r * 0.05).toFixed(2)}"/>${(STARS[n] || []).map(([x, y]) => `<path d="${starPath(cx + x * r, cy + y * r, r * starScale)}" fill="${red}"/>`).join('')}<path d="M${(cx - r * 0.7).toFixed(2)} ${(cy - r * 0.15).toFixed(2)}A${(r * 0.75).toFixed(2)} ${(r * 0.75).toFixed(2)} 0 0 1 ${(cx + r * 0.1).toFixed(2)} ${(cy - r * 0.72).toFixed(2)}A${(r * 0.6).toFixed(2)} ${(r * 0.6).toFixed(2)} 0 0 0 ${(cx - r * 0.7).toFixed(2)} ${(cy - r * 0.15).toFixed(2)}Z" fill="#ffffff" fill-opacity="0.45"/>`;
 
@@ -59,7 +58,9 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const crestSmall = svg(28, 28, capsule(24, 11));
   const crestBig = svg(84, 84, `<defs><radialGradient id="a"><stop offset="0.5" stop-color="${radar}" stop-opacity="0.45"/><stop offset="1" stop-color="${radar}" stop-opacity="0"/></radialGradient></defs><circle cx="42" cy="42" r="42" fill="url(#a)"/>${radarDisc(42, 26)}`);
   const lifeCap = svg(26, 26, radarDisc(13, 11.5));
-  const phaseOrb = svg(45, 45, `${orbDefs}${orb(22.5, 22.5, 21.5, 0)}`);
+  // The lit phase orb burns a deeper orange so its white label reads.
+  const deep = mix(amber, '#b04a00', 0.4);
+  const phaseOrbLit = svg(45, 45, `<defs><radialGradient id="o" cx="0.5" cy="0.62" r="0.62"><stop offset="0" stop-color="${mix(deep, gold, 0.35)}"/><stop offset="0.55" stop-color="${deep}"/><stop offset="0.88" stop-color="${mix(deep, '#000000', 0.15)}"/><stop offset="1" stop-color="${mix(deep, red, 0.5)}"/></radialGradient></defs>${orb(22.5, 22.5, 21.5, 0)}`);
   const phaseStars = (n) => {
     let d = '';
     for (let i = 0; i < n; i++) {
@@ -90,7 +91,7 @@ export default (t, { SEL, sel, svg, svgUrl, alpha }) => {
   const settingsPanels = sel(['#content #settings_content > div:not(.title_txt):not(.button)']);
   const titles = sel(['#content .title1', '#content .arial_black2', '#content .admin_lbl', '#deck_constructor #search .title_txt']);
 
-  const vars = [rim, crestSmall, grid, crestBig, lifeCap, rings, phaseOrb].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
+  const vars = [rim, crestSmall, grid, crestBig, lifeCap, rings, phaseOrbLit].map((v, i) => `--dbtc-u${i}: ${svgUrl(v)};`).join(' ');
   const phases = phaseIds.map((id, i) => `--dbtc-p${id}: ${svgUrl(phaseStars(i + 1))};`).join(' ');
   return `
 html body { ${vars} ${phases} }

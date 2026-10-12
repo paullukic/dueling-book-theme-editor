@@ -75,10 +75,10 @@ ${SEL.buttonDown} { background: ${mix(red, '#000000', 0.65)} !important; border-
 ${sel(['#content .button.proxy::before'])} { content: ""; position: absolute; left: 3px; top: -2px; width: 7px; height: 70%; pointer-events: none; background: var(--dbtc-u4) center / 100% 100% no-repeat; filter: drop-shadow(1px 1px 1px #000000); }
 ${sel(['#content .button.disabled'])} { opacity: 0.55 !important; }
 
-/* Pop-ups: the notebook's black rules page, stitched; a quill lies across a red ribbon bookmark over the top edge. */
+/* Pop-ups: the notebook's black rules page, stitched; a quill and red ribbon bookmark hang off the top-right corner, outside the page. */
 ${SEL.dialog} { background: radial-gradient(ellipse 70% 50% at 50% 0%, ${alpha(cold, 0.1)}, transparent 70%), var(--dbtc-u3), var(--dbtc-u2), linear-gradient(180deg, ${mix(leather, t.raised, 0.25)}, ${mix(t.bg, '#000000', 0.3)}) !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${mix(t.border, t.bg, 0.2)}, 0 0 0 4px ${ink}, 0 0 0 5px ${alpha(bone, 0.45)}, 0 24px 60px -12px #000000 !important; }
 ${on(SEL.dialog, 'before')} { content: ""; position: absolute; left: 6px; top: 6px; right: 6px; bottom: 6px; width: auto; height: auto; pointer-events: none; z-index: 0; ${frame(12)} background: none; transform: none; }
-${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: auto; top: -30px; right: 14px; bottom: auto; width: 144px; height: 120px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
+${on(SEL.dialog, 'after')} { content: ""; position: absolute; left: auto; top: -44px; right: -150px; bottom: auto; width: 144px; height: 120px; pointer-events: none; z-index: 1; background: var(--dbtc-u6) center / contain no-repeat; transform: none; }
 ${SEL.dialogTitle} { ${label} }
 
 /* Chat: a stitched leather band; the window is a ruled page. */
@@ -90,8 +90,8 @@ ${SEL.chat} { background: ${pageWell} !important; box-shadow: inset 1px 0 0 ${bo
 /* Duel: stitched leather life bars written in red and cold ink, capped with a pen nib; phases pressed in wax. */
 ${SEL.life} { border-color: ${mix(t.border, t.bg, 0.1)} !important; border-radius: 2px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 2px ${alpha(bone, 0.35)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 1px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self}) !important; }
-${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${t.opp} 70%, ${mix(t.opp, '#000000', 0.38)}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, #c9a24a, #e8c873) !important; }
+${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.18)}, transparent 50%), var(--dbtc-u3), linear-gradient(90deg, ${mix(t.opp, '#000000', 0.6)}, ${t.opp} 45%, ${mix(t.opp, '#000000', 0.38)} 70%, #6f747a) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -6px; width: 18px; height: 40px; pointer-events: none; background: var(--dbtc-u5) center / contain no-repeat; transform: rotate(-24deg); }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${bone} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
 ${SEL.phase} { background: conic-gradient(from 210deg, ${mix(t.muted, '#ffffff', 0.45)}, ${mix(t.muted, t.bg, 0.45)}, #ffffff, ${mix(t.muted, t.bg, 0.45)}, ${mix(t.muted, '#ffffff', 0.45)}) !important; box-shadow: 0 0 0 1px ${ink}, 0 4px 10px -2px #000000 !important; }

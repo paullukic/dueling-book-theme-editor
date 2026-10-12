@@ -125,7 +125,8 @@ ${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u6) ce
 ${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u6) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.75)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${lacquerHi}, ${mix(lacquer, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${vermDeep}, inset 0 0 0 4px ${alpha(checkInk, 0.9)}, inset 0 0 0 5px ${alpha(gold, 0.3)} !important; }
-${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${vermilion}, 0 0 0 4px ${checkInk}, 0 0 0 5px ${alpha(gold, 0.5)} !important; }
+${sel(['#duel #avatar1', '#duel #avatar3'])} { box-shadow: 0 0 0 2px ${t.self}, 0 0 0 4px ${checkInk}, 0 0 0 5px ${alpha(gold, 0.7)} !important; }
+${sel(['#duel #avatar2', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${t.opp}, 0 0 0 4px ${checkInk}, 0 0 0 5px ${alpha(gold, 0.5)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${gold}, ${goldDim}) !important; }
 ${sel(['#duel #turn .background_inner', '#duel #start_turn .background_inner', '#duel #end_turn .background_inner'])} { background: linear-gradient(180deg, ${mix(vermilion, t.bg, 0.3)}, ${mix(vermilion, t.bg, 0.62)}) !important; }
 
@@ -162,5 +163,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons: lacquer plates with a haori check, OK and Yes in vermilion. */
 ${popCss(popPrimary, popSecondary)}
+
+/* Scene: the blade stays off the menu feed and the front page's links. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-ds-blade { display: none; }
 `;
 };

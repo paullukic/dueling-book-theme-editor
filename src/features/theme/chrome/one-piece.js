@@ -81,7 +81,7 @@ html body { ${vars} }
 /* Menu tiles: timber planks lashed in a rope frame, the straw hat on top. */
 ${SEL.tile} { background: ${timberBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 14px round !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.8)}, inset 0 -12px 18px -8px ${alpha('#000000', 0.55)}, 0 10px 22px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: calc(50% - 17px); top: -8px; width: 34px; height: 16px; pointer-events: none; background: var(--dbtc-u7) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
-${on(sel(['#main_menu #room_btn.menu_btn .content']), 'before')} { left: calc(50% - 22px); top: -14px; width: 44px; height: 26px; background: var(--dbtc-u1) center / contain no-repeat; }
+${on(sel(['#main_menu #room_btn.menu_btn .content']), 'before')} { left: calc(50% - 20px); top: -10px; width: 40px; height: 24px; background: var(--dbtc-u1) center / contain no-repeat; }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
 ${SEL.tileHover} { background: ${timberBg(0.16)} !important; box-shadow: inset 0 0 0 1px ${alpha(ink, 0.8)}, inset 0 0 24px ${alpha(t.accent, 0.3)}, 0 0 18px -4px ${alpha(t.accent, 0.65)}, 0 12px 24px -12px #000000 !important; }
 ${SEL.tileLabel} { ${label} }
@@ -105,6 +105,8 @@ ${SEL.chat} { background: var(--dbtc-u2) 0 0 / 160px 36px, linear-gradient(180de
 ${SEL.life} { border-color: ${brass} !important; border-radius: 4px !important; box-shadow: 0 0 0 1px ${ink}, 0 0 0 3px ${ropeDark}, 0 0 0 4px ${alpha(rope, 0.6)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 4px !important; }
 ${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(mix(t.accent, t.accent2, 0.3), '#000000', 0.3)}, ${t.accent} 45%, ${mix(t.accent, '#e0b050', 0.6)}) !important; }
+/* A red inner hairline ties the gold self bar to the red self zones. */
+${sel(['#duel #lifepoints1 .life_border'])} { box-shadow: inset 0 0 0 2px ${t.self}, 0 0 0 1px ${ink}, 0 0 0 3px ${ropeDark}, 0 0 0 4px ${alpha(rope, 0.6)}, 0 4px 10px -3px #000000 !important; }
 /* The numeral fade under the self count dims gold into a warm umber, not the sea's teal ink (which turns it olive). */
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), linear-gradient(90deg, ${mix(t.opp, t.bg, 0.6)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -20px; top: -6px; width: 22px; height: 38px; pointer-events: none; background: var(--dbtc-u4) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }

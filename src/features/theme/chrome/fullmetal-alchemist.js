@@ -102,7 +102,7 @@ ${SEL.chat} { background: ${well} !important; box-shadow: inset 1px 0 0 ${brassD
 /* Duel: brass-rimmed life gauges capped with a hex bolt; phases chalked with arrays in riveted brass collars, lit when active. */
 ${SEL.life} { border-color: ${brass} !important; border-radius: 3px !important; box-shadow: 0 0 0 1px ${ironDark}, 0 0 0 2px ${alpha(brass, 0.45)}, 0 4px 10px -3px #000000 !important; }
 ${SEL.lifeSelf}, ${SEL.lifeOpp} { border-radius: 2px !important; }
-${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), ${brushed}, linear-gradient(90deg, ${mix(t.self, '#000000', 0.55)}, ${t.self}) !important; }
+${SEL.lifeSelf} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.4)}, transparent 40%, transparent 80%, ${alpha('#000000', 0.15)}), ${brushed}, linear-gradient(90deg, #d0a040, #f0c860) !important; }
 ${SEL.lifeOpp} { background: linear-gradient(180deg, ${alpha('#ffffff', 0.25)}, transparent 45%), ${brushed}, linear-gradient(90deg, ${mix(t.opp, '#000000', 0.55)}, ${t.opp}) !important; }
 ${on(sel(['#duel .lifepoints']), 'before')} { content: ""; position: absolute; left: -18px; top: -3px; width: 20px; height: 36px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; }
 ${sel(['#duel .lifepoints .life_txt'])} { color: ${chalk} !important; text-shadow: 0 1px 2px #000000, 0 0 6px #000000 !important; }
@@ -110,10 +110,11 @@ ${SEL.phase} { background: conic-gradient(from 200deg, ${brass}, ${brassDim}, ${
 ${sel(['#duel .phase::before'])} { content: ""; position: absolute; left: -4px; top: -4px; right: -4px; bottom: -4px; pointer-events: none; background: var(--dbtc-u5) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${ironDark} !important; }
-${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(iron, t.text, 0.12)}, ${ironDark} 75%) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(blue, 0.8)}, 0 0 4px ${blue}; }
+${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle at 40% 35%, ${mix(iron, ironDark, 0.35)}, ${mix(ironDark, '#000000', 0.3)} 75%) !important; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle at 40% 35%, #f6d47a, #e0a93a 55%, #b07a22) !important; box-shadow: 0 0 0 2px ${mix(blue, '#ffffff', 0.4)}, 0 0 18px 4px ${alpha(blue, 0.85)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u4) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 30%, ${mix(deepForWhite(t.opp), '#000000', 0.3)}) !important; box-shadow: 0 0 0 2px ${mix(blue, '#ffffff', 0.4)}, 0 0 18px 4px ${alpha(blue, 0.85)}; }
 ${sel(['#duel .phase span'])} { color: ${chalk} !important; text-shadow: 0 1px 2px #000000 !important; }
+${sel(['#duel .phase.active:has(.phase_inner.red) span'])} { color: #241503 !important; text-shadow: 0 1px 0 ${alpha('#ffffff', 0.45)} !important; }
 ${sel(['#duel .cout_txt'])} { background: ${well} !important; box-shadow: inset 0 0 0 1px ${brassDim}, inset 0 0 0 4px ${alpha(ironDark, 0.9)}, inset 0 0 0 5px ${alpha(brass, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${brass}, 0 0 0 5px ${ironDark}, 0 0 0 6px ${alpha(brass, 0.5)} !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: linear-gradient(180deg, ${brass}, ${brassDim}) !important; }
@@ -152,5 +153,10 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons: crimson cloth and steel, brass-rimmed. */
 ${popCss(popPrimary, popSecondary)}
+
+/* Scene: the Gate stays off the front page's links and right of the menu feed; the circle clears the duel's avatar panel. */
+html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-fma-gate { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-fma-gate, .dbtefx-fma-circle) { transform: translateX(224px); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fma-circle { transform-origin: 1365px 742px; transform: translate(156px, -60px) scale(0.5); }
 `;
 };

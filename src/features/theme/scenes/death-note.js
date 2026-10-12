@@ -77,7 +77,7 @@ const scene = (t) => {
   const tx = 330;
   const tower = `<path d="M${tx} 640L${tx - 3} 700L${tx - 9} 744H${tx - 13}V752H${tx - 11}L${tx - 22} 812H${tx - 27}V820H${tx - 24}L${tx - 40} ${H}H${tx + 40}L${tx + 24} 820H${tx + 27}V812H${tx + 22}L${tx + 11} 752H${tx + 13}V744H${tx + 9}L${tx + 3} 700Z" fill="${mix(t.bg, cold, 0.1)}"/><circle cx="${tx}" cy="640" r="2.4" fill="${t.danger}" ${anim('pulse', 2.4, 0, 'ease-in-out')}/>`;
 
-  const bx = 1424;
+  const bx = 1408;
   const by = 340;
   const apple = 'M0 -34C20 -50 50 -42 50 -6C50 32 28 56 6 52C0 50 -6 50 -12 52C-32 56 -52 32 -50 -6C-50 -42 -20 -50 0 -34Z';
   return `<defs>

@@ -172,6 +172,7 @@ const scene = (t) => {
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-fma-void)"/>
 <!--mid-->
+<g class="dbtefx-fma-gate">
 <path d="M${gx - 170} ${base + 26}L${gx - 240} ${H}H${gx + 240}L${gx + 170} ${base + 26}Z" fill="url(#dbtefx-fma-shadow)" opacity="0.6"/>
 <rect x="${gx - dw}" y="${iy}" width="${dw * 2}" height="${ih}" fill="${mix(t.bg, '#000000', 0.5)}"/>
 ${eyes}
@@ -179,10 +180,13 @@ ${leaf(-1)}${leaf(1)}
 <rect x="${gx - dw}" y="${iy}" width="${dw * 2}" height="${ih}" fill="url(#dbtefx-fma-grime)"/>
 ${tendrils}
 ${arch}
+</g>
 <!--near-->
+<g class="dbtefx-fma-circle">
 <ellipse cx="${gx}" cy="${cy}" rx="${n1((R + 40) * CK)}" ry="${n1((R + 40) * CK * 0.24)}" fill="url(#dbtefx-fma-pool)" style="animation: dbtefx-pulse 3.2s ease-in-out infinite;"/>
 <g transform="translate(${gx} ${cy}) scale(${CK} ${n1(ry * CK)})" fill="none"><g stroke="${blue}" stroke-opacity="0.3" stroke-width="9" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${blue}" stroke-opacity="0.5" stroke-width="3.5" vector-effect="non-scaling-stroke">${circle}</g><g stroke="${bluePale}" stroke-width="1.6" vector-effect="non-scaling-stroke">${circle}</g></g>
 <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">${bolts}</g>
+</g>
 <style>
 @keyframes dbtefx-fma-doorl { 0%, 30%, 100% { transform: translateX(-8px); } 55%, 72% { transform: translateX(-20px); } }
 @keyframes dbtefx-fma-doorr { 0%, 30%, 100% { transform: translateX(8px); } 55%, 72% { transform: translateX(20px); } }

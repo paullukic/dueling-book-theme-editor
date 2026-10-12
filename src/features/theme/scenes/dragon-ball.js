@@ -46,7 +46,7 @@ ${stars}
 
   // The six other orbs stacked above and below the hero in the right margin,
   // each glowing in turn.
-  const ring = [[1446, 110, 1, 18], [1420, 200, 2, 19], [1446, 292, 3, 20], [1420, 636, 5, 20], [1446, 706, 6, 19], [1422, 772, 7, 18]].map(([x, y, n, rad], i) =>
+  const ring = [[1446, 110, 1, 18], [1420, 200, 2, 19], [1446, 292, 3, 20], [1420, 616, 5, 20], [1446, 684, 6, 19], [1446, 738, 7, 18]].map(([x, y, n, rad], i) =>
     `<circle cx="${x}" cy="${y}" r="${rad * 2.6}" fill="url(#dbtefx-db-halo)" style="animation: dbtefx-db-call 6s ease-in-out ${n1(-6 + i)}s infinite;"/><g ${anim('bob', n1(5 + i * 0.6), i, 'ease-in-out')}>${orb(x, y, rad, n)}</g>`).join('');
 
   // Buttes: flat-topped mesas in hazy depths; the flank facing the aura
@@ -88,20 +88,6 @@ ${stars}
   };
   const lift = (x, y, s, seed, dur, delay) => `<g style="animation: dbtefx-db-lift ${dur}s ease-in-out ${-delay}s infinite;">${chunk(x, y, s, seed)}</g>`;
 
-  // Ki lightning crackling around the aura, flashing rarely.
-  let bolts = '';
-  [[1400, 380, 3, 0], [1460, 560, 9, 3.8]].forEach(([x, y, seed, delay]) => {
-    const lr = rng(seed);
-    let d = `M${x} ${y}`;
-    let [px, py] = [x, y];
-    for (let i = 0; i < 6; i++) {
-      px += (lr() - 0.3) * 40;
-      py += (lr() - 0.5) * 50 + 16;
-      d += `L${n1(px)} ${n1(py)}`;
-    }
-    bolts += `<path d="${d}" fill="none" stroke="${mix(gold, '#ffffff', 0.6)}" stroke-width="2.4" stroke-linejoin="bevel" style="animation: dbtefx-db-bolt 7s linear ${-delay}s infinite;"/>`;
-  });
-
   // Craters pocking the plain.
   let craters = '';
   [[260, 800, 90], [700, 770, 50], [1500, 830, 70]].forEach(([x, y, w]) => {
@@ -111,8 +97,7 @@ ${stars}
   return `<style>@keyframes dbtefx-db-call { 0%, 70%, 100% { opacity: 0.15; transform: scale(0.8); } 80% { opacity: 1; transform: scale(1.1); } }
 @keyframes dbtefx-db-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes dbtefx-db-lift { 0% { transform: translateY(0); } 50% { transform: translateY(-30px); } 100% { transform: translateY(0); } }
-@keyframes dbtefx-db-shock { 0% { transform: scale(0.3); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: scale(1.9); opacity: 0; } }
-@keyframes dbtefx-db-bolt { 0%, 88%, 93%, 100% { opacity: 0; } 89%, 92% { opacity: 1; } 90.5% { opacity: 0.2; } }</style>
+@keyframes dbtefx-db-shock { 0% { transform: scale(0.3); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: scale(1.9); opacity: 0; } }</style>
 <defs>
 <linearGradient id="dbtefx-db-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.bg}" stop-opacity="0.6"/><stop offset="0.55" stop-color="${mix(t.bg, t.border, 0.5)}" stop-opacity="0.3"/><stop offset="0.72" stop-color="${haze}" stop-opacity="0.45"/><stop offset="0.73" stop-color="${haze}" stop-opacity="0"/></linearGradient>
 <linearGradient id="dbtefx-db-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix(rock, t.bg, 0.4)}"/><stop offset="1" stop-color="${mix(t.bg, '#000000', 0.3)}"/></linearGradient>
@@ -133,7 +118,6 @@ ${craters}
 <g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="14"/><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${mix(gold, '#ffffff', 0.4)}" stroke-opacity="0.7" stroke-width="3"/></g>
 <g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out -2s infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${amber}" stroke-opacity="0.3" stroke-width="10"/></g>
 <circle cx="${C[0]}" cy="${C[1]}" r="${R * 1.6}" fill="url(#dbtefx-db-aura)" ${anim('pulse', 1.2, 0, 'ease-in-out')}/>
-${bolts}
 ${ring}
 <g style="animation: dbtefx-db-hover 7s ease-in-out infinite;">${orb(C[0], C[1], R, 4)}</g>
 <!--near-->

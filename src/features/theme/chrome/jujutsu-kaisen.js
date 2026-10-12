@@ -119,8 +119,8 @@ ${SEL.phase} { background: conic-gradient(from 210deg, ${cursed}, ${ink}, ${mix(
 ${sel(['#duel .phase .background .background_top'])} { background: none !important; }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${navyDeep} !important; }
 ${sel(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${navy} 30%, ${navyDeep}) !important; }
-${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)}; }
-${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)}; }
+${sel(['#duel .phase.active .phase_inner.red'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${mix(t.self, '#ffffff', 0.35)}, 0 0 20px 6px ${alpha(t.self, 0.9)}, 0 0 36px 10px ${alpha(t.self, 0.4)}; }
+${sel(['#duel .phase.active .phase_inner.blue'])} { background: var(--dbtc-u5) center / 100% 100%, radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 0 2px ${mix(t.opp, '#ffffff', 0.35)}, 0 0 20px 6px ${alpha(t.opp, 0.9)}, 0 0 36px 10px ${alpha(t.opp, 0.4)}; }
 ${sel(['#duel .phase span'])} { color: ${t.text} !important; text-shadow: 0 1px 2px #000000 !important; }
 ${SEL.duelLog} { background: var(--dbtc-u2), linear-gradient(180deg, ${navy}, ${mix(navyDeep, t.bg, 0.5)}) !important; box-shadow: inset 0 0 0 1px ${alpha(cursed, 0.5)}, inset 0 0 0 4px ${alpha(ink, 0.9)}, inset 0 0 0 5px ${alpha(red, 0.35)} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ink}, 0 0 0 3px ${cursed}, 0 0 12px ${alpha(cursed, 0.6)} !important; }
@@ -160,5 +160,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons: a red seal block and talisman paper. */
 ${popCss(popPrimary, popSecondary)}
+
+/* Scene: the domain sits right of the menu feed's Reply column and the front page's links; the windows under Quit and the hand go dark in a duel. */
+html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-jjk-domain { transform: translateX(63px); }
+html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-jjk-stagelights { display: none; }
 `;
 };
