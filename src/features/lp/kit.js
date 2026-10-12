@@ -18,6 +18,9 @@ export const LP_VAR = '--dbte-lp';
 export const lp = `var(${LP_VAR}, 1)`;
 // The frame's corner radius, recorded when a pulse starts (hit ring shape).
 export const LP_RADIUS_VAR = '--dbte-lp-radius';
+// A slanted frame (a parallelogram) sets this on .lifepoints (e.g. -18deg),
+// so the hit ring and its core skew to the frame's shape.
+export const LP_SKEW_VAR = '--dbte-lp-skew';
 // State on each .lifepoints: "hit" | "heal", "low" | "zero", "wide".
 export const STATE_ATTR = 'data-dbte-lp';
 // On <html> while a life point style (not the theme's look) is drawn, so the

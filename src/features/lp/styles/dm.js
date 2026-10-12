@@ -1,7 +1,7 @@
 // Duel Monsters: the Battle City era counter. A brushed-steel plate with a
 // thin light inset frame, "LP" and the number in gunmetal bold-italic serif
-// with a light bevel (chrome digits vanished on the steel). A slim engraved rail under "LP", lit in the Battle
-// City disk's red, carries the life left.
+// with a light bevel (chrome digits vanished on the steel). A slim engraved rail under "LP" carries the life
+// left: duel-disk blue while healthy, the Battle City red only when low.
 
 const W = 156;
 const H = 31;
@@ -30,6 +30,9 @@ ${k.bar} { opacity: 0 !important; }
 ${k.border} { background: ${k.svgUrl(plate(k.svg))} 0 0 / 100% 100% border-box no-repeat !important; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) !important; }
 ${k.border}::before {
   content: "" !important; ${k.box(9, 21, 55, 3)}
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%), ${k.fill('#2a64c8', 'transparent')};
+}
+${k.when('low', 'life_border')}::before, ${k.when('zero', 'life_border')}::before {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%), ${k.fill('#c8202a', 'transparent')};
 }
 ${k.txt} {

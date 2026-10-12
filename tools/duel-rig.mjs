@@ -5,7 +5,8 @@
 //                          frame, no particles, no shader), as ThemeEffect does
 //   lpStyle(id, effects)   a life point style and the life point effects
 //   chat(alpha)            the duel chat / card text transparency
-//   setLp(side, lp, state) a side's life (number, lost-life bar, --dbte-lp)
+//   setLp(side, lp, state, pulse)
+//                          a side's life (number, lost-life bar, --dbte-lp)
 //                          and its effects state, as lp/watch.js writes them
 //   freezeLp()             holds each LP glow animation at its peak
 //   preview()              shows the hovered-card preview and its card text
@@ -84,10 +85,11 @@ const lpStyle = (id, effects = true) => {
 
 const chat = (alpha) => style('dbte-duel-chat', alpha < 1 ? duelChatCss(alpha) : null);
 
-// side 1 = the bottom player, 2 = the top one. `state` forces the effects
-// state ("hit", "heal", "low", "zero", or a combination); left out, the level
-// follows the life as watch.js would compute it.
-const setLp = (side, lp, state) => {
+// side 1 = the bottom player, 2 = the top one. `state` forces the level
+// ("low", "zero", or any state string); left out, the level follows the life
+// as watch.js would compute it. `pulse` ("hit", "heal") stacks on that level,
+// as watch.js writes it ("hit low" while a low side takes damage).
+const setLp = (side, lp, state, pulse) => {
   const box = document.getElementById(`lifepoints${side}`);
   if (!box) return false;
   const black = box.querySelector('.black_bar');
@@ -96,7 +98,7 @@ const setLp = (side, lp, state) => {
   const ratio = lifeRatio(black.style.width);
   box.style.setProperty(LP_VAR, ratio.toFixed(3));
   // No state given (undefined, null or ""): the level as watch.js computes it.
-  const value = lpState(null, state ? state : lpLevel(lp, ratio), lp >= WIDE_LP);
+  const value = lpState(pulse || null, state ? state : lpLevel(lp, ratio), lp >= WIDE_LP);
   if (value) box.setAttribute(STATE_ATTR, value);
   else box.removeAttribute(STATE_ATTR);
   // As watch.js does when a pulse starts: the hit ring takes the frame's radius.

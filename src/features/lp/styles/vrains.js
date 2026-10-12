@@ -1,6 +1,6 @@
 // VRAINS: the Link VRAINS HUD. A dark indigo data bar with a chevron tip, a
 // metal hexagon cap with a green hex ring, and a cyan rail along its foot whose
-// glow runs as far as the life left, an "LP" tab riding on it. Big white numerals
+// glow runs as far as the life left. Big white numerals
 // with a navy outline.
 
 const W = 156;
@@ -19,8 +19,6 @@ const plate = (svg) =>
 <path d="M12 3.5H145L152.5 15.5L145 27.5H12Z" fill="url(#x)"/>
 <path d="M146.5 6L153.8 15.5L146.5 25" fill="none" stroke="#e8f4ff" stroke-width="1.4"/>
 <path d="M36 25.4H143" stroke="#30e8e8" stroke-opacity=".18" stroke-width="2.2"/>
-<path d="M20 23.2H34L36 27.6H20Z" fill="#30e8e8"/>
-<text x="22" y="27" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="4.6" fill="#0a1030">LP</text>
 <path d="M11 4.5L19.7 9.5V19.5L11 24.5L2.3 19.5V9.5Z" transform="translate(0 1)" fill="url(#h)" stroke="#2a3040" stroke-width=".8"/>
 <path d="M11 11.6L14.3 13.5V17.5L11 19.4L7.7 17.5V13.5Z" fill="#0c1a12" stroke="#40c060" stroke-width="1.2"/>
 <path d="M3.2 10.8L11 6.3" stroke="#fff" stroke-opacity=".6" stroke-width=".6"/>`,

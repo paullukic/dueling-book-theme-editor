@@ -12,7 +12,7 @@ styles and states, and the runtime ink guard.
   duel.png       duel-watch with a hovered card's preview and card text
                  shown (left column); bottom player (#lifepoints1) and top player
                  (#lifepoints2) at --lp, the top side forced into --opp-state
-  duel-hit.png   the same with the top side in the "hit" state
+  duel-hit.png   the same with a "hit" pulse stacked on the top side's state
   lp-crop.png    both LP counters (top, then bottom) at device scale 2
   menu.png       main-menu
   dialog.png     the error pop-up
@@ -183,7 +183,7 @@ def render_theme(browser, opts, theme):
         with open(os.path.join(out, 'regions.json'), 'w', encoding='utf-8') as f:
             json.dump(regions, f, indent=1)
         stack(duel.lp_crops()).save(os.path.join(out, 'lp-crop.png'))
-        duel.js('a => dbteRig.setLp(2, a[0], a[1])', [opp_lp, 'hit'])
+        duel.js('a => dbteRig.setLp(2, a[0], a[1], a[2])', [opp_lp, opts.opp_state, 'hit'])
         duel.settle(False)
         duel.shot(os.path.join(out, 'duel-hit.png'))
     finally:

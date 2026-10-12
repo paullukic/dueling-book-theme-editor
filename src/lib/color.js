@@ -46,6 +46,17 @@ export const readableOn = (color, bg, min = 4.5) => {
   return target;
 };
 
+// A disc or pill colour deepened (into `into`) just enough for white
+// lettering at `min` contrast, from a 35% start so it reads as a lit surface,
+// not a flat dark: the active phase and the TURN pill.
+export const deepForWhite = (color, into = '#000000', min = 4.5, from = 0.35) => {
+  for (let t = from; t < 1; t += 0.05) {
+    const c = mix(color, into, t);
+    if (contrast('#ffffff', c) >= min) return c;
+  }
+  return into;
+};
+
 // A computed CSS colour ("rgb(...)", "rgba(...)" or "color(srgb ...)") as
 // [r, g, b, alpha] with channels 0-255; null when it cannot be read.
 export const parseCssColor = (value) => {
