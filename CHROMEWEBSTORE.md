@@ -80,7 +80,7 @@ Screenshots are rendered from page snapshots with the released build: every othe
 ### Store review notes
 - Permissions are identical to the live 1.1.0 (storage, unlimitedStorage, scripting, duelingbook.com hosts): no new permission prompt for existing users.
 - No remote code. Scene card art loads as images from images.duelingbook.com, the same files the site loads (see Privacy); nothing is bundled.
-- The listing names no anime franchise; the anime-inspired themes carry franchise names only inside the extension.
+- No anime franchise is named in the listing or in the extension: the anime-inspired themes have neutral names (Pirate Crew, Shinobi Village, Star Orbs, Walled City, Demon Hunter, Cursed Domain, Black Notebook, Alchemist, Gate Hunter).
 
 ## Permissions Justification
 

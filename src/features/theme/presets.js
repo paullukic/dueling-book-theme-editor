@@ -1441,8 +1441,8 @@ export const PRESETS = [
   {
     id: 'one-piece',
     group: 'anime',
-    name: 'One Piece',
-    blurb: 'Grand Line dusk, straw-gold sails, ship timber, hemp rope and sea-chart parchment',
+    name: 'Pirate Crew',
+    blurb: 'Open-sea dusk, straw-gold sails, ship timber, hemp rope and sea-chart parchment',
     radius: 5,
     tokens: {
       bg: '#061a24',
@@ -1465,8 +1465,8 @@ export const PRESETS = [
   {
     id: 'naruto',
     group: 'anime',
-    name: 'Naruto',
-    blurb: 'Leaf-village dusk, ninja scrolls, forged steel and a spiralling chakra sphere',
+    name: 'Shinobi Village',
+    blurb: 'Village dusk, ninja scrolls, forged steel and a spiralling energy sphere',
     radius: 3,
     tokens: {
       bg: '#0d110c',
@@ -1489,8 +1489,8 @@ export const PRESETS = [
   {
     id: 'dragon-ball',
     group: 'anime',
-    name: 'Dragon Ball',
-    blurb: 'Amber star-glass orbs, a golden ki aura and rocky wasteland under a violet sky',
+    name: 'Star Orbs',
+    blurb: 'Amber star-glass orbs, a golden power aura and rocky wasteland under a violet sky',
     radius: 10,
     tokens: {
       bg: '#0e0a24',
@@ -1513,8 +1513,8 @@ export const PRESETS = [
   {
     id: 'attack-on-titan',
     group: 'anime',
-    name: 'Attack on Titan',
-    blurb: 'Survey Corps green, Wall Maria stone, ODM steel and titan steam',
+    name: 'Walled City',
+    blurb: 'Scout green, great wall stone, grapple steel and giant steam',
     radius: 2,
     tokens: {
       bg: '#0d0f0f',
@@ -1537,8 +1537,8 @@ export const PRESETS = [
   {
     id: 'demon-slayer',
     group: 'anime',
-    name: 'Demon Slayer',
-    blurb: 'Taisho night, ukiyo-e water breathing, sun-dance flame and wisteria',
+    name: 'Demon Hunter',
+    blurb: 'Old Japan at night, ukiyo-e water waves, sun-dance flame and wisteria',
     radius: 3,
     tokens: {
       bg: '#0c0a0f',
@@ -1561,8 +1561,8 @@ export const PRESETS = [
   {
     id: 'jujutsu-kaisen',
     group: 'anime',
-    name: 'Jujutsu Kaisen',
-    blurb: 'Midnight Shibuya, cursed energy, sealing talismans and a red-meets-blue hollow purple',
+    name: 'Cursed Domain',
+    blurb: 'Midnight Tokyo, cursed energy, sealing talismans and a red-meets-blue violet orb',
     radius: 2,
     tokens: {
       bg: '#07070d',
@@ -1585,7 +1585,7 @@ export const PRESETS = [
   {
     id: 'death-note',
     group: 'anime',
-    name: 'Death Note',
+    name: 'Black Notebook',
     blurb: 'A black notebook falling through cold light, gothic rule pages and one red apple',
     radius: 1,
     tokens: {
@@ -1609,8 +1609,8 @@ export const PRESETS = [
   {
     id: 'fullmetal-alchemist',
     group: 'anime',
-    name: 'Fullmetal Alchemist: Brotherhood',
-    blurb: 'The Gate of Truth, chalk transmutation circles, automail steel and a crimson coat',
+    name: 'Alchemist',
+    blurb: 'A stone gate, chalk transmutation circles, steel limbs and a crimson coat',
     radius: 2,
     tokens: {
       bg: '#0e0b0a',
@@ -1633,8 +1633,8 @@ export const PRESETS = [
   {
     id: 'solo-leveling',
     group: 'anime',
-    name: 'Solo Leveling',
-    blurb: 'System windows in black glass, a blue Gate over a ruined city and violet shadow smoke',
+    name: 'Gate Hunter',
+    blurb: 'Status windows in black glass, a blue gate over a ruined city and violet shadow smoke',
     radius: 2,
     tokens: {
       bg: '#04060e',
