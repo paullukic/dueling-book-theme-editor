@@ -623,6 +623,17 @@ html #duel #avatar2, html #duel #avatar4 { background: linear-gradient(160deg, v
 html #duel #status1 .status_txt, html #duel #countdown1 { text-shadow: 0 0 10px var(--dbt-self), 0 0 2px var(--dbt-halo) !important; }
 html #duel #status2 .status_txt, html #duel #countdown2 { text-shadow: 0 0 10px var(--dbt-opp), 0 0 2px var(--dbt-halo) !important; }
 
+/* Zones you can place a card in: DuelingBook marks them with thin white dashes that vanish on light theme borders,
+   so each open zone also pulses with an accent ring. */
+html body #duel #select_zones > div::after {
+  content: ""; position: absolute; inset: 3px; border-radius: 4px; pointer-events: none;
+  background: color-mix(in srgb, var(--dbt-accent) 18%, transparent);
+  box-shadow: inset 0 0 0 3px var(--dbt-accent), 0 0 14px 3px var(--dbt-accent);
+  animation: dbte-zone-pick 0.8s ease-in-out infinite alternate;
+}
+@keyframes dbte-zone-pick { from { opacity: 0.3; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { html body #duel #select_zones > div::after { animation: none; } }
+
 /* Card text, watchers, prompts, menus */
 html #duel #preview_txt, html #deck_constructor #preview_txt { background-color: var(--dbt-glass) !important; color: var(--dbt-text) !important; }
 html #duel #watchers, html #duel #watchers .users { background-color: var(--dbt-surface) !important; color: var(--dbt-text) !important; border-color: var(--dbt-line) !important; }

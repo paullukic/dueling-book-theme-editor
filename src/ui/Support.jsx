@@ -7,7 +7,10 @@ import { HeartIcon, PlayIcon, ShareIcon, StarIcon } from './icons';
 const DONATE_URL = 'https://www.buymeacoffee.com/sudbina';
 const STORE_URL = 'https://chromewebstore.google.com/detail/fpehmkbiafgdeaheeehcbpgahmlkolac';
 const REVIEW_URL = `${STORE_URL}/reviews`;
-const YOUTUBE_URL = 'https://www.youtube.com/@PsyYGO';
+const YOUTUBE_CHANNELS = [
+  { name: 'PsyYGO', url: 'https://www.youtube.com/@PsyYGO' },
+  { name: 'EvN-TCG', url: 'https://www.youtube.com/@EvN-TCG' },
+];
 const DISCORD_URL = 'https://discord.gg/XtP5Vj4q3C';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -269,10 +272,12 @@ export const SupportTab = () => {
             <ShareIcon />
             Join the Discord: request themes and report bugs
           </a>
-          <a className="btn" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">
-            <PlayIcon />
-            Watch PsyYGO on YouTube
-          </a>
+          {YOUTUBE_CHANNELS.map(({ name, url }) => (
+            <a key={name} className="btn" href={url} target="_blank" rel="noopener noreferrer">
+              <PlayIcon />
+              Watch {name} on YouTube
+            </a>
+          ))}
         </div>
       </Group>
     </>
