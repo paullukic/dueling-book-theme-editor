@@ -145,7 +145,5 @@ ${popCss}
 
 /* Duel: the temple's bubbles would rise inside the stage by the right deck. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-mm-bubbles { display: none; }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mm-megalo { transform-origin: 0 0; transform: translate(1035.2px, 83.6px) scale(0.32); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-mm-temple { transform-origin: 0 0; transform: translate(940.8px, 500px) scale(0.4); }
 `;
 };

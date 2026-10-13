@@ -125,7 +125,6 @@ ${sel(['#duel .phase .background .background_top'])} { background: none !importa
 /* In a duel the great foil card shrinks into the right gutter past the chat column, whole and clear of the viewport edge;
    on the main menu it would sit behind the feed's timestamps, so it is gone there. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translate(916px, 262px) scale(0.42); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { display: none; }
 /* Front page: the card sat half behind the pop-up's corner; it moves 60px right. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-sl-card { transform: translateX(42px); }
 ${sel(['#duel .phase .background .background_inner'])} { background: ${light ? t.raised : t.bg} !important; }

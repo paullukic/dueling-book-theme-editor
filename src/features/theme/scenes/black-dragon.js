@@ -42,7 +42,7 @@ ${CARD_ART_KEYFRAMES}
 ${smoke}
 <path d="${ridge}" fill="${ink}"/>
 <!--mid-->
-${cardArt(t, { id: 'dbtefx-rb-hero', card: CARDS.redEyes, x: 1330, y: 0, w: 400, h: 740, focus: [0.55, 0.5], zoom: 0.8, blend: 'luminosity', feather: 0.6, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.55), breathe: 14 })}
+<g class="dbtefx-rb-herogrp">${cardArt(t, { id: 'dbtefx-rb-hero', card: CARDS.redEyes, x: 1330, y: 0, w: 400, h: 740, focus: [0.55, 0.5], zoom: 0.8, blend: 'luminosity', feather: 0.6, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.55), breathe: 14 })}</g>
 <circle cx="${fx}" cy="${fy}" r="56" fill="url(#dbtefx-rb-ball)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-rb-charge 2.4s ease-in-out infinite;"/>
 ${embers}
 <!--near-->

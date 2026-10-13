@@ -236,9 +236,7 @@ ${Object.entries(families).map(([tk, list]) => `${sel(list.map((c) => `#settings
 ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; border-radius: 2px !important; }
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${mix(gold, t.bg, 0.4)}, ${gold} 50%, ${mix(gold, t.bg, 0.4)}) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bd-herogrp, .dbtefx-bd-edge, .dbtefx-bd-top) { display: none; }
-/* Main menu: the dragon sinks below the status filter; the top shard would stand beside it. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-herogrp { transform-origin: 0 0; transform: translate(1014px, 248px) scale(0.33); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-brand { transform: translateX(110px); }
+/* Main menu: the top shard would stand beside the dragon. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bd-top { display: none; }
 `;
 };

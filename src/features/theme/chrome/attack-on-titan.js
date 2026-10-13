@@ -156,7 +156,5 @@ ${popCss(popPrimary, popSecondary)}
 
 /* Scene: the titan hand stays off the menu feed and the front page. */
 html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-aot-hand { display: none; }
-/* Menu: the Survey Corps banner moves out from under the feed's Reply links into the right gutter. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-aot-banner { transform: translateX(120px); }
 `;
 };

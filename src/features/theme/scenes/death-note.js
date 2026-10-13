@@ -103,7 +103,7 @@ ${tower}
 <path d="${nearRow.lit}" fill="${t.text}" fill-opacity="0.35"/>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-dn-vig)"/>
 <!--mid-->
-<circle cx="${bx + 30}" cy="${by - 20}" r="360" fill="url(#dbtefx-dn-halo)"/>
+<g class="dbtefx-dn-book"><circle cx="${bx + 30}" cy="${by - 20}" r="360" fill="url(#dbtefx-dn-halo)"/>
 <g style="transform-origin: ${bx}px ${by}px; animation: dbtefx-dn-drift 14s ease-in-out infinite;">
 <g transform="translate(${bx} ${by}) rotate(-12) skewX(-7) scale(0.47)">
 <path d="M0 -130C-62 -144 -132 -140 -190 -128L-194 132C-128 122 -62 126 0 140C62 126 128 122 196 128L192 -132C132 -146 62 -146 0 -130Z" fill="${leather}" stroke="${mix(t.border, cold, 0.35)}" stroke-width="1.4"/>
@@ -125,7 +125,7 @@ ${tower}
 <path d="M14 -40C32 -42 48 -32 52 -12" fill="none" stroke="${mix(cold, '#ffffff', 0.4)}" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>
 <ellipse cx="22" cy="-24" rx="6" ry="10" transform="rotate(-35 22 -24)" fill="#ffffff" fill-opacity="0.4"/>
 <path d="M0 -34C0 -44 2 -52 8 -62" fill="none" stroke="${mix(t.bg, t.warning, 0.28)}" stroke-width="3" stroke-linecap="round"/>
-</g></g>
+</g></g></g>
 <!--near-->
 ${[1500, 1060, 140, 1380].map((sx, i) => scrap(sx, 0.6 + rand() * 0.35, i)).join('')}
 <style>

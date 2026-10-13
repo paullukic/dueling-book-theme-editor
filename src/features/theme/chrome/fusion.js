@@ -87,8 +87,6 @@ ${T(['#main_menu .menu_btn:active .content'])} { background: linear-gradient(180
 ${SEL.tileLabel} { color: #ffffff !important; text-shadow: 0 2px 2px ${t.bg}, 0 0 12px ${alpha(merge, 0.5)} !important; }
 ${T(['#main_menu .menu_btn.dbte-small-menu .content::before'])} { content: none; }
 ${T(['#main_menu .main_menu_circle .background'])} { background: ${edge} !important; }
-/* Main menu: the fusion vortex turns small in the right gutter; its arms no longer cross the timestamps. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fu-vortex { transform-origin: 0 0; transform: translate(1184.2px, 221px) scale(0.2); }
 
 /* ---- Buttons: violet capsules with a merging underline; hover fuses them ---- */
 ${SEL.button}, ${T(['#content #settings_content > div.button'])} {

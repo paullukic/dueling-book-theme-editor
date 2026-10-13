@@ -278,7 +278,6 @@ ${T(['#duel_room .format .format_txt'])} { background: linear-gradient(90deg, tr
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.border}, ${t.text} 40%, ${t.muted} 70%, ${t.border}) !important; border-radius: 2px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: linear-gradient(90deg, ${t.border}, #ffffff 40%, ${t.accent} 70%, ${t.border}) !important; }
 
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-cd-herogrp { transform-origin: 0 0; transform: translate(1095px, 283px) scale(0.26); }
 `;
   return `html body { ${[...ids].map(([s, id]) => `${id}: ${url(s)};`).join(' ')} }
 ${css.replace(/\/\*[^*]*\*\//g, '').replace(/\n\s+/g, '\n')}`;

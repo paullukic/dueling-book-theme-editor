@@ -164,8 +164,5 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Duel: Dante shrinks to head and shoulders around his face, clear of the viewport edge and the chat column. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-dante { transform-origin: 1480px 477px; transform: translateX(-28px) scale(0.62); }
-/* Menu: the Gate of Hell and its Malebranche shrink into the right gutter, the flyers into the gap left of the timestamps. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-gate { transform-origin: 0 0; transform: translate(758.4px, 118.3px) scale(0.55); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ba-flyers { transform-origin: 0 0; transform: translate(443px, 238.3px) scale(0.55); }
 `;
 };

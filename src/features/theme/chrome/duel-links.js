@@ -128,7 +128,5 @@ ${popCss}
 
 /* In a duel the scene's gate stands aside: in the right gutter the avatar column and the page edge cut it. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { display: none; }
-/* On the main menu the gate steps right, clear of the status feed's edge and its scrollbar. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dl-gate { translate: 125px 0; }
 `;
 };

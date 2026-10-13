@@ -168,8 +168,7 @@ ${popCss}
 /* In a duel the scene's winged sun disk stands aside (its wing tips would show in the stage's top corner), and on the
    main menu (it sits behind the status filter). */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-disk { display: none; }
-/* Main menu: the spinning card stands in the right gutter and the board slides right, so neither sits behind the status feed. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-card { transform-origin: 0 0; transform: translate(396px, 43.5px) scale(0.84); }
+/* Main menu: the board slides right, out from behind the status feed. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fm-board { transform: translateX(464px); }
 `;
 };

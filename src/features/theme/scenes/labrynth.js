@@ -153,7 +153,7 @@ ${glass}
 <circle cx="${RX}" cy="${RY}" r="214" fill="none" stroke="${stone}" stroke-opacity="0.6" stroke-width="4"/>
 </g>
 <circle cx="1480" cy="380" r="280" fill="url(#dbtefx-lb-warm)"/>
-${lady}
+<g class="dbtefx-lb-ladygrp">${lady}</g>
 <!--near-->
 <defs>
 <linearGradient id="dbtefx-lb-fold" x1="0" y1="0" x2="0" y2="1"><stop offset="0.4" stop-color="${mix(t.accent, '#000000', 0.7)}"/><stop offset="0.85" stop-color="${mix(t.accent, '#000000', 0.25)}"/><stop offset="0.95" stop-color="${mix(t.accent, '#ffffff', 0.15)}"/><stop offset="1" stop-color="${mix(t.accent, '#000000', 0.5)}"/></linearGradient>

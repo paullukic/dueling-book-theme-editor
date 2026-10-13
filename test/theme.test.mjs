@@ -9,6 +9,7 @@ import { AREA_CSS, fieldEdgeMix, fontCss, isLightTheme, panelVars, readingTextCs
 import { ICON_STYLES, iconCss, recolorField } from '../src/features/theme/art.js';
 import { keepAreas, skinBackdrop, skinCss } from '../src/features/theme/skins.js';
 import { CHROME_IDS, chromeCss } from '../src/features/theme/chrome.js';
+import { MENU_ART } from '../src/features/theme/menuArt.js';
 import { PARTICLES, SCENE_IDS, SHADERS, sceneMarkup } from '../src/features/theme/scenes.js';
 import { QUALITY, fragmentSource, uniformName } from '../src/features/theme/shader.js';
 import { PARTICLE_KINDS, createSystems, stepSystems } from '../src/features/theme/particles.js';
@@ -528,5 +529,19 @@ test('chrome: compact output - no comments, and every inline SVG decodes to a we
       assert.ok(svg.trimStart().startsWith('<svg'), `${id} SVG does not start with <svg`);
       assert.ok(svg.includes('</svg>'), `${id} SVG is not closed`);
     });
+  });
+});
+
+test('menu art: every hero and hidden piece exists in its scene, and the menu CSS places the hero', () => {
+  Object.entries(MENU_ART).forEach(([id, art]) => {
+    const preset = PRESETS.find((p) => p.id === id);
+    assert.ok(preset, id);
+    const scene = sceneMarkup(id, preset.tokens);
+    [art.hero, ...(art.hide || [])].forEach((sel) => {
+      (sel.match(/\.dbtefx-[a-z0-9-]+/g) || []).forEach((cls) => assert.match(scene, new RegExp(`class="(?:[^"]* )?${cls.slice(1)}[ "]`), `${id}: ${cls}`));
+    });
+    assert.equal(art.at.length, 3, id);
+    assert.ok(art.at.every(Number.isFinite) && art.at[2] > 0, id);
+    assert.ok(chromeCss(id, preset.tokens).includes(`transform: translate(${art.at[0]}px, ${art.at[1]}px) scale(${art.at[2]})`), id);
   });
 });

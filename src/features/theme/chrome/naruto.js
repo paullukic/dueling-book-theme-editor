@@ -155,7 +155,6 @@ ${popCss}
 /* Scene: the moon stays out from behind the menu feed and the front page's links; the tower's disc out of the duel stage; on the menu the chakra sphere shrinks into the gutter right of the feed, without its trails. */
 html body:is(:has(#main_menu:not([style*="none"])), :has(#welcome_buttons:not([style*="none"]))) #dbte-skin-fx .dbtefx-nr-moon { display: none; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-nr-disc { display: none; }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-nr-sphere { transform-origin: 1372px 600px; transform: translate(132px, 0) scale(0.7); }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-nr-trails { display: none; }
 /* Main menu: the round tower stands smaller in the right gutter, behind the front roofs, clear of the timestamps. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-nr-tower { transform-origin: 0 0; transform: translate(712px, 296px) scale(0.65); }

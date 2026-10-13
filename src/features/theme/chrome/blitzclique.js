@@ -166,9 +166,6 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-herogrp { di
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-bolt { transform: translateX(21px); }
 /* Duel: the storm cloud lifts clear of the opponent's life points. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-storm { transform: translateY(-46px); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-bcq-herogrp, .dbtefx-bcq-halo) { transform-origin: 0 0; transform: translate(1045px, 175px) scale(0.33); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-isle { transform-origin: 0 0; transform: translate(662px, 308px) scale(0.6); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-sun { transform-origin: 0 0; transform: translate(801px, 290px) scale(0.5); }
 /* Front page: the bolt fades in below the Welcome / Forum / Rules links. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-bcq-bolt { mask: url(#dbtefx-bcq-boltfade); }
 

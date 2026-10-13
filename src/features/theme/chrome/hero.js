@@ -210,7 +210,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${sel(['#content .checkbox', '#content .radiobutton'])} { box-shadow: inset 0 0 0 1.5px ${gold}, 2px 2px 0 ${red} !important; }
 /* Front page links over the scene art: a night outline keeps them readable. */
 ${sel(['#welcome_buttons > span'])} { color: ${gold} !important; text-shadow: 0 0 3px ${night}, 0 0 6px ${night}, 2px 2px 0 ${night} !important; }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-hr-neosgrp { transform-origin: 0 0; transform: translate(1056px, 213px) scale(0.3); }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-hr-beamr { transform: translateX(176px); }
 `;
 };

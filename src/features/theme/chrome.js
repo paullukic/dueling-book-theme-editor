@@ -6,6 +6,7 @@
 import { isHex } from '../../lib/color.js';
 import * as kit from './chrome/kit.js';
 import { keepAreas } from './skins.js';
+import { menuArtCss } from './menuArt.js';
 import spell from './chrome/spell.js';
 import oled from './chrome/oled.js';
 import midnight from './chrome/midnight.js';
@@ -166,5 +167,5 @@ export const chromeCss = (presetId, tokens, areas = {}) => {
   // Colours go straight into CSS and SVG: only well-formed hex values.
   if (!make || !Object.values(tokens || {}).every(isHex)) return '';
   // Comments are for the source only; data URIs never contain the comment markers.
-  return keepAreas(make(tokens, kit).replace(/\/\*[\s\S]*?\*\//g, ''), areas).trim();
+  return keepAreas(`${make(tokens, kit)}\n${menuArtCss(presetId)}`.replace(/\/\*[\s\S]*?\*\//g, ''), areas).trim();
 };

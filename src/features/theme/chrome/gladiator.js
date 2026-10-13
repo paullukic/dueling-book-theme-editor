@@ -145,7 +145,6 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-gb-banner-l, .dbtefx-gb-banner-r) { display: none; }
 /* Menu: the right banner would hang between the "All Statuses" dropdown and the camera button. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-gb-banner-r { display: none; }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-gb-gate { transform-origin: 0 0; transform: translate(930px, 272px) scale(0.4); }
 
 /* Duel room: bronze rings around stone panels. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(stone, 0.7)}, ${alpha(t.bg, 0.85)}) !important; box-shadow: 0 10px 26px -12px #000000; }

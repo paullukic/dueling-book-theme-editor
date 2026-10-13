@@ -156,7 +156,6 @@ ${popCss(popPrimary, popSecondary)}
 
 /* Scene: the Gate stays off the front page's links and right of the menu feed, and drops below the camera icon in a duel; the circle clears the duel's avatar panel. */
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-fma-gate { display: none; }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-fma-gate, .dbtefx-fma-circle) { transform: translateX(224px); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fma-gate { transform: translateY(30px); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fma-circle { transform-origin: 1365px 742px; transform: translate(156px, -60px) scale(0.5); }
 `;

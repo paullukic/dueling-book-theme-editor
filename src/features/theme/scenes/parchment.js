@@ -60,7 +60,7 @@ const astrolabe = (t) => {
 const parchment = (t) => `<defs><radialGradient id="dbtefx-pc-light" cx="0.82" cy="0.05" r="0.75"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.45" stop-color="#ffffff" stop-opacity="0.18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
 <rect width="1600" height="900" fill="url(#dbtefx-pc-light)"/>
 <!--mid-->
-${astrolabe(t)}`;
+<g class="dbtefx-pc-astrolabe">${astrolabe(t)}</g>`;
 
 export default parchment;
 

@@ -39,7 +39,6 @@ export default (t, kit) => {
   const sparkle = (cx, cy, r, c) => `<path d="M${cx} ${cy - r}Q${cx + r * 0.16} ${cy - r * 0.16} ${cx + r} ${cy}Q${cx + r * 0.16} ${cy + r * 0.16} ${cx} ${cy + r}Q${cx - r * 0.16} ${cy + r * 0.16} ${cx - r} ${cy}Q${cx - r * 0.16} ${cy - r * 0.16} ${cx} ${cy - r}Z" fill="${c}"/>`;
   const medal = svgUrl(svg(32, 32, `<defs><radialGradient id="m" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="${frameHi}"/><stop offset=".6" stop-color="${green}"/><stop offset="1" stop-color="${frameLo}"/></radialGradient></defs><circle cx="16" cy="16" r="14.5" fill="url(#m)" stroke="${t.text}" stroke-width="2"/><circle cx="16" cy="16" r="11" fill="none" stroke="${alpha(t.text, 0.45)}" stroke-width=".8"/>${sparkle(16, 16, 8.5, t.text)}<circle cx="16" cy="16" r="1.6" fill="${green}"/>`));
 
-
   // A lattice of four-point spell sparkles (the Spell card's glint).
   const lattice = svgUrl(svg(44, 44, `${sparkle(22, 22, 6, alpha(green, 0.2))}<g fill="${alpha(gold, 0.16)}"><circle cx="0" cy="0" r="1.4"/><circle cx="44" cy="0" r="1.4"/><circle cx="0" cy="44" r="1.4"/><circle cx="44" cy="44" r="1.4"/></g><path d="M0 22H12M32 22H44M22 0V12M22 32V44" stroke="${alpha(green, 0.1)}"/>`));
 
@@ -228,7 +227,5 @@ ${sel(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.act
 @media (prefers-reduced-motion: reduce) { html body #content *, html body #content *::before, html body #content *::after { transition: none !important; animation: none !important; } }
 /* Main menu: the cast card hung behind the feed's timestamps; it goes there. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sp-cast { display: none; }
-/* Main menu: the grimoire on its lectern and its rune ring stand small in the right gutter, clear of the timestamps. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-sp-ring, .dbtefx-sp-book) { transform-origin: 0 0; transform: translate(1010.7px, 71.5px) scale(0.34); }
 `;
 };

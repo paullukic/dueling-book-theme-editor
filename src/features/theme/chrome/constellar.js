@@ -153,8 +153,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 
 /* The armillary stays whole or not at all: on the front page it would run through the
-   Welcome / Forum / Rules links, on the menu behind the feed's timestamps, in a duel the
-   right column cuts it into fragments. */
-html body:is(:has(#welcome_buttons:not([style*="none"])), :has(#duel:not([style*="none"])), :has(#main_menu:not([style*="none"]))) #dbte-skin-fx .dbtefx-cs-armillary { display: none; }
+   Welcome / Forum / Rules links, in a duel the right column cuts it into fragments.
+   On the menu it is the hero piece (menuArt.js). */
+html body:is(:has(#welcome_buttons:not([style*="none"])), :has(#duel:not([style*="none"]))) #dbte-skin-fx .dbtefx-cs-armillary { display: none; }
 `;
 };

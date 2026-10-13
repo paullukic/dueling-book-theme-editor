@@ -187,9 +187,6 @@ html body #dbte-skin-motif { background: ${brushed} !important; }
 html body #circuit_cover { background-image: repeating-linear-gradient(0deg, ${alpha(ink, 0.04)} 0 1px, transparent 1px 2px, ${alpha('#ffffff', 0.25)} 2px 3px, transparent 3px 4px), linear-gradient(112deg, ${alpha(ink, 0.06)}, transparent 16%, ${alpha('#ffffff', 0.6)} 30%, transparent 44%, ${alpha(ink, 0.05)} 52%, transparent 58%, ${alpha('#ffffff', 0.45)} 68%, transparent 80%, ${alpha(ink, 0.06)}) !important; }
 html body #dbte-skin-motif::before { background: none !important; }
 
-/* ---- Main menu: the disk stands smaller in the right gutter, its hub clear of the timestamps ---- */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dd-disk { transform-origin: 0 0; transform: translate(676px, 218px) scale(0.6); }
-
 /* ---- Scrollbars ---- */
 ${T(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, ${t.border}, #ffffff 45%, ${t.border}) !important; box-shadow: inset 0 0 0 1px ${groove}; border-radius: 2px !important; }
 ${T(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.active'])} { background: ${blade} !important; }

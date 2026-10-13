@@ -145,7 +145,5 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* In a duel the academy's west-wing windows would sit in the gap between the field and the avatar column. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-tf-westwing { display: none; }
-/* Main menu: the academy island sits small on the horizon in the right gutter, clear of the status feed. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-tf-island, .dbtefx-tf-sunset) { transform-origin: 0 0; transform: translate(919px, 379px) scale(0.42); }
 `;
 };

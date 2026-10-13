@@ -115,11 +115,11 @@ ${buttes(700, 6, 120, 230, mix(rock, t.bg, 0.6), mix(rock, gold, 0.45), 13)}
 ${craters}
 <ellipse cx="${C[0]}" cy="706" rx="60" ry="12" fill="url(#dbtefx-db-pool)"/>
 <!--mid-->
-<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="14"/><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${mix(gold, '#ffffff', 0.4)}" stroke-opacity="0.7" stroke-width="3"/></g>
-<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out -2s infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${amber}" stroke-opacity="0.3" stroke-width="10"/></g>
-<circle cx="${C[0]}" cy="${C[1]}" r="${R * 1.6}" fill="url(#dbtefx-db-aura)" ${anim('pulse', 1.2, 0, 'ease-in-out')}/>
-${ring}
-<g style="animation: dbtefx-db-hover 7s ease-in-out infinite;">${orb(C[0], C[1], R, 4)}</g>
+<g class="dbtefx-db-shock"><g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${gold}" stroke-opacity="0.25" stroke-width="14"/><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${mix(gold, '#ffffff', 0.4)}" stroke-opacity="0.7" stroke-width="3"/></g>
+<g style="transform-origin: ${C[0]}px 706px; animation: dbtefx-db-shock 4s ease-out -2s infinite;"><ellipse cx="${C[0]}" cy="706" rx="40" ry="7" fill="none" stroke="${amber}" stroke-opacity="0.3" stroke-width="10"/></g></g>
+<g class="dbtefx-db-orbgrp"><circle cx="${C[0]}" cy="${C[1]}" r="${R * 1.6}" fill="url(#dbtefx-db-aura)" ${anim('pulse', 1.2, 0, 'ease-in-out')}/>
+<g style="animation: dbtefx-db-hover 7s ease-in-out infinite;">${orb(C[0], C[1], R, 4)}</g></g>
+<g class="dbtefx-db-ring">${ring}</g>
 <!--near-->
 ${lift(1060, 790, 34, 21, 6, 0)}${lift(1130, 850, 20, 23, 5, 1.5)}${lift(1400, 770, 28, 25, 7, 3)}${lift(1330, 850, 16, 27, 4.5, 2)}${lift(1210, 740, 12, 29, 5.5, 4)}
 <path d="M-40 ${H}L-40 760L60 740L130 770L210 750L260 800L330 830L380 ${H}Z" fill="${mix(rock, t.bg, 0.6)}"/><path d="M60 740L130 770L210 750" fill="none" stroke="${mix(rock, gold, 0.4)}" stroke-width="2.5"/>

@@ -140,7 +140,5 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-gutter { disp
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-linkhole { display: inline; }
 /* Main menu: the puppet strings fade out above the feed, clear of the status filter. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-menuhole { display: inline; }
-/* Main menu: the marionette hangs small in the right gutter, clear of the feed text. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-puppetmenu { transform-origin: 0 0; transform: translate(1150.4px, 89.6px) scale(0.24); }
 `;
 };

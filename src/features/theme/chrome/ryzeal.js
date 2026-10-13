@@ -152,7 +152,6 @@ ${popCss}
    Duel: as large as fits whole in the right gutter (screen x 1886-2046). Menu: whole, right of the feed's
    time and Reply column (screen x 1810-2042). Front page: 30px lower, clear of Welcome / Forum / Rules. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(1104.4px, 331.8px) scale(0.275); }
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(915.9px, 281.6px) scale(0.4); }
 html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-rz-core { transform: translate(0, 21px); }
 `;
 };
