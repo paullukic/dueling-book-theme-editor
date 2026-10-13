@@ -84,10 +84,10 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-tf-sky)"/>
 <g fill="${t.text}">${stars}</g>
-<ellipse cx="1360" cy="630" rx="340" ry="200" fill="url(#dbtefx-tf-sun)"/><ellipse cx="1360" cy="636" rx="240" ry="56" fill="url(#dbtefx-tf-sun)"/>
+<g class="dbtefx-tf-sunset"><ellipse cx="1360" cy="630" rx="340" ry="200" fill="url(#dbtefx-tf-sun)"/><ellipse cx="1360" cy="636" rx="240" ry="56" fill="url(#dbtefx-tf-sun)"/></g>
 <path d="M0 0H${W}V340Q800 250 0 330Z" fill="url(#dbtefx-tf-gloss)"/>
 <!--mid-->
-<g transform="translate(100 4) translate(1330 650) scale(1.1) translate(-1330 -650)">
+<g class="dbtefx-tf-island"><g transform="translate(100 4) translate(1330 650) scale(1.1) translate(-1330 -650)">
 <g fill="url(#dbtefx-tf-plume)">
 <ellipse cx="1340" cy="292" rx="46" ry="30" style="animation: dbtefx-tf-smoke 12s ease-out 0s infinite; transform-box: fill-box; transform-origin: center;"/>
 <ellipse cx="1346" cy="296" rx="50" ry="32" style="animation: dbtefx-tf-smoke 12s ease-out -4s infinite; transform-box: fill-box; transform-origin: center;"/>
@@ -114,7 +114,7 @@ ${[t.self, t.warning, t.opp].map((c, i) => `<linearGradient id="dbtefx-tf-r${i}"
 <path d="M1036 640V590H1124M1132 640V506M1102 640V470L1110 444M1246 640V470L1254 444M1240 640V590" fill="none" stroke="${dusk}" stroke-opacity="0.75" stroke-width="2"/>
 ${windows}<g class="dbtefx-tf-westwing">${westWing}</g>
 
-</g>
+</g></g>
 <path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664V700H${LX - 66}Z" fill="${rock}"/><path d="M${LX - 60} 660Q${LX - 34} 626 ${LX - 6} 636L${LX + 24} 642Q${LX + 44} 650 ${LX + 56} 664" fill="none" stroke="${rockLit}" stroke-width="2"/>
 <g transform="translate(${LX} ${LY})"><path d="M-9 92L-6 6H6L9 92Z" fill="${mix(t.text, rock, 0.35)}"/><path d="M-8 30H8M-8 58H8" stroke="${t.self}" stroke-width="7"/><rect x="-9" y="-6" width="18" height="13" fill="${lamp}"/><path d="M-12 -6L0 -20L12 -6Z" fill="${mix(rock, t.text, 0.2)}"/></g>
 <g transform="translate(${LX} ${LY})"><g style="animation: dbtefx-tf-beam 14s ease-in-out infinite; transform-origin: 0 0;"><path d="M0 0L120 -18L120 18Z" fill="url(#dbtefx-tf-cone)"/></g><circle r="16" fill="${lamp}" fill-opacity="0.45"/></g>

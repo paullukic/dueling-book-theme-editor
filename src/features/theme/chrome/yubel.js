@@ -168,5 +168,9 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${popCss}
 /* Duel: Yubel steps right so a slice of wing and eye shows in the right gutter, past the chat column. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-figure { transform: translateX(120px); }
+/* Main menu: Yubel and her rose window shrink into the right gutter, the vines step clear of the timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-figure { transform-origin: 0 0; transform: translate(1052px, 72px) scale(0.3); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-window { transform-origin: 0 0; transform: translate(1131.2px, 112.7px) scale(0.24); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-yb-vines { transform: translate(80px, 20px); }
 `;
 };

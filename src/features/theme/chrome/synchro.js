@@ -2,10 +2,9 @@
 // with four-point star sparkles at the corners, tuner rings that a line of
 // starlight runs through, stardust on graphite, phase buttons as rings of light.
 
-import { mix } from '../../../lib/color.js';
+import { mix, deepForWhite } from '../../../lib/color.js';
 import { svgUrl as kitSvgUrl } from './kit.js';
 
-// Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
 const url = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
@@ -162,8 +161,8 @@ ${SEL.phase} {
 ${T(['#duel .phase .background .background_top'])} { background: transparent !important; }
 ${T(['#duel .phase .background .background_inner'])} { background: ${t.bg} !important; }
 ${T(['#duel .phase .phase_inner.red', '#duel .phase .phase_inner.blue'])} { background: ${dust} center / 40px, radial-gradient(circle, ${t.raised}, ${deep}) !important; }
-${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, #ffffff 0 10%, ${t.self} 40%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)} !important; }
-${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, #ffffff 0 10%, ${t.opp} 40%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)} !important; }
+${T(['#duel .phase.active .phase_inner.red'])} { background: radial-gradient(circle, ${deepForWhite(t.self)} 20%, ${mix(t.self, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.self, 0.8)} !important; }
+${T(['#duel .phase.active .phase_inner.blue'])} { background: radial-gradient(circle, ${deepForWhite(t.opp)} 20%, ${mix(t.opp, t.bg, 0.5)}) !important; box-shadow: 0 0 14px ${alpha(t.opp, 0.8)} !important; }
 ${T(['#duel .phase.active .background'])} { background: repeating-conic-gradient(from 0deg, #ffffff 0 26deg, ${alpha(glow, 0.5)} 26deg 30deg) !important; box-shadow: 0 0 0 1px ${t.bg}, 0 0 16px ${alpha(glow, 0.9)} !important; }
 ${T(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.3)} !important; text-shadow: 0 1px 0 ${t.bg} !important; }
 ${T(['#duel .phase.active span'])} { color: #ffffff !important; text-shadow: 0 0 3px ${t.bg}, 0 1px 1px ${t.bg} !important; }

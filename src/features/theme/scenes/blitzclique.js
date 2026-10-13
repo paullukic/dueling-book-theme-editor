@@ -195,15 +195,15 @@ const blitzclique = (t) => {
 </defs>
 <rect x="-100" y="-60" width="1800" height="1020" fill="url(#dbtefx-bcq-sky)"/>
 
-<circle cx="1290" cy="690" r="320" fill="url(#dbtefx-bcq-glow)"/><circle cx="1290" cy="700" r="112" fill="url(#dbtefx-bcq-sun)"/>
+<g class="dbtefx-bcq-sun"><circle cx="1290" cy="690" r="320" fill="url(#dbtefx-bcq-glow)"/><circle cx="1290" cy="700" r="112" fill="url(#dbtefx-bcq-sun)"/></g>
 <g style="animation: dbtefx-bcq-cloud 60s ease-in-out infinite;">${cloud(1300, 850, 1.5, 11, mix(t.bg, orange, 0.24), mix(t.bg, orange, 0.62), -3, 0.92)}${cloud(300, 860, 1.8, 9, mix(t.bg, orange, 0.16), mix(t.bg, orange, 0.4), -3, 0.8)}</g>
 <g style="animation: dbtefx-bcq-cloud 80s ease-in-out -30s infinite;">${cloud(980, 10, 1.2, 7, mix(t.bg, '#000000', 0.22), mix(t.bg, mint, 0.22), 4, 0.8)}</g>
 <path d="${city}" fill="${mix(t.bg, orange, 0.12)}" fill-opacity="0.8"/><path d="${pylons}" stroke="${mix(t.bg, orange, 0.18)}" stroke-width="2" fill="none"/>
 <!--mid-->
 <g class="dbtefx-bcq-storm"><g style="animation: dbtefx-bcq-cloud 50s ease-in-out infinite;">${storm(1250, 66, 9)}</g></g>
-<circle cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
+<circle class="dbtefx-bcq-halo" cx="${hx}" cy="330" r="300" fill="url(#dbtefx-bcq-halo)" fill-opacity="0.5" style="animation: dbtefx-pulse 6s ease-in-out infinite;"/>
 <g class="dbtefx-bcq-herogrp">${surge}</g>
-<g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">
+<g class="dbtefx-bcq-isle"><g style="animation: dbtefx-bcq-float 10s ease-in-out infinite;">
 <g class="dbtefx-bcq-bolt">${strike}</g>
 <g transform="translate(${ix} ${iy}) scale(${is})">
 <path d="${rock}" fill="url(#dbtefx-bcq-rock)"/><path d="${strata}" fill="none" stroke="${dark}" stroke-opacity="0.35" stroke-width="2"/><path d="${cracks}" fill="none" stroke="${dark}" stroke-opacity="0.5" stroke-width="1.6"/><path d="M1094 566L1112 598L1138 610" fill="none" stroke="${mintHi}" stroke-opacity="0.3" stroke-width="2"/><path d="M1150 648L1178 668L1196 706L1226 726L1246 764L1272 790L1290 818L1306 792L1336 764L1368 740L1398 704L1428 684L1450 644" fill="none" stroke="${mix(orange, t.warning, 0.5)}" stroke-opacity="0.7" stroke-width="3" stroke-linejoin="round"/>
@@ -213,7 +213,7 @@ ${coil(1250, 412, 1.3, 0)}${coil(1462, 506, 1.05, 1.2)}
 ${arc('M1250 345L1262 322L1255 318L1270 300L1280 280', 3.4, 0)}${arc('M1462 453L1450 436L1458 430L1444 414L1446 400', 4.2, 1.5)}
 ${windmill}${crane}${flag}${board}
 </g>
-</g>
+</g></g>
 <!--near-->
 ${pole}`;
 };

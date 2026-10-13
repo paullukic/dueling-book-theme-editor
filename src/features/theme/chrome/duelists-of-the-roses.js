@@ -80,6 +80,10 @@ html body { ${u.map((v, i) => `--dbtc-u${i}: ${v};`).join(' ')} }
 ${SEL.tile} { background: ${lacquerBg()} !important; border-style: solid !important; border-image: var(--dbtc-u0) 20 / 19px stretch !important; border-radius: 0 !important; box-shadow: inset 0 -12px 18px -10px ${alpha('#000000', 0.6)}, 0 10px 22px -12px #000000 !important; }
 ${on(SEL.tile, 'before')} { content: ""; position: absolute; left: auto; right: -9px; top: -12px; width: 26px; height: 22px; pointer-events: none; background: var(--dbtc-u2) center / contain no-repeat; filter: drop-shadow(0 2px 2px #000000); }
 ${on(sel(['#main_menu .menu_btn.dbte-small-menu .content']), 'before')} { content: none; }
+/* Main menu: the rose crest and the terrain board stand small in the right gutter, clear of the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dor-crest { transform-origin: 0 0; transform: translate(1068.2px, 152px) scale(0.3); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dor-shield { opacity: 0.5; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dor-board { transform-origin: 0 0; transform: translate(1151px, 544px) scale(0.24); }
 ${SEL.tileHover} { background: ${lacquerBg(0.12)} !important; box-shadow: inset 0 0 22px ${alpha(gold, 0.25)}, 0 0 20px -4px ${alpha(gold, 0.6)}, 0 12px 24px -12px #000000 !important; }
 ${on(SEL.tileHover, 'before')} { content: ""; position: absolute; right: auto; left: -36px; top: calc(50% - 15px); width: 30px; height: 30px; pointer-events: none; background: var(--dbtc-u3) center / contain no-repeat; filter: drop-shadow(0 0 6px ${alpha(rose, 0.7)}); }
 ${SEL.tileLabel} { ${label} }

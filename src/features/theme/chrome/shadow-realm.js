@@ -194,6 +194,8 @@ ${sel(['#duel .phase.active .background'])} { box-shadow: 0 0 0 2px ${alpha(t.se
 /* In a duel the vortex's dark heart and the eye above it sit behind the opponent's zones and deck: gone there. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sr-instage { display: none; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sr-nomenu { display: none; }
+/* Menu: the floating slab shrinks into the right gutter, off the last Reply and timestamp. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sr-slab { transform-origin: 0 0; transform: translate(887.5px, 382.7px) scale(0.42); }
 ${sel(['#duel .phase.active:has(.phase_inner.blue) .background'])} { box-shadow: 0 0 0 2px ${alpha(t.opp, 0.9)}, 0 0 14px 2px ${alpha(mix(t.opp, '#ffffff', 0.4), 0.6)}, 0 0 30px 6px ${alpha(t.opp, 0.8)} !important; }
 ${sel(['#duel .phase span'])} { color: ${mix(t.text, t.muted, 0.2)} !important; text-shadow: 0 1px 0 #000000, 0 0 4px #000000 !important; }
 ${sel(['#duel #turn .background', '#duel #start_turn .background', '#duel #end_turn .background'])} { background: ${edge} !important; border-radius: 1px !important; }

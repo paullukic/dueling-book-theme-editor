@@ -89,7 +89,7 @@ ${shards}
 <defs><linearGradient id="dbtefx-sd-menufade" gradientUnits="userSpaceOnUse" x1="0" y1="-200" x2="0" y2="170"><stop offset="0.88" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient><radialGradient id="dbtefx-sd-holefade"><stop offset="0.55" stop-color="#000000"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
 <mask id="dbtefx-sd-links" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1300"><rect x="-200" y="-200" width="2000" height="1300" fill="#ffffff"/><rect class="dbtefx-sd-menuhole" x="-200" y="-200" width="2000" height="370" fill="url(#dbtefx-sd-menufade)"/><ellipse class="dbtefx-sd-linkhole" cx="1330" cy="185" rx="125" ry="95" fill="url(#dbtefx-sd-holefade)"/></mask></defs>
 ${gutter}
-<g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
+<g class="dbtefx-sd-puppetmenu"><g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${cardArt(t, { id: 'dbtefx-sd-hero', card: CARDS.elShaddollConstruct, x: ax, y: ay - 90, w: aw, h: 790, focus: [0.5, 0.508], zoom: 0.76, feather: 0.4, fade: 0.7, blend: 'normal', backdrop: mix(t.bg, violet, 0.25), backdropAmt: 0.8, glow: violet, breathe: 0, tint: navy, tintAmt: 0.3 })}
 </g>
 <g class="dbtefx-sd-puppet" mask="url(#dbtefx-sd-links)"><g style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
@@ -99,7 +99,7 @@ ${cardArt(t, { id: 'dbtefx-sd-hero', card: CARDS.elShaddollConstruct, x: ax, y: 
 <g class="dbtefx-sd-puppet" style="transform-origin: ${cx}px 40px; animation: dbtefx-sd-hang 13s ease-in-out infinite;">
 ${knots}
 ${bar}
-</g>
+</g></g>
 <!--near-->
 <g fill="none" stroke="${thread}" stroke-width="1.1" stroke-opacity="0.5">
 <g style="transform-origin: 90px 0px; animation: dbtefx-reed 9s ease-in-out infinite;"><path d="M90 -10V300"/><circle cx="90" cy="306" r="5" fill="url(#dbtefx-sd-orb)" stroke="${gold}"/></g>

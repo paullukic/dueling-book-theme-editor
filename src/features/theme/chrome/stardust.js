@@ -152,6 +152,9 @@ ${popCss}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-stage { display: none; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-trailgrp { mask: url(#dbtefx-sd-stagefade); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-city { mask: url(#dbtefx-sd-stagefade); }
+/* Main menu: the dragon shrinks into the right gutter and the city slides right, clear of the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-herogrp { transform-origin: 0 0; transform: translate(992.4px, 90px) scale(0.34); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sd-city { transform: translateX(570px); }
 /* Front page Welcome / Forum / Rules: night plates so the links read over the dragon. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 3px; }
 ${sel(['#duel img.field_zones'])} { filter: saturate(0.45) !important; }

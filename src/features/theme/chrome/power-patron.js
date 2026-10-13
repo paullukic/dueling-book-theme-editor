@@ -164,6 +164,8 @@ html body:has(#welcome_buttons:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-ey
 /* Main menu: the eye, its scrolls and its halo shrink into the space right of the feed's time and Reply column
    (eye centre viewBox 1310 300 -> 1433 405, screen x ~1820-2040). */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-sigil { transform-origin: 1310px 300px; transform: translate(122.7px, 104.7px) scale(0.45); }
+/* Menu: the rainbow road follows the sigil right, out from behind the feed timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-road { transform: translateX(174.5px); }
 /* Duel: the sigil's right swirl clears the avatar and chat column's edge. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-pp-sigil { transform: translate(21px, 0); }
 `;

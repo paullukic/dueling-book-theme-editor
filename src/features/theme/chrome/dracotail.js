@@ -173,5 +173,6 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dt-herogrp { transform-origin: 0 0; transform: translate(982px, 506px) scale(0.36); }
 `;
 };

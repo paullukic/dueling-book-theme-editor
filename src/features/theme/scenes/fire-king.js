@@ -74,7 +74,7 @@ ${smoke}
 ${cardArt(t, { id: 'dbtefx-fk-hero', card: CARDS.sacredGarunix, x: 1050, y: 40, w: 520, h: 760, focus: [0.5, 0.42], zoom: 0.92, blend: 'normal', feather: 0.62, fade: 0.9, backdrop: mix(t.bg, crimson, 0.3), backdropAmt: 0.6, breathe: 12 })}
 </g>
 <!--near-->
-<g fill="url(#dbtefx-fk-pyre)">${pyre}</g>`;
+<g class="dbtefx-fk-pyregrp" fill="url(#dbtefx-fk-pyre)">${pyre}</g>`;
 };
 
 export default fireKing;

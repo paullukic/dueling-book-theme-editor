@@ -131,11 +131,11 @@ ${ring(petal, 0.56, 36, base, ` stroke="${hi}" stroke-opacity="0.8" stroke-width
 </defs>
 <style>@keyframes dbtefx-dor-step { 0% { opacity: 1; } 16.6%, 100% { opacity: 0; } }</style>
 <rect width="1600" height="900" fill="url(#dbtefx-dor-sky)"/>
-<ellipse cx="1280" cy="270" rx="420" ry="340" fill="url(#dbtefx-dor-bloom)" style="animation: dbtefx-pulse 7s ease-in-out infinite;"/>
+<ellipse class="dbtefx-dor-crest" cx="1280" cy="270" rx="420" ry="340" fill="url(#dbtefx-dor-bloom)" style="animation: dbtefx-pulse 7s ease-in-out infinite;"/>
 <!--mid-->
-<g opacity="0.6">${tiles}${marks}<path d="${grid}" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"/>${sel}</g>
-<polygon points="${quad(-3.5, 0, 3.5, 7)}" fill="url(#dbtefx-dor-sky)" fill-opacity="0.25"/>
-<g opacity="0.22">${scroll(-1)}${scroll(1)}${shieldArt}${stems}${roses}</g>
+<g class="dbtefx-dor-board"><g opacity="0.6">${tiles}${marks}<path d="${grid}" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"/>${sel}</g>
+<polygon points="${quad(-3.5, 0, 3.5, 7)}" fill="url(#dbtefx-dor-sky)" fill-opacity="0.25"/></g>
+<g class="dbtefx-dor-crest dbtefx-dor-shield" opacity="0.22">${scroll(-1)}${scroll(1)}${shieldArt}${stems}${roses}</g>
 <!--near-->
 ${petals}`;
 };

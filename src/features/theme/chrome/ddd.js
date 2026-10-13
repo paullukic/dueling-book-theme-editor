@@ -146,6 +146,7 @@ ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-nearpillar { display: none; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-chain, html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-chain { display: none; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ddd-script { opacity: 0.49; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-ddd-gate, .dbtefx-ddd-king) { transform-origin: 0 0; transform: translate(1119px, 211px) scale(0.25); }
 /* Front page Welcome / Forum / Rules: obsidian plates so the clock dial never runs through them. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(obsidianDeep, 0.92)} !important; box-shadow: 0 0 0 0.25em ${alpha(obsidianDeep, 0.92)} !important; border-radius: 1px; }
 

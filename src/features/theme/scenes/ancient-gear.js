@@ -72,7 +72,7 @@ ${spin(375, 560, 140, false, `<path d="${gear(375, 560, 30, 10, 0, 0)}" fill="${
 ${wheel}
 ${castle}
 <!--mid-->
-${golem}
+<g class="dbtefx-ag-golem">${golem}</g>
 <!--near-->
 `;
 };

@@ -168,7 +168,7 @@ ${handSteam}</g>
 <rect x="0" y="760" width="${W}" height="140" fill="url(#dbtefx-aot-town)"/>
 <g fill="${ink}"><path d="${roofs}${extras}"/>${spire}</g>
 ${windows}
-${banner}`;
+<g class="dbtefx-aot-banner">${banner}</g>`;
 };
 
 export default scene;

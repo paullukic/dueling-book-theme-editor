@@ -105,8 +105,9 @@ ${glow('dbtefx-fu-core', core, 0.5, 0.5, 0.5, 0.9)}
 </defs>
 <rect x="-200" y="-200" width="2000" height="1300" fill="url(#dbtefx-fu-sky)"/>
 ${dust}
-<circle cx="${cx}" cy="${cy}" r="480" fill="url(#dbtefx-fu-halo)"/>
+<circle class="dbtefx-fu-vortex" cx="${cx}" cy="${cy}" r="480" fill="url(#dbtefx-fu-halo)"/>
 <!--mid-->
+<g class="dbtefx-fu-vortex">
 <g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fu-turn 45s linear infinite;">
 ${stream(80, 1150, 'dbtefx-fu-cool', 'dbtefx-fu-coolhi', 3)}
 ${stream(-10, 1050, 'dbtefx-fu-warm', 'dbtefx-fu-warmhi', 5)}
@@ -114,7 +115,8 @@ ${stream(-10, 1050, 'dbtefx-fu-warm', 'dbtefx-fu-warmhi', 5)}
 <circle cx="${cx}" cy="${cy}" r="190" fill="url(#dbtefx-fu-core)"/>
 <circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="${mix(core, '#ffffff', 0.4)}" stroke-width="3" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fu-wave 5s ease-out infinite;"/>
 <g fill="url(#dbtefx-fu-ray)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fu-flare 5s ease-in-out infinite;">${rays}</g>
-<circle cx="${cx}" cy="${cy}" r="58" fill="url(#dbtefx-fu-white)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fu-flare 5s ease-in-out -0.4s infinite;"/>`;
+<circle cx="${cx}" cy="${cy}" r="58" fill="url(#dbtefx-fu-white)" style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fu-flare 5s ease-in-out -0.4s infinite;"/>
+</g>`;
 };
 
 export default fusion;

@@ -64,7 +64,7 @@ ${eyes}
 ${fog}
 ${soul(1270, 300, 0.5, 0)}${soul(1431, 420, 0.42, 5)}
 <path class="dbtefx-sr-nomenu" d="M1130 140L1250 690H1420L1170 140Z" fill="url(#dbtefx-sr-shaft)"/>
-<g transform="translate(1335 720) scale(1.25)"><g style="animation: dbtefx-sr-float 12s ease-in-out infinite;"><path d="M-110 22L30 40L106 26L64 92L22 70L-8 128L-46 66L-84 60Z" fill="${ink}"/><path d="M-120 0L20 14L110 6L106 26L30 40L-110 22Z" fill="url(#dbtefx-sr-side)"/><path d="M-120 0L-62 -30L132 -24L110 6L20 14Z" fill="url(#dbtefx-sr-top)"/><path d="M-120 0L-62 -30L132 -24" fill="none" stroke="${rim}" stroke-width="1.5"/><path d="M-60 -6L-30 -20L18 -18L-8 -3ZM30 -2L52 -19L96 -18L80 -1Z" fill="none" stroke="${violet}" stroke-opacity="0.5" stroke-width="1.2"/></g></g>
+<g class="dbtefx-sr-slab"><g transform="translate(1335 720) scale(1.25)"><g style="animation: dbtefx-sr-float 12s ease-in-out infinite;"><path d="M-110 22L30 40L106 26L64 92L22 70L-8 128L-46 66L-84 60Z" fill="${ink}"/><path d="M-120 0L20 14L110 6L106 26L30 40L-110 22Z" fill="url(#dbtefx-sr-side)"/><path d="M-120 0L-62 -30L132 -24L110 6L20 14Z" fill="url(#dbtefx-sr-top)"/><path d="M-120 0L-62 -30L132 -24" fill="none" stroke="${rim}" stroke-width="1.5"/><path d="M-60 -6L-30 -20L18 -18L-8 -3ZM30 -2L52 -19L96 -18L80 -1Z" fill="none" stroke="${violet}" stroke-opacity="0.5" stroke-width="1.2"/></g></g></g>
 <style>@keyframes dbtefx-sr-blink { 0%, 86%, 100% { transform: scaleY(1); } 90%, 93% { transform: scaleY(0.05); } }
 @keyframes dbtefx-sr-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes dbtefx-sr-drift { 0%, 100% { transform: translate(0, 0); opacity: 0.55; } 50% { transform: translate(-14px, -22px); opacity: 1; } }

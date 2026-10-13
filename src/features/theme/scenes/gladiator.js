@@ -188,7 +188,7 @@ ${cornices}
 <path d="${sandMarks}" stroke="${sun}" stroke-opacity="0.16" stroke-width="2" stroke-dasharray="220 30 90 50" fill="none" transform="translate(0 -5)"/>
 <ellipse cx="760" cy="760" rx="560" ry="110" fill="url(#dbtefx-gb-pool)"/>
 <g fill="url(#dbtefx-gb-ray)">${rays}</g>
-${gate}
+<g class="dbtefx-gb-gate">${gate}</g>
 <!--near-->
 <path d="${awn}" fill="url(#dbtefx-gb-awn)" transform="skewX(0)"/>
 <path d="${awn}" fill="url(#dbtefx-gb-awnshade)"/>`;

@@ -144,6 +144,7 @@ const crystalBeast = (t) => {
 <mask id="dbtefx-cb-bowmask"><rect width="1600" height="900" fill="url(#dbtefx-cb-fade)"/></mask>
 <linearGradient id="dbtefx-cb-gapfade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="0.06" stop-color="#000000"/><stop offset="0.94" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
 <mask id="dbtefx-cb-stagegap" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><rect x="430" y="0" width="830" height="900" fill="url(#dbtefx-cb-gapfade)"/></mask>
+<mask id="dbtefx-cb-menugap" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect width="1600" height="900" fill="#ffffff"/><rect x="440" y="0" width="1010" height="900" fill="url(#dbtefx-cb-gapfade)"/></mask>
 ${glows}
 </defs>
 <rect width="1600" height="900" fill="url(#dbtefx-cb-sky)"/>
@@ -152,11 +153,11 @@ ${glows}
 <path d="${ridge}" fill="${mix(night, t.accent, 0.12)}"/>
 <path d="M180 900V600h30v300ZM228 900V640l12-10 14 14v256ZM300 900V690h24v210Z" fill="${mix(stoneDeep, night, 0.4)}"/>
 <!--mid-->
-<g class="dbtefx-cb-arena"><ellipse cx="${fx}" cy="${fy}" rx="420" ry="190" fill="url(#dbtefx-cb-arena)"/>
+<g class="dbtefx-cb-arena dbtefx-cb-tiers"><ellipse cx="${fx}" cy="${fy}" rx="420" ry="190" fill="url(#dbtefx-cb-arena)"/>
 ${tiers}</g>
 <path d="${wall}" fill="${stoneDeep}"/>
 <path d="M1420 430L1446 412L1462 440L1490 404L1530 420L1600 380" fill="none" stroke="${stoneDk}" stroke-width="3"/>
-<g class="dbtefx-cb-arena">
+<g class="dbtefx-cb-arena dbtefx-cb-rise">
 ${dragon}
 ${prism}
 <g class="dbtefx-cb-cols">${beams}</g>

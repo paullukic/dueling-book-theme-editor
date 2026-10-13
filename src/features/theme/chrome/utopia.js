@@ -156,6 +156,8 @@ ${popCss}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.21; }
 /* Main menu: the sunburst dimmed behind the feed. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-sunglow { opacity: 0.7; }
+/* Main menu: Utopia and his sunburst stand small in the right gutter, clear of the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-ut-sunglow, .dbtefx-ut-herogrp) { transform-origin: 0 0; transform: translate(1055px, 144px) scale(0.31); }
 /* Front page: the Welcome / Forum / Rules links on a dark night plate. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 2px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ut-city { mask: url(#dbtefx-ut-stagegap); }

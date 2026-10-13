@@ -250,5 +250,7 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { tran
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-pond { transform: translateX(420px); }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-glintgrp { transform: translateX(350px); }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-moonup { transform: translate(-60px, -46px) scale(0.7); }
+/* Menu: the frog steps out from behind the feed timestamps into the right gutter. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fr-frog { transform-origin: 0 0; transform: translate(988.6px, 452.4px) scale(0.36); }
 `;
 };

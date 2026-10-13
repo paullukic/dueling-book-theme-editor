@@ -87,10 +87,10 @@ ${rot(6, 60, 'steps(60, end)', `<path d="M${kx - 1.5} ${ky + 22}V${ky - 88}H${kx
 <g fill="${mix(t.warning, t.bg, 0.45)}">${lit}</g>
 <rect y="620" width="1600" height="280" fill="url(#dbtefx-dh-mist)"/>
 <!--mid-->
-${tower}
-<g opacity="0.5">${clock}</g>
-<ellipse cx="${fx}" cy="600" rx="300" ry="230" fill="url(#dbtefx-dh-back)"/>
-${dogma}
+<g class="dbtefx-dh-tower">${tower}
+<g opacity="0.5">${clock}</g></g>
+<g class="dbtefx-dh-dogma"><ellipse cx="${fx}" cy="600" rx="300" ry="230" fill="url(#dbtefx-dh-back)"/>
+${dogma}</g>
 <!--near-->
 `;
 };

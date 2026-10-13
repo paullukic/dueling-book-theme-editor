@@ -35,7 +35,7 @@ const ddd = (t) => {
       numerals += `<rect x="${n1(nx - 3)}" y="${n1(ny - 9)}" width="6" height="18" transform="rotate(${i * 6} ${nx} ${ny})"/>`;
     }
   }
-  const gate = `<circle cx="${gx}" cy="${gy}" r="250" fill="url(#dbtefx-ddd-void)"/>
+  const gate = `<g class="dbtefx-ddd-gate"><circle cx="${gx}" cy="${gy}" r="250" fill="url(#dbtefx-ddd-void)"/>
 <g style="transform-origin: ${gx}px ${gy}px; animation: dbtefx-spin 110s linear infinite;" fill="none">
 <circle cx="${gx}" cy="${gy}" r="250" stroke="${gold}" stroke-width="5"/>
 <circle cx="${gx}" cy="${gy}" r="216" stroke="${goldDeep}" stroke-width="2"/>
@@ -45,7 +45,7 @@ const ddd = (t) => {
 <g style="transform-origin: ${gx}px ${gy}px; animation: dbtefx-spin 60s linear infinite reverse;" fill="none" stroke="${violet}" stroke-opacity="0.45">
 <circle cx="${gx}" cy="${gy}" r="170" stroke-width="2" stroke-dasharray="40 12 6 12"/>
 <circle cx="${gx}" cy="${gy}" r="140" stroke-width="1.2"/>
-</g>`;
+</g></g>`;
 
   // Obsidian pillars with gold bands, receding on either side of the hall.
   const pillar = (x, w, top, k) => `<rect x="${n1(x - w / 2)}" y="${top}" width="${w}" height="${900 - top}" fill="url(#dbtefx-ddd-pillar)" fill-opacity="${k}"/><path d="M${n1(x - w / 2)} ${top + 40}h${w}M${n1(x - w / 2)} ${top + 52}h${w}M${n1(x - w / 2)} 780h${w}" stroke="${gold}" stroke-opacity="${n1(0.6 * k)}" stroke-width="3"/><path d="M${n1(x - w / 2 - 10)} ${top}h${w + 20}l-10 22h${-w}Z" fill="${goldDeep}" fill-opacity="${k}"/>`;
@@ -105,7 +105,7 @@ ${pillars}
 <path d="M-20 900V780H1620V900Z" fill="${mix(obsidian, t.bg, 0.5)}"/>
 <path d="M400 780H1620" stroke="url(#dbtefx-ddd-hz)" stroke-width="2"/>
 <!--mid-->
-${king}
+<g class="dbtefx-ddd-king">${king}</g>
 <!--near-->
 ${chains}
 ${contract}`;

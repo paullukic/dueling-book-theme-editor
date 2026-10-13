@@ -114,14 +114,14 @@ const scene = (t) => {
 ${wall}
 <ellipse cx="${VX}" cy="560" rx="620" ry="260" fill="url(#dbtefx-fm-halo)"/>
 <!--mid-->
-<g opacity="0.6">${edge}${tiles}<path d="${carve}" fill="none" stroke="${goldDeep}" stroke-opacity="0.55" stroke-width="1.5"/><path d="${grout}" stroke="${goldDeep}" stroke-width="3"/>${lying(1, 1)}${lying(3, 0)}${lying(4, 2)}</g>
+<g class="dbtefx-fm-board"><g opacity="0.6">${edge}${tiles}<path d="${carve}" fill="none" stroke="${goldDeep}" stroke-opacity="0.55" stroke-width="1.5"/><path d="${grout}" stroke="${goldDeep}" stroke-width="3"/>${lying(1, 1)}${lying(3, 0)}${lying(4, 2)}</g>
 <g style="mix-blend-mode: screen; animation: dbtefx-fm-sheen 9s ease-in-out infinite;"><polygon points="1140,900 1220,900 1300,560 1260,560" fill="${goldHi}" fill-opacity="0.18"/></g>
 <polygon points="${pts(quad(-2.5, 0, 2.5, 4))}" fill="url(#dbtefx-fm-dither)" opacity="0.7"/>
-<ellipse cx="${cx}" cy="${cy + 40}" rx="150" ry="230" fill="url(#dbtefx-fm-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
-<ellipse cx="${cx}" cy="560" rx="120" ry="26" fill="url(#dbtefx-fm-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
+<ellipse cx="${cx}" cy="560" rx="120" ry="26" fill="url(#dbtefx-fm-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/></g>
+<g class="dbtefx-fm-card"><ellipse cx="${cx}" cy="${cy + 40}" rx="150" ry="230" fill="url(#dbtefx-fm-halo)" style="animation: dbtefx-pulse 4s ease-in-out infinite;"/>
 <g opacity="0.26">${disk}
 <g style="transform-origin: ${cx}px ${cy}px; animation: dbtefx-fm-spin 8s linear infinite;"><g style="animation: dbtefx-fm-face 8s linear infinite;">${face}</g><g style="animation: dbtefx-fm-back 8s linear infinite;">${back}</g></g>
-<g style="animation: dbtefx-fm-bob 1.6s ease-in-out infinite;">${tri}</g></g>`;
+<g style="animation: dbtefx-fm-bob 1.6s ease-in-out infinite;">${tri}</g></g></g>`;
 };
 
 export default scene;

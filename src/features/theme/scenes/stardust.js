@@ -144,8 +144,8 @@ ${CARD_ART_KEYFRAMES}
 <g stroke="${mix(t.accent, '#ffffff', 0.55)}" stroke-linecap="round"><path d="${dots(dust[0])}" stroke-width="1.6" stroke-opacity="0.7"/><path d="${dots(dust[1])}" stroke-width="2.6" stroke-opacity="0.85"/></g>
 ${sparkles}
 <g class="dbtefx-sd-stage">${stageSparkles}</g>
-<ellipse cx="1290" cy="340" rx="340" ry="400" fill="url(#dbtefx-sd-halo)" style="animation: dbtefx-sd-glow 7s ease-in-out infinite;"/>
-${hero}
+<g class="dbtefx-sd-herogrp"><ellipse cx="1290" cy="340" rx="340" ry="400" fill="url(#dbtefx-sd-halo)" style="animation: dbtefx-sd-glow 7s ease-in-out infinite;"/>
+${hero}</g>
 <!--near-->
 <path d="${heap(-20, 520, 840, 728, 5)}" fill="${mix(night, '#000000', 0.45)}"/>
 <path d="${heap(370, 760, 884, 820, 9)}" fill="${mix(night, '#000000', 0.3)}"/>

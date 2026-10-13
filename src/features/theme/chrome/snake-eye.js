@@ -240,5 +240,7 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 ${sel(['#content .os-scrollbar-horizontal .os-scrollbar-handle'])} { background: linear-gradient(180deg, ${t.accent}, ${t.accent2} 50%, ${t.accent}) !important; }
 @media (prefers-reduced-motion: reduce) { html body #content *::before { transition: none !important; } }
 ${sel(['#msg', '#link', '#confirm', '#confirm2', '#input', '#input2', '#combo'].map((d) => `#content ${d} .body_txt`))} { color: #ecdcc8 !important; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-se-herogrp { transform-origin: 0 0; transform: translate(1061px, 96px) scale(0.3); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-se-branch { transform: translateX(190px); }
 `;
 };

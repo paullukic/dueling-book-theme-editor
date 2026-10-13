@@ -193,5 +193,8 @@ ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160de
 ${sel(['#welcome_buttons > span'])} { color: #ffffff !important; background: ${alpha(navy, 0.88)} !important; box-shadow: 0 0 0 0.25em ${alpha(navy, 0.88)} !important; border-radius: 2px; text-shadow: 0 1px 2px #000000, 0 0 6px ${navy} !important; }
 ${sel(['#duel #status2 .status_txt', '#duel #countdown2'])} { text-shadow: 0 0 10px ${ice}, 0 0 2px ${navy} !important; }
 ${sel(['#duel .phase.active .phase_inner.blue'])} { box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px ${alpha(frost, 0.9)}, 0 0 16px 4px ${alpha('#ffffff', 0.55)}, 0 0 30px 8px ${alpha(frost, 0.9)}; }
+/* Main menu: the dragon and its lightning shrink into the right gutter, the ice spire steps clear of the timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-wd-dragon { transform-origin: 0 0; transform: translate(968px, 86.8px) scale(0.32); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-wd-spire { transform: translateX(200px); }
 `;
 };

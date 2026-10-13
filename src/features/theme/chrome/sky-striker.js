@@ -226,9 +226,12 @@ ${sel(['#content .checkbox', '#content .radiobutton'])} { border-radius: 0 !impo
 ${sel(['#content .radiobutton'])} { transform: rotate(45deg) scale(0.85); }
 /* The front-page links sit over the ace's red armour: a dark plate keeps them legible. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(deep, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(deep, 0.9)} !important; border-radius: 0; }
-/* The chat column cuts the ace in a duel: she recedes; the radar's bearing ring stays off the menu's status feed. */
+/* The chat column cuts the ace in a duel: she recedes. On the menu the ace and her radar shrink into the right gutter, clear of the status feed. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-acegrp { opacity: 0.7; }
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-hud { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-acegrp { transform-origin: 0 0; transform: translate(936.4px, 90px) scale(0.36); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-radargrp { transform-origin: 0 0; transform: translate(936.8px, 100.8px) scale(0.36); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ss-speed { transform: translateX(130px); }
 `;
   return `html body { ${defs.map((d, i) => `--dbte-ss-${i}: ${d};`).join(' ')} }
 ${body}`;

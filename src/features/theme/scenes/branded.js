@@ -56,7 +56,7 @@ const branded = (t) => {
 <!--near-->
 <path d="M1130 900L${ridge.slice(1)}L1600 900Z" fill="${mix(t.bg, '#000000', 0.4)}"/>
 <path d="${ridge}" fill="none" stroke="${t.accent}" stroke-opacity="0.55" stroke-width="2"/>
-<g style="transform-origin: 1340px 760px; animation: dbtefx-bd-brand 4s ease-in-out infinite;"><circle cx="1340" cy="760" r="56" fill="url(#dbtefx-bd-core)"/><path d="${crossBrand(1340, 756, 0.8)}" fill="${brand}" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2"/><path d="M1340 749L1345 756L1340 763L1335 756Z" fill="#ffffff"/></g>
+<g class="dbtefx-bd-brand"><g style="transform-origin: 1340px 760px; animation: dbtefx-bd-brand 4s ease-in-out infinite;"><circle cx="1340" cy="760" r="56" fill="url(#dbtefx-bd-core)"/><path d="${crossBrand(1340, 756, 0.8)}" fill="${brand}" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2"/><path d="M1340 749L1345 756L1340 763L1335 756Z" fill="#ffffff"/></g></g>
 ${shard(1150, 110, 0.7, 0, 'dbtefx-bd-top')}${shard(1462, 520, 0.8, 1.6, 'dbtefx-bd-edge')}${shard(1120, 560, 0.65, 3)}`;
 };
 

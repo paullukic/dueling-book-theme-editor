@@ -100,13 +100,13 @@ ${leaf(236, 818, 200, 26)}${bloom(262, 794, 24, 30)}
 <rect width="1600" height="900" fill="url(#dbtefx-yb-sky)"/>
 <rect width="1600" height="900" fill="url(#dbtefx-yb-chill)"/>
 <circle cx="${wx}" cy="${wy}" r="420" fill="url(#dbtefx-yb-halo)" style="animation: dbtefx-pulse 9s ease-in-out infinite;"/>
-${window}
+<g class="dbtefx-yb-window">${window}</g>
 <path d="${skyline}" fill="${mix(t.bg, t.raised, 0.5)}"/>
 <g fill="${gold}" fill-opacity="0.7">${windows}</g>
 <!--mid-->
 <g class="dbtefx-yb-figure">${figure}</g>
 <!--near-->
-${vines}`;
+<g class="dbtefx-yb-vines">${vines}</g>`;
 };
 
 export default yubel;

@@ -157,5 +157,7 @@ ${sel(['#content a:hover', '#content a:active', '#content .status .reply_btn:hov
 
 /* Pop-up buttons in the theme material. */
 ${popCss}
+/* Menu: the sun disc and its glitter sat right under a feed timestamp; the WebGL sea keeps its glow and glittering path. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-op-sun { display: none; }
 `;
 };

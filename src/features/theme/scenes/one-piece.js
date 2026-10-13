@@ -129,11 +129,11 @@ const onePiece = (t) => {
 <ellipse cx="${SUN[0]}" cy="${SUN[1]}" rx="520" ry="300" fill="url(#dbtefx-op-sunglow)" ${anim('pulse', 10, 0, 'ease-in-out')}/>
 <g style="animation: dbtefx-op-cloud 70s ease-in-out infinite;">${bank(1040, 1700, 120, 470, 3)}</g>
 <g style="animation: dbtefx-op-cloud 90s ease-in-out -30s infinite;">${stratus}</g>
-<circle cx="${SUN[0]}" cy="${SUN[1]}" r="34" fill="url(#dbtefx-op-sun)"/>
+<circle class="dbtefx-op-sun" cx="${SUN[0]}" cy="${SUN[1]}" r="34" fill="url(#dbtefx-op-sun)"/>
 <rect x="0" y="${HORIZON - 1}" width="${W}" height="3" fill="${rim}" fill-opacity="0.35"/>
 <!--mid-->
 <g fill="none" stroke="${mix(t.text, t.opp, 0.4)}" stroke-linecap="round">${swell}</g>
-${glitter}
+<g class="dbtefx-op-sun">${glitter}</g>
 <g style="animation: dbtefx-op-glide 40s ease-in-out infinite;">${gull(1470, 96, 0.9, 0)}${gull(1500, 126, 0.7, 0.6)}${gull(1440, 140, 0.55, 1.1)}</g>
 <g transform="translate(1205 465) scale(0.19)">
 <g style="transform-origin: 1236px 660px; animation: dbtefx-op-rock 11s ease-in-out infinite;">

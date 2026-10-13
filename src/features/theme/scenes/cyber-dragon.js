@@ -61,9 +61,9 @@ const cyberDragon = (t) => {
 <g style="animation: dbtefx-spin 60s linear infinite reverse;"><path d="${chevrons}" stroke-opacity="0.6" stroke-width="3"/><circle r="390" stroke-opacity="0.1" stroke-dasharray="4 14" stroke-width="2"/></g>
 </g>
 <circle cx="${rx}" cy="${ry}" r="240" fill="url(#dbtefx-cd-core)" ${anim('bloom', 6, 0, 'ease-in-out')}/>
-${cardArt(t, { id: 'dbtefx-cd-hero', card: CARDS.cyberDragon, x: ax, y: ay, w: aw, h: ah, focus: [0.5, 0.48], zoom: 0.86, feather: 0.45, fade: 0.55, blend: 'normal', backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.9, glow: t.accent, breathe: 14, tint: mix(t.bg, t.accent, 0.5), tintAmt: 0.55 })}
+<g class="dbtefx-cd-herogrp">${cardArt(t, { id: 'dbtefx-cd-hero', card: CARDS.cyberDragon, x: ax, y: ay, w: aw, h: ah, focus: [0.5, 0.48], zoom: 0.86, feather: 0.45, fade: 0.55, blend: 'normal', backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.9, glow: t.accent, breathe: 14, tint: mix(t.bg, t.accent, 0.5), tintAmt: 0.55 })}
 <g mask="url(#dbtefx-cd-hero-m)" style="mix-blend-mode: screen;"><g transform="rotate(20 ${rx} ${ry})"><rect x="${n1(rx - 90)}" y="${ay - 200}" width="180" height="${ah + 400}" fill="url(#dbtefx-cd-spec)" style="animation: dbtefx-cd-sweep 9s ease-in-out infinite;"/></g></g>
-<g mask="url(#dbtefx-cd-hero-m)"><rect x="${ax}" y="${ay}" width="${aw}" height="${ah}" fill="url(#dbtefx-cd-lines)"/><rect x="${ax}" y="0" width="${aw}" height="80" fill="url(#dbtefx-cd-scanl)" style="animation: dbtefx-cd-scan 7s linear infinite;"/></g>
+<g mask="url(#dbtefx-cd-hero-m)"><rect x="${ax}" y="${ay}" width="${aw}" height="${ah}" fill="url(#dbtefx-cd-lines)"/><rect x="${ax}" y="0" width="${aw}" height="80" fill="url(#dbtefx-cd-scanl)" style="animation: dbtefx-cd-scan 7s linear infinite;"/></g></g>
 <!--near-->`;
 };
 

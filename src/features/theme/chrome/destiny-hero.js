@@ -130,6 +130,8 @@ ${sel(['#duel #avatar2', '#duel #avatar4'])} { background: linear-gradient(160de
 ${sel(['#duel #turn .red', '#duel #turn .blue'])} { background: linear-gradient(180deg, ${mix(maroon, '#ffffff', 0.12)}, ${maroon} 55%, ${mix(maroon, t.bg, 0.35)}) !important; }
 ${sel(['#duel img.field_zones'])} { filter: brightness(0.85) !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-dh-moon { opacity: 0.4; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-dh-moon, .dbtefx-dh-tower) { transform-origin: 0 0; transform: translate(781px, 450px) scale(0.5); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-dh-dogma { transform-origin: 0 0; transform: translate(1033px, 525px) scale(0.32); }
 
 /* Duel room: steel rims around black panels, the chamfered frame over each. */
 ${lobbyBorders} { background: var(--dbtc-u2), linear-gradient(180deg, ${alpha(iron, 0.88)}, ${alpha(t.bg, 0.92)}) !important; box-shadow: 0 10px 26px -12px #000000; }

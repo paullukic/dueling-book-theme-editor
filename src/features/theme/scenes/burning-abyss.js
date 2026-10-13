@@ -160,8 +160,8 @@ ${demonWing(-1)}${demonWing(1)}
 <rect width="1600" height="900" fill="url(#dbtefx-ba-sky)"/>
 <rect width="1600" height="900" fill="url(#dbtefx-ba-haze)"/>
 <path d="${ridge(400, 150, 5, 52)}" fill="${mix(t.bg, rock, 0.55)}"/>
-${gate}
-${demon}
+<g class="dbtefx-ba-gate">${gate}
+${demon}</g>
 <!--mid-->
 <path d="${ridge(fy - 136, 22, 9, 30)}" fill="url(#dbtefx-ba-ground)"/>
 <ellipse cx="${fx}" cy="${fy + 20}" rx="460" ry="230" fill="url(#dbtefx-ba-rimglow)"/>
@@ -171,7 +171,7 @@ ${demon}
 <path d="M${fx - 300} ${fy}A300 132 0 0 0 ${fx + 300} ${fy}" fill="none" stroke="${ember}" stroke-opacity="0.5" stroke-width="2.4"/>
 <ellipse cx="${fx}" cy="${pitY}" rx="96" ry="44" fill="url(#dbtefx-ba-pit)" style="animation: dbtefx-ba-breathe 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center;"/>
 ${smoke}
-<g fill="${ink}">${flyers}</g>
+<g class="dbtefx-ba-flyers" fill="${ink}">${flyers}</g>
 <!--near-->
 <g class="dbtefx-ba-dante">${dante}</g>
 ${outcrop}

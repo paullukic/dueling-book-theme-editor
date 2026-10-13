@@ -123,7 +123,10 @@ html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-bowgap { mask
 ${sel(['#content .status .reply_btn', '#content #post_status_btn'])} { color: ${t.accent2} !important; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edge { transform: translate(110px, 0); }
 /* Main menu: no gem columns behind the status feed. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-cb-cols, .dbtefx-cb-edge) { display: none; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-cb-cols, .dbtefx-cb-edge, .dbtefx-cb-tiers) { display: none; }
+/* Main menu: Rainbow Dragon and its ring stand small in the right gutter, the rainbow only outside the feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-rise { transform-origin: 0 0; transform: translate(1121px, 185px) scale(0.27); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-bowgap { mask: url(#dbtefx-cb-menugap); }
 /* Front page: the Welcome / Forum / Rules links on a dark glass plate. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(night, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(night, 0.9)} !important; border-radius: 3px; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-cb-edgegem { opacity: 0.45; }

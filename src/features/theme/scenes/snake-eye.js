@@ -77,10 +77,10 @@ ${glow('dbtefx-se-ground', t.accent, 0.5, 1, 0.8, 0.38)}
 <rect x="-200" y="300" width="${W + 400}" height="${H}" fill="url(#dbtefx-se-ground)"/>
 ${fire(180, H + 20, 1.3, 'dbtefx-se-fire', 0)}${fire(1480, H + 20, 1.5, 'dbtefx-se-fire', 1.2)}
 <!--mid-->
-${cardArt(t, { id: 'dbtefx-se-hero', card: CARDS.flamberge, x: 1040, y: -20, w: 500, h: 740, focus: [0.62, 0.45], zoom: 0.85, blend: 'normal', tint: t.accent, tintAmt: 0.85, feather: 0.85, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.6, glow: t.accent, breathe: 14 })}
+<g class="dbtefx-se-herogrp">${cardArt(t, { id: 'dbtefx-se-hero', card: CARDS.flamberge, x: 1040, y: -20, w: 500, h: 740, focus: [0.62, 0.45], zoom: 0.85, blend: 'normal', tint: t.accent, tintAmt: 0.85, feather: 0.85, fade: 0.65, backdrop: mix(t.bg, t.accent, 0.3), backdropAmt: 0.6, glow: t.accent, breathe: 14 })}</g>
 <!--near-->
-${limb([[1680, 960], [1520, 790], [1400, 730], [1236, 660]], 104, 22, 0, 14)}${limb([[1430, 742], [1430, 690], [1460, 640], [1500, 604]], 26, 6, 1.2, 6)}${limb([[1300, 712], [1286, 676], [1306, 646], [1340, 624]], 20, 5, 2.1, 5)}
-${blossom(1500, 600, 30, 0.4)}${blossom(1340, 620, 24, 1.3)}${blossom(1238, 656, 28, 2.2)}
+<g class="dbtefx-se-branch">${limb([[1680, 960], [1520, 790], [1400, 730], [1236, 660]], 104, 22, 0, 14)}${limb([[1430, 742], [1430, 690], [1460, 640], [1500, 604]], 26, 6, 1.2, 6)}${limb([[1300, 712], [1286, 676], [1306, 646], [1340, 624]], 20, 5, 2.1, 5)}
+${blossom(1500, 600, 30, 0.4)}${blossom(1340, 620, 24, 1.3)}${blossom(1238, 656, 28, 2.2)}</g>
 ${limb([[-60, -40], [80, 60], [240, 70], [420, 150]], 50, 8, 2)}${limb([[200, 74], [230, 40], [260, 10], [310, -20]], 18, 4, 2.8)}`;
 };
 

@@ -167,7 +167,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: linear-gradient(90deg, $
 /* Pop-up buttons in the theme material. */
 ${popCss}
 /* Menu: the phoenix clears the feed's timestamp column. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-phoenix { transform: translate(28px, 0); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-phoenix { transform-origin: 0 0; transform: translate(1105px, 260px) scale(0.27); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-pyregrp { transform: translateY(36px); }
 /* In a duel the sea glints would draw two grey lines between the deck and the hand. */
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-fk-glint { display: none; }
 `;

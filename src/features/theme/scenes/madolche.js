@@ -156,10 +156,10 @@ ${stars}
 <path d="M-20 740C140 700 300 720 460 750S760 790 900 760S1200 700 1640 720" fill="none" stroke="${cream}" stroke-opacity="0.18" stroke-width="5"/>
 <!--mid-->
 <ellipse cx="1200" cy="360" rx="360" ry="380" fill="url(#dbtefx-md-castle)"/>
-${queen}
+<g class="dbtefx-md-queen">${queen}</g>
 <path d="M-20 ${H + 20}V800C200 780 500 820 800 800S1300 770 1640 790V${H + 20}Z" fill="${mix(t.bg, t.accent2, 0.12)}"/>
 <path d="M-20 800C200 780 500 820 800 800S1300 770 1640 790" fill="none" stroke="${cream}" stroke-opacity="0.35" stroke-width="7" stroke-linecap="round"/>
-<g transform="translate(${n1(chX - cx * chS)} ${n1(860 - 860 * chS)}) scale(${chS})">
+<g class="dbtefx-md-castlegrp"><g transform="translate(${n1(chX - cx * chS)} ${n1(860 - 860 * chS)}) scale(${chS})">
 <path d="M${cx - 30} 330h60V450h-60Z" fill="url(#dbtefx-md-choc)"/>
 <path d="M${cx - 30} 352L${cx} 200L${cx + 30} 352Z" fill="url(#dbtefx-md-tower)"/><path d="${stripes}" stroke="${cream}" stroke-opacity="0.85" stroke-width="5" clip-path="url(#dbtefx-md-spireclip)"/>
 <clipPath id="dbtefx-md-spireclip"><path d="M${cx - 30} 352L${cx} 200L${cx + 30} 352Z"/></clipPath>
@@ -183,7 +183,7 @@ ${win(cx - 136, 730, 28, 48, 9)}${win(cx - 82, 730, 28, 48, 10)}${win(cx + 54, 7
 <path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840L${cx + 186} 852Q${cx} 882 ${cx - 186} 852Z" fill="url(#dbtefx-md-gold)"/><path d="M${cx - 200} 840Q${cx} 870 ${cx + 200} 840" fill="none" stroke="${cream}" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>
 <ellipse cx="${cx}" cy="858" rx="150" ry="22" fill="url(#dbtefx-md-halo)"/>
 ${lolly(cx - 196, 0)}<g class="dbtefx-md-lolly">${lolly(cx + 196, 1)}</g>
-</g>
+</g></g>
 ${sweets}
 <!--near-->
 <g transform="translate(250 868) rotate(-8) scale(3)">${macaron(t.accent)}</g>`;

@@ -141,13 +141,13 @@ const naruto = (t) => {
   // The round tower: a red-banded cylinder under a flared tiered roof, a
   // blank emblem disc on its face.
   const [tx, ty] = [1130, 560];
-  const tower = `<rect x="${tx - 62}" y="${ty}" width="124" height="${200}" fill="url(#dbtefx-nr-drum)"/>
+  const tower = `<g class="dbtefx-nr-tower"><rect x="${tx - 62}" y="${ty}" width="124" height="${200}" fill="url(#dbtefx-nr-drum)"/>
 <path d="M${tx - 62} ${ty + 60}h124M${tx - 62} ${ty + 120}h124" stroke="${ink}" stroke-opacity="0.45" stroke-width="3"/>
 <g fill="${mix(t.warning, t.accent, 0.4)}" fill-opacity="0.85">${[-38, -6, 26].map((dx) => `<rect x="${tx + dx}" y="${ty + 76}" width="12" height="22" rx="6"/><rect x="${tx + dx}" y="${ty + 136}" width="12" height="22" rx="6"/>`).join('')}</g>
 <path d="M${tx - 96} ${ty + 8}Q${tx - 50} ${ty - 6} ${tx - 40} ${ty - 30}H${tx + 40}Q${tx + 50} ${ty - 6} ${tx + 96} ${ty + 8}Z" fill="${roof}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
 <path d="M${tx - 58} ${ty - 30}Q${tx - 30} ${ty - 40} ${tx - 24} ${ty - 58}H${tx + 24}Q${tx + 30} ${ty - 40} ${tx + 58} ${ty - 30}Z" fill="${mix(roof, ink, 0.2)}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
 <path d="M${tx - 96} ${ty + 8}Q${tx - 50} ${ty - 6} ${tx - 40} ${ty - 30}H${tx + 40}" fill="none" stroke="${mix(t.accent, '#ffffff', 0.3)}" stroke-opacity="0.5" stroke-width="1.5"/>
-<g class="dbtefx-nr-disc"><circle cx="${tx}" cy="${ty + 32}" r="20" fill="${mix(t.text, t.accent, 0.2)}" stroke="${roof}" stroke-width="5"/><circle cx="${tx}" cy="${ty + 32}" r="11" fill="none" stroke="${roof}" stroke-opacity="0.6" stroke-width="2"/></g>`;
+<g class="dbtefx-nr-disc"><circle cx="${tx}" cy="${ty + 32}" r="20" fill="${mix(t.text, t.accent, 0.2)}" stroke="${roof}" stroke-width="5"/><circle cx="${tx}" cy="${ty + 32}" r="11" fill="none" stroke="${roof}" stroke-opacity="0.6" stroke-width="2"/></g></g>`;
 
   // Chakra sphere: three spiral arms spinning fast inside, a wind ring
   // turning the other way, leaves orbiting in its draft.

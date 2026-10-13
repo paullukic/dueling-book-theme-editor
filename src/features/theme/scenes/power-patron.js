@@ -127,9 +127,9 @@ ${[t.accent2, mix(t.text, t.muted, 0.3), t.success].map((c, k) => `<radialGradie
 <linearGradient id="dbtefx-pp-blade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(lace, obsidian, 0.4)}"/><stop offset="1" stop-color="${obsidian}"/></linearGradient>
 </defs>
 <rect x="0" y="0" width="1600" height="900" fill="url(#dbtefx-pp-void)"/>
-<g mask="url(#dbtefx-pp-roadmask)">${roadArt}</g>
+<g class="dbtefx-pp-road"><g mask="url(#dbtefx-pp-roadmask)">${roadArt}</g>
 <g clip-path="url(#dbtefx-pp-roadclip)"><rect x="1000" y="${ey + 230}" width="640" height="90" fill="url(#dbtefx-pp-band)" style="animation: dbtefx-pp-run 6s ease-in infinite;"/></g>
-<path d="M${r0} ${ey + 230}L${b0} 900M${r1} ${ey + 230}L${b1} 900" stroke="${iceHi}" stroke-opacity="0.35" stroke-width="1.5"/>
+<path d="M${r0} ${ey + 230}L${b0} 900M${r1} ${ey + 230}L${b1} 900" stroke="${iceHi}" stroke-opacity="0.35" stroke-width="1.5"/></g>
 <!--mid-->
 <g class="dbtefx-pp-sigil">
 <ellipse cx="${ex}" cy="${ey}" rx="230" ry="200" fill="url(#dbtefx-pp-glow)" ${anim('pulse', 6, 0, 'ease-in-out')}/>

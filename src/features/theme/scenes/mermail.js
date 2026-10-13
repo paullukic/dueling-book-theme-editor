@@ -203,9 +203,9 @@ const mermail = (t) => {
 <g transform="translate(860 120)"><path d="${manta}" fill="${deep}" fill-opacity="0.25" style="animation: dbtefx-mm-manta 46s linear infinite;"/></g>
 <!--mid-->
 <path d="M-40 ${H + 40}V790C200 770 420 800 700 784S1200 770 1640 780V${H + 40}Z" fill="${mix(stone, t.bg, 0.55)}"/><path d="M-40 790C200 770 420 800 700 784S1200 770 1640 780" fill="none" stroke="${stoneLit}" stroke-opacity="0.18" stroke-width="2"/>
-${megalo}
+<g class="dbtefx-mm-megalo">${megalo}</g>
 <g fill="url(#dbtefx-mm-ray)">${rays}</g>
-<g transform="translate(${n1(ox)} ${n1(oy)}) scale(${k})">
+<g class="dbtefx-mm-temple"><g transform="translate(${n1(ox)} ${n1(oy)}) scale(${k})">
 <ellipse cx="${cx}" cy="${sty + 20}" rx="360" ry="60" fill="url(#dbtefx-mm-pool)"/>
 <path d="M${cx - 250} 800h500v-20h-16v-18h-16v-20h-436v20h-16v18h-16Z" fill="url(#dbtefx-mm-stone)"/>
 <path d="M${cx - 218} ${sty}h436M${cx - 234} 762h468M${cx - 250} 780h500" stroke="${stoneLit}" stroke-opacity="0.3" stroke-width="1.5"/>
@@ -227,7 +227,7 @@ ${colXs.map((dx, i) => column(cx + dx, i === 0)).join('')}
 ${[[-226, 40], [-170, 70], [-60, 54], [40, 80], [150, 46], [210, 64]].map(([dx, l]) => `<path d="M${cx + dx} 444q-6 ${n1(l * 0.3)} 2 ${n1(l * 0.55)}t-2 ${n1(l * 0.45)}" fill="none" stroke="${mix(t.bg, t.success, 0.35)}" stroke-width="2.4" stroke-linecap="round"/>`).join('')}
 ${crust(cx - 246, cx + 246, 432, 7)}${crust(cx - 150, cx + 150, 398, 9)}${crust(cx - 236, cx - 120, 471, 13)}
 ${fan(cx - 222, 432, 34, coral)}${fan(cx + 214, 432, 26, coral2, -1)}${fan(cx + 120, 398, 22, coral)}${fan(cx - 196, colTop + 70, 20, coral2)}
-</g>
+</g></g>
 <g class="dbtefx-mm-bubbles">${bubbles}</g>
 <!--near-->
 <g fill="${mix(t.bg, '#000000', 0.2)}"><path d="M-40 ${H + 20}V840C40 810 120 830 180 860S260 ${H} 300 ${H + 20}Z"/><path d="M1640 ${H + 20}V820C1560 800 1500 830 1460 860S1400 ${H} 1380 ${H + 20}Z"/></g>

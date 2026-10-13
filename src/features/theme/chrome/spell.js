@@ -228,5 +228,7 @@ ${sel(['#content .os-scrollbar-handle:hover', '#content .os-scrollbar-handle.act
 @media (prefers-reduced-motion: reduce) { html body #content *, html body #content *::before, html body #content *::after { transition: none !important; animation: none !important; } }
 /* Main menu: the cast card hung behind the feed's timestamps; it goes there. */
 html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-sp-cast { display: none; }
+/* Main menu: the grimoire on its lectern and its rune ring stand small in the right gutter, clear of the timestamps. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx :is(.dbtefx-sp-ring, .dbtefx-sp-book) { transform-origin: 0 0; transform: translate(1010.7px, 71.5px) scale(0.34); }
 `;
 };

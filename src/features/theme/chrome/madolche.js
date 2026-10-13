@@ -133,6 +133,8 @@ ${sel(['#content .os-scrollbar-handle'])} { background: repeating-linear-gradien
 ${popCss}
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-moon { opacity: 0; }
 html body:has(#duel:not([style*="none"])) #dbte-skin-fx .dbtefx-md-lolly { opacity: 0; }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-md-queen { transform-origin: 0 0; transform: translate(1048px, 90px) scale(0.32); }
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-md-castlegrp { transform-origin: 0 0; transform: translate(720px, 332.8px) scale(0.56); }
 /* Front page: the Welcome / Forum / Rules links on a dark chocolate plate. */
 ${sel(['#welcome_buttons > span'])} { background: ${alpha(chocDeep, 0.9)} !important; box-shadow: 0 0 0 0.25em ${alpha(chocDeep, 0.9)} !important; border-radius: 3px; }
 `;

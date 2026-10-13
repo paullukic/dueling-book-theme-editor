@@ -108,17 +108,17 @@ const spell = (t) => {
 <radialGradient id="dbtefx-sp-shade" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.6"/></radialGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sp-sky)"/>
-<rect width="${W}" height="${H}" fill="url(#dbtefx-sp-halo)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
-<g transform="translate(${bx} ${cy})" fill="${teal}" fill-opacity="0.3"><g style="animation: dbtefx-spin 200s linear infinite;">${ring}<circle r="200" fill="none" stroke="${teal}" stroke-opacity="0.16"/><circle r="214" fill="none" stroke="${teal}" stroke-opacity="0.08" stroke-dasharray="2 9"/></g></g>
+<g class="dbtefx-sp-ring"><circle cx="${bx}" cy="${cy + 60}" r="520" fill="url(#dbtefx-sp-halo)" ${anim('pulse', 9, 0, 'ease-in-out')}/>
+<g transform="translate(${bx} ${cy})" fill="${teal}" fill-opacity="0.3"><g style="animation: dbtefx-spin 200s linear infinite;">${ring}<circle r="200" fill="none" stroke="${teal}" stroke-opacity="0.16"/><circle r="214" fill="none" stroke="${teal}" stroke-opacity="0.08" stroke-dasharray="2 9"/></g></g></g>
 <!--mid-->
-<path d="M${bx - 100} ${by - 4}L${bx - 60} ${cy + 60}H${bx + 60}L${bx + 100} ${by - 4}Z" fill="url(#dbtefx-sp-beam)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
+<g class="dbtefx-sp-book"><path d="M${bx - 100} ${by - 4}L${bx - 60} ${cy + 60}H${bx + 60}L${bx + 100} ${by - 4}Z" fill="url(#dbtefx-sp-beam)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
 <g transform="translate(${bx} ${by - 44}) scale(1 0.26)"><g fill="none" stroke="${pale}" stroke-width="3.5" stroke-linecap="round" style="animation: dbtefx-spin 26s linear infinite;">${arms}</g><g fill="none" stroke="${teal}" stroke-opacity="0.35" style="animation: dbtefx-spin 40s linear infinite reverse;"><circle r="196" stroke-width="2"/><circle r="110" stroke-width="1.5" stroke-dasharray="6 10"/></g></g>
-<ellipse cx="${bx}" cy="${by - 44}" rx="130" ry="34" fill="url(#dbtefx-sp-pool)" ${anim('pulse', 6, 0, 'ease-in-out')}/>
+<ellipse cx="${bx}" cy="${by - 44}" rx="130" ry="34" fill="url(#dbtefx-sp-pool)" ${anim('pulse', 6, 0, 'ease-in-out')}/></g>
 <g class="dbtefx-sp-cast"><circle cx="${bx}" cy="${cy}" r="170" fill="url(#dbtefx-sp-core)" opacity="0.32"/>
 <g transform="translate(${bx} ${cy})"><g style="animation: dbtefx-sp-hover 9s ease-in-out infinite;">${card}</g></g></g>
 <circle cx="1452" cy="600" r="96" fill="url(#dbtefx-sp-core)" opacity="0.22"/>
 <g transform="translate(1452 600) rotate(8) scale(0.55)"><g style="animation: dbtefx-sp-hover 11s ease-in-out -4s infinite;">${card}</g></g>
-<path d="M${bx - 26} 690H${bx + 26}L${bx + 18} 828H${bx - 18}Z" fill="url(#dbtefx-sp-wood)"/>
+<g class="dbtefx-sp-book"><path d="M${bx - 26} 690H${bx + 26}L${bx + 18} 828H${bx - 18}Z" fill="url(#dbtefx-sp-wood)"/>
 <g fill="url(#dbtefx-sp-wood)"><rect x="${bx - 34}" y="${738}" width="68" height="12" rx="3"/><rect x="${bx - 30}" y="${794}" width="60" height="10" rx="3"/></g>
 <path d="M${bx - 92} 852L${bx - 70} 826H${bx + 70}L${bx + 92} 852Z" fill="url(#dbtefx-sp-wood)"/>
 <path d="M${bx - 70} 826H${bx + 70}M${bx - 34} 738H${bx + 34}M${bx - 30} 794H${bx + 30}" stroke="${gold}" stroke-opacity="0.45" stroke-width="1.2"/>
@@ -131,7 +131,7 @@ const spell = (t) => {
 <g transform="translate(-74 22) scale(1 0.45)" fill="none" stroke="${mix(gold, t.bg, 0.25)}" stroke-width="1.6"><circle r="18"/><path d="M0 -14L4 -4L14 0L4 4L0 14L-4 4L-14 0L-4 -4Z"/></g>
 ${turner(0)}${turner(TURN / 2)}
 </g>
-${sparks}
+${sparks}</g>
 <!--near-->
 <rect width="${W}" height="${H}" fill="url(#dbtefx-sp-shade)"/>`;
 };

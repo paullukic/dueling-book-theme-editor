@@ -60,13 +60,13 @@ const whiteDragon = (t) => {
 <path d="${range}" fill="${mix(t.surface, ice, 0.12)}"/>
 <path d="${range}" fill="none" stroke="${ice}" stroke-opacity="0.35" stroke-width="2"/>
 <!--mid-->
-<circle cx="1300" cy="300" r="300" fill="url(#dbtefx-wd-halo)"/>
+<g class="dbtefx-wd-dragon"><circle cx="1300" cy="300" r="300" fill="url(#dbtefx-wd-halo)"/>
 ${cardArt(t, { id: 'dbtefx-wd-hero', card: CARDS.blueEyes, x: 1300, y: 10, w: 400, h: 720, focus: [0.62, 0.5], zoom: 0.78, blend: 'normal', grade: 'saturate(0.9) brightness(1.05)', tint: ice, tintAmt: 0.22, feather: 0.6, fade: 0.6, backdrop: mix(t.bg, ice, 0.55), glow: ice, breathe: 16 })}
 <g style="animation: dbtefx-wd-strike 5s linear infinite;">${strike(1)}</g>
-<circle cx="${mx}" cy="${my}" r="60" fill="url(#dbtefx-wd-orb)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-wd-charge 2.5s ease-in-out infinite;"/>
+<circle cx="${mx}" cy="${my}" r="60" fill="url(#dbtefx-wd-orb)" style="transform-box: fill-box; transform-origin: center; animation: dbtefx-wd-charge 2.5s ease-in-out infinite;"/></g>
 <!--near-->
-<path d="${spire}" fill="${ice}" transform="translate(5 0)"/>
-<path d="${spire}" fill="url(#dbtefx-wd-ice)"/>
+<g class="dbtefx-wd-spire"><path d="${spire}" fill="${ice}" transform="translate(5 0)"/>
+<path d="${spire}" fill="url(#dbtefx-wd-ice)"/></g>
 <path d="M0 900L0 800L40 760L70 812L110 770L150 830L190 900Z" fill="url(#dbtefx-wd-ice)" fill-opacity="0.8"/>`;
 };
 

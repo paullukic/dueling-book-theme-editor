@@ -136,8 +136,8 @@ ${sel(['#duel .cout_txt font[color="#FF0000" i]', '#duel .cout_txt font[color="r
 ${sel(['#duel .cout_txt font[color="#0000FF" i]', '#duel .cout_txt font[color="#0012ff" i]', '#duel .cout_txt font[color="blue" i]'])} { color: ${mix(t.opp, '#ffffff', 0.35)} !important; }
 /* The winged king stands behind the chat column in a duel: only a lone wing showed, so he waits for the menu. */
 html body:has(#duel:not([style*="none"])) .dbtefx-ae-hero { opacity: 0; }
-/* On the menu the pieces stand back, right of the status feed. */
-html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ae-pieces { transform-origin: 1640px 900px; transform: scale(0.62); }
+/* On the menu the pieces stand small in the right gutter, clear of the status feed. */
+html body:has(#main_menu:not([style*="none"])) #dbte-skin-fx .dbtefx-ae-pieces { transform-origin: 0 0; transform: translate(888.9px, 438.2px) scale(0.4) translate(1640px, 900px) scale(0.62) translate(-1640px, -900px); }
 ${sel(['#duel .cout_txt'])} { background: linear-gradient(180deg, ${alpha(t.surface, 0.88)}, ${alpha(t.bg, 0.92)}), var(--dbtc-u11) 0 0 / 48px 48px !important; box-shadow: inset 0 0 0 2px ${ivory}, inset 0 0 0 4px ${gold} !important; }
 ${sel(['#duel #avatar1', '#duel #avatar2', '#duel #avatar3', '#duel #avatar4'])} { box-shadow: 0 0 0 2px ${ivory}, 0 0 0 4px ${gold}, 0 6px 16px -6px #000000 !important; }
 

@@ -67,10 +67,10 @@ ${CARD_ART_KEYFRAMES}
 <rect width="${W}" height="${H}" fill="url(#dbtefx-ss-sky)"/>
 <ellipse cx="1100" cy="640" rx="760" ry="200" fill="url(#dbtefx-ss-sun)"/>
 ${deck}
-<g ${zoomTo}>${radar}</g>
+<g class="dbtefx-ss-radargrp"><g ${zoomTo}>${radar}</g></g>
 <!--mid-->
 <g class="dbtefx-ss-acegrp">${ace}</g>
-${speed}
+<g class="dbtefx-ss-speed">${speed}</g>
 <g class="dbtefx-ss-hud" ${zoomTo}>${frame}</g>
 <!--near-->
 <g transform="translate(1430 806) scale(0.6)">
