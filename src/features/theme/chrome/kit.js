@@ -45,8 +45,11 @@ export const SEL = {
   field: sel(['#content input[type=text]', '#content input[type=password]', '#content .textinput', '#content textarea']),
 };
 
-// An SVG string as a CSS url().
-export const svgUrl = (svg) => `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+// An SVG string as a CSS url(). Light escaping keeps the data URI ~25% smaller than encodeURIComponent: attribute
+// quotes become apostrophes (apostrophes already in the SVG become &apos;, which the SVG parser reads back), and only the characters a data URI
+// or our CSS block parser cannot take raw are escaped. Braces stay escaped: skins.js topBlocks reads them as CSS.
+const URI_ESCAPES = { '"': "'", "'": '&apos;', '%': '%25', '#': '%23', '<': '%3C', '>': '%3E', '{': '%7B', '}': '%7D' };
+export const svgUrl = (svg) => `url("data:image/svg+xml,${svg.replace(/\s+/g, ' ').replace(/["'%#<>{}]/g, (c) => URI_ESCAPES[c])}")`;
 export const svg = (w, h, body) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${body}</svg>`;
 // #rrggbb + alpha 0-1 -> #rrggbbaa
 export const alpha = (hex, a) => `${hex}${Math.round(a * 255).toString(16).padStart(2, '0')}`;

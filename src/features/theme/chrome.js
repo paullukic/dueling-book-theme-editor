@@ -165,5 +165,6 @@ export const chromeCss = (presetId, tokens, areas = {}) => {
   const make = CHROME[presetId];
   // Colours go straight into CSS and SVG: only well-formed hex values.
   if (!make || !Object.values(tokens || {}).every(isHex)) return '';
-  return keepAreas(make(tokens, kit), areas).trim();
+  // Comments are for the source only; data URIs never contain the comment markers.
+  return keepAreas(make(tokens, kit).replace(/\/\*[\s\S]*?\*\//g, ''), areas).trim();
 };

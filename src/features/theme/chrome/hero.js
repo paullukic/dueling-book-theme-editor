@@ -2,12 +2,13 @@
 // skyline with lit windows along panel feet, the Hero Signal (H in a moon
 // disc) as the emblem on tiles and pop-ups, a searchlight sweep on hover, gold
 // keylines with a red hard drop, segmented power-meter life points.
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
 // A compact SVG data URI: only the characters CSS or the URI needs are escaped.
-const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+const svgUrl = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   const gold = t.accent;

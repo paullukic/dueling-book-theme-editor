@@ -4,12 +4,14 @@
 // at the start of the life bar, and staff-tip dividers under titles.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 
 // Compact data URI: only the characters CSS and URLs need escaped.
-const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// One decimal place is plenty for these drawings.
+const svgUrl = (text) => kitSvgUrl(text.replace(/(\d\.\d)\d+/g, '$1'));
 
 // Five rune shapes, drawn around (0,0) about 6 units tall.
 const GLYPHS = ['M0-3v6M-2-1h4', 'M-2 3l2-6 2 6', 'M-2-3h4v6', 'M-2 3V-3l4 3-4 3', 'M0-3a2 2 0 1 1 0 4v2M-2 3h4'];

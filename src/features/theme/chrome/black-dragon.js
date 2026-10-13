@@ -4,6 +4,7 @@
 // life bar.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
@@ -21,7 +22,8 @@ const popButton = (t, label, W, H, primary) => {
 };
 
 // Compact data URI: only the characters CSS and URLs need escaped.
-const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// One decimal place is plenty for these drawings.
+const svgUrl = (text) => kitSvgUrl(text.replace(/(\d\.\d)\d+/g, '$1'));
 
 // Overlapping dragon scales, very faint.
 const scales = (t, kit) =>

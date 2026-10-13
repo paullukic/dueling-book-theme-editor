@@ -3,9 +3,10 @@
 // hex plating, with circuit traces running out of the corners.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 // Compact data URI: only % and # (and braces, which keepAreas splits on) are escaped.
-const url = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/\s*\n\s*/g, ' ').replace(/[%#{}]/g, encodeURIComponent)}")`;
+const url = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Each SVG is written once, as a custom property, and referenced by var().

@@ -2,12 +2,13 @@
 // (the card frames' riveted brackets), LED VU meters (tile feet, life points),
 // rotary-knob phases with lit rings, rack-unit pop-ups with an analog VU dial,
 // fader dividers, LCD fields and neon-tube titles in pink and teal.
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
 // A compact SVG data URI: only the characters CSS or the URI needs are escaped.
-const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+const svgUrl = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   const pink = t.accent;

@@ -3,12 +3,13 @@
 // gold four-point star of their books and brooches, the academy's rose-window
 // crest, and their magic: rainbow paint ribbons swept from brush staves and
 // jewel-colour paint splatter. Rose-window phase roundels, gilded duel zones.
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
 // A compact SVG data URI: only the characters CSS or the URI needs are escaped.
-const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+const svgUrl = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   const gold = t.accent2;

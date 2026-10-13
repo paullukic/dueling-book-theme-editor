@@ -4,12 +4,14 @@
 // eye), a serpent divider under titles and the Snake-Eye on the life bar.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 
 // Compact data URI: only the characters CSS and URLs need escaped.
-const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// One decimal place is plenty for these drawings.
+const svgUrl = (text) => kitSvgUrl(text.replace(/(\d\.\d)\d+/g, '$1'));
 
 const flameGrad = (t, id) => `<linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t.accent}"/><stop offset="0.55" stop-color="${t.accent2}"/><stop offset="1" stop-color="${t.accent2}" stop-opacity="0.2"/></linearGradient>`;
 

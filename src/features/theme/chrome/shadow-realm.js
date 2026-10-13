@@ -3,11 +3,13 @@
 // along every plate, and the void vortex sealed on pop-ups and the life bar.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
 
 // Compact data URI: only the characters CSS and URLs need escaped.
-const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// One decimal place is plenty for these drawings.
+const svgUrl = (text) => kitSvgUrl(text.replace(/(\d\.\d)\d+/g, '$1'));
 
 // Fractures in stone, green light seeping out of them.
 const cracks = (t, kit) => {

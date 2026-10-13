@@ -513,3 +513,20 @@ test('user lists: following, admin and adjudicator names get distinct, readable 
     roles.forEach((c) => assert.ok(contrast(c, p.tokens.surface) >= 4.5, `${p.id} role ${c} unreadable`));
   });
 });
+
+test('chrome: compact output - no comments, and every inline SVG decodes to a well-formed SVG', () => {
+  CHROME_IDS.forEach((id) => {
+    const preset = PRESETS.find((p) => p.id === id);
+    if (!preset) return;
+    const css = chromeCss(id, preset.tokens);
+    assert.ok(!css.includes('/*'), `${id} ships a comment`);
+    const uris = css.match(/url\("data:image\/svg\+xml,[^"]*"\)/g) || [];
+    uris.forEach((u) => {
+      const body = u.slice('url("data:image/svg+xml,'.length, -2);
+      assert.doesNotMatch(body, /[#{}<>]/, `${id} has an unescaped character in an SVG`);
+      const svg = decodeURIComponent(body);
+      assert.ok(svg.trimStart().startsWith('<svg'), `${id} SVG does not start with <svg`);
+      assert.ok(svg.includes('</svg>'), `${id} SVG is not closed`);
+    });
+  });
+});

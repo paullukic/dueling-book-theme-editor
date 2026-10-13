@@ -2,12 +2,13 @@
 // water; lily pads (notched, veined) as tile badges and
 // phase buttons; ripple rings around pop-ups and on hover; reeds and cattails
 // rising from panel corners; pebble buttons; firefly glow on focus.
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mix = (a, b, w) => `#${rgb(a).map((v, i) => Math.round(v * w + rgb(b)[i] * (1 - w)).toString(16).padStart(2, '0')).join('')}`;
 
 // A compact SVG data URI: only the characters CSS or the URI needs are escaped.
-const svgUrl = (s) => `url("data:image/svg+xml,${s.replace(/"/g, "'").replace(/[<>#%{}\n]/g, encodeURIComponent)}")`;
+const svgUrl = kitSvgUrl;
 
 export default (t, { SEL, sel, svg, alpha }) => {
   // Leaf green, pulled toward gold so it reads apart from the success green.

@@ -4,6 +4,7 @@
 // the pop-up buttons; buttons smoulder crimson on hover and frost when pressed.
 
 import { mix } from '../../../lib/color.js';
+import { svgUrl as kitSvgUrl } from './kit.js';
 
 const r1 = (v) => Math.round(v * 10) / 10;
 const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
@@ -11,7 +12,8 @@ const FONT = 'Segoe UI, system-ui, Roboto, Arial, sans-serif';
 const whiteGold = (t) => mix(t.text, t.warning, 0.4);
 
 // Compact data URI: only the characters CSS and URLs need escaped.
-const svgUrl = (text) => `url("data:image/svg+xml,${text.replace(/(\d\.\d)\d+/g, '$1').replace(/"/g, "'").replace(/[%#<>{}]/g, encodeURIComponent)}")`;
+// One decimal place is plenty for these drawings.
+const svgUrl = (text) => kitSvgUrl(text.replace(/(\d\.\d)\d+/g, '$1'));
 
 // The Despia cathedral's harlequin glass (Branded in Red): a lattice of
 // diamond panes, alternate panes faintly lit crimson and violet.
