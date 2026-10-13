@@ -1,31 +1,32 @@
 # Chrome Web Store Listing — DuelingBook Theme Editor
 
-> Last Updated: 2026-10-11 (v1.2.0)
+> Last Updated: 2026-10-14 (v1.2.0)
 
 ## Store Listing
 
 **Extension Name**
 DuelingBook Theme Editor - Dark Themes, Hotkeys & Duel Tools
 
-**Short Description** (122/132)
-Sleek dark themes for every screen, hotkeys, turn alerts, test hands and chat mute for duelingbook.com. No data collected.
+**Short Description** (125/132, same as the manifest description)
+78 animated themes for every duelingbook.com screen, plus hotkeys, turn alerts, test hands and chat tools. No data collected.
 
 **Detailed Description** (paste as plain text; the store strips Markdown)
 
 ```
 Make DuelingBook look and play the way you want. Theme Editor restyles every screen of duelingbook.com and adds keyboard shortcuts, turn alerts, deck tools and chat controls, without changing any game rules.
 
-THEME
-• A full, modern theme for every screen: main menu, duel room, deck constructor, duels, chat windows, pop-ups, profiles, settings, rankings and tournaments
-• 21 themes, each with its own signature look (backgrounds, glows, ornaments): three archetype themes (Branded, Artmage, Elemental HERO), six clean looks (Obsidian, Midnight, Crimson, Verdant, Sakura, OLED) and twelve duel themes (Spell Card, Trap Card, Fusion, Synchro, Xyz, Link, Pendulum, Divine Beasts, White Dragon, Dark Magic, Black Dragon, Millennium Gold)
+THEMES
+• 78 themes for every screen: main menu, duel room, deck constructor, duels, chat windows, pop-ups, profiles, settings, rankings and tournaments
+• Each theme has its own animated scene, menu tiles, buttons, pop-ups and duel field: 33 archetype themes, 17 duel themes (Spell, Trap, Fusion, Synchro, Xyz, Link, Pendulum and more), 10 looks inspired by classic duel video games, 9 anime-inspired themes and 9 clean looks, light ones included
+• Life points your way: the theme's own counter or one of eight styles from every era of the anime, with damage, heal and low-life effects
+• Find a theme fast: search, filters, favourites and recently used
 • Make it yours: pick every colour, corner roundness, background art and lettering, with a warning if text gets hard to read
-• The playmat, life points, phase buttons and pop-up buttons follow your colours
 • Keep DuelingBook's own look in any area you like, with one switch per area
+• Motion and visual quality settings; scenes stay still if your system asks for reduced motion
 • Share your theme as a code, or add your own CSS
-• Colour-coded card text: activation condition, cost or target, effect and once-per-turn limits each get their own colour, and you pick the colours
-• Bigger card text for easier reading
-• Compact main menu
-• Your own background image
+• Colour-coded card text: activation condition, cost or target, effect and once-per-turn limits each get their own colour
+• Zones you can place a card in pulse clearly in every theme
+• Bigger card text, compact main menu, your own background image
 
 DUEL
 • Turn and duel-found alerts: a chime, a flashing tab and an optional desktop notification, so you can wait in another tab
@@ -66,22 +67,20 @@ Free, no ads, made by a DuelingBook player. If it makes your duels nicer, you ca
 | Asset | Dimensions | Status | Filename |
 |-------|-----------|--------|----------|
 | Store Icon | 128×128 PNG | ✅ Ready | `icon128.png` |
-| Screenshot 1 | 1280×800 | ✅ Ready: themed duel (Obsidian) with the Theme tab | `screenshots/v1.2/1-duel-theme.png` |
-| Screenshot 2 | 1280×800 | ✅ Ready: deck constructor in Midnight with coloured card text | `screenshots/v1.2/2-deck-builder.png` |
-| Screenshot 3 | 1280×800 | ✅ Ready: preset gallery over Settings (Dark Magic) | `screenshots/v1.2/3-presets.png` |
-| Screenshot 4 | 1280×800 | ✅ Ready: test hand and opening odds (Spell Card) | `screenshots/v1.2/4-test-hand.png` |
-| Screenshot 5 | 1280×800 | ✅ Ready: duel with chat commands (Black Dragon) | `screenshots/v1.2/5-chat-commands.png` |
+| Screenshot 1 | 1280×800 | ✅ Ready: 9 themes on the main menu, "78 themes for every DuelingBook screen" | `screenshots/v1.2/1-themes.png` |
+| Screenshot 2 | 1280×800 | ✅ Ready: Blackwing duel, "Duels that look the part" | `screenshots/v1.2/2-duel.png` |
+| Screenshot 3 | 1280×800 | ✅ Ready: 5D's life points on Stardust Dragon, "Life points from every era" | `screenshots/v1.2/3-lp-styles.png` |
+| Screenshot 4 | 1280×800 | ✅ Ready: theme gallery in the panel over Dark Magic, "One click to switch" | `screenshots/v1.2/4-pick.png` |
+| Screenshot 5 | 1280×800 | ✅ Ready: Deck Constructor in Parchment, "Every screen, light themes too" | `screenshots/v1.2/5-deck.png` |
 | Small Promo Tile | 440×280 | ✅ Ready | `screenshots/v1.2/promo-small.png` |
 | Marquee Promo Tile | 1400×560 | ✅ Ready | `screenshots/v1.2/promo-marquee.png` |
 
-Screenshots show only the owner's own deck, duel and settings: other players' names and posts were hidden for the shots, and the owner's custom background was turned off so the theme's own backdrop shows.
+Screenshots are rendered from page snapshots with the released build: every other player's name, chat and log line is replaced by a stand-in (Duelist, Rival, Guest...), feed statuses by neutral lines. Avatars are DuelingBook card art. Captions are baked into the top band of each image.
 
-### Screenshot plan (one feature each, short caption)
-1. Themed duel with the Theme tab: "A sleek theme for every screen".
-2. Deck constructor in Midnight: "Deck builder restyled, card text colour-coded".
-3. Preset gallery: "16 themes, or pick every colour".
-4. Test hand and opening odds: "Test hands and opening odds".
-5. Duel with chat commands: "Chat shortcuts and quick maths".
+### Store review notes
+- Permissions are identical to the live 1.1.0 (storage, unlimitedStorage, scripting, duelingbook.com hosts): no new permission prompt for existing users.
+- No remote code. Scene card art loads as images from images.duelingbook.com, the same files the site loads (see Privacy); nothing is bundled.
+- The listing names no anime franchise; the anime-inspired themes carry franchise names only inside the extension.
 
 ## Permissions Justification
 
@@ -99,7 +98,7 @@ Host access is limited to duelingbook.com. No `tabs`, no remote code.
 
 **Does the extension collect user data?** No.
 
-All data (settings, notes, background image, action log, custom CSS) is stored with the browser's extension storage on the user's device (settings also sync through the user's own Chrome sync). Nothing is transmitted to the developer or any third party. The extension only reads public files from DuelingBook's own image server (images.duelingbook.com): card art for test hands and the playmat artwork it recolours for the full theme, the same files the site itself loads.
+All data (settings, notes, background image, action log, custom CSS) is stored with the browser's extension storage on the user's device (settings also sync through the user's own Chrome sync). Nothing is transmitted to the developer or any third party. The extension only reads public files from DuelingBook's own image server (images.duelingbook.com): card art for test hands and theme scenes, and the playmat artwork it recolours for the full theme, the same files the site itself loads.
 
 ### Data Use Certification
 - [x] Data is NOT sold to third parties
@@ -125,13 +124,14 @@ All data (settings, notes, background image, action log, custom CSS) is stored w
 
 | Version | Date | Summary |
 |---------|------|---------|
-| 1.2.0 | 2026-10-11 | Full theme for every DuelingBook screen with 21 themes with signature skins, your own colours, per-area switches, themed playmat and buttons, custom CSS and shareable theme codes; card text colouring rebuilt (Pendulum, Rush Duel, materials); reconnect automatically; chat commands; OCG-style line breaks; chat text size. All off until switched on; existing settings unchanged. |
+| 1.2.0 | 2026-10-14 | Full theme for every DuelingBook screen: 78 themes (archetype, duel, classic game, anime-inspired and clean, light ones included), each with an animated scene and its own menu, buttons, pop-ups and duel field; eight life-point styles with damage, heal and low-life effects; theme search, filters, favourites and recents; your own colours, per-area switches, custom CSS and shareable theme codes; clear zone highlight when placing a card; card text colouring rebuilt (Pendulum, Rush Duel, materials); reconnect automatically; chat commands; OCG-style line breaks; chat text size. All off until switched on; existing settings unchanged. |
 | 1.1.0 | 2026-10-10 | Rebuilt panel; turn and duel-found alerts; test hands and opening odds; chat mute and mentions; colour choices for card text; animation speed; card text size; settings export/import; fewer permissions (tabs and activeTab removed). Existing settings carry over. |
 | 1.0.7 | 2026-08-20 | Dark theme, feature tooltips, five custom chat shortcuts. |
 
 ## Pre-publish checklist (1.2.0)
 - [ ] `npm run package` and upload `dueling-book-theme-editor-1.2.0.zip`
-- [ ] Load the zip unpacked once and click through every tab on duelingbook.com
-- [x] Refresh screenshots (plan above)
+- [ ] Load the zip unpacked once and click through every tab on duelingbook.com (a few themes in a real duel too)
+- [x] Refresh screenshots and promo tiles (`screenshots/v1.2/`)
+- [ ] Paste the short and detailed description above; upload the 5 screenshots and 2 promo tiles
 - [ ] Privacy policy URL live
 - [ ] Reply to every review
